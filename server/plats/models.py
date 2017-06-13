@@ -6,6 +6,12 @@ class Subdivision(models.Model):
     is_approved = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
 
+    date_created = models.DateField(auto_now_add=True)
+    date_modified = models.DateField(auto_now=True)
+
+    # created_by = models.ForeignKey(User, related_name='plat_created')
+    # modified_by = models.ForeignKey(User, related_name='plat_modified')    
+
     name = models.CharField(max_length=200)
     gross_acreage = models.DecimalField(max_digits=20, decimal_places=3)
     number_allowed_lots = models.PositiveIntegerField()
