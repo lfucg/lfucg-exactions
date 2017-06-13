@@ -70,7 +70,7 @@ class Lot(models.Model):
     is_active = models.BooleanField(default=True)
 
     plat = models.ForeignKey(Plat, related_name='lot')
-    # parcel_id = ForeignKey(, null=True, blank=True) API CONNECTED TO EXISTING SYSTEM
+    parcel_id = models.CharField(max_length=200, null=True, blank=True)
     
     date_created = models.DateField(auto_now_add=True)
     date_modified = models.DateField(auto_now=True)
