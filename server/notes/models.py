@@ -15,13 +15,19 @@ class RateTable(models.Model):
     date_created = models.DateField(auto_now_add=True)
     date_modified = models.DateField(auto_now=True)
 
-    # created_by = models.ForeignKey(User, related_name='plat_created')
-    # modified_by = models.ForeignKey(User, related_name='plat_modified')
+    created_by = models.ForeignKey(User, related_name='rate_table_created')
+    modified_by = models.ForeignKey(User, related_name='rate_table_modified')
 
     begin_effective_date = models.DateField()
     end_effective_date = models.DateField()
 
     resolution_number = models.IntegerField()
+
+    def save(self, *args, **kwargs):
+        if self.pk is None:
+            self.created_by = self.request.user
+        else:
+            self.modified_by = self.request.user
 
 class Rate(models.Model):
     is_active = models.BooleanField(default=True)
@@ -56,8 +62,8 @@ class Rate(models.Model):
     date_created = models.DateField(auto_now_add=True)
     date_modified = models.DateField(auto_now=True)
 
-    # created_by = models.ForeignKey(User, related_name='plat_created')
-    # modified_by = models.ForeignKey(User, related_name='plat_modified')
+    created_by = models.ForeignKey(User, related_name='rate_created')
+    modified_by = models.ForeignKey(User, related_name='rate_modified')
 
     rate_table_id = models.ForeignKey(RateTable, related_name='rate')
 
@@ -65,3 +71,9 @@ class Rate(models.Model):
     zone = models.CharField(max_length=100, choices=ZONES)
     category = models.CharField(max_length=200)
     rate = models.CharField(max_length=200)
+
+    def save(self, *args, **kwargs):
+        if self.pk is None:
+            self.created_by = self.request.user
+        else:
+            self.modified_by = self.request.user

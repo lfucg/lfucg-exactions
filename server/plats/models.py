@@ -9,12 +9,18 @@ class Subdivision(models.Model):
     date_created = models.DateField(auto_now_add=True)
     date_modified = models.DateField(auto_now=True)
 
-    # created_by = models.ForeignKey(User, related_name='plat_created')
-    # modified_by = models.ForeignKey(User, related_name='plat_modified')    
+    created_by = models.ForeignKey(User, related_name='subdivision_created')
+    modified_by = models.ForeignKey(User, related_name='subdivision_modified')    
 
     name = models.CharField(max_length=200)
     gross_acreage = models.DecimalField(max_digits=20, decimal_places=3)
     number_allowed_lots = models.PositiveIntegerField()
+
+    def save(self, *args, **kwargs):
+        if self.pk is None:
+            self.created_by = self.request.user
+        else:
+            self.modified_by = self.request.user
 
 class Plat(models.Model):
     is_approved = models.BooleanField(default=False)
@@ -26,8 +32,8 @@ class Plat(models.Model):
     date_created = models.DateField(auto_now_add=True)
     date_modified = models.DateField(auto_now=True)
 
-    # created_by = models.ForeignKey(User, related_name='plat_created')
-    # modified_by = models.ForeignKey(User, related_name='plat_modified')
+    created_by = models.ForeignKey(User, related_name='plat_created')
+    modified_by = models.ForeignKey(User, related_name='plat_modified')
     
     total_acreage = models.DecimalField(max_digits=20, decimal_places=3)
     latitude = models.CharField(max_length=100)
@@ -52,6 +58,13 @@ class Plat(models.Model):
     sewer_due = models.DecimalField(max_digits=20, decimal_places=2)
     non_sewer_due = models.DecimalField(max_digits=20, decimal_places=2)
 
+    def save(self, *args, **kwargs):
+        if self.pk is None:
+            self.created_by = self.request.user
+        else:
+            self.modified_by = self.request.user
+
+
 class Lot(models.Model):
     is_approved = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
@@ -62,8 +75,8 @@ class Lot(models.Model):
     date_created = models.DateField(auto_now_add=True)
     date_modified = models.DateField(auto_now=True)
 
-    # created_by = models.ForeignKey(User, related_name='plat_created')
-    # modified_by = models.ForeignKey(User, related_name='plat_modified')
+    created_by = models.ForeignKey(User, related_name='lot_created')
+    modified_by = models.ForeignKey(User, related_name='lot_modified')
 
     lot_number = models.CharField(max_length=100)
     permit_id = models.CharField(max_length=200)
@@ -97,6 +110,12 @@ class Lot(models.Model):
 
     dues_open_space_dev = models.DecimalField(max_digits=20, decimal_places=2)
     dues_open_space_own = models.DecimalField(max_digits=20, decimal_places=2)
+
+    def save(self, *args, **kwargs):
+        if self.pk is None:
+            self.created_by = self.request.user
+        else:
+            self.modified_by = self.request.user    
 
 class PlatZone(models.Model):
     is_active = models.BooleanField(default=True)
@@ -133,11 +152,18 @@ class PlatZone(models.Model):
     date_created = models.DateField(auto_now_add=True)
     date_modified = models.DateField(auto_now=True)
 
-    # created_by = models.ForeignKey(User, related_name='plat_created')
-    # modified_by = models.ForeignKey(User, related_name='plat_modified')
+    created_by = models.ForeignKey(User, related_name='plat_zone_created')
+    modified_by = models.ForeignKey(User, related_name='plat_zone_modified')
 
     zone = models.CharField(max_length=100, choices=ZONES)
     acres = models.DecimalField(max_digits=20, decimal_places=2)
+
+    def save(self, *args, **kwargs):
+        if self.pk is None:
+            self.created_by = self.request.user
+        else:
+            self.modified_by = self.request.user
+
 
 class Payment(models.Model):
     is_approved = models.BooleanField(default=False)
@@ -148,8 +174,8 @@ class Payment(models.Model):
     date_created = models.DateField(auto_now_add=True)
     date_modified = models.DateField(auto_now=True)
 
-    # created_by = models.ForeignKey(User, related_name='plat_created')
-    # modified_by = models.ForeignKey(User, related_name='plat_modified')
+    created_by = models.ForeignKey(User, related_name='payment_created')
+    modified_by = models.ForeignKey(User, related_name='payment_modified')
 
     paid_by = models.CharField(max_length=100)
     paid_by_type = models.CharField(max_length=100)
@@ -165,6 +191,12 @@ class Payment(models.Model):
     paid_parks = models.DecimalField(max_digits=20, decimal_places=2)
     paid_storm = models.DecimalField(max_digits=20, decimal_places=2)
     paid_open_space = models.DecimalField(max_digits=20, decimal_places=2)
+
+    def save(self, *args, **kwargs):
+        if self.pk is None:
+            self.created_by = self.request.user
+        else:
+            self.modified_by = self.request.user    
 
 class CalculationWorksheet(models.Model):
     is_active = models.BooleanField(default=True)
