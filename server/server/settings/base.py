@@ -35,11 +35,11 @@ ROOT_URLCONF = 'server.urls'
 # Application definition
 INSTALLED_APPS = (
     # Django contrib apps
+    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.admin',
     'django.contrib.humanize',
     'django.contrib.syndication',
     'django.contrib.staticfiles',
@@ -47,6 +47,7 @@ INSTALLED_APPS = (
     # Third-party apps, patches, fixes
     'debug_toolbar',
     'compressor',
+    'rest_framework',
 
     # Application base, containing global templates.
     'base',
@@ -129,7 +130,7 @@ STATICFILES_FINDERS = (
     'compressor.finders.CompressorFinder',
 )
 
-MIDDLEWARE_CLASSES = [
+MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
