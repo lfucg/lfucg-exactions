@@ -52,6 +52,9 @@ INSTALLED_APPS = (
     'base',
 
     # Local apps, referenced via appname
+    'accounts',
+    'notes',
+    'plats',
 )
 
 # Place bcrypt first in the list, so it will be the default password hashing
