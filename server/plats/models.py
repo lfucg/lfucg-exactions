@@ -3,17 +3,21 @@ from django.contrib.auth.models import User
 
 
 class Subdivision(models.Model):
+    is_approved = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
 
     name = models.CharField(max_length=200)
     gross_acreage = models.DecimalField(max_digits=20, decimal_places=3)
     number_allowed_lots = models.PositiveIntegerField()
 
 class Plat(models.Model):
+    is_approved = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
 
     subdivision = models.ForeignKey(Subdivision, blank=True, null=True, related_name='plat')
 
     date_recorded = models.DateField()
-    date_created = models.DateField()
+    date_created = models.DateField(auto_now_add=True)
     date_modified = models.DateField(auto_now=True)
 
     # created_by = models.ForeignKey(User, related_name='plat_created')
@@ -22,6 +26,9 @@ class Plat(models.Model):
     total_acreage = models.DecimalField(max_digits=20, decimal_places=3)
     latitude = models.CharField(max_length=100)
     longitude = models.CharField(max_length=100)
+
+    # plan or development plan
+    plat_type = models.CharField(max_length=200)
 
     expansion_area = models.CharField(max_length=100)
     unit = models.CharField(max_length=200)
@@ -40,11 +47,13 @@ class Plat(models.Model):
     non_sewer_due = models.DecimalField(max_digits=20, decimal_places=2)
 
 class Lot(models.Model):
+    is_approved = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
 
     plat = models.ForeignKey(Plat, related_name='lot')
     # parcel_id = ForeignKey(, null=True, blank=True) API CONNECTED TO EXISTING SYSTEM
     
-    date_created = models.DateField()
+    date_created = models.DateField(auto_now_add=True)
     date_modified = models.DateField(auto_now=True)
 
     # created_by = models.ForeignKey(User, related_name='plat_created')
@@ -84,6 +93,7 @@ class Lot(models.Model):
     dues_open_space_own = models.DecimalField(max_digits=20, decimal_places=2)
 
 class PlatZone(models.Model):
+    is_active = models.BooleanField(default=True)
 
     ZONES = (
         ('A-R', 'Agricultural Rural'),
@@ -114,7 +124,7 @@ class PlatZone(models.Model):
 
     plat = models.ForeignKey(Plat, related_name='plat_zone')
 
-    date_created = models.DateField()
+    date_created = models.DateField(auto_now_add=True)
     date_modified = models.DateField(auto_now=True)
 
     # created_by = models.ForeignKey(User, related_name='plat_created')
@@ -124,10 +134,12 @@ class PlatZone(models.Model):
     acres = models.DecimalField(max_digits=20, decimal_places=2)
 
 class Payment(models.Model):
+    is_approved = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
 
     lot_id = models.ForeignKey(Lot, related_name='payment')
 
-    date_created = models.DateField()
+    date_created = models.DateField(auto_now_add=True)
     date_modified = models.DateField(auto_now=True)
 
     # created_by = models.ForeignKey(User, related_name='plat_created')
@@ -147,3 +159,36 @@ class Payment(models.Model):
     paid_parks = models.DecimalField(max_digits=20, decimal_places=2)
     paid_storm = models.DecimalField(max_digits=20, decimal_places=2)
     paid_open_space = models.DecimalField(max_digits=20, decimal_places=2)
+
+class CalculationWorksheet(models.Model):
+    is_active = models.BooleanField(default=True)
+
+    ZONES = (
+        ('A-R', 'Agricultural Rural'),
+        ('A-B', 'Agricultural Buffer'),
+        ('A-N', 'Agricultural Natural Areas'),
+        ('A-U', 'Agricultural Urban'),
+        ('R-1A', 'Single Family Residential'),
+        ('R-1B', 'Single Family Residential'),
+        ('R-1C', 'Single Family Residential'),
+        ('R-1D', 'Single Family Residential'),
+        ('R-1E', 'Single Family Residential'),
+        ('R-1T', 'Townhouse Residential'),
+        ('R-2', 'Two-Family Residential'),
+        ('R-3', 'Planned Neighborhood Residential'),
+        ('R-4', 'High Density Apartment'),
+        ('R-5', 'High Rise Apartment'),
+        ('P-1', 'Professional Office'),
+        ('B-1', 'Neighborhood Business'),
+        ('B-2', 'Downtown Business'),
+        ('B-2A', 'Downtown Frame Business'),
+        ('B-2B', 'Lexington Center Business'),
+        ('B-3', 'Highway Service Business'),
+        ('B-4', 'Wholesale and Warehouse Business'),
+        ('I-1', 'Light Industrial'),
+        ('I-2', 'Heavy Industrial'),
+        ('P-2', 'Office, Industry, and Research Park'),
+    )
+
+    acres = models.DecimalField(max_digits=20, decimal_places=2)
+    zone = models.CharField(max_length=100, choices=ZONES)

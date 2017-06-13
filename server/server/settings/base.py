@@ -52,6 +52,8 @@ INSTALLED_APPS = (
     'base',
 
     # Local apps, referenced via appname
+    'accounts',
+    'notes',
     'plats',
 )
 
