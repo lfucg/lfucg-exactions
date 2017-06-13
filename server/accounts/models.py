@@ -94,9 +94,10 @@ class AccountLedger(models.Model):
     # created_by = models.ForeignKey(User, related_name='plat_created')
     # modified_by = models.ForeignKey(User, related_name='plat_modified')  
 
-    account_from = models.ForeignKey(Account, related_name='ledger_account_from')
-    account_to = models.ForeignKey(Account, related_name='ledger_account_to')
-    lot = models.ForeignKey(Lot, related_name='ledger_lot')
+    account_from = models.ForeignKey(Account, related_name='ledger_account_from', blank=True, null=True)
+    account_to = models.ForeignKey(Account, related_name='ledger_account_to', blank=True, null=True)
+    lot = models.ForeignKey(Lot, related_name='ledger_lot', blank=True, null=True)
+    agreement = models.ForeignKey(Agreement, related_name='ledger', blank=True, null=True)
 
     entry_type = models.CharField(max_length=200)
 
