@@ -1,3 +1,9 @@
 from django.contrib import admin
 
-# Register your models here.
+from accounts.models import *
+
+admin.site.register(Account)
+admin.site.register(Agreement)
+admin.site.register(Project)
+admin.site.register(ProjectCostEstimate)
+admin.site.register(AccountLedger)
