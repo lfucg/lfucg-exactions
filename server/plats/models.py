@@ -79,10 +79,10 @@ class Lot(models.Model):
     longitude = models.CharField(max_length=100)
 
     address_number = models.IntegerField()
-    address_direction = models.CharField(max_length=50)
+    address_direction = models.CharField(max_length=50, null=True, blank=True)
     address_street = models.CharField(max_length=200)
-    address_suffix = models.CharField(max_length=100)
-    address_unit = models.CharField(max_length=100)
+    address_suffix = models.CharField(max_length=100, null=True, blank=True)
+    address_unit = models.CharField(max_length=100, null=True, blank=True)
     address_city = models.CharField(max_length=100)
     address_state = models.CharField(max_length=50)
     address_zip = models.CharField(max_length=10)
