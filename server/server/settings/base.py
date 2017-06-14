@@ -54,6 +54,7 @@ INSTALLED_APPS = (
 
     # Local apps, referenced via appname
     'accounts',
+    'api',
     'notes',
     'plats',
 )
