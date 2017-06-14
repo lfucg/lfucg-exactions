@@ -11,6 +11,10 @@ class AgreementViewSet(viewsets.ModelViewSet):
     serializer_class = AgreementSerializer
     queryset = Agreement.objects.all()
 
+class PaymentViewSet(viewsets.ModelViewSet):
+    serializer_class = PaymentSerilizer
+    queryset = Payment.objects.all()
+
 class ProjectViewSet(viewsets.ModelViewSet):
     serializer_class = ProjectSerializer
     queryset = Project.objects.all()

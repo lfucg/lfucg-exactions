@@ -19,10 +19,6 @@ class PlatZoneViewSet(viewsets.ModelViewSet):
     serializer_class = PlatZoneSerilizer
     queryset = PlatZone.objects.all()
 
-class PaymentViewSet(viewsets.ModelViewSet):
-    serializer_class = PaymentSerilizer
-    queryset = Payment.objects.all()
-
 class CalculationWorksheetViewSet(viewsets.ModelViewSet):
     serializer_class CalculationWorksheetSerilizer
     queryset = CalculationWorksheet.objects.all()

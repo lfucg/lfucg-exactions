@@ -23,6 +23,32 @@ class AccountLedgerSerializer(serializers.ModelSerializer):
             'sewer_credits',
         )
 
+class PaymentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Payment
+        fields = (
+            'id',
+            'is_approved',
+            'is_active',
+            'lot_id',
+            'date_created',
+            'date_modified',
+            'created_by',
+            'modified_by',
+            'paid_by',
+            'paid_by_type',
+            'payment_type',
+            'check_number',
+            'credit_source',
+            'credit_account',
+            'paid_roads',
+            'paid_sewer_trans',
+            'paid_sewer_cap',
+            'paid_parks',
+            'paid_storm',
+            'paid_open_space',
+        )
+
 class ProjectCostEstimateSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProjectCostEstimate
@@ -70,6 +96,7 @@ class ProjectSerializer(serializers.ModelSerializer):
 class AgreementSerializer(serializers.ModelSerializer):
     projects = ProjectSerializer(many=True, read_only=True)
     account_ledgers = AccountLedgerSerializer(many=True, read_only=True)
+    payments = PaymentSerializer(many=True, read_only=True)
 
     class Meta:
         model = Agreement
@@ -93,6 +120,7 @@ class AgreementSerializer(serializers.ModelSerializer):
 class AccountSerializer(serializers.ModelSerializer):
     agreements = AgreementSerializer(many=True, read_only=True)
     account_ledgers = AccountLedgerSerializer(many=True, read_only=True)
+    payments = PaymentSerializer(many=True, read_only=True)
 
     class Meta:
         model = Account

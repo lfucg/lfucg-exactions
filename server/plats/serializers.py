@@ -29,34 +29,8 @@ class CalculationWorksheetSerializer(serializers.ModelSerializer):
             'zone',
         )
 
-class PaymentSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Payment
-        fields = (
-            'id',
-            'is_approved',
-            'is_active',
-            'lot_id',
-            'date_created',
-            'date_modified',
-            'created_by',
-            'modified_by',
-            'paid_by',
-            'paid_by_type',
-            'payment_type',
-            'check_number',
-            'credit_source',
-            'credit_account',
-            'paid_roads',
-            'paid_sewer_trans',
-            'paid_sewer_cap',
-            'paid_parks',
-            'paid_storm',
-            'paid_open_space',
-        )
-
 class LotSerializer(serializers.ModelSerializer):
-    payment = PaymentSerializer(read_only=True)
+    # payment = PaymentSerializer(read_only=True)
 
     class Meta:
         model = Lot
