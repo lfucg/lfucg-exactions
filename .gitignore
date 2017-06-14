@@ -1,1 +1,13 @@
+.DS_Store
+*.pyc
+__pycache__
+*.sqlite3
 dist/
+
+.env
+.env.json
+
+node_modules/
+npm-debug.log
+
+media/
