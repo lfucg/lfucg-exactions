@@ -16,11 +16,8 @@ class Subdivision(models.Model):
     gross_acreage = models.DecimalField(max_digits=20, decimal_places=3)
     number_allowed_lots = models.PositiveIntegerField()
 
-    def save(self, *args, **kwargs):
-        if self.pk is None:
-            self.created_by = self.request.user
-        else:
-            self.modified_by = self.request.user
+    def __str__(self):
+        return self.name
 
 class Plat(models.Model):
     is_approved = models.BooleanField(default=False)
@@ -58,11 +55,8 @@ class Plat(models.Model):
     sewer_due = models.DecimalField(max_digits=20, decimal_places=2)
     non_sewer_due = models.DecimalField(max_digits=20, decimal_places=2)
 
-    def save(self, *args, **kwargs):
-        if self.pk is None:
-            self.created_by = self.request.user
-        else:
-            self.modified_by = self.request.user
+    def __str__(self):
+        return 'Lat: ' + self.latitude +  ' Long: ' + self.longitude
 
 
 class Lot(models.Model):
@@ -85,10 +79,10 @@ class Lot(models.Model):
     longitude = models.CharField(max_length=100)
 
     address_number = models.IntegerField()
-    address_direction = models.CharField(max_length=50)
+    address_direction = models.CharField(max_length=50, null=True, blank=True)
     address_street = models.CharField(max_length=200)
-    address_suffix = models.CharField(max_length=100)
-    address_unit = models.CharField(max_length=100)
+    address_suffix = models.CharField(max_length=100, null=True, blank=True)
+    address_unit = models.CharField(max_length=100, null=True, blank=True)
     address_city = models.CharField(max_length=100)
     address_state = models.CharField(max_length=50)
     address_zip = models.CharField(max_length=10)
@@ -111,11 +105,8 @@ class Lot(models.Model):
     dues_open_space_dev = models.DecimalField(max_digits=20, decimal_places=2)
     dues_open_space_own = models.DecimalField(max_digits=20, decimal_places=2)
 
-    def save(self, *args, **kwargs):
-        if self.pk is None:
-            self.created_by = self.request.user
-        else:
-            self.modified_by = self.request.user    
+    def __str__(self):
+        return self.address_full    
 
 class PlatZone(models.Model):
     is_active = models.BooleanField(default=True)
@@ -158,11 +149,8 @@ class PlatZone(models.Model):
     zone = models.CharField(max_length=100, choices=ZONES)
     acres = models.DecimalField(max_digits=20, decimal_places=2)
 
-    def save(self, *args, **kwargs):
-        if self.pk is None:
-            self.created_by = self.request.user
-        else:
-            self.modified_by = self.request.user
+    def __str__(self):
+        return self.zone
 
 
 class Payment(models.Model):
@@ -192,11 +180,8 @@ class Payment(models.Model):
     paid_storm = models.DecimalField(max_digits=20, decimal_places=2)
     paid_open_space = models.DecimalField(max_digits=20, decimal_places=2)
 
-    def save(self, *args, **kwargs):
-        if self.pk is None:
-            self.created_by = self.request.user
-        else:
-            self.modified_by = self.request.user    
+    def __str__(self):
+        return self.lot_id.address_full
 
 class CalculationWorksheet(models.Model):
     is_active = models.BooleanField(default=True)
@@ -230,3 +215,6 @@ class CalculationWorksheet(models.Model):
 
     acres = models.DecimalField(max_digits=20, decimal_places=2)
     zone = models.CharField(max_length=100, choices=ZONES)
+
+    def __str__(self):
+        return self.zone + self.acres

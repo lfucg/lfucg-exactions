@@ -9,6 +9,9 @@ class Note(models.Model):
     note = models.TextField()
     date = models.DateTimeField(auto_now=True)
 
+    def __str__(self):
+        return self.note
+
 class RateTable(models.Model):
     is_active = models.BooleanField(default=True)
 
@@ -23,11 +26,8 @@ class RateTable(models.Model):
 
     resolution_number = models.IntegerField()
 
-    def save(self, *args, **kwargs):
-        if self.pk is None:
-            self.created_by = self.request.user
-        else:
-            self.modified_by = self.request.user
+    def __str__(self):
+        return self.begin_effective_date
 
 class Rate(models.Model):
     is_active = models.BooleanField(default=True)
@@ -72,8 +72,5 @@ class Rate(models.Model):
     category = models.CharField(max_length=200)
     rate = models.CharField(max_length=200)
 
-    def save(self, *args, **kwargs):
-        if self.pk is None:
-            self.created_by = self.request.user
-        else:
-            self.modified_by = self.request.user
+    def __str__(self):
+        return self.rate
