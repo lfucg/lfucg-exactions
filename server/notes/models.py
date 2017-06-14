@@ -23,12 +23,6 @@ class RateTable(models.Model):
 
     resolution_number = models.IntegerField()
 
-    def save(self, *args, **kwargs):
-        if self.pk is None:
-            self.created_by = self.request.user
-        else:
-            self.modified_by = self.request.user
-
 class Rate(models.Model):
     is_active = models.BooleanField(default=True)
     
@@ -71,9 +65,3 @@ class Rate(models.Model):
     zone = models.CharField(max_length=100, choices=ZONES)
     category = models.CharField(max_length=200)
     rate = models.CharField(max_length=200)
-
-    def save(self, *args, **kwargs):
-        if self.pk is None:
-            self.created_by = self.request.user
-        else:
-            self.modified_by = self.request.user

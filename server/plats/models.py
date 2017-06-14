@@ -16,12 +16,6 @@ class Subdivision(models.Model):
     gross_acreage = models.DecimalField(max_digits=20, decimal_places=3)
     number_allowed_lots = models.PositiveIntegerField()
 
-    def save(self, *args, **kwargs):
-        if self.pk is None:
-            self.created_by = self.request.user
-        else:
-            self.modified_by = self.request.user
-
 class Plat(models.Model):
     is_approved = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
@@ -57,12 +51,6 @@ class Plat(models.Model):
 
     sewer_due = models.DecimalField(max_digits=20, decimal_places=2)
     non_sewer_due = models.DecimalField(max_digits=20, decimal_places=2)
-
-    def save(self, *args, **kwargs):
-        if self.pk is None:
-            self.created_by = self.request.user
-        else:
-            self.modified_by = self.request.user
 
 
 class Lot(models.Model):
@@ -109,13 +97,7 @@ class Lot(models.Model):
     dues_storm_own = models.DecimalField(max_digits=20, decimal_places=2)
 
     dues_open_space_dev = models.DecimalField(max_digits=20, decimal_places=2)
-    dues_open_space_own = models.DecimalField(max_digits=20, decimal_places=2)
-
-    def save(self, *args, **kwargs):
-        if self.pk is None:
-            self.created_by = self.request.user
-        else:
-            self.modified_by = self.request.user    
+    dues_open_space_own = models.DecimalField(max_digits=20, decimal_places=2)    
 
 class PlatZone(models.Model):
     is_active = models.BooleanField(default=True)
@@ -158,12 +140,6 @@ class PlatZone(models.Model):
     zone = models.CharField(max_length=100, choices=ZONES)
     acres = models.DecimalField(max_digits=20, decimal_places=2)
 
-    def save(self, *args, **kwargs):
-        if self.pk is None:
-            self.created_by = self.request.user
-        else:
-            self.modified_by = self.request.user
-
 
 class Payment(models.Model):
     is_approved = models.BooleanField(default=False)
@@ -190,13 +166,7 @@ class Payment(models.Model):
     paid_sewer_cap = models.DecimalField(max_digits=20, decimal_places=2)
     paid_parks = models.DecimalField(max_digits=20, decimal_places=2)
     paid_storm = models.DecimalField(max_digits=20, decimal_places=2)
-    paid_open_space = models.DecimalField(max_digits=20, decimal_places=2)
-
-    def save(self, *args, **kwargs):
-        if self.pk is None:
-            self.created_by = self.request.user
-        else:
-            self.modified_by = self.request.user    
+    paid_open_space = models.DecimalField(max_digits=20, decimal_places=2)    
 
 class CalculationWorksheet(models.Model):
     is_active = models.BooleanField(default=True)

@@ -25,12 +25,6 @@ class Account(models.Model):
     phone = models.CharField(max_length=15)
     email = models.EmailField(max_length=100)
 
-    def save(self, *args, **kwargs):
-        if self.pk is None:
-            self.created_by = self.request.user
-        else:
-            self.modified_by = self.request.user
-
 class Agreement(models.Model):
     is_approved = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
@@ -47,12 +41,6 @@ class Agreement(models.Model):
 
     expansion_area = models.CharField(max_length=100)
     agreement_type = models.CharField(max_length=100)
-
-    def save(self, *args, **kwargs):
-        if self.pk is None:
-            self.created_by = self.request.user
-        else:
-            self.modified_by = self.request.user
 
 class Project(models.Model):
     is_approved = models.BooleanField(default=False)
@@ -73,12 +61,6 @@ class Project(models.Model):
     project_description = models.TextField()
     project_status = models.CharField(max_length=200)
     status_date = models.DateField()
-
-    def save(self, *args, **kwargs):
-        if self.pk is None:
-            self.created_by = self.request.user
-        else:
-            self.modified_by = self.request.user
 
 class ProjectCostEstimate(models.Model):
     is_approved = models.BooleanField(default=False)
@@ -102,12 +84,6 @@ class ProjectCostEstimate(models.Model):
 
     credits_available = models.DecimalField(max_digits=20, decimal_places=2)
 
-    def save(self, *args, **kwargs):
-        if self.pk is None:
-            self.created_by = self.request.user
-        else:
-            self.modified_by = self.request.user
-
 class AccountLedger(models.Model):
     is_approved = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
@@ -128,9 +104,3 @@ class AccountLedger(models.Model):
 
     non_sewer_credits = models.DecimalField(max_digits=20, decimal_places=2)
     sewer_credits = models.DecimalField(max_digits=20, decimal_places=2)
-
-    def save(self, *args, **kwargs):
-        if self.pk is None:
-            self.created_by = self.request.user
-        else:
-            self.modified_by = self.request.user
