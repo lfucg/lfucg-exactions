@@ -16,11 +16,8 @@ class Subdivision(models.Model):
     gross_acreage = models.DecimalField(max_digits=20, decimal_places=3)
     number_allowed_lots = models.PositiveIntegerField()
 
-    def save(self, *args, **kwargs):
-        if self.pk is None:
-            self.created_by = self.request.user
-        else:
-            self.modified_by = self.request.user
+    def __str__(self):
+        return self.name
 
 class Plat(models.Model):
     is_approved = models.BooleanField(default=False)
@@ -58,16 +55,73 @@ class Plat(models.Model):
     sewer_due = models.DecimalField(max_digits=20, decimal_places=2)
     non_sewer_due = models.DecimalField(max_digits=20, decimal_places=2)
 
-    def save(self, *args, **kwargs):
-        if self.pk is None:
-            self.created_by = self.request.user
-        else:
-            self.modified_by = self.request.user
+    def __str__(self):
+        return 'Lat: ' + self.latitude +  ' Long: ' + self.longitude
 
 
 class Lot(models.Model):
     is_approved = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
+
+    STATES = (
+        ('AK', 'Alaska'),
+        ('AL', 'Alabama'),
+        ('AR', 'Arkansas'),
+        ('AS', 'American Samoa'),
+        ('AZ', 'Arizona'),
+        ('CA', 'California'),
+        ('CO', 'Colorado'),
+        ('CT', 'Connecticut'),
+        ('DC', 'District of Columbia'),
+        ('DE', 'Delaware'),
+        ('FL', 'Florida'),
+        ('GA', 'Georgia'),
+        ('GU', 'Guam'),
+        ('HI', 'Hawaii'),
+        ('IA', 'Iowa'),
+        ('ID', 'Idaho'),
+        ('IL', 'Illinois'),
+        ('IN', 'Indiana'),
+        ('KS', 'Kansas'),
+        ('KY', 'Kentucky'),
+        ('LA', 'Louisiana'),
+        ('MA', 'Massachusetts'),
+        ('MD', 'Maryland'),
+        ('ME', 'Maine'),
+        ('MI', 'Michigan'),
+        ('MN', 'Minnesota'),
+        ('MO', 'Missouri'),
+        ('MP', 'Northern Mariana Islands'),
+        ('MS', 'Mississippi'),
+        ('MT', 'Montana'),
+        ('NA', 'National'),
+        ('NC', 'North Carolina'),
+        ('ND', 'North Dakota'),
+        ('NE', 'Nebraska'),
+        ('NH', 'New Hampshire'),
+        ('NJ', 'New Jersey'),
+        ('NM', 'New Mexico'),
+        ('NV', 'Nevada'),
+        ('NY', 'New York'),
+        ('OH', 'Ohio'),
+        ('OK', 'Oklahoma'),
+        ('OR', 'Oregon'),
+        ('PA', 'Pennsylvania'),
+        ('PR', 'Puerto Rico'),
+        ('RI', 'Rhode Island'),
+        ('SC', 'South Carolina'),
+        ('SD', 'South Dakota'),
+        ('TN', 'Tennessee'),
+        ('TX', 'Texas'),
+        ('UT', 'Utah'),
+        ('VA', 'Virginia'),
+        ('VI', 'Virgin Islands'),
+        ('VT', 'Vermont'),
+        ('WA', 'Washington'),
+        ('WI', 'Wisconsin'),
+        ('WV', 'West Virginia'),
+        ('WY', 'Wyoming'),
+    )
 
     plat = models.ForeignKey(Plat, related_name='lot')
     parcel_id = models.CharField(max_length=200, null=True, blank=True)
@@ -85,12 +139,12 @@ class Lot(models.Model):
     longitude = models.CharField(max_length=100)
 
     address_number = models.IntegerField()
-    address_direction = models.CharField(max_length=50)
+    address_direction = models.CharField(max_length=50, null=True, blank=True)
     address_street = models.CharField(max_length=200)
-    address_suffix = models.CharField(max_length=100)
-    address_unit = models.CharField(max_length=100)
+    address_suffix = models.CharField(max_length=100, null=True, blank=True)
+    address_unit = models.CharField(max_length=100, null=True, blank=True)
     address_city = models.CharField(max_length=100)
-    address_state = models.CharField(max_length=50)
+    address_state = models.CharField(max_length=50, choices=STATES)
     address_zip = models.CharField(max_length=10)
     address_full = models.CharField(max_length=300)
 
@@ -111,11 +165,8 @@ class Lot(models.Model):
     dues_open_space_dev = models.DecimalField(max_digits=20, decimal_places=2)
     dues_open_space_own = models.DecimalField(max_digits=20, decimal_places=2)
 
-    def save(self, *args, **kwargs):
-        if self.pk is None:
-            self.created_by = self.request.user
-        else:
-            self.modified_by = self.request.user    
+    def __str__(self):
+        return self.address_full    
 
 class PlatZone(models.Model):
     is_active = models.BooleanField(default=True)
@@ -158,11 +209,8 @@ class PlatZone(models.Model):
     zone = models.CharField(max_length=100, choices=ZONES)
     acres = models.DecimalField(max_digits=20, decimal_places=2)
 
-    def save(self, *args, **kwargs):
-        if self.pk is None:
-            self.created_by = self.request.user
-        else:
-            self.modified_by = self.request.user
+    def __str__(self):
+        return self.zone
 
 
 class Payment(models.Model):
@@ -192,11 +240,8 @@ class Payment(models.Model):
     paid_storm = models.DecimalField(max_digits=20, decimal_places=2)
     paid_open_space = models.DecimalField(max_digits=20, decimal_places=2)
 
-    def save(self, *args, **kwargs):
-        if self.pk is None:
-            self.created_by = self.request.user
-        else:
-            self.modified_by = self.request.user    
+    def __str__(self):
+        return self.lot_id.address_full
 
 class CalculationWorksheet(models.Model):
     is_active = models.BooleanField(default=True)
@@ -230,3 +275,6 @@ class CalculationWorksheet(models.Model):
 
     acres = models.DecimalField(max_digits=20, decimal_places=2)
     zone = models.CharField(max_length=100, choices=ZONES)
+
+    def __str__(self):
+        return self.zone + self.acres

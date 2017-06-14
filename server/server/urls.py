@@ -1,7 +1,7 @@
 """ Default urlconf for server """
-
 from django.conf.urls import include, url
 from django.contrib import admin
+from django.conf import settings
 
 
 urlpatterns = [
@@ -9,3 +9,8 @@ urlpatterns = [
     url(r'', include('base.urls')),
 ]
 
+if settings.DEBUG:
+    import debug_toolbar
+    urlpatterns += [
+        url(r'^__debug__/', include(debug_toolbar.urls)),
+    ]
