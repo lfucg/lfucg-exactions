@@ -212,37 +212,6 @@ class PlatZone(models.Model):
     def __str__(self):
         return self.zone
 
-
-class Payment(models.Model):
-    is_approved = models.BooleanField(default=False)
-    is_active = models.BooleanField(default=True)
-
-    lot_id = models.ForeignKey(Lot, related_name='payment')
-
-    date_created = models.DateField(auto_now_add=True)
-    date_modified = models.DateField(auto_now=True)
-
-    created_by = models.ForeignKey(User, related_name='payment_created')
-    modified_by = models.ForeignKey(User, related_name='payment_modified')
-
-    paid_by = models.CharField(max_length=100)
-    paid_by_type = models.CharField(max_length=100)
-    payment_type = models.CharField(max_length=100)
-
-    check_number = models.IntegerField()
-    credit_source = models.CharField(max_length=100)
-    credit_account = models.CharField(max_length=100)
-
-    paid_roads = models.DecimalField(max_digits=20, decimal_places=2)
-    paid_sewer_trans = models.DecimalField(max_digits=20, decimal_places=2)
-    paid_sewer_cap = models.DecimalField(max_digits=20, decimal_places=2)
-    paid_parks = models.DecimalField(max_digits=20, decimal_places=2)
-    paid_storm = models.DecimalField(max_digits=20, decimal_places=2)
-    paid_open_space = models.DecimalField(max_digits=20, decimal_places=2)
-
-    def __str__(self):
-        return self.lot_id.address_full
-
 class CalculationWorksheet(models.Model):
     is_active = models.BooleanField(default=True)
 
