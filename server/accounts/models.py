@@ -25,6 +25,9 @@ class Account(models.Model):
     phone = models.CharField(max_length=15)
     email = models.EmailField(max_length=100)
 
+    def __str__(self):
+        return self.account_name
+
 class Agreement(models.Model):
     is_approved = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
@@ -41,6 +44,9 @@ class Agreement(models.Model):
 
     expansion_area = models.CharField(max_length=100)
     agreement_type = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.account_id.account_name
 
 class Project(models.Model):
     is_approved = models.BooleanField(default=False)
@@ -61,6 +67,9 @@ class Project(models.Model):
     project_description = models.TextField()
     project_status = models.CharField(max_length=200)
     status_date = models.DateField()
+
+    def __str__(self):
+        return self.project_description
 
 class ProjectCostEstimate(models.Model):
     is_approved = models.BooleanField(default=False)
@@ -84,6 +93,9 @@ class ProjectCostEstimate(models.Model):
 
     credits_available = models.DecimalField(max_digits=20, decimal_places=2)
 
+    def __str__(self):
+        return self.project_id.agreement_id.account_name
+
 class AccountLedger(models.Model):
     is_approved = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
@@ -104,3 +116,6 @@ class AccountLedger(models.Model):
 
     non_sewer_credits = models.DecimalField(max_digits=20, decimal_places=2)
     sewer_credits = models.DecimalField(max_digits=20, decimal_places=2)
+
+    def __str__(self):
+        return 'Lat: ' + self.lot.latitude +  ' Long: ' + self.lot.longitude
