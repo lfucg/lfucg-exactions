@@ -52,6 +52,10 @@
     {% block header %}{% endblock %}
   </header>
 
+  {% block dashboard %}
+        
+  {% endblock dashboard %}
+
   <div role="main">
     {% block content %}{% endblock %}
   </div>
@@ -90,6 +94,11 @@
     g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
     s.parentNode.insertBefore(g,s)}(document,'script'));
   </script>
+
+  {% block body_scripts %}
+      
+  {% endblock body_scripts %}
+
 {% endblock %}
 </body>
 </html>

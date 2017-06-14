@@ -1,5 +1,6 @@
 # Django Requirements
 Django==1.11.2
+Unipath==1.1
 djangorestframework==3.5.3
 
 # Templates

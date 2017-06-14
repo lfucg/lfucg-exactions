@@ -9,7 +9,7 @@ import logging
 # Normally you should not import ANYTHING from Django directly
 # into your settings, but ImproperlyConfigured is an exception.
 from django.core.exceptions import ImproperlyConfigured
-
+from unipath import Path
 
 def get_env_setting(setting):
     """ Get the environment setting or return exception """
@@ -24,6 +24,11 @@ def get_env_setting(setting):
 PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__) + "../../../")
 
 SUPPORTED_NONLOCALES = ['media', 'admin', 'static']
+
+BASE_DIR = Path(__file__).ancestor(3)
+DIST_DIR = BASE_DIR.ancestor(1).child("dist")
+TEMPLATE_DIR = BASE_DIR.child("templates")
+STATIC_FILE_DIR = BASE_DIR.child("static")
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
@@ -96,11 +101,11 @@ STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
 # Example: "http://media.example.com/static/"
 STATIC_URL = '/static/'
 
+
+
 # Additional locations of static files
-STATICFILES_DIRS = (
-    # Put strings here, like "/home/html/static" or "C:/www/django/static".
-    # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
+STATICFILES_DIRS = (    
+    DIST_DIR,
 )
 
 # If you set this to False, Django will make some optimizations so as not
@@ -140,7 +145,7 @@ MIDDLEWARE_CLASSES = [
     'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
-TEMPLATE_DIR = os.path.join(PROJECT_ROOT, 'templates')
+#TEMPLATE_DIR = os.path.join(PROJECT_ROOT, 'templates')
 
 TEMPLATES = [
     {
