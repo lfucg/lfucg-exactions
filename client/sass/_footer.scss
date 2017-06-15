@@ -2,11 +2,9 @@
     background-color: #001A49;
     margin-top: 2em;
     padding: 10px 0px;
-    position: absolute;
+    position: relative;
     bottom: 0px;
-    width: 100%;
-    height: 6em;
-
+    
     h2 {
         margin-top: 0.4em;
         a {
@@ -17,8 +15,11 @@
             font-size: 1em;
         }
     }
+    .footer-logo-div {
+        text-align: right;
+    }
     .white-horse-logo {
-        width: 90%;
+        width: 60%;
     }
     .footer-text {
         color: white;
