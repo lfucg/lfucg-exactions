@@ -1,11 +1,15 @@
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    margin: 0 0 7em;
+}
+
 .container {
     width: 95%;
 }
-
-/*.container div {
-    display: inline-block;
-    margin-top: 20px;
-}*/
 
 .clearfix::after {
     content: "";
