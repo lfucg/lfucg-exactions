@@ -1,6 +1,6 @@
 module.exports = {
   entry: {
-    'main': './js/main.js',
+    // 'main': './js/main.js',
     'dashboard': './js/dashboard.js',
   },
   devtool: 'source-map',
@@ -12,11 +12,11 @@ module.exports = {
     }]
   },
   resolve: {
-    extensions: ['', '.js', '.jsx']
+    extensions: ['', '.js', '.jsx'],
   },
   output: {
     path: __dirname + '../dist',
     publicPath: '/js',
-    filename: '[name].js'
+    filename: '[name].js',
   },
 };
