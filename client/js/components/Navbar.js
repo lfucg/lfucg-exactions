@@ -34,7 +34,6 @@ class Navbar extends React.Component {
                         </div>
                     </div>
                 </header>
-                <img src={`${global.BASE_STATIC_URL}/lexington-hero-interior.jpg`} role="presentation" className="lex-banner" />
             </div>
         );
     }

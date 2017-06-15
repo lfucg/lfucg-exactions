@@ -18,6 +18,7 @@ class DashboardPage extends React.Component {
         return (
             <div className="dashboard">
                 <Navbar />
+                <img src={`${global.BASE_STATIC_URL}/lexington-hero-interior.jpg`} role="presentation" className="lex-banner" />
                 <div className="container">
                     Hello World ... Now from React/Redux!
                 </div>
