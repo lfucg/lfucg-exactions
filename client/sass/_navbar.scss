@@ -1,21 +1,32 @@
 header {
     padding-top: 0.4em;
     padding-bottom: 0.5em;
-    height: 100px;
     background-color: #fff;
-}
-
-@media (max-width: 767px) {
-    .navbar-brand {
-        img {
-            width: 100px;
-        }
+    .container {
+        padding-top: 1em;
     }
 }
 
-.navbar-brand {
-    img {
-        width: 305px;
+@media (max-width: 767px) {
+    header {
+        height: 70px;
+    }
+    .navbar-brand {
+        background-image: url('../../static/Lexington_Web_Color_Horse_Only.png');
+        background-repeat: no-repeat;
+        background-size: 100%; 
+        width: 50px;
+    }
+}
+
+@media (min-width: 768px) {
+    header {
+        height: 100px;
+    }
+    .navbar-brand {
+        background-image: url('../../static/lexington-logo.svg');
+        background-repeat: no-repeat;
+        width: 305px; 
     }
 }
 

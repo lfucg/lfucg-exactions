@@ -10,9 +10,7 @@ class Navbar extends React.Component {
                 <header>
                     <div className="container">
                         <div className="navbar-header">
-                            <Link to="dashboard/" className="navbar-brand" >
-                                <img src={`${global.BASE_STATIC_URL}/lexington-logo.svg`} alt="Dashboard" role="link" />
-                            </Link>
+                            <Link to="dashboard/" className="navbar-brand" aria-label="Exactions Home" />
                             <button className="btn navbar-btn navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
                                 <span className="icon-bar" />
                                 <span className="icon-bar" />
