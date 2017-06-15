@@ -1,2 +1,34 @@
+header {
+    padding-top: 0.4em;
+    padding-bottom: 0.5em;
+    height: 100px;
+    background-color: #fff;
+}
 
+@media (max-width: 767px) {
+    .navbar-brand {
+        img {
+            width: 100px;
+        }
+    }
+}
 
+.navbar-brand {
+    img {
+        width: 305px;
+    }
+}
+
+.lex-banner {
+    width: 100%;
+    height: auto;
+    display: inline-block;
+    padding-bottom: 1.5em;
+}
+
+.navbar-menu li {
+    color: #0057A8;
+    font-size: 20px;
+    line-height: 59px;
+    vertical-align: middle;
+}
