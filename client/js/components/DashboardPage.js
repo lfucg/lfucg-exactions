@@ -1,24 +1,28 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
+import Navbar from './Navbar';
+import Footer from './Footer';
+
 class DashboardPage extends React.Component {
     static propTypes = {
-        
     };
 
     componentDidMount() {
-        
     }
 
     render() {
         const {
-
         } = this.props;
-
 
         return (
             <div className="dashboard">
-                Hello World ... Now from React/Redux!
+                <Navbar />
+                <img src={`${global.BASE_STATIC_URL}/lexington-hero-interior.jpg`} role="presentation" className="lex-banner" />
+                <div className="container">
+                    Hello World ... Now from React/Redux!
+                </div>
+                <Footer />
             </div>
         );
     }
@@ -26,13 +30,11 @@ class DashboardPage extends React.Component {
 
 function mapStateToProps(state) {
     return {
-        
     };
 }
 
 function mapDispatchToProps(dispatch) {
     return {
-        
     };
 }
 

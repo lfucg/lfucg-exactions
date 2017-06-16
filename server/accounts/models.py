@@ -177,7 +177,7 @@ class ProjectCostEstimate(models.Model):
     land_cost = models.DecimalField(max_digits=20, decimal_places=2)
     design_cost = models.DecimalField(max_digits=20, decimal_places=2)
     construction_cost = models.DecimalField(max_digits=20, decimal_places=2)
-    admin_cont = models.DecimalField(max_digits=20, decimal_places=2)
+    admin_cost = models.DecimalField(max_digits=20, decimal_places=2)
     management_cost = models.DecimalField(max_digits=20, decimal_places=2)
 
     credits_available = models.DecimalField(max_digits=20, decimal_places=2)

@@ -1,89 +1,9 @@
-.container-box {
-    text-align: center;
-    background-color: #eceeef;
-    padding: 20px 10px;
-    border-radius: .3rem;
-    margin-bottom: 2rem;
-    border: solid 1px #767674;
+.container {
+    width: 95%;
 }
-
-.accent-text {
-    color: red;
-}
-
-.larger-logo-img {
-    width: 100%;
-    margin-top: 85px;
-}
-
-@media (max-width: 768px) {
-    .larger-logo-img {
-        visibility: hidden;
-    }
-}
-
-.django-form-label {
-    text-align: left;
-    margin: 5px 10px 0px 10px;
-}
-.django-form-input {
-    margin: 5px 10px 0px 10px;
-}
-
 
 .clearfix::after {
     content: "";
     clear: both;
     display: table;
 }
-
-.jumbotron {
-    text-align: center;
-    padding: 20px 10px;
-    border: solid 1px #767674;
-}
-
-.comments {
-    padding: 20px 10px;
-    border: solid 1px #767674;
-    background-color: #eceeef;
-    border-radius: .3rem;
-    h2 {
-        text-align: center;
-    }
-}
-
-.comment-box {
-    /*background-color: white;*/
-    border: solid 0.5px #767674;
-    border-radius: 0.3rem;
-    max-height: 300px;
-    overflow: scroll;
-    h5 {
-        font-weight: normal;
-        
-    }
-    .poster-name {
-        font-weight: bold;
-        font-size: 1.1em;
-    }
-}
-
-.single-comment {
-    border-bottom: solid 0.3px #767674;
-}
-
-.verified {
-    padding-left: 50px;
-    color: green;
-}
-.unverified {
-    padding-left: 50px;
-    color: red;
-}
-
-.hidden-element {
-    display: none;
-}
-
-

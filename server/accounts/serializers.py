@@ -66,7 +66,7 @@ class ProjectCostEstimateSerializer(serializers.ModelSerializer):
             'land_cost',
             'design_cost',
             'construction_cost',
-            'admin_cont',
+            'admin_cost',
             'management_cost',
             'credits_available',
         )
