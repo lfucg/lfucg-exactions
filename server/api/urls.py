@@ -4,6 +4,7 @@ from rest_framework import routers
 from plats.viewsets import *
 from notes.viewsets import *
 from accounts.viewsets import *
+from accounts.views import CurrentUserDetails
 
 router = routers.DefaultRouter()
 

@@ -12,14 +12,14 @@ class PlatViewSet(viewsets.ModelViewSet):
     queryset = Plat.objects.all()
 
 class LotViewSet(viewsets.ModelViewSet):
-    serializer_class = LotSerilizer
+    serializer_class = LotSerializer
     queryset = Lot.objects.all()
 
 class PlatZoneViewSet(viewsets.ModelViewSet):
-    serializer_class = PlatZoneSerilizer
+    serializer_class = PlatZoneSerializer
     queryset = PlatZone.objects.all()
 
 class CalculationWorksheetViewSet(viewsets.ModelViewSet):
-    serializer_class CalculationWorksheetSerilizer
+    serializer_class = CalculationWorksheetSerializer
     queryset = CalculationWorksheet.objects.all()
     
