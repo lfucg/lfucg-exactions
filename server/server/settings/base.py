@@ -57,6 +57,7 @@ INSTALLED_APPS = (
 
     # Application base, containing global templates.
     'base',
+    'simple_history',
 
     # Local apps, referenced via appname
     'accounts',
@@ -146,6 +147,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
+    'simple_history.middleware.HistoryRequestMiddleware',
 ]
 
 #TEMPLATE_DIR = os.path.join(PROJECT_ROOT, 'templates')

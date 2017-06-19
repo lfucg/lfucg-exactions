@@ -2,6 +2,7 @@
 Django==1.11.2
 Unipath==1.1
 djangorestframework==3.5.3
+django-simple-history==1.9.0
 
 # Templates
 django_compressor
