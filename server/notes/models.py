@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+from simple_history.models import HistoricalRecords
+
 class Note(models.Model):
     is_active = models.BooleanField(default=True)
 
@@ -8,6 +10,8 @@ class Note(models.Model):
 
     note = models.TextField()
     date = models.DateTimeField(auto_now=True)
+
+    history = HistoricalRecords()
 
     def __str__(self):
         return self.note
@@ -25,6 +29,8 @@ class RateTable(models.Model):
     end_effective_date = models.DateField()
 
     resolution_number = models.IntegerField()
+
+    history = HistoricalRecords()
 
     def __str__(self):
         return self.begin_effective_date
@@ -71,6 +77,8 @@ class Rate(models.Model):
     zone = models.CharField(max_length=100, choices=ZONES)
     category = models.CharField(max_length=200)
     rate = models.CharField(max_length=200)
+
+    history = HistoricalRecords()
 
     def __str__(self):
         return self.rate
