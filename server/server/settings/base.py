@@ -107,7 +107,7 @@ STATIC_URL = '/static/'
 
 
 # Additional locations of static files
-STATICFILES_DIRS = (    
+STATICFILES_DIRS = (
     DIST_DIR,
 )
 

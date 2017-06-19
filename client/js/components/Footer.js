@@ -8,12 +8,12 @@ class Footer extends React.Component {
         return (
             <div className="react-footer">
                 <div className="container">
-                    <div className="col-sm-5 col-sm-offset-1">
+                    <div className="col-md-5 col-md-offset-1 col-sm-5">
                         <h2>
                             <a href="www.lexingtonky.gov">LEXINGTONKY.GOV</a>
                         </h2>
                     </div>
-                    <div className="col-sm-5 col-sm-offset-1">
+                    <div className="col-md-5  col-sm-7">
                         <div className="col-md-3 col-sm-4 footer-logo-div">
                             <img src={`${global.BASE_STATIC_URL}/Lexington_Web_White_Horse_Only.png`} role="presentation" className="white-horse-logo" />
                         </div>
