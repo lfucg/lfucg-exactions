@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+from simple_history.models import HistoricalRecords
 
 class Subdivision(models.Model):
     is_approved = models.BooleanField(default=False)
@@ -15,6 +16,8 @@ class Subdivision(models.Model):
     name = models.CharField(max_length=200)
     gross_acreage = models.DecimalField(max_digits=20, decimal_places=3)
     number_allowed_lots = models.PositiveIntegerField()
+
+    history = HistoricalRecords()
 
     def __str__(self):
         return self.name
@@ -54,6 +57,8 @@ class Plat(models.Model):
 
     sewer_due = models.DecimalField(max_digits=20, decimal_places=2)
     non_sewer_due = models.DecimalField(max_digits=20, decimal_places=2)
+
+    history = HistoricalRecords()
 
     def __str__(self):
         return 'Lat: ' + self.latitude +  ' Long: ' + self.longitude
@@ -165,6 +170,8 @@ class Lot(models.Model):
     dues_open_space_dev = models.DecimalField(max_digits=20, decimal_places=2)
     dues_open_space_own = models.DecimalField(max_digits=20, decimal_places=2)
 
+    history = HistoricalRecords()
+
     def __str__(self):
         return self.address_full    
 
@@ -209,6 +216,8 @@ class PlatZone(models.Model):
     zone = models.CharField(max_length=100, choices=ZONES)
     acres = models.DecimalField(max_digits=20, decimal_places=2)
 
+    history = HistoricalRecords()
+
     def __str__(self):
         return self.zone
 
@@ -244,6 +253,8 @@ class CalculationWorksheet(models.Model):
 
     acres = models.DecimalField(max_digits=20, decimal_places=2)
     zone = models.CharField(max_length=100, choices=ZONES)
+
+    history = HistoricalRecords()
 
     def __str__(self):
         return self.zone + self.acres
