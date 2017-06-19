@@ -48,11 +48,12 @@ INSTALLED_APPS = (
     'django.contrib.humanize',
     'django.contrib.syndication',
     'django.contrib.staticfiles',
+    'rest_framework.authtoken',
+    'rest_framework',
 
     # Third-party apps, patches, fixes
     'debug_toolbar',
     'compressor',
-    'rest_framework',
 
     # Application base, containing global templates.
     'base',
