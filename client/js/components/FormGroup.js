@@ -12,7 +12,7 @@ const FormGroup = ({
 }) => {
     return (
         <div className="form-group">
-            <label htmlFor={id} className="form-label">{label}</label>
+            <label htmlFor={id} className="form-label" aria-label={label} >{label}</label>
             {
                 React.cloneElement(
                     children,

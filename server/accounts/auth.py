@@ -52,7 +52,9 @@ def get_token_for_user(user):
     return token
 
 class CustomObtainAuthToken(ObtainAuthToken):
+    print('SERVER AUTH TOKEN')
     def post(self, request, *args, **kwargs):
+        print('INSIDE POST')
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
             token = get_token_for_user(serializer.validated_data['user'])
