@@ -6,13 +6,8 @@ import Footer from './Footer';
 
 import Login from './Login';
 
-import {
-    getMe,
-} from '../actions/apiActions';
-
 class DashboardPage extends React.Component {
     static propTypes = {
-        meme: React.PropTypes.func,
     };
 
     componentDidMount() {
@@ -20,7 +15,6 @@ class DashboardPage extends React.Component {
 
     render() {
         const {
-            meme,
         } = this.props;
 
         return (
@@ -28,9 +22,12 @@ class DashboardPage extends React.Component {
                 <Navbar />
                 <img src={`${global.BASE_STATIC_URL}/lexington-hero-interior.jpg`} role="presentation" className="lex-banner" />
                 <div className="container">
-                    Hello World ... Now from React/Redux!
-                    <button onClick={meme}>Get Me</button>
-                    <Login />
+                    <div className="col-md-6">
+                        Hello World ... Now from React/Redux!
+                    </div>
+                    <div className="col-md-6">
+                        <Login />
+                    </div>
                 </div>
                 <Footer />
             </div>
@@ -45,9 +42,6 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        meme() {
-            dispatch(getMe());
-        },
     };
 }
 

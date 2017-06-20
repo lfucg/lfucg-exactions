@@ -14,10 +14,10 @@ class Footer extends React.Component {
                         </h2>
                     </div>
                     <div className="col-md-5  col-sm-7">
-                        <div className="col-md-3 col-sm-4 footer-logo-div">
+                        <div className="col-md-3 col-sm-4 col-xs-2 footer-logo-div">
                             <img src={`${global.BASE_STATIC_URL}/Lexington_Web_White_Horse_Only.png`} role="presentation" className="white-horse-logo" />
                         </div>
-                        <div className="col-md-9 col-sm-8 footer-text">
+                        <div className="col-md-9 col-sm-8 col-xs-10 footer-text">
                             <div className="row">
                                 © 2017 Lexington-Fayette Urban County Government
                             </div>

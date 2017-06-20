@@ -16,7 +16,6 @@ export function getMe() {
 }
 
 export function login() {
-    console.log('login');
     return {
         type: API_CALL,
         endpoint: LOGIN,
@@ -30,7 +29,6 @@ export function login() {
                 username,
                 password,
             } = activeForm;
-            console.log('ACTIVE FORM', activeForm);
             return {
                 username,
                 password,

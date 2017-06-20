@@ -9,7 +9,7 @@ import activeFormReducer from './activeFormReducer';
 const dashboardReducer = combineReducers({
     routing: routerReducer,
 
-    //currentUser: currentUserReducer,
+    currentUser: currentUserReducer,
     token: tokenReducer,
 
     activeForm: activeFormReducer,

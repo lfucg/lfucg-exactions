@@ -1,55 +1,59 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router';
 
 import FormGroup from './FormGroup';
 
 import { login } from '../actions/apiActions';
-import {
-    formInit,
-    formUpdate,
-} from '../actions/formActions';
 
 class Login extends React.Component {
     static propTypes = {
+        activeForm: React.PropTypes.object,
         onLogin: React.PropTypes.func,
     };
 
     render() {
         const {
+            activeForm,
             onLogin,
         } = this.props;
 
-        // const {
-        // } = activeForm;
+        const {
+        } = activeForm;
 
         return (
             <div className="login">
                 <form onSubmit={onLogin}>
                     <fieldset>
-                        <h3>Login</h3>
-                        <div className="row">
+                        <div className="col-sm-1">
+                            <h3>Login</h3>
+                        </div>
+                        <div className="col-sm-5">
                             <FormGroup label="Username" id="username">
                                 <input type="text" className="form-control" placeholder="Username" aria-label="Username" />
                             </FormGroup>
                         </div>
-                        <div className="row">
+                        <div className="col-sm-5">
                             <FormGroup label="Password" id="password">
                                 <input type="password" className="form-control" placeholder="Password" aria-label="Password" />
                             </FormGroup>
                         </div>
+                        <div className="col-sm-1">
+                            <button className="btn">Login</button>
+                        </div>
                     </fieldset>
-                    <button className="btn">Login</button>
                 </form>
             </div>
         );
     }
 }
 
-// function mapState(state) {
-// }
+function mapStateToProps(state) {
+    return {
+        activeForm: state.activeForm,
+    };
+}
 
-function mapDispatch(dispatch) {
+function mapDispatchToProps(dispatch) {
     return {
         onLogin() {
             console.log('ON LOGIN');
@@ -58,4 +62,4 @@ function mapDispatch(dispatch) {
     };
 }
 
-export default connect(mapDispatch)(Login);
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

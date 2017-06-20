@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.contrib.auth.views import login
 from django.core import signing
+from django.views.decorators.csrf import csrf_exempt
 
 from rest_framework import status as statuses, serializers
 from rest_framework.authtoken.models import Token
@@ -44,6 +45,7 @@ import random
 #     return Response(serializer.errors, status=statuses.HTTP_400_BAD_REQUEST)
 
 def get_token_for_user(user):
+
     token =  Token.objects.get_or_create(user=user)[0]
     right_now = now()
     if token.created < right_now - timedelta(days=3):
@@ -52,9 +54,8 @@ def get_token_for_user(user):
     return token
 
 class CustomObtainAuthToken(ObtainAuthToken):
-    print('SERVER AUTH TOKEN')
     def post(self, request, *args, **kwargs):
-        print('INSIDE POST')
+
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
             token = get_token_for_user(serializer.validated_data['user'])

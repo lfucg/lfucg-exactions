@@ -48,8 +48,8 @@ INSTALLED_APPS = (
     'django.contrib.humanize',
     'django.contrib.syndication',
     'django.contrib.staticfiles',
-    'rest_framework.authtoken',
     'rest_framework',
+    'rest_framework.authtoken',
 
     # Third-party apps, patches, fixes
     'debug_toolbar',
@@ -81,10 +81,10 @@ PASSWORD_HASHERS = (
 # Sessions
 #
 # By default, be at least somewhat secure with our session cookies.
-SESSION_COOKIE_HTTPONLY = True
+# SESSION_COOKIE_HTTPONLY = True
 
 # Set this to true if you are using https
-SESSION_COOKIE_SECURE = False
+# SESSION_COOKIE_SECURE = False
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.example.com/media/"
