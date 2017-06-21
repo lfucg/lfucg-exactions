@@ -8,6 +8,8 @@ import dashboardStore from './stores/dashboardStore';
 
 import DashboardPage from './components/DashboardPage';
 
+import LoginPage from './components/LoginPage';
+
 global.reduxStore = dashboardStore;
 global.BASE_STATIC_URL =
     '/static';
@@ -21,6 +23,7 @@ ReactDOM.render(
             <Redirect from="/" to="dashboard/" />
             <Route path="dashboard/" component={DashboardPage} />
 
+            <Route path="login/" component={LoginPage} />
         </Router>
     </Provider>,
     document.getElementById('root'),

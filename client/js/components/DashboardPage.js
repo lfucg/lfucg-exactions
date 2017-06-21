@@ -4,8 +4,6 @@ import { connect } from 'react-redux';
 import Navbar from './Navbar';
 import Footer from './Footer';
 
-import Login from './Login';
-
 class DashboardPage extends React.Component {
     static propTypes = {
     };
@@ -22,12 +20,7 @@ class DashboardPage extends React.Component {
                 <Navbar />
                 <img src={`${global.BASE_STATIC_URL}/lexington-hero-interior.jpg`} role="presentation" className="lex-banner" />
                 <div className="container">
-                    <div className="col-md-6">
-                        Hello World ... Now from React/Redux!
-                    </div>
-                    <div className="col-md-6">
-                        <Login />
-                    </div>
+                    Hello World ... Now from React/Redux!
                 </div>
                 <Footer />
             </div>

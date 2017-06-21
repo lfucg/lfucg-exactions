@@ -21,12 +21,11 @@ class Navbar extends React.Component {
                             <div className="pull-right">
                                 <ul className="nav navbar-nav pull-right navbar-menu">
                                     <li>
-                                        <Link to="dashboard/" className="btn" >Home</Link>
+                                        <Link to="dashboard/" role="link" >Home</Link>
                                     </li>
-                                    <li>Finance</li>
-                                    <li>Plats</li>
-                                    <li>Lots</li>
-                                    <li>Payments</li>
+                                    <li>
+                                        <Link to="login/" role="link" >Login</Link>
+                                    </li>
                                 </ul>
                             </div>
                         </div>
