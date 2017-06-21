@@ -30,10 +30,10 @@ export default function api({ getState, dispatch }) {
         if (shouldCallAPI && !shouldCallAPI()) {
             return next(action);
         }
-
         return Promise.resolve(axios({
             headers: {
                 'X-CSRFToken': global.CSRFToken,
+                'WWW-Authenticate': global.token ? `Token ${global.token}` : null,
             },
             url: baseURL + (typeof url === 'function' ? url(getState) : url),
             params: typeof qs === 'function' ? qs(getState) : qs,
@@ -51,6 +51,10 @@ export default function api({ getState, dispatch }) {
                 });
                 return Promise.reject(error);
             }
+            if (response.data.token) {
+                global.token = response.data.token;
+            }
+            console.log('GLOBAL TOKEN', global.token);
             return dispatch({
                 type: API_CALL_SUCCESS,
                 response: response.data,

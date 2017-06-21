@@ -29,20 +29,30 @@ class Login extends React.Component {
                 <div className="below-banner">
                     <div className="container">
                         <div className="col-sm-3 left-list">
-                            <ul>
-                                <li>
-                                    <a href="">Login</a>
-                                </li>
-                                <li>
-                                    <a href="">Register</a>
-                                </li>
-                                <li>
-                                    <a href="">Forgot password</a>
-                                </li>
-                                <li>
-                                    <a href="">Forgot username</a>
-                                </li>
-                            </ul>
+                            <div className="row">
+                                <a href="">
+                                    Login
+                                    <i className="fa fa-chevron-right pull-right" aria-hidden="true" />
+                                </a>
+                            </div>
+                            <div className="row">
+                                <a href="">
+                                    Register
+                                    <i className="fa fa-chevron-right pull-right" aria-hidden="true" />
+                                </a>
+                            </div>
+                            <div className="row">
+                                <a href="">
+                                    Forgot password
+                                    <i className="fa fa-chevron-right pull-right" aria-hidden="true" />
+                                </a>
+                            </div>
+                            <div className="row">
+                                <a href="">
+                                    Forgot username
+                                    <i className="fa fa-chevron-right pull-right" aria-hidden="true" />
+                                </a>
+                            </div>
                         </div>
                         <div className="col-sm-8 col-sm-offset-1" id="login-select">
                             <h2>LOGIN</h2>
@@ -87,8 +97,10 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     return {
         onLogin() {
-            console.log('ON LOGIN');
-            dispatch(login());
+            dispatch(login())
+            .then((data_login) => {
+                console.log('DATA LOGIN', data_login);
+            });
         },
     };
 }

@@ -5,13 +5,17 @@
 
 .left-list {
     border-right: 1px #BFBFBF solid;
-    li {
-        list-style: none;
-        padding: 1em 0em;
+    .row {
+        padding: 1em;
         a {
             font-size: 1.5em;
             font-weight: normal;
             color: #585858;
+        }
+        .fa-chevron-right {
+            margin-top: 0.5em;
+            font-weight: lighter;
+            font-size: 0.6em;
         }
     }
 }

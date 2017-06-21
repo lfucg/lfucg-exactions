@@ -4,15 +4,23 @@ import { connect } from 'react-redux';
 import Navbar from './Navbar';
 import Footer from './Footer';
 
+import {
+    getMe,
+} from '../actions/apiActions';
+
 class DashboardPage extends React.Component {
     static propTypes = {
+        currentUser: React.PropTypes.object,
+        onComponentDidMount: React.PropTypes.func,
     };
 
     componentDidMount() {
+        this.props.onComponentDidMount();
     }
 
     render() {
         const {
+            currentUser,
         } = this.props;
 
         return (
@@ -30,11 +38,15 @@ class DashboardPage extends React.Component {
 
 function mapStateToProps(state) {
     return {
+        currentUser: state.currentUser,
     };
 }
 
 function mapDispatchToProps(dispatch) {
     return {
+        onComponentDidMount() {
+            dispatch(getMe());
+        },
     };
 }
 

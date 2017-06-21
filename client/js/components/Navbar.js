@@ -3,14 +3,21 @@ import { Link } from 'react-router';
 import { connect } from 'react-redux';
 
 class Navbar extends React.Component {
+    static propTypes = {
+        currentUser: React.PropTypes.object,
+    }
 
     render() {
+        const {
+            currentUser,
+        } = this.props;
+
         return (
             <div className="react-navbar">
                 <header>
                     <div className="container">
                         <div className="navbar-header">
-                            <Link to="dashboard/" className="navbar-brand" aria-label="Exactions Home" />
+                            <Link to="dashboard/" className="navbar-brand" aria-label="Exactions Home" role="link" />
                             <button className="btn navbar-btn navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
                                 <span className="icon-bar" />
                                 <span className="icon-bar" />
@@ -23,9 +30,20 @@ class Navbar extends React.Component {
                                     <li>
                                         <Link to="dashboard/" role="link" >Home</Link>
                                     </li>
-                                    <li>
-                                        <Link to="login/" role="link" >Login</Link>
-                                    </li>
+                                    { currentUser.username ? (
+                                        <li>
+                                            Logout
+                                        </li>
+                                    ) : (
+                                        <li>
+                                            <Link to="login/" role="link" >Login</Link>
+                                        </li>
+                                    )}
+                                    { currentUser.username ? (
+                                        <li>
+                                            {currentUser.username}
+                                        </li>
+                                    ) : null }
                                 </ul>
                             </div>
                         </div>
@@ -38,6 +56,7 @@ class Navbar extends React.Component {
 
 function mapStateToProps(state) {
     return {
+        currentUser: state.currentUser,
     };
 }
 
