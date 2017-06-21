@@ -20,13 +20,6 @@ from django.utils.timezone import now
 from datetime import timedelta
 import random
 
-def get_user(request, token):
-    if token is not None:
-        user = User.objects.get(username = token.user.username)
-        if user is not None:
-            login(request, user)
-
-
 # @api_view(['POST'])
 # @permission_classes((AllowAny, ))
 # def register(request):
@@ -64,8 +57,11 @@ class CustomObtainAuthToken(ObtainAuthToken):
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
             token = get_token_for_user(serializer.validated_data['user'])
-            get_user(request, token)
-            return Response({'key': token.key, 'user': UserSerializer(token.user).data})
+            if token is not None:
+                user = User.objects.get(username = token.user.username)
+                login(request, user)
+                return Response({'key': token.key, 'user': UserSerializer(token.user).data})
+            return Response('No token available')
         return Response(serializer.errors, status=statuses.HTTP_400_BAD_REQUEST)
 
 # class PasswordChangeView(GenericAPIView):
