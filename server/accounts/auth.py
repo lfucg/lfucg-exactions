@@ -1,8 +1,11 @@
 from django.contrib.auth.models import User
 from django.contrib.auth.views import login
 from django.core import signing
-from django.contrib.auth import authenticate, login 
 
+from rest_framework import authentication, permissions
+from django.contrib.auth import views as auth_views
+
+from django.shortcuts import redirect
 from rest_framework import status as statuses, serializers
 from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.views import ObtainAuthToken
@@ -10,7 +13,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.generics import CreateAPIView, GenericAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
-# from rest_framework_expiring_authtoken.models import ExpirsingToken
+# from rest_framework_expiring_authtoken.models import ExpiringToken
 
 from accounts.serializers import UserSerializer
 # , PasswordChangeSerializer
@@ -44,6 +47,22 @@ import random
 #         return Response({'key': token.key, 'user': serializer.data})
 #     return Response(serializer.errors, status=statuses.HTTP_400_BAD_REQUEST)
 
+# def get_token_for_user(user):
+#     token =  Token.objects.get_or_create(user=user)[0]
+#     right_now = now()
+#     if token.created < right_now - timedelta(days=3):
+#         token.delete()
+#         token = Token.objects.get_or_create(user=user, created=right_now)[0]
+#     return token
+
+# class CustomObtainAuthToken(ObtainAuthToken):
+#     def post(self, request, *args, **kwargs):
+#         serializer = self.serializer_class(data=request.data)
+#         if serializer.is_valid():
+#             token = get_token_for_user(serializer.validated_data['user'])
+#             return Response({'key': token.key, 'user': UserSerializer(token.user).data})
+#         return Response(serializer.errors, status=statuses.HTTP_400_BAD_REQUEST)
+
 def get_token_for_user(user):
     token =  Token.objects.get_or_create(user=user)[0]
     right_now = now()
@@ -53,15 +72,12 @@ def get_token_for_user(user):
     return token
 
 class CustomObtainAuthToken(ObtainAuthToken):
+    authentication_classes = (authentication.SessionAuthentication,)
     def post(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
             token = get_token_for_user(serializer.validated_data['user'])
-            if token is not None:
-                user = User.objects.get(username = token.user.username)
-                login(request, user)
-                return Response({'key': token.key, 'user': UserSerializer(token.user).data})
-            return Response('No token available')
+            return Response({'key': token.key, 'user': UserSerializer(token.user).data})
         return Response(serializer.errors, status=statuses.HTTP_400_BAD_REQUEST)
 
 # class PasswordChangeView(GenericAPIView):
@@ -132,13 +148,18 @@ class CustomObtainAuthToken(ObtainAuthToken):
 #         response['token'] = 'Invalid reset password request.'
 #     return response, status, user
 
-# def _delete_token(token):
-#     try:
-#         data = signing.loads(token)
-#         data_token = data.get('passtoken', None)
-#         ExpiringToken.objects.get(key=data_token).delete()
-#     except:
-#         pass
+def _delete_token(token):
+    try:
+        data = signing.loads(token)
+        data_token = data.get('passtoken', None)
+        ExpiringToken.objects.get(key=data_token).delete()
+    except:
+        pass
+
+class Logout(GenericAPIView):
+    def post(self, request, *args, **kwargs):
+        request.user.auth_token.delete()
+        return redirect('/logout/')
 
 # @api_view(['POST'])
 # @permission_classes((AllowAny, ))

@@ -7,7 +7,10 @@ import {
   API_CALL_ERROR,
   API_CALL_VALIDATION_ERROR,
 } from '../constants/actionTypes';
-import { BASE_URL } from '../constants/apiConstants';
+import {
+    BASE_URL,
+    LOGIN,
+} from '../constants/apiConstants';
 
 export default function api({ getState, dispatch }) {
     return next => (action) => {
@@ -30,10 +33,11 @@ export default function api({ getState, dispatch }) {
         if (shouldCallAPI && !shouldCallAPI()) {
             return next(action);
         }
+        console.log('GLOBAL TOKEN', global.auth_token);
         return Promise.resolve(axios({
             headers: {
                 'X-CSRFToken': global.CSRFToken,
-                'WWW-Authenticate': global.token ? `Token ${global.token}` : null,
+                Authorization: global.Authorization,
             },
             url: baseURL + (typeof url === 'function' ? url(getState) : url),
             params: typeof qs === 'function' ? qs(getState) : qs,
@@ -44,6 +48,9 @@ export default function api({ getState, dispatch }) {
             const error = responseValidation ?
             responseValidation(response.data, { getState, dispatch }) :
             null;
+            if (endpoint === LOGIN) {
+                global.Authorization = `Token ${response.data.key}`;
+            }
             if (error) {
                 dispatch({
                     type: API_CALL_VALIDATION_ERROR,
@@ -51,10 +58,6 @@ export default function api({ getState, dispatch }) {
                 });
                 return Promise.reject(error);
             }
-            if (response.data.token) {
-                global.token = response.data.token;
-            }
-            console.log('GLOBAL TOKEN', global.token);
             return dispatch({
                 type: API_CALL_SUCCESS,
                 response: response.data,

@@ -1,5 +1,6 @@
 import {
     LOGIN,
+    LOGOUT,
 } from '../constants/apiConstants';
 
 const tokenReducer = (state = {}, action) => {
@@ -9,6 +10,8 @@ const tokenReducer = (state = {}, action) => {
     switch (endpoint) {
     case LOGIN:
         return action.response;
+    case LOGOUT:
+        return {};
     default:
         return state;
     }

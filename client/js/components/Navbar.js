@@ -2,14 +2,26 @@ import React from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
 
+import {
+    logout,
+    getMe,
+} from '../actions/apiActions';
+
 class Navbar extends React.Component {
     static propTypes = {
         currentUser: React.PropTypes.object,
+        onComponentDidMount: React.PropTypes.func,
+        onLogout: React.PropTypes.func,
+    }
+
+    componentDidMount() {
+        this.props.onComponentDidMount();
     }
 
     render() {
         const {
             currentUser,
+            onLogout,
         } = this.props;
 
         return (
@@ -32,18 +44,15 @@ class Navbar extends React.Component {
                                     </li>
                                     { currentUser.username ? (
                                         <li>
-                                            Logout
+                                            <button className="link" onClick={onLogout} >
+                                                Logout
+                                            </button>
                                         </li>
                                     ) : (
                                         <li>
                                             <Link to="login/" role="link" >Login</Link>
                                         </li>
                                     )}
-                                    { currentUser.username ? (
-                                        <li>
-                                            {currentUser.username}
-                                        </li>
-                                    ) : null }
                                 </ul>
                             </div>
                         </div>
@@ -62,6 +71,12 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return {
+        onComponentDidMount() {
+            dispatch(getMe());
+        },
+        onLogout() {
+            dispatch(logout());
+        },
     };
 }
 

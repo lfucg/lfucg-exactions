@@ -5,6 +5,7 @@ import {
 import {
     ME,
     LOGIN,
+    LOGOUT,
 } from '../constants/apiConstants';
 
 export function getMe() {
@@ -34,5 +35,14 @@ export function login() {
                 password,
             };
         },
+    };
+}
+
+export function logout() {
+    return {
+        type: API_CALL,
+        endpoint: LOGOUT,
+        url: '/delete_token/',
+        method: 'POST',
     };
 }

@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { hashHistory } from 'react-router';
 
 import Navbar from './Navbar';
 import Footer from './Footer';
@@ -98,8 +99,8 @@ function mapDispatchToProps(dispatch) {
     return {
         onLogin() {
             dispatch(login())
-            .then((data_login) => {
-                console.log('DATA LOGIN', data_login);
+            .then(() => {
+                hashHistory.goBack();
             });
         },
     };

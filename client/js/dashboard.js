@@ -11,9 +11,7 @@ import DashboardPage from './components/DashboardPage';
 import LoginPage from './components/LoginPage';
 
 global.reduxStore = dashboardStore;
-global.BASE_STATIC_URL =
-    '/static';
-
+global.BASE_STATIC_URL = '/static';
 
 const history = syncHistoryWithStore(hashHistory, dashboardStore);
 
