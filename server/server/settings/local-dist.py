@@ -35,7 +35,7 @@ INSTALLED_APPS = base.INSTALLED_APPS + ('django_nose',)
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.',
-        'NAME': '',
+        'NAME': 'exactions.db',
         'USER': '',
         'PASSWORD': '',
         'HOST': '',
