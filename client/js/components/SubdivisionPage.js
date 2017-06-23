@@ -1,53 +1,59 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { map } from 'ramda';
+// import { map } from 'ramda';
+import {
+    Link,
+} from 'react-router';
 
 import Navbar from './Navbar';
 import Footer from './Footer';
 
-import {
-    getSubdivisions,
-} from '../actions/apiActions';
+// import {
+//     getSubdivisions,
+// } from '../actions/apiActions';
 
 class SubdivisionPage extends React.Component {
     static propTypes = {
-        subdivisions: React.PropTypes.object,
-        onComponentDidMount: React.PropTypes.func,
+        // subdivisions: React.PropTypes.object,
+        // onComponentDidMount: React.PropTypes.func,
     };
 
-    componentDidMount() {
-        this.props.onComponentDidMount();
-    }
+    // componentDidMount() {
+    //     this.props.onComponentDidMount();
+    // }
 
 
     render() {
         const {
-            subdivisions,
+            // subdivisions,
         } = this.props;
 
-        const subdivisions_list = subdivisions.length > 0 ? (
-            map((subdivision) => {
-                return (
-                    <div key={subdivision.id} className="col-xs-12">
-                        <div className="row">
-                            <h4>{subdivision.name}</h4>
-                        </div>
-                        <div className="row">
-                            <p className="col-md-3 col-sm-offset-1 col-sm-4 col-xs-6">Acres: {subdivision.gross_acreage}</p>
-                            <p className="col-md-3 col-sm-4 col-xs-6">Lots: {subdivision.number_allowed_lots}</p>
-                        </div>
-                    </div>
-                );
-            })(subdivisions)
-        ) : null;
-
         return (
-            <div className="dashboard">
+            <div className="subdivision-page">
                 <Navbar />
                 <img src={`${global.BASE_STATIC_URL}/lexington-hero-interior.jpg`} role="presentation" className="lex-banner" />
                 <div className="container">
                     <h1>SUBDIVISIONS</h1>
-                    {subdivisions_list}
+                    <div className="col-xs-12">
+                        <div className="row">
+                            <div className="col-md-6">
+                                <div className="row">
+                                    <Link to={'subdivision-form/'} role="link" ><h3 className="in-page-link">Create Subdivision</h3></Link>
+                                </div>
+                                <div className="row">
+                                    <p>Apply for approval of a new subdivision.</p>
+                                </div>
+                            </div>
+                            <div className="col-md-6">
+                                <div className="row">
+                                    <Link to={'subdivision-existing/'} role="link" ><h3 className="in-page-link">Existing Subdivisions</h3></Link>
+                                </div>
+                                <div className="row">
+                                    <p>View existing or developing subdivisions.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <Footer />
             </div>
@@ -57,15 +63,15 @@ class SubdivisionPage extends React.Component {
 
 function mapStateToProps(state) {
     return {
-        subdivisions: state.subdivisions,
+        // subdivisions: state.subdivisions,
     };
 }
 
 function mapDispatchToProps(dispatch) {
     return {
-        onComponentDidMount() {
-            dispatch(getSubdivisions());
-        },
+        // onComponentDidMount() {
+        //     dispatch(getSubdivisions());
+        // },
     };
 }
 
