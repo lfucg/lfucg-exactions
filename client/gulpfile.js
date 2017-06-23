@@ -22,9 +22,19 @@ gulp.task('scripts', function(){
     .pipe(gulp.dest('../dist/js'))
     .on('error', function (error) {console.log(error); this.emit('end')});
 });
+
 gulp.task('scripts:watch', ['scripts'], function () {
   gulp.watch(['./js/**/*.js'], ['scripts']);
-})
+});
+
+gulp.task('images', function() {
+  gulp.src('./images/*')
+  .pipe(gulp.dest('../dist/images/'));
+});
+
+gulp.task('images:watch', ['images'], function () {
+  gulp.watch(['./images/*'], ['images']);
+});
 
 gulp.task('test', function () {
   return gulp.src('./test/**/*.js', {read: false})
@@ -47,5 +57,5 @@ gulp.task('test:watch', ['test'], function () {
 gulp.task('build', ['sass', 'scripts'], function() {
 });
 
-gulp.task('default', ['sass:watch', 'scripts:watch'], function () {
+gulp.task('default', ['sass:watch', 'scripts:watch', 'images:watch'], function () {
 });
