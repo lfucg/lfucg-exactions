@@ -9,7 +9,7 @@
             LFUCG Exactions
         {% endblock title %}
     </title>
-    <!-- <link rel="icon" type="image/ico" href="{% static 'img/favicon.ico' %}"> -->
+    <link rel="icon" type="image/ico" href="{% static 'favicon.ico' %}">
     {% block styles %}
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
         <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}" />
@@ -21,9 +21,12 @@
         <!-- Latest compiled and minified JavaScript -->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
-        <!-- <script type="text/javascript">
+        <script type="text/javascript">
             window.CSRFToken = '{{ csrf_token|escapejs }}'
-        </script> -->
+        </script>
+        <script type="text/javascript">
+            window.Authorization = 'Token {{ user.auth_token|escapejs }}'
+        </script>
 
         <!-- jquery for site -->
         <script>{% include "_layouts/site_base.js" %}</script>

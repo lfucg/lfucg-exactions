@@ -48,11 +48,12 @@ INSTALLED_APPS = (
     'django.contrib.humanize',
     'django.contrib.syndication',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'rest_framework.authtoken',
 
     # Third-party apps, patches, fixes
     'debug_toolbar',
     'compressor',
-    'rest_framework',
 
     # Application base, containing global templates.
     'base',
@@ -80,10 +81,10 @@ PASSWORD_HASHERS = (
 # Sessions
 #
 # By default, be at least somewhat secure with our session cookies.
-SESSION_COOKIE_HTTPONLY = True
+# SESSION_COOKIE_HTTPONLY = True
 
 # Set this to true if you are using https
-SESSION_COOKIE_SECURE = False
+# SESSION_COOKIE_SECURE = False
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.example.com/media/"
@@ -107,7 +108,7 @@ STATIC_URL = '/static/'
 
 
 # Additional locations of static files
-STATICFILES_DIRS = (    
+STATICFILES_DIRS = (
     DIST_DIR,
 )
 
@@ -238,6 +239,16 @@ DATABASES = {
         'HOST': '',
         'PORT': '',
     },
+}
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
+    )
 }
 
 # Uncomment this and set to all slave DBs in use on the site.

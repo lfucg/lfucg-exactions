@@ -30,7 +30,7 @@ class PlatExisting extends React.Component {
                 return (
                     <div key={plat.id} className="col-xs-12">
                         <div className="row">
-                            <h4>Latitude: {plat.latitude} x Longitude: {plat.longitude}</h4>
+                            <h4>Latitude: {plat.latitude}  x  Longitude: {plat.longitude}</h4>
                         </div>
                         <div className="row">
                             <div className="col-sm-offset-1">

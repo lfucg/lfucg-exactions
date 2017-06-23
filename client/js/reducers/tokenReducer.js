@@ -1,18 +1,15 @@
 import {
-    ME,
     LOGIN,
     LOGOUT,
 } from '../constants/apiConstants';
 
-const currentUserReducer = (state = {}, action) => {
+const tokenReducer = (state = {}, action) => {
     const {
         endpoint,
     } = action;
     switch (endpoint) {
-    case ME:
-        return action.response;
     case LOGIN:
-        return action.response.user;
+        return action.response;
     case LOGOUT:
         return {};
     default:
@@ -20,5 +17,4 @@ const currentUserReducer = (state = {}, action) => {
     }
 };
 
-export default currentUserReducer;
-
+export default tokenReducer;

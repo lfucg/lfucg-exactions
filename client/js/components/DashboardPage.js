@@ -11,9 +11,6 @@ class DashboardPage extends React.Component {
     static propTypes = {
     };
 
-    componentDidMount() {
-    }
-
     render() {
         const {
         } = this.props;

@@ -2,6 +2,9 @@ export const BASE_URL = '/api';
 
 export const ME = 'ME';
 
+export const LOGIN = 'LOGIN';
+export const LOGOUT = 'LOGOUT';
+
 export const GET_SUBDIVISIONS = 'GET_SUBDIVISIONS';
 export const GET_SUBDIVISION_ID = 'GET_SUBDIVISION_ID';
 export const POST_SUBDIVISION = 'POST_SUBDIVISION';

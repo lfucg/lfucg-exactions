@@ -8,6 +8,8 @@ import dashboardStore from './stores/dashboardStore';
 
 import DashboardPage from './components/DashboardPage';
 
+import LoginPage from './components/LoginPage';
+
 import SubdivisionPage from './components/SubdivisionPage';
 import SubdivisionExisting from './components/SubdivisionExisting';
 import SubdivisionForm from './components/SubdivisionForm';
@@ -17,9 +19,7 @@ import PlatExisting from './components/PlatExisting';
 import PlatForm from './components/PlatForm';
 
 global.reduxStore = dashboardStore;
-global.BASE_STATIC_URL =
-    '/static';
-
+global.BASE_STATIC_URL = '/static';
 
 const history = syncHistoryWithStore(hashHistory, dashboardStore);
 
@@ -28,6 +28,8 @@ ReactDOM.render(
         <Router history={history}>
             <Redirect from="/" to="dashboard/" />
             <Route path="dashboard/" component={DashboardPage} />
+
+            <Route path="login/" component={LoginPage} />
 
             <Route path="subdivision-page" component={SubdivisionPage} />
             <Route path="subdivision-existing" component={SubdivisionExisting} />

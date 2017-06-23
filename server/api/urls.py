@@ -1,6 +1,7 @@
 from django.conf.urls import include, url
 from rest_framework import routers
 
+from accounts.auth import *
 from plats.viewsets import *
 from notes.viewsets import *
 from accounts.viewsets import *
@@ -28,6 +29,8 @@ router.register(r'estimate', ProjectCostEstimateViewSet)
 router.register(r'ledger', AccountLedgerViewSet)
 
 urlpatterns = [
+    url(r'^login/$', CustomObtainAuthToken.as_view()),
     url(r'^me/$', CurrentUserDetails.as_view(), name="me"),
+    url(r'^delete_token/', Logout.as_view()),
     url(r'^', include(router.urls)),
 ]

@@ -5,6 +5,9 @@ import {
 import {
     ME,
 
+    LOGIN,
+    LOGOUT,
+
     GET_SUBDIVISIONS,
     GET_SUBDIVISION_ID,
     POST_SUBDIVISION,
@@ -16,12 +19,42 @@ import {
     PUT_PLAT,
 } from '../constants/apiConstants';
 
-
 export function getMe() {
     return {
         type: API_CALL,
         endpoint: ME,
         url: '/me',
+    };
+}
+
+export function login() {
+    return {
+        type: API_CALL,
+        endpoint: LOGIN,
+        url: '/login/',
+        method: 'POST',
+        body: (getState) => {
+            const {
+                activeForm,
+            } = getState();
+            const {
+                username,
+                password,
+            } = activeForm;
+            return {
+                username,
+                password,
+            };
+        },
+    };
+}
+
+export function logout() {
+    return {
+        type: API_CALL,
+        endpoint: LOGOUT,
+        url: '/delete_token/',
+        method: 'POST',
     };
 }
 

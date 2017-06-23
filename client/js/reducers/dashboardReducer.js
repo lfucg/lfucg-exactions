@@ -2,6 +2,9 @@ import { combineReducers } from 'redux';
 import { routerReducer } from 'react-router-redux';
 
 import currentUserReducer from './currentUserReducer';
+import tokenReducer from './tokenReducer';
+
+import activeFormReducer from './activeFormReducer';
 
 import subdivisionsReducer from './subdivisionsReducer';
 import platsReducer from './platsReducer';
@@ -11,8 +14,13 @@ const dashboardReducer = combineReducers({
 
     currentUser: currentUserReducer,
 
+    token: tokenReducer,
+
+    activeForm: activeFormReducer,
+
     subdivisions: subdivisionsReducer,
     plats: platsReducer,
+
 });
 
 export default dashboardReducer;
