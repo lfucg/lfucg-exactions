@@ -8,6 +8,11 @@ import dashboardStore from './stores/dashboardStore';
 
 import DashboardPage from './components/DashboardPage';
 
+import SubdivisionPage from './components/SubdivisionPage';
+import SubdivisionForm from './components/SubdivisionForm';
+import PlatPage from './components/PlatPage';
+import PlatForm from './components/PlatForm';
+
 global.reduxStore = dashboardStore;
 global.BASE_STATIC_URL =
     '/static';
@@ -21,6 +26,10 @@ ReactDOM.render(
             <Redirect from="/" to="dashboard/" />
             <Route path="dashboard/" component={DashboardPage} />
 
+            <Route path="subdivision-page" component={SubdivisionPage} />
+            <Route path="subdivision-form" component={SubdivisionForm} />
+            <Route path="plat-page" component={PlatPage} />
+            <Route path="plat-form" component={PlatForm} />
         </Router>
     </Provider>,
     document.getElementById('root'),
