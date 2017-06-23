@@ -66,10 +66,84 @@ export function getSubdivisions() {
     };
 }
 
+export function postSubdivision() {
+    return {
+        type: API_CALL,
+        endpoint: POST_SUBDIVISION,
+        url: '/subdivision/',
+        method: 'POST',
+        body: (getState) => {
+            const {
+                activeForm,
+            } = getState();
+            const {
+                name,
+                gross_acreage,
+                number_allowed_lots,
+            } = activeForm;
+            return {
+                name,
+                gross_acreage,
+                number_allowed_lots,
+            };
+        },
+    };
+}
+
 export function getPlats() {
     return {
         type: API_CALL,
         endpoint: GET_PLATS,
         url: '/plat/',
+    };
+}
+
+export function postPlat() {
+    return {
+        type: API_CALL,
+        endpoint: POST_PLAT,
+        url: '/plat/',
+        method: 'POST',
+        body: (getState) => {
+            const {
+                activeForm,
+            } = getState();
+            const {
+                subdivision,
+                total_acreage,
+                latitude,
+                longitude,
+                plat_type,
+                expansion_area,
+                unit,
+                section,
+                block,
+                buildable_lots,
+                non_buildable_lots,
+                cabinet,
+                slide,
+                calculation_note,
+                sewer_due,
+                non_sewer_due,
+            } = activeForm;
+            return {
+                subdivision,
+                total_acreage,
+                latitude,
+                longitude,
+                plat_type,
+                expansion_area,
+                unit,
+                section,
+                block,
+                buildable_lots,
+                non_buildable_lots,
+                cabinet,
+                slide,
+                calculation_note,
+                sewer_due,
+                non_sewer_due,
+            };
+        },
     };
 }

@@ -19,15 +19,17 @@ class DashboardPage extends React.Component {
             <div className="dashboard">
                 <Navbar />
                 <img src={`${global.BASE_STATIC_URL}/lexington-hero-interior.jpg`} role="presentation" className="lex-banner" />
-                <div className="container">
-                    <div className="row">
-                        <div className="col-md-4 col-sm-6">
-                            <Link to="subdivision-page" role="link"><h3>Subdivisions</h3></Link>
-                            <p>Lexington subdivisions.</p>
-                        </div>
-                        <div className="col-md-4 col-sm-6">
-                            <Link to="plat-page" role="link"><h3>Plats</h3></Link>
-                            <p>Lexington plats.</p>
+                <div className="inside-body">
+                    <div className="container">
+                        <div className="row">
+                            <div className="col-md-4 col-sm-6">
+                                <Link to="subdivision-page" role="link"><h3 className="in-page-link">Subdivisions</h3></Link>
+                                <p>Lexington subdivisions.</p>
+                            </div>
+                            <div className="col-md-4 col-sm-6">
+                                <Link to="plat-page" role="link"><h3 className="in-page-link">Plats</h3></Link>
+                                <p>Lexington plats.</p>
+                            </div>
                         </div>
                     </div>
                 </div>

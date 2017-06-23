@@ -19,29 +19,33 @@ class SubdivisionPage extends React.Component {
             <div className="subdivision-page">
                 <Navbar />
                 <img src={`${global.BASE_STATIC_URL}/lexington-hero-interior.jpg`} role="presentation" className="lex-banner" />
-                <div className="container">
-                    <h1>SUBDIVISIONS</h1>
-                    <div className="col-xs-12">
-                        <div className="row">
-                            <div className="col-md-6">
-                                <div className="row">
-                                    <Link to={'subdivision-form/'} role="link" ><h3 className="in-page-link">Create Subdivision</h3></Link>
+
+                <div className="inside-body">
+                    <div className="container">
+                        <h1>SUBDIVISIONS</h1>
+                        <div className="col-xs-12">
+                            <div className="row">
+                                <div className="col-sm-6">
+                                    <div className="row">
+                                        <Link to={'subdivision-form/'} role="link" ><h3 className="in-page-link">Create Subdivision</h3></Link>
+                                    </div>
+                                    <div className="row">
+                                        <p>Apply for approval of a new subdivision.</p>
+                                    </div>
                                 </div>
-                                <div className="row">
-                                    <p>Apply for approval of a new subdivision.</p>
-                                </div>
-                            </div>
-                            <div className="col-md-6">
-                                <div className="row">
-                                    <Link to={'subdivision-existing/'} role="link" ><h3 className="in-page-link">Existing Subdivisions</h3></Link>
-                                </div>
-                                <div className="row">
-                                    <p>View existing or developing subdivisions.</p>
+                                <div className="col-sm-6">
+                                    <div className="row">
+                                        <Link to={'subdivision-existing/'} role="link" ><h3 className="in-page-link">Existing Subdivisions</h3></Link>
+                                    </div>
+                                    <div className="row">
+                                        <p>View existing or developing subdivisions.</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+
                 <Footer />
             </div>
         );

@@ -33,8 +33,8 @@ class SubdivisionExisting extends React.Component {
                             <h4>{subdivision.name}</h4>
                         </div>
                         <div className="row">
-                            <p className="col-md-3 col-sm-offset-1 col-sm-4 col-xs-6">Acres: {subdivision.gross_acreage}</p>
-                            <p className="col-md-3 col-sm-4 col-xs-6">Lots: {subdivision.number_allowed_lots}</p>
+                            <h5 className="col-md-3 col-sm-offset-1 col-sm-4 col-xs-6">Acres: {subdivision.gross_acreage}</h5>
+                            <h5 className="col-md-3 col-sm-4 col-xs-6">Lots: {subdivision.number_allowed_lots}</h5>
                         </div>
                     </div>
                 );
@@ -45,9 +45,11 @@ class SubdivisionExisting extends React.Component {
             <div className="subdivision-existing">
                 <Navbar />
                 <img src={`${global.BASE_STATIC_URL}/lexington-hero-interior.jpg`} role="presentation" className="lex-banner" />
-                <div className="container">
-                    <h1>SUBDIVISIONS - EXISTING</h1>
-                    {subdivisions_list}
+                <div className="inside-body">
+                    <div className="container">
+                        <h1>SUBDIVISIONS - EXISTING</h1>
+                        {subdivisions_list}
+                    </div>
                 </div>
                 <Footer />
             </div>

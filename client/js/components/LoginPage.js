@@ -27,7 +27,7 @@ class Login extends React.Component {
             <div className="login">
                 <Navbar />
                 <img src={`${global.BASE_STATIC_URL}/lexington-hero-interior.jpg`} role="presentation" className="lex-banner" />
-                <div className="below-banner">
+                <div className="inside-body">
                     <div className="container">
                         <div className="col-sm-3 left-list">
                             <div className="row">

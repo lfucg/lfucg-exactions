@@ -1,27 +1,22 @@
-html {
-    h1, h2, h3, h4, p {
-        color: #585858;
-    }
-}
-
 .container {
     width: 95%;
 }
 
-.below-banner {
+.inside-body {
     background-color: #f1f0f0;
     color: #585858;
     padding: 2em 0em 4em 0em;
     font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
     font-weight: lighter;
+    margin-bottom: 3em;
+}
+
+.in-page-link {
+    color: #0057A8;
 }
 
 .clearfix::after {
     content: "";
     clear: both;
     display: table;
-}
-
-.in-page-link {
-    color: #0057A8;
 }

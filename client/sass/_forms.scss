@@ -19,3 +19,25 @@
         }
     }
 }
+
+.form-header {
+    background-color: #001A49;
+    color: white;
+    font-weight: lighter;
+    padding: 10px 0;
+    margin-bottom: 3em;
+}
+
+.form-group {
+    font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+    label {
+        color: #585858;
+        font-size: 1.5em;
+        font-weight: normal;
+        margin: 0.2em 0em;
+    }
+    .form-control {
+        color: black;
+        font-weight: normal;
+    }
+}

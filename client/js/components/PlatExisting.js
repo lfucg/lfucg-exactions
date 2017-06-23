@@ -57,9 +57,11 @@ class PlatExisting extends React.Component {
             <div className="plat-existing">
                 <Navbar />
                 <img src={`${global.BASE_STATIC_URL}/lexington-hero-interior.jpg`} role="presentation" className="lex-banner" />
-                <div className="container">
-                    <h1>PLATS - EXISTING</h1>
-                    {plats_list}
+                <div className="inside-body">
+                    <div className="container">
+                        <h1>PLATS - EXISTING</h1>
+                        {plats_list}
+                    </div>
                 </div>
                 <Footer />
             </div>
