@@ -32,3 +32,11 @@ export function getSubdivisions() {
         url: '/subdivision/',
     };
 }
+
+export function getPlats() {
+    return {
+        type: API_CALL,
+        endpoint: GET_PLATS,
+        url: '/plat/',
+    };
+}

@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-// import { map } from 'ramda';
 import {
     Link,
 } from 'react-router';
@@ -8,24 +7,12 @@ import {
 import Navbar from './Navbar';
 import Footer from './Footer';
 
-// import {
-//     getSubdivisions,
-// } from '../actions/apiActions';
-
 class SubdivisionPage extends React.Component {
     static propTypes = {
-        // subdivisions: React.PropTypes.object,
-        // onComponentDidMount: React.PropTypes.func,
     };
-
-    // componentDidMount() {
-    //     this.props.onComponentDidMount();
-    // }
-
 
     render() {
         const {
-            // subdivisions,
         } = this.props;
 
         return (
@@ -63,15 +50,11 @@ class SubdivisionPage extends React.Component {
 
 function mapStateToProps(state) {
     return {
-        // subdivisions: state.subdivisions,
     };
 }
 
 function mapDispatchToProps(dispatch) {
     return {
-        // onComponentDidMount() {
-        //     dispatch(getSubdivisions());
-        // },
     };
 }
 

@@ -1,0 +1,86 @@
+import React from 'react';
+import { connect } from 'react-redux';
+import { map } from 'ramda';
+
+import Navbar from './Navbar';
+import Footer from './Footer';
+
+import {
+    getPlats,
+} from '../actions/apiActions';
+
+class PlatExisting extends React.Component {
+    static propTypes = {
+        plats: React.PropTypes.object,
+        onComponentDidMount: React.PropTypes.func,
+    };
+
+    componentDidMount() {
+        this.props.onComponentDidMount();
+    }
+
+
+    render() {
+        const {
+            plats,
+        } = this.props;
+
+        const plats_list = plats.length > 0 ? (
+            map((plat) => {
+                return (
+                    <div key={plat.id} className="col-xs-12">
+                        <div className="row">
+                            <h4>Latitude: {plat.latitude} x Longitude: {plat.longitude}</h4>
+                        </div>
+                        <div className="row">
+                            <div className="col-sm-offset-1">
+                                <p className="col-md-3 col-sm-4 col-xs-6">Subdivision: {plat.subdivision ? plat.subdivision.name : 'Not listed'}</p>
+                                <p className="col-md-3 col-sm-4 col-xs-6">Acreage: {plat.total_acreage}</p>
+                                <p className="col-md-3 col-sm-4 col-xs-6">Plat Type: {plat.plat_type}</p>
+                                <p className="col-md-3 col-sm-4 col-xs-6">Approval: {plat.is_approved ? 'Approved' : 'Not Approved'}</p>
+                                <p className="col-md-3 col-sm-4 col-xs-6">Expansion Area: {plat.expansion_area}</p>
+                                <p className="col-md-3 col-sm-4 col-xs-6">Buildable Lots: {plat.buildable_lots}</p>
+                                <p className="col-md-3 col-sm-4 col-xs-6">Non-Buildable Lots: {plat.non_buildable_lots}</p>
+                                <p className="col-md-3 col-sm-4 col-xs-6">Unit: {plat.unit}</p>
+                                <p className="col-md-3 col-sm-4 col-xs-6">Section: {plat.section}</p>
+                                <p className="col-md-3 col-sm-4 col-xs-6">Block: {plat.block}</p>
+                                <p className="col-md-3 col-sm-4 col-xs-6">Cabinet: {plat.cabinet}</p>
+                                <p className="col-md-3 col-sm-4 col-xs-6">Slide: {plat.slide}</p>
+                            </div>
+                        </div>
+                    </div>
+                );
+            })(plats)
+        ) : null;
+
+        return (
+            <div className="plat-existing">
+                <Navbar />
+                <img src={`${global.BASE_STATIC_URL}/lexington-hero-interior.jpg`} role="presentation" className="lex-banner" />
+                <div className="container">
+                    <h1>PLATS - EXISTING</h1>
+                    {plats_list}
+                </div>
+                <Footer />
+            </div>
+        );
+    }
+}
+
+function mapStateToProps(state) {
+    return {
+        plats: state.plats,
+    };
+}
+
+function mapDispatchToProps(dispatch) {
+    return {
+        onComponentDidMount() {
+            dispatch(getPlats());
+        },
+    };
+}
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(PlatExisting);
+

@@ -96,7 +96,12 @@ class PlatZoneSerializer(serializers.ModelSerializer):
 class PlatSerializer(serializers.ModelSerializer):
     lots = LotSerializer(many=True, read_only=True)
     plat_zones = PlatZoneSerializer(many=True, read_only=True)
+    total_acreage = serializers.SerializerMethodField(read_only=True)
 
+    def get_total_acreage(self, obj):
+        set_acreage = str(obj.total_acreage).rstrip('0').rstrip('.')
+        return set_acreage
+    
     class Meta:
         model = Plat 
         fields = (
