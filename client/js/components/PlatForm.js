@@ -66,85 +66,91 @@ class PlatForm extends React.Component {
 
                                 <fieldset>
                                     <div className="row">
-                                        <div className="col-sm-4">
+                                        <div className="col-sm-6">
                                             <FormGroup label="Subdivision" id="subdivision">
                                                 <input type="text" className="form-control" placeholder="Subdivision" autoFocus />
                                             </FormGroup>
                                         </div>
-                                        <div className="col-sm-4">
+                                    </div>
+                                    <div className="row">
+                                        <div className="col-sm-6">
                                             <FormGroup label="Latitude" id="latitude">
                                                 <input type="text" className="form-control" placeholder="Latitude" autoFocus />
                                             </FormGroup>
                                         </div>
-                                        <div className="col-sm-4">
+                                        <div className="col-sm-6">
                                             <FormGroup label="Longitude" id="longitute">
                                                 <input type="text" className="form-control" placeholder="Longitude" autoFocus />
                                             </FormGroup>
                                         </div>
                                     </div>
                                     <div className="row">
-                                        <div className="col-sm-4">
+                                        <div className="col-sm-6">
                                             <FormGroup label="Expansion Area" id="expansion_area">
                                                 <input type="text" className="form-control" placeholder="Expansion Area" autoFocus />
                                             </FormGroup>
                                         </div>
-                                        <div className="col-sm-4">
+                                        <div className="col-sm-6">
+                                            <FormGroup label="* Total Acreage" id="total_acreage">
+                                                <input type="text" className="form-control" placeholder="Total Acreage" autoFocus />
+                                            </FormGroup>
+                                        </div>
+                                    </div>
+                                    <div className="row">
+                                        <div className="col-sm-6">
                                             <FormGroup label="Buildable Lots" id="buildable_lots">
                                                 <input type="text" className="form-control" placeholder="Buildable Lots" autoFocus />
                                             </FormGroup>
                                         </div>
-                                        <div className="col-sm-4">
+                                        <div className="col-sm-6">
                                             <FormGroup label="Non-Buildable Lots" id="non_buildable_lots">
                                                 <input type="text" className="form-control" placeholder="Non-Buildable Lots" autoFocus />
                                             </FormGroup>
                                         </div>
                                     </div>
                                     <div className="row">
-                                        <div className="col-sm-4">
-                                            <FormGroup label="Unit" id="unit">
-                                                <input type="text" className="form-control" placeholder="Unit" autoFocus />
+                                        <div className="col-sm-6">
+                                            <FormGroup label="Plat Type" id="plat_type">
+                                                <input type="text" className="form-control" placeholder="Plat Type" autoFocus />
                                             </FormGroup>
                                         </div>
-                                        <div className="col-sm-4">
+                                        <div className="col-sm-6">
                                             <FormGroup label="Section" id="section">
                                                 <input type="text" className="form-control" placeholder="Section" autoFocus />
                                             </FormGroup>
                                         </div>
-                                        <div className="col-sm-4">
+                                    </div>
+                                    <div className="row">
+                                        <div className="col-sm-6">
+                                            <FormGroup label="Unit" id="unit">
+                                                <input type="text" className="form-control" placeholder="Unit" autoFocus />
+                                            </FormGroup>
+                                        </div>
+                                        <div className="col-sm-6">
                                             <FormGroup label="Block" id="block">
                                                 <input type="text" className="form-control" placeholder="Block" autoFocus />
                                             </FormGroup>
                                         </div>
                                     </div>
                                     <div className="row">
-                                        <div className="col-sm-4">
-                                            <FormGroup label="* Total Acreage" id="total_acreage">
-                                                <input type="text" className="form-control" placeholder="Total Acreage" autoFocus />
-                                            </FormGroup>
-                                        </div>
-                                        <div className="col-sm-4">
-                                            <FormGroup label="Plat Type" id="plat_type">
-                                                <input type="text" className="form-control" placeholder="Plat Type" autoFocus />
-                                            </FormGroup>
-                                        </div>
-                                        <div className="col-sm-4">
+                                        <div className="col-sm-6">
                                             <FormGroup label="Cabinet" id="cabinet">
                                                 <input type="text" className="form-control" placeholder="Cabinet" autoFocus />
                                             </FormGroup>
                                         </div>
-                                    </div>
-                                    <div className="row">
-                                        <div className="col-sm-4">
+                                        <div className="col-sm-6">
                                             <FormGroup label="Slide" id="slide">
                                                 <input type="text" className="form-control" placeholder="Slide" autoFocus />
                                             </FormGroup>
                                         </div>
-                                        <div className="col-sm-4">
+                                    </div>
+                                    <div className="row">
+                                        <div className="col-sm-6">
                                             <FormGroup label="Sewer Fees Due" id="sewer_due">
                                                 <input type="text" className="form-control" placeholder="Sewer Fees Due" autoFocus />
                                             </FormGroup>
                                         </div>
-                                        <div className="col-sm-4">
+                                        <div className="col-sm-6">
                                             <FormGroup label="Non-Sewer Fees Due" id="non_sewer_due">
                                                 <input type="text" className="form-control" placeholder="Non-Sewer Fees Due" autoFocus />
                                             </FormGroup>
