@@ -25,43 +25,6 @@ import random
 
 # @api_view(['POST'])
 # @permission_classes((AllowAny, ))
-# def register(request):
-#     serializer = UserSerializer(data=request.data)
-#     if serializer.is_valid():
-#         email = request.data.get('email', None)
-#         profile = Profile.objects.filter(user__email__iexact=email)
-#         if profile.count() > 0:
-#             raise serializers.ValidationError({ 'email': ['A user with that email already exists.']})
-#         u = serializer.save()
-#         # Create profile
-#         notifications = request.data.get('email_notifications', None)
-#         if notifications is None:
-#             notifications = True
-#         else:
-#             notifications = notifications.lower() == "true" or notifications == "1" or notifications.lower() == "yes"
-
-#         max_opponents = Opponent.objects.all().count()
-#         Profile.objects.get_or_create(user=u, email_notifications=notifications, solo_opponent=Opponent.objects.get(opponent_id=random.randint(1, max_opponents)))
-
-#         token =  Token.objects.get_or_create(user_id=serializer.data['id'])[0]
-#         return Response({'key': token.key, 'user': serializer.data})
-#     return Response(serializer.errors, status=statuses.HTTP_400_BAD_REQUEST)
-
-# def get_token_for_user(user):
-#     token =  Token.objects.get_or_create(user=user)[0]
-#     right_now = now()
-#     if token.created < right_now - timedelta(days=3):
-#         token.delete()
-#         token = Token.objects.get_or_create(user=user, created=right_now)[0]
-#     return token
-
-# class CustomObtainAuthToken(ObtainAuthToken):
-#     def post(self, request, *args, **kwargs):
-#         serializer = self.serializer_class(data=request.data)
-#         if serializer.is_valid():
-#             token = get_token_for_user(serializer.validated_data['user'])
-#             return Response({'key': token.key, 'user': UserSerializer(token.user).data})
-#         return Response(serializer.errors, status=statuses.HTTP_400_BAD_REQUEST)
 
 def get_token_for_user(user):
     token =  Token.objects.get_or_create(user=user)[0]
@@ -79,6 +42,39 @@ class CustomObtainAuthToken(ObtainAuthToken):
             token = get_token_for_user(serializer.validated_data['user'])
             return Response({'key': token.key, 'user': UserSerializer(token.user).data})
         return Response(serializer.errors, status=statuses.HTTP_400_BAD_REQUEST)
+
+class Registration(GenericAPIView):
+    authentication_classes = (authentication.SessionAuthentication,)
+    # def clean_password2(self):
+    #     cd = self.cleaned_data
+
+    #     if cd['password_1'] != cd['password_2']:
+    #         raise forms.ValidationError('Passwords do not match.')
+    #     password = cd['password_2']
+    #     return password
+
+    def post(self, request, *args, **kwargs):
+        print('GOT TO Registration')
+        
+
+    #     serializer = UserSerializer(data=request.data)
+    #     if serializer.is_valid():
+    #         token = get_token_for_user(serializer.validated_data['user'])
+    #         u = serializer.save()
+
+    #         return Response({'key': token.key, 'user': UserSerializer(token.user).data})
+    #     return Response(serializer.errors, status=statuses.HTTP_400_BAD_REQUEST)
+
+    # authentication_classes = (authentication.SessionAuthentication,)
+    
+    # def register(request):
+    #     serializer = UserSerializer(data=request.data)
+    #     if serializer.is_valid():
+    #         u = serializer.save()
+
+    #         token =  Token.objects.get_or_create(user_id=serializer.data['id'])[0]
+    #         return Response({'key': token.key, 'user': serializer.data})
+    #     return Response(serializer.errors, status=statuses.HTTP_400_BAD_REQUEST)
 
 # class PasswordChangeView(GenericAPIView):
 #     """

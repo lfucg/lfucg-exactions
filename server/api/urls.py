@@ -29,8 +29,9 @@ router.register(r'estimate', ProjectCostEstimateViewSet)
 router.register(r'ledger', AccountLedgerViewSet)
 
 urlpatterns = [
-    url(r'^login/$', CustomObtainAuthToken.as_view()),
     url(r'^me/$', CurrentUserDetails.as_view(), name="me"),
+    url(r'^login/$', CustomObtainAuthToken.as_view()),
     url(r'^delete_token/', Logout.as_view()),
+    url(r'^register/$', Registration.as_view()),
     url(r'^', include(router.urls)),
 ]
