@@ -48,30 +48,22 @@ class Login extends React.Component {
                 <div className="below-banner">
                     <div className="container">
                         <div className="col-sm-3 left-list">
-                            <div className="row">
-                                <button id="login" onClick={changeSelection('login')} >
-                                    Login
-                                    <i className="fa fa-chevron-right pull-right" aria-hidden="true" />
-                                </button>
-                            </div>
-                            <div className="row">
-                                <button id="register" onClick={changeSelection('register')} >
-                                    Register
-                                    <i className="fa fa-chevron-right pull-right" aria-hidden="true" />
-                                </button>
-                            </div>
-                            <div className="row">
-                                <button id="password" onClick={changeSelection('password')} >
-                                    Forgot password
-                                    <i className="fa fa-chevron-right pull-right" aria-hidden="true" />
-                                </button>
-                            </div>
-                            <div className="row">
-                                <button id="username" onClick={changeSelection('username')} >
-                                    Forgot username
-                                    <i className="fa fa-chevron-right pull-right" aria-hidden="true" />
-                                </button>
-                            </div>
+                            <button id="login" onClick={changeSelection('login')} className={(login_choice === 'login') ? 'list-selection' : 'non-selected'} >
+                                Login
+                                <i className="fa fa-chevron-right pull-right" aria-hidden="true" />
+                            </button>
+                            <button id="register" onClick={changeSelection('register')} className={(login_choice === 'register') ? 'list-selection' : 'non-selected'} >
+                                Register
+                                <i className="fa fa-chevron-right pull-right" aria-hidden="true" />
+                            </button>
+                            <button id="password" onClick={changeSelection('password')} className={(login_choice === 'password') ? 'list-selection' : 'non-selected'} >
+                                Forgot password
+                                <i className="fa fa-chevron-right pull-right" aria-hidden="true" />
+                            </button>
+                            <button id="username" onClick={changeSelection('username')} className={(login_choice === 'username') ? 'list-selection' : 'non-selected'} >
+                                Forgot username
+                                <i className="fa fa-chevron-right pull-right" aria-hidden="true" />
+                            </button>
                         </div>
                         <div className="col-sm-7 col-sm-offset-1" id="login-select">
                             { login_choice === 'login' ? (
