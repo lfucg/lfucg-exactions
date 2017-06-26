@@ -128,7 +128,7 @@ class Login extends React.Component {
                                 </fieldset>
                                 <div className="row">
                                     <div className="col-sm-12 col-md-offset-3 col-xs-6 col-md-offset-5">
-                                        <button className="btn btn-lex">Login</button>
+                                        <button className="btn btn-lex">Register</button>
                                     </div>
                                 </div>
                             </form>
@@ -149,13 +149,15 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        onLogin() {
+        onLogin(event) {
+            event.preventDefault();
             dispatch(login())
             .then(() => {
                 hashHistory.goBack();
             });
         },
-        onRegister() {
+        onRegister(event) {
+            event.preventDefault();
             dispatch(register());
         },
     };
