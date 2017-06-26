@@ -29,7 +29,7 @@ class Navbar extends React.Component {
                 <header>
                     <div className="container">
                         <div className="navbar-header">
-                            <Link to="dashboard/" className="navbar-brand" aria-label="Exactions Home" role="link" />
+                            <Link to="dashboard/" className="navbar-brand" aria-label="Exactions Home" role="link">Exactions</Link>
                             <button className="btn navbar-btn navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
                                 <span className="icon-bar" />
                                 <span className="icon-bar" />

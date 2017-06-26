@@ -6,6 +6,7 @@ import {
     ME,
 
     LOGIN,
+    REGISTER,
     LOGOUT,
 
     GET_SUBDIVISIONS,
@@ -44,6 +45,36 @@ export function login() {
             return {
                 username,
                 password,
+            };
+        },
+    };
+}
+
+export function register() {
+    return {
+        type: API_CALL,
+        endpoint: REGISTER,
+        url: '/register/',
+        method: 'POST',
+        body: (getState) => {
+            const {
+                activeForm,
+            } = getState();
+            const {
+                username_1,
+                password_1,
+                // password_2,
+                first_name,
+                last_name,
+                email,
+            } = activeForm;
+            return {
+                username: username_1,
+                password_1,
+                // password_2,
+                first_name,
+                last_name,
+                email,
             };
         },
     };

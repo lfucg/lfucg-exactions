@@ -147,12 +147,38 @@ class AccountSerializer(serializers.ModelSerializer):
         )
 
 class UserSerializer(serializers.ModelSerializer):
+
+    password = serializers.CharField(write_only=True)
+
+    # def validate_password(self, pwd):
+    #     strong_enough, error_msg = password_strong_enough(pwd)
+    #     if not strong_enough:
+    #         raise serializers.ValidationError(error_msg)
+    #     return pwd
+
+    def validate_email(self, email):
+        validate_email(email)
+        return email
+
+    def create(self, validated_data):
+        pwd = validated_data.pop('password')
+        username = validated_data.pop('username').lower()
+        user = User.objects.create(username=username, **validated_data)
+        user.set_password(pwd)
+        user.save()
+
+        tasks.send_welcome_email.delay(user.id)
+
+        return user
+
     class Meta:
         model = User
         fields = (
             'id',
             'username',
+            'password',
             'email',
             'first_name',
             'last_name',
         )
+        extra_kwargs = {'email': {'required': True}}
