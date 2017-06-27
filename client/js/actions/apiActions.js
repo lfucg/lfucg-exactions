@@ -144,6 +144,7 @@ export function postPlat() {
         body: (getState) => {
             const {
                 activeForm,
+                currentUser,
             } = getState();
             const {
                 subdivision,
@@ -163,7 +164,12 @@ export function postPlat() {
                 sewer_due,
                 non_sewer_due,
             } = activeForm;
+            const {
+                id,
+            } = currentUser;
             return {
+                created_by: id,
+                modified_by: id,
                 subdivision,
                 total_acreage,
                 latitude,

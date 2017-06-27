@@ -25,7 +25,7 @@ class PlatPage extends React.Component {
                         <h1>PLATS</h1>
                         <div className="col-xs-12">
                             <div className="row">
-                                <div className="col-md-6">
+                                <div className="col-sm-6">
                                     <div className="row">
                                         <Link to={'plat-form/'} role="link" ><h3 className="in-page-link">Create Plat</h3></Link>
                                     </div>
@@ -33,7 +33,7 @@ class PlatPage extends React.Component {
                                         <p>Apply for approval of a new plat.</p>
                                     </div>
                                 </div>
-                                <div className="col-md-6">
+                                <div className="col-sm-6">
                                     <div className="row">
                                         <Link to={'plat-existing/'} role="link" ><h3 className="in-page-link">Existing Plats</h3></Link>
                                     </div>

@@ -61,10 +61,13 @@ class PlatForm extends React.Component {
                 </div>
                 <div className="inside-body">
                     <div className="container">
-                        <div className="col-sm-offset-1 col-sm-10">
+                        <div className="col-md-offset-1 col-md-10">
                             <form onSubmit={onSubmit} >
 
                                 <fieldset>
+                                    <div className="row form-subheading">
+                                        <h3>Location</h3>
+                                    </div>
                                     <div className="row">
                                         <div className="col-sm-6">
                                             <FormGroup label="Subdivision" id="subdivision">
@@ -83,6 +86,9 @@ class PlatForm extends React.Component {
                                                 <input type="text" className="form-control" placeholder="Longitude" />
                                             </FormGroup>
                                         </div>
+                                    </div>
+                                    <div className="row form-subheading">
+                                        <h3>Land Attributes</h3>
                                     </div>
                                     <div className="row">
                                         <div className="col-sm-6">
@@ -107,6 +113,31 @@ class PlatForm extends React.Component {
                                                 <input type="text" className="form-control" placeholder="Non-Buildable Lots" />
                                             </FormGroup>
                                         </div>
+                                    </div>
+                                    <div className="row form-subheading">
+                                        <h3>Dues and Calculations</h3>
+                                    </div>
+                                    <div className="row">
+                                        <div className="col-sm-6">
+                                            <FormGroup label="Sewer Fees Due" id="sewer_due">
+                                                <input type="text" className="form-control" placeholder="Sewer Fees Due" />
+                                            </FormGroup>
+                                        </div>
+                                        <div className="col-sm-6">
+                                            <FormGroup label="Non-Sewer Fees Due" id="non_sewer_due">
+                                                <input type="text" className="form-control" placeholder="Non-Sewer Fees Due" />
+                                            </FormGroup>
+                                        </div>
+                                    </div>
+                                    <div className="row">
+                                        <div className="col-xs-12">
+                                            <FormGroup label="Calculation Notes" id="calculation_note">
+                                                <textarea type="text" className="form-control" placeholder="Calculation Notes" rows="4" />
+                                            </FormGroup>
+                                        </div>
+                                    </div>
+                                    <div className="row form-subheading">
+                                        <h3>Additional Plat Details</h3>
                                     </div>
                                     <div className="row">
                                         <div className="col-sm-6">
@@ -143,23 +174,6 @@ class PlatForm extends React.Component {
                                                 <input type="text" className="form-control" placeholder="Slide" />
                                             </FormGroup>
                                         </div>
-                                    </div>
-                                    <div className="row">
-                                        <div className="col-sm-6">
-                                            <FormGroup label="Sewer Fees Due" id="sewer_due">
-                                                <input type="text" className="form-control" placeholder="Sewer Fees Due" />
-                                            </FormGroup>
-                                        </div>
-                                        <div className="col-sm-6">
-                                            <FormGroup label="Non-Sewer Fees Due" id="non_sewer_due">
-                                                <input type="text" className="form-control" placeholder="Non-Sewer Fees Due" />
-                                            </FormGroup>
-                                        </div>
-                                    </div>
-                                    <div className="row">
-                                        <FormGroup label="Calculation Notes" id="calculation_note">
-                                            <input type="text" className="form-control" placeholder="Calculation Notes" />
-                                        </FormGroup>
                                     </div>
                                 </fieldset>
                                 <button disabled={!submitEnabled} className="btn btn-lex">Submit</button>

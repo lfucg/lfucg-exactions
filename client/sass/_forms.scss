@@ -1,6 +1,7 @@
 .btn-lex {
     background-color: #0057A8;
     color: #fff;
+    margin-top: 2.5em;
 }
 
 .left-list {
@@ -28,16 +29,28 @@
     margin-bottom: 3em;
 }
 
+.form-subheading {
+    background-color: #001A49;
+    color: white;
+    border-radius: 3px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    h3 {
+        margin: 8px 0px 8px 8px;
+    }
+}
+
 .form-group {
     font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
     label {
         color: #585858;
         font-size: 1.5em;
         font-weight: normal;
-        margin: 0.2em 0em;
+        margin: 0.3em 0em;
     }
     .form-control {
         color: black;
         font-weight: normal;
+        margin-bottom: 0.5em;
     }
 }

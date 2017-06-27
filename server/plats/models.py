@@ -73,6 +73,16 @@ class Plat(models.Model):
     def __str__(self):
         return 'Lat: ' + self.latitude +  ' Long: ' + self.longitude
 
+    def save(self, *args, **kwargs):
+        try:
+            existing_plat = Plat.objects.get(id=self.id)
+            if existing_plat.exists():
+                created_by = existing_plat.created_by
+        except:
+            created_by = self.created_by
+
+        super(Plat, self).save(*args, **kwargs)
+
 
 class Lot(models.Model):
     is_approved = models.BooleanField(default=False)
