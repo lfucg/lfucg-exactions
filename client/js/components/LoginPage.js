@@ -233,7 +233,13 @@ function mapDispatchToProps(dispatch) {
         },
         onRegister(event) {
             event.preventDefault();
-            dispatch(register());
+            dispatch(register())
+            .then(() => {
+                const login_selection = {
+                    login_choice: 'login',
+                };
+                dispatch(formUpdate(login_selection));
+            });
         },
         forgotPassword(event) {
             event.preventDefault();
