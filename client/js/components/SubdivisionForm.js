@@ -60,12 +60,12 @@ class SubdivisionForm extends React.Component {
                                     </div>
                                     <div className="row">
                                         <FormGroup label="* Gross Acreage" id="gross_acreage">
-                                            <input type="text" className="form-control" placeholder="Gross Acreage" autoFocus />
+                                            <input type="text" className="form-control" placeholder="Gross Acreage" />
                                         </FormGroup>
                                     </div>
                                     <div className="row">
                                         <FormGroup label="Number of Allowed Lots" id="number_allowed_lots">
-                                            <input type="text" className="form-control" placeholder="Number of Allowed Lots" autoFocus />
+                                            <input type="text" className="form-control" placeholder="Number of Allowed Lots" />
                                         </FormGroup>
                                     </div>
                                 </fieldset>

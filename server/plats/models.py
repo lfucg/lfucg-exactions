@@ -22,6 +22,16 @@ class Subdivision(models.Model):
     def __str__(self):
         return self.name
 
+    def save(self, *args, **kwargs):
+        try:
+            existing_subdivision = Subdivision.objects.get(id=self.id)
+            if existing_subdivision.exists():
+                created_by = existing_subdivision.created_by
+        except:
+            created_by = self.created_by
+
+        super(Subdivision, self).save(*args, **kwargs)
+
 class Plat(models.Model):
     is_approved = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)

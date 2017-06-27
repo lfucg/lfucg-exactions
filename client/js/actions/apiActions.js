@@ -106,13 +106,19 @@ export function postSubdivision() {
         body: (getState) => {
             const {
                 activeForm,
+                currentUser,
             } = getState();
             const {
                 name,
                 gross_acreage,
                 number_allowed_lots,
             } = activeForm;
+            const {
+                id,
+            } = currentUser;
             return {
+                created_by: id,
+                modified_by: id,
                 name,
                 gross_acreage,
                 number_allowed_lots,

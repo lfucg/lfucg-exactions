@@ -3,11 +3,11 @@ from rest_framework import serializers
 from .models import *
 
 class SubdivisionSerializer(serializers.ModelSerializer):
-    gross_acreage = serializers.SerializerMethodField(read_only=True)
+    # gross_acreage = serializers.SerializerMethodField(read_only=True)
 
-    def get_gross_acreage(self, obj):
-        set_acreage = str(obj.gross_acreage).rstrip('0').rstrip('.')
-        return set_acreage
+    # def get_gross_acreage(self, obj):
+    #     set_acreage = str(obj.gross_acreage).rstrip('0').rstrip('.')
+    #     return set_acreage
 
     class Meta:
         model = Subdivision
