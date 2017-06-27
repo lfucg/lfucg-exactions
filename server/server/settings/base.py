@@ -34,6 +34,7 @@ STATIC_FILE_DIR = BASE_DIR.child("static")
 # http://www.i18nguy.com/unicode/language-identifiers.html
 LANGUAGE_CODE = 'en-us'
 
+BASE_URL = "http://localhost:8000"
 # Defines the views served for root URLs.
 ROOT_URLCONF = 'server.urls'
 
@@ -296,6 +297,8 @@ INTERNAL_IPS = ('127.0.0.1')
 
 # Set this to true if you use a proxy that sets X-Forwarded-Host
 #USE_X_FORWARDED_HOST = False
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 SERVER_EMAIL = "webmaster@example.com"
 DEFAULT_FROM_EMAIL = "webmaster@example.com"

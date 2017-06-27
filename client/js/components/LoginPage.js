@@ -9,6 +9,8 @@ import FormGroup from './FormGroup';
 import {
     login,
     register,
+    passwordReset,
+    sendUsername,
 } from '../actions/apiActions';
 
 import {
@@ -23,6 +25,8 @@ class Login extends React.Component {
         changeSelection: React.PropTypes.func,
         onLogin: React.PropTypes.func,
         onRegister: React.PropTypes.func,
+        forgotPassword: React.PropTypes.func,
+        forgotUsername: React.PropTypes.func,
     }
 
     componentDidMount() {
@@ -35,6 +39,8 @@ class Login extends React.Component {
             changeSelection,
             onLogin,
             onRegister,
+            forgotPassword,
+            forgotUsername,
         } = this.props;
 
         const {
@@ -144,6 +150,48 @@ class Login extends React.Component {
                                     </form>
                                 </div>
                             ) : null }
+                            { login_choice === 'password' ? (
+                                <div>
+                                    <h2>FORGOT PASSWORD</h2>
+                                    <form onSubmit={forgotPassword}>
+                                        <fieldset>
+                                            <div className="row">
+                                                <div className="col-sm-12 col-md-7">
+                                                    <FormGroup label="Email" id="email_2">
+                                                        <input type="email" className="form-control" placeholder="Email" aria-label="Email" />
+                                                    </FormGroup>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                        <div className="row">
+                                            <div className="col-sm-12 col-md-offset-3 col-xs-6 col-md-offset-5">
+                                                <button className="btn btn-lex">Submit</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            ) : null }
+                            { login_choice === 'username' ? (
+                                <div>
+                                    <h2>FORGOT USERNAME</h2>
+                                    <form onSubmit={forgotUsername}>
+                                        <fieldset>
+                                            <div className="row">
+                                                <div className="col-sm-12 col-md-7">
+                                                    <FormGroup label="Email" id="email_3">
+                                                        <input type="email" className="form-control" placeholder="Email" aria-label="Email" />
+                                                    </FormGroup>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                        <div className="row">
+                                            <div className="col-sm-12 col-md-offset-3 col-xs-6 col-md-offset-5">
+                                                <button className="btn btn-lex">Submit</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            ) : null }
                         </div>
                     </div>
                 </div>
@@ -186,6 +234,14 @@ function mapDispatchToProps(dispatch) {
         onRegister(event) {
             event.preventDefault();
             dispatch(register());
+        },
+        forgotPassword(event) {
+            event.preventDefault();
+            dispatch(passwordReset());
+        },
+        forgotUsername(event) {
+            event.preventDefault();
+            dispatch(sendUsername());
         },
     };
 }
