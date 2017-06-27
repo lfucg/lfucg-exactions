@@ -3,31 +3,20 @@
     color: #fff;
 }
 
-.left-list {
-    border-right: 1px #BFBFBF solid;
-    padding: 0em;
-    /*.row {*/
-    button {
-        padding: 0.6em 1em;
-        border: none;
-        font-size: 1.5em;
-        font-weight: 200;
-        width: 100%;
-        text-align: left;        
-        .fa-chevron-right {
-            margin-top: 0.5em;
-            font-weight: lighter;
-            font-size: 0.6em;
-        }
+.form-header {
+    background-color: #001A49;
+    color: white;
+    font-weight: lighter;
+    padding-top: 0px;
+    padding-bottom: 8px;
+    margin-bottom: 3em;
+}
+
+.login-link-row {
+    margin-top: 5em;
+    margin-bottom: 10em;
+    Link {
+        text-align: center;
+        font-size: 14px;
     }
-    .list-selection {
-        background-color: #0057A8;
-        color: white;
-        outline: none;
-    }
-    .non-selected {
-        background-color: inherit;
-        color: #585858;
-    }
-    /*}*/
 }

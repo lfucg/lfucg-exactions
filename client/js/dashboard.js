@@ -8,7 +8,10 @@ import dashboardStore from './stores/dashboardStore';
 
 import DashboardPage from './components/DashboardPage';
 
-import LoginPage from './components/LoginPage';
+import Login from './components/LoginPage';
+import Registration from './components/RegistrationPage';
+import ForgotPassword from './components/ForgotPassword';
+import ForgotUsername from './components/ForgotUsername';
 
 global.reduxStore = dashboardStore;
 global.BASE_STATIC_URL = '/static';
@@ -21,7 +24,10 @@ ReactDOM.render(
             <Redirect from="/" to="dashboard/" />
             <Route path="dashboard/" component={DashboardPage} />
 
-            <Route path="login/" component={LoginPage} />
+            <Route path="login/" component={Login} />
+            <Route path="registration/" component={Registration} />
+            <Route path="forgot-password/" component={ForgotPassword} />
+            <Route path="forgot-username/" component={ForgotUsername} />
         </Router>
     </Provider>,
     document.getElementById('root'),
