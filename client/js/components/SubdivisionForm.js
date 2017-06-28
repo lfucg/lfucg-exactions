@@ -44,7 +44,12 @@ class SubdivisionForm extends React.Component {
 
                 <div className="form-header">
                     <div className="container">
-                        <h1>SUBDIVISIONS - CREATE / APPLY</h1>
+                        <div className="col-sm-9">
+                            <h1>SUBDIVISIONS - CREATE / APPLY</h1>
+                        </div>
+                        <div className="col-sm-3">
+                            <Link to="subdivision-page" className="btn btn-lex-reverse" role="link">Return to Subdivisions</Link>
+                        </div>
                     </div>
                 </div>
                 <div className="inside-body">

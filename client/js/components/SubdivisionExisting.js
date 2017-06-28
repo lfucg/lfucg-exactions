@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router';
 import { map } from 'ramda';
 
 import Navbar from './Navbar';
@@ -29,12 +30,12 @@ class SubdivisionExisting extends React.Component {
             map((subdivision) => {
                 return (
                     <div key={subdivision.id} className="col-xs-12">
-                        <div className="row">
-                            <h4>{subdivision.name}</h4>
+                        <div className="row form-subheading">
+                            <h3>{subdivision.name}</h3>
                         </div>
                         <div className="row">
-                            <h5 className="col-md-3 col-sm-offset-1 col-sm-4 col-xs-6">Acres: {subdivision.gross_acreage}</h5>
-                            <h5 className="col-md-3 col-sm-4 col-xs-6">Lots: {subdivision.number_allowed_lots}</h5>
+                            <p className="col-md-3 col-sm-offset-1 col-sm-4 col-xs-6">Acres: {subdivision.cleaned_gross_acreage}</p>
+                            <p className="col-md-3 col-sm-4 col-xs-6">Lots: {subdivision.number_allowed_lots}</p>
                         </div>
                     </div>
                 );
@@ -44,10 +45,19 @@ class SubdivisionExisting extends React.Component {
         return (
             <div className="subdivision-existing">
                 <Navbar />
-                <img src={`${global.BASE_STATIC_URL}/lexington-hero-interior.jpg`} role="presentation" className="lex-banner" />
+
+                <div className="form-header">
+                    <div className="container">
+                        <div className="col-sm-9">
+                            <h1>SUBDIVISIONS - EXISTING</h1>
+                        </div>
+                        <div className="col-sm-3">
+                            <Link to="subdivision-page" className="btn btn-lex-reverse" role="link">Return to Subdivisions</Link>
+                        </div>
+                    </div>
+                </div>
                 <div className="inside-body">
                     <div className="container">
-                        <h1>SUBDIVISIONS - EXISTING</h1>
                         {subdivisions_list}
                     </div>
                 </div>

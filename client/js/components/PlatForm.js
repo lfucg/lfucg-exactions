@@ -56,7 +56,12 @@ class PlatForm extends React.Component {
 
                 <div className="form-header">
                     <div className="container">
-                        <h1>PLATS - CREATE / APPLY</h1>
+                        <div className="col-sm-9">
+                            <h1>PLATS - CREATE / APPLY</h1>
+                        </div>
+                        <div className="col-sm-3">
+                            <Link to="plat-page" className="btn btn-lex-reverse" role="link">Return to Plats</Link>
+                        </div>
                     </div>
                 </div>
                 <div className="inside-body">
@@ -82,7 +87,7 @@ class PlatForm extends React.Component {
                                             </FormGroup>
                                         </div>
                                         <div className="col-sm-6">
-                                            <FormGroup label="Longitude" id="longitute">
+                                            <FormGroup label="Longitude" id="longitude">
                                                 <input type="text" className="form-control" placeholder="Longitude" />
                                             </FormGroup>
                                         </div>

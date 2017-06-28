@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router';
 import { map } from 'ramda';
 
 import Navbar from './Navbar';
@@ -29,8 +30,8 @@ class PlatExisting extends React.Component {
             map((plat) => {
                 return (
                     <div key={plat.id} className="col-xs-12">
-                        <div className="row">
-                            <h4>Latitude: {plat.latitude}  x  Longitude: {plat.longitude}</h4>
+                        <div className="row form-subheading">
+                            <h3>Latitude: {plat.latitude}  x  Longitude: {plat.longitude}</h3>
                         </div>
                         <div className="row">
                             <div className="col-sm-offset-1">
@@ -56,10 +57,19 @@ class PlatExisting extends React.Component {
         return (
             <div className="plat-existing">
                 <Navbar />
-                <img src={`${global.BASE_STATIC_URL}/lexington-hero-interior.jpg`} role="presentation" className="lex-banner" />
+
+                <div className="form-header">
+                    <div className="container">
+                        <div className="col-sm-9">
+                            <h1>PLATS - EXISTING</h1>
+                        </div>
+                        <div className="col-sm-3">
+                            <Link to="plat-page" className="btn btn-lex-reverse" role="link">Return to Plats</Link>
+                        </div>
+                    </div>
+                </div>
                 <div className="inside-body">
                     <div className="container">
-                        <h1>PLATS - EXISTING</h1>
                         {plats_list}
                     </div>
                 </div>
