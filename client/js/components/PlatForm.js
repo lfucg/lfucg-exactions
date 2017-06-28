@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import {
     Link,
+    hashHistory,
 } from 'react-router';
 
 import Navbar from './Navbar';
@@ -24,8 +25,13 @@ class PlatForm extends React.Component {
     static propTypes = {
         activeForm: React.PropTypes.object,
         plats: React.PropTypes.object,
+        onComponentDidMount: React.PropTypes.func,
         onSubmit: React.PropTypes.func,
     };
+
+    componentDidMount() {
+        this.props.onComponentDidMount();
+    }
 
     render() {
         const {
@@ -214,9 +220,15 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return {
+        onComponentDidMount() {
+            dispatch(formInit());
+        },
         onSubmit(event) {
             event.preventDefault();
-            dispatch(postPlat());
+            dispatch(postPlat())
+            .then(() => {
+                hashHistory.push('plat-existing/');
+            });
         },
     };
 }
