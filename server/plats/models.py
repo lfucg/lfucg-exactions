@@ -195,6 +195,16 @@ class Lot(models.Model):
     def __str__(self):
         return self.address_full    
 
+    def save(self, *args, **kwargs):
+        try:
+            existing_lot = Lot.objects.get(id=self.id)
+            if existing_lot.exists():
+                created_by = existing_lot.created_by
+        except:
+            created_by = self.created_by
+
+        super(Lot, self).save(*args, **kwargs)
+
 class PlatZone(models.Model):
     is_active = models.BooleanField(default=True)
 

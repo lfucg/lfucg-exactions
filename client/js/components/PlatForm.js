@@ -81,24 +81,24 @@ class PlatForm extends React.Component {
                                     </div>
                                     <div className="row">
                                         <div className="col-sm-6">
-                                            <FormGroup label="Subdivision" id="subdivision">
+                                            <FormGroup label="* Subdivision" id="subdivision">
                                                 <input type="text" className="form-control" placeholder="Subdivision" autoFocus />
                                             </FormGroup>
                                         </div>
                                         <div className="col-sm-6">
-                                            <FormGroup label="Date Recorded" id="date_recorded">
+                                            <FormGroup label="* Date Recorded" id="date_recorded">
                                                 <input type="date" className="form-control" placeholder="Date Recorded" />
                                             </FormGroup>
                                         </div>
                                     </div>
                                     <div className="row">
                                         <div className="col-sm-6">
-                                            <FormGroup label="Latitude" id="latitude">
+                                            <FormGroup label="* Latitude" id="latitude">
                                                 <input type="text" className="form-control" placeholder="Latitude" />
                                             </FormGroup>
                                         </div>
                                         <div className="col-sm-6">
-                                            <FormGroup label="Longitude" id="longitude">
+                                            <FormGroup label="* Longitude" id="longitude">
                                                 <input type="text" className="form-control" placeholder="Longitude" />
                                             </FormGroup>
                                         </div>
@@ -108,24 +108,24 @@ class PlatForm extends React.Component {
                                     </div>
                                     <div className="row">
                                         <div className="col-sm-6">
-                                            <FormGroup label="Expansion Area" id="expansion_area">
+                                            <FormGroup label="* Expansion Area" id="expansion_area">
                                                 <input type="text" className="form-control" placeholder="Expansion Area" />
                                             </FormGroup>
                                         </div>
                                         <div className="col-sm-6">
-                                            <FormGroup label="* Total Acreage" id="total_acreage">
+                                            <FormGroup label="* * Total Acreage" id="total_acreage">
                                                 <input type="number" className="form-control" placeholder="Total Acreage" />
                                             </FormGroup>
                                         </div>
                                     </div>
                                     <div className="row">
                                         <div className="col-sm-6">
-                                            <FormGroup label="Buildable Lots" id="buildable_lots">
+                                            <FormGroup label="* Buildable Lots" id="buildable_lots">
                                                 <input type="number" className="form-control" placeholder="Buildable Lots" />
                                             </FormGroup>
                                         </div>
                                         <div className="col-sm-6">
-                                            <FormGroup label="Non-Buildable Lots" id="non_buildable_lots">
+                                            <FormGroup label="* Non-Buildable Lots" id="non_buildable_lots">
                                                 <input type="number" className="form-control" placeholder="Non-Buildable Lots" />
                                             </FormGroup>
                                         </div>
@@ -135,19 +135,19 @@ class PlatForm extends React.Component {
                                     </div>
                                     <div className="row">
                                         <div className="col-sm-6">
-                                            <FormGroup label="Sewer Fees Due" id="sewer_due">
+                                            <FormGroup label="* Sewer Fees Due" id="sewer_due">
                                                 <input type="number" className="form-control" placeholder="Sewer Fees Due" />
                                             </FormGroup>
                                         </div>
                                         <div className="col-sm-6">
-                                            <FormGroup label="Non-Sewer Fees Due" id="non_sewer_due">
+                                            <FormGroup label="* Non-Sewer Fees Due" id="non_sewer_due">
                                                 <input type="number" className="form-control" placeholder="Non-Sewer Fees Due" />
                                             </FormGroup>
                                         </div>
                                     </div>
                                     <div className="row">
                                         <div className="col-xs-12">
-                                            <FormGroup label="Calculation Notes" id="calculation_note">
+                                            <FormGroup label="* Calculation Notes" id="calculation_note">
                                                 <textarea type="text" className="form-control" placeholder="Calculation Notes" rows="4" />
                                             </FormGroup>
                                         </div>
@@ -157,36 +157,36 @@ class PlatForm extends React.Component {
                                     </div>
                                     <div className="row">
                                         <div className="col-sm-6">
-                                            <FormGroup label="Plat Type" id="plat_type">
+                                            <FormGroup label="* Plat Type" id="plat_type">
                                                 <input type="text" className="form-control" placeholder="Plat Type" />
                                             </FormGroup>
                                         </div>
                                         <div className="col-sm-6">
-                                            <FormGroup label="Section" id="section">
+                                            <FormGroup label="* Section" id="section">
                                                 <input type="text" className="form-control" placeholder="Section" />
                                             </FormGroup>
                                         </div>
                                     </div>
                                     <div className="row">
                                         <div className="col-sm-6">
-                                            <FormGroup label="Unit" id="unit">
+                                            <FormGroup label="* Unit" id="unit">
                                                 <input type="text" className="form-control" placeholder="Unit" />
                                             </FormGroup>
                                         </div>
                                         <div className="col-sm-6">
-                                            <FormGroup label="Block" id="block">
+                                            <FormGroup label="* Block" id="block">
                                                 <input type="text" className="form-control" placeholder="Block" />
                                             </FormGroup>
                                         </div>
                                     </div>
                                     <div className="row">
                                         <div className="col-sm-6">
-                                            <FormGroup label="Cabinet" id="cabinet">
+                                            <FormGroup label="* Cabinet" id="cabinet">
                                                 <input type="text" className="form-control" placeholder="Cabinet" />
                                             </FormGroup>
                                         </div>
                                         <div className="col-sm-6">
-                                            <FormGroup label="Slide" id="slide">
+                                            <FormGroup label="* Slide" id="slide">
                                                 <input type="text" className="form-control" placeholder="Slide" />
                                             </FormGroup>
                                         </div>

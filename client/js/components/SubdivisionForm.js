@@ -75,7 +75,7 @@ class SubdivisionForm extends React.Component {
                                         </FormGroup>
                                     </div>
                                     <div className="row">
-                                        <FormGroup label="Number of Allowed Lots" id="number_allowed_lots">
+                                        <FormGroup label="* Number of Allowed Lots" id="number_allowed_lots">
                                             <input type="text" className="form-control" placeholder="Number of Allowed Lots" />
                                         </FormGroup>
                                     </div>

@@ -31,6 +31,10 @@ class DashboardPage extends React.Component {
                                 <Link to="plat-page" role="link"><h2 className="in-page-link">Plats</h2></Link>
                                 <p>Lexington plats.</p>
                             </div>
+                            <div className="col-md-4 col-sm-6">
+                                <Link to="lot-page" role="link"><h2 className="in-page-link">Lots</h2></Link>
+                                <p>Lexington lots.</p>
+                            </div>
                         </div>
                     </div>
                 </div>

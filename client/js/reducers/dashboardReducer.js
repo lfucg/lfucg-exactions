@@ -8,6 +8,7 @@ import activeFormReducer from './activeFormReducer';
 
 import subdivisionsReducer from './subdivisionsReducer';
 import platsReducer from './platsReducer';
+import lotsReducer from './lotsReducer';
 
 const dashboardReducer = combineReducers({
     routing: routerReducer,
@@ -20,7 +21,7 @@ const dashboardReducer = combineReducers({
 
     subdivisions: subdivisionsReducer,
     plats: platsReducer,
-
+    lots: lotsReducer,
 });
 
 export default dashboardReducer;
