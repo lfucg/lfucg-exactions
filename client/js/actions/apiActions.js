@@ -148,6 +148,7 @@ export function postPlat() {
             } = getState();
             const {
                 subdivision,
+                date_recorded,
                 total_acreage,
                 latitude,
                 longitude,
@@ -171,6 +172,7 @@ export function postPlat() {
                 created_by: id,
                 modified_by: id,
                 subdivision,
+                date_recorded,
                 total_acreage,
                 latitude,
                 longitude,

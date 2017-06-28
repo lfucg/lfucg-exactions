@@ -97,9 +97,9 @@ class PlatZoneSerializer(serializers.ModelSerializer):
 class PlatSerializer(serializers.ModelSerializer):
     lots = LotSerializer(many=True, read_only=True)
     plat_zones = PlatZoneSerializer(many=True, read_only=True)
-    total_acreage = serializers.SerializerMethodField(read_only=True)
+    cleaned_total_acreage = serializers.SerializerMethodField(read_only=True)
 
-    def get_total_acreage(self, obj):
+    def get_cleaned_total_acreage(self, obj):
         set_acreage = str(obj.total_acreage).rstrip('0').rstrip('.')
         return set_acreage
     
@@ -114,8 +114,9 @@ class PlatSerializer(serializers.ModelSerializer):
             'date_created',
             'date_modified',
             'created_by',
-            'modified_by',            
-            'total_acreage',
+            'modified_by',  
+            'total_acreage',          
+            'cleaned_total_acreage',
             'latitude',
             'longitude',
             'plat_type',

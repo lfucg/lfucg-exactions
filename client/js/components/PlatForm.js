@@ -37,7 +37,7 @@ class PlatForm extends React.Component {
         const submitEnabled =
             activeForm.total_acreage &&
             activeForm.latitude &&
-            activeForm.longitute &&
+            activeForm.longitude &&
             activeForm.plat_type &&
             activeForm.expansion_area &&
             activeForm.unit &&
@@ -79,6 +79,11 @@ class PlatForm extends React.Component {
                                                 <input type="text" className="form-control" placeholder="Subdivision" autoFocus />
                                             </FormGroup>
                                         </div>
+                                        <div className="col-sm-6">
+                                            <FormGroup label="Date Recorded" id="date_recorded">
+                                                <input type="date" className="form-control" placeholder="Date Recorded" />
+                                            </FormGroup>
+                                        </div>
                                     </div>
                                     <div className="row">
                                         <div className="col-sm-6">
@@ -103,19 +108,19 @@ class PlatForm extends React.Component {
                                         </div>
                                         <div className="col-sm-6">
                                             <FormGroup label="* Total Acreage" id="total_acreage">
-                                                <input type="text" className="form-control" placeholder="Total Acreage" />
+                                                <input type="number" className="form-control" placeholder="Total Acreage" />
                                             </FormGroup>
                                         </div>
                                     </div>
                                     <div className="row">
                                         <div className="col-sm-6">
                                             <FormGroup label="Buildable Lots" id="buildable_lots">
-                                                <input type="text" className="form-control" placeholder="Buildable Lots" />
+                                                <input type="number" className="form-control" placeholder="Buildable Lots" />
                                             </FormGroup>
                                         </div>
                                         <div className="col-sm-6">
                                             <FormGroup label="Non-Buildable Lots" id="non_buildable_lots">
-                                                <input type="text" className="form-control" placeholder="Non-Buildable Lots" />
+                                                <input type="number" className="form-control" placeholder="Non-Buildable Lots" />
                                             </FormGroup>
                                         </div>
                                     </div>
@@ -125,12 +130,12 @@ class PlatForm extends React.Component {
                                     <div className="row">
                                         <div className="col-sm-6">
                                             <FormGroup label="Sewer Fees Due" id="sewer_due">
-                                                <input type="text" className="form-control" placeholder="Sewer Fees Due" />
+                                                <input type="number" className="form-control" placeholder="Sewer Fees Due" />
                                             </FormGroup>
                                         </div>
                                         <div className="col-sm-6">
                                             <FormGroup label="Non-Sewer Fees Due" id="non_sewer_due">
-                                                <input type="text" className="form-control" placeholder="Non-Sewer Fees Due" />
+                                                <input type="number" className="form-control" placeholder="Non-Sewer Fees Due" />
                                             </FormGroup>
                                         </div>
                                     </div>
