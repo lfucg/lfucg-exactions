@@ -67,7 +67,7 @@ class Login extends React.Component {
                                     <div className="row">
                                         <div className="col-sm-12 col-md-7">
                                             <FormGroup label="Username" id="username">
-                                                <input type="text" className="form-control" placeholder="Username" aria-label="Username" />
+                                                <input type="text" className="form-control" placeholder="Username" aria-label="Username" autofocus/>
                                             </FormGroup>
                                         </div>
                                     </div>
@@ -149,7 +149,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        onLogin() {
+        onLogin(event) {
+            event.preventDefault();
             dispatch(login())
             .then(() => {
                 hashHistory.goBack();

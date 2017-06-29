@@ -2,12 +2,27 @@
     width: 95%;
 }
 
-.below-banner {
+.inside-body {
     background-color: #f1f0f0;
     color: #585858;
     padding: 2em 0em 4em 0em;
     font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
-    font-weight: lighter;
+    margin-bottom: 3em;
+    p {
+        font-size: 18px;
+    }
+}
+
+.in-page-link {
+    color: #3787BA;
+    font-weight: normal;
+}
+
+.btn-lex-reverse {
+    background-color: #f1f0f0;
+    color: #001A49;
+    font-size: 16px;
+    margin-top: 14px;
 }
 
 .clearfix::after {

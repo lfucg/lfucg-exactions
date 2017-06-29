@@ -22,6 +22,16 @@ class Subdivision(models.Model):
     def __str__(self):
         return self.name
 
+    def save(self, *args, **kwargs):
+        try:
+            existing_subdivision = Subdivision.objects.get(id=self.id)
+            if existing_subdivision.exists():
+                created_by = existing_subdivision.created_by
+        except:
+            created_by = self.created_by
+
+        super(Subdivision, self).save(*args, **kwargs)
+
 class Plat(models.Model):
     is_approved = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
@@ -34,7 +44,8 @@ class Plat(models.Model):
 
     created_by = models.ForeignKey(User, related_name='plat_created')
     modified_by = models.ForeignKey(User, related_name='plat_modified')
-    
+
+    name = models.CharField(max_length=300)    
     total_acreage = models.DecimalField(max_digits=20, decimal_places=3)
     latitude = models.CharField(max_length=100)
     longitude = models.CharField(max_length=100)
@@ -61,7 +72,17 @@ class Plat(models.Model):
     history = HistoricalRecords()
 
     def __str__(self):
-        return 'Lat: ' + self.latitude +  ' Long: ' + self.longitude
+        return self.name
+
+    def save(self, *args, **kwargs):
+        try:
+            existing_plat = Plat.objects.get(id=self.id)
+            if existing_plat.exists():
+                created_by = existing_plat.created_by
+        except:
+            created_by = self.created_by
+
+        super(Plat, self).save(*args, **kwargs)
 
 
 class Lot(models.Model):
@@ -174,6 +195,16 @@ class Lot(models.Model):
 
     def __str__(self):
         return self.address_full    
+
+    def save(self, *args, **kwargs):
+        try:
+            existing_lot = Lot.objects.get(id=self.id)
+            if existing_lot.exists():
+                created_by = existing_lot.created_by
+        except:
+            created_by = self.created_by
+
+        super(Lot, self).save(*args, **kwargs)
 
 class PlatZone(models.Model):
     is_active = models.BooleanField(default=True)
