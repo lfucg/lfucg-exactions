@@ -31,11 +31,13 @@ class PlatExisting extends React.Component {
                 return (
                     <div key={plat.id} className="col-xs-12">
                         <div className="row form-subheading">
-                            <h3>Latitude: {plat.latitude}  x  Longitude: {plat.longitude}</h3>
+                            <h3>{plat.name}</h3>
                         </div>
                         <div className="row">
                             <div className="col-sm-offset-1">
                                 <p className="col-md-3 col-sm-4 col-xs-6">Subdivision: {plat.subdivision ? plat.subdivision.name : 'Not listed'}</p>
+                                <p className="col-md-3 col-sm-4 col-xs-6">Longitude: {plat.longitude}</p>
+                                <p className="col-md-3 col-sm-4 col-xs-6">Latitude: {plat.latitude}</p>
                                 <p className="col-md-3 col-sm-4 col-xs-6">Acreage: {plat.cleaned_total_acreage}</p>
                                 <p className="col-md-3 col-sm-4 col-xs-6">Plat Type: {plat.plat_type}</p>
                                 <p className="col-md-3 col-sm-4 col-xs-6">Approval: {plat.is_approved ? 'Approved' : 'Not Approved'}</p>

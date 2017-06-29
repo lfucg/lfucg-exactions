@@ -35,13 +35,13 @@ class LotExisting extends React.Component {
                         </div>
                         <div className="row">
                             <div className="col-sm-offset-1">
-                                <p className="col-md-8 col-md-push-4 col-xs-12">Address: {lot.address_full}</p>
-                                <p className="col-md-4 col-md-pull-8 col-xs-6">Lot Number: {lot.lot_number}</p>
+                                <p className="col-md-6 col-xs-12">Plat Name: {lot.plat.name}</p>
+                                <p className="col-md-6 col-xs-12">Address: {lot.address_full}</p>
+                                <p className="col-md-4 col-xs-6">Lot Number: {lot.lot_number}</p>
                                 <p className="col-md-4 col-xs-6 ">Permit ID: {lot.permit_id}</p>
                                 <p className="col-md-4 col-xs-6">Latitude: {lot.latitude}</p>
                                 <p className="col-md-4 col-xs-6">Longitude: {lot.longitude}</p>
                                 <p className="col-md-4 col-xs-6">Approved: {lot.is_approved ? 'Approved' : 'Not Approved'}</p>
-                                <p className="col-md-4 col-xs-6">Payment: {lot.payment}</p>
                                 <p className="col-md-4 col-xs-6">Road Development Dues: ${lot.dues_roads_dev}</p>
                                 <p className="col-md-4 col-xs-6">Road Own Dues: ${lot.dues_roads_own}</p>
                                 <p className="col-md-4 col-xs-6">Sewer Trans. Development Dues: ${lot.dues_sewer_trans_dev}</p>

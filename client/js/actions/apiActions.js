@@ -153,6 +153,7 @@ export function postPlat() {
             } = getState();
             const {
                 subdivision,
+                name,
                 date_recorded,
                 total_acreage,
                 latitude,
@@ -176,6 +177,7 @@ export function postPlat() {
             return {
                 created_by: id,
                 modified_by: id,
+                name,
                 subdivision,
                 date_recorded,
                 total_acreage,
@@ -232,7 +234,6 @@ export function postLot() {
                 address_city,
                 address_state,
                 address_zip,
-                address_full,
                 dues_roads_dev,
                 dues_roads_own,
                 dues_sewer_trans_dev,
@@ -245,7 +246,7 @@ export function postLot() {
                 dues_storm_own,
                 dues_open_space_dev,
                 dues_open_space_own,
-                payment,
+                // payment,
             } = activeForm;
             const {
                 id,
@@ -267,7 +268,7 @@ export function postLot() {
                 address_city,
                 address_state,
                 address_zip,
-                address_full,
+                address_full: `${address_number} ${address_direction} ${address_street} ${address_suffix} ${address_unit}, ${address_city}, ${address_state} ${address_zip}`,
                 dues_roads_dev,
                 dues_roads_own,
                 dues_sewer_trans_dev,
@@ -280,7 +281,7 @@ export function postLot() {
                 dues_storm_own,
                 dues_open_space_dev,
                 dues_open_space_own,
-                payment,
+                // payment,
             };
         },
     };

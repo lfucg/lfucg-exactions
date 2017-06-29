@@ -76,7 +76,7 @@ class LotSerializer(serializers.ModelSerializer):
             'dues_storm_own',
             'dues_open_space_dev',
             'dues_open_space_own',
-            'payment',
+            # 'payment',
         )
 
 class PlatZoneSerializer(serializers.ModelSerializer):
@@ -114,7 +114,8 @@ class PlatSerializer(serializers.ModelSerializer):
             'date_created',
             'date_modified',
             'created_by',
-            'modified_by',  
+            'modified_by',
+            'name', 
             'total_acreage',          
             'cleaned_total_acreage',
             'latitude',

@@ -4,6 +4,7 @@ import {
     Link,
     hashHistory,
 } from 'react-router';
+import { map } from 'ramda';
 
 import Navbar from './Navbar';
 import Footer from './Footer';
@@ -16,6 +17,7 @@ import {
 } from '../actions/formActions';
 
 import {
+    getSubdivisions,
     getPlatID,
     postPlat,
     putPlat,
@@ -24,8 +26,10 @@ import {
 class PlatForm extends React.Component {
     static propTypes = {
         activeForm: React.PropTypes.object,
+        subdivisions: React.PropTypes.object,
         plats: React.PropTypes.object,
         onComponentDidMount: React.PropTypes.func,
+        formChange: React.PropTypes.func,
         onSubmit: React.PropTypes.func,
     };
 
@@ -36,9 +40,19 @@ class PlatForm extends React.Component {
     render() {
         const {
             activeForm,
+            subdivisions,
             plats,
+            formChange,
             onSubmit,
         } = this.props;
+
+        const subdivisionsList = subdivisions.length > 0 ? (map((single_subdivision) => {
+            return (
+                <option key={single_subdivision.id} value={[single_subdivision.id, single_subdivision.name]} >
+                    {single_subdivision.name}
+                </option>
+            );
+        })(subdivisions)) : null;
 
         const submitEnabled =
             activeForm.total_acreage &&
@@ -80,10 +94,14 @@ class PlatForm extends React.Component {
                                         <h3>Location</h3>
                                     </div>
                                     <div className="row">
-                                        <div className="col-sm-6">
-                                            <FormGroup label="* Subdivision" id="subdivision">
-                                                <input type="text" className="form-control" placeholder="Subdivision" autoFocus />
-                                            </FormGroup>
+                                        <div className="col-sm-6 form-group">
+                                            <label htmlFor="subdivision" className="form-label" id="subdivision">* Plat</label>
+                                            <select className="form-control" id="subdivision" onChange={formChange('subdivision')} >
+                                                <option value="choose_subdivision" aria-label="Select a Subdivision">
+                                                    {activeForm.subdivision ? activeForm.subdivision_name : <span>Select a Subdivision</span>}
+                                                </option>
+                                                {subdivisionsList}
+                                            </select>
                                         </div>
                                         <div className="col-sm-6">
                                             <FormGroup label="* Date Recorded" id="date_recorded">
@@ -113,7 +131,7 @@ class PlatForm extends React.Component {
                                             </FormGroup>
                                         </div>
                                         <div className="col-sm-6">
-                                            <FormGroup label="* * Total Acreage" id="total_acreage">
+                                            <FormGroup label="* Total Acreage" id="total_acreage">
                                                 <input type="number" className="form-control" placeholder="Total Acreage" />
                                             </FormGroup>
                                         </div>
@@ -154,6 +172,13 @@ class PlatForm extends React.Component {
                                     </div>
                                     <div className="row form-subheading">
                                         <h3>Additional Plat Details</h3>
+                                    </div>
+                                    <div className="row">
+                                        <div className="col-sm-6">
+                                            <FormGroup label="* Name" id="name">
+                                                <input type="text" className="form-control" placeholder="Name" />
+                                            </FormGroup>
+                                        </div>
                                     </div>
                                     <div className="row">
                                         <div className="col-sm-6">
@@ -214,6 +239,7 @@ class PlatForm extends React.Component {
 function mapStateToProps(state) {
     return {
         activeForm: state.activeForm,
+        subdivisions: state.subdivisions,
         plats: state.plats,
     };
 }
@@ -222,6 +248,23 @@ function mapDispatchToProps(dispatch) {
     return {
         onComponentDidMount() {
             dispatch(formInit());
+            dispatch(getSubdivisions());
+        },
+        formChange(field) {
+            return (e, ...args) => {
+                const value = typeof e.target.value !== 'undefined' ? e.target.value : args[1];
+
+                const comma_index = value.indexOf(',');
+                const value_id = value.substring(0, comma_index);
+                const value_name = value.substring(comma_index + 1, value.length);
+                const field_name = `${[field]}_name`;
+
+                const update = {
+                    [field]: value_id,
+                    [field_name]: value_name,
+                };
+                dispatch(formUpdate(update));
+            };
         },
         onSubmit(event) {
             event.preventDefault();
