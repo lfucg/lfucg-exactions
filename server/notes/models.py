@@ -89,9 +89,9 @@ class Rate(models.Model):
     expansion_area = models.CharField(max_length=200)
     zone = models.CharField(max_length=100, choices=ZONES)
     category = models.CharField(max_length=100, choices=CATEGORIES)
-    rate = models.CharField(max_length=200)
+    rate = models.DecimalField(max_digits=20, decimal_places=2)
 
     history = HistoricalRecords()
 
     def __str__(self):
-        return self.rate
+        return self.zone + ': ' + self.category
