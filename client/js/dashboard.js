@@ -13,6 +13,18 @@ import Registration from './components/RegistrationPage';
 import ForgotPassword from './components/ForgotPassword';
 import ForgotUsername from './components/ForgotUsername';
 
+import SubdivisionPage from './components/SubdivisionPage';
+import SubdivisionExisting from './components/SubdivisionExisting';
+import SubdivisionForm from './components/SubdivisionForm';
+
+import PlatPage from './components/PlatPage';
+import PlatExisting from './components/PlatExisting';
+import PlatForm from './components/PlatForm';
+
+import LotPage from './components/LotPage';
+import LotExisting from './components/LotExisting';
+import LotForm from './components/LotForm';
+
 global.reduxStore = dashboardStore;
 global.BASE_STATIC_URL = '/static';
 
@@ -28,6 +40,19 @@ ReactDOM.render(
             <Route path="registration/" component={Registration} />
             <Route path="forgot-password/" component={ForgotPassword} />
             <Route path="forgot-username/" component={ForgotUsername} />
+
+            <Route path="subdivision-page" component={SubdivisionPage} />
+            <Route path="subdivision-existing" component={SubdivisionExisting} />
+            <Route path="subdivision-form" component={SubdivisionForm} />
+
+            <Route path="plat-page" component={PlatPage} />
+            <Route path="plat-existing" component={PlatExisting} />
+            <Route path="plat-form" component={PlatForm} />
+
+            <Route path="lot-page" component={LotPage} />
+            <Route path="lot-existing" component={LotExisting} />
+            <Route path="lot-form" component={LotForm} />
+
         </Router>
     </Provider>,
     document.getElementById('root'),

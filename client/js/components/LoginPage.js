@@ -43,7 +43,7 @@ class Login extends React.Component {
                                     <div className="row">
                                         <div className="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
                                             <FormGroup label="Username" id="username">
-                                                <input type="text" className="form-control" placeholder="Username" aria-label="Username" />
+                                                <input type="text" className="form-control" placeholder="Username" aria-label="Username" autofocus/>
                                             </FormGroup>
                                         </div>
                                     </div>

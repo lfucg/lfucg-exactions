@@ -3,6 +3,12 @@ from rest_framework import serializers
 from .models import *
 
 class SubdivisionSerializer(serializers.ModelSerializer):
+    cleaned_gross_acreage = serializers.SerializerMethodField(read_only=True)
+
+    def get_cleaned_gross_acreage(self, obj):
+        set_acreage = str(obj.gross_acreage).rstrip('0').rstrip('.')
+        return set_acreage
+
     class Meta:
         model = Subdivision
         fields = (
@@ -16,6 +22,7 @@ class SubdivisionSerializer(serializers.ModelSerializer):
             'modified_by',   
             'name',
             'gross_acreage',
+            'cleaned_gross_acreage',
             'number_allowed_lots',
         )
 
@@ -69,7 +76,7 @@ class LotSerializer(serializers.ModelSerializer):
             'dues_storm_own',
             'dues_open_space_dev',
             'dues_open_space_own',
-            'payment',
+            # 'payment',
         )
 
 class PlatZoneSerializer(serializers.ModelSerializer):
@@ -90,7 +97,12 @@ class PlatZoneSerializer(serializers.ModelSerializer):
 class PlatSerializer(serializers.ModelSerializer):
     lots = LotSerializer(many=True, read_only=True)
     plat_zones = PlatZoneSerializer(many=True, read_only=True)
+    cleaned_total_acreage = serializers.SerializerMethodField(read_only=True)
 
+    def get_cleaned_total_acreage(self, obj):
+        set_acreage = str(obj.total_acreage).rstrip('0').rstrip('.')
+        return set_acreage
+    
     class Meta:
         model = Plat 
         fields = (
@@ -102,8 +114,10 @@ class PlatSerializer(serializers.ModelSerializer):
             'date_created',
             'date_modified',
             'created_by',
-            'modified_by',            
-            'total_acreage',
+            'modified_by',
+            'name', 
+            'total_acreage',          
+            'cleaned_total_acreage',
             'latitude',
             'longitude',
             'plat_type',
