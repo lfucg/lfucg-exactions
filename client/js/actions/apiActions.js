@@ -268,7 +268,7 @@ export function postLot() {
                 address_city,
                 address_state,
                 address_zip,
-                address_full: `${address_number} ${address_direction} ${address_street} ${address_suffix} ${address_unit}, ${address_city}, ${address_state} ${address_zip}`,
+                address_full: `${address_number} ${address_direction ? address_direction : null} ${address_street} ${address_suffix ? address_suffix : null} ${address_unit ? address_unit : null}, ${address_city}, ${address_state} ${address_zip}`,
                 dues_roads_dev,
                 dues_roads_own,
                 dues_sewer_trans_dev,

@@ -35,7 +35,7 @@ class LotExisting extends React.Component {
                         </div>
                         <div className="row">
                             <div className="col-sm-offset-1">
-                                <p className="col-md-4 col-xs-12">Plat Name: {lot.plat.name}</p>
+                                <p className="col-md-4 col-xs-12">Plat Name: {lot.plat}</p>
                                 <p className="col-md-8 col-xs-12">Address: {lot.address_full}</p>
                                 <p className="col-md-4 col-xs-6">Lot Number: {lot.lot_number}</p>
                                 <p className="col-md-4 col-xs-6 ">Permit ID: {lot.permit_id}</p>
