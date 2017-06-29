@@ -30,8 +30,12 @@ router.register(r'ledger', AccountLedgerViewSet)
 
 urlpatterns = [
     url(r'^me/$', CurrentUserDetails.as_view(), name="me"),
+
     url(r'^login/$', CustomObtainAuthToken.as_view()),
-    url(r'^delete_token/', Logout.as_view()),
     url(r'^register/$', Registration.as_view()),
+    url(r'^forgot-password/$', forgot_password),
+    url(r'^forgot-username/$', forgot_username),
+    url(r'^delete_token/', Logout.as_view()),
+
     url(r'^', include(router.urls)),
 ]

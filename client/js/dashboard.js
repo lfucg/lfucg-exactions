@@ -8,7 +8,10 @@ import dashboardStore from './stores/dashboardStore';
 
 import DashboardPage from './components/DashboardPage';
 
-import LoginPage from './components/LoginPage';
+import Login from './components/LoginPage';
+import Registration from './components/RegistrationPage';
+import ForgotPassword from './components/ForgotPassword';
+import ForgotUsername from './components/ForgotUsername';
 
 import SubdivisionPage from './components/SubdivisionPage';
 import SubdivisionExisting from './components/SubdivisionExisting';
@@ -33,7 +36,10 @@ ReactDOM.render(
             <Redirect from="/" to="dashboard/" />
             <Route path="dashboard/" component={DashboardPage} />
 
-            <Route path="login/" component={LoginPage} />
+            <Route path="login/" component={Login} />
+            <Route path="registration/" component={Registration} />
+            <Route path="forgot-password/" component={ForgotPassword} />
+            <Route path="forgot-username/" component={ForgotUsername} />
 
             <Route path="subdivision-page" component={SubdivisionPage} />
             <Route path="subdivision-existing" component={SubdivisionExisting} />
@@ -46,6 +52,7 @@ ReactDOM.render(
             <Route path="lot-page" component={LotPage} />
             <Route path="lot-existing" component={LotExisting} />
             <Route path="lot-form" component={LotForm} />
+
         </Router>
     </Provider>,
     document.getElementById('root'),

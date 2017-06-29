@@ -7,6 +7,8 @@ import {
 
     LOGIN,
     REGISTER,
+    PASSWORD,
+    SEND_USERNAME,
     LOGOUT,
 
     GET_SUBDIVISIONS,
@@ -33,6 +35,7 @@ export function getMe() {
     };
 }
 
+// LOGIN RELATED
 export function login() {
     return {
         type: API_CALL,
@@ -80,6 +83,46 @@ export function register() {
                 first_name,
                 last_name,
                 email,
+            };
+        },
+    };
+}
+
+export function passwordReset() {
+    return {
+        type: API_CALL,
+        endpoint: PASSWORD,
+        url: '/forgot-password/',
+        method: 'POST',
+        body: (getState) => {
+            const {
+                activeForm,
+            } = getState();
+            const {
+                email_2,
+            } = activeForm;
+            return {
+                email: email_2,
+            };
+        },
+    };
+}
+
+export function sendUsername() {
+    return {
+        type: API_CALL,
+        endpoint: SEND_USERNAME,
+        url: '/forgot-username/',
+        method: 'POST',
+        body: (getState) => {
+            const {
+                activeForm,
+            } = getState();
+            const {
+                email_3,
+            } = activeForm;
+            return {
+                email: email_3,
             };
         },
     };

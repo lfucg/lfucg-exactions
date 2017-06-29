@@ -1,0 +1,19 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-3">
+                <img src="baseURL/images/lexington-logo.svg" role="presentation" />
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <img src="baseURL/images/lexington-hero-interior.jpg" role="presentation" />
+    </div> 
+    <div class="container">
+        Here is your username: {{user.username}}
+    </div>
+</body>

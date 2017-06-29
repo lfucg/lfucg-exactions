@@ -4,20 +4,21 @@
     margin-top: 2.5em;
 }
 
-.left-list {
-    border-right: 1px #BFBFBF solid;
-    .row {
-        padding: 1em;
-        a {
-            font-size: 1.5em;
-            font-weight: normal;
-            color: #585858;
-        }
-        .fa-chevron-right {
-            margin-top: 0.5em;
-            font-weight: lighter;
-            font-size: 0.6em;
-        }
+.form-header {
+    background-color: #001A49;
+    color: white;
+    font-weight: lighter;
+    padding-top: 0px;
+    padding-bottom: 8px;
+    margin-bottom: 3em;
+}
+
+.login-link-row {
+    margin-top: 5em;
+    margin-bottom: 10em;
+    Link {
+        text-align: center;
+        font-size: 14px;
     }
 }
 

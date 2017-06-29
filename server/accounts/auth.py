@@ -13,6 +13,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.generics import CreateAPIView, GenericAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
+from .helper import send_password_reset_email, send_lost_username_email
 # from rest_framework_expiring_authtoken.models import ExpiringToken
 
 from accounts.serializers import UserSerializer
@@ -93,31 +94,28 @@ class Registration(GenericAPIView):
 #         return Response({"success": "New password has been saved."})
 
 # # Convert to try and except methods
-# @api_view(['POST'])
-# @permission_classes((AllowAny, ))
-# def forgot_password(request):
-#     email = request.data.get('email', None)
-#     user = User.objects.filter(email__icontains=email)
-#     if user.exists():
-#         if user[0].social_auth.filter(provider='facebook').exists():
-#             tasks.send_password_reset_email.delay(user[0].id, 'facebook')
-#         else:
-#             tasks.send_password_reset_email.delay(user[0].id, 'not facebook')
-
-#     # Always return success
-#     return Response(status=statuses.HTTP_200_OK)
+@api_view(['POST'])
+@permission_classes((AllowAny, ))
+def forgot_password(request):
+    email = request.data.get('email', None)
+    user = User.objects.filter(email__icontains=email)
+    if user.exists():
+        send_password_reset_email(user)
+        
+    # Always return success
+    return Response({'message': 'An email was sent to your account with instructions to reset your password.'}, status=statuses.HTTP_200_OK)
 
 # # Need to edit to send username in email
-# @api_view(['POST'])
-# @permission_classes((AllowAny, ))
-# def forgot_username(request):
-#     email = request.data.get('email', None)
-#     user = User.objects.filter(email__icontains=email)
-#     if user.exists():
-#         tasks.send_lost_username_email.delay(user[0].id)
+@api_view(['POST'])
+@permission_classes((AllowAny, ))
+def forgot_username(request):
+    email = request.data.get('email', None)
+    user = User.objects.filter(email__icontains=email)
+    if user.exists():
+        send_lost_username_email(user)
 
-#     # Always return success
-#     return Response(status=statuses.HTTP_200_OK)
+    # Always return success
+    return Response({'message': 'An email was sent to your account with your username.'}, status=statuses.HTTP_200_OK)
 
 
 # def _validate_token(token):
