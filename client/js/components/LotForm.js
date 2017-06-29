@@ -277,13 +277,13 @@ class LotForm extends React.Component {
                                     </div>
                                     <div className="row">
                                         <div className="col-sm-6">
-                                            <FormGroup label="* Sewer Cap. Development Fees" id="dues_sewer_cap_dev">
-                                                <input type="number" className="form-control" placeholder="Sewer Cap. Development Fees" />
+                                            <FormGroup label="* Sewer Capacity Development Fees" id="dues_sewer_cap_dev">
+                                                <input type="number" className="form-control" placeholder="Sewer Capacity Development Fees" />
                                             </FormGroup>
                                         </div>
                                         <div className="col-sm-6">
-                                            <FormGroup label="* Sewer Cap. Own Fees" id="dues_sewer_cap_own">
-                                                <input type="number" className="form-control" placeholder="Sewer Cap. Own Fees" />
+                                            <FormGroup label="* Sewer Capacity Own Fees" id="dues_sewer_cap_own">
+                                                <input type="number" className="form-control" placeholder="Sewer Capacity Own Fees" />
                                             </FormGroup>
                                         </div>
                                     </div>

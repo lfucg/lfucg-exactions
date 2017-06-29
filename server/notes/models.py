@@ -32,9 +32,6 @@ class RateTable(models.Model):
 
     history = HistoricalRecords()
 
-    def __str__(self):
-        return self.begin_effective_date
-
 class Rate(models.Model):
     is_active = models.BooleanField(default=True)
     
@@ -72,6 +69,15 @@ class Rate(models.Model):
         # ('P-2', 'Office, Industry, and Research Park'),
     )
 
+    CATEGORIES = (
+        ('ROADS', 'Roads'),
+        ('OPEN_SPACE', 'Open Space'),
+        ('SEWER_CAP', 'Sewer Capacity'),
+        ('SEWER_TRANS', 'Sewer Trans.'),
+        ('PARK', 'Park'),
+        ('STORM_WATER', 'Storm Water'),
+    )
+
     date_created = models.DateField(auto_now_add=True)
     date_modified = models.DateField(auto_now=True)
 
@@ -82,7 +88,7 @@ class Rate(models.Model):
 
     expansion_area = models.CharField(max_length=200)
     zone = models.CharField(max_length=100, choices=ZONES)
-    category = models.CharField(max_length=200)
+    category = models.CharField(max_length=100, choices=CATEGORIES)
     rate = models.CharField(max_length=200)
 
     history = HistoricalRecords()

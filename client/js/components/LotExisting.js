@@ -46,8 +46,8 @@ class LotExisting extends React.Component {
                                 <p className="col-md-4 col-xs-6">Road Own Dues: ${lot.dues_roads_own}</p>
                                 <p className="col-md-4 col-xs-6">Sewer Trans. Development Dues: ${lot.dues_sewer_trans_dev}</p>
                                 <p className="col-md-4 col-xs-6">Sewer Trans. Own Dues: ${lot.dues_sewer_trans_own}</p>
-                                <p className="col-md-4 col-xs-6">Sewer Cap. Development Dues: ${lot.dues_sewer_cap_dev}</p>
-                                <p className="col-md-4 col-xs-6">Sewer Cap. Own Dues: ${lot.dues_sewer_cap_own}</p>
+                                <p className="col-md-4 col-xs-6">Sewer Capacity Development Dues: ${lot.dues_sewer_cap_dev}</p>
+                                <p className="col-md-4 col-xs-6">Sewer Capacity Own Dues: ${lot.dues_sewer_cap_own}</p>
                                 <p className="col-md-4 col-xs-6">Parks Development Dues: ${lot.dues_parks_dev}</p>
                                 <p className="col-md-4 col-xs-6">Parks Own Dues: ${lot.dues_parks_own}</p>
                                 <p className="col-md-4 col-xs-6">Storm Development Dues: ${lot.dues_storm_dev}</p>
