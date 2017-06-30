@@ -30,7 +30,7 @@ class PlatPage extends React.Component {
                             <div className="row">
                                 <div className="col-sm-6">
                                     <div className="row">
-                                        <Link to={'plat-form/'} role="link" ><h2 className="in-page-link">Create Plat</h2></Link>
+                                        <Link to={'plat/form/'} role="link" ><h2 className="in-page-link">Create Plat</h2></Link>
                                     </div>
                                     <div className="row">
                                         <p>Apply for approval of a new plat.</p>
@@ -38,7 +38,7 @@ class PlatPage extends React.Component {
                                 </div>
                                 <div className="col-sm-6">
                                     <div className="row">
-                                        <Link to={'plat-existing/'} role="link" ><h2 className="in-page-link">Existing Plats</h2></Link>
+                                        <Link to={'plat/existing/'} role="link" ><h2 className="in-page-link">Existing Plats</h2></Link>
                                     </div>
                                     <div className="row">
                                         <p>View existing or developing plats.</p>

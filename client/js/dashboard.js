@@ -41,17 +41,20 @@ ReactDOM.render(
             <Route path="forgot-password/" component={ForgotPassword} />
             <Route path="forgot-username/" component={ForgotUsername} />
 
-            <Route path="subdivision-page" component={SubdivisionPage} />
-            <Route path="subdivision-existing" component={SubdivisionExisting} />
-            <Route path="subdivision-form" component={SubdivisionForm} />
+            <Route path="subdivision" component={SubdivisionPage} />
+            <Route path="subdivision/existing" component={SubdivisionExisting} />
+            <Route path="subdivision/form" component={SubdivisionForm} />
+            <Route path="subdivision/form/:id" component={SubdivisionForm} />
 
-            <Route path="plat-page" component={PlatPage} />
-            <Route path="plat-existing" component={PlatExisting} />
-            <Route path="plat-form" component={PlatForm} />
+            <Route path="plat" component={PlatPage} />
+            <Route path="plat/existing" component={PlatExisting} />
+            <Route path="plat/form" component={PlatForm} />
+            <Route path="plat/form/:id" component={PlatForm} />
 
-            <Route path="lot-page" component={LotPage} />
-            <Route path="lot-existing" component={LotExisting} />
-            <Route path="lot-form" component={LotForm} />
+            <Route path="lot" component={LotPage} />
+            <Route path="lot/existing" component={LotExisting} />
+            <Route path="lot/form" component={LotForm} />
+            <Route path="lot/form/:id" component={LotForm} />
 
         </Router>
     </Provider>,

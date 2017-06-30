@@ -31,7 +31,12 @@ class SubdivisionExisting extends React.Component {
                 return (
                     <div key={subdivision.id} className="col-xs-12">
                         <div className="row form-subheading">
-                            <h3>{subdivision.name}</h3>
+                            <Link to={`subdivision/form/${subdivision.id}`} role="link" className="page-link">
+                                <h3>
+                                    {subdivision.name}
+                                    <i className="fa fa-link" aria-hidden="true" />
+                                </h3>
+                            </Link>
                         </div>
                         <div className="row">
                             <p className="col-md-3 col-sm-offset-1 col-sm-4 col-xs-6">Acres: {subdivision.cleaned_gross_acreage}</p>
@@ -52,7 +57,7 @@ class SubdivisionExisting extends React.Component {
                             <h1>SUBDIVISIONS - EXISTING</h1>
                         </div>
                         <div className="col-sm-3">
-                            <Link to="subdivision-page" className="btn btn-lex-reverse" role="link">Return to Subdivisions</Link>
+                            <Link to="subdivision" className="btn btn-lex-reverse" role="link">Return to Subdivisions</Link>
                         </div>
                     </div>
                 </div>

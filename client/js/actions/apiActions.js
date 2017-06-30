@@ -137,11 +137,20 @@ export function logout() {
     };
 }
 
+// SUBDIVISIONS
 export function getSubdivisions() {
     return {
         type: API_CALL,
         endpoint: GET_SUBDIVISIONS,
         url: '/subdivision/',
+    };
+}
+
+export function getSubdivisionID(selectedSubdivision) {
+    return {
+        type: API_CALL,
+        endpoint: GET_SUBDIVISION_ID,
+        url: `/subdivision/${selectedSubdivision}`,
     };
 }
 

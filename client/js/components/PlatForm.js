@@ -80,7 +80,7 @@ class PlatForm extends React.Component {
                             <h1>PLATS - CREATE / APPLY</h1>
                         </div>
                         <div className="col-sm-3">
-                            <Link to="plat-page" className="btn btn-lex-reverse" role="link">Return to Plats</Link>
+                            <Link to="plat" className="btn btn-lex-reverse" role="link">Return to Plats</Link>
                         </div>
                     </div>
                 </div>
@@ -270,7 +270,7 @@ function mapDispatchToProps(dispatch) {
             event.preventDefault();
             dispatch(postPlat())
             .then(() => {
-                hashHistory.push('plat-existing/');
+                hashHistory.push('plat/existing/');
             });
         },
     };

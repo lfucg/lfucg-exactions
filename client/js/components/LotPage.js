@@ -29,7 +29,7 @@ class LotPage extends React.Component {
                             <div className="row">
                                 <div className="col-sm-6">
                                     <div className="row">
-                                        <Link to={'lot-form/'} role="link" ><h2 className="in-page-link">Create Lot</h2></Link>
+                                        <Link to={'lot/form'} role="link" ><h2 className="in-page-link">Create Lot</h2></Link>
                                     </div>
                                     <div className="row">
                                         <p>Apply for approval of a new lot.</p>
@@ -37,7 +37,7 @@ class LotPage extends React.Component {
                                 </div>
                                 <div className="col-sm-6">
                                     <div className="row">
-                                        <Link to={'lot-existing/'} role="link" ><h2 className="in-page-link">Existing Lots</h2></Link>
+                                        <Link to={'lot/existing'} role="link" ><h2 className="in-page-link">Existing Lots</h2></Link>
                                     </div>
                                     <div className="row">
                                         <p>View existing or developing lots.</p>

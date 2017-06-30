@@ -29,7 +29,7 @@ class SubdivisionPage extends React.Component {
                             <div className="row">
                                 <div className="col-sm-6">
                                     <div className="row">
-                                        <Link to={'subdivision-form/'} role="link" ><h2 className="in-page-link">Create Subdivision</h2></Link>
+                                        <Link to={'subdivision/form'} role="link" ><h2 className="in-page-link">Create Subdivision</h2></Link>
                                     </div>
                                     <div className="row">
                                         <p>Apply for approval of a new subdivision.</p>
@@ -37,7 +37,7 @@ class SubdivisionPage extends React.Component {
                                 </div>
                                 <div className="col-sm-6">
                                     <div className="row">
-                                        <Link to={'subdivision-existing/'} role="link" ><h2 className="in-page-link">Existing Subdivisions</h2></Link>
+                                        <Link to={'subdivision/existing'} role="link" ><h2 className="in-page-link">Existing Subdivisions</h2></Link>
                                     </div>
                                     <div className="row">
                                         <p>View existing or developing subdivisions.</p>

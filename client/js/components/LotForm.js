@@ -88,7 +88,7 @@ class LotForm extends React.Component {
                             <h1>LOTS - CREATE / APPLY</h1>
                         </div>
                         <div className="col-sm-3">
-                            <Link to="lot-page" className="btn btn-lex-reverse" role="link">Return to Lots</Link>
+                            <Link to="lot" className="btn btn-lex-reverse" role="link">Return to Lots</Link>
                         </div>
                     </div>
                 </div>
@@ -377,7 +377,7 @@ function mapDispatchToProps(dispatch) {
             event.preventDefault();
             dispatch(postLot())
             .then(() => {
-                hashHistory.push('lot-existing/');
+                hashHistory.push('lot/existing');
             });
         },
     };

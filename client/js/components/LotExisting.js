@@ -71,7 +71,7 @@ class LotExisting extends React.Component {
                             <h1>LOTS - EXISTING</h1>
                         </div>
                         <div className="col-sm-3">
-                            <Link to="lot-page" className="btn btn-lex-reverse" role="link">Return to Lots</Link>
+                            <Link to="lot" className="btn btn-lex-reverse" role="link">Return to Lots</Link>
                         </div>
                     </div>
                 </div>

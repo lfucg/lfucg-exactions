@@ -30,3 +30,14 @@
     clear: both;
     display: table;
 }
+
+.page-link {
+    color: white;
+    :hover {
+        color: #E0B111;
+    }
+}
+
+.fa-link {
+    padding-left: 0.5em;
+}

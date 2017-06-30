@@ -69,7 +69,7 @@ class PlatExisting extends React.Component {
                             <h1>PLATS - EXISTING</h1>
                         </div>
                         <div className="col-sm-3">
-                            <Link to="plat-page" className="btn btn-lex-reverse" role="link">Return to Plats</Link>
+                            <Link to="plat" className="btn btn-lex-reverse" role="link">Return to Plats</Link>
                         </div>
                     </div>
                 </div>

@@ -24,15 +24,15 @@ class DashboardPage extends React.Component {
                     <div className="container">
                         <div className="row">
                             <div className="col-md-4 col-sm-6">
-                                <Link to="subdivision-page" role="link"><h2 className="in-page-link">Subdivisions</h2></Link>
+                                <Link to="subdivision/" role="link"><h2 className="in-page-link">Subdivisions</h2></Link>
                                 <p>Lexington subdivisions.</p>
                             </div>
                             <div className="col-md-4 col-sm-6">
-                                <Link to="plat-page" role="link"><h2 className="in-page-link">Plats</h2></Link>
+                                <Link to="plat" role="link"><h2 className="in-page-link">Plats</h2></Link>
                                 <p>Lexington plats.</p>
                             </div>
                             <div className="col-md-4 col-sm-6">
-                                <Link to="lot-page" role="link"><h2 className="in-page-link">Lots</h2></Link>
+                                <Link to="lot" role="link"><h2 className="in-page-link">Lots</h2></Link>
                                 <p>Lexington lots.</p>
                             </div>
                         </div>
