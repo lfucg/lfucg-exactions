@@ -184,11 +184,20 @@ export function postSubdivision() {
     };
 }
 
+// PLATS
 export function getPlats() {
     return {
         type: API_CALL,
         endpoint: GET_PLATS,
         url: '/plat/',
+    };
+}
+
+export function getPlatID(selectedPlat) {
+    return {
+        type: API_CALL,
+        endpoint: GET_PLAT_ID,
+        url: `/plat/${selectedPlat}`,
     };
 }
 
@@ -252,11 +261,20 @@ export function postPlat() {
     };
 }
 
+// LOTS
 export function getLots() {
     return {
         type: API_CALL,
         endpoint: GET_LOTS,
         url: '/lot/',
+    };
+}
+
+export function getLotID(selectedLot) {
+    return {
+        type: API_CALL,
+        endpoint: GET_LOT_ID,
+        url: `/lot/${selectedLot}`,
     };
 }
 

@@ -31,7 +31,12 @@ class PlatExisting extends React.Component {
                 return (
                     <div key={plat.id} className="col-xs-12">
                         <div className="row form-subheading">
-                            <h3>{plat.name}</h3>
+                            <Link to={`plat/form/${plat.id}`} role="link" className="page-link">
+                                <h3>
+                                    {plat.name}
+                                    <i className="fa fa-link" aria-hidden="true" />
+                                </h3>
+                            </Link>
                         </div>
                         <div className="row">
                             <div className="col-sm-offset-1">
