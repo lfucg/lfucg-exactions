@@ -1,0 +1,1 @@
+[{"model": "notes.ratetable", "pk": 1, "fields": {"is_active": true, "date_created": "2017-06-29", "date_modified": null, "created_by": 5, "modified_by": 5, "begin_effective_date": "2017-06-12", "end_effective_date": "2017-11-24", "resolution_number": 1}}]
