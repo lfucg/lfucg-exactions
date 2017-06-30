@@ -54,7 +54,7 @@ class SubdivisionForm extends React.Component {
                             <h1>SUBDIVISIONS - CREATE / APPLY</h1>
                         </div>
                         <div className="col-sm-3">
-                            <Link to="subdivision-page" className="btn btn-lex-reverse" role="link">Return to Subdivisions</Link>
+                            <Link to="subdivision" className="btn btn-lex-reverse" role="link">Return to Subdivisions</Link>
                         </div>
                     </div>
                 </div>
@@ -106,16 +106,27 @@ function mapStateToProps(state) {
     };
 }
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch, params) {
+    const selectedSubdivision = params.params.id;
+
     return {
         onComponentDidMount() {
             dispatch(formInit());
+            dispatch(getSubdivisionID(selectedSubdivision))
+            .then((data_subdivision) => {
+                const update = {
+                    name: data_subdivision.response.name,
+                    gross_acreage: data_subdivision.response.cleaned_gross_acreage,
+                    number_allowed_lots: data_subdivision.response.number_allowed_lots,
+                };
+                dispatch(formUpdate(update));
+            });
         },
         onSubmit(event) {
             event.preventDefault();
             dispatch(postSubdivision())
             .then(() => {
-                hashHistory.push('subdivision-existing/');
+                hashHistory.push('subdivision/existing/');
             });
         },
     };

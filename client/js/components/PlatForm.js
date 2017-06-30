@@ -18,6 +18,7 @@ import {
 
 import {
     getSubdivisions,
+    getSubdivisionID,
     getPlatID,
     postPlat,
     putPlat,
@@ -80,7 +81,7 @@ class PlatForm extends React.Component {
                             <h1>PLATS - CREATE / APPLY</h1>
                         </div>
                         <div className="col-sm-3">
-                            <Link to="plat-page" className="btn btn-lex-reverse" role="link">Return to Plats</Link>
+                            <Link to="plat" className="btn btn-lex-reverse" role="link">Return to Plats</Link>
                         </div>
                     </div>
                 </div>
@@ -95,7 +96,7 @@ class PlatForm extends React.Component {
                                     </div>
                                     <div className="row">
                                         <div className="col-sm-6 form-group">
-                                            <label htmlFor="subdivision" className="form-label" id="subdivision">* Plat</label>
+                                            <label htmlFor="subdivision" className="form-label" id="subdivision">* Subdivision</label>
                                             <select className="form-control" id="subdivision" onChange={formChange('subdivision')} >
                                                 <option value="choose_subdivision" aria-label="Select a Subdivision">
                                                     {activeForm.subdivision ? activeForm.subdivision_name : <span>Select a Subdivision</span>}
@@ -244,11 +245,46 @@ function mapStateToProps(state) {
     };
 }
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch, params) {
+    const selectedPlat = params.params.id;
+
     return {
         onComponentDidMount() {
             dispatch(formInit());
             dispatch(getSubdivisions());
+            dispatch(getPlatID(selectedPlat))
+            .then((data_plat) => {
+                data_plat.response.subdivision ? (
+                    dispatch(getSubdivisionID(data_plat.response.subdivision))
+                    .then((data_sub_id) => {
+                        const update2 = {
+                            subdivision_name: data_sub_id.response.name,
+                        };
+                        dispatch(formUpdate(update2));
+                    })
+                ) : null;
+                const update = {
+                    subdivision: data_plat.response.subdivision,
+                    date_recorded: data_plat.response.date_recorded,
+                    latitude: data_plat.response.latitude,
+                    longitude: data_plat.response.longitude,
+                    expansion_area: data_plat.response.expansion_area,
+                    total_acreage: data_plat.response.cleaned_total_acreage,
+                    buildable_lots: data_plat.response.buildable_lots,
+                    non_buildable_lots: data_plat.response.non_buildable_lots,
+                    sewer_due: data_plat.response.sewer_due,
+                    non_sewer_due: data_plat.response.non_sewer_due,
+                    calculation_note: data_plat.response.calculation_note,
+                    name: data_plat.response.name,
+                    plat_type: data_plat.response.plat_type,
+                    section: data_plat.response.section,
+                    unit: data_plat.response.unit,
+                    block: data_plat.response.block,
+                    cabinet: data_plat.response.cabinet,
+                    slide: data_plat.response.slide,
+                };
+                dispatch(formUpdate(update));
+            });
         },
         formChange(field) {
             return (e, ...args) => {
@@ -270,7 +306,7 @@ function mapDispatchToProps(dispatch) {
             event.preventDefault();
             dispatch(postPlat())
             .then(() => {
-                hashHistory.push('plat-existing/');
+                hashHistory.push('plat/existing/');
             });
         },
     };

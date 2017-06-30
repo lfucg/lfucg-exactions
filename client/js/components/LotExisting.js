@@ -31,7 +31,12 @@ class LotExisting extends React.Component {
                 return (
                     <div key={lot.id} className="col-xs-12">
                         <div className="row form-subheading">
-                            <h3>Parcel ID , Lot Number:  {lot.parcel_id ? <span>{lot.parcel_id} , {lot.lot_number}</span> : <span> -- , {lot.lot_number}</span>}</h3>
+                            <Link to={`lot/form/${lot.id}`} role="link" className="page-link">
+                                <h3>
+                                    Parcel ID , Lot Number:  {lot.parcel_id ? <span>{lot.parcel_id} , {lot.lot_number}</span> : <span> -- , {lot.lot_number}</span>}
+                                    <i className="fa fa-link" aria-hidden="true" />
+                                </h3>
+                            </Link>
                         </div>
                         <div className="row">
                             <div className="col-sm-offset-1">
@@ -71,7 +76,7 @@ class LotExisting extends React.Component {
                             <h1>LOTS - EXISTING</h1>
                         </div>
                         <div className="col-sm-3">
-                            <Link to="lot-page" className="btn btn-lex-reverse" role="link">Return to Lots</Link>
+                            <Link to="lot" className="btn btn-lex-reverse" role="link">Return to Lots</Link>
                         </div>
                     </div>
                 </div>

@@ -27,7 +27,7 @@ class Login extends React.Component {
         } = activeForm;
 
         return (
-            <div className="login">
+            <div className="login-page">
                 <Navbar />
 
                 <div className="form-header">
