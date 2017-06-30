@@ -3,6 +3,16 @@ from django.contrib.auth.models import User
 
 from simple_history.models import HistoricalRecords
 
+ZONES = (
+    ('EAR-1', 'EAR-1'),
+    ('EAR-1SRA', 'EAR-1SRA'),
+    ('EAR-2', 'EAR-2'),
+    ('EAR-3', 'EAR-3'),
+    ('CC(RES)', 'CC(RES)'),
+    ('CC(NONR)', 'CC(NONR)'),
+    ('ED', 'ED'),
+)
+
 class Subdivision(models.Model):
     is_approved = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
@@ -209,33 +219,6 @@ class Lot(models.Model):
 class PlatZone(models.Model):
     is_active = models.BooleanField(default=True)
 
-    ZONES = (
-        ('A-R', 'Agricultural Rural'),
-        ('A-B', 'Agricultural Buffer'),
-        ('A-N', 'Agricultural Natural Areas'),
-        ('A-U', 'Agricultural Urban'),
-        ('R-1A', 'Single Family Residential'),
-        ('R-1B', 'Single Family Residential'),
-        ('R-1C', 'Single Family Residential'),
-        ('R-1D', 'Single Family Residential'),
-        ('R-1E', 'Single Family Residential'),
-        ('R-1T', 'Townhouse Residential'),
-        ('R-2', 'Two-Family Residential'),
-        ('R-3', 'Planned Neighborhood Residential'),
-        ('R-4', 'High Density Apartment'),
-        ('R-5', 'High Rise Apartment'),
-        ('P-1', 'Professional Office'),
-        ('B-1', 'Neighborhood Business'),
-        ('B-2', 'Downtown Business'),
-        ('B-2A', 'Downtown Frame Business'),
-        ('B-2B', 'Lexington Center Business'),
-        ('B-3', 'Highway Service Business'),
-        ('B-4', 'Wholesale and Warehouse Business'),
-        ('I-1', 'Light Industrial'),
-        ('I-2', 'Heavy Industrial'),
-        ('P-2', 'Office, Industry, and Research Park'),
-    )
-
     plat = models.ForeignKey(Plat, related_name='plat_zone')
 
     date_created = models.DateField(auto_now_add=True)
@@ -254,33 +237,6 @@ class PlatZone(models.Model):
 
 class CalculationWorksheet(models.Model):
     is_active = models.BooleanField(default=True)
-
-    ZONES = (
-        ('A-R', 'Agricultural Rural'),
-        ('A-B', 'Agricultural Buffer'),
-        ('A-N', 'Agricultural Natural Areas'),
-        ('A-U', 'Agricultural Urban'),
-        ('R-1A', 'Single Family Residential'),
-        ('R-1B', 'Single Family Residential'),
-        ('R-1C', 'Single Family Residential'),
-        ('R-1D', 'Single Family Residential'),
-        ('R-1E', 'Single Family Residential'),
-        ('R-1T', 'Townhouse Residential'),
-        ('R-2', 'Two-Family Residential'),
-        ('R-3', 'Planned Neighborhood Residential'),
-        ('R-4', 'High Density Apartment'),
-        ('R-5', 'High Rise Apartment'),
-        ('P-1', 'Professional Office'),
-        ('B-1', 'Neighborhood Business'),
-        ('B-2', 'Downtown Business'),
-        ('B-2A', 'Downtown Frame Business'),
-        ('B-2B', 'Lexington Center Business'),
-        ('B-3', 'Highway Service Business'),
-        ('B-4', 'Wholesale and Warehouse Business'),
-        ('I-1', 'Light Industrial'),
-        ('I-2', 'Heavy Industrial'),
-        ('P-2', 'Office, Industry, and Research Park'),
-    )
 
     acres = models.DecimalField(max_digits=20, decimal_places=2)
     zone = models.CharField(max_length=100, choices=ZONES)
