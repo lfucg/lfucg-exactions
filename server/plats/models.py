@@ -74,10 +74,10 @@ class Plat(models.Model):
     cabinet = models.CharField(max_length=200)
     slide = models.CharField(max_length=200)
 
-    calculation_note = models.TextField()
+    calculation_note = models.TextField(default='None')
 
-    sewer_due = models.DecimalField(max_digits=20, decimal_places=2)
-    non_sewer_due = models.DecimalField(max_digits=20, decimal_places=2)
+    sewer_due = models.DecimalField(max_digits=20, decimal_places=2, default=0)
+    non_sewer_due = models.DecimalField(max_digits=20, decimal_places=2, default=0)
 
     history = HistoricalRecords()
 
@@ -184,22 +184,22 @@ class Lot(models.Model):
     address_zip = models.CharField(max_length=10)
     address_full = models.CharField(max_length=300)
 
-    dues_roads_dev = models.DecimalField(max_digits=20, decimal_places=2)
-    dues_roads_own = models.DecimalField(max_digits=20, decimal_places=2)
+    dues_roads_dev = models.DecimalField(max_digits=20, decimal_places=2, default=0)
+    dues_roads_own = models.DecimalField(max_digits=20, decimal_places=2, default=0)
     
-    dues_sewer_trans_dev = models.DecimalField(max_digits=20, decimal_places=2)
-    dues_sewer_trans_own = models.DecimalField(max_digits=20, decimal_places=2)
-    dues_sewer_cap_dev = models.DecimalField(max_digits=20, decimal_places=2)
-    dues_sewer_cap_own = models.DecimalField(max_digits=20, decimal_places=2)
+    dues_sewer_trans_dev = models.DecimalField(max_digits=20, decimal_places=2, default=0)
+    dues_sewer_trans_own = models.DecimalField(max_digits=20, decimal_places=2, default=0)
+    dues_sewer_cap_dev = models.DecimalField(max_digits=20, decimal_places=2, default=0)
+    dues_sewer_cap_own = models.DecimalField(max_digits=20, decimal_places=2, default=0)
 
-    dues_parks_dev = models.DecimalField(max_digits=20, decimal_places=2)
-    dues_parks_own = models.DecimalField(max_digits=20, decimal_places=2)
+    dues_parks_dev = models.DecimalField(max_digits=20, decimal_places=2, default=0)
+    dues_parks_own = models.DecimalField(max_digits=20, decimal_places=2, default=0)
 
-    dues_storm_dev = models.DecimalField(max_digits=20, decimal_places=2)
-    dues_storm_own = models.DecimalField(max_digits=20, decimal_places=2)
+    dues_storm_dev = models.DecimalField(max_digits=20, decimal_places=2, default=0)
+    dues_storm_own = models.DecimalField(max_digits=20, decimal_places=2, default=0)
 
-    dues_open_space_dev = models.DecimalField(max_digits=20, decimal_places=2)
-    dues_open_space_own = models.DecimalField(max_digits=20, decimal_places=2)
+    dues_open_space_dev = models.DecimalField(max_digits=20, decimal_places=2, default=0)
+    dues_open_space_own = models.DecimalField(max_digits=20, decimal_places=2, default=0)
 
     history = HistoricalRecords()
 
@@ -238,6 +238,7 @@ class PlatZone(models.Model):
 class CalculationWorksheet(models.Model):
     is_active = models.BooleanField(default=True)
 
+    name = models.CharField(max_length=200)
     acres = models.DecimalField(max_digits=20, decimal_places=2)
     zone = models.CharField(max_length=100, choices=ZONES)
 
