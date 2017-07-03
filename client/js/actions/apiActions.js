@@ -261,6 +261,66 @@ export function postPlat() {
     };
 }
 
+export function putPlat() {
+    return {
+        type: API_CALL,
+        endpoint: PUT_PLAT,
+        url: '/plat/',
+        method: 'PUT',
+        body: (getState) => {
+            const {
+                activeForm,
+                currentUser,
+            } = getState();
+            const {
+                subdivision,
+                name,
+                date_recorded,
+                total_acreage,
+                latitude,
+                longitude,
+                plat_type,
+                expansion_area,
+                unit,
+                section,
+                block,
+                buildable_lots,
+                non_buildable_lots,
+                cabinet,
+                slide,
+                calculation_note,
+                sewer_due,
+                non_sewer_due,
+            } = activeForm;
+            const {
+                id,
+            } = currentUser;
+            return {
+                created_by: id,
+                modified_by: id,
+                name,
+                subdivision,
+                date_recorded,
+                total_acreage,
+                latitude,
+                longitude,
+                plat_type,
+                expansion_area,
+                unit,
+                section,
+                block,
+                buildable_lots,
+                non_buildable_lots,
+                cabinet,
+                slide,
+                calculation_note,
+                sewer_due,
+                non_sewer_due,
+            };
+        },
+    };
+}
+
 // LOTS
 export function getLots() {
     return {

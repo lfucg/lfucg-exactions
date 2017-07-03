@@ -31,7 +31,8 @@ class PlatForm extends React.Component {
         plats: React.PropTypes.object,
         onComponentDidMount: React.PropTypes.func,
         formChange: React.PropTypes.func,
-        onSubmit: React.PropTypes.func,
+        onPlatSubmit: React.PropTypes.func,
+        onPlatDues: React.PropTypes.func,
     };
 
     componentDidMount() {
@@ -44,7 +45,8 @@ class PlatForm extends React.Component {
             subdivisions,
             plats,
             formChange,
-            onSubmit,
+            onPlatSubmit,
+            onPlatDues,
         } = this.props;
 
         const subdivisionsList = subdivisions.length > 0 ? (map((single_subdivision) => {
@@ -67,9 +69,7 @@ class PlatForm extends React.Component {
             activeForm.buildable_lots &&
             activeForm.non_buildable_lots &&
             activeForm.cabinet &&
-            activeForm.slide &&
-            activeForm.sewer_due &&
-            activeForm.non_sewer_due;
+            activeForm.slide;
 
         return (
             <div className="plat-form">
@@ -88,7 +88,7 @@ class PlatForm extends React.Component {
                 <div className="inside-body">
                     <div className="container">
                         <div className="col-md-offset-1 col-md-10">
-                            <form onSubmit={onSubmit} >
+                            <form onSubmit={onPlatSubmit} >
 
                                 <fieldset>
                                     <div className="row form-subheading">
@@ -98,16 +98,17 @@ class PlatForm extends React.Component {
                                         <div className="col-sm-6 form-group">
                                             <label htmlFor="subdivision" className="form-label" id="subdivision">* Subdivision</label>
                                             <select className="form-control" id="subdivision" onChange={formChange('subdivision')} >
-                                                <option value="choose_subdivision" aria-label="Select a Subdivision">
-                                                    {activeForm.subdivision ? activeForm.subdivision_name : <span>Select a Subdivision</span>}
-                                                </option>
+                                                {activeForm.subdivision ? (
+                                                    <option value="choose_subdivision" aria-label="Select a Subdivision">
+                                                        {activeForm.subdivision_name}
+                                                    </option>
+                                                ) : (
+                                                    <option value="choose_subdivision" aria-label="Select a Subdivision">
+                                                        Select a Subdivision
+                                                    </option>
+                                                )}
                                                 {subdivisionsList}
                                             </select>
-                                        </div>
-                                        <div className="col-sm-6">
-                                            <FormGroup label="* Date Recorded" id="date_recorded">
-                                                <input type="date" className="form-control" placeholder="Date Recorded" />
-                                            </FormGroup>
                                         </div>
                                     </div>
                                     <div className="row">
@@ -150,34 +151,17 @@ class PlatForm extends React.Component {
                                         </div>
                                     </div>
                                     <div className="row form-subheading">
-                                        <h3>Dues and Calculations</h3>
-                                    </div>
-                                    <div className="row">
-                                        <div className="col-sm-6">
-                                            <FormGroup label="* Sewer Fees Due" id="sewer_due">
-                                                <input type="number" className="form-control" placeholder="Sewer Fees Due" />
-                                            </FormGroup>
-                                        </div>
-                                        <div className="col-sm-6">
-                                            <FormGroup label="* Non-Sewer Fees Due" id="non_sewer_due">
-                                                <input type="number" className="form-control" placeholder="Non-Sewer Fees Due" />
-                                            </FormGroup>
-                                        </div>
-                                    </div>
-                                    <div className="row">
-                                        <div className="col-xs-12">
-                                            <FormGroup label="* Calculation Notes" id="calculation_note">
-                                                <textarea type="text" className="form-control" placeholder="Calculation Notes" rows="4" />
-                                            </FormGroup>
-                                        </div>
-                                    </div>
-                                    <div className="row form-subheading">
                                         <h3>Additional Plat Details</h3>
                                     </div>
                                     <div className="row">
                                         <div className="col-sm-6">
                                             <FormGroup label="* Name" id="name">
                                                 <input type="text" className="form-control" placeholder="Name" />
+                                            </FormGroup>
+                                        </div>
+                                        <div className="col-sm-6">
+                                            <FormGroup label="* Date Recorded" id="date_recorded">
+                                                <input type="date" className="form-control" placeholder="Date Recorded" />
                                             </FormGroup>
                                         </div>
                                     </div>
@@ -227,6 +211,33 @@ class PlatForm extends React.Component {
                                 ) : null
                                 }
                             </form>
+                            <form onSubmit={onPlatDues}>
+                                <fieldset>
+                                    <div className="row form-subheading">
+                                        <h3>Dues and Calculations</h3>
+                                    </div>
+                                    <div className="row">
+                                        <div className="col-sm-6">
+                                            <FormGroup label="* Sewer Fees Due" id="sewer_due">
+                                                <input type="number" className="form-control" placeholder="Sewer Fees Due" />
+                                            </FormGroup>
+                                        </div>
+                                        <div className="col-sm-6">
+                                            <FormGroup label="* Non-Sewer Fees Due" id="non_sewer_due">
+                                                <input type="number" className="form-control" placeholder="Non-Sewer Fees Due" />
+                                            </FormGroup>
+                                        </div>
+                                    </div>
+                                    <div className="row">
+                                        <div className="col-xs-12">
+                                            <FormGroup label="* Calculation Notes" id="calculation_note">
+                                                <textarea type="text" className="form-control" placeholder="Calculation Notes" rows="4" />
+                                            </FormGroup>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                                <button className="btn btn-lex">Submit Dues</button>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -252,39 +263,41 @@ function mapDispatchToProps(dispatch, params) {
         onComponentDidMount() {
             dispatch(formInit());
             dispatch(getSubdivisions());
-            dispatch(getPlatID(selectedPlat))
-            .then((data_plat) => {
-                data_plat.response.subdivision ? (
-                    dispatch(getSubdivisionID(data_plat.response.subdivision))
-                    .then((data_sub_id) => {
-                        const update2 = {
-                            subdivision_name: data_sub_id.response.name,
-                        };
-                        dispatch(formUpdate(update2));
-                    })
-                ) : null;
-                const update = {
-                    subdivision: data_plat.response.subdivision,
-                    date_recorded: data_plat.response.date_recorded,
-                    latitude: data_plat.response.latitude,
-                    longitude: data_plat.response.longitude,
-                    expansion_area: data_plat.response.expansion_area,
-                    total_acreage: data_plat.response.cleaned_total_acreage,
-                    buildable_lots: data_plat.response.buildable_lots,
-                    non_buildable_lots: data_plat.response.non_buildable_lots,
-                    sewer_due: data_plat.response.sewer_due,
-                    non_sewer_due: data_plat.response.non_sewer_due,
-                    calculation_note: data_plat.response.calculation_note,
-                    name: data_plat.response.name,
-                    plat_type: data_plat.response.plat_type,
-                    section: data_plat.response.section,
-                    unit: data_plat.response.unit,
-                    block: data_plat.response.block,
-                    cabinet: data_plat.response.cabinet,
-                    slide: data_plat.response.slide,
-                };
-                dispatch(formUpdate(update));
-            });
+            if (selectedPlat) {
+                dispatch(getPlatID(selectedPlat))
+                .then((data_plat) => {
+                    data_plat.response.subdivision ? (
+                        dispatch(getSubdivisionID(data_plat.response.subdivision))
+                        .then((data_sub_id) => {
+                            const update2 = {
+                                subdivision_name: data_sub_id.response.name,
+                            };
+                            dispatch(formUpdate(update2));
+                        })
+                    ) : null;
+                    const update = {
+                        subdivision: data_plat.response.subdivision,
+                        date_recorded: data_plat.response.date_recorded,
+                        latitude: data_plat.response.latitude,
+                        longitude: data_plat.response.longitude,
+                        expansion_area: data_plat.response.expansion_area,
+                        total_acreage: data_plat.response.cleaned_total_acreage,
+                        buildable_lots: data_plat.response.buildable_lots,
+                        non_buildable_lots: data_plat.response.non_buildable_lots,
+                        sewer_due: data_plat.response.sewer_due,
+                        non_sewer_due: data_plat.response.non_sewer_due,
+                        calculation_note: data_plat.response.calculation_note,
+                        name: data_plat.response.name,
+                        plat_type: data_plat.response.plat_type,
+                        section: data_plat.response.section,
+                        unit: data_plat.response.unit,
+                        block: data_plat.response.block,
+                        cabinet: data_plat.response.cabinet,
+                        slide: data_plat.response.slide,
+                    };
+                    dispatch(formUpdate(update));
+                });
+            }
         },
         formChange(field) {
             return (e, ...args) => {
@@ -302,12 +315,16 @@ function mapDispatchToProps(dispatch, params) {
                 dispatch(formUpdate(update));
             };
         },
-        onSubmit(event) {
+        onPlatSubmit(event) {
             event.preventDefault();
             dispatch(postPlat())
-            .then(() => {
-                hashHistory.push('plat/existing/');
+            .then((data_post) => {
+                hashHistory.push(`plat/form/${data_post.id}`);
             });
+        },
+        onPlatDues(event) {
+            event.preventDefault();
+            dispatch(putPlat());
         },
     };
 }
