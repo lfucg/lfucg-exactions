@@ -427,8 +427,8 @@ function mapDispatchToProps(dispatch, params) {
         onSubmit(event) {
             event.preventDefault();
             dispatch(postLot())
-            .then(() => {
-                hashHistory.push('lot/existing');
+            .then((data_post) => {
+                hashHistory.push(`lot/form/${data_post.response.id}`);
             });
         },
     };

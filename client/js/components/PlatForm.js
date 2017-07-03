@@ -319,7 +319,7 @@ function mapDispatchToProps(dispatch, params) {
             event.preventDefault();
             dispatch(postPlat())
             .then((data_post) => {
-                hashHistory.push(`plat/form/${data_post.id}`);
+                hashHistory.push(`plat/form/${data_post.response.id}`);
             });
         },
         onPlatDues(event) {
