@@ -10,6 +10,7 @@ import Navbar from './Navbar';
 import Footer from './Footer';
 
 import FormGroup from './FormGroup';
+import PlatZoneForm from './PlatZoneForm';
 
 import {
     formInit,
@@ -211,6 +212,11 @@ class PlatForm extends React.Component {
                                 ) : null
                                 }
                             </form>
+                            {
+                            //     activeForm.first_section ? (
+                            // ) : null
+                            }
+                            <PlatZoneForm props={this.props} plat={activeForm.plat} plat_name={activeForm.plat_name} acres={activeForm.acres} />
                             <form onSubmit={onPlatDues}>
                                 <fieldset>
                                     <div className="row form-subheading">
@@ -271,6 +277,7 @@ function mapDispatchToProps(dispatch, params) {
                         .then((data_sub_id) => {
                             const update2 = {
                                 subdivision_name: data_sub_id.response.name,
+                                first_section: true,
                             };
                             dispatch(formUpdate(update2));
                         })
@@ -319,6 +326,12 @@ function mapDispatchToProps(dispatch, params) {
             event.preventDefault();
             dispatch(postPlat())
             .then((data_post) => {
+                const zone_update = {
+                    plat: data_post.response.id,
+                    plat_name: data_post.response.name,
+                    acres: data_post.response.total_acreage,
+                };
+                dispatch(formUpdate(zone_update));
                 hashHistory.push(`plat/form/${data_post.response.id}`);
             });
         },
