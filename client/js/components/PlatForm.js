@@ -212,11 +212,9 @@ class PlatForm extends React.Component {
                                 ) : null
                                 }
                             </form>
-                            {
-                            //     activeForm.first_section ? (
-                            // ) : null
-                            }
-                            <PlatZoneForm props={this.props} plat={activeForm.plat} plat_name={activeForm.plat_name} acres={activeForm.acres} />
+                            { activeForm.first_section ? (
+                                <PlatZoneForm props={this.props} plat={activeForm.plat} plat_name={activeForm.plat_name} acres={activeForm.acres} />
+                            ) : null}
                             <form onSubmit={onPlatDues}>
                                 <fieldset>
                                     <div className="row form-subheading">
@@ -282,6 +280,14 @@ function mapDispatchToProps(dispatch, params) {
                             dispatch(formUpdate(update2));
                         })
                     ) : null;
+                    if (!data_plat.response.plat_zone) {
+                        const zone_update = {
+                            plat: data_plat.response.id,
+                            plat_name: data_plat.response.name,
+                            acres: data_plat.response.cleaned_total_acreage,
+                        };
+                        dispatch(formUpdate(zone_update));
+                    }
                     const update = {
                         subdivision: data_plat.response.subdivision,
                         date_recorded: data_plat.response.date_recorded,

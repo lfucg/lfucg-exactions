@@ -21,6 +21,11 @@ import {
     POST_PLAT,
     PUT_PLAT,
 
+    GET_PLAT_ZONES,
+    GET_PLAT_ZONE_ID,
+    POST_PLAT_ZONE,
+    PUT_PLAT_ZONE,
+
     GET_LOTS,
     GET_LOT_ID,
     POST_LOT,
@@ -316,6 +321,37 @@ export function putPlat() {
                 calculation_note,
                 sewer_due,
                 non_sewer_due,
+            };
+        },
+    };
+}
+
+// PLAT_ZONES
+export function postPlatZone() {
+    return {
+        type: API_CALL,
+        endpoint: POST_PLAT_ZONE,
+        url: '/platZone/',
+        method: 'POST',
+        body: (getState) => {
+            const {
+                activeForm,
+                currentUser,
+            } = getState();
+            const {
+                plat,
+                zone,
+                acres,
+            } = activeForm;
+            const {
+                id,
+            } = currentUser;
+            return {
+                created_by: id,
+                modified_by: id,
+                plat,
+                zone,
+                acres,
             };
         },
     };

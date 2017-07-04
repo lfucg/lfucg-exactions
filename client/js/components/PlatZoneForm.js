@@ -17,20 +17,19 @@ import {
     getPlatID,
     postPlat,
     putPlat,
+    getPlatZones,
+    getPlatZoneID,
+    postPlatZone,
+    putPlatZone,
 } from '../actions/apiActions';
 
 class PlatZoneForm extends React.Component {
     static propTypes = {
         activeForm: React.PropTypes.object,
         plats: React.PropTypes.object,
-        onComponentDidMount: React.PropTypes.func,
         formChange: React.PropTypes.func,
         onPlatZoneSubmit: React.PropTypes.func,
     };
-
-    componentDidMount() {
-        this.props.onComponentDidMount();
-    }
 
     render() {
         const {
@@ -115,9 +114,6 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        onComponentDidMount() {
-            dispatch(formInit());
-        },
         formChange(field) {
             return (e, ...args) => {
                 const value = typeof e.target.value !== 'undefined' ? e.target.value : args[1];
@@ -133,6 +129,10 @@ function mapDispatchToProps(dispatch) {
                 };
                 dispatch(formUpdate(update));
             };
+        },
+        onPlatZoneSubmit(event) {
+            event.preventDefault();
+            dispatch(postPlatZone());
         },
     };
 }

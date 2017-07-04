@@ -95,8 +95,8 @@ class PlatZoneSerializer(serializers.ModelSerializer):
         )
 
 class PlatSerializer(serializers.ModelSerializer):
-    lots = LotSerializer(many=True, read_only=True)
-    plat_zones = PlatZoneSerializer(many=True, read_only=True)
+    lot = LotSerializer(many=True, read_only=True)
+    plat_zone = PlatZoneSerializer(many=True, read_only=True)
     cleaned_total_acreage = serializers.SerializerMethodField(read_only=True)
 
     def get_cleaned_total_acreage(self, obj):
@@ -132,6 +132,6 @@ class PlatSerializer(serializers.ModelSerializer):
             'calculation_note',
             'sewer_due',
             'non_sewer_due',
-            'lots',
-            'plat_zones',
+            'lot',
+            'plat_zone',
         )
