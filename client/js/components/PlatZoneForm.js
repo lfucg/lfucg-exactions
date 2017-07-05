@@ -27,9 +27,24 @@ class PlatZoneForm extends React.Component {
     static propTypes = {
         activeForm: React.PropTypes.object,
         plats: React.PropTypes.object,
+        // plat_zone: React.PropTypes.object,
+        acre_id: React.PropTypes.string,
+        acre_value: React.PropTypes.number,
+        zone_id: React.PropTypes.string,
+        zone_value: React.PropTypes.string,
+        onComponentDidMount: React.PropTypes.func,
         formChange: React.PropTypes.func,
         onPlatZoneSubmit: React.PropTypes.func,
     };
+
+    componentDidMount() {
+        this.props.onComponentDidMount({
+            acre_id: this.props.acre_id,
+            acre_value: this.props.acre_value,
+            zone_id: this.props.zone_id,
+            zone_value: this.props.zone_value,
+        });
+    }
 
     render() {
         const {
@@ -48,7 +63,7 @@ class PlatZoneForm extends React.Component {
                 <form onSubmit={onPlatZoneSubmit} >
                     <fieldset>
                         <div className="row form-subheading">
-                            <h3>Plat Zone</h3>
+                            {this.props.zone_value ? <h3>Plat Zone - {this.props.zone_value}</h3> : <h3>Plat Zone</h3>}
                         </div>
                         <div className="row">
                             <div className="col-sm-6 form-group">
@@ -68,10 +83,10 @@ class PlatZoneForm extends React.Component {
                         </div>
                         <div className="row">
                             <div className="col-sm-6 form-group">
-                                <label htmlFor="zone" className="form-label" id="zone">* Zone</label>
-                                <select className="form-control" onChange={formChange('zone')} >
-                                    {activeForm.zone_name ? (
-                                        <option value="zone_name" aria-label={activeForm.zone_name}>{activeForm.zone_name}</option>
+                                <label htmlFor={this.props.zone_id} className="form-label" id={this.props.zone_id}>* Zone</label>
+                                <select className="form-control" id={this.props.zone_id} onChange={formChange('zone')} >
+                                    {this.props.zone_value ? (
+                                        <option value="zone_name" aria-label={this.props.zone_value}>{this.props.zone_value}</option>
                                     ) : (
                                         <option value="start_zone" aria-label="Zone">Zone</option>
                                     )}
@@ -85,7 +100,7 @@ class PlatZoneForm extends React.Component {
                                 </select>
                             </div>
                             <div className="col-sm-6">
-                                <FormGroup label="* Acres" id="acres">
+                                <FormGroup label="* Acres" id={this.props.acre_id}>
                                     <input type="number" className="form-control" placeholder="Acres" />
                                 </FormGroup>
                             </div>
@@ -112,8 +127,19 @@ function mapStateToProps(state) {
     };
 }
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch, props) {
+    const selectedPlatZone = props.plat_zone;
+    console.log('PLAT ZONE PROPS', selectedPlatZone);
+
     return {
+        onComponentDidMount(pass_props) {
+            const plat_zone_update = {};
+
+            plat_zone_update[pass_props.acre_id] = pass_props.acre_value;
+            plat_zone_update[pass_props.zone_id] = pass_props.zone_value;
+
+            dispatch(formUpdate(plat_zone_update));
+        },
         formChange(field) {
             return (e, ...args) => {
                 const value = typeof e.target.value !== 'undefined' ? e.target.value : args[1];

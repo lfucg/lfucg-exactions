@@ -58,6 +58,14 @@ class PlatForm extends React.Component {
             );
         })(subdivisions)) : null;
 
+        const platZonesList = plats.plat_zone ? (map((single_plat_zone) => {
+            return (
+                <div key={single_plat_zone.id} >
+                    <PlatZoneForm props={this.props} acre_id={`${single_plat_zone.id}_acres`} zone_id={`${single_plat_zone.id}_zone`} zone_value={single_plat_zone.zone} acre_value={single_plat_zone.acres} plat_zone={single_plat_zone.id} />
+                </div>
+            );
+        })(plats.plat_zone)) : null;
+
         const submitEnabled =
             activeForm.total_acreage &&
             activeForm.latitude &&
@@ -212,9 +220,11 @@ class PlatForm extends React.Component {
                                 ) : null
                                 }
                             </form>
-                            { activeForm.first_section ? (
-                                <PlatZoneForm props={this.props} plat={activeForm.plat} plat_name={activeForm.plat_name} acres={activeForm.acres} />
-                            ) : null}
+                            { 
+                            //     activeForm.first_section ? (
+                            //     <PlatZoneForm />
+                            // ) : null
+                            }
                             <form onSubmit={onPlatDues}>
                                 <fieldset>
                                     <div className="row form-subheading">
@@ -242,6 +252,7 @@ class PlatForm extends React.Component {
                                 </fieldset>
                                 <button className="btn btn-lex">Submit Dues</button>
                             </form>
+                            { platZonesList }
                         </div>
                     </div>
                 </div>
@@ -282,8 +293,6 @@ function mapDispatchToProps(dispatch, params) {
                     ) : null;
                     if (!data_plat.response.plat_zone) {
                         const zone_update = {
-                            plat: data_plat.response.id,
-                            plat_name: data_plat.response.name,
                             acres: data_plat.response.cleaned_total_acreage,
                         };
                         dispatch(formUpdate(zone_update));
@@ -307,6 +316,8 @@ function mapDispatchToProps(dispatch, params) {
                         block: data_plat.response.block,
                         cabinet: data_plat.response.cabinet,
                         slide: data_plat.response.slide,
+                        plat: data_plat.response.id,
+                        plat_name: data_plat.response.name,
                     };
                     dispatch(formUpdate(update));
                 });

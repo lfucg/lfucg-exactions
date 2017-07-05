@@ -266,11 +266,11 @@ export function postPlat() {
     };
 }
 
-export function putPlat() {
+export function putPlat(selectedPlat) {
     return {
         type: API_CALL,
         endpoint: PUT_PLAT,
-        url: '/plat/',
+        url: `/plat/${selectedPlat}`,
         method: 'PUT',
         body: (getState) => {
             const {
@@ -333,6 +333,36 @@ export function postPlatZone() {
         endpoint: POST_PLAT_ZONE,
         url: '/platZone/',
         method: 'POST',
+        body: (getState) => {
+            const {
+                activeForm,
+                currentUser,
+            } = getState();
+            const {
+                plat,
+                zone,
+                acres,
+            } = activeForm;
+            const {
+                id,
+            } = currentUser;
+            return {
+                created_by: id,
+                modified_by: id,
+                plat,
+                zone,
+                acres,
+            };
+        },
+    };
+}
+
+export function putPlatZone(selectedPlatZone) {
+    return {
+        type: API_CALL,
+        endpoint: PUT_PLAT_ZONE,
+        url: `/platZone/${selectedPlatZone}`,
+        method: 'PUT',
         body: (getState) => {
             const {
                 activeForm,
