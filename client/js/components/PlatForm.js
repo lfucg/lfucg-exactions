@@ -33,6 +33,7 @@ class PlatForm extends React.Component {
         onComponentDidMount: React.PropTypes.func,
         formChange: React.PropTypes.func,
         onPlatSubmit: React.PropTypes.func,
+        addAnotherPlatZone: React.PropTypes.func,
         onPlatDues: React.PropTypes.func,
     };
 
@@ -47,6 +48,7 @@ class PlatForm extends React.Component {
             plats,
             formChange,
             onPlatSubmit,
+            addAnotherPlatZone,
             onPlatDues,
         } = this.props;
 
@@ -289,8 +291,20 @@ class PlatForm extends React.Component {
                                             <div className="col-xs-12">
                                                 { platZonesList }
                                             </div>
+                                            { plats.plat_zone && plats.plat_zone.length > 0 ?
+                                                <div className="col-xs-12">
+                                                    <button className="btn btn-lex" onClick={addAnotherPlatZone} >Add Another Plat Zone</button>
+                                                </div>
+                                            : null}
                                         </div>
                                     </div>
+                                    { activeForm.add_another_plat_zone ? (
+                                        <PlatZoneForm
+                                          props={this.props}
+                                          acre_id="acres"
+                                          zone_id="zone"
+                                        />
+                                    ) : null}
                                     <div className="row section-heading">
                                         <h2>Plat Dues</h2>
                                     </div>
@@ -356,7 +370,6 @@ function mapDispatchToProps(dispatch, params) {
                         .then((data_sub_id) => {
                             const update2 = {
                                 subdivision_name: data_sub_id.response.name,
-                                first_section: true,
                             };
                             dispatch(formUpdate(update2));
                         })
@@ -388,9 +401,17 @@ function mapDispatchToProps(dispatch, params) {
                         slide: data_plat.response.slide,
                         plat: data_plat.response.id,
                         plat_name: data_plat.response.name,
+                        first_section: true,
+                        add_another_plat_zone: false,
                     };
                     dispatch(formUpdate(update));
                 });
+            } else {
+                const else_update = {
+                    first_section: false,
+                    add_another_plat_zone: false,
+                };
+                dispatch(formUpdate(else_update));
             }
         },
         formChange(field) {
@@ -425,6 +446,13 @@ function mapDispatchToProps(dispatch, params) {
                     hashHistory.push(`plat/form/${data_post.response.id}`);
                 });
             }
+        },
+        addAnotherPlatZone(event) {
+            event.preventDefault();
+            const update = {
+                add_another_plat_zone: true,
+            };
+            dispatch(formUpdate(update));
         },
         onPlatDues(event) {
             event.preventDefault();
