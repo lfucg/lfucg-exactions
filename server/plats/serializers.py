@@ -80,6 +80,12 @@ class LotSerializer(serializers.ModelSerializer):
         )
 
 class PlatZoneSerializer(serializers.ModelSerializer):
+    cleaned_acres = serializers.SerializerMethodField(read_only=True)
+
+    def get_cleaned_acres(self, obj):
+        set_acreage = str(obj.acres).rstrip('0').rstrip('.')
+        return set_acreage
+
     class Meta:
         model = PlatZone
         fields = (
@@ -92,6 +98,7 @@ class PlatZoneSerializer(serializers.ModelSerializer):
             'modified_by',
             'zone',
             'acres',
+            'cleaned_acres',
         )
 
 class PlatSerializer(serializers.ModelSerializer):

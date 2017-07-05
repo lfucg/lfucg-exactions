@@ -66,7 +66,7 @@ class PlatForm extends React.Component {
                       acre_id={`${single_plat_zone.id}_acres`}
                       zone_id={`${single_plat_zone.id}_zone`}
                       zone_value={single_plat_zone.zone}
-                      acre_value={single_plat_zone.acres}
+                      acre_value={single_plat_zone.cleaned_acres}
                       plat_zone_id={`${single_plat_zone.id}_plat_zone`}
                       plat_zone_value={single_plat_zone.id}
                     />
@@ -115,12 +115,14 @@ class PlatForm extends React.Component {
                             >
                                 <div className="row section-heading" role="tab" id="headingTwo">
                                     <h2>General Plat Information</h2>
-                                    <h4>(Click to View or Edit)</h4>
+                                    {activeForm.first_section ?
+                                        <h4>(Click to View or Edit)</h4>
+                                    : null}
                                 </div>
                             </a>
                             <div
                               id="collapseGeneralPlat"
-                              className="panel-collapse collapse row"
+                              className={activeForm.first_section ? 'panel-collapse collapse row' : 'panel-collapse row'}
                               role="tabpanel"
                               aria-labelledby="#headingTwo"
                             >
@@ -250,12 +252,17 @@ class PlatForm extends React.Component {
                                     </form>
                                 </div>
                             </div>
-                            { activeForm.first_section && !plats.plat_zone ? (
-                                <PlatZoneForm
-                                  props={this.props}
-                                  acre_id="acres"
-                                  zone_id="zone"
-                                />
+                            { activeForm.first_section && plats.plat_zone && plats.plat_zone.length === 0 ? (
+                                <div>
+                                    <div className="row section-heading">
+                                        <h2>Plat Zone</h2>
+                                    </div>
+                                    <PlatZoneForm
+                                      props={this.props}
+                                      acre_id="acres"
+                                      zone_id="zone"
+                                    />
+                                </div>
                             ) : null }
                             {plats.plat_zone && plats.plat_zone.length > 0 ? (
                                 <div>
