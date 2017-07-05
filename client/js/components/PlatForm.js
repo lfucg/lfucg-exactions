@@ -250,11 +250,13 @@ class PlatForm extends React.Component {
                                     </form>
                                 </div>
                             </div>
-                            {
-                            //     activeForm.first_section ? (
-                            //     <PlatZoneForm />
-                            // ) : null
-                            }
+                            { activeForm.first_section && !plats.plat_zone ? (
+                                <PlatZoneForm
+                                  props={this.props}
+                                  acre_id="acres"
+                                  zone_id="zone"
+                                />
+                            ) : null }
                             {plats.plat_zone && plats.plat_zone.length > 0 ? (
                                 <div>
                                     <a
@@ -402,16 +404,20 @@ function mapDispatchToProps(dispatch, params) {
         },
         onPlatSubmit(event) {
             event.preventDefault();
-            dispatch(postPlat())
-            .then((data_post) => {
-                const zone_update = {
-                    plat: data_post.response.id,
-                    plat_name: data_post.response.name,
-                    acres: data_post.response.total_acreage,
-                };
-                dispatch(formUpdate(zone_update));
-                hashHistory.push(`plat/form/${data_post.response.id}`);
-            });
+            if (selectedPlat) {
+                dispatch(putPlat(selectedPlat));
+            } else {
+                dispatch(postPlat())
+                .then((data_post) => {
+                    const zone_update = {
+                        plat: data_post.response.id,
+                        plat_name: data_post.response.name,
+                        acres: data_post.response.total_acreage,
+                    };
+                    dispatch(formUpdate(zone_update));
+                    hashHistory.push(`plat/form/${data_post.response.id}`);
+                });
+            }
         },
         onPlatDues(event) {
             event.preventDefault();

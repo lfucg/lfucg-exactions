@@ -63,7 +63,7 @@ class PlatZoneForm extends React.Component {
 
         return (
             <div className="plat-zone-form">
-                <form onSubmit={onPlatZoneSubmit} >
+                <form onSubmit={onPlatZoneSubmit({ activeForm })} >
                     <fieldset>
                         <div className="row form-subheading">
                             {this.props.zone_value ? <h3>Plat Zone - {this.props.zone_value}</h3> : <h3>Plat Zone</h3>}
@@ -131,17 +131,19 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch, props) {
-    // const selectedPlatZone = props.plat_zone_value;
+    const selectedPlatZone = props.plat_zone_value;
 
     return {
         onComponentDidMount(pass_props) {
-            const plat_zone_update = {};
+            if (pass_props.plat_zone_value) {
+                const plat_zone_update = {};
 
-            plat_zone_update[pass_props.plat_zone_id] = pass_props.plat_zone_value;
-            plat_zone_update[pass_props.acre_id] = pass_props.acre_value;
-            plat_zone_update[pass_props.zone_id] = pass_props.zone_value;
+                plat_zone_update[pass_props.plat_zone_id] = pass_props.plat_zone_value;
+                plat_zone_update[pass_props.acre_id] = pass_props.acre_value;
+                plat_zone_update[pass_props.zone_id] = pass_props.zone_value;
 
-            dispatch(formUpdate(plat_zone_update));
+                dispatch(formUpdate(plat_zone_update));
+            }
         },
         formChange(field) {
             return (e, ...args) => {
@@ -159,9 +161,16 @@ function mapDispatchToProps(dispatch, props) {
                 dispatch(formUpdate(update));
             };
         },
-        onPlatZoneSubmit(event) {
-            event.preventDefault();
-            dispatch(postPlatZone());
+        onPlatZoneSubmit(activeForm) {
+            return () => {
+                if (selectedPlatZone) {
+                    const zone = activeForm.activeForm[`${props.zone_id}`];
+                    const acres = activeForm.activeForm[`${props.acre_id}`];
+                    dispatch(putPlatZone(selectedPlatZone, zone, acres));
+                } else {
+                    dispatch(postPlatZone());
+                }
+            };
         },
     };
 }
