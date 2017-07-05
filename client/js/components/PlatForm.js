@@ -61,7 +61,15 @@ class PlatForm extends React.Component {
         const platZonesList = plats.plat_zone ? (map((single_plat_zone) => {
             return (
                 <div key={single_plat_zone.id} >
-                    <PlatZoneForm props={this.props} acre_id={`${single_plat_zone.id}_acres`} zone_id={`${single_plat_zone.id}_zone`} zone_value={single_plat_zone.zone} acre_value={single_plat_zone.acres} plat_zone={single_plat_zone.id} />
+                    <PlatZoneForm
+                      props={this.props}
+                      acre_id={`${single_plat_zone.id}_acres`}
+                      zone_id={`${single_plat_zone.id}_zone`}
+                      zone_value={single_plat_zone.zone}
+                      acre_value={single_plat_zone.acres}
+                      plat_zone_id={`${single_plat_zone.id}_plat_zone`}
+                      plat_zone_value={single_plat_zone.id}
+                    />
                 </div>
             );
         })(plats.plat_zone)) : null;
@@ -96,163 +104,216 @@ class PlatForm extends React.Component {
                 </div>
                 <div className="inside-body">
                     <div className="container">
-                        <div className="col-md-offset-1 col-md-10">
-                            <form onSubmit={onPlatSubmit} >
+                        <div className="col-md-offset-1 col-md-10 panel-group" id="accordion" role="tablist" aria-multiselectable="false">
+                            <a
+                              role="button"
+                              data-toggle="collapse"
+                              data-parent="#accordion"
+                              href="#collapseGeneralPlat"
+                              aria-expanded="false"
+                              aria-controls="collapseGeneralPlat"
+                            >
+                                <div className="row section-heading" role="tab" id="headingTwo">
+                                    <h2>General Plat Information</h2>
+                                    <h4>(Click to View or Edit)</h4>
+                                </div>
+                            </a>
+                            <div
+                              id="collapseGeneralPlat"
+                              className="panel-collapse collapse row"
+                              role="tabpanel"
+                              aria-labelledby="#headingTwo"
+                            >
+                                <div className="panel-body">
+                                    <form onSubmit={onPlatSubmit} className="col-xs-12">
 
-                                <fieldset>
-                                    <div className="row form-subheading">
-                                        <h3>Location</h3>
-                                    </div>
-                                    <div className="row">
-                                        <div className="col-sm-6 form-group">
-                                            <label htmlFor="subdivision" className="form-label" id="subdivision">* Subdivision</label>
-                                            <select className="form-control" id="subdivision" onChange={formChange('subdivision')} >
-                                                {activeForm.subdivision ? (
-                                                    <option value="choose_subdivision" aria-label="Select a Subdivision">
-                                                        {activeForm.subdivision_name}
-                                                    </option>
-                                                ) : (
-                                                    <option value="choose_subdivision" aria-label="Select a Subdivision">
-                                                        Select a Subdivision
-                                                    </option>
-                                                )}
-                                                {subdivisionsList}
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div className="row">
-                                        <div className="col-sm-6">
-                                            <FormGroup label="* Latitude" id="latitude">
-                                                <input type="text" className="form-control" placeholder="Latitude" />
-                                            </FormGroup>
-                                        </div>
-                                        <div className="col-sm-6">
-                                            <FormGroup label="* Longitude" id="longitude">
-                                                <input type="text" className="form-control" placeholder="Longitude" />
-                                            </FormGroup>
-                                        </div>
-                                    </div>
-                                    <div className="row form-subheading">
-                                        <h3>Land Attributes</h3>
-                                    </div>
-                                    <div className="row">
-                                        <div className="col-sm-6">
-                                            <FormGroup label="* Expansion Area" id="expansion_area">
-                                                <input type="text" className="form-control" placeholder="Expansion Area" />
-                                            </FormGroup>
-                                        </div>
-                                        <div className="col-sm-6">
-                                            <FormGroup label="* Total Acreage" id="total_acreage">
-                                                <input type="number" className="form-control" placeholder="Total Acreage" />
-                                            </FormGroup>
-                                        </div>
-                                    </div>
-                                    <div className="row">
-                                        <div className="col-sm-6">
-                                            <FormGroup label="* Buildable Lots" id="buildable_lots">
-                                                <input type="number" className="form-control" placeholder="Buildable Lots" />
-                                            </FormGroup>
-                                        </div>
-                                        <div className="col-sm-6">
-                                            <FormGroup label="* Non-Buildable Lots" id="non_buildable_lots">
-                                                <input type="number" className="form-control" placeholder="Non-Buildable Lots" />
-                                            </FormGroup>
-                                        </div>
-                                    </div>
-                                    <div className="row form-subheading">
-                                        <h3>Additional Plat Details</h3>
-                                    </div>
-                                    <div className="row">
-                                        <div className="col-sm-6">
-                                            <FormGroup label="* Name" id="name">
-                                                <input type="text" className="form-control" placeholder="Name" />
-                                            </FormGroup>
-                                        </div>
-                                        <div className="col-sm-6">
-                                            <FormGroup label="* Date Recorded" id="date_recorded">
-                                                <input type="date" className="form-control" placeholder="Date Recorded" />
-                                            </FormGroup>
-                                        </div>
-                                    </div>
-                                    <div className="row">
-                                        <div className="col-sm-6">
-                                            <FormGroup label="* Plat Type" id="plat_type">
-                                                <input type="text" className="form-control" placeholder="Plat Type" />
-                                            </FormGroup>
-                                        </div>
-                                        <div className="col-sm-6">
-                                            <FormGroup label="* Section" id="section">
-                                                <input type="text" className="form-control" placeholder="Section" />
-                                            </FormGroup>
-                                        </div>
-                                    </div>
-                                    <div className="row">
-                                        <div className="col-sm-6">
-                                            <FormGroup label="* Unit" id="unit">
-                                                <input type="text" className="form-control" placeholder="Unit" />
-                                            </FormGroup>
-                                        </div>
-                                        <div className="col-sm-6">
-                                            <FormGroup label="* Block" id="block">
-                                                <input type="text" className="form-control" placeholder="Block" />
-                                            </FormGroup>
-                                        </div>
-                                    </div>
-                                    <div className="row">
-                                        <div className="col-sm-6">
-                                            <FormGroup label="* Cabinet" id="cabinet">
-                                                <input type="text" className="form-control" placeholder="Cabinet" />
-                                            </FormGroup>
-                                        </div>
-                                        <div className="col-sm-6">
-                                            <FormGroup label="* Slide" id="slide">
-                                                <input type="text" className="form-control" placeholder="Slide" />
-                                            </FormGroup>
-                                        </div>
-                                    </div>
-                                </fieldset>
-                                <button disabled={!submitEnabled} className="btn btn-lex">Submit</button>
-                                {!submitEnabled ? (
-                                    <div>
-                                        <div className="clearfix" />
-                                        <span> * All required fields must be filled.</span>
-                                    </div>
-                                ) : null
-                                }
-                            </form>
-                            { 
+                                        <fieldset>
+                                            <div className="row form-subheading">
+                                                <h3>Location</h3>
+                                            </div>
+                                            <div className="row">
+                                                <div className="col-sm-6 form-group">
+                                                    <label htmlFor="subdivision" className="form-label" id="subdivision">* Subdivision</label>
+                                                    <select className="form-control" id="subdivision" onChange={formChange('subdivision')} >
+                                                        {activeForm.subdivision ? (
+                                                            <option value="choose_subdivision" aria-label="Select a Subdivision">
+                                                                {activeForm.subdivision_name}
+                                                            </option>
+                                                        ) : (
+                                                            <option value="choose_subdivision" aria-label="Select a Subdivision">
+                                                                Select a Subdivision
+                                                            </option>
+                                                        )}
+                                                        {subdivisionsList}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div className="row">
+                                                <div className="col-sm-6">
+                                                    <FormGroup label="* Latitude" id="latitude">
+                                                        <input type="text" className="form-control" placeholder="Latitude" />
+                                                    </FormGroup>
+                                                </div>
+                                                <div className="col-sm-6">
+                                                    <FormGroup label="* Longitude" id="longitude">
+                                                        <input type="text" className="form-control" placeholder="Longitude" />
+                                                    </FormGroup>
+                                                </div>
+                                            </div>
+                                            <div className="row form-subheading">
+                                                <h3>Land Attributes</h3>
+                                            </div>
+                                            <div className="row">
+                                                <div className="col-sm-6">
+                                                    <FormGroup label="* Expansion Area" id="expansion_area">
+                                                        <input type="text" className="form-control" placeholder="Expansion Area" />
+                                                    </FormGroup>
+                                                </div>
+                                                <div className="col-sm-6">
+                                                    <FormGroup label="* Total Acreage" id="total_acreage">
+                                                        <input type="number" className="form-control" placeholder="Total Acreage" />
+                                                    </FormGroup>
+                                                </div>
+                                            </div>
+                                            <div className="row">
+                                                <div className="col-sm-6">
+                                                    <FormGroup label="* Buildable Lots" id="buildable_lots">
+                                                        <input type="number" className="form-control" placeholder="Buildable Lots" />
+                                                    </FormGroup>
+                                                </div>
+                                                <div className="col-sm-6">
+                                                    <FormGroup label="* Non-Buildable Lots" id="non_buildable_lots">
+                                                        <input type="number" className="form-control" placeholder="Non-Buildable Lots" />
+                                                    </FormGroup>
+                                                </div>
+                                            </div>
+                                            <div className="row form-subheading">
+                                                <h3>Additional Plat Details</h3>
+                                            </div>
+                                            <div className="row">
+                                                <div className="col-sm-6">
+                                                    <FormGroup label="* Name" id="name">
+                                                        <input type="text" className="form-control" placeholder="Name" />
+                                                    </FormGroup>
+                                                </div>
+                                                <div className="col-sm-6">
+                                                    <FormGroup label="* Date Recorded" id="date_recorded">
+                                                        <input type="date" className="form-control" placeholder="Date Recorded" />
+                                                    </FormGroup>
+                                                </div>
+                                            </div>
+                                            <div className="row">
+                                                <div className="col-sm-6">
+                                                    <FormGroup label="* Plat Type" id="plat_type">
+                                                        <input type="text" className="form-control" placeholder="Plat Type" />
+                                                    </FormGroup>
+                                                </div>
+                                                <div className="col-sm-6">
+                                                    <FormGroup label="* Section" id="section">
+                                                        <input type="text" className="form-control" placeholder="Section" />
+                                                    </FormGroup>
+                                                </div>
+                                            </div>
+                                            <div className="row">
+                                                <div className="col-sm-6">
+                                                    <FormGroup label="* Unit" id="unit">
+                                                        <input type="text" className="form-control" placeholder="Unit" />
+                                                    </FormGroup>
+                                                </div>
+                                                <div className="col-sm-6">
+                                                    <FormGroup label="* Block" id="block">
+                                                        <input type="text" className="form-control" placeholder="Block" />
+                                                    </FormGroup>
+                                                </div>
+                                            </div>
+                                            <div className="row">
+                                                <div className="col-sm-6">
+                                                    <FormGroup label="* Cabinet" id="cabinet">
+                                                        <input type="text" className="form-control" placeholder="Cabinet" />
+                                                    </FormGroup>
+                                                </div>
+                                                <div className="col-sm-6">
+                                                    <FormGroup label="* Slide" id="slide">
+                                                        <input type="text" className="form-control" placeholder="Slide" />
+                                                    </FormGroup>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                        <button disabled={!submitEnabled} className="btn btn-lex">Submit</button>
+                                        {!submitEnabled ? (
+                                            <div>
+                                                <div className="clearfix" />
+                                                <span> * All required fields must be filled.</span>
+                                            </div>
+                                        ) : null
+                                        }
+                                    </form>
+                                </div>
+                            </div>
+                            {
                             //     activeForm.first_section ? (
                             //     <PlatZoneForm />
                             // ) : null
                             }
-                            <form onSubmit={onPlatDues}>
-                                <fieldset>
-                                    <div className="row form-subheading">
-                                        <h3>Dues and Calculations</h3>
-                                    </div>
-                                    <div className="row">
-                                        <div className="col-sm-6">
-                                            <FormGroup label="* Sewer Fees Due" id="sewer_due">
-                                                <input type="number" className="form-control" placeholder="Sewer Fees Due" />
-                                            </FormGroup>
+                            {plats.plat_zone && plats.plat_zone.length > 0 ? (
+                                <div>
+                                    <a
+                                      role="button"
+                                      data-toggle="collapse"
+                                      data-parent="#accordion"
+                                      href="#collapsePlatZones"
+                                      aria-expanded="false"
+                                      aria-controls="collapsePlatZones"
+                                    >
+                                        <div className="row section-heading" role="tab" id="headingTwo">
+                                            <h2>Plat Zones</h2>
+                                            <h4>(Click to View or Edit)</h4>
                                         </div>
-                                        <div className="col-sm-6">
-                                            <FormGroup label="* Non-Sewer Fees Due" id="non_sewer_due">
-                                                <input type="number" className="form-control" placeholder="Non-Sewer Fees Due" />
-                                            </FormGroup>
+                                    </a>
+                                    <div
+                                      id="collapsePlatZones"
+                                      className="panel-collapse collapse row"
+                                      role="tabpanel"
+                                      aria-labelledby="#headingTwo"
+                                    >
+                                        <div className="panel-body">
+                                            <div className="col-xs-12">
+                                                { platZonesList }
+                                            </div>
                                         </div>
                                     </div>
-                                    <div className="row">
-                                        <div className="col-xs-12">
-                                            <FormGroup label="* Calculation Notes" id="calculation_note">
-                                                <textarea type="text" className="form-control" placeholder="Calculation Notes" rows="4" />
-                                            </FormGroup>
-                                        </div>
+                                    <div className="row section-heading">
+                                        <h2>Plat Dues</h2>
                                     </div>
-                                </fieldset>
-                                <button className="btn btn-lex">Submit Dues</button>
-                            </form>
-                            { platZonesList }
+                                    <form onSubmit={onPlatDues}>
+                                        <fieldset>
+                                            <div className="row form-subheading">
+                                                <h3>Dues and Calculations</h3>
+                                            </div>
+                                            <div className="row">
+                                                <div className="col-sm-6">
+                                                    <FormGroup label="* Sewer Fees Due" id="sewer_due">
+                                                        <input type="number" className="form-control" placeholder="Sewer Fees Due" />
+                                                    </FormGroup>
+                                                </div>
+                                                <div className="col-sm-6">
+                                                    <FormGroup label="* Non-Sewer Fees Due" id="non_sewer_due">
+                                                        <input type="number" className="form-control" placeholder="Non-Sewer Fees Due" />
+                                                    </FormGroup>
+                                                </div>
+                                            </div>
+                                            <div className="row">
+                                                <div className="col-xs-12">
+                                                    <FormGroup label="* Calculation Notes" id="calculation_note">
+                                                        <textarea type="text" className="form-control" placeholder="Calculation Notes" rows="4" />
+                                                    </FormGroup>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                        <button className="btn btn-lex">Submit Dues</button>
+                                    </form>
+                                </div>
+                            ) : null }
                         </div>
                     </div>
                 </div>

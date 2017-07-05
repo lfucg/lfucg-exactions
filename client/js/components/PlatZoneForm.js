@@ -27,7 +27,8 @@ class PlatZoneForm extends React.Component {
     static propTypes = {
         activeForm: React.PropTypes.object,
         plats: React.PropTypes.object,
-        // plat_zone: React.PropTypes.object,
+        plat_zone_id: React.PropTypes.string,
+        plat_zone_value: React.PropTypes.number,
         acre_id: React.PropTypes.string,
         acre_value: React.PropTypes.number,
         zone_id: React.PropTypes.string,
@@ -39,6 +40,8 @@ class PlatZoneForm extends React.Component {
 
     componentDidMount() {
         this.props.onComponentDidMount({
+            plat_zone_id: this.props.plat_zone_id,
+            plat_zone_value: this.props.plat_zone_value,
             acre_id: this.props.acre_id,
             acre_value: this.props.acre_value,
             zone_id: this.props.zone_id,
@@ -128,13 +131,13 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch, props) {
-    const selectedPlatZone = props.plat_zone;
-    console.log('PLAT ZONE PROPS', selectedPlatZone);
+    // const selectedPlatZone = props.plat_zone_value;
 
     return {
         onComponentDidMount(pass_props) {
             const plat_zone_update = {};
 
+            plat_zone_update[pass_props.plat_zone_id] = pass_props.plat_zone_value;
             plat_zone_update[pass_props.acre_id] = pass_props.acre_value;
             plat_zone_update[pass_props.zone_id] = pass_props.zone_value;
 

@@ -22,12 +22,12 @@
     }
 }
 
-.form-header {
-    background-color: #001A49;
-    color: white;
-    font-weight: lighter;
-    padding: 10px 0;
-    margin-bottom: 3em;
+.section-heading {
+    text-align: center;
+    color: #001A49;
+    border: 2px solid #585858;
+    border-radius: 4px;
+    margin-top: 20px;
 }
 
 .form-subheading {
@@ -39,6 +39,11 @@
     h3 {
         margin: 8px 0px 8px 8px;
     }
+}
+
+.panel-collapse {
+    border: 2px solid #585858;
+    border-radius: 4px;
 }
 
 .form-group {
