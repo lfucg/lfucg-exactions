@@ -230,12 +230,12 @@ class PlatZone(models.Model):
     zone = models.CharField(max_length=100, choices=ZONES)
     acres = models.DecimalField(max_digits=20, decimal_places=2)
 
-    dues_roads = models.DecimalField(max_digits=20, decimal_places=2)
-    dues_open_spaces = models.DecimalField(max_digits=20, decimal_places=2)
-    dues_sewer_cap = models.DecimalField(max_digits=20, decimal_places=2)
-    dues_sewer_trans = models.DecimalField(max_digits=20, decimal_places=2)
-    dues_parks = models.DecimalField(max_digits=20, decimal_places=2)
-    dues_storm_water = models.DecimalField(max_digits=20, decimal_places=2)
+    dues_roads = models.DecimalField(max_digits=20, decimal_places=2, default=0)
+    dues_open_spaces = models.DecimalField(max_digits=20, decimal_places=2, default=0)
+    dues_sewer_cap = models.DecimalField(max_digits=20, decimal_places=2, default=0)
+    dues_sewer_trans = models.DecimalField(max_digits=20, decimal_places=2, default=0)
+    dues_parks = models.DecimalField(max_digits=20, decimal_places=2, default=0)
+    dues_storm_water = models.DecimalField(max_digits=20, decimal_places=2, default=0)
 
     history = HistoricalRecords()
 
