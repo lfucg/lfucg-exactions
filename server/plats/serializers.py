@@ -20,6 +20,7 @@ class SubdivisionSerializer(serializers.ModelSerializer):
             'date_modified',
             'created_by',
             'modified_by',   
+
             'name',
             'gross_acreage',
             'cleaned_gross_acreage',
@@ -51,6 +52,7 @@ class LotSerializer(serializers.ModelSerializer):
             'date_modified',
             'created_by',
             'modified_by',
+
             'lot_number',
             'permit_id',
             'latitude',
@@ -64,6 +66,7 @@ class LotSerializer(serializers.ModelSerializer):
             'address_state',
             'address_zip',
             'address_full',
+
             'dues_roads_dev',
             'dues_roads_own',
             'dues_sewer_trans_dev',
@@ -96,8 +99,17 @@ class PlatZoneSerializer(serializers.ModelSerializer):
             'date_modified',
             'created_by',
             'modified_by',
+
             'zone',
             'acres',
+
+            'dues_roads',
+            'dues_open_spaces',
+            'dues_sewer_cap',
+            'dues_sewer_trans',
+            'dues_parks',
+            'dues_storm_water',
+
             'cleaned_acres',
         )
 
@@ -122,6 +134,7 @@ class PlatSerializer(serializers.ModelSerializer):
             'date_modified',
             'created_by',
             'modified_by',
+
             'name', 
             'total_acreage',          
             'cleaned_total_acreage',
