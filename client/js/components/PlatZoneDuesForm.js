@@ -11,6 +11,7 @@ import {
 } from '../actions/formActions';
 
 import {
+    getPlatID,
     postPlatZone,
     putPlatZoneDues,
 } from '../actions/apiActions';
@@ -168,7 +169,17 @@ function mapDispatchToProps(dispatch, props) {
                         dues_sewer_trans,
                         dues_parks,
                         dues_storm_water,
-                    ));
+                    ))
+                    .then((data_plat_zone) => {
+                        dispatch(getPlatID(data_plat_zone.response.plat))
+                        .then((data_plat) => {
+                            const update = {
+                                sewer_due: data_plat.response.sewer_due,
+                                non_sewer_due: data_plat.response.non_sewer_due,
+                            };
+                            dispatch(formUpdate(update));
+                        });
+                    });
                 } else {
                     dispatch(postPlatZone());
                 }
