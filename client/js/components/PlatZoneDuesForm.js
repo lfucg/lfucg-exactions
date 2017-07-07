@@ -148,16 +148,24 @@ function mapDispatchToProps(dispatch, props) {
             }
         },
         onPlatZoneDuesChange(activeForm) {
-            return () => {
+            return (e, ...args) => {
+                console.log('ACTIVE FORM', activeForm);
+                const field_name = typeof e.target.id !== 'undefined' ? e.target.id : args[1];
+                const value = typeof e.target.value !== 'undefined' ? e.target.value : args[1];
+                const update = {
+                    [field_name]: value,
+                };
+                console.log('UPDATE ED', update);
+                dispatch(formUpdate(update));
                 if (selectedPlatZone) {
                     const zone = activeForm.activeForm[`${props.zone_id}`];
                     const acres = activeForm.activeForm[`${props.acre_id}`];
-                    const dues_roads = activeForm.activeForm[`${props.dues_roads_id}`];
-                    const dues_open_spaces = activeForm.activeForm[`${props.dues_open_spaces_id}`];
-                    const dues_sewer_cap = activeForm.activeForm[`${props.dues_sewer_cap_id}`];
-                    const dues_sewer_trans = activeForm.activeForm[`${props.dues_sewer_trans_id}`];
-                    const dues_parks = activeForm.activeForm[`${props.dues_parks_id}`];
-                    const dues_storm_water = activeForm.activeForm[`${props.dues_storm_water_id}`];
+                    const dues_roads = (field_name === props.dues_roads_id) ? value : activeForm.activeForm[`${props.dues_roads_id}`];
+                    const dues_open_spaces = (field_name === props.dues_open_spaces_id) ? value : activeForm.activeForm[`${props.dues_open_spaces_id}`];
+                    const dues_sewer_cap = (field_name === props.dues_sewer_cap_id) ? value : activeForm.activeForm[`${props.dues_sewer_cap_id}`];
+                    const dues_sewer_trans = (field_name === props.dues_sewer_trans_id) ? value : activeForm.activeForm[`${props.dues_sewer_trans_id}`];
+                    const dues_parks = (field_name === props.dues_parks_id) ? value : activeForm.activeForm[`${props.dues_parks_id}`];
+                    const dues_storm_water = (field_name === props.dues_storm_water_id) ? value : activeForm.activeForm[`${props.dues_storm_water_id}`];
 
                     dispatch(putPlatZoneDues(
                         selectedPlatZone,
@@ -173,11 +181,11 @@ function mapDispatchToProps(dispatch, props) {
                     .then((data_plat_zone) => {
                         dispatch(getPlatID(data_plat_zone.response.plat))
                         .then((data_plat) => {
-                            const update = {
+                            const update2 = {
                                 sewer_due: data_plat.response.sewer_due,
                                 non_sewer_due: data_plat.response.non_sewer_due,
                             };
-                            dispatch(formUpdate(update));
+                            dispatch(formUpdate(update2));
                         });
                     });
                 } else {
