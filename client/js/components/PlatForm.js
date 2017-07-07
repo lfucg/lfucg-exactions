@@ -11,6 +11,7 @@ import Footer from './Footer';
 
 import FormGroup from './FormGroup';
 import PlatZoneForm from './PlatZoneForm';
+import PlatZoneDuesForm from './PlatZoneDuesForm';
 
 import {
     formInit,
@@ -66,12 +67,42 @@ class PlatForm extends React.Component {
                     <PlatZoneForm
                       props={this.props}
                       acre_id={`${single_plat_zone.id}_acres`}
+                      acre_value={single_plat_zone.cleaned_acres}
                       zone_id={`${single_plat_zone.id}_zone`}
                       zone_value={single_plat_zone.zone}
-                      acre_value={single_plat_zone.cleaned_acres}
                       plat_zone_id={`${single_plat_zone.id}_plat_zone`}
                       plat_zone_value={single_plat_zone.id}
                     />
+                </div>
+            );
+        })(plats.plat_zone)) : null;
+
+        const platZoneDuesList = plats.plat_zone ? (map((single_plat_zone) => {
+            return (
+                <div key={single_plat_zone.id} >
+                    <div className={plats.plat_zone.length < 1 ? 'col-xs-6' : 'col-xs-4'}>
+                        <PlatZoneDuesForm
+                          props={this.props}
+                          plat_zone_id={`${single_plat_zone.id}_plat_zone`}
+                          plat_zone_value={single_plat_zone.id}
+                          zone_id={`${single_plat_zone.id}_zone`}
+                          zone_value={single_plat_zone.zone}
+                          acre_id={`${single_plat_zone.id}_acres`}
+                          acre_value={single_plat_zone.cleaned_acres}
+                          dues_roads_id={`${single_plat_zone.id}_dues_roads`}
+                          dues_roads_value={single_plat_zone.dues_roads}
+                          dues_open_spaces_id={`${single_plat_zone.id}_dues_open_spaces`}
+                          dues_open_spaces_value={single_plat_zone.dues_open_spaces}
+                          dues_sewer_cap_id={`${single_plat_zone.id}_dues_sewer_cap`}
+                          dues_sewer_cap_value={single_plat_zone.dues_sewer_cap}
+                          dues_sewer_trans_id={`${single_plat_zone.id}_dues_sewer_trans`}
+                          dues_sewer_trans_value={single_plat_zone.dues_sewer_trans}
+                          dues_parks_id={`${single_plat_zone.id}_dues_parks`}
+                          dues_parks_value={single_plat_zone.dues_parks}
+                          dues_storm_water_id={`${single_plat_zone.id}_dues_storm_water`}
+                          dues_storm_water_value={single_plat_zone.dues_storm_water}
+                        />
+                    </div>
                 </div>
             );
         })(plats.plat_zone)) : null;
@@ -313,6 +344,38 @@ class PlatForm extends React.Component {
                                             <div className="row form-subheading">
                                                 <h3>Dues and Calculations</h3>
                                             </div>
+                                            <div className="row">
+                                                <div className="col-xs-3">
+                                                    <div className="col-xs-12 dues-table-heading">
+                                                        <h3>Zone</h3>
+                                                    </div>
+                                                    <div className="col-xs-12 dues-label">
+                                                        <h4>Acres</h4>
+                                                    </div>
+                                                    <div className="col-xs-12 dues-label">
+                                                        <h4>Roads</h4>
+                                                    </div>
+                                                    <div className="col-xs-12 dues-label">
+                                                        <h4>Open Space</h4>
+                                                    </div>
+                                                    <div className="col-xs-12 dues-label">
+                                                        <h4>Sewer Capacity</h4>
+                                                    </div>
+                                                    <div className="col-xs-12 dues-label">
+                                                        <h4>Sewer Transm.</h4>
+                                                    </div>
+                                                    <div className="col-xs-12 dues-label">
+                                                        <h4>Parks</h4>
+                                                    </div>
+                                                    <div className="col-xs-12 dues-label">
+                                                        <h4>Storm Water</h4>
+                                                    </div>
+                                                </div>
+                                                <div className="col-xs-9">
+                                                    {platZoneDuesList}
+                                                </div>
+                                            </div>
+                                            <div className="col-xs-12 dues-table-heading"><h3>Plat Dues</h3></div>
                                             <div className="row">
                                                 <div className="col-sm-6">
                                                     <FormGroup label="* Sewer Fees Due" id="sewer_due">

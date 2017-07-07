@@ -25,6 +25,7 @@ import {
     GET_PLAT_ZONE_ID,
     POST_PLAT_ZONE,
     PUT_PLAT_ZONE,
+    PUT_PLAT_ZONE_DUES,
 
     GET_LOTS,
     GET_LOT_ID,
@@ -380,6 +381,50 @@ export function putPlatZone(selectedPlatZone, zone, acres) {
                 plat,
                 zone,
                 acres,
+            };
+        },
+    };
+}
+
+export function putPlatZoneDues(
+    selectedPlatZone,
+    zone,
+    acres,
+    dues_roads,
+    dues_open_spaces,
+    dues_sewer_cap,
+    dues_sewer_trans,
+    dues_parks,
+    dues_storm_water,
+) {
+    return {
+        type: API_CALL,
+        endpoint: PUT_PLAT_ZONE_DUES,
+        url: `/platZone/${selectedPlatZone}/`,
+        method: 'PUT',
+        body: (getState) => {
+            const {
+                activeForm,
+                currentUser,
+            } = getState();
+            const {
+                plat,
+            } = activeForm;
+            const {
+                id,
+            } = currentUser;
+            return {
+                created_by: id,
+                modified_by: id,
+                plat,
+                zone,
+                acres,
+                dues_roads,
+                dues_open_spaces,
+                dues_sewer_cap,
+                dues_sewer_trans,
+                dues_parks,
+                dues_storm_water,
             };
         },
     };

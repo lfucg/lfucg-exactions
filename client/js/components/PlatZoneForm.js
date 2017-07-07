@@ -1,24 +1,16 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import {
-    Link,
     hashHistory,
 } from 'react-router';
-import { map } from 'ramda';
 
 import FormGroup from './FormGroup';
 
 import {
-    formInit,
     formUpdate,
 } from '../actions/formActions';
 
 import {
-    getPlatID,
-    postPlat,
-    putPlat,
-    getPlatZones,
-    getPlatZoneID,
     postPlatZone,
     putPlatZone,
 } from '../actions/apiActions';

@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 
 from simple_history.models import HistoricalRecords
+from notes.models import Rate
 
 ZONES = (
     ('EAR-1', 'EAR-1'),
@@ -241,6 +242,28 @@ class PlatZone(models.Model):
 
     def __str__(self):
         return self.zone
+
+    def save(self, *args, **kwargs):
+        road_rate = Rate.objects.get(zone=self.zone, category='ROADS')
+        if road_rate is not None:
+            self.dues_roads = (self.acres * road_rate.rate)
+        open_space_rate = Rate.objects.get(zone=self.zone, category='OPEN_SPACE')
+        if open_space_rate is not None:
+            self.dues_open_spaces = (self.acres * open_space_rate.rate)
+        sewer_cap_rate = Rate.objects.get(zone=self.zone, category='SEWER_CAP')
+        if sewer_cap_rate is not None:
+            self.dues_sewer_cap = (self.acres * sewer_cap_rate.rate)
+        sewer_trans_rate = Rate.objects.get(zone=self.zone, category='SEWER_TRANS')
+        if sewer_trans_rate is not None:
+            self.dues_sewer_trans = (self.acres * sewer_trans_rate.rate)
+        parks_rate = Rate.objects.get(zone=self.zone, category='PARK')
+        if parks_rate is not None:
+            self.dues_parks = (self.acres * parks_rate.rate)
+        storm_water_rate = Rate.objects.get(zone=self.zone, category='STORM_WATER')
+        if storm_water_rate is not None:
+            self.dues_storm_water = (self.acres * storm_water_rate.rate)
+
+        super().save(*args, **kwargs)
 
 class CalculationWorksheet(models.Model):
     is_active = models.BooleanField(default=True)
