@@ -428,15 +428,15 @@ function mapDispatchToProps(dispatch, params) {
             if (selectedPlat) {
                 dispatch(getPlatID(selectedPlat))
                 .then((data_plat) => {
-                    data_plat.response.subdivision ? (
+                    if (data_plat.response.subdivision) {
                         dispatch(getSubdivisionID(data_plat.response.subdivision))
                         .then((data_sub_id) => {
                             const update2 = {
                                 subdivision_name: data_sub_id.response.name,
                             };
                             dispatch(formUpdate(update2));
-                        })
-                    ) : null;
+                        });
+                    }
                     if (!data_plat.response.plat_zone) {
                         const zone_update = {
                             acres: data_plat.response.cleaned_total_acreage,
