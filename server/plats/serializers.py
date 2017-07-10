@@ -20,6 +20,7 @@ class SubdivisionSerializer(serializers.ModelSerializer):
             'date_modified',
             'created_by',
             'modified_by',   
+
             'name',
             'gross_acreage',
             'cleaned_gross_acreage',
@@ -51,6 +52,7 @@ class LotSerializer(serializers.ModelSerializer):
             'date_modified',
             'created_by',
             'modified_by',
+
             'lot_number',
             'permit_id',
             'latitude',
@@ -64,6 +66,7 @@ class LotSerializer(serializers.ModelSerializer):
             'address_state',
             'address_zip',
             'address_full',
+
             'dues_roads_dev',
             'dues_roads_own',
             'dues_sewer_trans_dev',
@@ -80,6 +83,12 @@ class LotSerializer(serializers.ModelSerializer):
         )
 
 class PlatZoneSerializer(serializers.ModelSerializer):
+    cleaned_acres = serializers.SerializerMethodField(read_only=True)
+
+    def get_cleaned_acres(self, obj):
+        set_acreage = str(obj.acres).rstrip('0').rstrip('.')
+        return set_acreage
+
     class Meta:
         model = PlatZone
         fields = (
@@ -90,13 +99,23 @@ class PlatZoneSerializer(serializers.ModelSerializer):
             'date_modified',
             'created_by',
             'modified_by',
+
             'zone',
             'acres',
+
+            'dues_roads',
+            'dues_open_spaces',
+            'dues_sewer_cap',
+            'dues_sewer_trans',
+            'dues_parks',
+            'dues_storm_water',
+
+            'cleaned_acres',
         )
 
 class PlatSerializer(serializers.ModelSerializer):
-    lots = LotSerializer(many=True, read_only=True)
-    plat_zones = PlatZoneSerializer(many=True, read_only=True)
+    lot = LotSerializer(many=True, read_only=True)
+    plat_zone = PlatZoneSerializer(many=True, read_only=True)
     cleaned_total_acreage = serializers.SerializerMethodField(read_only=True)
 
     def get_cleaned_total_acreage(self, obj):
@@ -115,6 +134,7 @@ class PlatSerializer(serializers.ModelSerializer):
             'date_modified',
             'created_by',
             'modified_by',
+
             'name', 
             'total_acreage',          
             'cleaned_total_acreage',
@@ -132,6 +152,6 @@ class PlatSerializer(serializers.ModelSerializer):
             'calculation_note',
             'sewer_due',
             'non_sewer_due',
-            'lots',
-            'plat_zones',
+            'lot',
+            'plat_zone',
         )

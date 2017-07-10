@@ -18,6 +18,12 @@ export const GET_PLAT_ID = 'GET_PLAT_ID';
 export const POST_PLAT = 'POST_PLAT';
 export const PUT_PLAT = 'PUT_PLAT';
 
+export const GET_PLAT_ZONES = 'GET_PLAT_ZONES';
+export const GET_PLAT_ZONE_ID = 'GET_PLAT_ZONE_ID';
+export const POST_PLAT_ZONE = 'POST_PLAT_ZONE';
+export const PUT_PLAT_ZONE = 'PUT_PLAT_ZONE';
+export const PUT_PLAT_ZONE_DUES = 'PUT_PLAT_ZONE_DUES';
+
 export const GET_LOTS = 'GET_LOTS';
 export const GET_LOT_ID = 'GET_LOT_ID';
 export const POST_LOT = 'POST_LOT';

@@ -213,9 +213,15 @@ class LotForm extends React.Component {
                                         <div className="col-sm-6 form-group">
                                             <label htmlFor="plat" className="form-label" id="plat">* Plat</label>
                                             <select className="form-control" id="plat" onChange={formChange('plat')} >
-                                                <option value="choose_plat" aria-label="Select a Plat">
-                                                    {activeForm.plat ? activeForm.plat_name : <span>Select a Plat</span>}
-                                                </option>
+                                                {activeForm.plat ? (
+                                                    <option value="choose_plat" aria-label={activeForm.plat_name}>
+                                                        {activeForm.plat_name}
+                                                    </option>
+                                                ) : (
+                                                    <option value="choose_plat" aria-label="Select a Plat">
+                                                        Select a Plat
+                                                    </option>
+                                                )}
                                                 {platsList}
                                             </select>
                                         </div>
@@ -358,47 +364,49 @@ function mapDispatchToProps(dispatch, params) {
         onComponentDidMount() {
             dispatch(formInit());
             dispatch(getPlats());
-            dispatch(getLotID(selectedLot))
-            .then((data_lot) => {
-                data_lot.response.plat ? (
-                    dispatch(getPlatID(data_lot.response.plat))
-                    .then((data_plat_id) => {
-                        const update2 = {
-                            plat_name: data_plat_id.response.name,
-                        };
-                        dispatch(formUpdate(update2));
-                    })
-                ) : null;
-                const update = {
-                    address_number: data_lot.response.address_number,
-                    address_street: data_lot.response.address_street,
-                    address_direction: data_lot.response.address_direction,
-                    address_unit: data_lot.response.address_unit,
-                    address_suffix: data_lot.response.address_suffix,
-                    address_city: data_lot.response.address_city,
-                    address_state: data_lot.response.address_state,
-                    address_zip: data_lot.response.address_zip,
-                    plat: data_lot.response.plat,
-                    lot_number: data_lot.response.lot_number,
-                    parcel_id: data_lot.response.parcel_id,
-                    permit_id: data_lot.response.permit_id,
-                    latitude: data_lot.response.latitude,
-                    longitude: data_lot.response.longitude,
-                    dues_roads_dev: data_lot.response.dues_roads_dev,
-                    dues_roads_own: data_lot.response.dues_roads_own,
-                    dues_sewer_trans_dev: data_lot.response.dues_sewer_trans_dev,
-                    dues_sewer_trans_own: data_lot.response.dues_sewer_trans_own,
-                    dues_sewer_cap_dev: data_lot.response.dues_sewer_cap_dev,
-                    dues_sewer_cap_own: data_lot.response.dues_sewer_cap_own,
-                    dues_parks_dev: data_lot.response.dues_parks_dev,
-                    dues_parks_own: data_lot.response.dues_parks_own,
-                    dues_storm_dev: data_lot.response.dues_storm_dev,
-                    dues_storm_own: data_lot.response.dues_storm_own,
-                    dues_open_space_dev: data_lot.response.dues_open_space_dev,
-                    dues_open_space_own: data_lot.response.dues_open_space_own,
-                };
-                dispatch(formUpdate(update));
-            });
+            if (selectedLot) {
+                dispatch(getLotID(selectedLot))
+                .then((data_lot) => {
+                    data_lot.response.plat ? (
+                        dispatch(getPlatID(data_lot.response.plat))
+                        .then((data_plat_id) => {
+                            const update2 = {
+                                plat_name: data_plat_id.response.name,
+                            };
+                            dispatch(formUpdate(update2));
+                        })
+                    ) : null;
+                    const update = {
+                        address_number: data_lot.response.address_number,
+                        address_street: data_lot.response.address_street,
+                        address_direction: data_lot.response.address_direction,
+                        address_unit: data_lot.response.address_unit,
+                        address_suffix: data_lot.response.address_suffix,
+                        address_city: data_lot.response.address_city,
+                        address_state: data_lot.response.address_state,
+                        address_zip: data_lot.response.address_zip,
+                        plat: data_lot.response.plat,
+                        lot_number: data_lot.response.lot_number,
+                        parcel_id: data_lot.response.parcel_id,
+                        permit_id: data_lot.response.permit_id,
+                        latitude: data_lot.response.latitude,
+                        longitude: data_lot.response.longitude,
+                        dues_roads_dev: data_lot.response.dues_roads_dev,
+                        dues_roads_own: data_lot.response.dues_roads_own,
+                        dues_sewer_trans_dev: data_lot.response.dues_sewer_trans_dev,
+                        dues_sewer_trans_own: data_lot.response.dues_sewer_trans_own,
+                        dues_sewer_cap_dev: data_lot.response.dues_sewer_cap_dev,
+                        dues_sewer_cap_own: data_lot.response.dues_sewer_cap_own,
+                        dues_parks_dev: data_lot.response.dues_parks_dev,
+                        dues_parks_own: data_lot.response.dues_parks_own,
+                        dues_storm_dev: data_lot.response.dues_storm_dev,
+                        dues_storm_own: data_lot.response.dues_storm_own,
+                        dues_open_space_dev: data_lot.response.dues_open_space_dev,
+                        dues_open_space_own: data_lot.response.dues_open_space_own,
+                    };
+                    dispatch(formUpdate(update));
+                });
+            }
         },
         formChange(field) {
             return (e, ...args) => {
@@ -419,8 +427,8 @@ function mapDispatchToProps(dispatch, params) {
         onSubmit(event) {
             event.preventDefault();
             dispatch(postLot())
-            .then(() => {
-                hashHistory.push('lot/existing');
+            .then((data_post) => {
+                hashHistory.push(`lot/form/${data_post.response.id}`);
             });
         },
     };

@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 
 from simple_history.models import HistoricalRecords
+from notes.models import Rate
 
 ZONES = (
     ('EAR-1', 'EAR-1'),
@@ -74,10 +75,10 @@ class Plat(models.Model):
     cabinet = models.CharField(max_length=200)
     slide = models.CharField(max_length=200)
 
-    calculation_note = models.TextField()
+    calculation_note = models.TextField(default='None')
 
-    sewer_due = models.DecimalField(max_digits=20, decimal_places=2)
-    non_sewer_due = models.DecimalField(max_digits=20, decimal_places=2)
+    sewer_due = models.DecimalField(max_digits=20, decimal_places=2, default=0)
+    non_sewer_due = models.DecimalField(max_digits=20, decimal_places=2, default=0)
 
     history = HistoricalRecords()
 
@@ -91,6 +92,17 @@ class Plat(models.Model):
                 created_by = existing_plat.created_by
         except:
             created_by = self.created_by
+
+        plat_zones = self.plat_zone.all()
+        if plat_zones is not None:
+            sewer_calc = 0
+            non_sewer_calc = 0
+            for plat_zone in plat_zones:
+                sewer_calc += (plat_zone.dues_sewer_cap + plat_zone.dues_sewer_trans)
+                non_sewer_calc += (plat_zone.dues_roads + plat_zone.dues_open_spaces + plat_zone.dues_parks + plat_zone.dues_storm_water)
+
+            self.sewer_due = sewer_calc
+            self.non_sewer_due = non_sewer_calc
 
         super(Plat, self).save(*args, **kwargs)
 
@@ -184,22 +196,22 @@ class Lot(models.Model):
     address_zip = models.CharField(max_length=10)
     address_full = models.CharField(max_length=300)
 
-    dues_roads_dev = models.DecimalField(max_digits=20, decimal_places=2)
-    dues_roads_own = models.DecimalField(max_digits=20, decimal_places=2)
+    dues_roads_dev = models.DecimalField(max_digits=20, decimal_places=2, default=0)
+    dues_roads_own = models.DecimalField(max_digits=20, decimal_places=2, default=0)
     
-    dues_sewer_trans_dev = models.DecimalField(max_digits=20, decimal_places=2)
-    dues_sewer_trans_own = models.DecimalField(max_digits=20, decimal_places=2)
-    dues_sewer_cap_dev = models.DecimalField(max_digits=20, decimal_places=2)
-    dues_sewer_cap_own = models.DecimalField(max_digits=20, decimal_places=2)
+    dues_sewer_trans_dev = models.DecimalField(max_digits=20, decimal_places=2, default=0)
+    dues_sewer_trans_own = models.DecimalField(max_digits=20, decimal_places=2, default=0)
+    dues_sewer_cap_dev = models.DecimalField(max_digits=20, decimal_places=2, default=0)
+    dues_sewer_cap_own = models.DecimalField(max_digits=20, decimal_places=2, default=0)
 
-    dues_parks_dev = models.DecimalField(max_digits=20, decimal_places=2)
-    dues_parks_own = models.DecimalField(max_digits=20, decimal_places=2)
+    dues_parks_dev = models.DecimalField(max_digits=20, decimal_places=2, default=0)
+    dues_parks_own = models.DecimalField(max_digits=20, decimal_places=2, default=0)
 
-    dues_storm_dev = models.DecimalField(max_digits=20, decimal_places=2)
-    dues_storm_own = models.DecimalField(max_digits=20, decimal_places=2)
+    dues_storm_dev = models.DecimalField(max_digits=20, decimal_places=2, default=0)
+    dues_storm_own = models.DecimalField(max_digits=20, decimal_places=2, default=0)
 
-    dues_open_space_dev = models.DecimalField(max_digits=20, decimal_places=2)
-    dues_open_space_own = models.DecimalField(max_digits=20, decimal_places=2)
+    dues_open_space_dev = models.DecimalField(max_digits=20, decimal_places=2, default=0)
+    dues_open_space_own = models.DecimalField(max_digits=20, decimal_places=2, default=0)
 
     history = HistoricalRecords()
 
@@ -230,14 +242,53 @@ class PlatZone(models.Model):
     zone = models.CharField(max_length=100, choices=ZONES)
     acres = models.DecimalField(max_digits=20, decimal_places=2)
 
+    dues_roads = models.DecimalField(max_digits=20, decimal_places=2, default=0)
+    dues_open_spaces = models.DecimalField(max_digits=20, decimal_places=2, default=0)
+    dues_sewer_cap = models.DecimalField(max_digits=20, decimal_places=2, default=0)
+    dues_sewer_trans = models.DecimalField(max_digits=20, decimal_places=2, default=0)
+    dues_parks = models.DecimalField(max_digits=20, decimal_places=2, default=0)
+    dues_storm_water = models.DecimalField(max_digits=20, decimal_places=2, default=0)
+
     history = HistoricalRecords()
 
     def __str__(self):
         return self.zone
 
+    def save(self, *args, **kwargs):
+        if self.dues_roads == 0:
+            road_rate = Rate.objects.get(zone=self.zone, category='ROADS')
+            if road_rate is not None:
+                self.dues_roads = (self.acres * road_rate.rate)
+        if self.dues_open_spaces == 0:
+            open_space_rate = Rate.objects.get(zone=self.zone, category='OPEN_SPACE')
+            if open_space_rate is not None:
+                self.dues_open_spaces = (self.acres * open_space_rate.rate)
+        if self.dues_sewer_cap == 0:
+            sewer_cap_rate = Rate.objects.get(zone=self.zone, category='SEWER_CAP')
+            if sewer_cap_rate is not None:
+                self.dues_sewer_cap = (self.acres * sewer_cap_rate.rate)
+        if self.dues_sewer_trans == 0:
+            sewer_trans_rate = Rate.objects.get(zone=self.zone, category='SEWER_TRANS')
+            if sewer_trans_rate is not None:
+                self.dues_sewer_trans = (self.acres * sewer_trans_rate.rate)
+        if self.dues_parks == 0:
+            parks_rate = Rate.objects.get(zone=self.zone, category='PARK')
+            if parks_rate is not None:
+                self.dues_parks = (self.acres * parks_rate.rate)
+        if self.dues_storm_water == 0:
+            storm_water_rate = Rate.objects.get(zone=self.zone, category='STORM_WATER')
+            if storm_water_rate is not None:
+                self.dues_storm_water = (self.acres * storm_water_rate.rate)
+
+        super(PlatZone, self).save(*args, **kwargs)
+        
+        plat_model = self.plat
+        plat_model.save()
+
 class CalculationWorksheet(models.Model):
     is_active = models.BooleanField(default=True)
 
+    name = models.CharField(max_length=200)
     acres = models.DecimalField(max_digits=20, decimal_places=2)
     zone = models.CharField(max_length=100, choices=ZONES)
 

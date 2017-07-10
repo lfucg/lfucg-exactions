@@ -21,6 +21,12 @@ import {
     POST_PLAT,
     PUT_PLAT,
 
+    GET_PLAT_ZONES,
+    GET_PLAT_ZONE_ID,
+    POST_PLAT_ZONE,
+    PUT_PLAT_ZONE,
+    PUT_PLAT_ZONE_DUES,
+
     GET_LOTS,
     GET_LOT_ID,
     POST_LOT,
@@ -256,6 +262,169 @@ export function postPlat() {
                 calculation_note,
                 sewer_due,
                 non_sewer_due,
+            };
+        },
+    };
+}
+
+export function putPlat(selectedPlat) {
+    return {
+        type: API_CALL,
+        endpoint: PUT_PLAT,
+        url: `/plat/${selectedPlat}/`,
+        method: 'PUT',
+        body: (getState) => {
+            const {
+                activeForm,
+                currentUser,
+            } = getState();
+            const {
+                subdivision,
+                name,
+                date_recorded,
+                total_acreage,
+                latitude,
+                longitude,
+                plat_type,
+                expansion_area,
+                unit,
+                section,
+                block,
+                buildable_lots,
+                non_buildable_lots,
+                cabinet,
+                slide,
+                calculation_note,
+                sewer_due,
+                non_sewer_due,
+            } = activeForm;
+            const {
+                id,
+            } = currentUser;
+            return {
+                created_by: id,
+                modified_by: id,
+                name,
+                subdivision,
+                date_recorded,
+                total_acreage,
+                latitude,
+                longitude,
+                plat_type,
+                expansion_area,
+                unit,
+                section,
+                block,
+                buildable_lots,
+                non_buildable_lots,
+                cabinet,
+                slide,
+                calculation_note,
+                sewer_due,
+                non_sewer_due,
+            };
+        },
+    };
+}
+
+// PLAT_ZONES
+export function postPlatZone() {
+    return {
+        type: API_CALL,
+        endpoint: POST_PLAT_ZONE,
+        url: '/platZone/',
+        method: 'POST',
+        body: (getState) => {
+            const {
+                activeForm,
+                currentUser,
+            } = getState();
+            const {
+                plat,
+                zone,
+                acres,
+            } = activeForm;
+            const {
+                id,
+            } = currentUser;
+            return {
+                created_by: id,
+                modified_by: id,
+                plat,
+                zone,
+                acres,
+            };
+        },
+    };
+}
+
+export function putPlatZone(selectedPlatZone, zone, acres) {
+    return {
+        type: API_CALL,
+        endpoint: PUT_PLAT_ZONE,
+        url: `/platZone/${selectedPlatZone}/`,
+        method: 'PUT',
+        body: (getState) => {
+            const {
+                activeForm,
+                currentUser,
+            } = getState();
+            const {
+                plat,
+            } = activeForm;
+            const {
+                id,
+            } = currentUser;
+            return {
+                created_by: id,
+                modified_by: id,
+                plat,
+                zone,
+                acres,
+            };
+        },
+    };
+}
+
+export function putPlatZoneDues(
+    selectedPlatZone,
+    zone,
+    acres,
+    dues_roads,
+    dues_open_spaces,
+    dues_sewer_cap,
+    dues_sewer_trans,
+    dues_parks,
+    dues_storm_water,
+) {
+    return {
+        type: API_CALL,
+        endpoint: PUT_PLAT_ZONE_DUES,
+        url: `/platZone/${selectedPlatZone}/`,
+        method: 'PUT',
+        body: (getState) => {
+            const {
+                activeForm,
+                currentUser,
+            } = getState();
+            const {
+                plat,
+            } = activeForm;
+            const {
+                id,
+            } = currentUser;
+            return {
+                created_by: id,
+                modified_by: id,
+                plat,
+                zone,
+                acres,
+                dues_roads,
+                dues_open_spaces,
+                dues_sewer_cap,
+                dues_sewer_trans,
+                dues_parks,
+                dues_storm_water,
             };
         },
     };
