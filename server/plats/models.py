@@ -280,9 +280,10 @@ class PlatZone(models.Model):
             if storm_water_rate is not None:
                 self.dues_storm_water = (self.acres * storm_water_rate.rate)
 
+        super(PlatZone, self).save(*args, **kwargs)
+        
         plat_model = self.plat
         plat_model.save()
-        super(PlatZone, self).save(*args, **kwargs)
 
 class CalculationWorksheet(models.Model):
     is_active = models.BooleanField(default=True)

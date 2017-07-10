@@ -74,7 +74,7 @@ class PlatZoneForm extends React.Component {
 
         return (
             <div className="plat-zone-form">
-                <form onChange={onPlatZoneDuesChange({ activeForm })} >
+                <form onBlur={onPlatZoneDuesChange({ activeForm })} >
                     <fieldset>
                         <div className="row dues-table-heading">
                             <h3>{this.props.zone_value}</h3>
@@ -149,13 +149,11 @@ function mapDispatchToProps(dispatch, props) {
         },
         onPlatZoneDuesChange(activeForm) {
             return (e, ...args) => {
-                console.log('ACTIVE FORM', activeForm);
                 const field_name = typeof e.target.id !== 'undefined' ? e.target.id : args[1];
                 const value = typeof e.target.value !== 'undefined' ? e.target.value : args[1];
                 const update = {
                     [field_name]: value,
                 };
-                console.log('UPDATE ED', update);
                 dispatch(formUpdate(update));
                 if (selectedPlatZone) {
                     const zone = activeForm.activeForm[`${props.zone_id}`];
