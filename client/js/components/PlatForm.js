@@ -146,7 +146,7 @@ class PlatForm extends React.Component {
                               aria-expanded="false"
                               aria-controls="collapseGeneralPlat"
                             >
-                                <div className="row section-heading" role="tab" id="headingTwo">
+                                <div className="row section-heading" role="tab" id="headingPlat">
                                     <h2>General Plat Information</h2>
                                     {activeForm.first_section ?
                                         <h4>(Click to View or Edit)</h4>
@@ -157,7 +157,7 @@ class PlatForm extends React.Component {
                               id="collapseGeneralPlat"
                               className={activeForm.first_section ? 'panel-collapse collapse row' : 'panel-collapse row'}
                               role="tabpanel"
-                              aria-labelledby="#headingTwo"
+                              aria-labelledby="#headingPlat"
                             >
                                 <div className="panel-body">
                                     <form onSubmit={onPlatSubmit} className="col-xs-12">
@@ -307,7 +307,7 @@ class PlatForm extends React.Component {
                                       aria-expanded="false"
                                       aria-controls="collapsePlatZones"
                                     >
-                                        <div className="row section-heading" role="tab" id="headingTwo">
+                                        <div className="row section-heading" role="tab" id="headingPlatZone">
                                             <h2>Plat Zones</h2>
                                             <h4>(Click to View or Edit)</h4>
                                         </div>
@@ -316,7 +316,7 @@ class PlatForm extends React.Component {
                                       id="collapsePlatZones"
                                       className="panel-collapse collapse row"
                                       role="tabpanel"
-                                      aria-labelledby="#headingTwo"
+                                      aria-labelledby="#headingPlatZone"
                                     >
                                         <div className="panel-body">
                                             <div className="col-xs-12">
@@ -437,7 +437,7 @@ function mapDispatchToProps(dispatch, params) {
                             dispatch(formUpdate(update2));
                         });
                     }
-                    if (!data_plat.response.plat_zone) {
+                    if (data_plat.response.plat_zone && data_plat.response.plat_zone.length === 0) {
                         const zone_update = {
                             acres: data_plat.response.cleaned_total_acreage,
                         };
