@@ -359,7 +359,10 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch, params) {
-    const selectedLot = params.params.id;
+    const params_location = params.location.pathname;
+    const selectedLot = (params_location.includes('lot/form/plat')) ? null : (params.params.id);
+    const plat_start = (params_location.includes('lot/form/plat')) ? (params.params.id) : null;
+
     return {
         onComponentDidMount() {
             dispatch(formInit());
@@ -367,15 +370,15 @@ function mapDispatchToProps(dispatch, params) {
             if (selectedLot) {
                 dispatch(getLotID(selectedLot))
                 .then((data_lot) => {
-                    data_lot.response.plat ? (
+                    if (data_lot.response.plat) {
                         dispatch(getPlatID(data_lot.response.plat))
                         .then((data_plat_id) => {
                             const update2 = {
                                 plat_name: data_plat_id.response.name,
                             };
                             dispatch(formUpdate(update2));
-                        })
-                    ) : null;
+                        });
+                    }
                     const update = {
                         address_number: data_lot.response.address_number,
                         address_street: data_lot.response.address_street,
@@ -405,6 +408,15 @@ function mapDispatchToProps(dispatch, params) {
                         dues_open_space_own: data_lot.response.dues_open_space_own,
                     };
                     dispatch(formUpdate(update));
+                });
+            } else if (plat_start) {
+                dispatch(getPlatID(plat_start))
+                .then((data_plat_start) => {
+                    const plat_update = {
+                        plat: data_plat_start.response.id,
+                        plat_name: data_plat_start.response.name,
+                    };
+                    dispatch(formUpdate(plat_update));
                 });
             }
         },
