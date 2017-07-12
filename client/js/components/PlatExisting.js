@@ -70,12 +70,17 @@ class PlatExisting extends React.Component {
 
                 <div className="form-header">
                     <div className="container">
-                        <div className="col-sm-9">
-                            <h1>PLATS - EXISTING</h1>
-                        </div>
-                        <div className="col-sm-3">
-                            <Link to="plat" className="btn btn-lex-reverse" role="link">Return to Plats</Link>
-                        </div>
+                        <h1>PLATS - EXISTING</h1>
+                    </div>
+                </div>
+                <div className="breadcrumb">
+                    <div className="container">
+                        <h4>
+                            <Link to="dashboard/" role="link">Home</Link>
+                            <span> / </span>
+                            <Link to="plat" role="link">Plat</Link>
+                            <span> / </span>
+                        </h4>
                     </div>
                 </div>
                 <div className="inside-body">

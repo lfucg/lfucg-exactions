@@ -72,12 +72,17 @@ class LotExisting extends React.Component {
 
                 <div className="form-header">
                     <div className="container">
-                        <div className="col-sm-9">
-                            <h1>LOTS - EXISTING</h1>
-                        </div>
-                        <div className="col-sm-3">
-                            <Link to="lot" className="btn btn-lex-reverse" role="link">Return to Lots</Link>
-                        </div>
+                        <h1>LOTS - EXISTING</h1>
+                    </div>
+                </div>
+                <div className="breadcrumb">
+                    <div className="container">
+                        <h4>
+                            <Link to="dashboard/" role="link">Home</Link>
+                            <span> / </span>
+                            <Link to="lot" role="link">Lot</Link>
+                            <span> / </span>
+                        </h4>
                     </div>
                 </div>
                 <div className="inside-body">
