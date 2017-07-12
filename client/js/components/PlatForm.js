@@ -402,7 +402,7 @@ class PlatForm extends React.Component {
                                             <button className="btn btn-lex" >Submit Dues</button>
                                         </div>
                                         <div className="col-xs-offset-1 col-xs-4">
-                                            <button className="btn btn-lex" onSubmit={onPlatAndCreateLot} >Submit and Create Lot</button>
+                                            <button className="btn btn-lex" onClick={onPlatAndCreateLot} >Submit and Create Lot</button>
                                         </div>
                                     </form>
                                 </div>
@@ -530,10 +530,13 @@ function mapDispatchToProps(dispatch, params) {
             }
         },
         onPlatAndCreateLot() {
+            console.log('PLAT PUSH');
             if (selectedPlat) {
+                console.log('PUSH CREATE', selectedPlat);
+                console.log('PUSH', `plat/${selectedPlat}/lot/form`);
                 dispatch(putPlat(selectedPlat))
                 .then(() => {
-                    hashHistory.push(`lot/form/plat/${selectedPlat}`);
+                    hashHistory.push(`plat/${selectedPlat}/lot/form`);
                 });
             }
         },
