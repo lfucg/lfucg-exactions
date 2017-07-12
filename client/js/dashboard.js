@@ -54,6 +54,7 @@ ReactDOM.render(
             <Route path="lot" component={LotPage} />
             <Route path="lot/existing" component={LotExisting} />
             <Route path="lot/form" component={LotForm} />
+            <Route path="plat/:id/lot/form" component={LotForm} />
             <Route path="lot/form/:id" component={LotForm} />
 
         </Router>

@@ -16,9 +16,9 @@ const lotsReducer = (state = {}, action) => {
     case GET_LOTS:
         return action.response;
     case POST_LOT:
-        return {};
+        return action.response;
     case PUT_LOT:
-        return {};
+        return action.response;
     default:
         return state;
     }

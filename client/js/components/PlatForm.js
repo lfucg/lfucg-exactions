@@ -34,6 +34,7 @@ class PlatForm extends React.Component {
         onComponentDidMount: React.PropTypes.func,
         formChange: React.PropTypes.func,
         onPlatSubmit: React.PropTypes.func,
+        onPlatAndCreateLot: React.PropTypes.func,
         addAnotherPlatZone: React.PropTypes.func,
         onPlatDues: React.PropTypes.func,
     };
@@ -49,6 +50,7 @@ class PlatForm extends React.Component {
             plats,
             formChange,
             onPlatSubmit,
+            onPlatAndCreateLot,
             addAnotherPlatZone,
             onPlatDues,
         } = this.props;
@@ -396,7 +398,12 @@ class PlatForm extends React.Component {
                                                 </div>
                                             </div>
                                         </fieldset>
-                                        <button className="btn btn-lex">Submit Dues</button>
+                                        <div className="col-xs-offset-2 col-xs-4">
+                                            <button className="btn btn-lex" >Submit Dues</button>
+                                        </div>
+                                        <div className="col-xs-offset-1 col-xs-4">
+                                            <button className="btn btn-lex" onClick={onPlatAndCreateLot} >Submit and Create Lot</button>
+                                        </div>
                                     </form>
                                 </div>
                             ) : null }
@@ -517,9 +524,21 @@ function mapDispatchToProps(dispatch, params) {
             };
             dispatch(formUpdate(update));
         },
-        onPlatDues(event) {
-            event.preventDefault();
-            dispatch(putPlat());
+        onPlatDues() {
+            if (selectedPlat) {
+                dispatch(putPlat(selectedPlat));
+            }
+        },
+        onPlatAndCreateLot() {
+            console.log('PLAT PUSH');
+            if (selectedPlat) {
+                console.log('PUSH CREATE', selectedPlat);
+                console.log('PUSH', `plat/${selectedPlat}/lot/form`);
+                dispatch(putPlat(selectedPlat))
+                .then(() => {
+                    hashHistory.push(`plat/${selectedPlat}/lot/form`);
+                });
+            }
         },
     };
 }
