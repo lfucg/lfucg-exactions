@@ -9,6 +9,7 @@ import Navbar from './Navbar';
 import Footer from './Footer';
 
 import FormGroup from './FormGroup';
+import Breadcrumbs from './Breadcrumbs';
 
 import {
     formInit,
@@ -25,6 +26,7 @@ class SubdivisionForm extends React.Component {
     static propTypes = {
         activeForm: React.PropTypes.object,
         subdivisions: React.PropTypes.object,
+        route: React.PropTypes.object,
         onComponentDidMount: React.PropTypes.func,
         onSubmit: React.PropTypes.func,
     };
@@ -54,16 +56,8 @@ class SubdivisionForm extends React.Component {
                     </div>
                 </div>
 
-                <div className="breadcrumb">
-                    <div className="container">
-                        <h4>
-                            <Link to="dashboard/" role="link">Home</Link>
-                            <span> / </span>
-                            <Link to="subdivision" role="link">Subdivision</Link>
-                            <span> / </span>
-                        </h4>
-                    </div>
-                </div>
+                <Breadcrumbs route={this.props.route} />
+
                 <div className="inside-body">
                     <div className="container">
                         <div className="col-sm-offset-1 col-sm-10">
@@ -118,15 +112,17 @@ function mapDispatchToProps(dispatch, params) {
     return {
         onComponentDidMount() {
             dispatch(formInit());
-            dispatch(getSubdivisionID(selectedSubdivision))
-            .then((data_subdivision) => {
-                const update = {
-                    name: data_subdivision.response.name,
-                    gross_acreage: data_subdivision.response.cleaned_gross_acreage,
-                    number_allowed_lots: data_subdivision.response.number_allowed_lots,
-                };
-                dispatch(formUpdate(update));
-            });
+            if (selectedSubdivision) {
+                dispatch(getSubdivisionID(selectedSubdivision))
+                .then((data_subdivision) => {
+                    const update = {
+                        name: data_subdivision.response.name,
+                        gross_acreage: data_subdivision.response.cleaned_gross_acreage,
+                        number_allowed_lots: data_subdivision.response.number_allowed_lots,
+                    };
+                    dispatch(formUpdate(update));
+                });
+            }
         },
         onSubmit(event) {
             event.preventDefault();

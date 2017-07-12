@@ -227,7 +227,8 @@ class Lot(models.Model):
             created_by = self.created_by
 
         plat_zones = Plat.objects.get(id=self.plat.id).plat_zone.all()
-        # print('PLAT ZONE 0', plat_obj.plat_zone.all())
+        plat_buildable = Plat.objects.get(id=self.plat.id).buildable_lots
+
         if plat_zones is not None:
             road_calc = 0
             sewer_cap_calc = 0
@@ -237,12 +238,12 @@ class Lot(models.Model):
             open_space_calc = 0
 
             for plat_zone in plat_zones:
-                road_calc += plat_zone.dues_roads
-                sewer_cap_calc += plat_zone.dues_sewer_cap
-                sewer_trans_calc += plat_zone.dues_sewer_trans
-                park_calc += plat_zone.dues_parks
-                storm_calc += plat_zone.dues_storm_water
-                open_space_calc += plat_zone.dues_open_spaces
+                road_calc += (plat_zone.dues_roads / plat_buildable)
+                sewer_cap_calc += (plat_zone.dues_sewer_cap / plat_buildable)
+                sewer_trans_calc += (plat_zone.dues_sewer_trans / plat_buildable)
+                park_calc += (plat_zone.dues_parks / plat_buildable)
+                storm_calc += (plat_zone.dues_storm_water / plat_buildable)
+                open_space_calc += (plat_zone.dues_open_spaces / plat_buildable)
 
             if (self.dues_roads_dev == 0 and
             self.dues_sewer_cap_dev == 0 and

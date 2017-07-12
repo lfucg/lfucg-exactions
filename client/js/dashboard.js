@@ -34,28 +34,28 @@ ReactDOM.render(
     <Provider store={dashboardStore}>
         <Router history={history}>
             <Redirect from="/" to="dashboard/" />
-            <Route path="dashboard/" component={DashboardPage} />
+            <Route path="dashboard/" component={DashboardPage} name="Home" />
 
-            <Route path="login/" component={Login} />
-            <Route path="registration/" component={Registration} />
-            <Route path="forgot-password/" component={ForgotPassword} />
-            <Route path="forgot-username/" component={ForgotUsername} />
+            <Route path="login/" component={Login} name="Login" />
+            <Route path="registration/" component={Registration} name="Registration" />
+            <Route path="forgot-password/" component={ForgotPassword} name="Forgot Password" />
+            <Route path="forgot-username/" component={ForgotUsername} name="Forgot Username" />
 
-            <Route path="subdivision" component={SubdivisionPage} />
-            <Route path="subdivision/existing" component={SubdivisionExisting} />
-            <Route path="subdivision/form" component={SubdivisionForm} />
-            <Route path="subdivision/form/:id" component={SubdivisionForm} />
+            <Route path="subdivision" component={SubdivisionPage} name="Subdivision" />
+            <Route path="subdivision/existing" component={SubdivisionExisting} name="Existing Subdivisions" />
+            <Route path="subdivision/form" component={SubdivisionForm} name="Subdivision Form" />
+            <Route path="subdivision/form/:id" component={SubdivisionForm} name="Current Subdivision Form" />
 
-            <Route path="plat" component={PlatPage} />
-            <Route path="plat/existing" component={PlatExisting} />
-            <Route path="plat/form" component={PlatForm} />
-            <Route path="plat/form/:id" component={PlatForm} />
+            <Route path="plat" component={PlatPage} name="Plat" />
+            <Route path="plat/existing" component={PlatExisting} name="Existing Plats" />
+            <Route path="plat/form" component={PlatForm} name="Plat Form" />
+            <Route path="plat/form/:id" component={PlatForm} name="Current Plat Form" />
 
-            <Route path="lot" component={LotPage} />
-            <Route path="lot/existing" component={LotExisting} />
-            <Route path="lot/form" component={LotForm} />
-            <Route path="plat/:id/lot/form" component={LotForm} />
-            <Route path="lot/form/:id" component={LotForm} />
+            <Route path="lot" component={LotPage} name="Lot" />
+            <Route path="lot/existing" component={LotExisting} name="Existing Lots" />
+            <Route path="lot/form" component={LotForm} name="Lot Form" />
+            <Route path="plat/:id/lot/form" component={LotForm} name="Lot Form with Plat" />
+            <Route path="lot/form/:id" component={LotForm} name="Current Lot Form" />
 
         </Router>
     </Provider>,
