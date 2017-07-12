@@ -190,6 +190,36 @@ export function postSubdivision() {
     };
 }
 
+export function putSubdivision(selectedSubdivision) {
+    return {
+        type: API_CALL,
+        endpoint: PUT_SUBDIVISION,
+        url: `/subdivision/${selectedSubdivision}/`,
+        method: 'PUT',
+        body: (getState) => {
+            const {
+                activeForm,
+                currentUser,
+            } = getState();
+            const {
+                name,
+                gross_acreage,
+                number_allowed_lots,
+            } = activeForm;
+            const {
+                id,
+            } = currentUser;
+            return {
+                created_by: id,
+                modified_by: id,
+                name,
+                gross_acreage,
+                number_allowed_lots,
+            };
+        },
+    };
+}
+
 // PLATS
 export function getPlats() {
     return {
@@ -450,9 +480,88 @@ export function getLotID(selectedLot) {
 export function postLot() {
     return {
         type: API_CALL,
-        endpoint: POST_SUBDIVISION,
+        endpoint: POST_LOT,
         url: '/lot/',
         method: 'POST',
+        body: (getState) => {
+            const {
+                activeForm,
+                currentUser,
+            } = getState();
+            const {
+                plat,
+                parcel_id,
+                lot_number,
+                permit_id,
+                latitude,
+                longitude,
+                address_number,
+                address_direction,
+                address_street,
+                address_suffix,
+                address_unit,
+                address_city,
+                address_state,
+                address_zip,
+                dues_roads_dev,
+                dues_roads_own,
+                dues_sewer_trans_dev,
+                dues_sewer_trans_own,
+                dues_sewer_cap_dev,
+                dues_sewer_cap_own,
+                dues_parks_dev,
+                dues_parks_own,
+                dues_storm_dev,
+                dues_storm_own,
+                dues_open_space_dev,
+                dues_open_space_own,
+                // payment,
+            } = activeForm;
+            const {
+                id,
+            } = currentUser;
+            return {
+                created_by: id,
+                modified_by: id,
+                plat,
+                parcel_id,
+                lot_number,
+                permit_id,
+                latitude,
+                longitude,
+                address_number,
+                address_direction,
+                address_street,
+                address_suffix,
+                address_unit,
+                address_city,
+                address_state,
+                address_zip,
+                address_full: `${address_number} ${address_direction ? address_direction : null} ${address_street} ${address_suffix ? address_suffix : null} ${address_unit ? address_unit : null}, ${address_city}, ${address_state} ${address_zip}`,
+                dues_roads_dev,
+                dues_roads_own,
+                dues_sewer_trans_dev,
+                dues_sewer_trans_own,
+                dues_sewer_cap_dev,
+                dues_sewer_cap_own,
+                dues_parks_dev,
+                dues_parks_own,
+                dues_storm_dev,
+                dues_storm_own,
+                dues_open_space_dev,
+                dues_open_space_own,
+                // payment,
+            };
+        },
+    };
+}
+
+export function putLot(selectedLot) {
+    return {
+        type: API_CALL,
+        endpoint: PUT_LOT,
+        url: `/lot/${selectedLot}/`,
+        method: 'PUT',
         body: (getState) => {
             const {
                 activeForm,

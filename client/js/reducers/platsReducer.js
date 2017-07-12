@@ -18,7 +18,7 @@ const platsReducer = (state = {}, action) => {
     case POST_PLAT:
         return {};
     case PUT_PLAT:
-        return {};
+        return action.response;
     default:
         return state;
     }
