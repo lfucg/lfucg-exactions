@@ -45,7 +45,7 @@ class PlatExisting extends React.Component {
                                 <p className="col-md-3 col-sm-4 col-xs-6">Subdivision: {plat.subdivision ? plat.subdivision.name : 'Not listed'}</p>
                                 <p className="col-md-3 col-sm-4 col-xs-6">Longitude: {plat.longitude}</p>
                                 <p className="col-md-3 col-sm-4 col-xs-6">Latitude: {plat.latitude}</p>
-                                <p className="col-md-3 col-sm-4 col-xs-6">Acreage: {plat.cleaned_total_acreage}</p>
+                                <p className="col-md-3 col-sm-4 col-xs-6">Gross Acreage: {plat.cleaned_total_acreage}</p>
                                 <p className="col-md-3 col-sm-4 col-xs-6">Plat Type: {plat.plat_type}</p>
                                 <p className="col-md-3 col-sm-4 col-xs-6">Approval: {plat.is_approved ? 'Approved' : 'Not Approved'}</p>
                                 <p className="col-md-3 col-sm-4 col-xs-6">Expansion Area: {plat.expansion_area}</p>
@@ -56,8 +56,8 @@ class PlatExisting extends React.Component {
                                 <p className="col-md-3 col-sm-4 col-xs-6">Slide: {plat.slide}</p>
                                 <p className="col-md-3 col-sm-4 col-xs-6">Buildable Lots: {plat.buildable_lots}</p>
                                 <p className="col-md-3 col-sm-4 col-xs-6">Non-Buildable Lots: {plat.non_buildable_lots}</p>
-                                <p className="col-md-3 col-sm-4 col-xs-6">Sewer Fees: ${plat.sewer_due}</p>
-                                <p className="col-md-3 col-sm-4 col-xs-6">Non-Sewer Fees: ${plat.non_sewer_due}</p>
+                                <p className="col-md-3 col-sm-4 col-xs-6">Sewer Exactions: ${plat.sewer_due}</p>
+                                <p className="col-md-3 col-sm-4 col-xs-6">Non-Sewer Exactions: ${plat.non_sewer_due}</p>
                                 <p className="col-xs-12">Calculation Note: {plat.calculation_note}</p>
                             </div>
                         </div>

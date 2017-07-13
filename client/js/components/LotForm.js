@@ -283,77 +283,77 @@ class LotForm extends React.Component {
                                 <form onSubmit={onLotDues} >
                                     <fieldset>
                                         <div className="row form-subheading">
-                                            <h3>Dues</h3>
+                                            <h3>Exactions</h3>
                                         </div>
                                         <div className="row">
                                             <div className="col-sm-6">
-                                                <FormGroup label="Road Development Fees" id="dues_roads_dev">
-                                                    <input type="number" className="form-control" placeholder="Road Development Fees" />
+                                                <FormGroup label="Road Developer Exactions" id="dues_roads_dev">
+                                                    <input type="number" className="form-control" placeholder="Road Developer Exactions" />
                                                 </FormGroup>
                                             </div>
                                             <div className="col-sm-6">
-                                                <FormGroup label="Road Own Fees" id="dues_roads_own">
-                                                    <input type="number" className="form-control" placeholder="Road Own Fees" />
-                                                </FormGroup>
-                                            </div>
-                                        </div>
-                                        <div className="row">
-                                            <div className="col-sm-6">
-                                                <FormGroup label="Sewer Trans. Development Fees" id="dues_sewer_trans_dev">
-                                                    <input type="number" className="form-control" placeholder="Sewer Trans. Development Fees" />
-                                                </FormGroup>
-                                            </div>
-                                            <div className="col-sm-6">
-                                                <FormGroup label="Sewer Trans. Own Fees" id="dues_sewer_trans_own">
-                                                    <input type="number" className="form-control" placeholder="Sewer Trans. Own Fees" />
+                                                <FormGroup label="Road Owner Exactions" id="dues_roads_own">
+                                                    <input type="number" className="form-control" placeholder="Road Owner Exactions" />
                                                 </FormGroup>
                                             </div>
                                         </div>
                                         <div className="row">
                                             <div className="col-sm-6">
-                                                <FormGroup label="Sewer Capacity Development Fees" id="dues_sewer_cap_dev">
-                                                    <input type="number" className="form-control" placeholder="Sewer Capacity Development Fees" />
+                                                <FormGroup label="Sewer Transmission Developer Exactions" id="dues_sewer_trans_dev">
+                                                    <input type="number" className="form-control" placeholder="Sewer Transmission Developer Exactions" />
                                                 </FormGroup>
                                             </div>
                                             <div className="col-sm-6">
-                                                <FormGroup label="Sewer Capacity Own Fees" id="dues_sewer_cap_own">
-                                                    <input type="number" className="form-control" placeholder="Sewer Capacity Own Fees" />
-                                                </FormGroup>
-                                            </div>
-                                        </div>
-                                        <div className="row">
-                                            <div className="col-sm-6">
-                                                <FormGroup label="Parks Development Fees" id="dues_parks_dev">
-                                                    <input type="number" className="form-control" placeholder="Parks Development Fees" />
-                                                </FormGroup>
-                                            </div>
-                                            <div className="col-sm-6">
-                                                <FormGroup label="Parks Own Fees" id="dues_parks_own">
-                                                    <input type="number" className="form-control" placeholder="Parks Own Fees" />
+                                                <FormGroup label="Sewer Transmission Owner Exactions" id="dues_sewer_trans_own">
+                                                    <input type="number" className="form-control" placeholder="Sewer Transmission Owner Exactions" />
                                                 </FormGroup>
                                             </div>
                                         </div>
                                         <div className="row">
                                             <div className="col-sm-6">
-                                                <FormGroup label="Storm Development Fees" id="dues_storm_dev">
-                                                    <input type="number" className="form-control" placeholder="Storm Development Fees" />
+                                                <FormGroup label="Sewer Capacity Developer Exactions" id="dues_sewer_cap_dev">
+                                                    <input type="number" className="form-control" placeholder="Sewer Capacity Developer Exactions" />
                                                 </FormGroup>
                                             </div>
                                             <div className="col-sm-6">
-                                                <FormGroup label="Storm Own Fees" id="dues_storm_own">
-                                                    <input type="number" className="form-control" placeholder="Storm Own Fees" />
+                                                <FormGroup label="Sewer Capacity Owner Exactions" id="dues_sewer_cap_own">
+                                                    <input type="number" className="form-control" placeholder="Sewer Capacity Owner Exactions" />
                                                 </FormGroup>
                                             </div>
                                         </div>
                                         <div className="row">
                                             <div className="col-sm-6">
-                                                <FormGroup label="Open Space Development Fees" id="dues_open_space_dev">
-                                                    <input type="number" className="form-control" placeholder="Open Space Development Fees" />
+                                                <FormGroup label="Parks Developer Exactions" id="dues_parks_dev">
+                                                    <input type="number" className="form-control" placeholder="Parks Developer Exactions" />
                                                 </FormGroup>
                                             </div>
                                             <div className="col-sm-6">
-                                                <FormGroup label="Open Space Own Fees" id="dues_open_space_own">
-                                                    <input type="number" className="form-control" placeholder="Open Space Own Fees" />
+                                                <FormGroup label="Parks Owner Exactions" id="dues_parks_own">
+                                                    <input type="number" className="form-control" placeholder="Parks Owner Exactions" />
+                                                </FormGroup>
+                                            </div>
+                                        </div>
+                                        <div className="row">
+                                            <div className="col-sm-6">
+                                                <FormGroup label="Storm Developer Exactions" id="dues_storm_dev">
+                                                    <input type="number" className="form-control" placeholder="Storm Developer Exactions" />
+                                                </FormGroup>
+                                            </div>
+                                            <div className="col-sm-6">
+                                                <FormGroup label="Storm Owner Exactions" id="dues_storm_own">
+                                                    <input type="number" className="form-control" placeholder="Storm Owner Exactions" />
+                                                </FormGroup>
+                                            </div>
+                                        </div>
+                                        <div className="row">
+                                            <div className="col-sm-6">
+                                                <FormGroup label="Open Space Developer Exactions" id="dues_open_space_dev">
+                                                    <input type="number" className="form-control" placeholder="Open Space Developer Exactions" />
+                                                </FormGroup>
+                                            </div>
+                                            <div className="col-sm-6">
+                                                <FormGroup label="Open Space Owner Exactions" id="dues_open_space_own">
+                                                    <input type="number" className="form-control" placeholder="Open Space Owner Exactions" />
                                                 </FormGroup>
                                             </div>
                                         </div>

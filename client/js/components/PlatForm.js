@@ -207,8 +207,8 @@ class PlatForm extends React.Component {
                                                     </FormGroup>
                                                 </div>
                                                 <div className="col-sm-6">
-                                                    <FormGroup label="* Total Acreage" id="total_acreage">
-                                                        <input type="number" className="form-control" placeholder="Total Acreage" />
+                                                    <FormGroup label="* Gross Acreage" id="total_acreage">
+                                                        <input type="number" className="form-control" placeholder="Gross Acreage" />
                                                     </FormGroup>
                                                 </div>
                                             </div>
@@ -339,12 +339,12 @@ class PlatForm extends React.Component {
                                         />
                                     ) : null}
                                     <div className="row section-heading">
-                                        <h2>Plat Dues</h2>
+                                        <h2>Plat Exactions</h2>
                                     </div>
                                     <form onSubmit={onPlatDues}>
                                         <fieldset>
                                             <div className="row form-subheading">
-                                                <h3>Dues and Calculations</h3>
+                                                <h3>Exactions and Calculations</h3>
                                             </div>
                                             <div className="row">
                                                 <div className="col-xs-3">
@@ -352,7 +352,7 @@ class PlatForm extends React.Component {
                                                         <h3>Zone</h3>
                                                     </div>
                                                     <div className="col-xs-12 dues-label">
-                                                        <h4>Acres</h4>
+                                                        <h4>Gross Acreage</h4>
                                                     </div>
                                                     <div className="col-xs-12 dues-label">
                                                         <h4>Roads</h4>
@@ -364,7 +364,7 @@ class PlatForm extends React.Component {
                                                         <h4>Sewer Capacity</h4>
                                                     </div>
                                                     <div className="col-xs-12 dues-label">
-                                                        <h4>Sewer Transm.</h4>
+                                                        <h4>Sewer Transmmission</h4>
                                                     </div>
                                                     <div className="col-xs-12 dues-label">
                                                         <h4>Parks</h4>
@@ -377,16 +377,16 @@ class PlatForm extends React.Component {
                                                     {platZoneDuesList}
                                                 </div>
                                             </div>
-                                            <div className="col-xs-12 dues-table-heading"><h3>Plat Dues</h3></div>
+                                            <div className="col-xs-12 dues-table-heading"><h3>Plat Exactions</h3></div>
                                             <div className="row">
                                                 <div className="col-sm-6">
-                                                    <FormGroup label="* Sewer Fees Due" id="sewer_due">
-                                                        <input type="number" className="form-control" placeholder="Sewer Fees Due" />
+                                                    <FormGroup label="* Sewer Exactions" id="sewer_due">
+                                                        <input type="number" className="form-control" placeholder="Sewer Exactions" />
                                                     </FormGroup>
                                                 </div>
                                                 <div className="col-sm-6">
-                                                    <FormGroup label="* Non-Sewer Fees Due" id="non_sewer_due">
-                                                        <input type="number" className="form-control" placeholder="Non-Sewer Fees Due" />
+                                                    <FormGroup label="* Non-Sewer Exactions" id="non_sewer_due">
+                                                        <input type="number" className="form-control" placeholder="Non-Sewer Exactions" />
                                                     </FormGroup>
                                                 </div>
                                             </div>
@@ -399,7 +399,7 @@ class PlatForm extends React.Component {
                                             </div>
                                         </fieldset>
                                         <div className="col-xs-offset-2 col-xs-4">
-                                            <button className="btn btn-lex" >Submit Dues</button>
+                                            <button className="btn btn-lex" >Submit Exactions</button>
                                         </div>
                                         <div className="col-xs-offset-1 col-xs-4">
                                             <button className="btn btn-lex" onClick={onPlatAndCreateLot} >Submit and Create Lot</button>
