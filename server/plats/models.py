@@ -242,7 +242,8 @@ class Lot(models.Model):
             self.dues_sewer_trans_dev == 0 and
             self.dues_parks_dev == 0 and
             self.dues_storm_dev == 0 and
-            self.dues_open_space_dev ==0):
+            self.dues_open_space_dev ==0 and
+            plat_buildable != 0):
                 for plat_zone in plat_zones:
                     road_calc += (plat_zone.dues_roads / plat_buildable)
                     sewer_cap_calc += (plat_zone.dues_sewer_cap / plat_buildable)
