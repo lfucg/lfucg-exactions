@@ -81,8 +81,8 @@ class Plat(models.Model):
     section = models.CharField(max_length=200)
     block = models.CharField(max_length=200)
     
-    buildable_lots = models.CharField(max_length=200)
-    non_buildable_lots = models.CharField(max_length=200)
+    buildable_lots = models.IntegerField()
+    non_buildable_lots = models.IntegerField()
 
     cabinet = models.CharField(max_length=200)
     slide = models.CharField(max_length=200)

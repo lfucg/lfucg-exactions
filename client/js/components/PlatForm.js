@@ -113,11 +113,8 @@ class PlatForm extends React.Component {
 
         const submitEnabled =
             activeForm.total_acreage &&
-            activeForm.latitude &&
-            activeForm.longitude &&
             activeForm.plat_type &&
             activeForm.expansion_area &&
-            activeForm.unit &&
             activeForm.section &&
             activeForm.block &&
             activeForm.buildable_lots &&
@@ -170,7 +167,7 @@ class PlatForm extends React.Component {
                                             </div>
                                             <div className="row">
                                                 <div className="col-sm-6 form-group">
-                                                    <label htmlFor="subdivision" className="form-label" id="subdivision">* Subdivision</label>
+                                                    <label htmlFor="subdivision" className="form-label" id="subdivision">Subdivision</label>
                                                     <select className="form-control" id="subdivision" onChange={formChange('subdivision')} >
                                                         {activeForm.subdivision ? (
                                                             <option value="choose_subdivision" aria-label="Select a Subdivision">
@@ -187,12 +184,12 @@ class PlatForm extends React.Component {
                                             </div>
                                             <div className="row">
                                                 <div className="col-sm-6">
-                                                    <FormGroup label="* Latitude" id="latitude">
+                                                    <FormGroup label="Latitude" id="latitude">
                                                         <input type="text" className="form-control" placeholder="Latitude" />
                                                     </FormGroup>
                                                 </div>
                                                 <div className="col-sm-6">
-                                                    <FormGroup label="* Longitude" id="longitude">
+                                                    <FormGroup label="Longitude" id="longitude">
                                                         <input type="text" className="form-control" placeholder="Longitude" />
                                                     </FormGroup>
                                                 </div>
@@ -253,7 +250,7 @@ class PlatForm extends React.Component {
                                             </div>
                                             <div className="row">
                                                 <div className="col-sm-6">
-                                                    <FormGroup label="* Unit" id="unit">
+                                                    <FormGroup label="Unit" id="unit">
                                                         <input type="text" className="form-control" placeholder="Unit" />
                                                     </FormGroup>
                                                 </div>
