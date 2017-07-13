@@ -8,6 +8,7 @@ import { map } from 'ramda';
 
 import Navbar from './Navbar';
 import Footer from './Footer';
+import Breadcrumbs from './Breadcrumbs';
 
 import FormGroup from './FormGroup';
 import PlatZoneForm from './PlatZoneForm';
@@ -31,6 +32,7 @@ class PlatForm extends React.Component {
         activeForm: React.PropTypes.object,
         subdivisions: React.PropTypes.object,
         plats: React.PropTypes.object,
+        route: React.PropTypes.object,
         onComponentDidMount: React.PropTypes.func,
         formChange: React.PropTypes.func,
         onPlatSubmit: React.PropTypes.func,
@@ -132,16 +134,9 @@ class PlatForm extends React.Component {
                         <h1>PLATS - CREATE / APPLY</h1>
                     </div>
                 </div>
-                <div className="breadcrumb">
-                    <div className="container">
-                        <h4>
-                            <Link to="dashboard/" role="link">Home</Link>
-                            <span> / </span>
-                            <Link to="plat" role="link">Plat</Link>
-                            <span> / </span>
-                        </h4>
-                    </div>
-                </div>
+
+                <Breadcrumbs route={this.props.route} parent_link={'plat'} parent_name={'Plats'} />
+
                 <div className="inside-body">
                     <div className="container">
                         <div className="col-md-offset-1 col-md-10 panel-group" id="accordion" role="tablist" aria-multiselectable="false">

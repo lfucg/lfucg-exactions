@@ -75,16 +75,9 @@ class LotExisting extends React.Component {
                         <h1>LOTS - EXISTING</h1>
                     </div>
                 </div>
-                <div className="breadcrumb">
-                    <div className="container">
-                        <h4>
-                            <Link to="dashboard/" role="link">Home</Link>
-                            <span> / </span>
-                            <Link to="lot" role="link">Lot</Link>
-                            <span> / </span>
-                        </h4>
-                    </div>
-                </div>
+
+                <Breadcrumbs route={this.props.route} parent_link={'lot'} parent_name={'Lots'} />
+
                 <div className="inside-body">
                     <div className="container">
                         {lots_list}

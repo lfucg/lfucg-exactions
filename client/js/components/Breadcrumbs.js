@@ -9,12 +9,17 @@ import {
 class Breadcrumbs extends React.Component {
     static propTypes = {
         activeForm: React.PropTypes.object,
+        parent_link: React.PropTypes.string,
+        parent_name: React.PropTypes.string,
         onComponentDidMount: React.PropTypes.func,
     };
 
     componentDidMount() {
         setTimeout(() => {
-            this.props.onComponentDidMount();
+            this.props.onComponentDidMount({
+                parent_link: this.props.parent_link,
+                parent_name: this.props.parent_name,
+            });
         }, (Object.keys(this.props.activeForm).length > 0));
     }
 
@@ -34,12 +39,14 @@ class Breadcrumbs extends React.Component {
                     <h4>
                         <Link to="/" role="link">Home</Link>
                         <span> / </span>
-                        <Link to="subdivision" role="link">Subdivision</Link>
-                        <span> / </span>
-                        {console.log('ROUTE', this.route)}
+                        {activeForm.parent_link ?
+                            <span>
+                                <Link to={activeForm.parent_link} role="link">{activeForm.parent_name}</Link>
+                                <span> / </span>
+                            </span>
+                        : null }
                         <Link to={current_link}>{current_name}</Link>
                         <span> / </span>
-                        {console.log('ACTIVE FORM', activeForm)}
                     </h4>
                 </div>
             </div>
@@ -58,10 +65,12 @@ function mapDispatchToProps(dispatch, route) {
     const location_name = route.route.name;
 
     return {
-        onComponentDidMount() {
+        onComponentDidMount(pass_props) {
             const update = {
                 current_link: location_url,
                 current_name: location_name,
+                parent_link: pass_props.parent_link,
+                parent_name: pass_props.parent_name,
             };
             dispatch(formUpdate(update));
         },
