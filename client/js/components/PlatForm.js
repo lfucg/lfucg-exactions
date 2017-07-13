@@ -8,6 +8,7 @@ import { map } from 'ramda';
 
 import Navbar from './Navbar';
 import Footer from './Footer';
+import Breadcrumbs from './Breadcrumbs';
 
 import FormGroup from './FormGroup';
 import PlatZoneForm from './PlatZoneForm';
@@ -31,6 +32,7 @@ class PlatForm extends React.Component {
         activeForm: React.PropTypes.object,
         subdivisions: React.PropTypes.object,
         plats: React.PropTypes.object,
+        route: React.PropTypes.object,
         onComponentDidMount: React.PropTypes.func,
         formChange: React.PropTypes.func,
         onPlatSubmit: React.PropTypes.func,
@@ -129,14 +131,12 @@ class PlatForm extends React.Component {
 
                 <div className="form-header">
                     <div className="container">
-                        <div className="col-sm-9">
-                            <h1>PLATS - CREATE / APPLY</h1>
-                        </div>
-                        <div className="col-sm-3">
-                            <Link to="plat" className="btn btn-lex-reverse" role="link">Return to Plats</Link>
-                        </div>
+                        <h1>PLATS - CREATE / APPLY</h1>
                     </div>
                 </div>
+
+                <Breadcrumbs route={this.props.route} parent_link={'plat'} parent_name={'Plats'} />
+
                 <div className="inside-body">
                     <div className="container">
                         <div className="col-md-offset-1 col-md-10 panel-group" id="accordion" role="tablist" aria-multiselectable="false">

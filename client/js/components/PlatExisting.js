@@ -5,6 +5,7 @@ import { map } from 'ramda';
 
 import Navbar from './Navbar';
 import Footer from './Footer';
+import Breadcrumbs from './Breadcrumbs';
 
 import {
     getPlats,
@@ -13,6 +14,7 @@ import {
 class PlatExisting extends React.Component {
     static propTypes = {
         plats: React.PropTypes.object,
+        route: React.PropTypes.object,
         onComponentDidMount: React.PropTypes.func,
     };
 
@@ -70,14 +72,12 @@ class PlatExisting extends React.Component {
 
                 <div className="form-header">
                     <div className="container">
-                        <div className="col-sm-9">
-                            <h1>PLATS - EXISTING</h1>
-                        </div>
-                        <div className="col-sm-3">
-                            <Link to="plat" className="btn btn-lex-reverse" role="link">Return to Plats</Link>
-                        </div>
+                        <h1>PLATS - EXISTING</h1>
                     </div>
                 </div>
+
+                <Breadcrumbs route={this.props.route} parent_link={'plat'} parent_name={'Plats'} />
+
                 <div className="inside-body">
                     <div className="container">
                         {plats_list}

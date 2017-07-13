@@ -5,6 +5,7 @@ import { map } from 'ramda';
 
 import Navbar from './Navbar';
 import Footer from './Footer';
+import Breadcrumbs from './Breadcrumbs';
 
 import {
     getSubdivisions,
@@ -13,6 +14,7 @@ import {
 class SubdivisionExisting extends React.Component {
     static propTypes = {
         subdivisions: React.PropTypes.object,
+        route: React.PropTypes.object,
         onComponentDidMount: React.PropTypes.func,
     };
 
@@ -53,14 +55,12 @@ class SubdivisionExisting extends React.Component {
 
                 <div className="form-header">
                     <div className="container">
-                        <div className="col-sm-9">
-                            <h1>SUBDIVISIONS - EXISTING</h1>
-                        </div>
-                        <div className="col-sm-3">
-                            <Link to="subdivision" className="btn btn-lex-reverse" role="link">Return to Subdivisions</Link>
-                        </div>
+                        <h1>SUBDIVISIONS - EXISTING</h1>
                     </div>
                 </div>
+
+                <Breadcrumbs route={this.props.route} parent_link={'subdivision'} parent_name={'Subdivisions'} />
+
                 <div className="inside-body">
                     <div className="container">
                         {subdivisions_list}

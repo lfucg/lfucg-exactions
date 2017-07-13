@@ -6,9 +6,11 @@ import {
 
 import Navbar from './Navbar';
 import Footer from './Footer';
+import Breadcrumbs from './Breadcrumbs';
 
 class PlatPage extends React.Component {
     static propTypes = {
+        route: React.PropTypes.object,
     };
 
     render() {
@@ -23,6 +25,8 @@ class PlatPage extends React.Component {
                         <h1>Plats</h1>
                     </div>
                 </div>
+
+                <Breadcrumbs route={this.props.route} />
 
                 <div className="inside-body">
                     <div className="container">

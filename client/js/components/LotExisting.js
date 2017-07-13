@@ -72,14 +72,12 @@ class LotExisting extends React.Component {
 
                 <div className="form-header">
                     <div className="container">
-                        <div className="col-sm-9">
-                            <h1>LOTS - EXISTING</h1>
-                        </div>
-                        <div className="col-sm-3">
-                            <Link to="lot" className="btn btn-lex-reverse" role="link">Return to Lots</Link>
-                        </div>
+                        <h1>LOTS - EXISTING</h1>
                     </div>
                 </div>
+
+                <Breadcrumbs route={this.props.route} parent_link={'lot'} parent_name={'Lots'} />
+
                 <div className="inside-body">
                     <div className="container">
                         {lots_list}

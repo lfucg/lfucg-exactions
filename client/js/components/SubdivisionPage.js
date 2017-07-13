@@ -6,9 +6,11 @@ import {
 
 import Navbar from './Navbar';
 import Footer from './Footer';
+import Breadcrumbs from './Breadcrumbs';
 
 class SubdivisionPage extends React.Component {
     static propTypes = {
+        route: React.PropTypes.object,
     };
 
     render() {
@@ -23,6 +25,9 @@ class SubdivisionPage extends React.Component {
                         <h1>SUBDIVISIONS</h1>
                     </div>
                 </div>
+
+                <Breadcrumbs route={this.props.route} />
+
                 <div className="inside-body">
                     <div className="container">
                         <div className="col-xs-12">

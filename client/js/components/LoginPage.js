@@ -1,10 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router';
 import { hashHistory } from 'react-router';
 
 import Navbar from './Navbar';
 import Footer from './Footer';
+import Breadcrumbs from './Breadcrumbs';
+
 import FormGroup from './FormGroup';
 
 import {
@@ -14,6 +15,7 @@ import {
 class Login extends React.Component {
     static propTypes = {
         activeForm: React.PropTypes.object,
+        route: React.PropTypes.object,
         onLogin: React.PropTypes.func,
     }
 
@@ -35,6 +37,9 @@ class Login extends React.Component {
                         <h1>LOGIN</h1>
                     </div>
                 </div>
+
+                <Breadcrumbs route={this.props.route} />
+
                 <div className="inside-body">
                     <div className="container">
                         <div className="col-md-offset-1 col-md-10">

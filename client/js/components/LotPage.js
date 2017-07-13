@@ -6,9 +6,11 @@ import {
 
 import Navbar from './Navbar';
 import Footer from './Footer';
+import Breadcrumbs from './Breadcrumbs';
 
 class LotPage extends React.Component {
     static propTypes = {
+        route: React.PropTypes.object,
     };
 
     render() {
@@ -23,6 +25,9 @@ class LotPage extends React.Component {
                         <h1>LOTS</h1>
                     </div>
                 </div>
+
+                <Breadcrumbs route={this.props.route} />
+
                 <div className="inside-body">
                     <div className="container">
                         <div className="col-xs-12">

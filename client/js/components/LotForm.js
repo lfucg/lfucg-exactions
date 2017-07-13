@@ -8,6 +8,7 @@ import { map } from 'ramda';
 
 import Navbar from './Navbar';
 import Footer from './Footer';
+import Breadcrumbs from './Breadcrumbs';
 
 import FormGroup from './FormGroup';
 
@@ -29,6 +30,7 @@ class LotForm extends React.Component {
         activeForm: React.PropTypes.object,
         plats: React.PropTypes.object,
         lots: React.PropTypes.object,
+        route: React.PropTypes.object,
         onComponentDidMount: React.PropTypes.func,
         formChange: React.PropTypes.func,
         onLotSubmit: React.PropTypes.func,
@@ -75,14 +77,12 @@ class LotForm extends React.Component {
 
                 <div className="form-header">
                     <div className="container">
-                        <div className="col-sm-9">
-                            <h1>LOTS - CREATE / APPLY</h1>
-                        </div>
-                        <div className="col-sm-3">
-                            <Link to="lot" className="btn btn-lex-reverse" role="link">Return to Lots</Link>
-                        </div>
+                        <h1>LOTS - CREATE / APPLY</h1>
                     </div>
                 </div>
+
+                <Breadcrumbs route={this.props.route} parent_link={'lot'} parent_name={'Lots'} />
+
                 <div className="inside-body">
                     <div className="container">
                         <div className="col-md-offset-1 col-md-10 panel-group" id="accordion" role="tablist" aria-multiselectable="false">
