@@ -39,12 +39,12 @@ class Breadcrumbs extends React.Component {
                     <h4>
                         <Link to="/" role="link">Home</Link>
                         <span> / </span>
-                        {activeForm.parent_link ?
+                        {activeForm.parent_link &&
                             <span>
                                 <Link to={activeForm.parent_link} role="link">{activeForm.parent_name}</Link>
                                 <span> / </span>
                             </span>
-                        : null }
+                        }
                         <Link to={current_link}>{current_name}</Link>
                         <span> / </span>
                     </h4>
