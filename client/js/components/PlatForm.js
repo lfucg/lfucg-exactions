@@ -198,10 +198,20 @@ class PlatForm extends React.Component {
                                                 <h3>Land Attributes</h3>
                                             </div>
                                             <div className="row">
-                                                <div className="col-sm-6">
-                                                    <FormGroup label="* Expansion Area" id="expansion_area">
-                                                        <input type="text" className="form-control" placeholder="Expansion Area" />
-                                                    </FormGroup>
+                                                <div className="col-sm-6 form-group">
+                                                    <label htmlFor="expansion_area" className="form-label" id="expansion_area">* Expansion Area</label>
+                                                    <select className="form-control" id="expansion_area" onChange={formChange('expansion_area')} >
+                                                        {plats.expansion_area ? (
+                                                            <option value="expansion_area" aria-label={`Expansion Area ${plats.expansion_area}`}>{plats.expansion_area}</option>
+                                                        ) : (
+                                                            <option value="choose_expansion_area" aria-label="Choose an Expansion Area">Choose an Expansion Area</option>
+                                                        )}
+                                                        <option value={['EA-1', 'EA-1']}>EA-1</option>
+                                                        <option value={['EA-2A', 'EA-2A']}>EA-2A</option>
+                                                        <option value={['EA-2B', 'EA-2B']}>EA-2B</option>
+                                                        <option value={['EA-2C', 'EA-2C']}>EA-2C</option>
+                                                        <option value={['EA-3', 'EA-3']}>EA-3</option>
+                                                    </select>
                                                 </div>
                                                 <div className="col-sm-6">
                                                     <FormGroup label="* Gross Acreage" id="total_acreage">
@@ -237,10 +247,17 @@ class PlatForm extends React.Component {
                                                 </div>
                                             </div>
                                             <div className="row">
-                                                <div className="col-sm-6">
-                                                    <FormGroup label="* Plat Type" id="plat_type">
-                                                        <input type="text" className="form-control" placeholder="Plat Type" />
-                                                    </FormGroup>
+                                                <div className="col-sm-6 form-group">
+                                                    <label htmlFor="plat_type" className="form-label" id="plat_type">* Plat Type</label>
+                                                    <select className="form-control" id="plat_type" onChange={formChange('plat_type')} >
+                                                        {plats.plat_type ? (
+                                                            <option value="plat_type" aria-label={`Plat Type ${plats.plat_type}`}>{plats.plat_type}</option>
+                                                        ) : (
+                                                            <option value="choose_plat_type" aria-label="Choose an Plat Type">Choose an Plat Type</option>
+                                                        )}
+                                                        <option value={['PLAT', 'Final Record Plat']}>Final Record Plat</option>
+                                                        <option value={['DEVELOPMENT_PLAN', 'Final Development Plan']}>Final Development Plan</option>
+                                                    </select>
                                                 </div>
                                                 <div className="col-sm-6">
                                                     <FormGroup label="* Section" id="section">
