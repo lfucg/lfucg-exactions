@@ -32,6 +32,9 @@ class RateTable(models.Model):
 
     history = HistoricalRecords()
 
+    def __str__(self):
+        return self.resolution_number
+
 class Rate(models.Model):
     is_active = models.BooleanField(default=True)
     
