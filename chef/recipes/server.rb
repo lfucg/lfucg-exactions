@@ -35,8 +35,7 @@ end
 web_app 'lfucg-exactions' do
   template "vhost.conf.erb"
   server_name "#{domain}"
-  user "ubuntu"
-  docroot "/home/ubuntu/lfucg-exactions"
+  docroot "/home/ubuntu/lfucg-exactions/lfucg-exactions/server"
   admin "kelly@apaxsoftware.com"
 end
 
