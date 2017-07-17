@@ -13,17 +13,10 @@ include_recipe "python::pip"
 
 package "apache2-dev"
 
-if Dir.exists? "/home/vagrant"
-    user = "vagrant"
-    domain = "localhost"
-    redirect_domain = ''
-else
-  user = "ubuntu"
-  app = search("aws_opsworks_app").first
-  domain = "#{app['domains'][0]}"
-end
+app = node.attribute?('vagrant') ? node['vagrant']['app'] : search('aws_opsworks_app').first
+domain = app['domains'][0]
 
-virtualenv = "/home/#{user}/env"
+virtualenv = "/home/ubuntu/env"
 
 python_pip "mod_wsgi" do
   version "4.5.2"
@@ -42,8 +35,8 @@ end
 web_app 'lfucg-exactions' do
   template "vhost.conf.erb"
   server_name "#{domain}"
-  user "#{user}"
-  docroot "/home/#{user}/lfucg-exactions"
+  user "ubuntu"
+  docroot "/home/ubuntu/lfucg-exactions"
   project "lfucg-exactions"
   python "3.5.2"
   admin "kelly@apaxsoftware.com"

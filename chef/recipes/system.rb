@@ -15,7 +15,7 @@ if Dir.exists? "/home/vagrant"
 else
   user = "ubuntu"
 end
-virtualenv = "/home/#{user}/env"
+virtualenv = "/home/ubuntu/env"
 
 package "my packages" do
   package_name [
@@ -33,8 +33,8 @@ python_runtime '3'
 # NOTE: This will fail with SSL errors if owner/group isn't specified
 python_virtualenv "#{virtualenv}" do
     python '3'
-    user user
-    group user
+    user 'ubuntu'
+    group 'ubuntu'
     action :create
 end
 
@@ -44,6 +44,6 @@ execute "upgrade_npm" do
   action :run
 end
 
-cookbook_file "/home/#{user}/.ssh/config" do
+cookbook_file "/home/ubuntu/.ssh/config" do
   source 'config'
 end

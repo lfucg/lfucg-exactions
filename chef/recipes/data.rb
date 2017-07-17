@@ -13,11 +13,13 @@ end.run_action(:run)
 include_recipe "postgresql::server"
 include_recipe "database::postgresql"
 
+config = node['vagrant']['app']['environment']
+
 postgresql_connection_info = {
-  :host => '127.0.0.1',
-  :port => '5432',
-  :username => 'postgres',
-  :password => 'password'
+  :host => config['DATABASE_HOST'],
+  :port => config['DATABASE_PORT'],
+  :username => config['DATABASE_USER'],
+  :password => config['DATABASE_PASSWORD'],
 }
 
 postgresql_database 'exactions.db' do
