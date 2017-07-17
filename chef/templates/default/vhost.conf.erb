@@ -2,7 +2,7 @@
     ServerName <%= @params[:server_name] %>
     ServerAlias *
 
-    ServerAdmin kelly@apaxsoftware.com
+    ServerAdmin <%= @params[:admin] %>
     DocumentRoot <%= @params[:docroot] %>
     ErrorLog ${APACHE_LOG_DIR}/error.log
     CustomLog ${APACHE_LOG_DIR}/access.log combined

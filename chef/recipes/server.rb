@@ -29,7 +29,7 @@ end
 
 apache_module "wsgi_express" do
   identifier "wsgi_module"
-  filename "mod_wsgi-py27.so"
+  filename "mod_wsgi-py35.cpython-35m-x86_64-linux-gnu.so"
 end
 
 web_app 'lfucg-exactions' do
@@ -37,8 +37,6 @@ web_app 'lfucg-exactions' do
   server_name "#{domain}"
   user "ubuntu"
   docroot "/home/ubuntu/lfucg-exactions"
-  project "lfucg-exactions"
-  python "3.5.2"
   admin "kelly@apaxsoftware.com"
 end
 
