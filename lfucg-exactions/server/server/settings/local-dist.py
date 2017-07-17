@@ -1,45 +1,13 @@
-"""
-This is an example settings/local.py file.
-These settings overrides what's in settings/base.py
-"""
-
 from . import base
-
-
-# To extend any settings from settings/base.py here's an example.
-# If you don't need to extend any settings from base.py, you do not need
-# to import base above
-# INSTALLED_APPS = base.INSTALLED_APPS + ('django_nose',)
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': 'db/development.sqlite3',
-#         'USER': '',
-#         'PASSWORD': '',
-#         'HOST': '',
-#         'PORT': '',
-#         #'OPTIONS': {
-#         #    'init_command': 'SET storage_engine=InnoDB',
-#         #    'charset' : 'utf8',
-#         #    'use_unicode' : True,
-#         #},
-#         #'TEST_CHARSET': 'utf8',
-#         #'TEST_COLLATION': 'utf8_general_ci',
-#     },
-#     # 'slave': {
-#     #     ...
-#     # },
-# }
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'exactions.db',
-        'USER': '',
-        'PASSWORD': '',
-        'HOST': '',
-        'PORT': '',
+        'USER': '<%= @config["DATABASE_USER"] %>',
+        'PASSWORD': '<%= @config["DATABASE_PASSWORD"] %>',
+        'HOST': '<%= @config["DATABASE_HOST"] %>',
+        'PORT': '<%= @config["DATABASE_PORT"] %>',
     },
 }
 
@@ -57,9 +25,6 @@ CACHES = {
     }
 }
 
-# SECURITY WARNING: don't run with debug turned on in production!
-# Debugging displays nice error messages, but leaks memory. Set this to False
-# on all server instances and True only for development.
 DEBUG = TEMPLATE_DEBUG = True
 
 # Is this a development instance? Set this to True on development/master
@@ -73,18 +38,10 @@ ALLOWED_HOSTS = []
 # SECURITY WARNING: keep the secret key used in production secret!
 # Hardcoded values can leak through source control. Consider loading
 # the secret key from an environment variable or a file instead.
-SECRET_KEY = 'l@qwn(9^(i4jslsby9tpdvar3*0af62gzc+gh7tj+_kpu9(wj+'
 
-# Uncomment these to activate and customize Celery:
-# CELERY_ALWAYS_EAGER = False  # required to activate celeryd
-# BROKER_HOST = 'localhost'
-# BROKER_PORT = 5672
-# BROKER_USER = 'django'
-# BROKER_PASSWORD = 'django'
-# BROKER_VHOST = 'django'
-# CELERY_RESULT_BACKEND = 'amqp'
-
-## Log settings
+# Generate a fresh key with the following command:
+# python -c 'import random; print("".join([random.choice("abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(-_=+)") for i in range(50)]))'
+SECRET_KEY = '<%= @config["SECRET_KEY"] %>'
 
 # Remove this configuration variable to use your custom logging configuration
 LOGGING_CONFIG = None

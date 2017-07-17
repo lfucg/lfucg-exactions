@@ -5,31 +5,34 @@ include_recipe 'python'
 include_recipe "python::pip"
 include_recipe 'poise-python'
 
-if Dir.exists? "/home/vagrant"
-    user = "vagrant"
-else
-  user = "ubuntu"
-end
-virtualenv = "/home/#{user}/env"
+app = node.attribute?('vagrant') ? node['vagrant']['app'] : search('aws_opsworks_app').first
+config = app['environment']
 
-directory "/home/#{user}/media" do
+virtualenv = "/home/ubuntu/env"
+
+directory "/home/ubuntu/media" do
   recursive true
   mode 0777
 end
 
 if Dir.exists? "/home/vagrant"
-  cookbook_file "/home/#{user}/.ssh/id_rsa" do
+  cookbook_file "/home/ubuntu/.ssh/id_rsa" do
     source 'id_rsa'
   end
 end
 
-python_virtualenv "#{virtualenv}"
+template "/home/ubuntu/lfucg-exactions/lfucg-exactions/server/server/settings/local.py" do
+  source "/home/ubuntu/lfucg-exactions/lfucg-exactions/server/server/settings/local-dist.py"
+  local true
+  mode 0755
+  variables( :config => config )
+end
 
-pip_requirements "--exists-action w -r /home/#{user}/chef-lfucg-exactions/lfucg-exactions/lfucg-exactions/server/requirements.txt" do
+pip_requirements "--exists-action w -r /home/ubuntu/lfucg-exactions/lfucg-exactions/server/requirements.txt" do
     virtualenv "#{virtualenv}"
 end
 
-python_execute "/home/#{user}/chef-lfucg-exactions/lfucg-exactions/lfucg-exactions/server/manage.py migrate" do
+python_execute "/home/ubuntu/lfucg-exactions/lfucg-exactions/server/manage.py migrate" do
   virtualenv "#{virtualenv}"
 end
 
@@ -41,7 +44,8 @@ end
 
 bash "collectstatic" do
   code "echo 'yes' | #{virtualenv}/bin/python manage.py collectstatic"
-  cwd "/home/#{user}/chef-lfucg-exactions/lfucg-exactions/lfucg-exactions/server/manage.py"
-  only_if { ::Dir.exists?("/home/#{user}/chef-lfucg-exactions/lfucg-exactions/lfucg-exactions/server/manage.py") }
+  cwd "/home/ubuntu/lfucg-exactions/lfucg-exactions/server/manage.py"
+  only_if { ::Dir.exists?("/home/ubuntu/lfucg-exactions/lfucg-exactions/server/manage.py") }
   action :nothing
 end
+
