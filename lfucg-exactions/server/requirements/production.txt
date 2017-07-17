@@ -8,7 +8,7 @@ Django>=1.11.2
 djangorestframework==3.5.3
 
 # Templates
-django_compressor
+#django_compressor
 
 # Security
 bleach
@@ -18,7 +18,7 @@ bleach
 #raven
 
 # Celery: Message queue
-celery>=4
+#celery>=4
 #django-celery - not needed with celery>=4
 
 # L10n/i18n

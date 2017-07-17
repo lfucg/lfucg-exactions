@@ -36,7 +36,7 @@ Vagrant.configure("2") do |config|
  #  You donâ€™t need to get your code on your virtual machine because it is able to share folders with
  #  your host machine.  Your repo root should be in the directory that contains this Vagrantfile.
  # Uncomment the line below and fill in the name of your repo 
-  config.vm.synced_folder "../", "/home/ubuntu/chef"
+  config.vm.synced_folder "../", "/home/ubuntu/lfucg-exactions"
 
   # OSX needs this for concurrent open files
   config.vm.provision :shell, :inline => "ulimit -n 4048"
