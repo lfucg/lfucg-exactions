@@ -3,7 +3,6 @@
 
 include_recipe 'python'
 include_recipe "python::pip"
-include_recipe 'poise-python'
 
 app = node.attribute?('vagrant') ? node['vagrant']['app'] : search('aws_opsworks_app').first
 config = app['environment']
@@ -15,12 +14,6 @@ directory "/home/ubuntu/media" do
   mode 0777
 end
 
-if Dir.exists? "/home/vagrant"
-  cookbook_file "/home/ubuntu/.ssh/id_rsa" do
-    source 'id_rsa'
-  end
-end
-
 template "/home/ubuntu/lfucg-exactions/lfucg-exactions/server/server/settings/local.py" do
   source "/home/ubuntu/lfucg-exactions/lfucg-exactions/server/server/settings/local-dist.py"
   local true
@@ -28,12 +21,16 @@ template "/home/ubuntu/lfucg-exactions/lfucg-exactions/server/server/settings/lo
   variables( :config => config )
 end
 
-pip_requirements "--exists-action w -r /home/ubuntu/lfucg-exactions/lfucg-exactions/server/requirements.txt" do
+python_pip "--exists-action w -r /home/ubuntu/lfucg-exactions/lfucg-exactions/server/requirements.txt" do
     virtualenv "#{virtualenv}"
+    user 'ubuntu'
+    group 'ubuntu'
 end
 
-python_execute "/home/ubuntu/lfucg-exactions/lfucg-exactions/server/manage.py migrate" do
-  virtualenv "#{virtualenv}"
+bash "migrate" do
+  user "ubuntu"
+  code "#{virtualenv}/bin/python manage.py migrate --noinput"
+  cwd "/home/ubuntu/lfucg-exactions/lfucg-exactions/server"
 end
 
 service "apache2" do

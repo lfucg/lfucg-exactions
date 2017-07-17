@@ -8,19 +8,20 @@
 #
 
 include_recipe 'apt'
-include_recipe 'poise-python'
+include_recipe 'python'
+include_recipe "python::pip"
 
-if Dir.exists? "/home/vagrant"
-    user = "vagrant"
-else
-  user = "ubuntu"
+python_pip "virtualenv" do
+  action :install
 end
+
 virtualenv = "/home/ubuntu/env"
 
 package "my packages" do
   package_name [
     # Django
     "git",
+    "python3-dev",
     "libpq-dev",
     "libffi-dev",
     "libjpeg-dev",
@@ -28,21 +29,17 @@ package "my packages" do
   action :install
 end
 
-python_runtime '3'
+# python_runtime '3'
 
 # NOTE: This will fail with SSL errors if owner/group isn't specified
 python_virtualenv "#{virtualenv}" do
-    python '3'
-    user 'ubuntu'
+    interpreter '/usr/bin/python3'
+    owner 'ubuntu'
     group 'ubuntu'
     action :create
 end
 
 include_recipe "nodejs::npm"
-execute "upgrade_npm" do
-  command "sudo npm -g install npm@latest"
-  action :run
-end
 
 cookbook_file "/home/ubuntu/.ssh/config" do
   source 'config'
