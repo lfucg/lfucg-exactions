@@ -53,9 +53,18 @@ end
 
 execute "gulp-build" do
   cwd "/home/ubuntu/lfucg-exactions/lfucg-exactions/client"
-  command "npm build"
+  command "npm run build"
   environment "HOME" => "/home/ubuntu"
   user 'ubuntu'
   group 'ubuntu'
   action :run
 end
+
+# execute "gulp-gulp" do
+#   cwd "/home/ubuntu/lfucg-exactions/lfucg-exactions/client"
+#   command "npm gulp"
+#   environment "HOME" => "/home/ubuntu"
+#   user 'ubuntu'
+#   group 'ubuntu'
+#   action :run
+# end
