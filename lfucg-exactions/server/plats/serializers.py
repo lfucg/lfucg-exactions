@@ -24,7 +24,6 @@ class SubdivisionSerializer(serializers.ModelSerializer):
             'name',
             'gross_acreage',
             'cleaned_gross_acreage',
-            'number_allowed_lots',
         )
 
 class CalculationWorksheetSerializer(serializers.ModelSerializer):
