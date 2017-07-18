@@ -41,8 +41,8 @@ end
 
 if Dir.exists? "/home/ubuntu"
   bash "loaddata" do
-    code "#{virtualenv}/bin/python manage.py loaddata rate.json"
-    cwd "/home/ubuntu/lfucg-exactions/lfucg-exactions/server/manage.py"
+    code "#{virtualenv}/bin/python manage.py loaddata initial_data"
+    cwd "/home/ubuntu/lfucg-exactions/lfucg-exactions/server"
   end
 end
 
