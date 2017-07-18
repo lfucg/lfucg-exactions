@@ -5,6 +5,7 @@ import { map } from 'ramda';
 
 import Navbar from './Navbar';
 import Footer from './Footer';
+import Breadcrumbs from './Breadcrumbs';
 
 import {
     getLots,
@@ -13,6 +14,7 @@ import {
 class LotExisting extends React.Component {
     static propTypes = {
         lots: React.PropTypes.object,
+        route: React.PropTypes.object,
         onComponentDidMount: React.PropTypes.func,
     };
 
@@ -47,18 +49,18 @@ class LotExisting extends React.Component {
                                 <p className="col-md-4 col-xs-6">Latitude: {lot.latitude}</p>
                                 <p className="col-md-4 col-xs-6">Longitude: {lot.longitude}</p>
                                 <p className="col-md-4 col-xs-6">Approved: {lot.is_approved ? 'Approved' : 'Not Approved'}</p>
-                                <p className="col-md-4 col-xs-6">Road Development Dues: ${lot.dues_roads_dev}</p>
-                                <p className="col-md-4 col-xs-6">Road Own Dues: ${lot.dues_roads_own}</p>
-                                <p className="col-md-4 col-xs-6">Sewer Trans. Development Dues: ${lot.dues_sewer_trans_dev}</p>
-                                <p className="col-md-4 col-xs-6">Sewer Trans. Own Dues: ${lot.dues_sewer_trans_own}</p>
-                                <p className="col-md-4 col-xs-6">Sewer Capacity Development Dues: ${lot.dues_sewer_cap_dev}</p>
-                                <p className="col-md-4 col-xs-6">Sewer Capacity Own Dues: ${lot.dues_sewer_cap_own}</p>
-                                <p className="col-md-4 col-xs-6">Parks Development Dues: ${lot.dues_parks_dev}</p>
-                                <p className="col-md-4 col-xs-6">Parks Own Dues: ${lot.dues_parks_own}</p>
-                                <p className="col-md-4 col-xs-6">Storm Development Dues: ${lot.dues_storm_dev}</p>
-                                <p className="col-md-4 col-xs-6">Storm Own Dues: ${lot.dues_storm_own}</p>
-                                <p className="col-md-4 col-xs-6">Open Space Development Dues: ${lot.dues_open_space_dev}</p>
-                                <p className="col-md-4 col-xs-6">Open Space Own Dues: ${lot.dues_open_space_own}</p>
+                                <p className="col-md-4 col-xs-6">Road Developer Exactions: ${lot.dues_roads_dev}</p>
+                                <p className="col-md-4 col-xs-6">Road Owner Exactions: ${lot.dues_roads_own}</p>
+                                <p className="col-md-4 col-xs-6">Sewer Transmission Developer Exactions: ${lot.dues_sewer_trans_dev}</p>
+                                <p className="col-md-4 col-xs-6">Sewer Transmission Owner Exactions: ${lot.dues_sewer_trans_own}</p>
+                                <p className="col-md-4 col-xs-6">Sewer Capacity Developer Exactions: ${lot.dues_sewer_cap_dev}</p>
+                                <p className="col-md-4 col-xs-6">Sewer Capacity Owner Exactions: ${lot.dues_sewer_cap_own}</p>
+                                <p className="col-md-4 col-xs-6">Parks Developer Exactions: ${lot.dues_parks_dev}</p>
+                                <p className="col-md-4 col-xs-6">Parks Owner Exactions: ${lot.dues_parks_own}</p>
+                                <p className="col-md-4 col-xs-6">Storm Developer Exactions: ${lot.dues_storm_dev}</p>
+                                <p className="col-md-4 col-xs-6">Storm Owner Exactions: ${lot.dues_storm_own}</p>
+                                <p className="col-md-4 col-xs-6">Open Space Developer Exactions: ${lot.dues_open_space_dev}</p>
+                                <p className="col-md-4 col-xs-6">Open Space Owner Exactions: ${lot.dues_open_space_own}</p>
                             </div>
                         </div>
                     </div>

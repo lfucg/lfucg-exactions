@@ -95,8 +95,8 @@ class PlatZoneForm extends React.Component {
                                 </select>
                             </div>
                             <div className="col-sm-6">
-                                <FormGroup label="* Acres" id={this.props.acre_id}>
-                                    <input type="number" className="form-control" placeholder="Acres" />
+                                <FormGroup label="* Gross Acreage" id={this.props.acre_id}>
+                                    <input type="number" className="form-control" placeholder="Gross Acreage" />
                                 </FormGroup>
                             </div>
                         </div>

@@ -62,13 +62,8 @@ class LotForm extends React.Component {
         const submitEnabled =
             activeForm.plat !== 'choose_plat' &&
             activeForm.lot_number &&
-            activeForm.permit_id &&
-            activeForm.latitude &&
-            activeForm.longitude &&
             activeForm.address_number &&
             activeForm.address_street &&
-            activeForm.address_city &&
-            activeForm.address_state !== 'start_state' &&
             activeForm.address_zip;
 
         return (
@@ -145,77 +140,29 @@ class LotForm extends React.Component {
                                             </div>
                                             <div className="row">
                                                 <div className="col-sm-5">
-                                                    <FormGroup label="* City" id="address_city">
-                                                        <input type="text" className="form-control" placeholder="City" />
+                                                    <FormGroup label="City" id="address_city">
+                                                        <input type="text" className="form-control" placeholder="Lexington" disabled value="Lexington" />
                                                     </FormGroup>
                                                 </div>
                                                 <div className="col-sm-4 form-group">
-                                                    <label htmlFor="address_state" className="form-label" id="address_state">* State</label>
-                                                    <select className="form-control" onChange={formChange('address_state')} >
-                                                        <option value="start_state">State</option>
-                                                        <option value={['AK', 'Alaska']}>Alaska</option>
-                                                        <option value={['AL', 'Alabama']}>Alabama</option>
-                                                        <option value={['AR', 'Arkansas']}>Arkansas</option>
-                                                        <option value={['AS', 'American Samoa']}>American Samoa</option>
-                                                        <option value={['AZ', 'Arizona']}>Arizona</option>
-                                                        <option value={['CA', 'California']}>California</option>
-                                                        <option value={['CO', 'Colorado']}>Colorado</option>
-                                                        <option value={['CT', 'Connecticut']}>Connecticut</option>
-                                                        <option value={['DC', 'District of Columbia']}>District of Columbia</option>
-                                                        <option value={['DE', 'Delaware']}>Delaware</option>
-                                                        <option value={['FL', 'Florida']}>Florida</option>
-                                                        <option value={['GA', 'Georgia']}>Georgia</option>
-                                                        <option value={['GU', 'Guam']}>Guam</option>
-                                                        <option value={['HI', 'Hawaii']}>Hawaii</option>
-                                                        <option value={['IA', 'Iowa']}>Iowa</option>
-                                                        <option value={['ID', 'Idaho']}>Idaho</option>
-                                                        <option value={['IL', 'Illinois']}>Illinois</option>
-                                                        <option value={['IN', 'Indiana']}>Indiana</option>
-                                                        <option value={['KS', 'Kansas']}>Kansas</option>
-                                                        <option value={['KY', 'Kentucky']}>Kentucky</option>
-                                                        <option value={['LA', 'Louisiana']}>Louisiana</option>
-                                                        <option value={['MA', 'Massachusetts']}>Massachusetts</option>
-                                                        <option value={['MD', 'Maryland']}>Maryland</option>
-                                                        <option value={['ME', 'Maine']}>Maine</option>
-                                                        <option value={['MI', 'Michigan']}>Michigan</option>
-                                                        <option value={['MN', 'Minnesota']}>Minnesota</option>
-                                                        <option value={['MO', 'Missouri']}>Missouri</option>
-                                                        <option value={['MP', 'Northern Mariana Islands']}>Northern Mariana Islands</option>
-                                                        <option value={['MS', 'Mississippi']}>Mississippi</option>
-                                                        <option value={['MT', 'Montana']}>Montana</option>
-                                                        <option value={['NA', 'National']}>National</option>
-                                                        <option value={['NC', 'North Carolina']}>North Carolina</option>
-                                                        <option value={['ND', 'North Dakota']}>North Dakota</option>
-                                                        <option value={['NE', 'Nebraska']}>Nebraska</option>
-                                                        <option value={['NH', 'New Hampshire']}>New Hampshire</option>
-                                                        <option value={['NJ', 'New Jersey']}>New Jersey</option>
-                                                        <option value={['NM', 'New Mexico']}>New Mexico</option>
-                                                        <option value={['NV', 'Nevada']}>Nevada</option>
-                                                        <option value={['NY', 'New York']}>New York</option>
-                                                        <option value={['OH', 'Ohio']}>Ohio</option>
-                                                        <option value={['OK', 'Oklahoma']}>Oklahoma</option>
-                                                        <option value={['OR', 'Oregon']}>Oregon</option>
-                                                        <option value={['PA', 'Pennsylvania']}>Pennsylvania</option>
-                                                        <option value={['PR', 'Puerto Rico']}>Puerto Rico</option>
-                                                        <option value={['RI', 'Rhode Island']}>Rhode Island</option>
-                                                        <option value={['SC', 'South Carolina']}>South Carolina</option>
-                                                        <option value={['SD', 'South Dakota']}>South Dakota</option>
-                                                        <option value={['TN', 'Tennessee']}>Tennessee</option>
-                                                        <option value={['TX', 'Texas']}>Texas</option>
-                                                        <option value={['UT', 'Utah']}>Utah</option>
-                                                        <option value={['VA', 'Virginia']}>Virginia</option>
-                                                        <option value={['VI', 'Virgin Islands']}>Virgin Islands</option>
-                                                        <option value={['VT', 'Vermont']}>Vermont</option>
-                                                        <option value={['WA', 'Washington']}>Washington</option>
-                                                        <option value={['WI', 'Wisconsin']}>Wisconsin</option>
-                                                        <option value={['WV', 'West Virginia']}>West Virginia</option>
-                                                        <option value={['WY', 'Wyoming']}>Wyoming</option>
-                                                    </select>
-                                                </div>
-                                                <div className="col-sm-3">
-                                                    <FormGroup label="* Zipcode" id="address_zip">
-                                                        <input type="text" className="form-control" placeholder="Zipcode" />
+                                                    <FormGroup label="State" id="address_state">
+                                                        <input type="text" className="form-control" placeholder="Kentucky" disabled value="KY" />
                                                     </FormGroup>
+                                                </div>
+                                                <div className="col-sm-3 form-group">
+                                                    <label htmlFor="address_zip" className="form-label" id="address_zip">* Zipcode</label>
+                                                    <select className="form-control" id="address_zip" onChange={formChange('address_zip')} >
+                                                        {lots.address_zip ? (
+                                                            <option value="address_zip" aria-label={`Zipcode ${lots.address_zip}`}>{lots.address_zip}</option>
+                                                        ) : (
+                                                            <option value="choose_zip" aria-label="Zipcode">Zipcode</option>
+                                                        )}
+                                                        <option value={['40515', '40515']}>40515</option>
+                                                        <option value={['40509', '40509']}>40509</option>
+                                                        <option value={['40516', '40516']}>40516</option>
+                                                        <option value={['40511', '40511']}>40511</option>
+                                                        <option value={['40505', '40505']}>40505</option>
+                                                    </select>
                                                 </div>
                                             </div>
                                             <div className="row form-subheading">
@@ -250,19 +197,19 @@ class LotForm extends React.Component {
                                                     </FormGroup>
                                                 </div>
                                                 <div className="col-sm-6">
-                                                    <FormGroup label="* Permit ID" id="permit_id">
+                                                    <FormGroup label="Permit ID" id="permit_id">
                                                         <input type="text" className="form-control" placeholder="Permit ID" />
                                                     </FormGroup>
                                                 </div>
                                             </div>
                                             <div className="row">
                                                 <div className="col-sm-6">
-                                                    <FormGroup label="* Latitude" id="latitude">
+                                                    <FormGroup label="Latitude" id="latitude">
                                                         <input type="text" className="form-control" placeholder="Latitude" />
                                                     </FormGroup>
                                                 </div>
                                                 <div className="col-sm-6">
-                                                    <FormGroup label="* Longitude" id="longitude">
+                                                    <FormGroup label="Longitude" id="longitude">
                                                         <input type="text" className="form-control" placeholder="Permit ID" />
                                                     </FormGroup>
                                                 </div>
@@ -283,77 +230,77 @@ class LotForm extends React.Component {
                                 <form onSubmit={onLotDues} >
                                     <fieldset>
                                         <div className="row form-subheading">
-                                            <h3>Dues</h3>
+                                            <h3>Exactions</h3>
                                         </div>
                                         <div className="row">
                                             <div className="col-sm-6">
-                                                <FormGroup label="Road Development Fees" id="dues_roads_dev">
-                                                    <input type="number" className="form-control" placeholder="Road Development Fees" />
+                                                <FormGroup label="Road Developer Exactions" id="dues_roads_dev">
+                                                    <input type="number" className="form-control" placeholder="Road Developer Exactions" />
                                                 </FormGroup>
                                             </div>
                                             <div className="col-sm-6">
-                                                <FormGroup label="Road Own Fees" id="dues_roads_own">
-                                                    <input type="number" className="form-control" placeholder="Road Own Fees" />
-                                                </FormGroup>
-                                            </div>
-                                        </div>
-                                        <div className="row">
-                                            <div className="col-sm-6">
-                                                <FormGroup label="Sewer Trans. Development Fees" id="dues_sewer_trans_dev">
-                                                    <input type="number" className="form-control" placeholder="Sewer Trans. Development Fees" />
-                                                </FormGroup>
-                                            </div>
-                                            <div className="col-sm-6">
-                                                <FormGroup label="Sewer Trans. Own Fees" id="dues_sewer_trans_own">
-                                                    <input type="number" className="form-control" placeholder="Sewer Trans. Own Fees" />
+                                                <FormGroup label="Road Owner Exactions" id="dues_roads_own">
+                                                    <input type="number" className="form-control" placeholder="Road Owner Exactions" />
                                                 </FormGroup>
                                             </div>
                                         </div>
                                         <div className="row">
                                             <div className="col-sm-6">
-                                                <FormGroup label="Sewer Capacity Development Fees" id="dues_sewer_cap_dev">
-                                                    <input type="number" className="form-control" placeholder="Sewer Capacity Development Fees" />
+                                                <FormGroup label="Sewer Transmission Developer Exactions" id="dues_sewer_trans_dev">
+                                                    <input type="number" className="form-control" placeholder="Sewer Transmission Developer Exactions" />
                                                 </FormGroup>
                                             </div>
                                             <div className="col-sm-6">
-                                                <FormGroup label="Sewer Capacity Own Fees" id="dues_sewer_cap_own">
-                                                    <input type="number" className="form-control" placeholder="Sewer Capacity Own Fees" />
-                                                </FormGroup>
-                                            </div>
-                                        </div>
-                                        <div className="row">
-                                            <div className="col-sm-6">
-                                                <FormGroup label="Parks Development Fees" id="dues_parks_dev">
-                                                    <input type="number" className="form-control" placeholder="Parks Development Fees" />
-                                                </FormGroup>
-                                            </div>
-                                            <div className="col-sm-6">
-                                                <FormGroup label="Parks Own Fees" id="dues_parks_own">
-                                                    <input type="number" className="form-control" placeholder="Parks Own Fees" />
+                                                <FormGroup label="Sewer Transmission Owner Exactions" id="dues_sewer_trans_own">
+                                                    <input type="number" className="form-control" placeholder="Sewer Transmission Owner Exactions" />
                                                 </FormGroup>
                                             </div>
                                         </div>
                                         <div className="row">
                                             <div className="col-sm-6">
-                                                <FormGroup label="Storm Development Fees" id="dues_storm_dev">
-                                                    <input type="number" className="form-control" placeholder="Storm Development Fees" />
+                                                <FormGroup label="Sewer Capacity Developer Exactions" id="dues_sewer_cap_dev">
+                                                    <input type="number" className="form-control" placeholder="Sewer Capacity Developer Exactions" />
                                                 </FormGroup>
                                             </div>
                                             <div className="col-sm-6">
-                                                <FormGroup label="Storm Own Fees" id="dues_storm_own">
-                                                    <input type="number" className="form-control" placeholder="Storm Own Fees" />
+                                                <FormGroup label="Sewer Capacity Owner Exactions" id="dues_sewer_cap_own">
+                                                    <input type="number" className="form-control" placeholder="Sewer Capacity Owner Exactions" />
                                                 </FormGroup>
                                             </div>
                                         </div>
                                         <div className="row">
                                             <div className="col-sm-6">
-                                                <FormGroup label="Open Space Development Fees" id="dues_open_space_dev">
-                                                    <input type="number" className="form-control" placeholder="Open Space Development Fees" />
+                                                <FormGroup label="Parks Developer Exactions" id="dues_parks_dev">
+                                                    <input type="number" className="form-control" placeholder="Parks Developer Exactions" />
                                                 </FormGroup>
                                             </div>
                                             <div className="col-sm-6">
-                                                <FormGroup label="Open Space Own Fees" id="dues_open_space_own">
-                                                    <input type="number" className="form-control" placeholder="Open Space Own Fees" />
+                                                <FormGroup label="Parks Owner Exactions" id="dues_parks_own">
+                                                    <input type="number" className="form-control" placeholder="Parks Owner Exactions" />
+                                                </FormGroup>
+                                            </div>
+                                        </div>
+                                        <div className="row">
+                                            <div className="col-sm-6">
+                                                <FormGroup label="Storm Developer Exactions" id="dues_storm_dev">
+                                                    <input type="number" className="form-control" placeholder="Storm Developer Exactions" />
+                                                </FormGroup>
+                                            </div>
+                                            <div className="col-sm-6">
+                                                <FormGroup label="Storm Owner Exactions" id="dues_storm_own">
+                                                    <input type="number" className="form-control" placeholder="Storm Owner Exactions" />
+                                                </FormGroup>
+                                            </div>
+                                        </div>
+                                        <div className="row">
+                                            <div className="col-sm-6">
+                                                <FormGroup label="Open Space Developer Exactions" id="dues_open_space_dev">
+                                                    <input type="number" className="form-control" placeholder="Open Space Developer Exactions" />
+                                                </FormGroup>
+                                            </div>
+                                            <div className="col-sm-6">
+                                                <FormGroup label="Open Space Owner Exactions" id="dues_open_space_own">
+                                                    <input type="number" className="form-control" placeholder="Open Space Owner Exactions" />
                                                 </FormGroup>
                                             </div>
                                         </div>

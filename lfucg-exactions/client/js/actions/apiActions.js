@@ -174,7 +174,6 @@ export function postSubdivision() {
             const {
                 name,
                 gross_acreage,
-                number_allowed_lots,
             } = activeForm;
             const {
                 id,
@@ -184,7 +183,6 @@ export function postSubdivision() {
                 modified_by: id,
                 name,
                 gross_acreage,
-                number_allowed_lots,
             };
         },
     };
@@ -204,7 +202,6 @@ export function putSubdivision(selectedSubdivision) {
             const {
                 name,
                 gross_acreage,
-                number_allowed_lots,
             } = activeForm;
             const {
                 id,
@@ -214,7 +211,6 @@ export function putSubdivision(selectedSubdivision) {
                 modified_by: id,
                 name,
                 gross_acreage,
-                number_allowed_lots,
             };
         },
     };

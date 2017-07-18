@@ -26,7 +26,6 @@ class Subdivision(models.Model):
 
     name = models.CharField(max_length=200)
     gross_acreage = models.DecimalField(max_digits=20, decimal_places=3)
-    number_allowed_lots = models.PositiveIntegerField()
 
     history = HistoricalRecords()
 
@@ -47,6 +46,19 @@ class Plat(models.Model):
     is_approved = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
 
+    EXPANSION_AREAS = (
+        ('EA-1', 'EA-1'),
+        ('EA-2A', 'EA-2A'),
+        ('EA-2B', 'EA-2B'),
+        ('EA-2C', 'EA-2C'),
+        ('EA-3', 'EA-3'),
+    )
+
+    PLAT_TYPES = (
+        ('PLAT', 'Final Record Plat'),
+        ('DEVELOPMENT_PLAN', 'Final Development Plan'),
+    )
+
     subdivision = models.ForeignKey(Subdivision, blank=True, null=True, related_name='plat')
 
     date_recorded = models.DateField()
@@ -58,19 +70,19 @@ class Plat(models.Model):
 
     name = models.CharField(max_length=300)    
     total_acreage = models.DecimalField(max_digits=20, decimal_places=3)
-    latitude = models.CharField(max_length=100)
-    longitude = models.CharField(max_length=100)
+    latitude = models.CharField(max_length=100, null=True, blank=True)
+    longitude = models.CharField(max_length=100, null=True, blank=True)
 
     # plan or development plan
-    plat_type = models.CharField(max_length=200)
+    plat_type = models.CharField(max_length=100, choices=PLAT_TYPES)
 
-    expansion_area = models.CharField(max_length=100)
-    unit = models.CharField(max_length=200)
+    expansion_area = models.CharField(max_length=100, choices=EXPANSION_AREAS)
+    unit = models.CharField(max_length=200, null=True, blank=True)
     section = models.CharField(max_length=200)
     block = models.CharField(max_length=200)
     
-    buildable_lots = models.CharField(max_length=200)
-    non_buildable_lots = models.CharField(max_length=200)
+    buildable_lots = models.IntegerField()
+    non_buildable_lots = models.IntegerField()
 
     cabinet = models.CharField(max_length=200)
     slide = models.CharField(max_length=200)
@@ -171,6 +183,14 @@ class Lot(models.Model):
         ('WY', 'Wyoming'),
     )
 
+    ZIPCODES = (
+        ('40515', '40515'),
+        ('40509', '40509'),
+        ('40516', '40516'),
+        ('40511', '40511'),
+        ('40505', '40505'),
+    )
+
     plat = models.ForeignKey(Plat, related_name='lot')
     parcel_id = models.CharField(max_length=200, null=True, blank=True)
     
@@ -181,19 +201,19 @@ class Lot(models.Model):
     modified_by = models.ForeignKey(User, related_name='lot_modified')
 
     lot_number = models.CharField(max_length=100)
-    permit_id = models.CharField(max_length=200)
+    permit_id = models.CharField(max_length=200, null=True, blank=True)
 
-    latitude = models.CharField(max_length=100)
-    longitude = models.CharField(max_length=100)
+    latitude = models.CharField(max_length=100, null=True, blank=True)
+    longitude = models.CharField(max_length=100, null=True, blank=True)
 
     address_number = models.IntegerField()
     address_direction = models.CharField(max_length=50, null=True, blank=True)
     address_street = models.CharField(max_length=200)
     address_suffix = models.CharField(max_length=100, null=True, blank=True)
     address_unit = models.CharField(max_length=100, null=True, blank=True)
-    address_city = models.CharField(max_length=100)
-    address_state = models.CharField(max_length=50, choices=STATES)
-    address_zip = models.CharField(max_length=10)
+    address_city = models.CharField(max_length=100, default='Lexington')
+    address_state = models.CharField(max_length=50, choices=STATES, default='KY')
+    address_zip = models.CharField(max_length=10, choices=ZIPCODES)
     address_full = models.CharField(max_length=300)
 
     dues_roads_dev = models.DecimalField(max_digits=20, decimal_places=2, default=0)
@@ -225,6 +245,10 @@ class Lot(models.Model):
                 created_by = existing_lot.created_by
         except:
             created_by = self.created_by
+
+        plat_expansion_area = Plat.objects.get(id=self.plat.id).expansion_area
+        if plat_expansion_area == 'EA-1':
+            self.address_zip = '40515'
 
         plat_zones = Plat.objects.get(id=self.plat.id).plat_zone.all()
         plat_buildable = Plat.objects.get(id=self.plat.id).buildable_lots
