@@ -1,5 +1,11 @@
 #
 # Cookbook Name:: chef-lfucg-exactions
+# Recipe:: system
+#
+# Copyright (C) 2017 Kelly Wright
+#
+# All rights reserved - Do Not Redistribute
+#
 
 include_recipe 'python'
 include_recipe "python::pip"
@@ -31,6 +37,13 @@ bash "migrate" do
   user "ubuntu"
   code "#{virtualenv}/bin/python manage.py migrate --noinput"
   cwd "/home/ubuntu/lfucg-exactions/lfucg-exactions/server"
+end
+
+if Dir.exists? "/home/ubuntu"
+  bash "loaddata" do
+    code "#{virtualenv}/bin/python manage.py loaddata rate.json"
+    cwd "/home/ubuntu/lfucg-exactions/lfucg-exactions/server/manage.py"
+  end
 end
 
 service "apache2" do
