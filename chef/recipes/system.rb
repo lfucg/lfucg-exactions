@@ -41,6 +41,6 @@ end
 
 include_recipe "nodejs::npm"
 
-cookbook_file "/home/ubuntu/.ssh/config" do
-  source 'config'
-end
+# cookbook_file "/home/ubuntu/.ssh/config" do
+#   source 'config'
+# end

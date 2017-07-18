@@ -1,0 +1,30 @@
+<VirtualHost *:80>
+    ServerName <%= @params[:server_name] %>
+    ServerAlias *
+
+    ServerAdmin <%= @params[:admin] %>
+    DocumentRoot <%= @params[:docroot] %>
+    ErrorLog ${APACHE_LOG_DIR}/error.log
+    CustomLog ${APACHE_LOG_DIR}/access.log combined
+
+    ErrorDocument 500 /static/errors/500.html
+
+    WSGIPassAuthorization On
+    <Directory <%= @params[:docroot] %>>
+        <Files wsgi.py>
+        Order deny,allow
+        Require all granted
+        </Files>
+    </Directory>
+
+    Alias /static/ <%= @params[:docroot] %>/static/
+
+    <Directory <%= @params[:docroot] %>/static>
+        Require all granted
+    </Directory>
+
+</VirtualHost>
+
+WSGIDaemonProcess exactions python-path=<%= @params[:docroot] %>:/home/ubuntu/env/lib/python3.5/site-packages
+WSGIProcessGroup exactions
+WSGIScriptAlias / <%= @params[:docroot] %>/server/wsgi.py
