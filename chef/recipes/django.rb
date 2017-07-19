@@ -45,17 +45,3 @@ if node.attribute?('vagrant')
     cwd "/home/ubuntu/lfucg-exactions/lfucg-exactions/server"
   end
 end
-
-service "apache2" do
-  ignore_failure true
-  action [ :restart ]
-  notifies :run, 'bash[collectstatic]', :immediately
-end
-
-bash "collectstatic" do
-  code "echo 'yes' | #{virtualenv}/bin/python manage.py collectstatic"
-  cwd "/home/ubuntu/lfucg-exactions/lfucg-exactions/server"
-  only_if { ::Dir.exists?("/home/ubuntu/lfucg-exactions/lfucg-exactions/server/manage.py") }
-  action :nothing
-end
-
