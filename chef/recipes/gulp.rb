@@ -9,48 +9,28 @@
 
 include_recipe "nodejs::npm"
 
-# if Dir.exists? "/home/ubuntu"
-directory "/home/ubuntu/lfucg-exactions/lfucg-exactions/client/node_modules" do
-  owner 'ubuntu'
-  group 'ubuntu'
-  only_if { node['symlink_npm'] }
-end
-
-link "/home/ubuntu/lfucg-exactions/lfucg-exactions/client/node_modules" do
-  owner 'ubuntu'
-  group 'ubuntu'
-  to "/home/ubuntu/lfucg-exactions/lfucg-exactions/client/node_modules"
-  only_if { node['symlink_npm'] }
-end
-# end
-
 # Some host OSs don't let npm create symlinks in the shared directory. This
 # stores our node_modules on the VM and simply creates a mystery symlink file
 # in the shared directory which is gitignored
-# directory "/home/ubuntu/lfucg-exactions/lfucg-exactions/client/node_modules" do
-#   owner "ubuntu"
-#   group "ubuntu"
-#   recursive true
-# end
-# link "/home/ubuntu/lfucg-exactions/lfucg-exactions/client/node_modules" do
-#   owner "ubuntu"
-#   group "ubuntu"
-#   to "/home/ubuntu/lfucg-exactions/lfucg-exactions/client/node_modules"
-# end
+directory "/home/ubuntu/node_modules" do
+  owner "ubuntu"
+  group "ubuntu"
+  recursive true
+end
+link "/home/ubuntu/lfucg-exactions/lfucg-exactions/client/node_modules" do
+  owner "ubuntu"
+  group "ubuntu"
+  to "/home/ubuntu/node_modules"
+end
 
-# # Install package.json dependencies
-# nodejs_npm "npm-install" do
-#   path "/home/ubuntu/lfucg-exactions/lfucg-exactions/client"
-#   user "ubuntu"
-#   json true
-# end
-
+# Install package.json dependencies
 nodejs_npm "npm-install" do
   path "/home/ubuntu/lfucg-exactions/lfucg-exactions/client"
-  user 'ubuntu'
+  user "ubuntu"
   json true
 end
 
+# Build JS and CSS dependencies
 execute "gulp-build" do
   cwd "/home/ubuntu/lfucg-exactions/lfucg-exactions/client"
   command "npm run build"
@@ -59,12 +39,3 @@ execute "gulp-build" do
   group 'ubuntu'
   action :run
 end
-
-# execute "gulp-gulp" do
-#   cwd "/home/ubuntu/lfucg-exactions/lfucg-exactions/client"
-#   command "npm gulp"
-#   environment "HOME" => "/home/ubuntu"
-#   user 'ubuntu'
-#   group 'ubuntu'
-#   action :run
-# end
