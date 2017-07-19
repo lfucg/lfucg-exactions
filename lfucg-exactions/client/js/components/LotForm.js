@@ -240,7 +240,7 @@ class LotForm extends React.Component {
                                             </div>
                                             <div className="col-sm-6">
                                                 <FormGroup label="Road Owner Exactions" id="dues_roads_own">
-                                                    <input type="number" className="form-control" placeholder="Road Owner Exactions" />
+                                                    <input type="number" className="form-control" placeholder="Road Owner Exactions" disabled={lots.dues_roads_own === 0} />
                                                 </FormGroup>
                                             </div>
                                         </div>
@@ -252,7 +252,7 @@ class LotForm extends React.Component {
                                             </div>
                                             <div className="col-sm-6">
                                                 <FormGroup label="Sewer Transmission Owner Exactions" id="dues_sewer_trans_own">
-                                                    <input type="number" className="form-control" placeholder="Sewer Transmission Owner Exactions" />
+                                                    <input type="number" className="form-control" placeholder="Sewer Transmission Owner Exactions" disabled={lots.dues_sewer_trans_own === 0} />
                                                 </FormGroup>
                                             </div>
                                         </div>
@@ -264,7 +264,7 @@ class LotForm extends React.Component {
                                             </div>
                                             <div className="col-sm-6">
                                                 <FormGroup label="Sewer Capacity Owner Exactions" id="dues_sewer_cap_own">
-                                                    <input type="number" className="form-control" placeholder="Sewer Capacity Owner Exactions" />
+                                                    <input type="number" className="form-control" placeholder="Sewer Capacity Owner Exactions" disabled={lots.dues_sewer_cap_own === 0} />
                                                 </FormGroup>
                                             </div>
                                         </div>
@@ -276,7 +276,7 @@ class LotForm extends React.Component {
                                             </div>
                                             <div className="col-sm-6">
                                                 <FormGroup label="Parks Owner Exactions" id="dues_parks_own">
-                                                    <input type="number" className="form-control" placeholder="Parks Owner Exactions" />
+                                                    <input type="number" className="form-control" placeholder="Parks Owner Exactions" disabled={lots.dues_parks_own === 0} />
                                                 </FormGroup>
                                             </div>
                                         </div>
@@ -288,7 +288,7 @@ class LotForm extends React.Component {
                                             </div>
                                             <div className="col-sm-6">
                                                 <FormGroup label="Storm Owner Exactions" id="dues_storm_own">
-                                                    <input type="number" className="form-control" placeholder="Storm Owner Exactions" />
+                                                    <input type="number" className="form-control" placeholder="Storm Owner Exactions" disabled={lots.dues_storm_own === 0} />
                                                 </FormGroup>
                                             </div>
                                         </div>
@@ -299,8 +299,8 @@ class LotForm extends React.Component {
                                                 </FormGroup>
                                             </div>
                                             <div className="col-sm-6">
-                                                <FormGroup label="Open Space Owner Exactions" id="dues_open_space_own">
-                                                    <input type="number" className="form-control" placeholder="Open Space Owner Exactions" />
+                                                <FormGroup label="Open Space Owner Exactions" id="dues_open_space_own" disabled={lots.dues_open_space_own === 0}>
+                                                    <input type="number" className="form-control" placeholder="Open Space Owner Exactions" disabled={lots.dues_open_space_own === 0} />
                                                 </FormGroup>
                                             </div>
                                         </div>

@@ -12,7 +12,7 @@ header {
         height: 70px;
     }
     .navbar-brand {
-        background-image: url('../../static/Lexington_Web_Color_Horse_Only.png');
+        background-image: url(`${global.BASE_STATIC_URL}/Lexington_Web_Color_Horse_Only.png`);
         background-repeat: no-repeat;
         background-size: 100%; 
         width: 50px;
