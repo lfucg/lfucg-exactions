@@ -54,7 +54,7 @@ end
 
 bash "collectstatic" do
   code "echo 'yes' | #{virtualenv}/bin/python manage.py collectstatic"
-  cwd "/home/ubuntu/lfucg-exactions/lfucg-exactions/server/manage.py"
+  cwd "/home/ubuntu/lfucg-exactions/lfucg-exactions/server"
   only_if { ::Dir.exists?("/home/ubuntu/lfucg-exactions/lfucg-exactions/server/manage.py") }
   action :nothing
 end
