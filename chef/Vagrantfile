@@ -56,7 +56,6 @@ Vagrant.configure("2") do |config|
     chef.json = {
       'vagrant' => {
         'app' => {
-          "symlink_npm" => (RbConfig::CONFIG["host_os"] =~ /cygwin|mswin|mingw/) ? true : false,
           'domains' => ['localhost:8000'],
           'environment' => {
             "SECRET_KEY": "secret_key",

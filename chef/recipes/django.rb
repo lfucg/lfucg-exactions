@@ -39,7 +39,7 @@ bash "migrate" do
   cwd "/home/ubuntu/lfucg-exactions/lfucg-exactions/server"
 end
 
-if Dir.exists? "/home/ubuntu"
+if node.attribute?('vagrant')
   bash "loaddata" do
     code "#{virtualenv}/bin/python manage.py loaddata initial_data"
     cwd "/home/ubuntu/lfucg-exactions/lfucg-exactions/server"
