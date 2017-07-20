@@ -234,7 +234,7 @@ WSGI_APPLICATION = 'server.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'exactions.db',
+        'NAME': 'exactions',
         'USER': '',
         'PASSWORD': '',
         'HOST': '',
