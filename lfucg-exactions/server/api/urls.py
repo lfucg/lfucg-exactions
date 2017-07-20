@@ -5,7 +5,7 @@ from accounts.auth import *
 from plats.viewsets import *
 from notes.viewsets import *
 from accounts.viewsets import *
-from accounts.views import CurrentUserDetails
+from .views import CurrentUserDetails
 
 router = routers.DefaultRouter()
 

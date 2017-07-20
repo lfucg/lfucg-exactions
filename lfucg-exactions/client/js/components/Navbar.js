@@ -63,7 +63,6 @@ class Navbar extends React.Component {
                                             <Link to="login/" role="link" >Login</Link>
                                         </li>
                                     )}
-                                    {console.log('WIDTH', window.innerWidth)}
                                 </ul>
                             </div>
                         </div>
