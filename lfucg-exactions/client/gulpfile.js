@@ -20,7 +20,7 @@ gulp.task('scripts', function(){
   gulp.src('./js/main.js', {read: false})
     .pipe(webpack(require('./webpack.config.js')))
     .pipe(gulp.dest('../dist/js'))
-    .on('error', function (error) {console.log(error); this.emit('end')});
+    .on('error', function (error) {console.log(error)});
 });
 
 gulp.task('scripts:watch', ['scripts'], function () {
@@ -39,7 +39,7 @@ gulp.task('images:watch', ['images'], function () {
 gulp.task('test', function () {
   return gulp.src('./test/**/*.js', {read: false})
     .pipe(mocha({}))
-    .on('error', function (error) {console.log(error); this.emit('end')});
+    .on('error', function (error) {console.log(error)});
 });
 
 gulp.task('test:ci', function () {
