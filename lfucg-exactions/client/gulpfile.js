@@ -39,7 +39,7 @@ gulp.task('images:watch', ['images'], function () {
 gulp.task('test', function () {
   return gulp.src('./test/**/*.js', {read: false})
     .pipe(mocha({}))
-    .on('error', function (error) {console.log(error); this.emit('end')});
+    .on('error', function (error) {console.log(error)});
 });
 
 gulp.task('test:ci', function () {

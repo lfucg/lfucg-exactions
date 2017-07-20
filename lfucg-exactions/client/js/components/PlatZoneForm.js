@@ -86,7 +86,7 @@ class PlatZoneForm extends React.Component {
                                         <option value="start_zone" aria-label="Zone">Zone</option>
                                     )}
                                     <option value={['EAR-1', 'EAR-1']}>EAR-1</option>
-                                    <option value={['EAR-1SRA', 'EAR-1SRA']}>EAR-1SRA</option>
+                                    <option value={['EAR1-SRA', 'EAR1-SRA']}>EAR1-SRA</option>
                                     <option value={['EAR-2', 'EAR-2']}>EAR-2</option>
                                     <option value={['EAR-3', 'EAR-3']}>EAR-3</option>
                                     <option value={['CC(RES)', 'CC(RES)']}>CC(RES)</option>
