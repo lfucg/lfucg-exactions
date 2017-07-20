@@ -240,7 +240,7 @@ class LotForm extends React.Component {
                                             </div>
                                             <div className="col-sm-6">
                                                 <FormGroup label="Road Owner Exactions" id="dues_roads_own">
-                                                    <input type="number" className="form-control" placeholder="Road Owner Exactions" disabled={lots.dues_roads_own === 0} />
+                                                    <input type="number" className="form-control" placeholder="Road Owner Exactions" disabled="true" />
                                                 </FormGroup>
                                             </div>
                                         </div>
