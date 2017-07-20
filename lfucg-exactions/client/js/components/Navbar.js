@@ -26,9 +26,6 @@ class Navbar extends React.Component {
 
         const windowWidth = window.innerWidth;
 
-        // const divStyle = {
-        //     height: 100,
-        // };
         return (
             <div className="react-navbar">
                 <header>
