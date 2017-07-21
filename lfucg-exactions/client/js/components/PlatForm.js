@@ -446,6 +446,11 @@ function mapDispatchToProps(dispatch, params) {
     return {
         onComponentDidMount() {
             dispatch(formInit());
+            const else_update = {
+                first_section: false,
+                add_another_plat_zone: false,
+            };
+            dispatch(formUpdate(else_update));
             dispatch(getSubdivisions());
             dispatch(getMe())
             .then((data_me) => {
@@ -494,12 +499,6 @@ function mapDispatchToProps(dispatch, params) {
                         };
                         dispatch(formUpdate(update));
                     });
-                } else {
-                    const else_update = {
-                        first_section: false,
-                        add_another_plat_zone: false,
-                    };
-                    dispatch(formUpdate(else_update));
                 }
             });
         },
@@ -522,7 +521,13 @@ function mapDispatchToProps(dispatch, params) {
         onPlatSubmit(event) {
             event.preventDefault();
             if (selectedPlat) {
-                dispatch(putPlat(selectedPlat));
+                dispatch(putPlat(selectedPlat))
+                .then(() => {
+                    const put_update = {
+                        first_section: true,
+                    };
+                    dispatch(formUpdate(put_update));
+                })
             } else {
                 dispatch(postPlat())
                 .then((data_post) => {
@@ -530,6 +535,7 @@ function mapDispatchToProps(dispatch, params) {
                         plat: data_post.response.id,
                         plat_name: data_post.response.name,
                         acres: data_post.response.total_acreage,
+                        first_section: true,
                     };
                     dispatch(formUpdate(zone_update));
                     hashHistory.push(`plat/form/${data_post.response.id}`);
