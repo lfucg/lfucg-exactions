@@ -253,7 +253,7 @@ class PlatForm extends React.Component {
                                                         {plats.plat_type ? (
                                                             <option value="plat_type" aria-label={`Plat Type ${plats.plat_type}`}>{plats.plat_type}</option>
                                                         ) : (
-                                                            <option value="choose_plat_type" aria-label="Choose an Plat Type">Choose an Plat Type</option>
+                                                            <option value="choose_plat_type" aria-label="Choose a Plat Type">Choose an Plat Type</option>
                                                         )}
                                                         <option value={['PLAT', 'Final Record Plat']}>Final Record Plat</option>
                                                         <option value={['DEVELOPMENT_PLAN', 'Final Development Plan']}>Final Development Plan</option>
@@ -394,13 +394,13 @@ class PlatForm extends React.Component {
                                             <div className="col-xs-12 dues-table-heading"><h3>Plat Exactions</h3></div>
                                             <div className="row">
                                                 <div className="col-sm-6">
-                                                    <FormGroup label="* Sewer Exactions" id="sewer_due">
-                                                        <input type="number" className="form-control" placeholder="Sewer Exactions" />
+                                                    <FormGroup label="Sewer Exactions" id="sewer_due">
+                                                        <input type="number" className="form-control" placeholder="Sewer Exactions" disabled />
                                                     </FormGroup>
                                                 </div>
                                                 <div className="col-sm-6">
-                                                    <FormGroup label="* Non-Sewer Exactions" id="non_sewer_due">
-                                                        <input type="number" className="form-control" placeholder="Non-Sewer Exactions" />
+                                                    <FormGroup label="Non-Sewer Exactions" id="non_sewer_due">
+                                                        <input type="number" className="form-control" placeholder="Non-Sewer Exactions" disabled />
                                                     </FormGroup>
                                                 </div>
                                             </div>
