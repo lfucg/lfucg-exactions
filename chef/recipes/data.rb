@@ -17,7 +17,7 @@ config = node['vagrant']['app']['environment']
 
 postgresql_connection_info = {
   :host => config['DATABASE_HOST'],
-  :port => '5432',
+  :port => config['DATABASE_PORT'],
   :username => config['DATABASE_USER'],
   :password => config['DATABASE_PASSWORD'],
 }
