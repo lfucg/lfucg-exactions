@@ -13,6 +13,7 @@ import {
 import {
     postPlatZone,
     putPlatZone,
+    getPlatID,
 } from '../actions/apiActions';
 
 class PlatZoneForm extends React.Component {
@@ -162,9 +163,31 @@ function mapDispatchToProps(dispatch, props) {
                 if (selectedPlatZone) {
                     const zone = activeForm.activeForm[`${props.zone_id}`];
                     const acres = activeForm.activeForm[`${props.acre_id}`];
-                    dispatch(putPlatZone(selectedPlatZone, zone, acres));
+                    dispatch(putPlatZone(selectedPlatZone, zone, acres))
+                    .then(() => {
+                        dispatch(getPlatID(activeForm.activeForm.plat))
+                        .then((zone_put_get_plat) => {
+                            const zone_put_update = {
+                                sewer_due: zone_put_get_plat.response.sewer_due,
+                                non_sewer_due: zone_put_get_plat.response.non_sewer_due,
+                                calculation_note: zone_put_get_plat.response.calculation_note,
+                            };
+                            dispatch(formUpdate(zone_put_update));
+                        });
+                    });
                 } else {
-                    dispatch(postPlatZone());
+                    dispatch(postPlatZone())
+                    .then(() => {
+                        dispatch(getPlatID(activeForm.activeForm.plat))
+                        .then((zone_post_get_plat) => {
+                            const zone_post_update = {
+                                sewer_due: zone_post_get_plat.response.sewer_due,
+                                non_sewer_due: zone_post_get_plat.response.non_sewer_due,
+                                calculation_note: zone_post_get_plat.response.calculation_note,
+                            };
+                            dispatch(formUpdate(zone_post_update));
+                        });
+                    });
                 }
             };
         },

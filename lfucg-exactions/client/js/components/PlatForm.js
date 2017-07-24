@@ -303,7 +303,7 @@ class PlatForm extends React.Component {
                             </div>
                             { activeForm.first_section ? (
                                 <div>
-                                    { plats.plat_zone && activeForm.zone_section && plats.plat_zone.length > 0 ? (
+                                    { activeForm.zone_section ? (
                                         <div>
                                             <a
                                               role="button"
@@ -477,6 +477,12 @@ function mapDispatchToProps(dispatch, params) {
                             };
                             dispatch(formUpdate(zone_update));
                         }
+                        if (data_plat.response.plat_zone && data_plat.response.plat_zone.length > 0) {
+                            const zones_exist_update = {
+                                zone_section: true,
+                            };
+                            dispatch(formUpdate(zones_exist_update));
+                        }
                         const update = {
                             subdivision: data_plat.response.subdivision,
                             date_recorded: data_plat.response.date_recorded,
@@ -500,7 +506,6 @@ function mapDispatchToProps(dispatch, params) {
                             plat_name: data_plat.response.name,
                             first_section: true,
                             add_another_plat_zone: false,
-                            zone_section: true,
                         };
                         dispatch(formUpdate(update));
                     });
