@@ -69,7 +69,7 @@ class Plat(models.Model):
     modified_by = models.ForeignKey(User, related_name='plat_modified')
 
     name = models.CharField(max_length=300)    
-    total_acreage = models.DecimalField(max_digits=20, decimal_places=3)
+    total_acreage = models.DecimalField(max_digits=20, decimal_places=2)
     latitude = models.CharField(max_length=100, null=True, blank=True)
     longitude = models.CharField(max_length=100, null=True, blank=True)
 
