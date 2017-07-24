@@ -168,11 +168,11 @@ class LotForm extends React.Component {
                                                         ) : (
                                                             <option value="choose_zip" aria-label="Zipcode">Zipcode</option>
                                                         )}
-                                                        <option value={['40515', '40515']}>40515</option>
-                                                        <option value={['40509', '40509']}>40509</option>
-                                                        <option value={['40516', '40516']}>40516</option>
-                                                        <option value={['40511', '40511']}>40511</option>
                                                         <option value={['40505', '40505']}>40505</option>
+                                                        <option value={['40509', '40509']}>40509</option>
+                                                        <option value={['40511', '40511']}>40511</option>
+                                                        <option value={['40515', '40515']}>40515</option>
+                                                        <option value={['40516', '40516']}>40516</option>
                                                     </select>
                                                 </div>
                                             </div>
