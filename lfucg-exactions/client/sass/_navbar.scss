@@ -11,12 +11,6 @@ header {
     header {
         height: 70px;
     }
-    .navbar-brand {
-        background-image: url('../../static/Lexington_Web_Color_Horse_Only.png');
-        background-repeat: no-repeat;
-        background-size: 100%; 
-        width: 50px;
-    }
 }
 
 @media (min-width: 768px) {
@@ -24,9 +18,8 @@ header {
         height: 100px;
     }
     .navbar-brand {
-        background-image: url('../../static/lexington-logo.svg');
-        background-repeat: no-repeat;
-        width: 305px; 
+        height: 85px;
+        padding: 0px 15px 30px 35px;
     }
 }
 
