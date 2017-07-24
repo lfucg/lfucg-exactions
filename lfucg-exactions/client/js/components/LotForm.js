@@ -473,7 +473,10 @@ function mapDispatchToProps(dispatch, params) {
         },
         onLotDues() {
             if (selectedLot) {
-                dispatch(putLot(selectedLot));
+                dispatch(putLot(selectedLot))
+                .then(() => {
+                    hashHistory.push('lot/existing/');
+                })
             }
         },
     };
