@@ -29,7 +29,7 @@ global.reduxStore = dashboardStore;
 // global.BASE_STATIC_URL = window.location.host === 'http://52.201.224.95/' ?
 //     'http://52.201.224.95/images' :
 //     '/static';
-global.BASE_STATIC_URL = '/static';
+global.BASE_STATIC_URL = '/static/images';
 
 const history = syncHistoryWithStore(hashHistory, dashboardStore);
 
