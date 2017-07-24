@@ -26,10 +26,10 @@ import LotExisting from './components/LotExisting';
 import LotForm from './components/LotForm';
 
 global.reduxStore = dashboardStore;
-// global.BASE_STATIC_URL = window.location.host === 'http://52.201.224.95/' ?
-//     'http://52.201.224.95/images' :
-//     '/static';
-global.BASE_STATIC_URL = '/static/images';
+global.BASE_STATIC_URL = window.location.host === '52.201.224.95' ?
+    '52.201.224.95' :
+    '/static';
+// global.BASE_STATIC_URL = '/static';
 
 const history = syncHistoryWithStore(hashHistory, dashboardStore);
 
