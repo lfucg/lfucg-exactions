@@ -34,7 +34,7 @@ STATIC_FILE_DIR = BASE_DIR.child("static")
 # http://www.i18nguy.com/unicode/language-identifiers.html
 LANGUAGE_CODE = 'en-us'
 
-BASE_URL = "http://localhost:8000"
+BASE_URL = "http://52.201.224.95/"
 # Defines the views served for root URLs.
 ROOT_URLCONF = 'server.urls'
 
@@ -169,21 +169,6 @@ TEMPLATES = [
         },
     },
 ]
-
-
-# TEMPLATE_DIRS = (
-#     # Put strings here, like "/home/html/django_templates" or
-#     # "C:/www/django/templates".
-#     # Always use forward slashes, even on Windows.
-#     # Don't forget to use absolute paths, not relative paths.
-#     os.path.join(PROJECT_ROOT, 'templates'),
-# )
-
-# List of callables that know how to import templates from various sources.
-# TEMPLATE_LOADERS = (
-#     'django.template.loaders.filesystem.Loader',
-#     'django.template.loaders.app_directories.Loader',
-# )
 
 TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 
