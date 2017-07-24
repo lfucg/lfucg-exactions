@@ -1,5 +1,11 @@
 #
 # Cookbook Name:: chef-lfucg-exactions
+# Recipe:: system
+#
+# Copyright (C) 2017 Kelly Wright
+#
+# All rights reserved - Do Not Redistribute
+#
 
 include_recipe 'python'
 include_recipe "python::pip"
@@ -33,16 +39,9 @@ bash "migrate" do
   cwd "/home/ubuntu/lfucg-exactions/lfucg-exactions/server"
 end
 
-service "apache2" do
-  ignore_failure true
-  action [ :restart ]
-  notifies :run, 'bash[collectstatic]', :immediately
+if node.attribute?('vagrant')
+  bash "loaddata" do
+    code "#{virtualenv}/bin/python manage.py loaddata initial_data"
+    cwd "/home/ubuntu/lfucg-exactions/lfucg-exactions/server"
+  end
 end
-
-bash "collectstatic" do
-  code "echo 'yes' | #{virtualenv}/bin/python manage.py collectstatic"
-  cwd "/home/ubuntu/lfucg-exactions/lfucg-exactions/server/manage.py"
-  only_if { ::Dir.exists?("/home/ubuntu/lfucg-exactions/lfucg-exactions/server/manage.py") }
-  action :nothing
-end
-

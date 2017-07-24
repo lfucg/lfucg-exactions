@@ -83,33 +83,33 @@ class PlatZoneForm extends React.Component {
                             <h4>{this.props.acre_value}</h4>
                         </div>
                         <div className="row reduced-form-label">
-                            <FormGroup label="" aria-label={`${this.props.zone_value} road dues`} id={this.props.dues_roads_id} >
-                                <input type="number" className="form-control" placeholder="Road Dues" />
+                            <FormGroup label="" aria-label={`${this.props.zone_value} road exaction`} id={this.props.dues_roads_id} >
+                                <input type="number" className="form-control" placeholder="Road Exactions" />
                             </FormGroup>
                         </div>
                         <div className="row reduced-form-label">
-                            <FormGroup label="" aria-label={`${this.props.zone_value} open space dues`} id={this.props.dues_open_spaces_id} >
-                                <input type="number" className="form-control" placeholder="Open Spaces Dues" />
+                            <FormGroup label="" aria-label={`${this.props.zone_value} open space exaction`} id={this.props.dues_open_spaces_id} >
+                                <input type="number" className="form-control" placeholder="Open Spaces Exactions" />
                             </FormGroup>
                         </div>
                         <div className="row reduced-form-label">
-                            <FormGroup label="" aria-label={`${this.props.zone_value} sewer capacity dues`} id={this.props.dues_sewer_cap_id} >
-                                <input type="number" className="form-control" placeholder="Sewer Capacity Dues" />
+                            <FormGroup label="" aria-label={`${this.props.zone_value} sewer capacity exaction`} id={this.props.dues_sewer_cap_id} >
+                                <input type="number" className="form-control" placeholder="Sewer Capacity Exactions" />
                             </FormGroup>
                         </div>
                         <div className="row reduced-form-label">
-                            <FormGroup label="" aria-label={`${this.props.zone_value} sewer trans dues`} id={this.props.dues_sewer_trans_id} >
-                                <input type="number" className="form-control" placeholder="Sewer Trans. Dues" />
+                            <FormGroup label="" aria-label={`${this.props.zone_value} sewer transmission exaction`} id={this.props.dues_sewer_trans_id} >
+                                <input type="number" className="form-control" placeholder="Sewer Transmission Exactions" />
                             </FormGroup>
                         </div>
                         <div className="row reduced-form-label">
-                            <FormGroup label="" aria-label={`${this.props.zone_value} parks dues`} id={this.props.dues_parks_id} >
-                                <input type="number" className="form-control" placeholder="Park Dues" />
+                            <FormGroup label="" aria-label={`${this.props.zone_value} parks exaction`} id={this.props.dues_parks_id} >
+                                <input type="number" className="form-control" placeholder="Park Exactions" />
                             </FormGroup>
                         </div>
                         <div className="row reduced-form-label">
-                            <FormGroup label="" aria-label={`${this.props.zone_value} storm water dues`} id={this.props.dues_storm_water_id} >
-                                <input type="number" className="form-control" placeholder="Storm Water Dues" />
+                            <FormGroup label="" aria-label={`${this.props.zone_value} storm water exaction`} id={this.props.dues_storm_water_id} >
+                                <input type="number" className="form-control" placeholder="Storm Water Exactions" />
                             </FormGroup>
                         </div>
                     </fieldset>

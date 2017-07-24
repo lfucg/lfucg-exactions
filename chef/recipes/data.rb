@@ -22,7 +22,7 @@ postgresql_connection_info = {
   :password => config['DATABASE_PASSWORD'],
 }
 
-postgresql_database 'exactions.db' do
+postgresql_database 'exactions' do
   connection postgresql_connection_info
   action :create
 end

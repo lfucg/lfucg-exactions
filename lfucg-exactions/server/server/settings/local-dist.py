@@ -3,11 +3,11 @@ from . import base
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'exactions.db',
+        'NAME': 'exactions',
         'USER': '<%= @config["DATABASE_USER"] %>',
         'PASSWORD': '<%= @config["DATABASE_PASSWORD"] %>',
         'HOST': '<%= @config["DATABASE_HOST"] %>',
-        'PORT': '<%= @config["DATABASE_PORT"] %>',
+        'PORT': '5432',
     },
 }
 
@@ -33,7 +33,7 @@ DEV = True
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 # SECURITY WARNING: keep the secret key used in production secret!
 # Hardcoded values can leak through source control. Consider loading

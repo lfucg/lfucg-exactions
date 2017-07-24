@@ -42,7 +42,6 @@ class SubdivisionExisting extends React.Component {
                         </div>
                         <div className="row">
                             <p className="col-md-3 col-sm-offset-1 col-sm-4 col-xs-6">Acres: {subdivision.cleaned_gross_acreage}</p>
-                            <p className="col-md-3 col-sm-4 col-xs-6">Lots: {subdivision.number_allowed_lots}</p>
                         </div>
                     </div>
                 );

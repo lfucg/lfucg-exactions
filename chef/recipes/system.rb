@@ -40,7 +40,3 @@ python_virtualenv "#{virtualenv}" do
 end
 
 include_recipe "nodejs::npm"
-
-cookbook_file "/home/ubuntu/.ssh/config" do
-  source 'config'
-end
