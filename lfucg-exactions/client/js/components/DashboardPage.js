@@ -19,7 +19,7 @@ class DashboardPage extends React.Component {
             <div className="dashboard">
                 <Navbar />
 
-                <img src={`${global.BASE_STATIC_URL}/images/lexington-hero-interior.jpg`} role="presentation" className="lex-banner" />
+                <img src={`${global.BASE_STATIC_URL}/lexington-hero-interior.jpg`} role="presentation" className="lex-banner" />
                 <div className="inside-body">
                     <div className="container">
                         <div className="row">
