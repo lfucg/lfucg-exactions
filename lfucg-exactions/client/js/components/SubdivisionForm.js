@@ -74,11 +74,6 @@ class SubdivisionForm extends React.Component {
                                             <input type="text" className="form-control" placeholder="Gross Acreage" />
                                         </FormGroup>
                                     </div>
-                                    <div className="row">
-                                        <FormGroup label="* Number of Allowed Lots" id="number_allowed_lots">
-                                            <input type="text" className="form-control" placeholder="Number of Allowed Lots" />
-                                        </FormGroup>
-                                    </div>
                                 </fieldset>
                                 <button disabled={!submitEnabled} className="btn btn-lex">Submit</button>
                                 {!submitEnabled ? (
@@ -118,7 +113,6 @@ function mapDispatchToProps(dispatch, params) {
                     const update = {
                         name: data_subdivision.response.name,
                         gross_acreage: data_subdivision.response.cleaned_gross_acreage,
-                        number_allowed_lots: data_subdivision.response.number_allowed_lots,
                     };
                     dispatch(formUpdate(update));
                 });
