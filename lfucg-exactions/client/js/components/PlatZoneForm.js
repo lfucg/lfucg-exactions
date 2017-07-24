@@ -155,6 +155,10 @@ function mapDispatchToProps(dispatch, props) {
         },
         onPlatZoneSubmit(activeForm) {
             return () => {
+                const plat_zone_update = {
+                    zone_section: true,
+                };
+                dispatch(formUpdate(plat_zone_update));
                 if (selectedPlatZone) {
                     const zone = activeForm.activeForm[`${props.zone_id}`];
                     const acres = activeForm.activeForm[`${props.acre_id}`];
