@@ -18,6 +18,7 @@ import {
 } from '../actions/formActions';
 
 import {
+    getMe,
     getLotID,
     postLot,
     putLot,
@@ -58,6 +59,16 @@ class LotForm extends React.Component {
                 </option>
             );
         })(plats)) : null;
+
+        const ownerDisabled =
+            lots &&
+            lots.dues_roads_own &&
+            lots.dues_roads_own === "0.00" &&
+            lots.dues_parks_own === "0.00" &&
+            lots.dues_storm_own === "0.00" &&
+            lots.dues_open_space_own === "0.00" &&
+            lots.dues_sewer_cap_own === "0.00" &&
+            lots.dues_sewer_trans_own === "0.00";
 
         const submitEnabled =
             activeForm.plat !== 'choose_plat' &&
@@ -240,7 +251,7 @@ class LotForm extends React.Component {
                                             </div>
                                             <div className="col-sm-6">
                                                 <FormGroup label="Road Owner Exactions" id="dues_roads_own">
-                                                    <input type="number" className="form-control" placeholder="Road Owner Exactions" />
+                                                    <input type="number" className="form-control" placeholder="Road Owner Exactions" disabled={ownerDisabled} />
                                                 </FormGroup>
                                             </div>
                                         </div>
@@ -252,7 +263,7 @@ class LotForm extends React.Component {
                                             </div>
                                             <div className="col-sm-6">
                                                 <FormGroup label="Sewer Transmission Owner Exactions" id="dues_sewer_trans_own">
-                                                    <input type="number" className="form-control" placeholder="Sewer Transmission Owner Exactions" />
+                                                    <input type="number" className="form-control" placeholder="Sewer Transmission Owner Exactions" disabled={ownerDisabled} />
                                                 </FormGroup>
                                             </div>
                                         </div>
@@ -264,7 +275,7 @@ class LotForm extends React.Component {
                                             </div>
                                             <div className="col-sm-6">
                                                 <FormGroup label="Sewer Capacity Owner Exactions" id="dues_sewer_cap_own">
-                                                    <input type="number" className="form-control" placeholder="Sewer Capacity Owner Exactions" />
+                                                    <input type="number" className="form-control" placeholder="Sewer Capacity Owner Exactions" disabled={ownerDisabled} />
                                                 </FormGroup>
                                             </div>
                                         </div>
@@ -276,7 +287,7 @@ class LotForm extends React.Component {
                                             </div>
                                             <div className="col-sm-6">
                                                 <FormGroup label="Parks Owner Exactions" id="dues_parks_own">
-                                                    <input type="number" className="form-control" placeholder="Parks Owner Exactions" />
+                                                    <input type="number" className="form-control" placeholder="Parks Owner Exactions" disabled={ownerDisabled} />
                                                 </FormGroup>
                                             </div>
                                         </div>
@@ -288,7 +299,7 @@ class LotForm extends React.Component {
                                             </div>
                                             <div className="col-sm-6">
                                                 <FormGroup label="Storm Owner Exactions" id="dues_storm_own">
-                                                    <input type="number" className="form-control" placeholder="Storm Owner Exactions" />
+                                                    <input type="number" className="form-control" placeholder="Storm Owner Exactions" disabled={ownerDisabled} />
                                                 </FormGroup>
                                             </div>
                                         </div>
@@ -300,7 +311,7 @@ class LotForm extends React.Component {
                                             </div>
                                             <div className="col-sm-6">
                                                 <FormGroup label="Open Space Owner Exactions" id="dues_open_space_own">
-                                                    <input type="number" className="form-control" placeholder="Open Space Owner Exactions" />
+                                                    <input type="number" className="form-control" placeholder="Open Space Owner Exactions" disabled={ownerDisabled} />
                                                 </FormGroup>
                                             </div>
                                         </div>
@@ -335,65 +346,69 @@ function mapDispatchToProps(dispatch, params) {
         onComponentDidMount() {
             dispatch(formInit());
             dispatch(getPlats());
-            if (selectedLot) {
-                dispatch(getLotID(selectedLot))
-                .then((data_lot) => {
-                    if (data_lot.response.plat) {
-                        dispatch(getPlatID(data_lot.response.plat))
-                        .then((data_plat_id) => {
-                            const update2 = {
-                                plat_name: data_plat_id.response.name,
-                            };
-                            dispatch(formUpdate(update2));
-                        });
-                    }
-                    const update = {
-                        address_number: data_lot.response.address_number,
-                        address_street: data_lot.response.address_street,
-                        address_direction: data_lot.response.address_direction,
-                        address_unit: data_lot.response.address_unit,
-                        address_suffix: data_lot.response.address_suffix,
-                        address_city: data_lot.response.address_city,
-                        address_state: data_lot.response.address_state,
-                        address_zip: data_lot.response.address_zip,
-                        plat: data_lot.response.plat,
-                        lot_number: data_lot.response.lot_number,
-                        parcel_id: data_lot.response.parcel_id,
-                        permit_id: data_lot.response.permit_id,
-                        latitude: data_lot.response.latitude,
-                        longitude: data_lot.response.longitude,
-                        dues_roads_dev: data_lot.response.dues_roads_dev,
-                        dues_roads_own: data_lot.response.dues_roads_own,
-                        dues_sewer_trans_dev: data_lot.response.dues_sewer_trans_dev,
-                        dues_sewer_trans_own: data_lot.response.dues_sewer_trans_own,
-                        dues_sewer_cap_dev: data_lot.response.dues_sewer_cap_dev,
-                        dues_sewer_cap_own: data_lot.response.dues_sewer_cap_own,
-                        dues_parks_dev: data_lot.response.dues_parks_dev,
-                        dues_parks_own: data_lot.response.dues_parks_own,
-                        dues_storm_dev: data_lot.response.dues_storm_dev,
-                        dues_storm_own: data_lot.response.dues_storm_own,
-                        dues_open_space_dev: data_lot.response.dues_open_space_dev,
-                        dues_open_space_own: data_lot.response.dues_open_space_own,
-                        first_section: true,
-                    };
-                    dispatch(formUpdate(update));
-                });
-            } else if (plat_start) {
-                dispatch(getPlatID(plat_start))
-                .then((data_plat_start) => {
-                    const plat_update = {
-                        plat: data_plat_start.response.id,
-                        plat_name: data_plat_start.response.name,
+            dispatch(getMe())
+            .then((data_me) => {
+                data_me.error  && hashHistory.push('login/');
+                if (selectedLot) {
+                    dispatch(getLotID(selectedLot))
+                    .then((data_lot) => {
+                        if (data_lot.response.plat) {
+                            dispatch(getPlatID(data_lot.response.plat))
+                            .then((data_plat_id) => {
+                                const update2 = {
+                                    plat_name: data_plat_id.response.name,
+                                };
+                                dispatch(formUpdate(update2));
+                            });
+                        }
+                        const update = {
+                            address_number: data_lot.response.address_number,
+                            address_street: data_lot.response.address_street,
+                            address_direction: data_lot.response.address_direction,
+                            address_unit: data_lot.response.address_unit,
+                            address_suffix: data_lot.response.address_suffix,
+                            address_city: data_lot.response.address_city,
+                            address_state: data_lot.response.address_state,
+                            address_zip: data_lot.response.address_zip,
+                            plat: data_lot.response.plat,
+                            lot_number: data_lot.response.lot_number,
+                            parcel_id: data_lot.response.parcel_id,
+                            permit_id: data_lot.response.permit_id,
+                            latitude: data_lot.response.latitude,
+                            longitude: data_lot.response.longitude,
+                            dues_roads_dev: data_lot.response.dues_roads_dev,
+                            dues_roads_own: data_lot.response.dues_roads_own,
+                            dues_sewer_trans_dev: data_lot.response.dues_sewer_trans_dev,
+                            dues_sewer_trans_own: data_lot.response.dues_sewer_trans_own,
+                            dues_sewer_cap_dev: data_lot.response.dues_sewer_cap_dev,
+                            dues_sewer_cap_own: data_lot.response.dues_sewer_cap_own,
+                            dues_parks_dev: data_lot.response.dues_parks_dev,
+                            dues_parks_own: data_lot.response.dues_parks_own,
+                            dues_storm_dev: data_lot.response.dues_storm_dev,
+                            dues_storm_own: data_lot.response.dues_storm_own,
+                            dues_open_space_dev: data_lot.response.dues_open_space_dev,
+                            dues_open_space_own: data_lot.response.dues_open_space_own,
+                            first_section: true,
+                        };
+                        dispatch(formUpdate(update));
+                    });
+                } else if (plat_start) {
+                    dispatch(getPlatID(plat_start))
+                    .then((data_plat_start) => {
+                        const plat_update = {
+                            plat: data_plat_start.response.id,
+                            plat_name: data_plat_start.response.name,
+                            first_section: false,
+                        };
+                        dispatch(formUpdate(plat_update));
+                    });
+                } else {
+                    const else_update = {
                         first_section: false,
                     };
-                    dispatch(formUpdate(plat_update));
-                });
-            } else {
-                const else_update = {
-                    first_section: false,
-                };
-                dispatch(formUpdate(else_update));
-            }
+                    dispatch(formUpdate(else_update));
+                }
+            });
         },
         formChange(field) {
             return (e, ...args) => {

@@ -17,6 +17,7 @@ import {
 } from '../actions/formActions';
 
 import {
+    getMe,
     getSubdivisionID,
     postSubdivision,
     putSubdivision,
@@ -107,16 +108,20 @@ function mapDispatchToProps(dispatch, params) {
     return {
         onComponentDidMount() {
             dispatch(formInit());
-            if (selectedSubdivision) {
-                dispatch(getSubdivisionID(selectedSubdivision))
-                .then((data_subdivision) => {
-                    const update = {
-                        name: data_subdivision.response.name,
-                        gross_acreage: data_subdivision.response.cleaned_gross_acreage,
-                    };
-                    dispatch(formUpdate(update));
-                });
-            }
+            dispatch(getMe())
+            .then((data_me) => {
+                data_me.error  && hashHistory.push('login/');
+                if (selectedSubdivision) {
+                    dispatch(getSubdivisionID(selectedSubdivision))
+                    .then((data_subdivision) => {
+                        const update = {
+                            name: data_subdivision.response.name,
+                            gross_acreage: data_subdivision.response.cleaned_gross_acreage,
+                        };
+                        dispatch(formUpdate(update));
+                    });
+                }
+            });
         },
         onSubmit(event) {
             event.preventDefault();

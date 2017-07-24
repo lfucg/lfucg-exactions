@@ -20,6 +20,7 @@ import {
 } from '../actions/formActions';
 
 import {
+    getMe,
     getSubdivisions,
     getSubdivisionID,
     getPlatID,
@@ -445,58 +446,61 @@ function mapDispatchToProps(dispatch, params) {
     return {
         onComponentDidMount() {
             dispatch(formInit());
+            const else_update = {
+                first_section: false,
+                add_another_plat_zone: false,
+            };
+            dispatch(formUpdate(else_update));
             dispatch(getSubdivisions());
-            if (selectedPlat) {
-                dispatch(getPlatID(selectedPlat))
-                .then((data_plat) => {
-                    if (data_plat.response.subdivision) {
-                        dispatch(getSubdivisionID(data_plat.response.subdivision))
-                        .then((data_sub_id) => {
-                            const update2 = {
-                                subdivision_name: data_sub_id.response.name,
+            dispatch(getMe())
+            .then((data_me) => {
+                data_me.error  && hashHistory.push('login/');
+                if (selectedPlat) {
+                    dispatch(getPlatID(selectedPlat))
+                    .then((data_plat) => {
+                        if (data_plat.response.subdivision) {
+                            dispatch(getSubdivisionID(data_plat.response.subdivision))
+                            .then((data_sub_id) => {
+                                const update2 = {
+                                    subdivision_name: data_sub_id.response.name,
+                                };
+                                dispatch(formUpdate(update2));
+                            });
+                        }
+                        if (data_plat.response.plat_zone && data_plat.response.plat_zone.length === 0) {
+                            const zone_update = {
+                                acres: data_plat.response.cleaned_total_acreage,
                             };
-                            dispatch(formUpdate(update2));
-                        });
-                    }
-                    if (data_plat.response.plat_zone && data_plat.response.plat_zone.length === 0) {
-                        const zone_update = {
-                            acres: data_plat.response.cleaned_total_acreage,
+                            dispatch(formUpdate(zone_update));
+                        }
+                        const update = {
+                            subdivision: data_plat.response.subdivision,
+                            date_recorded: data_plat.response.date_recorded,
+                            latitude: data_plat.response.latitude,
+                            longitude: data_plat.response.longitude,
+                            expansion_area: data_plat.response.expansion_area,
+                            total_acreage: data_plat.response.cleaned_total_acreage,
+                            buildable_lots: data_plat.response.buildable_lots,
+                            non_buildable_lots: data_plat.response.non_buildable_lots,
+                            sewer_due: data_plat.response.sewer_due,
+                            non_sewer_due: data_plat.response.non_sewer_due,
+                            calculation_note: data_plat.response.calculation_note,
+                            name: data_plat.response.name,
+                            plat_type: data_plat.response.plat_type,
+                            section: data_plat.response.section,
+                            unit: data_plat.response.unit,
+                            block: data_plat.response.block,
+                            cabinet: data_plat.response.cabinet,
+                            slide: data_plat.response.slide,
+                            plat: data_plat.response.id,
+                            plat_name: data_plat.response.name,
+                            first_section: true,
+                            add_another_plat_zone: false,
                         };
-                        dispatch(formUpdate(zone_update));
-                    }
-                    const update = {
-                        subdivision: data_plat.response.subdivision,
-                        date_recorded: data_plat.response.date_recorded,
-                        latitude: data_plat.response.latitude,
-                        longitude: data_plat.response.longitude,
-                        expansion_area: data_plat.response.expansion_area,
-                        total_acreage: data_plat.response.cleaned_total_acreage,
-                        buildable_lots: data_plat.response.buildable_lots,
-                        non_buildable_lots: data_plat.response.non_buildable_lots,
-                        sewer_due: data_plat.response.sewer_due,
-                        non_sewer_due: data_plat.response.non_sewer_due,
-                        calculation_note: data_plat.response.calculation_note,
-                        name: data_plat.response.name,
-                        plat_type: data_plat.response.plat_type,
-                        section: data_plat.response.section,
-                        unit: data_plat.response.unit,
-                        block: data_plat.response.block,
-                        cabinet: data_plat.response.cabinet,
-                        slide: data_plat.response.slide,
-                        plat: data_plat.response.id,
-                        plat_name: data_plat.response.name,
-                        first_section: true,
-                        add_another_plat_zone: false,
-                    };
-                    dispatch(formUpdate(update));
-                });
-            } else {
-                const else_update = {
-                    first_section: false,
-                    add_another_plat_zone: false,
-                };
-                dispatch(formUpdate(else_update));
-            }
+                        dispatch(formUpdate(update));
+                    });
+                }
+            });
         },
         formChange(field) {
             return (e, ...args) => {
@@ -517,7 +521,13 @@ function mapDispatchToProps(dispatch, params) {
         onPlatSubmit(event) {
             event.preventDefault();
             if (selectedPlat) {
-                dispatch(putPlat(selectedPlat));
+                dispatch(putPlat(selectedPlat))
+                .then(() => {
+                    const put_update = {
+                        first_section: true,
+                    };
+                    dispatch(formUpdate(put_update));
+                })
             } else {
                 dispatch(postPlat())
                 .then((data_post) => {
@@ -525,6 +535,7 @@ function mapDispatchToProps(dispatch, params) {
                         plat: data_post.response.id,
                         plat_name: data_post.response.name,
                         acres: data_post.response.total_acreage,
+                        first_section: true,
                     };
                     dispatch(formUpdate(zone_update));
                     hashHistory.push(`plat/form/${data_post.response.id}`);
