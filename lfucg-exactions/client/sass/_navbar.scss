@@ -11,9 +11,6 @@ header {
     header {
         height: 70px;
     }
-    .navbar-brand {
-        /*width: 50px;*/
-    }
 }
 
 @media (min-width: 768px) {
@@ -21,10 +18,8 @@ header {
         height: 100px;
     }
     .navbar-brand {
-        /*width: 305px; */
         height: 85px;
         padding: 0px 15px 30px 35px;
-        /*padding: 0px;*/
     }
 }
 
