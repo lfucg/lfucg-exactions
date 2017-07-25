@@ -20,5 +20,6 @@ test_db/
 .vagrant
 *.sublime-project
 *.sublime-workspace
+static/*
 media/*
 exactions
