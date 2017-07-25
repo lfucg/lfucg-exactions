@@ -31,6 +31,11 @@ import {
     GET_LOT_ID,
     POST_LOT,
     PUT_LOT,
+
+    GET_ACCOUNTS,
+    GET_ACCOUNT_ID,
+    POST_ACCOUNT,
+    PUT_ACCOUNT,
 } from '../constants/apiConstants';
 
 export function getMe() {
@@ -628,5 +633,22 @@ export function putLot(selectedLot) {
                 // payment,
             };
         },
+    };
+}
+
+// ACCOUNTS
+export function getAccounts() {
+    return {
+        type: API_CALL,
+        endpoint: GET_ACCOUNTS,
+        url: '/account/',
+    };
+}
+
+export function getAccountID(selectedAccount) {
+    return {
+        type: API_CALL,
+        endpoint: GET_ACCOUNT_ID,
+        url: `/account/${selectedAccount}`,
     };
 }
