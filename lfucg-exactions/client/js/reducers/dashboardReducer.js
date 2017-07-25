@@ -10,6 +10,8 @@ import subdivisionsReducer from './subdivisionsReducer';
 import platsReducer from './platsReducer';
 import lotsReducer from './lotsReducer';
 
+import accountReducer from './accountReducer';
+
 const dashboardReducer = combineReducers({
     routing: routerReducer,
 
@@ -22,6 +24,8 @@ const dashboardReducer = combineReducers({
     subdivisions: subdivisionsReducer,
     plats: platsReducer,
     lots: lotsReducer,
+
+    accounts: accountReducer,
 });
 
 export default dashboardReducer;
