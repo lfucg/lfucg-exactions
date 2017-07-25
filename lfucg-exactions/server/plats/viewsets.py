@@ -7,13 +7,58 @@ class SubdivisionViewSet(viewsets.ModelViewSet):
     serializer_class = SubdivisionSerializer
     queryset = Subdivision.objects.all()
 
+    def get_queryset(self):
+        queryset = Subdivision.objects.order_by('name')
+
+        query_text = self.request.query_params.get('query', None)
+        if query_text is not None:
+            query_text = query_text.lower()
+            tmp_set = queryset.filter(name__icontains=query_text)
+
+            queryset = tmp_set
+
+        return queryset.order_by('name')
+
 class PlatViewSet(viewsets.ModelViewSet):
     serializer_class = PlatSerializer
     queryset = Plat.objects.all()
 
+    def get_queryset(self):
+        queryset = Plat.objects.order_by('expansion_area')
+
+        query_text = self.request.query_params.get('query', None)
+        if query_text is not None:
+            query_text = query_text.lower()
+            tmp_set = queryset.filter(name__icontains=query_text)
+            tmp_set |= queryset.filter(expansion_area__icontains=query_text)
+            tmp_set |= queryset.filter(slide__icontains=query_text)
+            tmp_set |= queryset.filter(subdivision__name__icontains=query_text)
+
+            queryset = tmp_set
+
+        return queryset.order_by('expansion_area')
+
 class LotViewSet(viewsets.ModelViewSet):
     serializer_class = LotSerializer
     queryset = Lot.objects.all()
+
+    def get_queryset(self):
+        queryset = Lot.objects.order_by('address_street')
+
+        query_text = self.request.query_params.get('query', None)
+        if query_text is not None:
+            query_text = query_text.lower()
+            tmp_set = queryset.filter(address_full__icontains=query_text)
+            tmp_set |= queryset.filter(lot_number__icontains=query_text)
+            tmp_set |= queryset.filter(parcel_id__icontains=query_text)
+            tmp_set |= queryset.filter(permit_id__icontains=query_text)
+            tmp_set |= queryset.filter(plat__expansion_area__icontains=query_text)
+            tmp_set |= queryset.filter(plat__name__icontains=query_text)
+
+            queryset = tmp_set
+
+        return queryset.order_by('address_street')
+
 
 class PlatZoneViewSet(viewsets.ModelViewSet):
     serializer_class = PlatZoneSerializer

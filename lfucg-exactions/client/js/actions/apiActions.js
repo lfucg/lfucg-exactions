@@ -13,11 +13,13 @@ import {
 
     GET_SUBDIVISIONS,
     GET_SUBDIVISION_ID,
+    GET_SUBDIVISION_QUERY,
     POST_SUBDIVISION,
     PUT_SUBDIVISION,
 
     GET_PLATS,
     GET_PLAT_ID,
+    GET_PLAT_QUERY,
     POST_PLAT,
     PUT_PLAT,
 
@@ -29,6 +31,7 @@ import {
 
     GET_LOTS,
     GET_LOT_ID,
+    GET_LOT_QUERY,
     POST_LOT,
     PUT_LOT,
 } from '../constants/apiConstants';
@@ -160,6 +163,24 @@ export function getSubdivisionID(selectedSubdivision) {
     };
 }
 
+export function getSubdivisionQuery() {
+    return {
+        type: API_CALL,
+        endpoint: GET_SUBDIVISION_QUERY,
+        url: (getState) => {
+            const {
+                activeForm,
+            } = getState();
+            const {
+                query,
+            } = activeForm;
+
+            const query_all = `/subdivision/?query=${query}`;
+            return query_all;
+        },
+    };
+}
+
 export function postSubdivision() {
     return {
         type: API_CALL,
@@ -230,6 +251,24 @@ export function getPlatID(selectedPlat) {
         type: API_CALL,
         endpoint: GET_PLAT_ID,
         url: `/plat/${selectedPlat}`,
+    };
+}
+
+export function getPlatQuery() {
+    return {
+        type: API_CALL,
+        endpoint: GET_PLAT_QUERY,
+        url: (getState) => {
+            const {
+                activeForm,
+            } = getState();
+            const {
+                query,
+            } = activeForm;
+
+            const query_all = `/plat/?query=${query}`;
+            return query_all;
+        },
     };
 }
 
@@ -470,6 +509,24 @@ export function getLotID(selectedLot) {
         type: API_CALL,
         endpoint: GET_LOT_ID,
         url: `/lot/${selectedLot}`,
+    };
+}
+
+export function getLotQuery() {
+    return {
+        type: API_CALL,
+        endpoint: GET_LOT_QUERY,
+        url: (getState) => {
+            const {
+                activeForm,
+            } = getState();
+            const {
+                query,
+            } = activeForm;
+
+            const query_all = `/lot/?query=${query}`;
+            return query_all;
+        },
     };
 }
 
