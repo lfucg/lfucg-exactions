@@ -709,3 +709,87 @@ export function getAccountID(selectedAccount) {
         url: `/account/${selectedAccount}`,
     };
 }
+
+export function postAccount() {
+    return {
+        type: API_CALL,
+        endpoint: POST_ACCOUNT,
+        url: '/account/',
+        method: 'POST',
+        body: (getState) => {
+            const {
+                activeForm,
+                currentUser,
+            } = getState();
+            const {
+                account_name,
+                contact_first_name,
+                contact_last_name,
+                address_city,
+                address_state,
+                address_zip,
+                phone,
+                email,
+            } = activeForm;
+            const {
+                id,
+            } = currentUser;
+            return {
+                created_by: id,
+                modified_by: id,
+                account_name,
+                contact_first_name,
+                contact_last_name,
+                contact_full_name: `${contact_first_name} ${contact_last_name}`,
+                address_city,
+                address_state,
+                address_zip,
+                address_full: `${address_city}, ${address_state} ${address_zip}`,
+                phone,
+                email,
+            };
+        },
+    };
+}
+
+export function putAccount(selectedAccount) {
+    return {
+        type: API_CALL,
+        endpoint: PUT_ACCOUNT,
+        url: `/account/${selectedAccount}/`,
+        method: 'PUT',
+        body: (getState) => {
+            const {
+                activeForm,
+                currentUser,
+            } = getState();
+            const {
+                account_name,
+                contact_first_name,
+                contact_last_name,
+                address_city,
+                address_state,
+                address_zip,
+                phone,
+                email,
+            } = activeForm;
+            const {
+                id,
+            } = currentUser;
+            return {
+                created_by: id,
+                modified_by: id,
+                account_name,
+                contact_first_name,
+                contact_last_name,
+                contact_full_name: `${contact_first_name} ${contact_last_name}`,
+                address_city,
+                address_state,
+                address_zip,
+                address_full: `${address_city}, ${address_state} ${address_zip}`,
+                phone,
+                email,
+            };
+        },
+    };
+}
