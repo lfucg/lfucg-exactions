@@ -476,7 +476,7 @@ function mapDispatchToProps(dispatch, params) {
                 dispatch(putLot(selectedLot))
                 .then(() => {
                     hashHistory.push('lot/existing/');
-                })
+                });
             }
         },
     };
