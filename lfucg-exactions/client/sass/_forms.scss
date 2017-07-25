@@ -85,3 +85,18 @@
     text-align: center;
     margin-bottom: 20px;
 }
+
+.search-box {
+    background-color: white;
+    margin: 30px;
+    label {
+        font-size: 1.5em;
+        font-weight: normal;
+        color: #585858;
+    }
+    input {
+        color: black;
+        font-weight: normal;
+        font-size: 1.4em;
+    }
+}
