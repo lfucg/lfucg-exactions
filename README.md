@@ -32,7 +32,7 @@ $ vagrant plugin install vagrant-omnibus
 
 ### Development
 
-After installing `vagrant` and the chef plugins, you can start a vagrant vm using `vagrant up`:
+After installing `vagrant` and the chef plugins, you can start a vagrant vm using `vagrant up` from the chef directory:
 
 ```bash
 $ vagrant up
@@ -49,8 +49,6 @@ Bringing machine 'default' up with 'virtualbox' provider...
 ```
 
 This will initialize the cookobook, create a default `local.py` (if it doesn't already exist), and start a VirtualBox vm using the cookbook to provision it.  Most importantly, this shares the `lfucg-exactions` directory with the vm.  Any changes made to files within this directory are mirrored in the coupled OS.
-
-<!-- See the notes in exactions/readme about settings and local.py for more local configuration hints. -->
 
 ### Work Flow
 
@@ -72,11 +70,13 @@ Django version 1.8, using settings 'lfucg-exactions.settings'
 Starting development server at http://0.0.0.0:8000/
 Quit the server with CONTROL-C.
 ```
-<!-- 
-There are two directories with `gulpfile.js` and `package.json` files.  They will already have been built once by the cookbook, but when actively developing on the files that gulp builds, you'll want gulp watching for any changes.  For the dashboard:
+
+There are two directories with `gulpfile.js` and `package.json` files.  They will already have been built once by the cookbook, but when actively developing on the files that gulp builds, you'll want gulp watching for any changes.  For the dashboard (in a new terminal):
 
 ```bash
-$ cd mobileserve/dashboard
+$ cd lfucg-exactions/chef
+$ vagrant ssh
+$ cd lfucg-exactions/lfucg-exactions/client
 $ npm run gulp
 [14:54:46] Using gulpfile ~/mobileserve-web-app/mobileserve/dashboard/gulpfile.js
 [14:54:46] Starting 'scripts'...
@@ -91,23 +91,9 @@ $ npm run gulp
 [14:55:33] Finished 'default' after 25 s
 ```
 
-And for the django app:
+If changes are made to the dashboard `package.json` dependencies, you'll want to fetch and compile the external dependecies one time by running (in ssh client terminal):
 
 ```bash
-$ cd mobileserve/base/static
-$ npm run gulp
-[13:07:00] Using gulpfile ~/mobileserve-web-app/mobileserve/base/static/gulpfile.js
-[13:07:00] Starting 'less'...
-[13:07:00] Finished 'less' after 19 ms
-[13:07:00] Starting 'default'...
-[13:07:00] Finished 'default' after 44 ms
-```
-
-If changes are made to the dashboard `package.json` dependencies, you'll want to fetch and compile the external dependecies one time by running:
-
-```bash
-$ cd mobileserve/dashboard
 $ npm install
 $ npm run gulp build
 ```
- -->

@@ -11,6 +11,7 @@ DATABASES = {
     },
 }
 
+BASE_URL="http://localhost:8000"
 # Recipients of traceback emails and other notifications.
 ADMINS = (
     # ('Your Name', 'your_email@domain.com'),

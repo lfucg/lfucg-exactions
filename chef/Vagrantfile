@@ -61,7 +61,8 @@ Vagrant.configure("2") do |config|
             "SECRET_KEY": "secret_key",
             'DATABASE_USER': 'postgres',
             'DATABASE_PASSWORD': 'password',
-            'DATABASE_HOST': '127.0.0.1'
+            'DATABASE_HOST': '127.0.0.1',
+            'DATABASE_PORT': '5432',
           }
         }
       },
