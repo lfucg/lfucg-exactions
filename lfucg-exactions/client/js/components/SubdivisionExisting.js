@@ -9,13 +9,19 @@ import Breadcrumbs from './Breadcrumbs';
 
 import {
     getSubdivisions,
+    getSubdivisionQuery,
 } from '../actions/apiActions';
+
+import {
+    formUpdate,
+} from '../actions/formActions';
 
 class SubdivisionExisting extends React.Component {
     static propTypes = {
         subdivisions: React.PropTypes.object,
         route: React.PropTypes.object,
         onComponentDidMount: React.PropTypes.func,
+        onSubdivisionQuery: React.PropTypes.func,
     };
 
     componentDidMount() {
@@ -26,6 +32,7 @@ class SubdivisionExisting extends React.Component {
     render() {
         const {
             subdivisions,
+            onSubdivisionQuery,
         } = this.props;
 
         const subdivisions_list = subdivisions.length > 0 ? (
@@ -60,6 +67,23 @@ class SubdivisionExisting extends React.Component {
 
                 <Breadcrumbs route={this.props.route} parent_link={'subdivision'} parent_name={'Subdivisions'} />
 
+                <div className="row search-box">
+                    <form onChange={onSubdivisionQuery('query')} className="col-sm-10 col-sm-offset-1" >
+                        <fieldset>
+                            <div className="col-sm-2 col-xs-12">
+                                <label htmlFor="query" className="form-label">Search</label>
+                            </div>
+                            <div className="col-sm-10 col-xs-12">
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  placeholder="Search Subdivisions"
+                                />
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+
                 <div className="inside-body">
                     <div className="container">
                         {subdivisions_list}
@@ -81,6 +105,16 @@ function mapDispatchToProps(dispatch) {
     return {
         onComponentDidMount() {
             dispatch(getSubdivisions());
+        },
+        onSubdivisionQuery(field) {
+            return (e, ...args) => {
+                const value = typeof e.target.value !== 'undefined' ? e.target.value : args[1];
+                const update = {
+                    [field]: value,
+                };
+                dispatch(formUpdate(update));
+                dispatch(getSubdivisionQuery());
+            };
         },
     };
 }

@@ -9,13 +9,19 @@ import Breadcrumbs from './Breadcrumbs';
 
 import {
     getPlats,
+    getPlatQuery,
 } from '../actions/apiActions';
+
+import {
+    formUpdate,
+} from '../actions/formActions';
 
 class PlatExisting extends React.Component {
     static propTypes = {
         plats: React.PropTypes.object,
         route: React.PropTypes.object,
         onComponentDidMount: React.PropTypes.func,
+        onPlatQuery: React.PropTypes.func,
     };
 
     componentDidMount() {
@@ -26,6 +32,7 @@ class PlatExisting extends React.Component {
     render() {
         const {
             plats,
+            onPlatQuery,
         } = this.props;
 
         const plats_list = plats.length > 0 ? (
@@ -78,6 +85,23 @@ class PlatExisting extends React.Component {
 
                 <Breadcrumbs route={this.props.route} parent_link={'plat'} parent_name={'Plats'} />
 
+                <div className="row search-box">
+                    <form onChange={onPlatQuery('query')} className="col-sm-10 col-sm-offset-1" >
+                        <fieldset>
+                            <div className="col-sm-2 col-xs-12">
+                                <label htmlFor="query" className="form-label">Search</label>
+                            </div>
+                            <div className="col-sm-10 col-xs-12">
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  placeholder="Search Plats"
+                                />
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+
                 <div className="inside-body">
                     <div className="container">
                         {plats_list}
@@ -99,6 +123,16 @@ function mapDispatchToProps(dispatch) {
     return {
         onComponentDidMount() {
             dispatch(getPlats());
+        },
+        onPlatQuery(field) {
+            return (e, ...args) => {
+                const value = typeof e.target.value !== 'undefined' ? e.target.value : args[1];
+                const update = {
+                    [field]: value,
+                };
+                dispatch(formUpdate(update));
+                dispatch(getPlatQuery());
+            };
         },
     };
 }
