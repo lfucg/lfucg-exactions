@@ -163,11 +163,21 @@ export function getSubdivisionID(selectedSubdivision) {
     };
 }
 
-export function getSubdivisionQuery(query) {
+export function getSubdivisionQuery() {
     return {
         type: API_CALL,
         endpoint: GET_SUBDIVISION_QUERY,
-        url: `/subdivision/?query=${query}`,
+        url: (getState) => {
+            const {
+                activeForm,
+            } = getState();
+            const {
+                query,
+            } = activeForm;
+
+            const query_all = `/subdivision/?query=${query}`;
+            return query_all;
+        },
     };
 }
 
@@ -244,11 +254,21 @@ export function getPlatID(selectedPlat) {
     };
 }
 
-export function getPlatQuery(query) {
+export function getPlatQuery() {
     return {
         type: API_CALL,
         endpoint: GET_PLAT_QUERY,
-        url: `/plat/?query=${query}`,
+        url: (getState) => {
+            const {
+                activeForm,
+            } = getState();
+            const {
+                query,
+            } = activeForm;
+
+            const query_all = `/plat/?query=${query}`;
+            return query_all;
+        },
     };
 }
 
