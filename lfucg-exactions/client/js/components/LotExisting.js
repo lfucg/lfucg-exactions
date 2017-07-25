@@ -33,9 +33,9 @@ class LotExisting extends React.Component {
                 return (
                     <div key={lot.id} className="col-xs-12">
                         <div className="row form-subheading">
-                            <Link to={`lot/form/${lot.id}`} role="link" className="page-link">
+                            <Link to={`lot/form/${lot.id}`} role="link" className="page-link" aria-label={`Link to ${lot.address_full}`} >
                                 <h3>
-                                    Parcel ID , Lot Number:  {lot.parcel_id ? <span>{lot.parcel_id} , {lot.lot_number}</span> : <span> -- , {lot.lot_number}</span>}
+                                    {lot.address_full}
                                     <i className="fa fa-link" aria-hidden="true" />
                                 </h3>
                             </Link>

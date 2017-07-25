@@ -24,12 +24,22 @@ class Navbar extends React.Component {
             onLogout,
         } = this.props;
 
+        const windowWidth = window.innerWidth;
+
         return (
             <div className="react-navbar">
                 <header>
                     <div className="container">
                         <div className="navbar-header">
-                            <Link to="dashboard/" className="navbar-brand" aria-label="Exactions Home" role="link" />
+                            {windowWidth <= 767 ?
+                                <Link to="dashboard/" aria-label="Exactions Home" role="link" >
+                                    <img className="navbar-brand" src={`${global.BASE_STATIC_URL}/Lexington_Web_Color_Horse_Only.png`} alt="#" aria-hidden />
+                                </Link>
+                            :
+                                <Link to="dashboard/" aria-label="Exactions Home" role="link" >
+                                    <img className="navbar-brand" src={`${global.BASE_STATIC_URL}/lexington-logo.svg`} alt="#" aria-hidden />
+                                </Link>
+                            }
                             <button className="btn navbar-btn navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
                                 <span className="icon-bar" />
                                 <span className="icon-bar" />

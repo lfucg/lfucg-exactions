@@ -6,7 +6,7 @@ from notes.models import Rate
 
 ZONES = (
     ('EAR-1', 'EAR-1'),
-    ('EAR-1SRA', 'EAR-1SRA'),
+    ('EAR1-SRA', 'EAR1-SRA'),
     ('EAR-2', 'EAR-2'),
     ('EAR-3', 'EAR-3'),
     ('CC(RES)', 'CC(RES)'),
@@ -69,7 +69,7 @@ class Plat(models.Model):
     modified_by = models.ForeignKey(User, related_name='plat_modified')
 
     name = models.CharField(max_length=300)    
-    total_acreage = models.DecimalField(max_digits=20, decimal_places=3)
+    total_acreage = models.DecimalField(max_digits=20, decimal_places=2)
     latitude = models.CharField(max_length=100, null=True, blank=True)
     longitude = models.CharField(max_length=100, null=True, blank=True)
 
@@ -184,11 +184,11 @@ class Lot(models.Model):
     )
 
     ZIPCODES = (
-        ('40515', '40515'),
-        ('40509', '40509'),
-        ('40516', '40516'),
-        ('40511', '40511'),
         ('40505', '40505'),
+        ('40509', '40509'),
+        ('40511', '40511'),
+        ('40515', '40515'),
+        ('40516', '40516'),
     )
 
     plat = models.ForeignKey(Plat, related_name='lot')
@@ -312,28 +312,34 @@ class PlatZone(models.Model):
         return self.zone
 
     def save(self, *args, **kwargs):
-        if self.dues_roads == 0:
-            road_rate = Rate.objects.get(zone=self.zone, category='ROADS')
+        if (self.dues_roads == 0 and
+            self.dues_open_spaces == 0 and
+            self.dues_sewer_cap == 0 and
+            self.dues_sewer_trans == 0 and
+            self.dues_parks == 0 and
+            self.dues_storm_water == 0
+        ):
+            road_rate = Rate.objects.get(expansion_area=self.plat.expansion_area, zone=self.zone, category='ROADS')
             if road_rate is not None:
                 self.dues_roads = (self.acres * road_rate.rate)
-        if self.dues_open_spaces == 0:
-            open_space_rate = Rate.objects.get(zone=self.zone, category='OPEN_SPACE')
+
+            open_space_rate = Rate.objects.get(expansion_area=self.plat.expansion_area, zone=self.zone, category='OPEN_SPACE')
             if open_space_rate is not None:
                 self.dues_open_spaces = (self.acres * open_space_rate.rate)
-        if self.dues_sewer_cap == 0:
-            sewer_cap_rate = Rate.objects.get(zone=self.zone, category='SEWER_CAP')
+
+            sewer_cap_rate = Rate.objects.get(expansion_area=self.plat.expansion_area, zone=self.zone, category='SEWER_CAP')
             if sewer_cap_rate is not None:
                 self.dues_sewer_cap = (self.acres * sewer_cap_rate.rate)
-        if self.dues_sewer_trans == 0:
-            sewer_trans_rate = Rate.objects.get(zone=self.zone, category='SEWER_TRANS')
+
+            sewer_trans_rate = Rate.objects.get(expansion_area=self.plat.expansion_area, zone=self.zone, category='SEWER_TRANS')
             if sewer_trans_rate is not None:
                 self.dues_sewer_trans = (self.acres * sewer_trans_rate.rate)
-        if self.dues_parks == 0:
-            parks_rate = Rate.objects.get(zone=self.zone, category='PARK')
+
+            parks_rate = Rate.objects.get(expansion_area=self.plat.expansion_area, zone=self.zone, category='PARK')
             if parks_rate is not None:
                 self.dues_parks = (self.acres * parks_rate.rate)
-        if self.dues_storm_water == 0:
-            storm_water_rate = Rate.objects.get(zone=self.zone, category='STORM_WATER')
+
+            storm_water_rate = Rate.objects.get(expansion_area=self.plat.expansion_area, zone=self.zone, category='STORM_WATER')
             if storm_water_rate is not None:
                 self.dues_storm_water = (self.acres * storm_water_rate.rate)
 
