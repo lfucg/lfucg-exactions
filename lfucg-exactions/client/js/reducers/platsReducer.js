@@ -1,6 +1,7 @@
 import {
     GET_PLATS,
     GET_PLAT_ID,
+    GET_PLAT_QUERY,
     POST_PLAT,
     PUT_PLAT,
 } from '../constants/apiConstants';
@@ -14,6 +15,8 @@ const platsReducer = (state = {}, action) => {
     case GET_PLAT_ID:
         return action.response;
     case GET_PLATS:
+        return action.response;
+    case GET_PLAT_QUERY:
         return action.response;
     case POST_PLAT:
         return {};
