@@ -32,8 +32,9 @@ import AccountForm from './components/AccountForm';
 
 global.reduxStore = dashboardStore;
 global.BASE_STATIC_URL = window.location.host === '52.201.224.95' ?
-    '52.201.224.95' :
-    '/static';
+    //'52.201.224.95' :
+    'https://s3.amazonaws.com/chef-lfucg/temp_exactions_images' :
+    '/static';    
 // global.BASE_STATIC_URL = '/static';
 
 const history = syncHistoryWithStore(hashHistory, dashboardStore);
