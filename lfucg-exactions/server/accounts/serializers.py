@@ -144,6 +144,7 @@ class AccountSerializer(serializers.ModelSerializer):
             'email',
             'agreements',
             'account_ledgers',
+            'payments',
         )
 
 class UserSerializer(serializers.ModelSerializer):

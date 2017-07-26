@@ -74,9 +74,11 @@ class AccountForm extends React.Component {
 
                                 <fieldset>
                                     <div className="row">
-                                        <FormGroup label="* Account Name" id="account_name">
-                                            <input type="text" className="form-control" placeholder="Account Name" autoFocus />
-                                        </FormGroup>
+                                        <div className="col-sm-12">
+                                            <FormGroup label="* Account Name" id="account_name">
+                                                <input type="text" className="form-control" placeholder="Account Name" autoFocus />
+                                            </FormGroup>
+                                        </div>
                                     </div>
                                     <div className="row">
                                         <div className="col-sm-6">
@@ -160,19 +162,9 @@ class AccountForm extends React.Component {
                                             </select>
                                         </div>
                                         <div className="col-sm-3 form-group">
-                                            <label htmlFor="address_zip" className="form-label" id="address_zip">* Zipcode</label>
-                                            <select className="form-control" id="address_zip" onChange={formChange('address_zip')} >
-                                                {accounts.address_zip ? (
-                                                    <option value="address_zip" aria-label={`Zipcode ${accounts.address_zip}`}>{accounts.address_zip}</option>
-                                                ) : (
-                                                    <option value="choose_zip" aria-label="Zipcode">Zipcode</option>
-                                                )}
-                                                <option value={['40505', '40505']}>40505</option>
-                                                <option value={['40509', '40509']}>40509</option>
-                                                <option value={['40511', '40511']}>40511</option>
-                                                <option value={['40515', '40515']}>40515</option>
-                                                <option value={['40516', '40516']}>40516</option>
-                                            </select>
+                                            <FormGroup label="* Zipcode" id="address_zip" >
+                                                <input type="text" className="form-control" placeholder="Zipcode" />
+                                            </FormGroup>
                                         </div>
                                     </div>
                                     <div className="row">
