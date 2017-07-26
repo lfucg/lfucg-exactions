@@ -1,6 +1,8 @@
 from rest_framework import serializers
 
 from .models import *
+from notes.models import Note
+from notes.serializers import NoteSerializer
 
 class SubdivisionSerializer(serializers.ModelSerializer):
     cleaned_gross_acreage = serializers.SerializerMethodField(read_only=True)
@@ -38,6 +40,16 @@ class CalculationWorksheetSerializer(serializers.ModelSerializer):
 
 class LotSerializer(serializers.ModelSerializer):
     # payment = PaymentSerializer(read_only=True)
+    notes = serializers.SerializerMethodField(read_only=True)
+    notes_plat = serializers.SerializerMethodField(read_only=True)
+
+    def get_notes(self, obj):
+        filtered_notes = Note.objects.filter(object_id=obj.id)
+        return NoteSerializer(filtered_notes, many=True).data
+
+    def get_notes_plat(self, obj):
+        filtered_notes = Note.objects.filter(object_id=obj.plat.id)
+        return NoteSerializer(filtered_notes, many=True).data
 
     class Meta:
         model = Lot
@@ -51,6 +63,9 @@ class LotSerializer(serializers.ModelSerializer):
             'date_modified',
             'created_by',
             'modified_by',
+
+            'notes',
+            'notes_plat',
 
             'lot_number',
             'permit_id',
@@ -117,9 +132,15 @@ class PlatSerializer(serializers.ModelSerializer):
     plat_zone = PlatZoneSerializer(many=True, read_only=True)
     cleaned_total_acreage = serializers.SerializerMethodField(read_only=True)
 
+    notes = serializers.SerializerMethodField(read_only=True)
+
     def get_cleaned_total_acreage(self, obj):
         set_acreage = str(obj.total_acreage).rstrip('0').rstrip('.')
         return set_acreage
+
+    def get_notes(self, obj):
+        filtered_notes = Note.objects.filter(object_id=obj.id)
+        return NoteSerializer(filtered_notes, many=True).data
     
     class Meta:
         model = Plat 
@@ -133,6 +154,8 @@ class PlatSerializer(serializers.ModelSerializer):
             'date_modified',
             'created_by',
             'modified_by',
+
+            'notes',
 
             'name', 
             'total_acreage',          
