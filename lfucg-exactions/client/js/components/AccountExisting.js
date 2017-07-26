@@ -22,7 +22,6 @@ class AccountExisting extends React.Component {
         this.props.onComponentDidMount();
     }
 
-
     render() {
         const {
             accounts,
@@ -39,6 +38,15 @@ class AccountExisting extends React.Component {
                                     <i className="fa fa-link" aria-hidden="true" />
                                 </h3>
                             </Link>
+                        </div>
+                        <div className="row">
+                            <div className="col-sm-offset-1">
+                                <p className="col-md-4 col-xs-6">Account Name: {account.account_name}</p>
+                                <p className="col-md-4 col-xs-6">Contact Name: {account.contact_full_name}</p>
+                                <p className="col-xs-12">Address: {account.address_full}</p>
+                                <p className="col-md-4 col-xs-6 ">Phone: {account.phone}</p>
+                                <p className="col-md-4 col-xs-6">Email: {account.email}</p>
+                            </div>
                         </div>
                     </div>
                 );
@@ -81,7 +89,6 @@ function mapDispatchToProps(dispatch) {
         },
     };
 }
-
 
 export default connect(mapStateToProps, mapDispatchToProps)(AccountExisting);
 
