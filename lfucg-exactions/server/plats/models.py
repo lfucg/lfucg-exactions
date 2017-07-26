@@ -1,8 +1,10 @@
 from django.db import models
+from django.contrib.contenttypes.fields import GenericRelation
+
 from django.contrib.auth.models import User
 
 from simple_history.models import HistoricalRecords
-from notes.models import Rate
+from notes.models import *
 
 ZONES = (
     ('EAR-1', 'EAR-1'),
@@ -67,6 +69,8 @@ class Plat(models.Model):
 
     created_by = models.ForeignKey(User, related_name='plat_created')
     modified_by = models.ForeignKey(User, related_name='plat_modified')
+
+    notes = GenericRelation(Note, related_query_name='plat')
 
     name = models.CharField(max_length=300)    
     total_acreage = models.DecimalField(max_digits=20, decimal_places=2)
