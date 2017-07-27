@@ -11,9 +11,6 @@ class NoteSerializer(serializers.ModelSerializer):
             'user',
             'note',
             'date',
-            # 'content_type',
-            # 'object_id',
-            # 'content_object',
         )
 
 class RateSerializer(serializers.ModelSerializer):
