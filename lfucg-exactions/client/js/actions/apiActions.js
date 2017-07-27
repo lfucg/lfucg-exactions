@@ -34,6 +34,8 @@ import {
     GET_LOT_QUERY,
     POST_LOT,
     PUT_LOT,
+
+    POST_NOTE,
 } from '../constants/apiConstants';
 
 export function getMe() {
@@ -683,6 +685,37 @@ export function putLot(selectedLot) {
                 dues_open_space_dev,
                 dues_open_space_own,
                 // payment,
+            };
+        },
+    };
+}
+
+// NOTES
+export function postNote() {
+    return {
+        type: API_CALL,
+        endpoint: POST_NOTE,
+        url: '/note/',
+        method: 'POST',
+        body: (getState) => {
+            const {
+                activeForm,
+                currentUser,
+            } = getState();
+            const {
+                note,
+                content_type,
+                object_id,
+            } = activeForm;
+            const {
+                id,
+            } = currentUser;
+            console.log('API HERE');
+            return {
+                user: id,
+                note,
+                content_type: plat,
+                object_id: 20,
             };
         },
     };

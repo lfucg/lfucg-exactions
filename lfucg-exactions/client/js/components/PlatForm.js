@@ -8,6 +8,7 @@ import { map } from 'ramda';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
+import Notes from './Notes';
 
 import FormGroup from './FormGroup';
 import PlatZoneForm from './PlatZoneForm';
@@ -333,82 +334,107 @@ class PlatForm extends React.Component {
                                                             <button className="btn btn-lex" onClick={addAnotherPlatZone} >Add Another Plat Zone</button>
                                                         </div>
                                                     : null}
-                                                </div>
-                                            </div>
-                                            { activeForm.add_another_plat_zone ? (
-                                                <PlatZoneForm
-                                                  props={this.props}
-                                                  acre_id="acres"
-                                                  zone_id="zone"
-                                                />
-                                            ) : null}
-                                            <div className="row section-heading">
-                                                <h2>Plat Exactions</h2>
-                                            </div>
-                                            <form onSubmit={onPlatDues}>
-                                                <fieldset>
-                                                    <div className="row form-subheading">
-                                                        <h3>Exactions and Calculations</h3>
-                                                    </div>
-                                                    <div className="row">
-                                                        <div className="col-xs-3">
-                                                            <div className="col-xs-12 dues-table-heading">
-                                                                <h3>Zone</h3>
-                                                            </div>
-                                                            <div className="col-xs-12 dues-label">
-                                                                <h4>Gross Acreage</h4>
-                                                            </div>
-                                                            <div className="col-xs-12 dues-label">
-                                                                <h4>Roads</h4>
-                                                            </div>
-                                                            <div className="col-xs-12 dues-label">
-                                                                <h4>Open Space</h4>
-                                                            </div>
-                                                            <div className="col-xs-12 dues-label">
-                                                                <h4>Sewer Capacity</h4>
-                                                            </div>
-                                                            <div className="col-xs-12 dues-label">
-                                                                <h4>Sewer Transmmission</h4>
-                                                            </div>
-                                                            <div className="col-xs-12 dues-label">
-                                                                <h4>Parks</h4>
-                                                            </div>
-                                                            <div className="col-xs-12 dues-label">
-                                                                <h4>Storm Water</h4>
-                                                            </div>
-                                                        </div>
-                                                        <div className="col-xs-9">
-                                                            {platZoneDuesList}
-                                                        </div>
-                                                    </div>
-                                                    <div className="col-xs-12 dues-table-heading"><h3>Plat Exactions</h3></div>
-                                                    <div className="row">
-                                                        <div className="col-sm-6">
-                                                            <FormGroup label="Sewer Exactions" id="sewer_due">
-                                                                <input type="number" className="form-control" placeholder="Sewer Exactions" disabled />
-                                                            </FormGroup>
-                                                        </div>
-                                                        <div className="col-sm-6">
-                                                            <FormGroup label="Non-Sewer Exactions" id="non_sewer_due">
-                                                                <input type="number" className="form-control" placeholder="Non-Sewer Exactions" disabled />
-                                                            </FormGroup>
-                                                        </div>
-                                                    </div>
-                                                    <div className="row">
+                                                    { activeForm.add_another_plat_zone &&
                                                         <div className="col-xs-12">
-                                                            <FormGroup label="* Calculation Notes" id="calculation_note">
-                                                                <textarea type="text" className="form-control" placeholder="Calculation Notes" rows="4" />
-                                                            </FormGroup>
+                                                            <PlatZoneForm
+                                                              props={this.props}
+                                                              acre_id="acres"
+                                                              zone_id="zone"
+                                                            />
                                                         </div>
+                                                    }
+                                                </div>
+                                            </div>
+                                            <a
+                                              role="button"
+                                              data-toggle="collapse"
+                                              data-parent="#accordion"
+                                              href="#collapsePlatExactions"
+                                              aria-expanded="true"
+                                              aria-controls="collapsePlatExactions"
+                                            >
+                                                <div className="row section-heading" role="tab" id="headingPlatExactions">
+                                                    <h2>Plat Exactions</h2>
+                                                    <h4>(Click to View or Edit)</h4>
+                                                </div>
+                                            </a>
+                                            <div
+                                              id="collapsePlatExactions"
+                                              className="panel-collapse collapse in row"
+                                              role="tabpanel"
+                                              aria-labelledby="#headingPlatExactions"
+                                            >
+                                                <div className="panel-body">
+                                                    <div className="col-xs-12">
+                                                        <form onSubmit={onPlatDues}>
+                                                            <fieldset>
+                                                                <div className="row form-subheading">
+                                                                    <h3>Exactions and Calculations</h3>
+                                                                </div>
+                                                                <div className="row">
+                                                                    <div className="col-xs-3">
+                                                                        <div className="col-xs-12 dues-table-heading">
+                                                                            <h3>Zone</h3>
+                                                                        </div>
+                                                                        <div className="col-xs-12 dues-label">
+                                                                            <h4>Gross Acreage</h4>
+                                                                        </div>
+                                                                        <div className="col-xs-12 dues-label">
+                                                                            <h4>Roads</h4>
+                                                                        </div>
+                                                                        <div className="col-xs-12 dues-label">
+                                                                            <h4>Open Space</h4>
+                                                                        </div>
+                                                                        <div className="col-xs-12 dues-label">
+                                                                            <h4>Sewer Capacity</h4>
+                                                                        </div>
+                                                                        <div className="col-xs-12 dues-label">
+                                                                            <h4>Sewer Transmmission</h4>
+                                                                        </div>
+                                                                        <div className="col-xs-12 dues-label">
+                                                                            <h4>Parks</h4>
+                                                                        </div>
+                                                                        <div className="col-xs-12 dues-label">
+                                                                            <h4>Storm Water</h4>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div className="col-xs-9">
+                                                                        {platZoneDuesList}
+                                                                    </div>
+                                                                </div>
+                                                                <div className="col-xs-12 dues-table-heading"><h3>Plat Exactions</h3></div>
+                                                                <div className="row">
+                                                                    <div className="col-sm-6">
+                                                                        <FormGroup label="Sewer Exactions" id="sewer_due">
+                                                                            <input type="number" className="form-control" placeholder="Sewer Exactions" disabled />
+                                                                        </FormGroup>
+                                                                    </div>
+                                                                    <div className="col-sm-6">
+                                                                        <FormGroup label="Non-Sewer Exactions" id="non_sewer_due">
+                                                                            <input type="number" className="form-control" placeholder="Non-Sewer Exactions" disabled />
+                                                                        </FormGroup>
+                                                                    </div>
+                                                                </div>
+                                                                {
+                                                                // <div className="row">
+                                                                //     <div className="col-xs-12">
+                                                                //         <FormGroup label="* Calculation Notes" id="calculation_note">
+                                                                //             <textarea type="text" className="form-control" placeholder="Calculation Notes" rows="4" />
+                                                                //         </FormGroup>
+                                                                //     </div>
+                                                                // </div>
+                                                                }
+                                                            </fieldset>
+                                                            <div className="col-xs-offset-2 col-xs-4">
+                                                                <button className="btn btn-lex" >Submit Exactions</button>
+                                                            </div>
+                                                            <div className="col-xs-offset-1 col-xs-4">
+                                                                <button className="btn btn-lex" onClick={onPlatAndCreateLot} >Submit and Create Lot</button>
+                                                            </div>
+                                                        </form>
                                                     </div>
-                                                </fieldset>
-                                                <div className="col-xs-offset-2 col-xs-4">
-                                                    <button className="btn btn-lex" >Submit Exactions</button>
                                                 </div>
-                                                <div className="col-xs-offset-1 col-xs-4">
-                                                    <button className="btn btn-lex" onClick={onPlatAndCreateLot} >Submit and Create Lot</button>
-                                                </div>
-                                            </form>
+                                            </div>
                                         </div>
                                     ) : (
                                         <div>
@@ -424,6 +450,31 @@ class PlatForm extends React.Component {
                                     )}
                                 </div>
                             ) : null }
+                            <a
+                              role="button"
+                              data-toggle="collapse"
+                              data-parent="#accordion"
+                              href="#collapseNotes"
+                              aria-expanded="true"
+                              aria-controls="collapseNotes"
+                            >
+                                <div className="row section-heading" role="tab" id="headingNotes">
+                                    <h2>Notes</h2>
+                                    <h4>(Click to View or Edit)</h4>
+                                </div>
+                            </a>
+                            <div
+                              id="collapseNotes"
+                              className="panel-collapse collapse in row"
+                              role="tabpanel"
+                              aria-labelledby="#headingNotes"
+                            >
+                                <div className="panel-body">
+                                    <div className="col-xs-12">
+                                        <Notes />
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
