@@ -732,12 +732,11 @@ export function postNote() {
             const {
                 id,
             } = currentUser;
-            console.log('API HERE');
             return {
                 user: id,
                 note,
-                content_type: plat,
-                object_id: 20,
+                content_type: content_type === 'Plat' ? 29 : 28,
+                object_id,
             };
         },
     };

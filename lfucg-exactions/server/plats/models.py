@@ -39,6 +39,8 @@ class Subdivision(models.Model):
             existing_subdivision = Subdivision.objects.get(id=self.id)
             if existing_subdivision.exists():
                 created_by = existing_subdivision.created_by
+            else:
+                created_by = self.created_by
         except:
             created_by = self.created_by
 
