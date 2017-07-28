@@ -11,7 +11,7 @@ const notesReducer = (state = {}, action) => {
     case GET_NOTE_CONTENT:
         return action.response;
     case POST_NOTE:
-        return action.response;
+        return {};
     default:
         return state;
     }

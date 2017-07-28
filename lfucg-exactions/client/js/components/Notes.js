@@ -21,12 +21,16 @@ class Notes extends React.Component {
         onSubmit: React.PropTypes.func,
         content_type: React.PropTypes.string,
         object_id: React.PropTypes.number,
+        parent_content_type: React.PropTypes.string,
+        parent_object_id: React.PropTypes.number,
     };
 
     componentDidMount() {
         this.props.onComponentDidMount({
             content_type: this.props.content_type,
             object_id: this.props.object_id,
+            parent_content_type: this.props.parent_content_type,
+            parent_object_id: this.props.parent_object_id,
         });
     }
 
@@ -48,7 +52,7 @@ class Notes extends React.Component {
                                     {single_note.cleaned_date}
                                 </div>
                                 <div className="col-sm-6">
-                                    {single_note.content_type_title}
+                                    on {single_note.content_type_title}
                                 </div>
                             </div>
                             <div className="row">
@@ -116,13 +120,18 @@ function mapDispatchToProps(dispatch) {
 
                 update_content.content_type = pass_props.content_type;
                 update_content.object_id = pass_props.object_id;
+                update_content.parent_content_type = pass_props.parent_content_type;
+                update_content.parent_object_id = pass_props.parent_object_id;
 
                 dispatch(formUpdate(update_content));
                 dispatch(getNoteContent());
             }
         },
         onSubmit() {
-            dispatch(postNote());
+            dispatch(postNote())
+            .then(() => {
+                dispatch(getNoteContent());
+            });
         },
     };
 }

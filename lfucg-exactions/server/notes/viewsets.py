@@ -32,7 +32,8 @@ class NoteViewSet(viewsets.ModelViewSet):
                 Q(content_type=parent_content_type, object_id=parent_object_id) |
                 Q(content_type=child_content_type, object_id=child_object_id))
 
-        if child_content_type_string is not None:
+            queryset = query_list
+        elif child_content_type_string is not None:
 
             if child_content_type_string == 'Plat':
                 child_content_type = ContentType.objects.get_for_model(Plat)
