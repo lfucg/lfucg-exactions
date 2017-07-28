@@ -35,6 +35,7 @@ import {
     POST_LOT,
     PUT_LOT,
 
+    GET_NOTE_CONTENT,
     POST_NOTE,
 } from '../constants/apiConstants';
 
@@ -691,6 +692,27 @@ export function putLot(selectedLot) {
 }
 
 // NOTES
+export function getNoteContent() {
+    return {
+        type: API_CALL,
+        endpoint: GET_NOTE_CONTENT,
+        url: (getState) => {
+            const {
+                activeForm,
+            } = getState();
+            const {
+                content_type,
+                object_id,
+                parent_content_type,
+                parent_object_id,
+            } = activeForm;
+
+            const related_notes = parent_content_type ? `/note/?content_type=${content_type}&object_id=${object_id}&parent_content_type=${parent_content_type}&parent_object_id=${parent_object_id}` : `/note/?content_type=${content_type}&object_id=${object_id}`;
+            return related_notes;
+        },
+    };
+}
+
 export function postNote() {
     return {
         type: API_CALL,

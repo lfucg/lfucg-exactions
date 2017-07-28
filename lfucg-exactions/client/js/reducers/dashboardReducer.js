@@ -10,11 +10,12 @@ import subdivisionsReducer from './subdivisionsReducer';
 import platsReducer from './platsReducer';
 import lotsReducer from './lotsReducer';
 
+import notesReducer from './notesReducer';
+
 const dashboardReducer = combineReducers({
     routing: routerReducer,
 
     currentUser: currentUserReducer,
-
     token: tokenReducer,
 
     activeForm: activeFormReducer,
@@ -22,6 +23,8 @@ const dashboardReducer = combineReducers({
     subdivisions: subdivisionsReducer,
     plats: platsReducer,
     lots: lotsReducer,
+
+    notes: notesReducer,
 });
 
 export default dashboardReducer;

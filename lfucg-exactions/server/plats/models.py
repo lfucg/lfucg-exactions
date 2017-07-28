@@ -70,8 +70,6 @@ class Plat(models.Model):
     created_by = models.ForeignKey(User, related_name='plat_created')
     modified_by = models.ForeignKey(User, related_name='plat_modified')
 
-    notes = GenericRelation(Note, related_query_name='plat')
-
     name = models.CharField(max_length=300)    
     total_acreage = models.DecimalField(max_digits=20, decimal_places=2)
     latitude = models.CharField(max_length=100, null=True, blank=True)

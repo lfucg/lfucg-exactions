@@ -6,6 +6,7 @@ import { map } from 'ramda';
 import FormGroup from './FormGroup';
 
 import {
+    getNoteContent,
     postNote,
 } from '../actions/apiActions';
 
@@ -15,6 +16,7 @@ import {
 
 class Notes extends React.Component {
     static propTypes = {
+        notes: React.PropTypes.object,
         onComponentDidMount: React.PropTypes.func,
         onSubmit: React.PropTypes.func,
     };
@@ -26,6 +28,7 @@ class Notes extends React.Component {
 
     render() {
         const {
+            notes,
             onSubmit,
         } = this.props;
 
@@ -52,12 +55,17 @@ class Notes extends React.Component {
 
 function mapStateToProps(state) {
     return {
+        notes: state.notes,
     };
 }
 
 function mapDispatchToProps(dispatch) {
     return {
         onComponentDidMount() {
+            dispatch(getNoteContent())
+            .then((note_data) => {
+                console.log('NOTE DATA', note_data);
+            });
         },
         onSubmit() {
             dispatch(postNote());
