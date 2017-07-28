@@ -94,7 +94,7 @@ class AccountForm extends React.Component {
                                     </div>
                                     <div className="row">
                                         <div className="col-sm-5">
-                                            <FormGroup label="City" id="address_city">
+                                            <FormGroup label="* City" id="address_city">
                                                 <input type="text" className="form-control" placeholder="City" />
                                             </FormGroup>
                                         </div>
