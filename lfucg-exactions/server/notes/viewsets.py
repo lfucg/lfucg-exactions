@@ -43,7 +43,7 @@ class NoteViewSet(viewsets.ModelViewSet):
         else:
             queryset = queryset
 
-        return queryset
+        return queryset.order_by('-date')
 
 class RateTableViewSet(viewsets.ModelViewSet):
     serializer_class = RateTableSerializer
