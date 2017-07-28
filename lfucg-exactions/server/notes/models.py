@@ -23,6 +23,14 @@ class Note(models.Model):
     def __str__(self):
         return self.note
 
+    def save(self, *args, **kwargs):
+        # content_type = ContentType.objects.get_for_model(Plat)
+        if self.content_type == 29:
+            new_type = ContentType.objects.get_for_model(Plat)
+            print('NEW TYPE', new_type)
+
+        super(Note, self).save(*args, **kwargs)
+
 class RateTable(models.Model):
     is_active = models.BooleanField(default=True)
 
