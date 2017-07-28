@@ -171,6 +171,7 @@ function mapDispatchToProps(dispatch, props) {
                                 sewer_due: zone_put_get_plat.response.sewer_due,
                                 non_sewer_due: zone_put_get_plat.response.non_sewer_due,
                                 calculation_note: zone_put_get_plat.response.calculation_note,
+                                add_another_plat_zone: false,
                             };
                             dispatch(formUpdate(zone_put_update));
                         });
@@ -184,6 +185,7 @@ function mapDispatchToProps(dispatch, props) {
                                 sewer_due: zone_post_get_plat.response.sewer_due,
                                 non_sewer_due: zone_post_get_plat.response.non_sewer_due,
                                 calculation_note: zone_post_get_plat.response.calculation_note,
+                                add_another_plat_zone: false,
                             };
                             dispatch(formUpdate(zone_post_update));
                         });

@@ -3,6 +3,22 @@ from rest_framework import serializers
 from .models import *
 
 class NoteSerializer(serializers.ModelSerializer):
+    user_name = serializers.SerializerMethodField(read_only=True)
+    content_type_title = serializers.SerializerMethodField(read_only=True)
+    cleaned_date = serializers.SerializerMethodField(read_only=True)
+
+    def get_user_name(self, obj):
+        return obj.user.first_name + ' ' + obj.user.last_name
+
+    def get_content_type_title(self, obj):
+        if obj.content_type.model == 'plat':
+            return 'Plat'
+        elif obj.content_type.model == 'lot':
+            return 'Lot'
+
+    def get_cleaned_date(self, obj):
+        return obj.date.strftime('%m/%d/%Y')
+
     class Meta:
         model = Note
         fields = (
@@ -13,6 +29,10 @@ class NoteSerializer(serializers.ModelSerializer):
             'date',
             'content_type',
             'object_id',
+
+            'user_name',
+            'content_type_title',
+            'cleaned_date',
         )
 
 class RateSerializer(serializers.ModelSerializer):
