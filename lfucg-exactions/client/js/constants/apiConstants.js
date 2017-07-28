@@ -32,4 +32,5 @@ export const GET_LOT_QUERY = 'GET_LOT_QUERY';
 export const POST_LOT = 'POST_LOT';
 export const PUT_LOT = 'PUT_LOT';
 
+export const GET_NOTE_CONTENT = 'GET_NOTE_CONTENT';
 export const POST_NOTE = 'POST_NOTE';
