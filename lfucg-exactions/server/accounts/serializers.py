@@ -3,6 +3,9 @@ from rest_framework import serializers
 from django.contrib.auth.models import User
 from .models import *
 
+from plats.models import Plat, Lot
+from plats.serializers import PlatSerializer, LotSerializer
+
 class AccountLedgerSerializer(serializers.ModelSerializer):
     class Meta:
         model = AccountLedger
@@ -118,10 +121,46 @@ class AgreementSerializer(serializers.ModelSerializer):
             'account_ledgers',
         )
 
+class PlatField(serializers.Field):
+    def to_internal_value(self, data):
+        try:
+            return Plat.objects.get(id=data)
+        except:
+            None
+
+    def to_representation(self, obj):
+        print('OBJ', obj)
+        if obj is not None:
+            return {
+                'id': obj.id,
+                'expansion_area': obj.expansion_area,
+                'total_acreage': obj.total_acreage,
+                'plat_type': obj.plat_type,
+                'buildable_lots': obj.buildable_lots,
+                'non_buildable_lots': obj.non_buildable_lots,
+                'sewer_due': obj.sewer_due,
+                'non_sewer_due': obj.non_sewer_due,
+            }
+        return None
+        # return PlatSerializer(obj).data
+
+class LotField(serializers.Field):
+    def to_internal_value(self, data):
+        try:
+            return Lot.objects.get(id=data)
+        except:
+            None
+
+    def to_representation(self, obj):
+        return LotSerializer(obj).data
+
 class AccountSerializer(serializers.ModelSerializer):
     agreements = AgreementSerializer(many=True, read_only=True)
     account_ledgers = AccountLedgerSerializer(many=True, read_only=True)
     payments = PaymentSerializer(many=True, read_only=True)
+
+    plat = PlatField(required=False)
+    lot = LotField(required=False)
 
     class Meta:
         model = Account
@@ -132,6 +171,10 @@ class AccountSerializer(serializers.ModelSerializer):
             'date_modified',
             'created_by',
             'modified_by',
+
+            'plat',
+            'lot',
+
             'account_name',
             'contact_first_name',
             'contact_last_name',

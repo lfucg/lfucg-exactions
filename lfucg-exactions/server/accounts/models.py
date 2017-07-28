@@ -1,7 +1,7 @@
 from django.db import models
 
 from django.contrib.auth.models import User
-from plats.models import Lot
+from plats.models import Lot, Plat
 
 from simple_history.models import HistoricalRecords
 
@@ -73,6 +73,9 @@ class Account(models.Model):
 
     created_by = models.ForeignKey(User, related_name='account_created')
     modified_by = models.ForeignKey(User, related_name='account_modified')
+
+    plat = models.ManyToManyField(Plat, blank=True)
+    lot = models.ManyToManyField(Lot, blank=True)
 
     account_name = models.CharField(max_length=200)
 
