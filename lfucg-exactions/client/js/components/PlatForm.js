@@ -176,6 +176,26 @@ class PlatForm extends React.Component {
 
                                         <fieldset>
                                             <div className="row form-subheading">
+                                                <h3>Account</h3>
+                                            </div>
+                                            <div className="row">
+                                                <div className="col-sm-6 form-group">
+                                                    <label htmlFor="account" className="form-label" id="account">Account</label>
+                                                    <select className="form-control" id="account" onChange={formChange('account')} >
+                                                        {activeForm.account_name ? (
+                                                            <option value="choose_account" aria-label="Selected Account">
+                                                                {activeForm.account_name}
+                                                            </option>
+                                                        ) : (
+                                                            <option value="choose_account" aria-label="Select an Account">
+                                                                Select an Account
+                                                            </option>
+                                                        )}
+                                                        {accountsList}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div className="row form-subheading">
                                                 <h3>Location</h3>
                                             </div>
                                             <div className="row">
@@ -192,21 +212,6 @@ class PlatForm extends React.Component {
                                                             </option>
                                                         )}
                                                         {subdivisionsList}
-                                                    </select>
-                                                </div>
-                                                <div className="col-sm-6 form-group">
-                                                    <label htmlFor="account" className="form-label" id="account">Account</label>
-                                                    <select className="form-control" id="account" onChange={formChange('account')} >
-                                                        {activeForm.account_name ? (
-                                                            <option value="choose_account" aria-label="Selected Account">
-                                                                {activeForm.account_name}
-                                                            </option>
-                                                        ) : (
-                                                            <option value="choose_account" aria-label="Select an Account">
-                                                                Select an Account
-                                                            </option>
-                                                        )}
-                                                        {accountsList}
                                                     </select>
                                                 </div>
                                             </div>

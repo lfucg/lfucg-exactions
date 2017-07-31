@@ -105,7 +105,7 @@ class Plat(models.Model):
     def save(self, *args, **kwargs):
         try:
             existing_plat = Plat.objects.get(id=self.id)
-            if existing_plat.exists():
+            if existing_plat is not None:
                 created_by = existing_plat.created_by
         except:
             created_by = self.created_by
@@ -245,19 +245,25 @@ class Lot(models.Model):
         return self.address_full    
 
     def save(self, *args, **kwargs):
+        plat = Plat.objects.get(id=self.plat.id)
+
         try:
             existing_lot = Lot.objects.get(id=self.id)
-            if existing_lot.exists():
+            if existing_lot is not None:
                 created_by = existing_lot.created_by
+            else:
+                created_by = self.created_by
+                account = self.plat.account
         except:
             created_by = self.created_by
 
-        plat_expansion_area = Plat.objects.get(id=self.plat.id).expansion_area
+        plat_expansion_area = plat.expansion_area
         if plat_expansion_area == 'EA-1':
             self.address_zip = '40515'
 
-        plat_zones = Plat.objects.get(id=self.plat.id).plat_zone.all()
-        plat_buildable = Plat.objects.get(id=self.plat.id).buildable_lots
+
+        plat_zones = plat.plat_zone.all()
+        plat_buildable = plat.buildable_lots
 
         if plat_zones is not None:
             road_calc = 0
