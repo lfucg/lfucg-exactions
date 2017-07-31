@@ -40,14 +40,12 @@ class AccountSummary extends React.Component {
                             </Link>
                         </div>
                         <div className="row">
-                            <div className="col-sm-offset-1">
-                                <p className="col-md-3 col-sm-4 col-xs-6">Gross Acreage: {plat.cleaned_total_acreage}</p>
-                                <p className="col-md-3 col-sm-4 col-xs-6">Approval: {plat.is_approved ? 'Approved' : 'Not Approved'}</p>
-                                <p className="col-md-3 col-sm-4 col-xs-6">Expansion Area: {plat.expansion_area}</p>
-                                <p className="col-md-3 col-sm-4 col-xs-6">Slide: {plat.slide}</p>
-                                <p className="col-md-3 col-sm-4 col-xs-6">Sewer Exactions: ${plat.sewer_due}</p>
-                                <p className="col-md-3 col-sm-4 col-xs-6">Non-Sewer Exactions: ${plat.non_sewer_due}</p>
-                            </div>
+                            <p className="col-md-3 col-sm-4 col-xs-6">Gross Acreage: {plat.cleaned_total_acreage}</p>
+                            <p className="col-md-3 col-sm-4 col-xs-6">Approval: {plat.is_approved ? 'Approved' : 'Not Approved'}</p>
+                            <p className="col-md-3 col-sm-4 col-xs-6">Expansion Area: {plat.expansion_area}</p>
+                            <p className="col-md-3 col-sm-4 col-xs-6">Slide: {plat.slide}</p>
+                            <p className="col-md-3 col-sm-4 col-xs-6">Sewer Exactions: ${plat.sewer_due}</p>
+                            <p className="col-md-3 col-sm-4 col-xs-6">Non-Sewer Exactions: ${plat.non_sewer_due}</p>
                         </div>
                     </div>
                 );
@@ -67,12 +65,10 @@ class AccountSummary extends React.Component {
                             </Link>
                         </div>
                         <div className="row">
-                            <div className="col-sm-offset-1">
-                                <p className="col-md-3 col-sm-4 col-xs-6">Total Due: {lot.total_due}</p>
-                                <p className="col-md-3 col-sm-4 col-xs-6">Approval: {lot.is_approved ? 'Approved' : 'Not Approved'}</p>
-                                <p className="col-md-3 col-sm-4 col-xs-6">Lot Number: {lot.lot_number}</p>
-                                <p className="col-md-3 col-sm-4 col-xs-6">Parcel ID: {lot.parcel_id}</p>
-                            </div>
+                            <p className="col-md-3 col-sm-4 col-xs-6">Total Due: {lot.total_due}</p>
+                            <p className="col-md-3 col-sm-4 col-xs-6">Approval: {lot.is_approved ? 'Approved' : 'Not Approved'}</p>
+                            <p className="col-md-3 col-sm-4 col-xs-6">Lot Number: {lot.lot_number}</p>
+                            <p className="col-md-3 col-sm-4 col-xs-6">Parcel ID: {lot.parcel_id}</p>
                         </div>
                     </div>
                 );
