@@ -74,9 +74,6 @@ class Account(models.Model):
     created_by = models.ForeignKey(User, related_name='account_created')
     modified_by = models.ForeignKey(User, related_name='account_modified')
 
-    plat = models.ManyToManyField(Plat, blank=True)
-    lot = models.ManyToManyField(Lot, blank=True)
-
     account_name = models.CharField(max_length=200)
 
     contact_first_name = models.CharField(max_length=100)

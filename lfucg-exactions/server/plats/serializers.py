@@ -46,6 +46,8 @@ class LotSerializer(serializers.ModelSerializer):
             'is_approved',
             'is_active',
             'plat',
+            'account',
+
             'parcel_id',            
             'date_created',
             'date_modified',
@@ -112,10 +114,25 @@ class PlatZoneSerializer(serializers.ModelSerializer):
             'cleaned_acres',
         )
 
+class SubdivisionField(serializers.Field):
+    def to_internal_value(self, data):
+        try:
+            return Subdivision.objects.get(id=data)
+        except:
+            None
+
+    def to_representation(self, obj):
+        try:
+            subdivision = SubdivisionSerializer(obj).data
+            return subdivision['id']
+        except:
+            None
+
 class PlatSerializer(serializers.ModelSerializer):
     lot = LotSerializer(many=True, read_only=True)
     plat_zone = PlatZoneSerializer(many=True, read_only=True)
     cleaned_total_acreage = serializers.SerializerMethodField(read_only=True)
+    subdivision = SubdivisionField(required=False)
 
     def get_cleaned_total_acreage(self, obj):
         set_acreage = str(obj.total_acreage).rstrip('0').rstrip('.')
@@ -128,6 +145,8 @@ class PlatSerializer(serializers.ModelSerializer):
             'is_approved',
             'is_active',
             'subdivision',
+            'account',
+
             'date_recorded',
             'date_created',
             'date_modified',
