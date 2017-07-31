@@ -1,6 +1,8 @@
 from rest_framework import serializers
 
 from .models import *
+from notes.models import Note
+from notes.serializers import NoteSerializer
 
 class SubdivisionSerializer(serializers.ModelSerializer):
     cleaned_gross_acreage = serializers.SerializerMethodField(read_only=True)
@@ -137,7 +139,7 @@ class PlatSerializer(serializers.ModelSerializer):
     def get_cleaned_total_acreage(self, obj):
         set_acreage = str(obj.total_acreage).rstrip('0').rstrip('.')
         return set_acreage
-    
+
     class Meta:
         model = Plat 
         fields = (

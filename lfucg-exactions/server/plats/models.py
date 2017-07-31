@@ -1,8 +1,10 @@
 from django.db import models
+from django.contrib.contenttypes.fields import GenericRelation
+
 from django.contrib.auth.models import User
 
 from simple_history.models import HistoricalRecords
-from notes.models import Rate
+from notes.models import *
 
 ZONES = (
     ('EAR-1', 'EAR-1'),
@@ -37,6 +39,8 @@ class Subdivision(models.Model):
             existing_subdivision = Subdivision.objects.get(id=self.id)
             if existing_subdivision.exists():
                 created_by = existing_subdivision.created_by
+            else:
+                created_by = self.created_by
         except:
             created_by = self.created_by
 

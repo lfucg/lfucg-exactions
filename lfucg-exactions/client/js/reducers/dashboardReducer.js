@@ -12,11 +12,12 @@ import lotsReducer from './lotsReducer';
 
 import accountReducer from './accountReducer';
 
+import notesReducer from './notesReducer';
+
 const dashboardReducer = combineReducers({
     routing: routerReducer,
 
     currentUser: currentUserReducer,
-
     token: tokenReducer,
 
     activeForm: activeFormReducer,
@@ -26,6 +27,8 @@ const dashboardReducer = combineReducers({
     lots: lotsReducer,
 
     accounts: accountReducer,
+
+    notes: notesReducer,
 });
 
 export default dashboardReducer;
