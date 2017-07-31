@@ -9,6 +9,7 @@ import { map } from 'ramda';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
+import Notes from './Notes';
 
 import FormGroup from './FormGroup';
 
@@ -238,87 +239,140 @@ class LotForm extends React.Component {
                                 </div>
                             </div>
                             { activeForm.first_section ? (
-                                <form onSubmit={onLotDues} >
-                                    <fieldset>
-                                        <div className="row form-subheading">
-                                            <h3>Exactions</h3>
+                                <div>
+                                    <a
+                                      role="button"
+                                      data-toggle="collapse"
+                                      data-parent="#accordion"
+                                      href="#collapseLotExactions"
+                                      aria-expanded="false"
+                                      aria-controls="collapseLotExactions"
+                                    >
+                                        <div className="row section-heading" role="tab" id="headingLotExactions">
+                                            <h2>Lot Exactions</h2>
+                                            {activeForm.first_section ?
+                                                <h4>(Click to View or Edit)</h4>
+                                            : null}
                                         </div>
-                                        <div className="row">
-                                            <div className="col-sm-6">
-                                                <FormGroup label="Road Developer Exactions" id="dues_roads_dev">
-                                                    <input type="number" className="form-control" placeholder="Road Developer Exactions" />
-                                                </FormGroup>
-                                            </div>
-                                            <div className="col-sm-6">
-                                                <FormGroup label="Road Owner Exactions" id="dues_roads_own">
-                                                    <input type="number" className="form-control" placeholder="Road Owner Exactions" disabled={ownerDisabled} />
-                                                </FormGroup>
-                                            </div>
+                                    </a>
+                                    <div
+                                      id="collapseLotExactions"
+                                      className="panel-collapse collapse in row"
+                                      role="tabpanel"
+                                      aria-labelledby="#headingLotExactions"
+                                    >
+                                        <div className="panel-body">
+                                            <form onSubmit={onLotDues} >
+                                                <fieldset>
+                                                    <div className="row form-subheading">
+                                                        <h3>Exactions</h3>
+                                                    </div>
+                                                    <div className="row">
+                                                        <div className="col-sm-6">
+                                                            <FormGroup label="Road Developer Exactions" id="dues_roads_dev">
+                                                                <input type="number" className="form-control" placeholder="Road Developer Exactions" />
+                                                            </FormGroup>
+                                                        </div>
+                                                        <div className="col-sm-6">
+                                                            <FormGroup label="Road Owner Exactions" id="dues_roads_own">
+                                                                <input type="number" className="form-control" placeholder="Road Owner Exactions" disabled={ownerDisabled} />
+                                                            </FormGroup>
+                                                        </div>
+                                                    </div>
+                                                    <div className="row">
+                                                        <div className="col-sm-6">
+                                                            <FormGroup label="Sewer Transmission Developer Exactions" id="dues_sewer_trans_dev">
+                                                                <input type="number" className="form-control" placeholder="Sewer Transmission Developer Exactions" />
+                                                            </FormGroup>
+                                                        </div>
+                                                        <div className="col-sm-6">
+                                                            <FormGroup label="Sewer Transmission Owner Exactions" id="dues_sewer_trans_own">
+                                                                <input type="number" className="form-control" placeholder="Sewer Transmission Owner Exactions" disabled={ownerDisabled} />
+                                                            </FormGroup>
+                                                        </div>
+                                                    </div>
+                                                    <div className="row">
+                                                        <div className="col-sm-6">
+                                                            <FormGroup label="Sewer Capacity Developer Exactions" id="dues_sewer_cap_dev">
+                                                                <input type="number" className="form-control" placeholder="Sewer Capacity Developer Exactions" />
+                                                            </FormGroup>
+                                                        </div>
+                                                        <div className="col-sm-6">
+                                                            <FormGroup label="Sewer Capacity Owner Exactions" id="dues_sewer_cap_own">
+                                                                <input type="number" className="form-control" placeholder="Sewer Capacity Owner Exactions" disabled={ownerDisabled} />
+                                                            </FormGroup>
+                                                        </div>
+                                                    </div>
+                                                    <div className="row">
+                                                        <div className="col-sm-6">
+                                                            <FormGroup label="Parks Developer Exactions" id="dues_parks_dev">
+                                                                <input type="number" className="form-control" placeholder="Parks Developer Exactions" />
+                                                            </FormGroup>
+                                                        </div>
+                                                        <div className="col-sm-6">
+                                                            <FormGroup label="Parks Owner Exactions" id="dues_parks_own">
+                                                                <input type="number" className="form-control" placeholder="Parks Owner Exactions" disabled={ownerDisabled} />
+                                                            </FormGroup>
+                                                        </div>
+                                                    </div>
+                                                    <div className="row">
+                                                        <div className="col-sm-6">
+                                                            <FormGroup label="Storm Developer Exactions" id="dues_storm_dev">
+                                                                <input type="number" className="form-control" placeholder="Storm Developer Exactions" />
+                                                            </FormGroup>
+                                                        </div>
+                                                        <div className="col-sm-6">
+                                                            <FormGroup label="Storm Owner Exactions" id="dues_storm_own">
+                                                                <input type="number" className="form-control" placeholder="Storm Owner Exactions" disabled={ownerDisabled} />
+                                                            </FormGroup>
+                                                        </div>
+                                                    </div>
+                                                    <div className="row">
+                                                        <div className="col-sm-6">
+                                                            <FormGroup label="Open Space Developer Exactions" id="dues_open_space_dev">
+                                                                <input type="number" className="form-control" placeholder="Open Space Developer Exactions" />
+                                                            </FormGroup>
+                                                        </div>
+                                                        <div className="col-sm-6">
+                                                            <FormGroup label="Open Space Owner Exactions" id="dues_open_space_own">
+                                                                <input type="number" className="form-control" placeholder="Open Space Owner Exactions" disabled={ownerDisabled} />
+                                                            </FormGroup>
+                                                        </div>
+                                                    </div>
+                                                </fieldset>
+                                                <button className="btn btn-lex" >Submit</button>
+                                            </form>
                                         </div>
-                                        <div className="row">
-                                            <div className="col-sm-6">
-                                                <FormGroup label="Sewer Transmission Developer Exactions" id="dues_sewer_trans_dev">
-                                                    <input type="number" className="form-control" placeholder="Sewer Transmission Developer Exactions" />
-                                                </FormGroup>
-                                            </div>
-                                            <div className="col-sm-6">
-                                                <FormGroup label="Sewer Transmission Owner Exactions" id="dues_sewer_trans_own">
-                                                    <input type="number" className="form-control" placeholder="Sewer Transmission Owner Exactions" disabled={ownerDisabled} />
-                                                </FormGroup>
-                                            </div>
-                                        </div>
-                                        <div className="row">
-                                            <div className="col-sm-6">
-                                                <FormGroup label="Sewer Capacity Developer Exactions" id="dues_sewer_cap_dev">
-                                                    <input type="number" className="form-control" placeholder="Sewer Capacity Developer Exactions" />
-                                                </FormGroup>
-                                            </div>
-                                            <div className="col-sm-6">
-                                                <FormGroup label="Sewer Capacity Owner Exactions" id="dues_sewer_cap_own">
-                                                    <input type="number" className="form-control" placeholder="Sewer Capacity Owner Exactions" disabled={ownerDisabled} />
-                                                </FormGroup>
-                                            </div>
-                                        </div>
-                                        <div className="row">
-                                            <div className="col-sm-6">
-                                                <FormGroup label="Parks Developer Exactions" id="dues_parks_dev">
-                                                    <input type="number" className="form-control" placeholder="Parks Developer Exactions" />
-                                                </FormGroup>
-                                            </div>
-                                            <div className="col-sm-6">
-                                                <FormGroup label="Parks Owner Exactions" id="dues_parks_own">
-                                                    <input type="number" className="form-control" placeholder="Parks Owner Exactions" disabled={ownerDisabled} />
-                                                </FormGroup>
-                                            </div>
-                                        </div>
-                                        <div className="row">
-                                            <div className="col-sm-6">
-                                                <FormGroup label="Storm Developer Exactions" id="dues_storm_dev">
-                                                    <input type="number" className="form-control" placeholder="Storm Developer Exactions" />
-                                                </FormGroup>
-                                            </div>
-                                            <div className="col-sm-6">
-                                                <FormGroup label="Storm Owner Exactions" id="dues_storm_own">
-                                                    <input type="number" className="form-control" placeholder="Storm Owner Exactions" disabled={ownerDisabled} />
-                                                </FormGroup>
-                                            </div>
-                                        </div>
-                                        <div className="row">
-                                            <div className="col-sm-6">
-                                                <FormGroup label="Open Space Developer Exactions" id="dues_open_space_dev">
-                                                    <input type="number" className="form-control" placeholder="Open Space Developer Exactions" />
-                                                </FormGroup>
-                                            </div>
-                                            <div className="col-sm-6">
-                                                <FormGroup label="Open Space Owner Exactions" id="dues_open_space_own">
-                                                    <input type="number" className="form-control" placeholder="Open Space Owner Exactions" disabled={ownerDisabled} />
-                                                </FormGroup>
-                                            </div>
-                                        </div>
-                                    </fieldset>
-                                    <button className="btn btn-lex" >Submit</button>
-                                </form>
+                                    </div>
+                                </div>
                             ) : null}
+                            <a
+                              role="button"
+                              data-toggle="collapse"
+                              data-parent="#accordion"
+                              href="#collapseNotes"
+                              aria-expanded="true"
+                              aria-controls="collapseNotes"
+                            >
+                                <div className="row section-heading" role="tab" id="headingNotes">
+                                    <h2>Notes</h2>
+                                    <h4>(Click to View or Edit)</h4>
+                                </div>
+                            </a>
+                            <div
+                              id="collapseNotes"
+                              className="panel-collapse collapse in row"
+                              role="tabpanel"
+                              aria-labelledby="#headingNotes"
+                            >
+                                <div className="panel-body">
+                                    <div className="col-xs-12">
+                                        {lots.id && lots.plat &&
+                                            <Notes content_type="Lot" object_id={lots.id} parent_content_type="Plat" parent_object_id={lots.plat} />
+                                        }
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
