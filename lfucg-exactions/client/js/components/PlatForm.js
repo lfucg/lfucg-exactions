@@ -26,6 +26,8 @@ import {
     getPlatID,
     postPlat,
     putPlat,
+    getAccounts,
+    getAccountID,
 } from '../actions/apiActions';
 
 class PlatForm extends React.Component {
@@ -33,6 +35,7 @@ class PlatForm extends React.Component {
         activeForm: React.PropTypes.object,
         subdivisions: React.PropTypes.object,
         plats: React.PropTypes.object,
+        accounts: React.PropTypes.object,
         route: React.PropTypes.object,
         onComponentDidMount: React.PropTypes.func,
         formChange: React.PropTypes.func,
@@ -51,6 +54,7 @@ class PlatForm extends React.Component {
             activeForm,
             subdivisions,
             plats,
+            accounts,
             formChange,
             onPlatSubmit,
             onPlatAndCreateLot,
@@ -65,6 +69,14 @@ class PlatForm extends React.Component {
                 </option>
             );
         })(subdivisions)) : null;
+
+        const accountsList = accounts.length > 0 ? (map((single_account) => {
+            return (
+                <option key={single_account.id} value={[single_account.id, single_account.account_name]} >
+                    {single_account.account_name}
+                </option>
+            );
+        })(accounts)) : null;
 
         const platZonesList = plats.plat_zone ? (map((single_plat_zone) => {
             return (
@@ -171,7 +183,7 @@ class PlatForm extends React.Component {
                                                     <label htmlFor="subdivision" className="form-label" id="subdivision">Subdivision</label>
                                                     <select className="form-control" id="subdivision" onChange={formChange('subdivision')} >
                                                         {activeForm.subdivision ? (
-                                                            <option value="choose_subdivision" aria-label="Select a Subdivision">
+                                                            <option value="choose_subdivision" aria-label="Selected Subdivision">
                                                                 {activeForm.subdivision_name}
                                                             </option>
                                                         ) : (
@@ -180,6 +192,21 @@ class PlatForm extends React.Component {
                                                             </option>
                                                         )}
                                                         {subdivisionsList}
+                                                    </select>
+                                                </div>
+                                                <div className="col-sm-6 form-group">
+                                                    <label htmlFor="account" className="form-label" id="account">Account</label>
+                                                    <select className="form-control" id="account" onChange={formChange('account')} >
+                                                        {activeForm.account_name ? (
+                                                            <option value="choose_account" aria-label="Selected Account">
+                                                                {activeForm.account_name}
+                                                            </option>
+                                                        ) : (
+                                                            <option value="choose_account" aria-label="Select an Account">
+                                                                Select an Account
+                                                            </option>
+                                                        )}
+                                                        {accountsList}
                                                     </select>
                                                 </div>
                                             </div>
@@ -492,6 +519,7 @@ function mapStateToProps(state) {
         activeForm: state.activeForm,
         subdivisions: state.subdivisions,
         plats: state.plats,
+        accounts: state.accounts,
     };
 }
 
@@ -507,6 +535,7 @@ function mapDispatchToProps(dispatch, params) {
             };
             dispatch(formUpdate(else_update));
             dispatch(getSubdivisions());
+            dispatch(getAccounts());
             dispatch(getMe())
             .then((data_me) => {
                 if (data_me.error) {
@@ -522,6 +551,15 @@ function mapDispatchToProps(dispatch, params) {
                                     subdivision_name: data_sub_id.response.name,
                                 };
                                 dispatch(formUpdate(update2));
+                            });
+                        }
+                        if (data_plat.response.account) {
+                            dispatch(getAccountID(data_plat.response.account))
+                            .then((data_account) => {
+                                const update_account = {
+                                    account_name: data_account.response.account_name,
+                                };
+                                dispatch(formUpdate(update_account));
                             });
                         }
                         if (data_plat.response.plat_zone && data_plat.response.plat_zone.length === 0) {
