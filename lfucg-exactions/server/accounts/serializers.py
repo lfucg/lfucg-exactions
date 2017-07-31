@@ -126,8 +126,8 @@ class AccountSerializer(serializers.ModelSerializer):
     account_ledgers = AccountLedgerSerializer(many=True, read_only=True)
     payments = PaymentSerializer(many=True, read_only=True)
 
-    plat_account = PlatSerializer(many=True)
-    lot_account = LotSerializer(many=True)
+    plat_account = PlatSerializer(many=True, required=False)
+    lot_account = LotSerializer(many=True, required=False)
 
     class Meta:
         model = Account
