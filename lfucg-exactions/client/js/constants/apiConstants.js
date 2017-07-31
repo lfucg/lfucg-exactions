@@ -36,3 +36,6 @@ export const GET_ACCOUNTS = 'GET_ACCOUNTS';
 export const GET_ACCOUNT_ID = 'GET_ACCOUNT_ID';
 export const POST_ACCOUNT = 'POST_ACCOUNT';
 export const PUT_ACCOUNT = 'PUT_ACCOUNT';
+
+export const GET_NOTE_CONTENT = 'GET_NOTE_CONTENT';
+export const POST_NOTE = 'POST_NOTE';

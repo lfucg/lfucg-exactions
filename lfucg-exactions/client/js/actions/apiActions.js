@@ -39,6 +39,10 @@ import {
     GET_ACCOUNT_ID,
     POST_ACCOUNT,
     PUT_ACCOUNT,
+
+    GET_NOTE_CONTENT,
+    POST_NOTE,
+
 } from '../constants/apiConstants';
 
 export function getMe() {
@@ -789,6 +793,57 @@ export function putAccount(selectedAccount) {
                 address_full: `${address_city}, ${address_state} ${address_zip}`,
                 phone,
                 email,
+            };
+        }
+    };
+}
+
+// NOTES
+export function getNoteContent() {
+    return {
+        type: API_CALL,
+        endpoint: GET_NOTE_CONTENT,
+        url: (getState) => {
+            const {
+                activeForm,
+            } = getState();
+            const {
+                content_type,
+                object_id,
+                parent_content_type,
+                parent_object_id,
+            } = activeForm;
+
+            const related_notes = parent_content_type ? `/note/?content_type=${content_type}&object_id=${object_id}&parent_content_type=${parent_content_type}&parent_object_id=${parent_object_id}` : `/note/?content_type=${content_type}&object_id=${object_id}`;
+            return related_notes;
+        },
+    };
+}
+
+export function postNote() {
+    return {
+        type: API_CALL,
+        endpoint: POST_NOTE,
+        url: '/note/',
+        method: 'POST',
+        body: (getState) => {
+            const {
+                activeForm,
+                currentUser,
+            } = getState();
+            const {
+                note,
+                content_type,
+                object_id,
+            } = activeForm;
+            const {
+                id,
+            } = currentUser;
+            return {
+                user: id,
+                note,
+                content_type,
+                object_id,
             };
         },
     };
