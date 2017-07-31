@@ -40,6 +40,25 @@ class CalculationWorksheetSerializer(serializers.ModelSerializer):
 
 class LotSerializer(serializers.ModelSerializer):
     # payment = PaymentSerializer(read_only=True)
+    total_due = serializers.SerializerMethodField(read_only=True)
+
+    def get_total_due(self,obj):
+        total = (
+            obj.dues_roads_own +
+            obj.dues_roads_dev +
+            obj.dues_sewer_cap_own +
+            obj.dues_sewer_trans_dev +
+            obj.dues_sewer_trans_own +
+            obj.dues_sewer_cap_dev +
+            obj.dues_sewer_cap_own +
+            obj.dues_parks_dev +
+            obj.dues_parks_own +
+            obj.dues_storm_dev +
+            obj.dues_storm_own +
+            obj.dues_open_space_dev +
+            obj.dues_open_space_own
+        )
+        return total
 
     class Meta:
         model = Lot
@@ -83,6 +102,7 @@ class LotSerializer(serializers.ModelSerializer):
             'dues_open_space_dev',
             'dues_open_space_own',
             # 'payment',
+            'total_due',
         )
 
 class PlatZoneSerializer(serializers.ModelSerializer):

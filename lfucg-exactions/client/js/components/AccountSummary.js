@@ -41,9 +41,7 @@ class AccountSummary extends React.Component {
                         </div>
                         <div className="row">
                             <div className="col-sm-offset-1">
-                                <p className="col-md-3 col-sm-4 col-xs-6">Subdivision: {plat.subdivision ? plat.subdivision.name : 'Not listed'}</p>
                                 <p className="col-md-3 col-sm-4 col-xs-6">Gross Acreage: {plat.cleaned_total_acreage}</p>
-                                <p className="col-md-3 col-sm-4 col-xs-6">Plat Type: {plat.plat_type}</p>
                                 <p className="col-md-3 col-sm-4 col-xs-6">Approval: {plat.is_approved ? 'Approved' : 'Not Approved'}</p>
                                 <p className="col-md-3 col-sm-4 col-xs-6">Expansion Area: {plat.expansion_area}</p>
                                 <p className="col-md-3 col-sm-4 col-xs-6">Slide: {plat.slide}</p>
@@ -54,6 +52,31 @@ class AccountSummary extends React.Component {
                     </div>
                 );
             })(accounts.plat_account)
+        ) : null;
+
+        const lots_list = (accounts.lot_account && accounts.lot_account.length > 0) ? (
+            map((lot) => {
+                return (
+                    <div key={lot.id} className="col-xs-12">
+                        <div className="row form-subheading">
+                            <Link to={`lot/form/${lot.id}`} role="link" className="page-link">
+                                <h3>
+                                    {lot.address_full}
+                                    <i className="fa fa-link" aria-hidden="true" />
+                                </h3>
+                            </Link>
+                        </div>
+                        <div className="row">
+                            <div className="col-sm-offset-1">
+                                <p className="col-md-3 col-sm-4 col-xs-6">Total Due: {lot.total_due}</p>
+                                <p className="col-md-3 col-sm-4 col-xs-6">Approval: {lot.is_approved ? 'Approved' : 'Not Approved'}</p>
+                                <p className="col-md-3 col-sm-4 col-xs-6">Lot Number: {lot.lot_number}</p>
+                                <p className="col-md-3 col-sm-4 col-xs-6">Parcel ID: {lot.parcel_id}</p>
+                            </div>
+                        </div>
+                    </div>
+                );
+            })(accounts.lot_account)
         ) : null;
 
         return (
@@ -133,6 +156,41 @@ class AccountSummary extends React.Component {
                                     <h2>Account Plats - None</h2>
                                 </div>
                             )}
+
+                            {lots_list ? (
+                                <div>
+                                    <a
+                                      role="button"
+                                      data-toggle="collapse"
+                                      data-parent="#accordion"
+                                      href="#collapseAccountLots"
+                                      aria-expanded="false"
+                                      aria-controls="collapseAccountLots"
+                                    >
+                                        <div className="row section-heading" role="tab" id="headingAccountLots">
+                                            <h2>Account Lots</h2>
+                                            <h4>(Click to View or Edit)</h4>
+                                        </div>
+                                    </a>
+                                    <div
+                                      id="collapseAccountLots"
+                                      className="panel-collapse collapse row"
+                                      role="tabpanel"
+                                      aria-labelledby="#headingAccountLots"
+                                    >
+                                        <div className="panel-body">
+                                            <div className="col-xs-12">
+                                                {lots_list}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            ) : (
+                                <div className="row section-heading" role="tab" id="headingAccountLots">
+                                    <h2>Account Lots - None</h2>
+                                </div>
+                            )}
+
                         </div>
                     </div>
                 </div>
