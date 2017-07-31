@@ -256,12 +256,12 @@ function mapDispatchToProps(dispatch, params) {
             if (selectedAccount) {
                 dispatch(putAccount(selectedAccount))
                 .then(() => {
-                    hashHistory.push('account/existing/');
+                    hashHistory.push(`account/summary/${selectedAccount}`);
                 });
             } else {
                 dispatch(postAccount())
-                .then(() => {
-                    hashHistory.push('account/existing/');
+                .then((data_post) => {
+                    hashHistory.push(`account/summary/${data_post.response.id}`);
                 });
             }
         },
