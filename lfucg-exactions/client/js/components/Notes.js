@@ -49,15 +49,15 @@ class Notes extends React.Component {
                         <div className="col-sm-3">
                             <div className="row">
                                 <div className="col-sm-6">
-                                    {single_note.cleaned_date}
+                                    {single_note.date}
                                 </div>
                                 <div className="col-sm-6">
-                                    on {single_note.content_type_title}
+                                    on {single_note.content_type}
                                 </div>
                             </div>
                             <div className="row">
                                 <div className="col-sm-12">
-                                    {single_note.user_name}
+                                    {single_note.user}
                                 </div>
                             </div>
                         </div>
@@ -130,6 +130,10 @@ function mapDispatchToProps(dispatch) {
         onSubmit() {
             dispatch(postNote())
             .then(() => {
+                const clear_note = {
+                    note: '',
+                };
+                dispatch(formUpdate(clear_note));
                 dispatch(getNoteContent());
             });
         },
