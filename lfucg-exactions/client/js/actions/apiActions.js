@@ -708,7 +708,6 @@ export function getNoteContent() {
             } = activeForm;
 
             const related_notes = parent_content_type ? `/note/?content_type=${content_type}&object_id=${object_id}&parent_content_type=${parent_content_type}&parent_object_id=${parent_object_id}` : `/note/?content_type=${content_type}&object_id=${object_id}`;
-            console.log('RELATED NOTES', related_notes);
             return related_notes;
         },
     };
@@ -736,7 +735,7 @@ export function postNote() {
             return {
                 user: id,
                 note,
-                content_type: content_type === 'Plat' ? 29 : 28,
+                content_type,
                 object_id,
             };
         },

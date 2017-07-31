@@ -1,23 +1,41 @@
 from rest_framework import serializers
+from django.contrib.auth.models import User
+
+from django.contrib.contenttypes.models import ContentType
 
 from .models import *
+from plats.models import Plat, Lot
+
+class UserNameField(serializers.Field):
+    def to_internal_value(self, data):
+        return User.objects.filter(id=data)[0]
+
+    def to_representation(self, obj):
+        return obj.first_name + ' ' + obj.last_name
+
+class ContentTypeField(serializers.Field):
+    def to_internal_value(self, data):
+        if data == 'Plat':
+            return ContentType.objects.get_for_model(Plat)
+        elif data == 'Lot':
+            return ContentType.objects.get_for_model(Lot)
+
+    def to_representation(self, obj):
+        if obj.model == 'plat':
+            return 'Plat'
+        elif obj.model == 'lot':
+            return 'Lot'
+        else:
+            return obj.model
+
+class CleanedDateField(serializers.Field):
+    def to_representation(self, obj):
+        return obj.strftime('%m/%d/%Y')
 
 class NoteSerializer(serializers.ModelSerializer):
-    user_name = serializers.SerializerMethodField(read_only=True)
-    content_type_title = serializers.SerializerMethodField(read_only=True)
-    cleaned_date = serializers.SerializerMethodField(read_only=True)
-
-    def get_user_name(self, obj):
-        return obj.user.first_name + ' ' + obj.user.last_name
-
-    def get_content_type_title(self, obj):
-        if obj.content_type.model == 'plat':
-            return 'Plat'
-        elif obj.content_type.model == 'lot':
-            return 'Lot'
-
-    def get_cleaned_date(self, obj):
-        return obj.date.strftime('%m/%d/%Y')
+    user = UserNameField()
+    content_type = ContentTypeField()
+    date = CleanedDateField(read_only=True)
 
     class Meta:
         model = Note
@@ -29,10 +47,6 @@ class NoteSerializer(serializers.ModelSerializer):
             'date',
             'content_type',
             'object_id',
-
-            'user_name',
-            'content_type_title',
-            'cleaned_date',
         )
 
 class RateSerializer(serializers.ModelSerializer):
