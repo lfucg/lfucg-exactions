@@ -60,6 +60,7 @@ class Plat(models.Model):
     )
 
     subdivision = models.ForeignKey(Subdivision, blank=True, null=True, related_name='plat')
+    account = models.ForeignKey('accounts.Account', blank=True, null=True, related_name='plat_account')
 
     date_recorded = models.DateField()
     date_created = models.DateField(auto_now_add=True)
@@ -192,6 +193,7 @@ class Lot(models.Model):
     )
 
     plat = models.ForeignKey(Plat, related_name='lot')
+    account = models.ForeignKey('accounts.Account', blank=True, null=True, related_name='lot_account')
     parcel_id = models.CharField(max_length=200, null=True, blank=True)
     
     date_created = models.DateField(auto_now_add=True)

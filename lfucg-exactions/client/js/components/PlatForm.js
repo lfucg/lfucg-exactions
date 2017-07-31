@@ -565,10 +565,7 @@ function mapDispatchToProps(dispatch, params) {
             }
         },
         onPlatAndCreateLot() {
-            console.log('PLAT PUSH');
             if (selectedPlat) {
-                console.log('PUSH CREATE', selectedPlat);
-                console.log('PUSH', `plat/${selectedPlat}/lot/form`);
                 dispatch(putPlat(selectedPlat))
                 .then(() => {
                     hashHistory.push(`plat/${selectedPlat}/lot/form`);
