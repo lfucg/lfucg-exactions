@@ -110,7 +110,9 @@ function mapDispatchToProps(dispatch, params) {
             dispatch(formInit());
             dispatch(getMe())
             .then((data_me) => {
-                data_me.error  && hashHistory.push('login/');
+                if (data_me.error) {
+                    hashHistory.push('login/');
+                }
                 if (selectedSubdivision) {
                     dispatch(getSubdivisionID(selectedSubdivision))
                     .then((data_subdivision) => {
