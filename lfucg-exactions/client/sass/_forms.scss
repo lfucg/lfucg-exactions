@@ -22,12 +22,35 @@
     }
 }
 
-.section-heading {
-    text-align: center;
-    color: #001A49;
-    border: 2px solid #585858;
-    border-radius: 4px;
-    margin-top: 20px;
+.panel-group {
+    .section-heading {
+        text-align: center;
+        color: white;
+        background-color: #0057A8;
+        border: 2px solid #585858;
+        border-radius: 4px;
+        margin-top: 20px;
+    }
+    [aria-expanded="false"] {
+        .caret-indicator:before {
+            font-family: FontAwesome;
+            /*fa-caret-right*/
+            content: "\f0da";
+            font-size: 3.8em;
+            margin: 20px 0px 0px 20px;
+            color: #858585;
+        }
+    }
+    [aria-expanded="true"] {
+        .caret-indicator:before {
+            font-family: FontAwesome;
+            /*fa-caret-down*/
+            content: "\f0d7";
+            font-size: 3.8em;
+            color: white;
+        }
+    }
+    /*background-color: green;*/
 }
 
 .form-subheading {
@@ -36,6 +59,8 @@
     border-radius: 3px;
     margin-top: 20px;
     margin-bottom: 20px;
+    padding-top: 5px;
+    padding-bottom: 5px;
     h3 {
         margin: 8px 0px 8px 8px;
     }
