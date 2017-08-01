@@ -102,10 +102,10 @@ class LotForm extends React.Component {
                               aria-controls="collapseGeneralLot"
                             >
                                 <div className="row section-heading" role="tab" id="headingLot">
-                                    <h2>General Lot Information</h2>
-                                    {activeForm.first_section ?
-                                        <h4>(Click to View or Edit)</h4>
-                                    : null}
+                                    <div className="col-xs-1 caret-indicator" />
+                                    <div className="col-xs-10">
+                                        <h2>General Lot Information</h2>
+                                    </div>
                                 </div>
                             </a>
                             <div
@@ -249,10 +249,10 @@ class LotForm extends React.Component {
                                       aria-controls="collapseLotExactions"
                                     >
                                         <div className="row section-heading" role="tab" id="headingLotExactions">
-                                            <h2>Lot Exactions</h2>
-                                            {activeForm.first_section ?
-                                                <h4>(Click to View or Edit)</h4>
-                                            : null}
+                                            <div className="col-xs-1 caret-indicator" />
+                                            <div className="col-xs-10">
+                                                <h2>Lot Exactions</h2>
+                                            </div>
                                         </div>
                                     </a>
                                     <div
@@ -355,8 +355,10 @@ class LotForm extends React.Component {
                               aria-controls="collapseNotes"
                             >
                                 <div className="row section-heading" role="tab" id="headingNotes">
-                                    <h2>Notes</h2>
-                                    <h4>(Click to View or Edit)</h4>
+                                    <div className="col-xs-1 caret-indicator" />
+                                    <div className="col-xs-10">
+                                        <h2>Notes</h2>
+                                    </div>
                                 </div>
                             </a>
                             <div

@@ -18,11 +18,20 @@
     font-weight: normal;
 }
 
-.btn-lex-reverse {
-    background-color: #f1f0f0;
-    color: #001A49;
+.btn-top-level {
+    background-color: #0057A8;
+    color: white;
+    border: 2px #BFBFBF solid;
+    font-size: 26px;
+    margin-top: 13px;
+}
+
+.btn-mid-level {
+    background-color: #0057A8;
+    color: white;
+    border: 2px #BFBFBF solid;
     font-size: 16px;
-    margin-top: 14px;
+    margin-top: 2px;
 }
 
 .clearfix::after {

@@ -20,6 +20,7 @@ import SubdivisionForm from './components/SubdivisionForm';
 import PlatPage from './components/PlatPage';
 import PlatExisting from './components/PlatExisting';
 import PlatForm from './components/PlatForm';
+import PlatSummary from './components/PlatSummary';
 
 import LotPage from './components/LotPage';
 import LotExisting from './components/LotExisting';
@@ -29,7 +30,7 @@ global.reduxStore = dashboardStore;
 global.BASE_STATIC_URL = window.location.host === '52.201.224.95' ?
     //'52.201.224.95' :
     'https://s3.amazonaws.com/chef-lfucg/temp_exactions_images' :
-    '/static';    
+    '/static';
 // global.BASE_STATIC_URL = '/static';
 
 const history = syncHistoryWithStore(hashHistory, dashboardStore);
@@ -52,6 +53,7 @@ ReactDOM.render(
 
             <Route path="plat" component={PlatPage} name="Plat" />
             <Route path="plat/existing" component={PlatExisting} name="Existing Plats" />
+            <Route path="plat/summary/:id" component={PlatSummary} name="Plat Summary" />
             <Route path="plat/form" component={PlatForm} name="Plat Form" />
             <Route path="plat/form/:id" component={PlatForm} name="Current Plat Form" />
 
