@@ -43,7 +43,6 @@ class LotExisting extends React.Component {
                             <Link to={`lot/form/${lot.id}`} role="link" className="page-link" aria-label={`Link to ${lot.address_full}`} >
                                 <h3>
                                     {lot.address_full}
-                                    <i className="fa fa-link" aria-hidden="true" />
                                 </h3>
                             </Link>
                         </div>
