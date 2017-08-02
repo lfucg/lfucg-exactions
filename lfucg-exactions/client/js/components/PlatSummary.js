@@ -82,6 +82,37 @@ class PlatExisting extends React.Component {
             );
         })(plats.plat_zone));
 
+        const platLots = plats.lot && plats.lot.length > 0 && (map((lot) => {
+            return (
+                <div key={lot.id}>
+                    <div className="row form-subheading">
+                        <div className="col-sm-7 col-md-9">
+                            <h3>{lot.address_full}</h3>
+                        </div>
+                        <div className="col-sm-5 col-md-3">
+                            <div className="col-xs-5">
+                                <Link to={`lot/summary/${lot.id}`} className="btn btn-mid-level">
+                                    Summary
+                                </Link>
+                            </div>
+                            <div className="col-xs-5 col-xs-offset-1">
+                                <Link to={`lot/form/${lot.id}`} className="btn btn-mid-level">
+                                    Edit
+                                </Link>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className="col-sm-offset-1">
+                            <p className="col-md-4 col-xs-6">Lot Number: {lot.lot_number}</p>
+                            <p className="col-md-4 col-xs-6 ">Permit ID: {lot.permit_id}</p>
+                            <p className="col-md-4 col-xs-6 ">Permit ID: {lot.parcel_id}</p>
+                        </div>
+                    </div>
+                </div>
+            );
+        })(plats.lot));
+
         return (
             <div className="plat-existing">
                 <Navbar />
@@ -107,8 +138,13 @@ class PlatExisting extends React.Component {
                             >
                                 <div className="row section-heading" role="tab" id="headingPlat">
                                     <div className="col-xs-1 caret-indicator" />
-                                    <div className="col-xs-10">
+                                    <div className="col-xs-8 col-xs-offset-1">
                                         <h2>General Plat Information</h2>
+                                    </div>
+                                    <div className="col-xs-2">
+                                        <Link to={`plat/form/${plats.id}`} className="btn btn-top-small">
+                                            Edit
+                                        </Link>
                                     </div>
                                 </div>
                             </a>
@@ -119,11 +155,6 @@ class PlatExisting extends React.Component {
                               aria-labelledby="#headingPlat"
                             >
                                 <div className="panel-body">
-                                    <div className="col-xs-12">
-                                        <Link to={`plat/form/${plats.id}`} className="btn btn-mid-level edit-button">
-                                            Edit
-                                        </Link>
-                                    </div>
                                     <div className="col-xs-12">
                                         <p className="col-md-3 col-sm-4 col-xs-6">Plat Name: {plats.name}</p>
                                         <p className="col-md-3 col-sm-4 col-xs-6">Plat Type: {plats.plat_type}</p>
@@ -155,8 +186,13 @@ class PlatExisting extends React.Component {
                                 >
                                     <div className="row section-heading" role="tab" id="headingPlatZone">
                                         <div className="col-xs-1 caret-indicator" />
-                                        <div className="col-sm-10">
+                                        <div className="col-xs-8 col-xs-offset-1">
                                             <h2>Plat Zones</h2>
+                                        </div>
+                                        <div className="col-xs-2">
+                                            <Link to={`plat/form/${plats.id}`} className="btn btn-top-small">
+                                                Edit
+                                            </Link>
                                         </div>
                                     </div>
                                 </a>
@@ -168,11 +204,6 @@ class PlatExisting extends React.Component {
                                 >
                                     <div className="panel-body">
                                         <div className="col-xs-12">
-                                            <div className="col-xs-12">
-                                                <Link to={`plat/form/${plats.id}`} className="btn btn-mid-level edit-button">
-                                                    Edit
-                                                </Link>
-                                            </div>
                                             <div className="col-xs-12">
                                                 { platZonesList }
                                             </div>
@@ -193,8 +224,13 @@ class PlatExisting extends React.Component {
                                     >
                                         <div className="row section-heading" role="tab" id="headingPlatExactions">
                                             <div className="col-xs-1 caret-indicator" />
-                                            <div className="col-xs-10">
+                                            <div className="col-xs-8 col-xs-offset-1">
                                                 <h2>Plat Exactions</h2>
+                                            </div>
+                                            <div className="col-xs-2">
+                                                <Link to={`plat/form/${plats.id}`} className="btn btn-top-small">
+                                                    Edit
+                                                </Link>
                                             </div>
                                         </div>
                                     </a>
@@ -206,11 +242,6 @@ class PlatExisting extends React.Component {
                                     >
                                         <div className="panel-body">
                                             <div className="col-xs-12">
-                                                <div className="col-xs-12">
-                                                    <Link to={`plat/form/${plats.id}`} className="btn btn-mid-level edit-button">
-                                                        Edit
-                                                    </Link>
-                                                </div>
                                                 <div className="col-xs-12">
                                                     <div className="col-xs-3">
                                                         <div className="col-xs-12 table-border">
@@ -271,7 +302,7 @@ class PlatExisting extends React.Component {
                             >
                                 <div className="row section-heading" role="tab" id="headingNotes">
                                     <div className="col-xs-1 caret-indicator" />
-                                    <div className="col-xs-10">
+                                    <div className="col-xs-8 col-xs-offset-1">
                                         <h2>Notes</h2>
                                     </div>
                                 </div>
@@ -291,7 +322,37 @@ class PlatExisting extends React.Component {
                                 </div>
                             </div>
 
-
+                            {plats.lot &&
+                                <div>
+                                    <a
+                                      role="button"
+                                      data-toggle="collapse"
+                                      data-parent="#accordion"
+                                      href="#collapseLots"
+                                      aria-expanded="false"
+                                      aria-controls="collapseLots"
+                                    >
+                                        <div className="row section-heading" role="tab" id="headingLots">
+                                            <div className="col-xs-1 caret-indicator" />
+                                            <div className="col-xs-8 col-xs-offset-1">
+                                                <h2>Lots</h2>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <div
+                                      id="collapseLots"
+                                      className="panel-collapse collapse row"
+                                      role="tabpanel"
+                                      aria-labelledby="#headingLots"
+                                    >
+                                        <div className="panel-body">
+                                            <div className="col-xs-12">
+                                                {platLots}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
                         </div>
                     </div>
                 </div>
