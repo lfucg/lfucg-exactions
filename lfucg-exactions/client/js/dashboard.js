@@ -22,8 +22,8 @@ import PlatSummary from './components/PlatSummary';
 
 import LotExisting from './components/LotExisting';
 import LotForm from './components/LotForm';
+import LotSummary from './components/LotSummary';
 
-import AccountPage from './components/AccountPage';
 import AccountExisting from './components/AccountExisting';
 import AccountSummary from './components/AccountSummary';
 import AccountForm from './components/AccountForm';
@@ -58,11 +58,11 @@ ReactDOM.render(
             <Route path="plat/form/:id" component={PlatForm} name="Current Plat Form" />
 
             <Route path="lot/existing" component={LotExisting} name="Existing Lots" />
+            <Route path="lot/summary/:id" component={LotSummary} name="Lot Summary" />
             <Route path="lot/form" component={LotForm} name="Lot Form" />
             <Route path="plat/:id/lot/form" component={LotForm} name="Lot Form with Plat" />
             <Route path="lot/form/:id" component={LotForm} name="Current Lot Form" />
 
-            <Route path="account" component={AccountPage} name="Account" />
             <Route path="account/existing" component={AccountExisting} name="Existing Accounts" />
             <Route path="account/summary/:id" component={AccountSummary} name="Account Summary" />
             <Route path="account/form" component={AccountForm} name="Account Form" />
