@@ -5,6 +5,14 @@ from plats.models import Lot, Plat
 
 from simple_history.models import HistoricalRecords
 
+EXPANSION_AREAS = (
+    ('EA-1', 'EA-1'),
+    ('EA-2A', 'EA-2A'),
+    ('EA-2B', 'EA-2B'),
+    ('EA-2C', 'EA-2C'),
+    ('EA-3', 'EA-3'),
+)
+
 class Account(models.Model):
     is_active = models.BooleanField(default=True)
 
@@ -107,7 +115,7 @@ class Agreement(models.Model):
     account_id = models.ForeignKey(Account, related_name='agreement')
     resolution_number = models.CharField(max_length=100)
 
-    expansion_area = models.CharField(max_length=100)
+    expansion_area = models.CharField(max_length=100, choices=EXPANSION_AREAS)
     agreement_type = models.CharField(max_length=100)
 
     history = HistoricalRecords()
@@ -158,7 +166,7 @@ class Project(models.Model):
 
     agreement_id = models.ForeignKey(Agreement, related_name='project')
 
-    expansion_area = models.CharField(max_length=100)
+    expansion_area = models.CharField(max_length=100, choices=EXPANSION_AREAS)
     
     project_category = models.CharField(max_length=200)
     project_type = models.CharField(max_length=200)
