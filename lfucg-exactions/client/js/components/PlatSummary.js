@@ -10,15 +10,17 @@ import Notes from './Notes';
 
 import {
     getPlatID,
+    getAccountID,
 } from '../actions/apiActions';
 
-import {
-    formUpdate,
-} from '../actions/formActions';
+// import {
+//     formUpdate,
+// } from '../actions/formActions';
 
 class PlatExisting extends React.Component {
     static propTypes = {
         plats: React.PropTypes.object,
+        accounts: React.PropTypes.object,
         route: React.PropTypes.object,
         onComponentDidMount: React.PropTypes.func,
     };
@@ -31,6 +33,7 @@ class PlatExisting extends React.Component {
     render() {
         const {
             plats,
+            accounts,
         } = this.props;
 
         const platZonesList = plats.plat_zone && (map((single_plat_zone) => {
@@ -138,13 +141,8 @@ class PlatExisting extends React.Component {
                             >
                                 <div className="row section-heading" role="tab" id="headingPlat">
                                     <div className="col-xs-1 caret-indicator" />
-                                    <div className="col-xs-8 col-xs-offset-1">
+                                    <div className="col-xs-10">
                                         <h2>General Plat Information</h2>
-                                    </div>
-                                    <div className="col-xs-2">
-                                        <Link to={`plat/form/${plats.id}`} className="btn btn-top-small">
-                                            Edit
-                                        </Link>
                                     </div>
                                 </div>
                             </a>
@@ -172,6 +170,11 @@ class PlatExisting extends React.Component {
                                         <p className="col-md-3 col-sm-4 col-xs-6">Non-Sewer Exactions: ${plats.non_sewer_due}</p>
                                         <p className="col-xs-12">Calculation Note: {plats.calculation_note}</p>
                                     </div>
+                                    <div className="col-md-offset-11 col-sm-offset-10 col-xs-offset-8">
+                                        <Link to={`plat/form/${plats.id}`} role="link" >
+                                            <h4>Edit</h4>
+                                        </Link>
+                                    </div>
                                 </div>
                             </div>
 
@@ -186,13 +189,8 @@ class PlatExisting extends React.Component {
                                 >
                                     <div className="row section-heading" role="tab" id="headingPlatZone">
                                         <div className="col-xs-1 caret-indicator" />
-                                        <div className="col-xs-8 col-xs-offset-1">
+                                        <div className="col-xs-10">
                                             <h2>Plat Zones</h2>
-                                        </div>
-                                        <div className="col-xs-2">
-                                            <Link to={`plat/form/${plats.id}`} className="btn btn-top-small">
-                                                Edit
-                                            </Link>
                                         </div>
                                     </div>
                                 </a>
@@ -206,6 +204,11 @@ class PlatExisting extends React.Component {
                                         <div className="col-xs-12">
                                             <div className="col-xs-12">
                                                 { platZonesList }
+                                            </div>
+                                            <div className="col-md-offset-11 col-sm-offset-10 col-xs-offset-8">
+                                                <Link to={`plat/form/${plats.id}`} role="link" >
+                                                    <h4>Edit</h4>
+                                                </Link>
                                             </div>
                                         </div>
                                     </div>
@@ -224,13 +227,8 @@ class PlatExisting extends React.Component {
                                     >
                                         <div className="row section-heading" role="tab" id="headingPlatExactions">
                                             <div className="col-xs-1 caret-indicator" />
-                                            <div className="col-xs-8 col-xs-offset-1">
+                                            <div className="col-xs-10">
                                                 <h2>Plat Exactions</h2>
-                                            </div>
-                                            <div className="col-xs-2">
-                                                <Link to={`plat/form/${plats.id}`} className="btn btn-top-small">
-                                                    Edit
-                                                </Link>
                                             </div>
                                         </div>
                                     </a>
@@ -285,6 +283,11 @@ class PlatExisting extends React.Component {
                                                             <p>Non-Sewer Dues: {plats.non_sewer_due}</p>
                                                         </div>
                                                     </div>
+                                                </div>
+                                                <div className="col-md-offset-11 col-sm-offset-10 col-xs-offset-8">
+                                                    <Link to={`plat/form/${plats.id}`} role="link" >
+                                                        <h4>Edit</h4>
+                                                    </Link>
                                                 </div>
                                             </div>
                                         </div>
@@ -353,6 +356,55 @@ class PlatExisting extends React.Component {
                                     </div>
                                 </div>
                             }
+
+                            {plats.account && accounts &&
+                                <div>
+                                    <a
+                                      role="button"
+                                      data-toggle="collapse"
+                                      data-parent="#accordion"
+                                      href="#collapseAccounts"
+                                      aria-expanded="false"
+                                      aria-controls="collapseAccounts"
+                                    >
+                                        <div className="row section-heading" role="tab" id="headingAccount">
+                                            <div className="col-xs-1 caret-indicator" />
+                                            <div className="col-xs-10">
+                                                <h2>Account</h2>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <div
+                                      id="collapseAccounts"
+                                      className="panel-collapse collapse row"
+                                      role="tabpanel"
+                                      aria-labelledby="#headingAccounts"
+                                    >
+                                        <div className="panel-body">
+                                            <div className="col-xs-12">
+                                                <div className="col-sm-6">
+                                                    <p>Account Name: {accounts.account_name}</p>
+                                                </div>
+                                                <div className="col-sm-6">
+                                                    <p>Contact Name: {accounts.contact_full_name}</p>
+                                                </div>
+                                            </div>
+                                            <div className="col-md-offset-8 col-sm-offset-6">
+                                                <div className="col-xs-6">
+                                                    <Link to={`account/summary/${accounts.id}`} role="link" >
+                                                        <h4>Summary</h4>
+                                                    </Link>
+                                                </div>
+                                                <div className="col-xs-6">
+                                                    <Link to={`account/form/${accounts.id}`} role="link" >
+                                                        <h4>Edit</h4>
+                                                    </Link>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
                         </div>
                     </div>
                 </div>
@@ -365,6 +417,7 @@ class PlatExisting extends React.Component {
 function mapStateToProps(state) {
     return {
         plats: state.plats,
+        accounts: state.accounts,
     };
 }
 
@@ -373,7 +426,12 @@ function mapDispatchToProps(dispatch, params) {
 
     return {
         onComponentDidMount() {
-            dispatch(getPlatID(selectedPlat));
+            dispatch(getPlatID(selectedPlat))
+            .then((plat_data) => {
+                if (plat_data.response.account) {
+                    dispatch(getAccountID(plat_data.response.account));
+                }
+            });
         },
     };
 }
