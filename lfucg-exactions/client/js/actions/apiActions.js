@@ -43,6 +43,12 @@ import {
     GET_NOTE_CONTENT,
     POST_NOTE,
 
+    GET_AGREEMENTS,
+    GET_AGREEMENT_ID,
+    GET_AGREEMENT_QUERY,
+    POST_AGREEMENT,
+    PUT_AGREEMENT,
+
 } from '../constants/apiConstants';
 
 export function getMe() {
@@ -802,7 +808,7 @@ export function putAccount(selectedAccount) {
                 phone,
                 email,
             };
-        }
+        },
     };
 }
 
@@ -852,6 +858,105 @@ export function postNote() {
                 note,
                 content_type,
                 object_id,
+            };
+        },
+    };
+}
+
+// AGREEMENTS
+export function getAgreements() {
+    return {
+        type: API_CALL,
+        endpoint: GET_AGREEMENTS,
+        url: '/agreement/',
+    };
+}
+
+export function getAgreementID(selectedAgreement) {
+    return {
+        type: API_CALL,
+        endpoint: GET_AGREEMENT_ID,
+        url: `/agreement/${selectedAgreement}`,
+    };
+}
+
+export function getAgreementQuery() {
+    return {
+        type: API_CALL,
+        endpoint: GET_AGREEMENT_QUERY,
+        url: (getState) => {
+            const {
+                activeForm,
+            } = getState();
+            const {
+                query,
+            } = activeForm;
+
+            const query_all = `/agreement/?query=${query}`;
+            return query_all;
+        },
+    };
+}
+
+export function postAgreement() {
+    return {
+        type: API_CALL,
+        endpoint: POST_AGREEMENT,
+        url: '/agreement/',
+        method: 'POST',
+        body: (getState) => {
+            const {
+                activeForm,
+                currentUser,
+            } = getState();
+            const {
+                account_id,
+                resolution_number,
+                expansion_area,
+                agreement_type,
+            } = activeForm;
+            const {
+                id,
+            } = currentUser;
+            return {
+                created_by: id,
+                modified_by: id,
+                account_id,
+                resolution_number,
+                expansion_area,
+                agreement_type,
+            };
+        },
+    };
+}
+
+export function putAgreement(selectedAgreement) {
+    return {
+        type: API_CALL,
+        endpoint: PUT_AGREEMENT,
+        url: `/agreement/${selectedAgreement}/`,
+        method: 'PUT',
+        body: (getState) => {
+            const {
+                activeForm,
+                currentUser,
+            } = getState();
+            const {
+                account_id,
+                resolution_number,
+                expansion_area,
+                agreement_type,
+            } = activeForm;
+            const {
+                id,
+            } = currentUser;
+            return {
+                created_by: id,
+                modified_by: id,
+                account_id,
+                resolution_number,
+                expansion_area,
+                agreement_type,
             };
         },
     };
