@@ -92,7 +92,7 @@ class PlatExisting extends React.Component {
                     </div>
                 </div>
 
-                <Breadcrumbs route={this.props.route} parent_link={'plat'} parent_name={'Plats'} />
+                <Breadcrumbs route={this.props.route} parent_link={'plat/existing'} parent_name={'Plats'} />
 
                 <div className="inside-body">
                     <div className="container">
@@ -127,6 +127,7 @@ class PlatExisting extends React.Component {
                                     <div className="col-xs-12">
                                         <p className="col-md-3 col-sm-4 col-xs-6">Plat Name: {plats.name}</p>
                                         <p className="col-md-3 col-sm-4 col-xs-6">Plat Type: {plats.plat_type}</p>
+                                        <p className="col-md-3 col-sm-4 col-xs-6">Subdivision: {plats.subdivision && plats.subdivision.name}</p>
                                         <p className="col-md-3 col-sm-4 col-xs-6">Approval: {plats.is_approved ? 'Approved' : 'Not Approved'}</p>
                                         <p className="col-md-3 col-sm-4 col-xs-6">Expansion Area: {plats.expansion_area}</p>
                                         <p className="col-md-3 col-sm-4 col-xs-6">Unit: {plats.unit}</p>
