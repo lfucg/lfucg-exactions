@@ -119,6 +119,7 @@ class AgreementSerializer(serializers.ModelSerializer):
             'agreement_type',
             'projects',
             'account_ledgers',
+            'payments',
         )
 
 class AccountSerializer(serializers.ModelSerializer):
