@@ -35,8 +35,14 @@ import {
     POST_LOT,
     PUT_LOT,
 
+    GET_ACCOUNTS,
+    GET_ACCOUNT_ID,
+    POST_ACCOUNT,
+    PUT_ACCOUNT,
+
     GET_NOTE_CONTENT,
     POST_NOTE,
+
 } from '../constants/apiConstants';
 
 export function getMe() {
@@ -305,6 +311,7 @@ export function postPlat() {
                 calculation_note,
                 sewer_due,
                 non_sewer_due,
+                account,
             } = activeForm;
             const {
                 id,
@@ -330,6 +337,7 @@ export function postPlat() {
                 calculation_note,
                 sewer_due,
                 non_sewer_due,
+                account,
             };
         },
     };
@@ -365,6 +373,7 @@ export function putPlat(selectedPlat) {
                 calculation_note,
                 sewer_due,
                 non_sewer_due,
+                account,
             } = activeForm;
             const {
                 id,
@@ -390,6 +399,7 @@ export function putPlat(selectedPlat) {
                 calculation_note,
                 sewer_due,
                 non_sewer_due,
+                account,
             };
         },
     };
@@ -571,6 +581,7 @@ export function postLot() {
                 dues_storm_own,
                 dues_open_space_dev,
                 dues_open_space_own,
+                account,
                 // payment,
             } = activeForm;
             const {
@@ -606,6 +617,7 @@ export function postLot() {
                 dues_storm_own,
                 dues_open_space_dev,
                 dues_open_space_own,
+                account,
                 // payment,
             };
         },
@@ -650,6 +662,7 @@ export function putLot(selectedLot) {
                 dues_storm_own,
                 dues_open_space_dev,
                 dues_open_space_own,
+                account,
                 // payment,
             } = activeForm;
             const {
@@ -685,9 +698,111 @@ export function putLot(selectedLot) {
                 dues_storm_own,
                 dues_open_space_dev,
                 dues_open_space_own,
+                account,
                 // payment,
             };
         },
+    };
+}
+
+// ACCOUNTS
+export function getAccounts() {
+    return {
+        type: API_CALL,
+        endpoint: GET_ACCOUNTS,
+        url: '/account/',
+    };
+}
+
+export function getAccountID(selectedAccount) {
+    return {
+        type: API_CALL,
+        endpoint: GET_ACCOUNT_ID,
+        url: `/account/${selectedAccount}`,
+    };
+}
+
+export function postAccount() {
+    return {
+        type: API_CALL,
+        endpoint: POST_ACCOUNT,
+        url: '/account/',
+        method: 'POST',
+        body: (getState) => {
+            const {
+                activeForm,
+                currentUser,
+            } = getState();
+            const {
+                account_name,
+                contact_first_name,
+                contact_last_name,
+                address_city,
+                address_state,
+                address_zip,
+                phone,
+                email,
+            } = activeForm;
+            const {
+                id,
+            } = currentUser;
+            return {
+                created_by: id,
+                modified_by: id,
+                account_name,
+                contact_first_name,
+                contact_last_name,
+                contact_full_name: `${contact_first_name} ${contact_last_name}`,
+                address_city,
+                address_state,
+                address_zip,
+                address_full: `${address_city}, ${address_state} ${address_zip}`,
+                phone,
+                email,
+            };
+        },
+    };
+}
+
+export function putAccount(selectedAccount) {
+    return {
+        type: API_CALL,
+        endpoint: PUT_ACCOUNT,
+        url: `/account/${selectedAccount}/`,
+        method: 'PUT',
+        body: (getState) => {
+            const {
+                activeForm,
+                currentUser,
+            } = getState();
+            const {
+                account_name,
+                contact_first_name,
+                contact_last_name,
+                address_city,
+                address_state,
+                address_zip,
+                phone,
+                email,
+            } = activeForm;
+            const {
+                id,
+            } = currentUser;
+            return {
+                created_by: id,
+                modified_by: id,
+                account_name,
+                contact_first_name,
+                contact_last_name,
+                contact_full_name: `${contact_first_name} ${contact_last_name}`,
+                address_city,
+                address_state,
+                address_zip,
+                address_full: `${address_city}, ${address_state} ${address_zip}`,
+                phone,
+                email,
+            };
+        }
     };
 }
 

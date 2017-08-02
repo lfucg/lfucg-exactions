@@ -10,6 +10,8 @@ import subdivisionsReducer from './subdivisionsReducer';
 import platsReducer from './platsReducer';
 import lotsReducer from './lotsReducer';
 
+import accountReducer from './accountReducer';
+
 import notesReducer from './notesReducer';
 
 const dashboardReducer = combineReducers({
@@ -23,6 +25,8 @@ const dashboardReducer = combineReducers({
     subdivisions: subdivisionsReducer,
     plats: platsReducer,
     lots: lotsReducer,
+
+    accounts: accountReducer,
 
     notes: notesReducer,
 });

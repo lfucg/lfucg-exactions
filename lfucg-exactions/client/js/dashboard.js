@@ -23,6 +23,11 @@ import PlatSummary from './components/PlatSummary';
 import LotExisting from './components/LotExisting';
 import LotForm from './components/LotForm';
 
+import AccountPage from './components/AccountPage';
+import AccountExisting from './components/AccountExisting';
+import AccountSummary from './components/AccountSummary';
+import AccountForm from './components/AccountForm';
+
 global.reduxStore = dashboardStore;
 global.BASE_STATIC_URL = (window.location.host === '52.201.224.95') ?
     //'52.201.224.95' :
@@ -56,6 +61,12 @@ ReactDOM.render(
             <Route path="lot/form" component={LotForm} name="Lot Form" />
             <Route path="plat/:id/lot/form" component={LotForm} name="Lot Form with Plat" />
             <Route path="lot/form/:id" component={LotForm} name="Current Lot Form" />
+
+            <Route path="account" component={AccountPage} name="Account" />
+            <Route path="account/existing" component={AccountExisting} name="Existing Accounts" />
+            <Route path="account/summary/:id" component={AccountSummary} name="Account Summary" />
+            <Route path="account/form" component={AccountForm} name="Account Form" />
+            <Route path="account/form/:id" component={AccountForm} name="Current Account Form" />
 
         </Router>
     </Provider>,

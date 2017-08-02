@@ -3,6 +3,9 @@ from rest_framework import serializers
 from django.contrib.auth.models import User
 from .models import *
 
+from plats.models import Plat, Lot
+from plats.serializers import PlatSerializer, LotSerializer
+
 class AccountLedgerSerializer(serializers.ModelSerializer):
     class Meta:
         model = AccountLedger
@@ -123,6 +126,9 @@ class AccountSerializer(serializers.ModelSerializer):
     account_ledgers = AccountLedgerSerializer(many=True, read_only=True)
     payments = PaymentSerializer(many=True, read_only=True)
 
+    plat_account = PlatSerializer(many=True, required=False)
+    lot_account = LotSerializer(many=True, required=False)
+
     class Meta:
         model = Account
         fields = (
@@ -132,6 +138,10 @@ class AccountSerializer(serializers.ModelSerializer):
             'date_modified',
             'created_by',
             'modified_by',
+
+            'plat_account',
+            'lot_account',
+
             'account_name',
             'contact_first_name',
             'contact_last_name',
@@ -144,6 +154,7 @@ class AccountSerializer(serializers.ModelSerializer):
             'email',
             'agreements',
             'account_ledgers',
+            'payments',
         )
 
 class UserSerializer(serializers.ModelSerializer):
