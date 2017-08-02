@@ -117,6 +117,7 @@ class PlatZoneSerializer(serializers.ModelSerializer):
 class PlatSerializer(serializers.ModelSerializer):
     lot = LotSerializer(many=True, read_only=True)
     plat_zone = PlatZoneSerializer(many=True, read_only=True)
+    subdivision = SubdivisionSerializer(read_only=True)
     cleaned_total_acreage = serializers.SerializerMethodField(read_only=True)
 
     def get_cleaned_total_acreage(self, obj):

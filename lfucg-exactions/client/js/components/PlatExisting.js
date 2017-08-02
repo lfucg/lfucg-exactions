@@ -88,7 +88,7 @@ class PlatExisting extends React.Component {
                     </div>
                 </div>
 
-                <Breadcrumbs route={this.props.route} parent_link={'plat'} parent_name={'Plats'} />
+                <Breadcrumbs route={this.props.route} />
 
                 <div className="row search-box">
                     <form onChange={onPlatQuery('query')} className="col-sm-10 col-sm-offset-1" >

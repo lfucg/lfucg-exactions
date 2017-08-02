@@ -85,7 +85,7 @@ class LotExisting extends React.Component {
                     </div>
                 </div>
 
-                <Breadcrumbs route={this.props.route} parent_link={'lot'} parent_name={'Lots'} />
+                <Breadcrumbs route={this.props.route} />
 
                 <div className="row search-box">
                     <form onChange={onLotQuery('query')} className="col-sm-10 col-sm-offset-1" >

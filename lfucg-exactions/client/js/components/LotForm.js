@@ -88,7 +88,7 @@ class LotForm extends React.Component {
                     </div>
                 </div>
 
-                <Breadcrumbs route={this.props.route} parent_link={'lot'} parent_name={'Lots'} />
+                <Breadcrumbs route={this.props.route} parent_link={'lot/existing'} parent_name={'Lots'} />
 
                 <div className="inside-body">
                     <div className="container">
