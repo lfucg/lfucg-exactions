@@ -17,7 +17,7 @@ import {
 //     formUpdate,
 // } from '../actions/formActions';
 
-class PlatExisting extends React.Component {
+class PlatSummary extends React.Component {
     static propTypes = {
         plats: React.PropTypes.object,
         accounts: React.PropTypes.object,
@@ -117,7 +117,7 @@ class PlatExisting extends React.Component {
         })(plats.lot));
 
         return (
-            <div className="plat-existing">
+            <div className="plat-summary">
                 <Navbar />
 
                 <div className="form-header">
@@ -156,7 +156,7 @@ class PlatExisting extends React.Component {
                                     <div className="col-xs-12">
                                         <p className="col-md-3 col-sm-4 col-xs-6">Plat Name: {plats.name}</p>
                                         <p className="col-md-3 col-sm-4 col-xs-6">Plat Type: {plats.plat_type}</p>
-                                        <p className="col-md-3 col-sm-4 col-xs-6">Subdivision: {plats.subdivision && plats.subdivision.name}</p>
+                                        <p className="col-md-3 col-sm-4 col-xs-6">Subdivision: {plats.subdivision ? plats.subdivision.name : null}</p>
                                         <p className="col-md-3 col-sm-4 col-xs-6">Approval: {plats.is_approved ? 'Approved' : 'Not Approved'}</p>
                                         <p className="col-md-3 col-sm-4 col-xs-6">Expansion Area: {plats.expansion_area}</p>
                                         <p className="col-md-3 col-sm-4 col-xs-6">Unit: {plats.unit}</p>
@@ -437,4 +437,4 @@ function mapDispatchToProps(dispatch, params) {
 }
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(PlatExisting);
+export default connect(mapStateToProps, mapDispatchToProps)(PlatSummary);
