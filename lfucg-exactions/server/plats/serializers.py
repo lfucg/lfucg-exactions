@@ -145,8 +145,7 @@ class SubdivisionField(serializers.Field):
 
     def to_representation(self, obj):
         try:
-            subdivision = SubdivisionSerializer(obj).data
-            return subdivision['id']
+            return SubdivisionSerializer(obj).data['id']
         except:
             None
 
