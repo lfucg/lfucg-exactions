@@ -145,7 +145,7 @@ class PlatForm extends React.Component {
                     </div>
                 </div>
 
-                <Breadcrumbs route={this.props.route} parent_link={'plat'} parent_name={'Plats'} />
+                <Breadcrumbs route={this.props.route} parent_link={'plat/existing'} parent_name={'Plats'} />
 
                 <div className="inside-body">
                     <div className="container">
@@ -159,10 +159,10 @@ class PlatForm extends React.Component {
                               aria-controls="collapseGeneralPlat"
                             >
                                 <div className="row section-heading" role="tab" id="headingPlat">
-                                    <h2>General Plat Information</h2>
-                                    {activeForm.first_section ?
-                                        <h4>(Click to View or Edit)</h4>
-                                    : null}
+                                    <div className="col-xs-1 caret-indicator" />
+                                    <div className="col-xs-10">
+                                        <h2>General Plat Information</h2>
+                                    </div>
                                 </div>
                             </a>
                             <div
@@ -347,8 +347,10 @@ class PlatForm extends React.Component {
                                               aria-controls="collapsePlatZones"
                                             >
                                                 <div className="row section-heading" role="tab" id="headingPlatZone">
-                                                    <h2>Plat Zones</h2>
-                                                    <h4>(Click to View or Edit)</h4>
+                                                    <div className="col-xs-1 caret-indicator" />
+                                                    <div className="col-sm-10">
+                                                        <h2>Plat Zones</h2>
+                                                    </div>
                                                 </div>
                                             </a>
                                             <div
@@ -386,8 +388,10 @@ class PlatForm extends React.Component {
                                               aria-controls="collapsePlatExactions"
                                             >
                                                 <div className="row section-heading" role="tab" id="headingPlatExactions">
-                                                    <h2>Plat Exactions</h2>
-                                                    <h4>(Click to View or Edit)</h4>
+                                                    <div className="col-xs-1 caret-indicator" />
+                                                    <div className="col-xs-10">
+                                                        <h2>Plat Exactions</h2>
+                                                    </div>
                                                 </div>
                                             </a>
                                             <div
@@ -491,8 +495,10 @@ class PlatForm extends React.Component {
                               aria-controls="collapseNotes"
                             >
                                 <div className="row section-heading" role="tab" id="headingNotes">
-                                    <h2>Notes</h2>
-                                    <h4>(Click to View or Edit)</h4>
+                                    <div className="col-xs-1 caret-indicator" />
+                                    <div className="col-xs-10">
+                                        <h2>Notes</h2>
+                                    </div>
                                 </div>
                             </a>
                             <div
