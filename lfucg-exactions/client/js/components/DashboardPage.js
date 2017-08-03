@@ -36,7 +36,7 @@ class DashboardPage extends React.Component {
                                 <p>Lexington lots.</p>
                             </div>
                             <div className="col-md-4 col-sm-6">
-                                <Link to="account" role="link"><h2 className="in-page-link">Accounts</h2></Link>
+                                <Link to="account/existing" role="link"><h2 className="in-page-link">Accounts</h2></Link>
                                 <p>Lexington accounts.</p>
                             </div>
                         </div>
