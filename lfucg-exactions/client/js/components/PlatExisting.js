@@ -53,7 +53,7 @@ class PlatExisting extends React.Component {
                                 <p className="col-md-3 col-sm-4 col-xs-6">Longitude: {plat.longitude}</p>
                                 <p className="col-md-3 col-sm-4 col-xs-6">Latitude: {plat.latitude}</p>
                                 <p className="col-md-3 col-sm-4 col-xs-6">Gross Acreage: {plat.cleaned_total_acreage}</p>
-                                <p className="col-md-3 col-sm-4 col-xs-6">Plat Type: {plat.plat_type}</p>
+                                <p className="col-md-3 col-sm-4 col-xs-6">Plat Type: {plat.plat_type_display}</p>
                                 <p className="col-md-3 col-sm-4 col-xs-6">Approval: {plat.is_approved ? 'Approved' : 'Not Approved'}</p>
                                 <p className="col-md-3 col-sm-4 col-xs-6">Expansion Area: {plat.expansion_area}</p>
                                 <p className="col-md-3 col-sm-4 col-xs-6">Unit: {plat.unit}</p>
