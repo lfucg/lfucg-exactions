@@ -552,10 +552,10 @@ function mapDispatchToProps(dispatch, params) {
                         if (data_plat.response.subdivision) {
                             dispatch(getSubdivisionID(data_plat.response.subdivision))
                             .then((data_sub_id) => {
-                                const update2 = {
+                                const sub_update = {
                                     subdivision_name: data_sub_id.response.name,
                                 };
-                                dispatch(formUpdate(update2));
+                                dispatch(formUpdate(sub_update));
                             });
                         }
                         if (data_plat.response.account) {
