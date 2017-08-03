@@ -710,6 +710,57 @@ export function putLot(selectedLot) {
     };
 }
 
+// NOTES
+export function getNoteContent() {
+    return {
+        type: API_CALL,
+        endpoint: GET_NOTE_CONTENT,
+        url: (getState) => {
+            const {
+                activeForm,
+            } = getState();
+            const {
+                content_type,
+                object_id,
+                parent_content_type,
+                parent_object_id,
+            } = activeForm;
+
+            const related_notes = parent_content_type ? `/note/?content_type=${content_type}&object_id=${object_id}&parent_content_type=${parent_content_type}&parent_object_id=${parent_object_id}` : `/note/?content_type=${content_type}&object_id=${object_id}`;
+            return related_notes;
+        },
+    };
+}
+
+export function postNote() {
+    return {
+        type: API_CALL,
+        endpoint: POST_NOTE,
+        url: '/note/',
+        method: 'POST',
+        body: (getState) => {
+            const {
+                activeForm,
+                currentUser,
+            } = getState();
+            const {
+                note,
+                content_type,
+                object_id,
+            } = activeForm;
+            const {
+                id,
+            } = currentUser;
+            return {
+                user: id,
+                note,
+                content_type,
+                object_id,
+            };
+        },
+    };
+}
+
 // ACCOUNTS
 export function getAccounts() {
     return {
@@ -829,57 +880,6 @@ export function putAccount(selectedAccount) {
     };
 }
 
-// NOTES
-export function getNoteContent() {
-    return {
-        type: API_CALL,
-        endpoint: GET_NOTE_CONTENT,
-        url: (getState) => {
-            const {
-                activeForm,
-            } = getState();
-            const {
-                content_type,
-                object_id,
-                parent_content_type,
-                parent_object_id,
-            } = activeForm;
-
-            const related_notes = parent_content_type ? `/note/?content_type=${content_type}&object_id=${object_id}&parent_content_type=${parent_content_type}&parent_object_id=${parent_object_id}` : `/note/?content_type=${content_type}&object_id=${object_id}`;
-            return related_notes;
-        },
-    };
-}
-
-export function postNote() {
-    return {
-        type: API_CALL,
-        endpoint: POST_NOTE,
-        url: '/note/',
-        method: 'POST',
-        body: (getState) => {
-            const {
-                activeForm,
-                currentUser,
-            } = getState();
-            const {
-                note,
-                content_type,
-                object_id,
-            } = activeForm;
-            const {
-                id,
-            } = currentUser;
-            return {
-                user: id,
-                note,
-                content_type,
-                object_id,
-            };
-        },
-    };
-}
-
 // AGREEMENTS
 export function getAgreements() {
     return {
@@ -931,6 +931,7 @@ export function postAgreement() {
                 resolution_number,
                 expansion_area,
                 agreement_type,
+                date_executed,
             } = activeForm;
             const {
                 id,
@@ -942,6 +943,7 @@ export function postAgreement() {
                 resolution_number,
                 expansion_area,
                 agreement_type,
+                date_executed,
             };
         },
     };
@@ -963,6 +965,7 @@ export function putAgreement(selectedAgreement) {
                 resolution_number,
                 expansion_area,
                 agreement_type,
+                date_executed,
             } = activeForm;
             const {
                 id,
@@ -974,6 +977,7 @@ export function putAgreement(selectedAgreement) {
                 resolution_number,
                 expansion_area,
                 agreement_type,
+                date_executed,
             };
         },
     };

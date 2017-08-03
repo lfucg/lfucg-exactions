@@ -40,7 +40,7 @@ class AgreementExisting extends React.Component {
                     <div key={agreement.id} className="col-xs-12">
                         <div className="row form-subheading">
                             <div className="col-sm-7 col-md-9">
-                                <h3>{agreement.resolution_number}</h3>
+                                <h3>Resolution Number: {agreement.resolution_number}</h3>
                             </div>
                             <div className="col-sm-5 col-md-3">
                                 <div className="col-xs-5">
@@ -57,11 +57,10 @@ class AgreementExisting extends React.Component {
                         </div>
                         <div className="row">
                             <div className="col-sm-offset-1">
-                                <p className="col-md-4 col-xs-6">Agreement Name: {agreement.agreement_name}</p>
-                                <p className="col-md-4 col-xs-6">Contact Name: {agreement.contact_full_name}</p>
-                                <p className="col-xs-12">Address: {agreement.address_full}</p>
-                                <p className="col-md-4 col-xs-6 ">Phone: {agreement.phone}</p>
-                                <p className="col-md-4 col-xs-6">Email: {agreement.email}</p>
+                                <p className="col-md-4 col-xs-6">Account: {agreement.account_id}</p>
+                                <p className="col-md-4 col-xs-6">Expansion Area: {agreement.expansion_area}</p>
+                                <p className="col-xs-12">Agreement Type: {agreement.agreement_type}</p>
+                                <p className="col-md-4 col-xs-6 ">Date Executed: {agreement.date_executed}</p>
                             </div>
                         </div>
                     </div>
