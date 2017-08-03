@@ -25,6 +25,8 @@ import {
     putLot,
     getPlats,
     getPlatID,
+    getAccounts,
+    getAccountID,
 } from '../actions/apiActions';
 
 class LotForm extends React.Component {
@@ -32,6 +34,7 @@ class LotForm extends React.Component {
         activeForm: React.PropTypes.object,
         plats: React.PropTypes.object,
         lots: React.PropTypes.object,
+        accounts: React.PropTypes.object,
         route: React.PropTypes.object,
         onComponentDidMount: React.PropTypes.func,
         formChange: React.PropTypes.func,
@@ -48,6 +51,7 @@ class LotForm extends React.Component {
             activeForm,
             plats,
             lots,
+            accounts,
             formChange,
             onLotSubmit,
             onLotDues,
@@ -60,6 +64,14 @@ class LotForm extends React.Component {
                 </option>
             );
         })(plats)) : null;
+
+        const accountsList = accounts.length > 0 ? (map((single_account) => {
+            return (
+                <option key={single_account.id} value={[single_account.id, single_account.account_name]} >
+                    {single_account.account_name}
+                </option>
+            );
+        })(accounts)) : null;
 
         const ownerDisabled =
             lots &&
@@ -119,6 +131,27 @@ class LotForm extends React.Component {
 
                                         <fieldset>
                                             <div className="row form-subheading">
+                                                <h3>Account</h3>
+                                            </div>
+                                            <div className="row">
+                                                <div className="col-sm-6 form-group">
+                                                    <label htmlFor="account" className="form-label" id="account">Account</label>
+                                                    <select className="form-control" id="account" onChange={formChange('account')} >
+                                                        {activeForm.account_name ? (
+                                                            <option value="choose_account" aria-label="Selected Account">
+                                                                {activeForm.account_name}
+                                                            </option>
+                                                        ) : (
+                                                            <option value="choose_account" aria-label="Select an Account">
+                                                                Select an Account
+                                                            </option>
+                                                        )}
+                                                        {accountsList}
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div className="row form-subheading">
                                                 <h3>Address</h3>
                                             </div>
                                             <div className="row">
@@ -177,6 +210,7 @@ class LotForm extends React.Component {
                                                     </select>
                                                 </div>
                                             </div>
+
                                             <div className="row form-subheading">
                                                 <h3>Location Identification</h3>
                                             </div>
@@ -388,6 +422,7 @@ function mapStateToProps(state) {
         activeForm: state.activeForm,
         plats: state.plats,
         lots: state.lots,
+        accounts: state.accounts,
     };
 }
 
@@ -400,21 +435,15 @@ function mapDispatchToProps(dispatch, params) {
         onComponentDidMount() {
             dispatch(formInit());
             dispatch(getPlats());
+            dispatch(getAccounts());
             dispatch(getMe())
             .then((data_me) => {
-                data_me.error  && hashHistory.push('login/');
+                if (data_me.error) {
+                    hashHistory.push('login/');
+                }
                 if (selectedLot) {
                     dispatch(getLotID(selectedLot))
                     .then((data_lot) => {
-                        if (data_lot.response.plat) {
-                            dispatch(getPlatID(data_lot.response.plat))
-                            .then((data_plat_id) => {
-                                const update2 = {
-                                    plat_name: data_plat_id.response.name,
-                                };
-                                dispatch(formUpdate(update2));
-                            });
-                        }
                         const update = {
                             address_number: data_lot.response.address_number,
                             address_street: data_lot.response.address_street,
@@ -445,6 +474,32 @@ function mapDispatchToProps(dispatch, params) {
                             first_section: true,
                         };
                         dispatch(formUpdate(update));
+                        if (data_lot.response.plat) {
+                            dispatch(getPlatID(data_lot.response.plat))
+                            .then((data_plat_id) => {
+                                const update2 = {
+                                    plat_name: data_plat_id.response.name,
+                                };
+                                dispatch(formUpdate(update2));
+                                if (data_lot.response.account) {
+                                    dispatch(getAccountID(data_lot.response.account))
+                                    .then((data_account_id) => {
+                                        const update_lot_account = {
+                                            account_name: data_account_id.response.account_name,
+                                        };
+                                        dispatch(formUpdate(update_lot_account));
+                                    });
+                                } else if (data_plat_id.response.account) {
+                                    dispatch(getAccountID(data_plat_id.response.account))
+                                    .then((data_plat_account_id) => {
+                                        const update_account = {
+                                            account_name: data_plat_account_id.response.account_name,
+                                        };
+                                        dispatch(formUpdate(update_account));
+                                    });
+                                }
+                            });
+                        }
                     });
                 } else if (plat_start) {
                     dispatch(getPlatID(plat_start))
@@ -530,7 +585,7 @@ function mapDispatchToProps(dispatch, params) {
                 dispatch(putLot(selectedLot))
                 .then(() => {
                     hashHistory.push('lot/existing/');
-                })
+                });
             }
         },
     };

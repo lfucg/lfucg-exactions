@@ -40,6 +40,25 @@ class CalculationWorksheetSerializer(serializers.ModelSerializer):
 
 class LotSerializer(serializers.ModelSerializer):
     # payment = PaymentSerializer(read_only=True)
+    total_due = serializers.SerializerMethodField(read_only=True)
+
+    def get_total_due(self,obj):
+        total = (
+            obj.dues_roads_own +
+            obj.dues_roads_dev +
+            obj.dues_sewer_cap_own +
+            obj.dues_sewer_trans_dev +
+            obj.dues_sewer_trans_own +
+            obj.dues_sewer_cap_dev +
+            obj.dues_sewer_cap_own +
+            obj.dues_parks_dev +
+            obj.dues_parks_own +
+            obj.dues_storm_dev +
+            obj.dues_storm_own +
+            obj.dues_open_space_dev +
+            obj.dues_open_space_own
+        )
+        return total
 
     class Meta:
         model = Lot
@@ -48,6 +67,8 @@ class LotSerializer(serializers.ModelSerializer):
             'is_approved',
             'is_active',
             'plat',
+            'account',
+
             'parcel_id',            
             'date_created',
             'date_modified',
@@ -81,6 +102,7 @@ class LotSerializer(serializers.ModelSerializer):
             'dues_open_space_dev',
             'dues_open_space_own',
             # 'payment',
+            'total_due',
         )
 
 class PlatZoneSerializer(serializers.ModelSerializer):
@@ -114,14 +136,32 @@ class PlatZoneSerializer(serializers.ModelSerializer):
             'cleaned_acres',
         )
 
+class SubdivisionField(serializers.Field):
+    def to_internal_value(self, data):
+        try:
+            return Subdivision.objects.get(id=data)
+        except:
+            None
+
+    def to_representation(self, obj):
+        try:
+            return SubdivisionSerializer(obj).data['id']
+        except:
+            None
+
 class PlatSerializer(serializers.ModelSerializer):
     lot = LotSerializer(many=True, read_only=True)
     plat_zone = PlatZoneSerializer(many=True, read_only=True)
     cleaned_total_acreage = serializers.SerializerMethodField(read_only=True)
+    subdivision = SubdivisionField(required=False)
+    plat_type_display = serializers.SerializerMethodField(read_only=True)
 
     def get_cleaned_total_acreage(self, obj):
         set_acreage = str(obj.total_acreage).rstrip('0').rstrip('.')
         return set_acreage
+
+    def get_plat_type_display(self, obj):
+        return obj.get_plat_type_display()
 
     class Meta:
         model = Plat 
@@ -130,6 +170,8 @@ class PlatSerializer(serializers.ModelSerializer):
             'is_approved',
             'is_active',
             'subdivision',
+            'account',
+
             'date_recorded',
             'date_created',
             'date_modified',
@@ -155,4 +197,5 @@ class PlatSerializer(serializers.ModelSerializer):
             'non_sewer_due',
             'lot',
             'plat_zone',
+            'plat_type_display',
         )

@@ -26,6 +26,8 @@ import {
     getPlatID,
     postPlat,
     putPlat,
+    getAccounts,
+    getAccountID,
 } from '../actions/apiActions';
 
 class PlatForm extends React.Component {
@@ -33,6 +35,7 @@ class PlatForm extends React.Component {
         activeForm: React.PropTypes.object,
         subdivisions: React.PropTypes.object,
         plats: React.PropTypes.object,
+        accounts: React.PropTypes.object,
         route: React.PropTypes.object,
         onComponentDidMount: React.PropTypes.func,
         formChange: React.PropTypes.func,
@@ -51,6 +54,7 @@ class PlatForm extends React.Component {
             activeForm,
             subdivisions,
             plats,
+            accounts,
             formChange,
             onPlatSubmit,
             onPlatAndCreateLot,
@@ -65,6 +69,14 @@ class PlatForm extends React.Component {
                 </option>
             );
         })(subdivisions)) : null;
+
+        const accountsList = accounts.length > 0 ? (map((single_account) => {
+            return (
+                <option key={single_account.id} value={[single_account.id, single_account.account_name]} >
+                    {single_account.account_name}
+                </option>
+            );
+        })(accounts)) : null;
 
         const platZonesList = plats.plat_zone ? (map((single_plat_zone) => {
             return (
@@ -164,6 +176,26 @@ class PlatForm extends React.Component {
 
                                         <fieldset>
                                             <div className="row form-subheading">
+                                                <h3>Account</h3>
+                                            </div>
+                                            <div className="row">
+                                                <div className="col-sm-6 form-group">
+                                                    <label htmlFor="account" className="form-label" id="account">Account</label>
+                                                    <select className="form-control" id="account" onChange={formChange('account')} >
+                                                        {activeForm.account_name ? (
+                                                            <option value="choose_account" aria-label="Selected Account">
+                                                                {activeForm.account_name}
+                                                            </option>
+                                                        ) : (
+                                                            <option value="choose_account" aria-label="Select an Account">
+                                                                Select an Account
+                                                            </option>
+                                                        )}
+                                                        {accountsList}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div className="row form-subheading">
                                                 <h3>Location</h3>
                                             </div>
                                             <div className="row">
@@ -171,7 +203,7 @@ class PlatForm extends React.Component {
                                                     <label htmlFor="subdivision" className="form-label" id="subdivision">Subdivision</label>
                                                     <select className="form-control" id="subdivision" onChange={formChange('subdivision')} >
                                                         {activeForm.subdivision ? (
-                                                            <option value="choose_subdivision" aria-label="Select a Subdivision">
+                                                            <option value="choose_subdivision" aria-label="Selected Subdivision">
                                                                 {activeForm.subdivision_name}
                                                             </option>
                                                         ) : (
@@ -251,8 +283,8 @@ class PlatForm extends React.Component {
                                                 <div className="col-sm-6 form-group">
                                                     <label htmlFor="plat_type" className="form-label" id="plat_type">* Plat Type</label>
                                                     <select className="form-control" id="plat_type" onChange={formChange('plat_type')} >
-                                                        {plats.plat_type ? (
-                                                            <option value="plat_type" aria-label={`Plat Type ${plats.plat_type}`}>{plats.plat_type}</option>
+                                                        {plats.plat_type_display ? (
+                                                            <option value="plat_type" aria-label={`Plat Type ${plats.plat_type_display}`}>{plats.plat_type_display}</option>
                                                         ) : (
                                                             <option value="choose_plat_type" aria-label="Choose a Plat Type">Choose an Plat Type</option>
                                                         )}
@@ -492,6 +524,7 @@ function mapStateToProps(state) {
         activeForm: state.activeForm,
         subdivisions: state.subdivisions,
         plats: state.plats,
+        accounts: state.accounts,
     };
 }
 
@@ -507,6 +540,7 @@ function mapDispatchToProps(dispatch, params) {
             };
             dispatch(formUpdate(else_update));
             dispatch(getSubdivisions());
+            dispatch(getAccounts());
             dispatch(getMe())
             .then((data_me) => {
                 if (data_me.error) {
@@ -518,10 +552,19 @@ function mapDispatchToProps(dispatch, params) {
                         if (data_plat.response.subdivision) {
                             dispatch(getSubdivisionID(data_plat.response.subdivision))
                             .then((data_sub_id) => {
-                                const update2 = {
+                                const sub_update = {
                                     subdivision_name: data_sub_id.response.name,
                                 };
-                                dispatch(formUpdate(update2));
+                                dispatch(formUpdate(sub_update));
+                            });
+                        }
+                        if (data_plat.response.account) {
+                            dispatch(getAccountID(data_plat.response.account))
+                            .then((data_account) => {
+                                const update_account = {
+                                    account_name: data_account.response.account_name,
+                                };
+                                dispatch(formUpdate(update_account));
                             });
                         }
                         if (data_plat.response.plat_zone && data_plat.response.plat_zone.length === 0) {
@@ -550,6 +593,7 @@ function mapDispatchToProps(dispatch, params) {
                             calculation_note: data_plat.response.calculation_note,
                             name: data_plat.response.name,
                             plat_type: data_plat.response.plat_type,
+                            plat_type_display: data_plat.response.plat_type_display,
                             section: data_plat.response.section,
                             unit: data_plat.response.unit,
                             block: data_plat.response.block,
