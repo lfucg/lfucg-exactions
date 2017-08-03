@@ -152,6 +152,7 @@ class SubdivisionField(serializers.Field):
 class PlatSerializer(serializers.ModelSerializer):
     lot = LotSerializer(many=True, read_only=True)
     plat_zone = PlatZoneSerializer(many=True, read_only=True)
+    subdivision = SubdivisionSerializer(read_only=True)
     cleaned_total_acreage = serializers.SerializerMethodField(read_only=True)
     subdivision = SubdivisionField(required=False)
     plat_type_display = serializers.SerializerMethodField(read_only=True)

@@ -40,12 +40,16 @@ class SubdivisionExisting extends React.Component {
                 return (
                     <div key={subdivision.id} className="col-xs-12">
                         <div className="row form-subheading">
-                            <Link to={`subdivision/form/${subdivision.id}`} role="link" className="page-link">
-                                <h3>
-                                    {subdivision.name}
-                                    <i className="fa fa-link" aria-hidden="true" />
-                                </h3>
-                            </Link>
+                            <div className="col-sm-7 col-md-9">
+                                <h3>{subdivision.name}</h3>
+                            </div>
+                            <div className="col-sm-5 col-md-3">
+                                <div className="col-xs-5 col-xs-offset-6">
+                                    <Link to={`subdivision/form/${subdivision.id}`} className="btn btn-mid-level">
+                                        Edit
+                                    </Link>
+                                </div>
+                            </div>
                         </div>
                         <div className="row">
                             <p className="col-md-3 col-sm-offset-1 col-sm-4 col-xs-6">Acres: {subdivision.cleaned_gross_acreage}</p>
@@ -61,11 +65,18 @@ class SubdivisionExisting extends React.Component {
 
                 <div className="form-header">
                     <div className="container">
-                        <h1>SUBDIVISIONS - EXISTING</h1>
+                        <div className="col-sm-8">
+                            <h1>SUBDIVISIONS - EXISTING</h1>
+                        </div>
+                        <div className="col-sm-2 col-sm-offset-1">
+                            <Link to={'subdivision/form/'} className="btn btn-top-level" >
+                                Create
+                            </Link>
+                        </div>
                     </div>
                 </div>
 
-                <Breadcrumbs route={this.props.route} parent_link={'subdivision'} parent_name={'Subdivisions'} />
+                <Breadcrumbs route={this.props.route} />
 
                 <div className="row search-box">
                     <form onChange={onSubdivisionQuery('query')} className="col-sm-10 col-sm-offset-1" >
