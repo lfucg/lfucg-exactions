@@ -32,12 +32,21 @@ class AccountSummary extends React.Component {
                 return (
                     <div key={plat.id} className="col-xs-12">
                         <div className="row form-subheading">
-                            <Link to={`plat/form/${plat.id}`} role="link" className="page-link">
-                                <h3>
-                                    {plat.name}
-                                    <i className="fa fa-link" aria-hidden="true" />
-                                </h3>
-                            </Link>
+                            <div className="col-sm-7 col-md-9">
+                                <h3>{plat.name}</h3>
+                            </div>
+                            <div className="col-sm-5 col-md-3">
+                                <div className="col-xs-5">
+                                    <Link to={`plat/summary/${plat.id}`} className="btn btn-mid-level">
+                                        Summary
+                                    </Link>
+                                </div>
+                                <div className="col-xs-5 col-xs-offset-1">
+                                    <Link to={`plat/form/${plat.id}`} className="btn btn-mid-level">
+                                        Edit
+                                    </Link>
+                                </div>
+                            </div>
                         </div>
                         <div className="row">
                             <p className="col-md-3 col-sm-4 col-xs-6">Gross Acreage: {plat.cleaned_total_acreage}</p>
@@ -57,12 +66,21 @@ class AccountSummary extends React.Component {
                 return (
                     <div key={lot.id} className="col-xs-12">
                         <div className="row form-subheading">
-                            <Link to={`lot/form/${lot.id}`} role="link" className="page-link">
-                                <h3>
-                                    {lot.address_full}
-                                    <i className="fa fa-link" aria-hidden="true" />
-                                </h3>
-                            </Link>
+                            <div className="col-sm-7 col-md-9">
+                                <h3>{lot.address_full}</h3>
+                            </div>
+                            <div className="col-sm-5 col-md-3">
+                                <div className="col-xs-5">
+                                    <Link to={`lot/summary/${lot.id}`} className="btn btn-mid-level">
+                                        Summary
+                                    </Link>
+                                </div>
+                                <div className="col-xs-5 col-xs-offset-1">
+                                    <Link to={`lot/form/${lot.id}`} className="btn btn-mid-level">
+                                        Edit
+                                    </Link>
+                                </div>
+                            </div>
                         </div>
                         <div className="row">
                             <p className="col-md-3 col-sm-4 col-xs-6">Total Due: {lot.total_due}</p>
@@ -85,7 +103,7 @@ class AccountSummary extends React.Component {
                     </div>
                 </div>
 
-                <Breadcrumbs route={this.props.route} parent_link={'account'} parent_name={'Accounts'} />
+                <Breadcrumbs route={this.props.route} parent_link={'account/existing'} parent_name={'Accounts'} />
 
                 <div className="inside-body">
                     <div className="container">
@@ -99,8 +117,10 @@ class AccountSummary extends React.Component {
                               aria-controls="collapseAccountInfo"
                             >
                                 <div className="row section-heading" role="tab" id="headingAccountInfo">
-                                    <h2>Account Information</h2>
-                                    <h4>(Click to View or Edit)</h4>
+                                    <div className="col-xs-1 caret-indicator" />
+                                    <div className="col-xs-10">
+                                        <h2>Account Information</h2>
+                                    </div>
                                 </div>
                             </a>
                             <div
@@ -130,8 +150,10 @@ class AccountSummary extends React.Component {
                                       aria-controls="collapseAccountPlats"
                                     >
                                         <div className="row section-heading" role="tab" id="headingAccountPlats">
-                                            <h2>Account Plats</h2>
-                                            <h4>(Click to View or Edit)</h4>
+                                            <div className="col-xs-1 caret-indicator" />
+                                            <div className="col-xs-10">
+                                                <h2>Account Plats</h2>
+                                            </div>
                                         </div>
                                     </a>
                                     <div
@@ -164,8 +186,10 @@ class AccountSummary extends React.Component {
                                       aria-controls="collapseAccountLots"
                                     >
                                         <div className="row section-heading" role="tab" id="headingAccountLots">
-                                            <h2>Account Lots</h2>
-                                            <h4>(Click to View or Edit)</h4>
+                                            <div className="col-xs-1 caret-indicator" />
+                                            <div className="col-xs-10">
+                                                <h2>Account Lots</h2>
+                                            </div>
                                         </div>
                                     </a>
                                     <div

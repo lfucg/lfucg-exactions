@@ -9,13 +9,19 @@ import Breadcrumbs from './Breadcrumbs';
 
 import {
     getAccounts,
+    getAccountQuery,
 } from '../actions/apiActions';
+
+import {
+    formUpdate,
+} from '../actions/formActions';
 
 class AccountExisting extends React.Component {
     static propTypes = {
         accounts: React.PropTypes.object,
         route: React.PropTypes.object,
         onComponentDidMount: React.PropTypes.func,
+        onAccountQuery: React.PropTypes.func,
     };
 
     componentDidMount() {
@@ -25,6 +31,7 @@ class AccountExisting extends React.Component {
     render() {
         const {
             accounts,
+            onAccountQuery,
         } = this.props;
 
         const accounts_list = accounts.length > 0 ? (
@@ -32,20 +39,26 @@ class AccountExisting extends React.Component {
                 return (
                     <div key={account.id} className="col-xs-12">
                         <div className="row form-subheading">
-                            <Link to={`account/summary/${account.id}`} role="link" className="page-link">
-                                <h3>
-                                    {account.account_name}
-                                    <i className="fa fa-link" aria-hidden="true" />
-                                </h3>
-                            </Link>
+                            <div className="col-sm-7 col-md-9">
+                                <h3>{account.account_name}</h3>
+                            </div>
+                            <div className="col-sm-5 col-md-3">
+                                <div className="col-xs-5">
+                                    <Link to={`account/summary/${account.id}`} className="btn btn-mid-level">
+                                        Summary
+                                    </Link>
+                                </div>
+                                <div className="col-xs-5 col-xs-offset-1">
+                                    <Link to={`account/form/${account.id}`} className="btn btn-mid-level">
+                                        Edit
+                                    </Link>
+                                </div>
+                            </div>
                         </div>
                         <div className="row">
                             <div className="col-sm-offset-1">
                                 <p className="col-md-4 col-xs-6">Account Name: {account.account_name}</p>
                                 <p className="col-md-4 col-xs-6">Contact Name: {account.contact_full_name}</p>
-                                <p className="col-xs-12">Address: {account.address_full}</p>
-                                <p className="col-md-4 col-xs-6 ">Phone: {account.phone}</p>
-                                <p className="col-md-4 col-xs-6">Email: {account.email}</p>
                             </div>
                         </div>
                     </div>
@@ -59,11 +72,35 @@ class AccountExisting extends React.Component {
 
                 <div className="form-header">
                     <div className="container">
-                        <h1>ACCOUNTS - EXISTING</h1>
+                        <div className="col-sm-8">
+                            <h1>ACCOUNTS - EXISTING</h1>
+                        </div>
+                        <div className="col-sm-2 col-sm-offset-1">
+                            <Link to={'account/form/'} className="btn btn-top-level" >
+                                Create
+                            </Link>
+                        </div>
                     </div>
                 </div>
 
-                <Breadcrumbs route={this.props.route} parent_link={'account'} parent_name={'Accounts'} />
+                <Breadcrumbs route={this.props.route} />
+
+                <div className="row search-box">
+                    <form onChange={onAccountQuery('query')} className="col-sm-10 col-sm-offset-1" >
+                        <fieldset>
+                            <div className="col-sm-2 col-xs-12">
+                                <label htmlFor="query" className="form-label">Search</label>
+                            </div>
+                            <div className="col-sm-10 col-xs-12">
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  placeholder="Search Accounts"
+                                />
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
 
                 <div className="inside-body">
                     <div className="container">
@@ -86,6 +123,16 @@ function mapDispatchToProps(dispatch) {
     return {
         onComponentDidMount() {
             dispatch(getAccounts());
+        },
+        onAccountQuery(field) {
+            return (e, ...args) => {
+                const value = typeof e.target.value !== 'undefined' ? e.target.value : args[1];
+                const update = {
+                    [field]: value,
+                };
+                dispatch(formUpdate(update));
+                dispatch(getAccountQuery());
+            };
         },
     };
 }

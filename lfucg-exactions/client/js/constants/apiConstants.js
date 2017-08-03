@@ -34,6 +34,7 @@ export const PUT_LOT = 'PUT_LOT';
 
 export const GET_ACCOUNTS = 'GET_ACCOUNTS';
 export const GET_ACCOUNT_ID = 'GET_ACCOUNT_ID';
+export const GET_ACCOUNT_QUERY = 'GET_ACCOUNT_QUERY';
 export const POST_ACCOUNT = 'POST_ACCOUNT';
 export const PUT_ACCOUNT = 'PUT_ACCOUNT';
 

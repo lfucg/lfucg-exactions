@@ -23,8 +23,6 @@ import {
     POST_PLAT,
     PUT_PLAT,
 
-    GET_PLAT_ZONES,
-    GET_PLAT_ZONE_ID,
     POST_PLAT_ZONE,
     PUT_PLAT_ZONE,
     PUT_PLAT_ZONE_DUES,
@@ -37,6 +35,7 @@ import {
 
     GET_ACCOUNTS,
     GET_ACCOUNT_ID,
+    GET_ACCOUNT_QUERY,
     POST_ACCOUNT,
     PUT_ACCOUNT,
 
@@ -725,6 +724,24 @@ export function getAccountID(selectedAccount) {
         type: API_CALL,
         endpoint: GET_ACCOUNT_ID,
         url: `/account/${selectedAccount}`,
+    };
+}
+
+export function getAccountQuery() {
+    return {
+        type: API_CALL,
+        endpoint: GET_ACCOUNT_QUERY,
+        url: (getState) => {
+            const {
+                activeForm,
+            } = getState();
+            const {
+                query,
+            } = activeForm;
+
+            const query_all = `/account/?query=${query}`;
+            return query_all;
+        },
     };
 }
 

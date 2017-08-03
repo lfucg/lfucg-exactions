@@ -145,7 +145,7 @@ class PlatForm extends React.Component {
                     </div>
                 </div>
 
-                <Breadcrumbs route={this.props.route} parent_link={'plat'} parent_name={'Plats'} />
+                <Breadcrumbs route={this.props.route} parent_link={'plat/existing'} parent_name={'Plats'} />
 
                 <div className="inside-body">
                     <div className="container">
@@ -159,10 +159,10 @@ class PlatForm extends React.Component {
                               aria-controls="collapseGeneralPlat"
                             >
                                 <div className="row section-heading" role="tab" id="headingPlat">
-                                    <h2>General Plat Information</h2>
-                                    {activeForm.first_section ?
-                                        <h4>(Click to View or Edit)</h4>
-                                    : null}
+                                    <div className="col-xs-1 caret-indicator" />
+                                    <div className="col-xs-10">
+                                        <h2>General Plat Information</h2>
+                                    </div>
                                 </div>
                             </a>
                             <div
@@ -283,8 +283,8 @@ class PlatForm extends React.Component {
                                                 <div className="col-sm-6 form-group">
                                                     <label htmlFor="plat_type" className="form-label" id="plat_type">* Plat Type</label>
                                                     <select className="form-control" id="plat_type" onChange={formChange('plat_type')} >
-                                                        {plats.plat_type ? (
-                                                            <option value="plat_type" aria-label={`Plat Type ${plats.plat_type}`}>{plats.plat_type}</option>
+                                                        {plats.plat_type_display ? (
+                                                            <option value="plat_type" aria-label={`Plat Type ${plats.plat_type_display}`}>{plats.plat_type_display}</option>
                                                         ) : (
                                                             <option value="choose_plat_type" aria-label="Choose a Plat Type">Choose an Plat Type</option>
                                                         )}
@@ -347,8 +347,10 @@ class PlatForm extends React.Component {
                                               aria-controls="collapsePlatZones"
                                             >
                                                 <div className="row section-heading" role="tab" id="headingPlatZone">
-                                                    <h2>Plat Zones</h2>
-                                                    <h4>(Click to View or Edit)</h4>
+                                                    <div className="col-xs-1 caret-indicator" />
+                                                    <div className="col-sm-10">
+                                                        <h2>Plat Zones</h2>
+                                                    </div>
                                                 </div>
                                             </a>
                                             <div
@@ -386,8 +388,10 @@ class PlatForm extends React.Component {
                                               aria-controls="collapsePlatExactions"
                                             >
                                                 <div className="row section-heading" role="tab" id="headingPlatExactions">
-                                                    <h2>Plat Exactions</h2>
-                                                    <h4>(Click to View or Edit)</h4>
+                                                    <div className="col-xs-1 caret-indicator" />
+                                                    <div className="col-xs-10">
+                                                        <h2>Plat Exactions</h2>
+                                                    </div>
                                                 </div>
                                             </a>
                                             <div
@@ -491,8 +495,10 @@ class PlatForm extends React.Component {
                               aria-controls="collapseNotes"
                             >
                                 <div className="row section-heading" role="tab" id="headingNotes">
-                                    <h2>Notes</h2>
-                                    <h4>(Click to View or Edit)</h4>
+                                    <div className="col-xs-1 caret-indicator" />
+                                    <div className="col-xs-10">
+                                        <h2>Notes</h2>
+                                    </div>
                                 </div>
                             </a>
                             <div
@@ -552,10 +558,10 @@ function mapDispatchToProps(dispatch, params) {
                         if (data_plat.response.subdivision) {
                             dispatch(getSubdivisionID(data_plat.response.subdivision))
                             .then((data_sub_id) => {
-                                const update2 = {
+                                const sub_update = {
                                     subdivision_name: data_sub_id.response.name,
                                 };
-                                dispatch(formUpdate(update2));
+                                dispatch(formUpdate(sub_update));
                             });
                         }
                         if (data_plat.response.account) {
@@ -593,6 +599,7 @@ function mapDispatchToProps(dispatch, params) {
                             calculation_note: data_plat.response.calculation_note,
                             name: data_plat.response.name,
                             plat_type: data_plat.response.plat_type,
+                            plat_type_display: data_plat.response.plat_type_display,
                             section: data_plat.response.section,
                             unit: data_plat.response.unit,
                             block: data_plat.response.block,
