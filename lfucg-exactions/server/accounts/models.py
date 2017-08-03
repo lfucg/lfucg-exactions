@@ -1,7 +1,7 @@
 from django.db import models
 
 from django.contrib.auth.models import User
-from plats.models import Lot
+from plats.models import Lot, Plat
 
 from simple_history.models import HistoricalRecords
 
