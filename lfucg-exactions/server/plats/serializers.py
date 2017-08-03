@@ -145,20 +145,24 @@ class SubdivisionField(serializers.Field):
 
     def to_representation(self, obj):
         try:
-            subdivision = SubdivisionSerializer(obj).data
-            return subdivision['id']
+            return SubdivisionSerializer(obj).data['id']
         except:
             None
 
 class PlatSerializer(serializers.ModelSerializer):
     lot = LotSerializer(many=True, read_only=True)
     plat_zone = PlatZoneSerializer(many=True, read_only=True)
+    subdivision = SubdivisionSerializer(read_only=True)
     cleaned_total_acreage = serializers.SerializerMethodField(read_only=True)
     subdivision = SubdivisionField(required=False)
+    plat_type_display = serializers.SerializerMethodField(read_only=True)
 
     def get_cleaned_total_acreage(self, obj):
         set_acreage = str(obj.total_acreage).rstrip('0').rstrip('.')
         return set_acreage
+
+    def get_plat_type_display(self, obj):
+        return obj.get_plat_type_display()
 
     class Meta:
         model = Plat 
@@ -194,4 +198,5 @@ class PlatSerializer(serializers.ModelSerializer):
             'non_sewer_due',
             'lot',
             'plat_zone',
+            'plat_type_display',
         )
