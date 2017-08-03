@@ -28,10 +28,6 @@ import AccountExisting from './components/AccountExisting';
 import AccountSummary from './components/AccountSummary';
 import AccountForm from './components/AccountForm';
 
-import AgreementExisting from './components/AgreementExisting';
-import AgreementSummary from './components/AgreementSummary';
-import AgreementForm from './components/AgreementForm';
-
 global.reduxStore = dashboardStore;
 global.BASE_STATIC_URL = (window.location.host === '52.201.224.95') ?
     //'52.201.224.95' :
@@ -72,12 +68,7 @@ ReactDOM.render(
             <Route path="account/form" component={AccountForm} name="Account Form" />
             <Route path="account/form/:id" component={AccountForm} name="Current Account Form" />
 
-            <Route path="agreement/existing" component={AgreementExisting} name="Existing Agreements" />
-            <Route path="agreement/summary/:id" component={AgreementSummary} name="Agreement Summary" />
-            <Route path="agreement/form" component={AgreementForm} name="Agreement Form" />
-            <Route path="agreement/form/:id" component={AgreementForm} name="Current Agreement Form" />
         </Router>
     </Provider>,
     document.getElementById('root'),
 );
-
