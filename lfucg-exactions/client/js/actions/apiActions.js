@@ -48,6 +48,30 @@ import {
     POST_AGREEMENT,
     PUT_AGREEMENT,
 
+    GET_PAYMENTS,
+    GET_PAYMENT_ID,
+    GET_PAYMENT_QUERY,
+    POST_PAYMENT,
+    PUT_PAYMENT,
+
+    GET_PROJECTS,
+    GET_PROJECT_ID,
+    GET_PROJECT_QUERY,
+    POST_PROJECT,
+    PUT_PROJECT,
+
+    GET_PROJECT_COSTS,
+    GET_PROJECT_COST_ID,
+    GET_PROJECT_COST_QUERY,
+    POST_PROJECT_COST,
+    PUT_PROJECT_COST,
+
+    GET_ACCOUNT_LEDGERS,
+    GET_ACCOUNT_LEDGER_ID,
+    GET_ACCOUNT_LEDGER_QUERY,
+    POST_ACCOUNT_LEDGER,
+    PUT_ACCOUNT_LEDGER,
+
 } from '../constants/apiConstants';
 
 export function getMe() {
@@ -978,6 +1002,486 @@ export function putAgreement(selectedAgreement) {
                 expansion_area,
                 agreement_type,
                 date_executed,
+            };
+        },
+    };
+}
+
+// PAYMENTS
+export function getPayments() {
+    return {
+        type: API_CALL,
+        endpoint: GET_PAYMENTS,
+        url: '/payment/',
+    };
+}
+
+export function getPaymentID(selectedPayment) {
+    return {
+        type: API_CALL,
+        endpoint: GET_PAYMENT_ID,
+        url: `/payment/${selectedPayment}`,
+    };
+}
+
+export function getPaymentQuery() {
+    return {
+        type: API_CALL,
+        endpoint: GET_PAYMENT_QUERY,
+        url: (getState) => {
+            const {
+                activeForm,
+            } = getState();
+            const {
+                query,
+            } = activeForm;
+
+            const query_all = `/payment/?query=${query}`;
+            return query_all;
+        },
+    };
+}
+
+export function postPayment() {
+    return {
+        type: API_CALL,
+        endpoint: POST_PAYMENT,
+        url: '/payment/',
+        method: 'POST',
+        body: (getState) => {
+            const {
+                activeForm,
+                currentUser,
+            } = getState();
+            const {
+                lot_id,
+                paid_by,
+                paid_by_type,
+                payment_type,
+                check_number,
+                credit_source,
+                credit_account,
+                paid_roads,
+                paid_sewer_trans,
+                paid_sewer_cap,
+                paid_parks,
+                paid_storm,
+                paid_open_space,
+            } = activeForm;
+            const {
+                id,
+            } = currentUser;
+            return {
+                created_by: id,
+                modified_by: id,
+                lot_id,
+                paid_by,
+                paid_by_type,
+                payment_type,
+                check_number,
+                credit_source,
+                credit_account,
+                paid_roads,
+                paid_sewer_trans,
+                paid_sewer_cap,
+                paid_parks,
+                paid_storm,
+                paid_open_space,
+            };
+        },
+    };
+}
+
+export function putPayment(selectedPayment) {
+    return {
+        type: API_CALL,
+        endpoint: PUT_PAYMENT,
+        url: `/payment/${selectedPayment}/`,
+        method: 'PUT',
+        body: (getState) => {
+            const {
+                activeForm,
+                currentUser,
+            } = getState();
+            const {
+                lot_id,
+                paid_by,
+                paid_by_type,
+                payment_type,
+                check_number,
+                credit_source,
+                credit_account,
+                paid_roads,
+                paid_sewer_trans,
+                paid_sewer_cap,
+                paid_parks,
+                paid_storm,
+                paid_open_space,
+            } = activeForm;
+            const {
+                id,
+            } = currentUser;
+            return {
+                created_by: id,
+                modified_by: id,
+                lot_id,
+                paid_by,
+                paid_by_type,
+                payment_type,
+                check_number,
+                credit_source,
+                credit_account,
+                paid_roads,
+                paid_sewer_trans,
+                paid_sewer_cap,
+                paid_parks,
+                paid_storm,
+                paid_open_space,
+            };
+        },
+    };
+}
+
+// PROJECTS
+export function getProjects() {
+    return {
+        type: API_CALL,
+        endpoint: GET_PROJECTS,
+        url: '/agreement/',
+    };
+}
+
+export function getProjectID(selectedProject) {
+    return {
+        type: API_CALL,
+        endpoint: GET_PROJECT_ID,
+        url: `/agreement/${selectedProject}`,
+    };
+}
+
+export function getProjectQuery() {
+    return {
+        type: API_CALL,
+        endpoint: GET_PROJECT_QUERY,
+        url: (getState) => {
+            const {
+                activeForm,
+            } = getState();
+            const {
+                query,
+            } = activeForm;
+
+            const query_all = `/agreement/?query=${query}`;
+            return query_all;
+        },
+    };
+}
+
+export function postProject() {
+    return {
+        type: API_CALL,
+        endpoint: POST_PROJECT,
+        url: '/agreement/',
+        method: 'POST',
+        body: (getState) => {
+            const {
+                activeForm,
+                currentUser,
+            } = getState();
+            const {
+                agreement_id,
+                project_category,
+                expansion_area,
+                project_type,
+                project_status,
+                status_date,
+                project_cost_estimates,
+                project_description,
+            } = activeForm;
+            const {
+                id,
+            } = currentUser;
+            return {
+                created_by: id,
+                modified_by: id,
+                agreement_id,
+                project_category,
+                expansion_area,
+                project_type,
+                project_status,
+                status_date,
+                project_cost_estimates,
+                project_description,
+            };
+        },
+    };
+}
+
+export function putProject(selectedProject) {
+    return {
+        type: API_CALL,
+        endpoint: PUT_PROJECT,
+        url: `/agreement/${selectedProject}/`,
+        method: 'PUT',
+        body: (getState) => {
+            const {
+                activeForm,
+                currentUser,
+            } = getState();
+            const {
+                agreement_id,
+                project_category,
+                expansion_area,
+                project_type,
+                project_status,
+                status_date,
+                project_cost_estimates,
+                project_description,
+            } = activeForm;
+            const {
+                id,
+            } = currentUser;
+            return {
+                created_by: id,
+                modified_by: id,
+                agreement_id,
+                project_category,
+                expansion_area,
+                project_type,
+                project_status,
+                status_date,
+                project_cost_estimates,
+                project_description,
+            };
+        },
+    };
+}
+
+// PROJECT COST ESTIMATES
+export function getProjectCosts() {
+    return {
+        type: API_CALL,
+        endpoint: GET_PROJECT_COSTS,
+        url: '/project_cost/',
+    };
+}
+
+export function getProjectCostID(selectedProjectCost) {
+    return {
+        type: API_CALL,
+        endpoint: GET_PROJECT_COST_ID,
+        url: `/project_cost/${selectedProjectCost}`,
+    };
+}
+
+export function getProjectCostQuery() {
+    return {
+        type: API_CALL,
+        endpoint: GET_PROJECT_COST_QUERY,
+        url: (getState) => {
+            const {
+                activeForm,
+            } = getState();
+            const {
+                query,
+            } = activeForm;
+
+            const query_all = `/project_cost/?query=${query}`;
+            return query_all;
+        },
+    };
+}
+
+export function postProjectCost() {
+    return {
+        type: API_CALL,
+        endpoint: POST_PROJECT_COST,
+        url: '/project_cost/',
+        method: 'POST',
+        body: (getState) => {
+            const {
+                activeForm,
+                currentUser,
+            } = getState();
+            const {
+                project_id,
+                estimate_type,
+                land_cost,
+                design_cost,
+                construction_cost,
+                admin_cost,
+                management_cost,
+                credits_available,
+            } = activeForm;
+            const {
+                id,
+            } = currentUser;
+            return {
+                created_by: id,
+                modified_by: id,
+                project_id,
+                estimate_type,
+                land_cost,
+                design_cost,
+                construction_cost,
+                admin_cost,
+                management_cost,
+                credits_available,
+            };
+        },
+    };
+}
+
+export function putProjectCost(selectedProjectCost) {
+    return {
+        type: API_CALL,
+        endpoint: PUT_PROJECT_COST,
+        url: `/project_cost/${selectedProjectCost}/`,
+        method: 'PUT',
+        body: (getState) => {
+            const {
+                activeForm,
+                currentUser,
+            } = getState();
+            const {
+                project_id,
+                estimate_type,
+                land_cost,
+                design_cost,
+                construction_cost,
+                admin_cost,
+                management_cost,
+                credits_available,
+            } = activeForm;
+            const {
+                id,
+            } = currentUser;
+            return {
+                created_by: id,
+                modified_by: id,
+                project_id,
+                estimate_type,
+                land_cost,
+                design_cost,
+                construction_cost,
+                admin_cost,
+                management_cost,
+                credits_available,
+            };
+        },
+    };
+}
+
+// ACCOUNT LEDGERS
+export function getAccountLedgers() {
+    return {
+        type: API_CALL,
+        endpoint: GET_ACCOUNT_LEDGERS,
+        url: '/account_ledger/',
+    };
+}
+
+export function getAccountLedgerID(selectedAccountLedger) {
+    return {
+        type: API_CALL,
+        endpoint: GET_ACCOUNT_LEDGER_ID,
+        url: `/account_ledger/${selectedAccountLedger}`,
+    };
+}
+
+export function getAccountLedgerQuery() {
+    return {
+        type: API_CALL,
+        endpoint: GET_ACCOUNT_LEDGER_QUERY,
+        url: (getState) => {
+            const {
+                activeForm,
+            } = getState();
+            const {
+                query,
+            } = activeForm;
+
+            const query_all = `/account_ledger/?query=${query}`;
+            return query_all;
+        },
+    };
+}
+
+export function postAccountLedger() {
+    return {
+        type: API_CALL,
+        endpoint: POST_ACCOUNT_LEDGER,
+        url: '/account_ledger/',
+        method: 'POST',
+        body: (getState) => {
+            const {
+                activeForm,
+                currentUser,
+            } = getState();
+            const {
+                entry_date,
+                account_from,
+                account_to,
+                lot,
+                agreement,
+                entry_type,
+                non_sewer_credits,
+                sewer_credits,
+            } = activeForm;
+            const {
+                id,
+            } = currentUser;
+            return {
+                created_by: id,
+                modified_by: id,
+                entry_date,
+                account_from,
+                account_to,
+                lot,
+                agreement,
+                entry_type,
+                non_sewer_credits,
+                sewer_credits,
+            };
+        },
+    };
+}
+
+export function putAccountLedger(selectedAccountLedger) {
+    return {
+        type: API_CALL,
+        endpoint: PUT_ACCOUNT_LEDGER,
+        url: `/account_ledger/${selectedAccountLedger}/`,
+        method: 'PUT',
+        body: (getState) => {
+            const {
+                activeForm,
+                currentUser,
+            } = getState();
+            const {
+                entry_date,
+                account_from,
+                account_to,
+                lot,
+                agreement,
+                entry_type,
+                non_sewer_credits,
+                sewer_credits,
+            } = activeForm;
+            const {
+                id,
+            } = currentUser;
+            return {
+                created_by: id,
+                modified_by: id,
+                entry_date,
+                account_from,
+                account_to,
+                lot,
+                agreement,
+                entry_type,
+                non_sewer_credits,
+                sewer_credits,
             };
         },
     };
