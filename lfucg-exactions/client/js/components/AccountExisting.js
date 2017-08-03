@@ -63,7 +63,7 @@ class AccountExisting extends React.Component {
                     </div>
                 </div>
 
-                <Breadcrumbs route={this.props.route} parent_link={'account'} parent_name={'Accounts'} />
+                <Breadcrumbs route={this.props.route} />
 
                 <div className="inside-body">
                     <div className="container">
