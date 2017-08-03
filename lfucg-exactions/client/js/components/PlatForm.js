@@ -283,8 +283,8 @@ class PlatForm extends React.Component {
                                                 <div className="col-sm-6 form-group">
                                                     <label htmlFor="plat_type" className="form-label" id="plat_type">* Plat Type</label>
                                                     <select className="form-control" id="plat_type" onChange={formChange('plat_type')} >
-                                                        {plats.plat_type ? (
-                                                            <option value="plat_type" aria-label={`Plat Type ${plats.plat_type}`}>{plats.plat_type}</option>
+                                                        {plats.plat_type_display ? (
+                                                            <option value="plat_type" aria-label={`Plat Type ${plats.plat_type_display}`}>{plats.plat_type_display}</option>
                                                         ) : (
                                                             <option value="choose_plat_type" aria-label="Choose a Plat Type">Choose an Plat Type</option>
                                                         )}
@@ -558,10 +558,10 @@ function mapDispatchToProps(dispatch, params) {
                         if (data_plat.response.subdivision) {
                             dispatch(getSubdivisionID(data_plat.response.subdivision))
                             .then((data_sub_id) => {
-                                const update2 = {
+                                const sub_update = {
                                     subdivision_name: data_sub_id.response.name,
                                 };
-                                dispatch(formUpdate(update2));
+                                dispatch(formUpdate(sub_update));
                             });
                         }
                         if (data_plat.response.account) {
@@ -599,6 +599,7 @@ function mapDispatchToProps(dispatch, params) {
                             calculation_note: data_plat.response.calculation_note,
                             name: data_plat.response.name,
                             plat_type: data_plat.response.plat_type,
+                            plat_type_display: data_plat.response.plat_type_display,
                             section: data_plat.response.section,
                             unit: data_plat.response.unit,
                             block: data_plat.response.block,
