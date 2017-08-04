@@ -18,10 +18,11 @@ import {
 
 import {
     getMe,
+    getAgreements,
+    getAgreementID,
     getProjectID,
     postProject,
     putProject,
-    getAgreements,
 } from '../actions/apiActions';
 
 class ProjectForm extends React.Component {
@@ -66,7 +67,7 @@ class ProjectForm extends React.Component {
                     </div>
                 </div>
 
-                <Breadcrumbs route={this.props.route} parent_link={'project/existing'} parent_name={'Projects'} />
+                <Breadcrumbs route={this.props.route} parent_link={'project'} parent_name={'Projects'} />
 
                 <div className="inside-body">
                     <div className="container">
@@ -131,13 +132,6 @@ class ProjectForm extends React.Component {
                                         </div>
                                     </div>
                                     <div className="row">
-                                        <div className="col-sm-6">
-                                            <FormGroup label="Project Cost Estimates" id="project_cost_estimates">
-                                                <input type="text" className="form-control" placeholder="Project Cost Estimates" />
-                                            </FormGroup>
-                                        </div>
-                                    </div>
-                                    <div className="row">
                                         <FormGroup label="Project Description" id="project_description">
                                             <textarea type="text" className="form-control" placeholder="Project Description" rows="4" />
                                         </FormGroup>
@@ -178,15 +172,22 @@ function mapDispatchToProps(dispatch, params) {
                 if (selectedProject) {
                     dispatch(getProjectID(selectedProject))
                     .then((data_project) => {
+                        if (data_project.response.agreement_id) {
+                            dispatch(getAgreementID(data_project.response.agreement_id))
+                            .then((data_agreement) => {
+                                const agreement_update = {
+                                    resolution_number: data_agreement.response.resolution_number,
+                                };
+                                dispatch(formUpdate(agreement_update));
+                            });
+                        }
                         const update = {
-                            resolution_number: data_project.response.agreement_id,
                             expansion_area: data_project.response.expansion_area,
                             project_category: data_project.response.project_category,
                             project_type: data_project.response.project_type,
                             project_description: data_project.response.project_description,
                             project_status: data_project.response.project_status,
                             status_date: data_project.response.status_date,
-                            project_cost_estimates: data_project.response.project_cost_estimates,
                         };
                         dispatch(formUpdate(update));
                     });

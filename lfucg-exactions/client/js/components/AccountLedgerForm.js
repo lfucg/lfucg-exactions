@@ -19,8 +19,11 @@ import {
 import {
     getMe,
     getLots,
+    getLotID,
     getAccounts,
     getAccountID,
+    getAgreements,
+    getAgreementID,
     getAccountLedgerID,
     postAccountLedger,
     putAccountLedger,
@@ -88,7 +91,7 @@ class AccountLedgerForm extends React.Component {
                     </div>
                 </div>
 
-                <Breadcrumbs route={this.props.route} parent_link={'account-ledger/existing'} parent_name={'AccountLedgers'} />
+                <Breadcrumbs route={this.props.route} parent_link={'account-ledger'} parent_name={'Account Ledgers'} />
 
                 <div className="inside-body">
                     <div className="container">
@@ -213,7 +216,9 @@ function mapDispatchToProps(dispatch, params) {
     return {
         onComponentDidMount() {
             dispatch(formInit());
+            dispatch(getLots());
             dispatch(getAccounts());
+            dispatch(getAgreements());
             dispatch(getMe())
             .then((data_me) => {
                 if (data_me.error) {
@@ -241,7 +246,7 @@ function mapDispatchToProps(dispatch, params) {
                             });
                         }
                         if (data_account_ledger.response.agreement_id) {
-                            dispatch(getAccountID(data_account_ledger.response.agreement_id))
+                            dispatch(getAgreementID(data_account_ledger.response.agreement_id))
                             .then((data_agreement) => {
                                 const agreement_update = {
                                     resolution_number: data_agreement.response.resolution_number,
@@ -250,7 +255,7 @@ function mapDispatchToProps(dispatch, params) {
                             });
                         }
                         if (data_account_ledger.response.lot_id) {
-                            dispatch(getAccountID(data_account_ledger.response.lot_id))
+                            dispatch(getLotID(data_account_ledger.response.lot_id))
                             .then((data_lot) => {
                                 const lot_update = {
                                     address_full: data_lot.response.address_full,

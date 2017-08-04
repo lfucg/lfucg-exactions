@@ -126,7 +126,7 @@ class PlatSummary extends React.Component {
                     </div>
                 </div>
 
-                <Breadcrumbs route={this.props.route} parent_link={'plat/existing'} parent_name={'Plats'} />
+                <Breadcrumbs route={this.props.route} parent_link={'plat'} parent_name={'Plats'} />
 
                 <div className="inside-body">
                     <div className="container">
