@@ -54,6 +54,18 @@ class PaymentSerializer(serializers.ModelSerializer):
         )
 
 class ProjectCostEstimateSerializer(serializers.ModelSerializer):
+    total_costs = serializers.SerializerMethodField(read_only=True)
+
+    def get_total_costs(self,obj):
+        total = (
+            obj.land_cost +
+            obj.design_cost +
+            obj.construction_cost +
+            obj.admin_cost +
+            obj.management_cost
+        )
+        return total
+
     class Meta:
         model = ProjectCostEstimate
         fields = (
@@ -72,6 +84,8 @@ class ProjectCostEstimateSerializer(serializers.ModelSerializer):
             'admin_cost',
             'management_cost',
             'credits_available',
+
+            'total_costs',
         )
 
 class ProjectSerializer(serializers.ModelSerializer):

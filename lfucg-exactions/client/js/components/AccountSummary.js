@@ -103,7 +103,7 @@ class AccountSummary extends React.Component {
                     </div>
                 </div>
 
-                <Breadcrumbs route={this.props.route} parent_link={'account/existing'} parent_name={'Accounts'} />
+                <Breadcrumbs route={this.props.route} parent_link={'account'} parent_name={'Accounts'} />
 
                 <div className="inside-body">
                     <div className="container">

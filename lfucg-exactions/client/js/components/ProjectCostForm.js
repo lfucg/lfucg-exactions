@@ -67,7 +67,7 @@ class ProjectCostForm extends React.Component {
                     </div>
                 </div>
 
-                <Breadcrumbs route={this.props.route} parent_link={'project-cost/existing'} parent_name={'ProjectCosts'} />
+                <Breadcrumbs route={this.props.route} parent_link={'project-cost'} parent_name={'ProjectCosts'} />
 
                 <div className="inside-body">
                     <div className="container">

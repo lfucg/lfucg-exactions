@@ -68,47 +68,47 @@ ReactDOM.render(
             <Route path="forgot-password/" component={ForgotPassword} name="Forgot Password" />
             <Route path="forgot-username/" component={ForgotUsername} name="Forgot Username" />
 
-            <Route path="subdivision/existing" component={SubdivisionExisting} name="Existing Subdivisions" />
+            <Route path="subdivision" component={SubdivisionExisting} name="Existing Subdivisions" />
             <Route path="subdivision/form" component={SubdivisionForm} name="Subdivision Form" />
             <Route path="subdivision/form/:id" component={SubdivisionForm} name="Current Subdivision Form" />
 
-            <Route path="plat/existing" component={PlatExisting} name="Existing Plats" />
+            <Route path="plat" component={PlatExisting} name="Existing Plats" />
             <Route path="plat/summary/:id" component={PlatSummary} name="Plat Summary" />
             <Route path="plat/form" component={PlatForm} name="Plat Form" />
             <Route path="plat/form/:id" component={PlatForm} name="Current Plat Form" />
 
-            <Route path="lot/existing" component={LotExisting} name="Existing Lots" />
+            <Route path="lot" component={LotExisting} name="Existing Lots" />
             <Route path="lot/summary/:id" component={LotSummary} name="Lot Summary" />
             <Route path="lot/form" component={LotForm} name="Lot Form" />
             <Route path="plat/:id/lot/form" component={LotForm} name="Lot Form with Plat" />
             <Route path="lot/form/:id" component={LotForm} name="Current Lot Form" />
 
-            <Route path="account/existing" component={AccountExisting} name="Existing Accounts" />
+            <Route path="account" component={AccountExisting} name="Existing Accounts" />
             <Route path="account/summary/:id" component={AccountSummary} name="Account Summary" />
             <Route path="account/form" component={AccountForm} name="Account Form" />
             <Route path="account/form/:id" component={AccountForm} name="Current Account Form" />
 
-            <Route path="agreement/existing" component={AgreementExisting} name="Existing Agreements" />
+            <Route path="agreement" component={AgreementExisting} name="Existing Agreements" />
             <Route path="agreement/summary/:id" component={AgreementSummary} name="Agreement Summary" />
             <Route path="agreement/form" component={AgreementForm} name="Agreement Form" />
             <Route path="agreement/form/:id" component={AgreementForm} name="Current Agreement Form" />
 
-            <Route path="payment/existing" component={PaymentExisting} name="Existing Payments" />
+            <Route path="payment" component={PaymentExisting} name="Existing Payments" />
             <Route path="payment/summary/:id" component={PaymentSummary} name="Payment Summary" />
             <Route path="payment/form" component={PaymentForm} name="Payment Form" />
             <Route path="payment/form/:id" component={PaymentForm} name="Current Payment Form" />
 
-            <Route path="project/existing" component={ProjectExisting} name="Existing Projects" />
+            <Route path="project" component={ProjectExisting} name="Existing Projects" />
             <Route path="project/summary/:id" component={ProjectSummary} name="Project Summary" />
             <Route path="project/form" component={ProjectForm} name="Project Form" />
             <Route path="project/form/:id" component={ProjectForm} name="Current Project Form" />
 
-            <Route path="project-cost/existing" component={ProjectCostExisting} name="Existing Project Costs" />
+            <Route path="project-cost" component={ProjectCostExisting} name="Existing Project Costs" />
             <Route path="project-cost/summary/:id" component={ProjectCostSummary} name="Project Cost Summary" />
             <Route path="project-cost/form" component={ProjectCostForm} name="Project Cost Form" />
             <Route path="project-cost/form/:id" component={ProjectCostForm} name="Current Project Cost Form" />
 
-            <Route path="account-ledger/existing" component={AccountLedgerExisting} name="Existing Account Ledgers" />
+            <Route path="account-ledger" component={AccountLedgerExisting} name="Existing Account Ledgers" />
             <Route path="account-ledger/summary/:id" component={AccountLedgerSummary} name="Account Ledger Summary" />
             <Route path="account-ledger/form" component={AccountLedgerForm} name="Account Ledger Form" />
             <Route path="account-ledger/form/:id" component={AccountLedgerForm} name="Current Account Ledger Form" />

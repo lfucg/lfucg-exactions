@@ -19,8 +19,11 @@ import {
 import {
     getMe,
     getLots,
+    getLotID,
     getAccounts,
     getAccountID,
+    getAgreements,
+    getAgreementID,
     getPaymentID,
     postPayment,
     putPayment,
@@ -88,7 +91,7 @@ class PaymentForm extends React.Component {
                     </div>
                 </div>
 
-                <Breadcrumbs route={this.props.route} parent_link={'payment/existing'} parent_name={'Payments'} />
+                <Breadcrumbs route={this.props.route} parent_link={'payment'} parent_name={'Payments'} />
 
                 <div className="inside-body">
                     <div className="container">
@@ -103,9 +106,9 @@ class PaymentForm extends React.Component {
                                         <div className="col-sm-6 form-group">
                                             <label htmlFor="lot_id" className="form-label" id="lot_id">Lot</label>
                                             <select className="form-control" id="lot_id" onChange={formChange('lot_id')} >
-                                                {activeForm.lot_id ? (
+                                                {activeForm.address_full ? (
                                                     <option value="choose_source" aria-label="Selected Lot">
-                                                        {activeForm.lot_id}
+                                                        {activeForm.address_full}
                                                     </option>
                                                 ) : (
                                                     <option value="choose_source" aria-label="Select an Lot">
@@ -118,26 +121,11 @@ class PaymentForm extends React.Component {
                                     </div>
                                     <div className="row">
                                         <div className="col-sm-6 form-group">
-                                            <label htmlFor="credit_source" className="form-label" id="credit_source">Agreement</label>
-                                            <select className="form-control" id="credit_source" onChange={formChange('credit_source')} >
-                                                {activeForm.credit_source ? (
-                                                    <option value="choose_source" aria-label="Selected Agreement">
-                                                        {activeForm.credit_source}
-                                                    </option>
-                                                ) : (
-                                                    <option value="choose_source" aria-label="Select an Agreement">
-                                                        Select an Agreement
-                                                    </option>
-                                                )}
-                                                {agreementsList}
-                                            </select>
-                                        </div>
-                                        <div className="col-sm-6 form-group">
                                             <label htmlFor="credit_account" className="form-label" id="credit_account">Account</label>
                                             <select className="form-control" id="credit_account" onChange={formChange('credit_account')} >
-                                                {activeForm.credit_account ? (
+                                                {activeForm.account_name ? (
                                                     <option value="choose_account" aria-label="Selected Account">
-                                                        {activeForm.credit_account}
+                                                        {activeForm.account_name}
                                                     </option>
                                                 ) : (
                                                     <option value="choose_account" aria-label="Select an Account">
@@ -145,6 +133,21 @@ class PaymentForm extends React.Component {
                                                     </option>
                                                 )}
                                                 {accountsList}
+                                            </select>
+                                        </div>
+                                        <div className="col-sm-6 form-group">
+                                            <label htmlFor="credit_source" className="form-label" id="credit_source">Agreement</label>
+                                            <select className="form-control" id="credit_source" onChange={formChange('credit_source')} >
+                                                {activeForm.resolution_number ? (
+                                                    <option value="choose_source" aria-label="Selected Agreement">
+                                                        {activeForm.resolution_number}
+                                                    </option>
+                                                ) : (
+                                                    <option value="choose_source" aria-label="Select an Agreement">
+                                                        Select an Agreement
+                                                    </option>
+                                                )}
+                                                {agreementsList}
                                             </select>
                                         </div>
                                     </div>
@@ -209,7 +212,7 @@ class PaymentForm extends React.Component {
                                             </FormGroup>
                                         </div>
                                         <div className="col-sm-6">
-                                            <FormGroup label="Open Spaces Exactions Paid" id="paid_open_spaces">
+                                            <FormGroup label="Open Spaces Exactions Paid" id="paid_open_space">
                                                 <input type="number" className="form-control" placeholder="Open Spaces Exactions Paid" />
                                             </FormGroup>
                                         </div>
@@ -243,7 +246,9 @@ function mapDispatchToProps(dispatch, params) {
     return {
         onComponentDidMount() {
             dispatch(formInit());
+            dispatch(getLots());
             dispatch(getAccounts());
+            dispatch(getAgreements());
             dispatch(getMe())
             .then((data_me) => {
                 if (data_me.error) {
@@ -252,8 +257,8 @@ function mapDispatchToProps(dispatch, params) {
                 if (selectedPayment) {
                     dispatch(getPaymentID(selectedPayment))
                     .then((data_payment) => {
-                        if (data_payment.response.account_id) {
-                            dispatch(getAccountID(data_payment.response.account_id))
+                        if (data_payment.response.credit_account) {
+                            dispatch(getAccountID(data_payment.response.credit_account))
                             .then((data_account) => {
                                 const account_update = {
                                     account_name: data_account.response.account_name,
@@ -261,8 +266,8 @@ function mapDispatchToProps(dispatch, params) {
                                 dispatch(formUpdate(account_update));
                             });
                         }
-                        if (data_payment.response.agreement_id) {
-                            dispatch(getAccountID(data_payment.response.agreement_id))
+                        if (data_payment.response.credit_source) {
+                            dispatch(getAgreementID(data_payment.response.credit_source))
                             .then((data_agreement) => {
                                 const agreement_update = {
                                     resolution_number: data_agreement.response.resolution_number,
@@ -271,7 +276,7 @@ function mapDispatchToProps(dispatch, params) {
                             });
                         }
                         if (data_payment.response.lot_id) {
-                            dispatch(getAccountID(data_payment.response.lot_id))
+                            dispatch(getLotID(data_payment.response.lot_id))
                             .then((data_lot) => {
                                 const lot_update = {
                                     address_full: data_lot.response.address_full,
@@ -289,7 +294,7 @@ function mapDispatchToProps(dispatch, params) {
                             paid_sewer_cap: data_payment.response.paid_sewer_cap,
                             paid_parks: data_payment.response.paid_parks,
                             paid_storm: data_payment.response.paid_storm,
-                            paid_open_spaces: data_payment.response.paid_open_spaces,
+                            paid_open_space: data_payment.response.paid_open_space,
                         };
                         dispatch(formUpdate(update));
                     });
