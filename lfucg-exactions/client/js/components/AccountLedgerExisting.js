@@ -44,12 +44,12 @@ class AccountLedgerExisting extends React.Component {
                             </div>
                             <div className="col-sm-5 col-md-3">
                                 <div className="col-xs-5">
-                                    <Link to={`accountLedger/summary/${accountLedger.id}`} className="btn btn-mid-level">
+                                    <Link to={`account-ledger/summary/${accountLedger.id}`} className="btn btn-mid-level">
                                         Summary
                                     </Link>
                                 </div>
                                 <div className="col-xs-5 col-xs-offset-1">
-                                    <Link to={`accountLedger/form/${accountLedger.id}`} className="btn btn-mid-level">
+                                    <Link to={`account-ledger/form/${accountLedger.id}`} className="btn btn-mid-level">
                                         Edit
                                     </Link>
                                 </div>
@@ -78,7 +78,7 @@ class AccountLedgerExisting extends React.Component {
                             <h1>ACCOUNT LEDGERS - EXISTING</h1>
                         </div>
                         <div className="col-sm-2 col-sm-offset-1">
-                            <Link to={'accountLedger/form/'} className="btn btn-top-level" >
+                            <Link to={'account-ledger/form/'} className="btn btn-top-level" >
                                 Create
                             </Link>
                         </div>

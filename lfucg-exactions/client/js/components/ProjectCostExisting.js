@@ -44,12 +44,12 @@ class ProjectCostExisting extends React.Component {
                             </div>
                             <div className="col-sm-5 col-md-3">
                                 <div className="col-xs-5">
-                                    <Link to={`projectCost/summary/${projectCost.id}`} className="btn btn-mid-level">
+                                    <Link to={`project-cost/summary/${projectCost.id}`} className="btn btn-mid-level">
                                         Summary
                                     </Link>
                                 </div>
                                 <div className="col-xs-5 col-xs-offset-1">
-                                    <Link to={`projectCost/form/${projectCost.id}`} className="btn btn-mid-level">
+                                    <Link to={`project-cost/form/${projectCost.id}`} className="btn btn-mid-level">
                                         Edit
                                     </Link>
                                 </div>
@@ -77,7 +77,7 @@ class ProjectCostExisting extends React.Component {
                             <h1>PROJECT COSTS - EXISTING</h1>
                         </div>
                         <div className="col-sm-2 col-sm-offset-1">
-                            <Link to={'projectCost/form/'} className="btn btn-top-level" >
+                            <Link to={'project-cost/form/'} className="btn btn-top-level" >
                                 Create
                             </Link>
                         </div>
