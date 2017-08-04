@@ -1262,7 +1262,7 @@ export function getProjectCosts() {
     return {
         type: API_CALL,
         endpoint: GET_PROJECT_COSTS,
-        url: '/project_cost/',
+        url: '/estimate/',
     };
 }
 
@@ -1270,7 +1270,7 @@ export function getProjectCostID(selectedProjectCost) {
     return {
         type: API_CALL,
         endpoint: GET_PROJECT_COST_ID,
-        url: `/project_cost/${selectedProjectCost}`,
+        url: `/estimate/${selectedProjectCost}`,
     };
 }
 
@@ -1286,7 +1286,7 @@ export function getProjectCostQuery() {
                 query,
             } = activeForm;
 
-            const query_all = `/project_cost/?query=${query}`;
+            const query_all = `/estimate/?query=${query}`;
             return query_all;
         },
     };
@@ -1296,7 +1296,7 @@ export function postProjectCost() {
     return {
         type: API_CALL,
         endpoint: POST_PROJECT_COST,
-        url: '/project_cost/',
+        url: '/estimate/',
         method: 'POST',
         body: (getState) => {
             const {
@@ -1336,7 +1336,7 @@ export function putProjectCost(selectedProjectCost) {
     return {
         type: API_CALL,
         endpoint: PUT_PROJECT_COST,
-        url: `/project_cost/${selectedProjectCost}/`,
+        url: `/estimate/${selectedProjectCost}/`,
         method: 'PUT',
         body: (getState) => {
             const {
@@ -1377,7 +1377,7 @@ export function getAccountLedgers() {
     return {
         type: API_CALL,
         endpoint: GET_ACCOUNT_LEDGERS,
-        url: '/account_ledger/',
+        url: '/ledger/',
     };
 }
 
@@ -1385,7 +1385,7 @@ export function getAccountLedgerID(selectedAccountLedger) {
     return {
         type: API_CALL,
         endpoint: GET_ACCOUNT_LEDGER_ID,
-        url: `/account_ledger/${selectedAccountLedger}`,
+        url: `/ledger/${selectedAccountLedger}`,
     };
 }
 
@@ -1401,7 +1401,7 @@ export function getAccountLedgerQuery() {
                 query,
             } = activeForm;
 
-            const query_all = `/account_ledger/?query=${query}`;
+            const query_all = `/ledger/?query=${query}`;
             return query_all;
         },
     };
@@ -1411,7 +1411,7 @@ export function postAccountLedger() {
     return {
         type: API_CALL,
         endpoint: POST_ACCOUNT_LEDGER,
-        url: '/account_ledger/',
+        url: '/ledger/',
         method: 'POST',
         body: (getState) => {
             const {
@@ -1451,7 +1451,7 @@ export function putAccountLedger(selectedAccountLedger) {
     return {
         type: API_CALL,
         endpoint: PUT_ACCOUNT_LEDGER,
-        url: `/account_ledger/${selectedAccountLedger}/`,
+        url: `/ledger/${selectedAccountLedger}/`,
         method: 'PUT',
         body: (getState) => {
             const {
