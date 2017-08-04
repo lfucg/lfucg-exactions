@@ -28,6 +28,26 @@ import AccountExisting from './components/AccountExisting';
 import AccountSummary from './components/AccountSummary';
 import AccountForm from './components/AccountForm';
 
+import AgreementExisting from './components/AgreementExisting';
+import AgreementSummary from './components/AgreementSummary';
+import AgreementForm from './components/AgreementForm';
+
+import PaymentExisting from './components/PaymentExisting';
+import PaymentSummary from './components/PaymentSummary';
+import PaymentForm from './components/PaymentForm';
+
+import ProjectExisting from './components/ProjectExisting';
+import ProjectSummary from './components/ProjectSummary';
+import ProjectForm from './components/ProjectForm';
+
+import ProjectCostExisting from './components/ProjectCostExisting';
+import ProjectCostSummary from './components/ProjectCostSummary';
+import ProjectCostForm from './components/ProjectCostForm';
+
+import AccountLedgerExisting from './components/AccountLedgerExisting';
+import AccountLedgerSummary from './components/AccountLedgerSummary';
+import AccountLedgerForm from './components/AccountLedgerForm';
+
 global.reduxStore = dashboardStore;
 global.BASE_STATIC_URL = (window.location.host === '52.201.224.95') ?
     //'52.201.224.95' :
@@ -67,6 +87,31 @@ ReactDOM.render(
             <Route path="account/summary/:id" component={AccountSummary} name="Account Summary" />
             <Route path="account/form" component={AccountForm} name="Account Form" />
             <Route path="account/form/:id" component={AccountForm} name="Current Account Form" />
+
+            <Route path="agreement/existing" component={AgreementExisting} name="Existing Agreements" />
+            <Route path="agreement/summary/:id" component={AgreementSummary} name="Agreement Summary" />
+            <Route path="agreement/form" component={AgreementForm} name="Agreement Form" />
+            <Route path="agreement/form/:id" component={AgreementForm} name="Current Agreement Form" />
+
+            <Route path="payment/existing" component={PaymentExisting} name="Existing Payments" />
+            <Route path="payment/summary/:id" component={PaymentSummary} name="Payment Summary" />
+            <Route path="payment/form" component={PaymentForm} name="Payment Form" />
+            <Route path="payment/form/:id" component={PaymentForm} name="Current Payment Form" />
+
+            <Route path="project/existing" component={ProjectExisting} name="Existing Projects" />
+            <Route path="project/summary/:id" component={ProjectSummary} name="Project Summary" />
+            <Route path="project/form" component={ProjectForm} name="Project Form" />
+            <Route path="project/form/:id" component={ProjectForm} name="Current Project Form" />
+
+            <Route path="project-cost/existing" component={ProjectCostExisting} name="Existing Project Costs" />
+            <Route path="project-cost/summary/:id" component={ProjectCostSummary} name="Project Cost Summary" />
+            <Route path="project-cost/form" component={ProjectCostForm} name="Project Cost Form" />
+            <Route path="project-cost/form/:id" component={ProjectCostForm} name="Current Project Cost Form" />
+
+            <Route path="account-ledger/existing" component={AccountLedgerExisting} name="Existing Account Ledgers" />
+            <Route path="account-ledger/summary/:id" component={AccountLedgerSummary} name="Account Ledger Summary" />
+            <Route path="account-ledger/form" component={AccountLedgerForm} name="Account Ledger Form" />
+            <Route path="account-ledger/form/:id" component={AccountLedgerForm} name="Current Account Ledger Form" />
 
         </Router>
     </Provider>,

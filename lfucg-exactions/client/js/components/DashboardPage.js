@@ -43,6 +43,22 @@ class DashboardPage extends React.Component {
                                 <Link to="agreement/existing" role="link"><h2 className="in-page-link">Agreements</h2></Link>
                                 <p>Lexington agreements.</p>
                             </div>
+                            <div className="col-md-4 col-sm-6">
+                                <Link to="payment/existing" role="link"><h2 className="in-page-link">Payments</h2></Link>
+                                <p>Lexington payments.</p>
+                            </div>
+                            <div className="col-md-4 col-sm-6">
+                                <Link to="project/existing" role="link"><h2 className="in-page-link">Projects</h2></Link>
+                                <p>Lexington projects.</p>
+                            </div>
+                            <div className="col-md-4 col-sm-6">
+                                <Link to="project-cost/existing" role="link"><h2 className="in-page-link">Project Costs</h2></Link>
+                                <p>Lexington project costs.</p>
+                            </div>
+                            <div className="col-md-4 col-sm-6">
+                                <Link to="account-ledger/existing" role="link"><h2 className="in-page-link">Account Ledgers</h2></Link>
+                                <p>Lexington account ledgers.</p>
+                            </div>
                         </div>
                     </div>
                 </div>

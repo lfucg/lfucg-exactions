@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import {
-    Link,
     hashHistory,
 } from 'react-router';
 import { map } from 'ramda';
