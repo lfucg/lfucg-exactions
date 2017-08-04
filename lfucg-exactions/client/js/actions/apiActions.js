@@ -1147,7 +1147,7 @@ export function getProjects() {
     return {
         type: API_CALL,
         endpoint: GET_PROJECTS,
-        url: '/agreement/',
+        url: '/project/',
     };
 }
 
@@ -1155,7 +1155,7 @@ export function getProjectID(selectedProject) {
     return {
         type: API_CALL,
         endpoint: GET_PROJECT_ID,
-        url: `/agreement/${selectedProject}`,
+        url: `/project/${selectedProject}`,
     };
 }
 
@@ -1171,7 +1171,7 @@ export function getProjectQuery() {
                 query,
             } = activeForm;
 
-            const query_all = `/agreement/?query=${query}`;
+            const query_all = `/project/?query=${query}`;
             return query_all;
         },
     };
@@ -1181,7 +1181,7 @@ export function postProject() {
     return {
         type: API_CALL,
         endpoint: POST_PROJECT,
-        url: '/agreement/',
+        url: '/project/',
         method: 'POST',
         body: (getState) => {
             const {
@@ -1221,7 +1221,7 @@ export function putProject(selectedProject) {
     return {
         type: API_CALL,
         endpoint: PUT_PROJECT,
-        url: `/agreement/${selectedProject}/`,
+        url: `/project/${selectedProject}/`,
         method: 'PUT',
         body: (getState) => {
             const {
