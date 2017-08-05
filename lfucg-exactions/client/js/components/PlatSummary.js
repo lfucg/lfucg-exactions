@@ -109,7 +109,7 @@ class PlatSummary extends React.Component {
                         <div className="col-sm-offset-1">
                             <p className="col-md-4 col-xs-6">Lot Number: {lot.lot_number}</p>
                             <p className="col-md-4 col-xs-6 ">Permit ID: {lot.permit_id}</p>
-                            <p className="col-md-4 col-xs-6 ">Permit ID: {lot.parcel_id}</p>
+                            <p className="col-md-4 col-xs-6 ">Parcel ID: {lot.parcel_id}</p>
                         </div>
                     </div>
                 </div>

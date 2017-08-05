@@ -28,6 +28,19 @@ class AccountLedgerSerializer(serializers.ModelSerializer):
         )
 
 class PaymentSerializer(serializers.ModelSerializer):
+    total_paid = serializers.SerializerMethodField(read_only=True)
+
+    def get_total_paid(self,obj):
+        total = (
+            obj.paid_roads +
+            obj.paid_sewer_trans +
+            obj.paid_sewer_cap +
+            obj.paid_parks +
+            obj.paid_storm +
+            obj.paid_open_space
+        )
+        return total
+
     class Meta:
         model = Payment
         fields = (
@@ -51,6 +64,8 @@ class PaymentSerializer(serializers.ModelSerializer):
             'paid_parks',
             'paid_storm',
             'paid_open_space',
+
+            'total_paid',
         )
 
 class ProjectCostEstimateSerializer(serializers.ModelSerializer):
