@@ -45,12 +45,16 @@ import {
     GET_AGREEMENTS,
     GET_AGREEMENT_ID,
     GET_AGREEMENT_QUERY,
+    GET_ACCOUNT_AGREEMENTS,
     POST_AGREEMENT,
     PUT_AGREEMENT,
 
     GET_PAYMENTS,
     GET_PAYMENT_ID,
     GET_PAYMENT_QUERY,
+    GET_LOT_PAYMENTS,
+    GET_ACCOUNT_PAYMENTS,
+    GET_AGREEMENT_PAYMENTS,
     POST_PAYMENT,
     PUT_PAYMENT,
 
@@ -63,12 +67,16 @@ import {
     GET_PROJECT_COSTS,
     GET_PROJECT_COST_ID,
     GET_PROJECT_COST_QUERY,
+    GET_AGREEMENT_PROJECTS,
     POST_PROJECT_COST,
     PUT_PROJECT_COST,
 
     GET_ACCOUNT_LEDGERS,
     GET_ACCOUNT_LEDGER_ID,
     GET_ACCOUNT_LEDGER_QUERY,
+    GET_LOT_ACCOUNT_LEDGERS,
+    GET_ACCOUNT_ACCOUNT_LEDGERS,
+    GET_AGREEMENT_ACCOUNT_LEDGERS,
     POST_ACCOUNT_LEDGER,
     PUT_ACCOUNT_LEDGER,
 
@@ -939,6 +947,14 @@ export function getAgreementQuery() {
     };
 }
 
+export function getAccountAgreements(selectedAccount) {
+    return {
+        type: API_CALL,
+        endpoint: GET_ACCOUNT_AGREEMENTS,
+        url: `/agreement/?account_id=${selectedAccount}`,
+    };
+}
+
 export function postAgreement() {
     return {
         type: API_CALL,
@@ -1039,6 +1055,30 @@ export function getPaymentQuery() {
             const query_all = `/payment/?query=${query}`;
             return query_all;
         },
+    };
+}
+
+export function getLotPayments(selectedLot) {
+    return {
+        type: API_CALL,
+        endpoint: GET_LOT_PAYMENTS,
+        url: `/payment/?lot_id=${selectedLot}`,
+    };
+}
+
+export function getAccountPayments(selectedAccount) {
+    return {
+        type: API_CALL,
+        endpoint: GET_ACCOUNT_PAYMENTS,
+        url: `/payment/?credit_account=${selectedAccount}`,
+    };
+}
+
+export function getAgreementPayments(selectedAgreement) {
+    return {
+        type: API_CALL,
+        endpoint: GET_AGREEMENT_PAYMENTS,
+        url: `/payment/?credit_source=${selectedAgreement}`,
     };
 }
 
@@ -1174,6 +1214,14 @@ export function getProjectQuery() {
             const query_all = `/project/?query=${query}`;
             return query_all;
         },
+    };
+}
+
+export function getAgreementProjects(selectedAgreement) {
+    return {
+        type: API_CALL,
+        endpoint: GET_AGREEMENT_PROJECTS,
+        url: `/project/?agreement_id=${selectedAgreement}`,
     };
 }
 
@@ -1404,6 +1452,30 @@ export function getAccountLedgerQuery() {
             const query_all = `/ledger/?query=${query}`;
             return query_all;
         },
+    };
+}
+
+export function getLotAccountLedgers(selectedLot) {
+    return {
+        type: API_CALL,
+        endpoint: GET_LOT_ACCOUNT_LEDGERS,
+        url: `/ledger/?lot=${selectedLot}`,
+    };
+}
+
+export function getAccountAccountLedgers(selectedAccount) {
+    return {
+        type: API_CALL,
+        endpoint: GET_ACCOUNT_ACCOUNT_LEDGERS,
+        url: `/ledger/?account_from=${selectedAccount}&account_to=${selectedAccount}`,
+    };
+}
+
+export function getAgreementAccountLedgers(selectedAgreement) {
+    return {
+        type: API_CALL,
+        endpoint: GET_AGREEMENT_ACCOUNT_LEDGERS,
+        url: `/ledger/?agreement=${selectedAgreement}`,
     };
 }
 
