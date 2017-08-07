@@ -2,6 +2,7 @@ import {
     GET_AGREEMENTS,
     GET_AGREEMENT_ID,
     GET_AGREEMENT_QUERY,
+    GET_ACCOUNT_AGREEMENTS,
     POST_AGREEMENT,
     PUT_AGREEMENT,
 } from '../constants/apiConstants';
@@ -17,6 +18,8 @@ const agreementsReducer = (state = {}, action) => {
     case GET_AGREEMENTS:
         return action.response;
     case GET_AGREEMENT_QUERY:
+        return action.response;
+    case GET_ACCOUNT_AGREEMENTS:
         return action.response;
     case POST_AGREEMENT:
         return {};

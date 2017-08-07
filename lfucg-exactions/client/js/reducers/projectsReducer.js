@@ -2,6 +2,7 @@ import {
     GET_PROJECTS,
     GET_PROJECT_ID,
     GET_PROJECT_QUERY,
+    GET_AGREEMENT_PROJECTS,
     POST_PROJECT,
     PUT_PROJECT,
 } from '../constants/apiConstants';
@@ -17,6 +18,8 @@ const projectsReducer = (state = {}, action) => {
     case GET_PROJECTS:
         return action.response;
     case GET_PROJECT_QUERY:
+        return action.response;
+    case GET_AGREEMENT_PROJECTS:
         return action.response;
     case POST_PROJECT:
         return {};
