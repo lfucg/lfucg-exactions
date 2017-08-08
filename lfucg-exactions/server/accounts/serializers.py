@@ -104,7 +104,7 @@ class ProjectCostEstimateSerializer(serializers.ModelSerializer):
         )
 
 class ProjectSerializer(serializers.ModelSerializer):
-    project_cost_estimates = ProjectCostEstimateSerializer(many=True, read_only=True)
+    project_cost_estimate = ProjectCostEstimateSerializer(many=True, read_only=True)
 
     class Meta:
         model = Project
@@ -123,7 +123,7 @@ class ProjectSerializer(serializers.ModelSerializer):
             'project_description',
             'project_status',
             'status_date',
-            'project_cost_estimates',
+            'project_cost_estimate',
         )
 
 class AgreementSerializer(serializers.ModelSerializer):

@@ -204,7 +204,7 @@ class ProjectCostEstimate(models.Model):
     history = HistoricalRecords()
 
     def __str__(self):
-        return self.project_id.agreement_id.account_name
+        return self.estimate_type
 
 class AccountLedger(models.Model):
     is_approved = models.BooleanField(default=False)
@@ -230,4 +230,4 @@ class AccountLedger(models.Model):
     history = HistoricalRecords()
 
     def __str__(self):
-        return 'Lat: ' + self.lot.latitude +  ' Long: ' + self.lot.longitude
+        return self.entry_type

@@ -40,7 +40,7 @@ class ProjectCostExisting extends React.Component {
                     <div key={projectCost.id} className="col-xs-12">
                         <div className="row form-subheading">
                             <div className="col-sm-7 col-md-9">
-                                <h3>ProjectCost Category : ProjectCost Type: {projectCost.projectCost_category} : {projectCost.projectCost_type}</h3>
+                                <h3>Project Cost Category: {projectCost.estimate_type}</h3>
                             </div>
                             <div className="col-sm-5 col-md-3">
                                 <div className="col-xs-5">

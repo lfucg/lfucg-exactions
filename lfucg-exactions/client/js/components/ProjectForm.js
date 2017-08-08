@@ -132,9 +132,11 @@ class ProjectForm extends React.Component {
                                         </div>
                                     </div>
                                     <div className="row">
-                                        <FormGroup label="Project Description" id="project_description">
-                                            <textarea type="text" className="form-control" placeholder="Project Description" rows="4" />
-                                        </FormGroup>
+                                        <div className="col-xs-12">
+                                            <FormGroup label="Project Description" id="project_description">
+                                                <textarea type="text" className="form-control" placeholder="Project Description" rows="4" />
+                                            </FormGroup>
+                                        </div>
                                     </div>
                                 </fieldset>
                                 <button className="btn btn-lex">Submit</button>
