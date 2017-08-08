@@ -91,7 +91,7 @@ class ProjectCostSummary extends React.Component {
                                 <div className="row section-heading" role="tab" id="headingProjectInfo">
                                     <div className="col-xs-1 caret-indicator" />
                                     <div className="col-xs-10">
-                                        <h2>Project Information</h2>
+                                        <h2>Project</h2>
                                     </div>
                                 </div>
                             </a>

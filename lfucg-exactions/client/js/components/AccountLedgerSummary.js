@@ -98,7 +98,7 @@ class AccountLedgerSummary extends React.Component {
                                         <div className="row section-heading" role="tab" id="headingLotInfo">
                                             <div className="col-xs-1 caret-indicator" />
                                             <div className="col-xs-10">
-                                                <h2>Lot Information</h2>
+                                                <h2>Lot</h2>
                                             </div>
                                         </div>
                                     </a>
@@ -138,7 +138,7 @@ class AccountLedgerSummary extends React.Component {
                                         <div className="row section-heading" role="tab" id="headingAccountFromInfo">
                                             <div className="col-xs-1 caret-indicator" />
                                             <div className="col-xs-10">
-                                                <h2>Account From Information</h2>
+                                                <h2>Account From</h2>
                                             </div>
                                         </div>
                                     </a>
@@ -178,7 +178,7 @@ class AccountLedgerSummary extends React.Component {
                                         <div className="row section-heading" role="tab" id="headingAccountToInfo">
                                             <div className="col-xs-1 caret-indicator" />
                                             <div className="col-xs-10">
-                                                <h2>Account To Information</h2>
+                                                <h2>Account To</h2>
                                             </div>
                                         </div>
                                     </a>
@@ -218,7 +218,7 @@ class AccountLedgerSummary extends React.Component {
                                         <div className="row section-heading" role="tab" id="headingAgreementInfo">
                                             <div className="col-xs-1 caret-indicator" />
                                             <div className="col-xs-10">
-                                                <h2>Agreement Information</h2>
+                                                <h2>Agreement</h2>
                                             </div>
                                         </div>
                                     </a>
