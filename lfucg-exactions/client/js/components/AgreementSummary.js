@@ -227,7 +227,7 @@ class AgreementSummary extends React.Component {
                                         <div className="row section-heading" role="tab" id="headingAccountPayments">
                                             <div className="col-xs-1 caret-indicator" />
                                             <div className="col-xs-10">
-                                                <h2>Account Payments</h2>
+                                                <h2>Payments</h2>
                                             </div>
                                         </div>
                                     </a>
@@ -246,7 +246,7 @@ class AgreementSummary extends React.Component {
                                 </div>
                             ) : (
                                 <div className="row section-heading" role="tab" id="headingAccountPayments">
-                                    <h2>Account Payments - None</h2>
+                                    <h2>Payments - None</h2>
                                 </div>
                             )}
 
@@ -263,7 +263,7 @@ class AgreementSummary extends React.Component {
                                         <div className="row section-heading" role="tab" id="headingAccountProjects">
                                             <div className="col-xs-1 caret-indicator" />
                                             <div className="col-xs-10">
-                                                <h2>Account Projects</h2>
+                                                <h2>Projects</h2>
                                             </div>
                                         </div>
                                     </a>
@@ -282,7 +282,7 @@ class AgreementSummary extends React.Component {
                                 </div>
                             ) : (
                                 <div className="row section-heading" role="tab" id="headingAccountProjects">
-                                    <h2>Account Projects - None</h2>
+                                    <h2>Projects - None</h2>
                                 </div>
                             )}
 
