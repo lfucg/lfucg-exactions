@@ -98,7 +98,7 @@ class PaymentSummary extends React.Component {
                                 <div className="row section-heading" role="tab" id="headingLotInfo">
                                     <div className="col-xs-1 caret-indicator" />
                                     <div className="col-xs-10">
-                                        <h2>Lot Information</h2>
+                                        <h2>Lot</h2>
                                     </div>
                                 </div>
                             </a>
@@ -130,7 +130,7 @@ class PaymentSummary extends React.Component {
                                 <div className="row section-heading" role="tab" id="headingAccountInfo">
                                     <div className="col-xs-1 caret-indicator" />
                                     <div className="col-xs-10">
-                                        <h2>Credit Account Information</h2>
+                                        <h2>Credit Account</h2>
                                     </div>
                                 </div>
                             </a>
@@ -162,7 +162,7 @@ class PaymentSummary extends React.Component {
                                 <div className="row section-heading" role="tab" id="headingAgreementInfo">
                                     <div className="col-xs-1 caret-indicator" />
                                     <div className="col-xs-10">
-                                        <h2>Credit Source Information</h2>
+                                        <h2>Credit Source</h2>
                                     </div>
                                 </div>
                             </a>
