@@ -40,7 +40,7 @@ class ProjectExisting extends React.Component {
                     <div key={project.id} className="col-xs-12">
                         <div className="row form-subheading">
                             <div className="col-sm-7 col-md-9">
-                                <h3>Project Category : Project Type: {project.project_category} : {project.project_type}</h3>
+                                <h3>Project Category : {project.project_category}</h3>
                             </div>
                             <div className="col-sm-5 col-md-3">
                                 <div className="col-xs-5">
@@ -58,6 +58,7 @@ class ProjectExisting extends React.Component {
                         <div className="row">
                             <div className="col-sm-offset-1">
                                 <p className="col-md-4 col-xs-6">Agreement: {project.agreement_id}</p>
+                                <p className="col-md-4 col-xs-6">Project Type: {project.project_type}</p>
                                 <p className="col-md-4 col-xs-6">Expansion Area: {project.expansion_area}</p>
                                 <p className="col-md-4 col-xs-6 ">Project Status: {project.project_status}</p>
                                 <p className="col-md-4 col-xs-6 ">Status Date: {project.status_date}</p>
