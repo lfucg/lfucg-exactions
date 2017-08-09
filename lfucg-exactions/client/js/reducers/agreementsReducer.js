@@ -14,15 +14,11 @@ const agreementsReducer = (state = {}, action) => {
     } = action;
     switch (endpoint) {
     case GET_AGREEMENT_ID:
-        return action.response;
     case GET_AGREEMENTS:
-        return action.response;
     case GET_AGREEMENT_QUERY:
-        return action.response;
     case GET_ACCOUNT_AGREEMENTS:
         return action.response;
     case POST_AGREEMENT:
-        return {};
     case PUT_AGREEMENT:
         return {};
     default:
