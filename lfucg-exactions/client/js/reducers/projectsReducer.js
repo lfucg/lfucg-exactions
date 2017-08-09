@@ -14,15 +14,11 @@ const projectsReducer = (state = {}, action) => {
     } = action;
     switch (endpoint) {
     case GET_PROJECT_ID:
-        return action.response;
     case GET_PROJECTS:
-        return action.response;
     case GET_PROJECT_QUERY:
-        return action.response;
     case GET_AGREEMENT_PROJECTS:
         return action.response;
     case POST_PROJECT:
-        return {};
     case PUT_PROJECT:
         return {};
     default:

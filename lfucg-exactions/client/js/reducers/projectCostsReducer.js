@@ -13,13 +13,10 @@ const projectCostsReducer = (state = {}, action) => {
     } = action;
     switch (endpoint) {
     case GET_PROJECT_COST_ID:
-        return action.response;
     case GET_PROJECT_COSTS:
-        return action.response;
     case GET_PROJECT_COST_QUERY:
         return action.response;
     case POST_PROJECT_COST:
-        return {};
     case PUT_PROJECT_COST:
         return {};
     default:

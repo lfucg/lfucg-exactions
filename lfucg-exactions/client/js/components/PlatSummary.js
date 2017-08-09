@@ -155,7 +155,7 @@ class PlatSummary extends React.Component {
                                 <div className="panel-body">
                                     <div className="col-xs-12">
                                         <p className="col-md-3 col-sm-4 col-xs-6">Plat Name: {plats.name}</p>
-                                        <p className="col-md-3 col-sm-4 col-xs-6">Plat Type: {plats.plat_type}</p>
+                                        <p className="col-md-3 col-sm-4 col-xs-6">Plat Type: {plats.plat_type_display}</p>
                                         <p className="col-md-3 col-sm-4 col-xs-6">Subdivision: {plats.subdivision ? plats.subdivision.name : null}</p>
                                         <p className="col-md-3 col-sm-4 col-xs-6">Approval: {plats.is_approved ? 'Approved' : 'Not Approved'}</p>
                                         <p className="col-md-3 col-sm-4 col-xs-6">Expansion Area: {plats.expansion_area}</p>

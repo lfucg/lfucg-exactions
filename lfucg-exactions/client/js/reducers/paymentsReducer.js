@@ -16,19 +16,13 @@ const paymentReducer = (state = {}, action) => {
     } = action;
     switch (endpoint) {
     case GET_PAYMENT_ID:
-        return action.response;
     case GET_PAYMENTS:
-        return action.response;
     case GET_PAYMENT_QUERY:
-        return action.response;
     case GET_LOT_PAYMENTS:
-        return action.response;
     case GET_ACCOUNT_PAYMENTS:
-        return action.response;
     case GET_AGREEMENT_PAYMENTS:
         return action.response;
     case POST_PAYMENT:
-        return {};
     case PUT_PAYMENT:
         return {};
     default:
