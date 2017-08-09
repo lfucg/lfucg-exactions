@@ -13,13 +13,9 @@ const lotsReducer = (state = {}, action) => {
     } = action;
     switch (endpoint) {
     case GET_LOT_ID:
-        return action.response;
     case GET_LOTS:
-        return action.response;
     case GET_LOT_QUERY:
-        return action.response;
     case POST_LOT:
-        return action.response;
     case PUT_LOT:
         return action.response;
     default:

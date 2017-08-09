@@ -6,24 +6,21 @@ import { map } from 'ramda';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
-import Notes from './Notes';
 
 import {
-    getLotID,
     getAccountID,
-    getLotPayments,
-    getLotAccountLedgers,
+    getAgreementID,
+    getAgreementPayments,
+    getAgreementProjects,
+    getAgreementAccountLedgers,
 } from '../actions/apiActions';
 
-// import {
-//     formUpdate,
-// } from '../actions/formActions';
-
-class LotSummary extends React.Component {
+class AgreementSummary extends React.Component {
     static propTypes = {
-        lots: React.PropTypes.object,
         accounts: React.PropTypes.object,
+        agreements: React.PropTypes.object,
         payments: React.PropTypes.object,
+        projects: React.PropTypes.object,
         accountLedgers: React.PropTypes.object,
         route: React.PropTypes.object,
         onComponentDidMount: React.PropTypes.func,
@@ -33,12 +30,12 @@ class LotSummary extends React.Component {
         this.props.onComponentDidMount();
     }
 
-
     render() {
         const {
-            lots,
             accounts,
+            agreements,
             payments,
+            projects,
             accountLedgers,
         } = this.props;
 
@@ -74,6 +71,39 @@ class LotSummary extends React.Component {
             })(payments)
         ) : null;
 
+        const projects_list = (projects && projects.length > 0) ? (
+            map((project) => {
+                return (
+                    <div key={project.id} className="col-xs-12">
+                        <div className="row form-subheading">
+                            <div className="col-sm-7 col-md-9">
+                                <h3>{project.project_category}</h3>
+                            </div>
+                            <div className="col-sm-5 col-md-3">
+                                <div className="col-xs-5">
+                                    <Link to={`project/summary/${project.id}`} className="btn btn-mid-level">
+                                        Summary
+                                    </Link>
+                                </div>
+                                <div className="col-xs-5 col-xs-offset-1">
+                                    <Link to={`project/form/${project.id}`} className="btn btn-mid-level">
+                                        Edit
+                                    </Link>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="row">
+                            <p className="col-md-3 col-sm-4 col-xs-6">Expansion Area: {project.expansion_area}</p>
+                            <p className="col-md-3 col-sm-4 col-xs-6">Project Type: {project.project_type}</p>
+                            <p className="col-md-3 col-sm-4 col-xs-6">Project Status: {project.project_status}</p>
+                            <p className="col-md-3 col-sm-4 col-xs-6">Status Date: {project.status_date}</p>
+                            <p className="col-xs-12">Project Description: {project.project_description}</p>
+                        </div>
+                    </div>
+                );
+            })(projects)
+        ) : null;
+
         const account_ledgers_list = (accountLedgers && accountLedgers.length > 0) ? (
             map((accountLedger) => {
                 return (
@@ -106,16 +136,16 @@ class LotSummary extends React.Component {
         ) : null;
 
         return (
-            <div className="lot-summary">
+            <div className="agreement-summary">
                 <Navbar />
 
                 <div className="form-header">
                     <div className="container">
-                        <h1>LOTS - {lots.address_full}</h1>
+                        <h1>AGREEMENT - SUMMARY</h1>
                     </div>
                 </div>
 
-                <Breadcrumbs route={this.props.route} parent_link={'lot'} parent_name={'Lots'} />
+                <Breadcrumbs route={this.props.route} parent_link={'agreement'} parent_name={'Agreements'} />
 
                 <div className="inside-body">
                     <div className="container">
@@ -124,38 +154,30 @@ class LotSummary extends React.Component {
                               role="button"
                               data-toggle="collapse"
                               data-parent="#accordion"
-                              href="#collapseGeneralLot"
+                              href="#collapseAgreementInfo"
                               aria-expanded="false"
-                              aria-controls="collapseGeneralLot"
+                              aria-controls="collapseAgreementInfo"
                             >
-                                <div className="row section-heading" role="tab" id="headingLot">
+                                <div className="row section-heading" role="tab" id="headingAgreementInfo">
                                     <div className="col-xs-1 caret-indicator" />
                                     <div className="col-xs-10">
-                                        <h2>General Lot Information</h2>
+                                        <h2>Agreement Information</h2>
                                     </div>
                                 </div>
                             </a>
                             <div
-                              id="collapseGeneralLot"
+                              id="collapseAgreementInfo"
                               className="panel-collapse collapse row"
                               role="tabpanel"
-                              aria-labelledby="#headingLot"
+                              aria-labelledby="#headingAgreementInfo"
                             >
                                 <div className="panel-body">
                                     <div className="col-xs-12">
-                                        <h3 className="col-xs-12 ">Total Exactions: {lots.total_due}</h3>
-                                        <p className="col-md-8 col-xs-12">Address: {lots.address_full}</p>
-                                        <p className="col-md-4 col-xs-6">Plat Name: {lots.plat ? lots.plat.name : null}</p>
-                                        <p className="col-md-4 col-xs-6">Lot Number: {lots.lot_number}</p>
-                                        <p className="col-md-4 col-xs-6 ">Permit ID: {lots.permit_id}</p>
-                                        <p className="col-md-4 col-xs-6">Latitude: {lots.latitude}</p>
-                                        <p className="col-md-4 col-xs-6">Longitude: {lots.longitude}</p>
-                                        <p className="col-md-4 col-xs-6">Approved: {lots.is_approved ? 'Approved' : 'Not Approved'}</p>
-                                    </div>
-                                    <div className="col-md-offset-11 col-sm-offset-10 col-xs-offset-8">
-                                        <Link to={`lot/form/${lots.id}`} role="link" >
-                                            <h4>Edit</h4>
-                                        </Link>
+                                        <p className="col-md-4 col-xs-6">Resolution Number: {agreements.resolution_number}</p>
+                                        <p className="col-md-4 col-xs-6">Account: {agreements.account_id}</p>
+                                        <p className="col-md-4 col-xs-6">Expansion Area: {agreements.expansion_area}</p>
+                                        <p className="col-md-4 col-xs-6">Agreement Type: {agreements.agreement_type}</p>
+                                        <p className="col-md-4 col-xs-6">Date Executed: {agreements.date_executed}</p>
                                     </div>
                                 </div>
                             </div>
@@ -164,125 +186,33 @@ class LotSummary extends React.Component {
                               role="button"
                               data-toggle="collapse"
                               data-parent="#accordion"
-                              href="#collapseLotExactions"
+                              href="#collapseAccountInfo"
                               aria-expanded="false"
-                              aria-controls="collapseLotExactions"
+                              aria-controls="collapseAccountInfo"
                             >
-                                <div className="row section-heading" role="tab" id="headingLotExactions">
+                                <div className="row section-heading" role="tab" id="headingAccountInfo">
                                     <div className="col-xs-1 caret-indicator" />
                                     <div className="col-xs-10">
-                                        <h2>Lot Exactions</h2>
+                                        <h2>Account Information</h2>
                                     </div>
                                 </div>
                             </a>
                             <div
-                              id="collapseLotExactions"
+                              id="collapseAccountInfo"
                               className="panel-collapse collapse row"
                               role="tabpanel"
-                              aria-labelledby="#headingLotExactions"
+                              aria-labelledby="#headingAccountInfo"
                             >
                                 <div className="panel-body">
                                     <div className="col-xs-12">
-                                        <h3 className="col-xs-12 ">Total Exactions: {lots.total_due}</h3>
-                                        <p className="col-sm-6">Road Developer Exactions: ${lots.dues_roads_dev}</p>
-                                        <p className="col-sm-6">Road Owner Exactions: ${lots.dues_roads_own}</p>
-                                        <p className="col-sm-6">Sewer Transmission Developer Exactions: ${lots.dues_sewer_trans_dev}</p>
-                                        <p className="col-sm-6">Sewer Transmission Owner Exactions: ${lots.dues_sewer_trans_own}</p>
-                                        <p className="col-sm-6">Sewer Capacity Developer Exactions: ${lots.dues_sewer_cap_dev}</p>
-                                        <p className="col-sm-6">Sewer Capacity Owner Exactions: ${lots.dues_sewer_cap_own}</p>
-                                        <p className="col-sm-6">Parks Developer Exactions: ${lots.dues_parks_dev}</p>
-                                        <p className="col-sm-6">Parks Owner Exactions: ${lots.dues_parks_own}</p>
-                                        <p className="col-sm-6">Storm Developer Exactions: ${lots.dues_storm_dev}</p>
-                                        <p className="col-sm-6">Storm Owner Exactions: ${lots.dues_storm_own}</p>
-                                        <p className="col-sm-6">Open Space Developer Exactions: ${lots.dues_open_space_dev}</p>
-                                        <p className="col-sm-6">Open Space Owner Exactions: ${lots.dues_open_space_own}</p>
-                                    </div>
-                                    <div className="col-md-offset-11 col-sm-offset-10 col-xs-offset-8">
-                                        <Link to={`lot/form/${lots.id}`} role="link" >
-                                            <h4>Edit</h4>
-                                        </Link>
+                                        <h4 className="col-md-4 col-xs-6">Account Name: {accounts.account_name}</h4>
+                                        <h4 className="col-md-4 col-xs-6">Contact Name: {accounts.contact_full_name}</h4>
+                                        <h4 className="col-xs-12">Address: {accounts.address_full}</h4>
+                                        <h4 className="col-md-4 col-xs-6 ">Phone: {accounts.phone}</h4>
+                                        <h4 className="col-md-4 col-xs-6">Email: {accounts.email}</h4>
                                     </div>
                                 </div>
                             </div>
-
-                            <a
-                              role="button"
-                              data-toggle="collapse"
-                              data-parent="#accordion"
-                              href="#collapseNotes"
-                              aria-expanded="false"
-                              aria-controls="collapseNotes"
-                            >
-                                <div className="row section-heading" role="tab" id="headingNotes">
-                                    <div className="col-xs-1 caret-indicator" />
-                                    <div className="col-xs-8 col-xs-offset-1">
-                                        <h2>Notes</h2>
-                                    </div>
-                                </div>
-                            </a>
-                            <div
-                              id="collapseNotes"
-                              className="panel-collapse collapse row"
-                              role="tabpanel"
-                              aria-labelledby="#headingNotes"
-                            >
-                                <div className="panel-body">
-                                    <div className="col-xs-12">
-                                        {lots.id &&
-                                            <Notes content_type="Plat" object_id={lots.id} />
-                                        }
-                                    </div>
-                                </div>
-                            </div>
-
-                            {lots.account && accounts &&
-                                <div>
-                                    <a
-                                      role="button"
-                                      data-toggle="collapse"
-                                      data-parent="#accordion"
-                                      href="#collapseAccounts"
-                                      aria-expanded="false"
-                                      aria-controls="collapseAccounts"
-                                    >
-                                        <div className="row section-heading" role="tab" id="headingAccount">
-                                            <div className="col-xs-1 caret-indicator" />
-                                            <div className="col-xs-10">
-                                                <h2>Account</h2>
-                                            </div>
-                                        </div>
-                                    </a>
-                                    <div
-                                      id="collapseAccounts"
-                                      className="panel-collapse collapse row"
-                                      role="tabpanel"
-                                      aria-labelledby="#headingAccounts"
-                                    >
-                                        <div className="panel-body">
-                                            <div className="col-xs-12">
-                                                <div className="col-sm-6">
-                                                    <p>Account Name: {accounts.account_name}</p>
-                                                </div>
-                                                <div className="col-sm-6">
-                                                    <p>Contact Name: {accounts.contact_full_name}</p>
-                                                </div>
-                                            </div>
-                                            <div className="col-md-offset-8 col-sm-offset-6">
-                                                <div className="col-xs-6">
-                                                    <Link to={`account/summary/${accounts.id}`} role="link" >
-                                                        <h4>Summary</h4>
-                                                    </Link>
-                                                </div>
-                                                <div className="col-xs-6">
-                                                    <Link to={`account/form/${accounts.id}`} role="link" >
-                                                        <h4>Edit</h4>
-                                                    </Link>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            }
 
                             {payments_list ? (
                                 <div>
@@ -317,6 +247,42 @@ class LotSummary extends React.Component {
                             ) : (
                                 <div className="row section-heading" role="tab" id="headingAccountPayments">
                                     <h2>Payments - None</h2>
+                                </div>
+                            )}
+
+                            {projects_list ? (
+                                <div>
+                                    <a
+                                      role="button"
+                                      data-toggle="collapse"
+                                      data-parent="#accordion"
+                                      href="#collapseAccountProjects"
+                                      aria-expanded="false"
+                                      aria-controls="collapseAccountProjects"
+                                    >
+                                        <div className="row section-heading" role="tab" id="headingAccountProjects">
+                                            <div className="col-xs-1 caret-indicator" />
+                                            <div className="col-xs-10">
+                                                <h2>Projects</h2>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <div
+                                      id="collapseAccountProjects"
+                                      className="panel-collapse collapse row"
+                                      role="tabpanel"
+                                      aria-labelledby="#headingAccountProjects"
+                                    >
+                                        <div className="panel-body">
+                                            <div className="col-xs-12">
+                                                {projects_list}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            ) : (
+                                <div className="row section-heading" role="tab" id="headingAccountProjects">
+                                    <h2>Projects - None</h2>
                                 </div>
                             )}
 
@@ -355,6 +321,7 @@ class LotSummary extends React.Component {
                                     <h2>Account Ledgers - None</h2>
                                 </div>
                             )}
+
                         </div>
                     </div>
                 </div>
@@ -366,28 +333,31 @@ class LotSummary extends React.Component {
 
 function mapStateToProps(state) {
     return {
-        lots: state.lots,
         accounts: state.accounts,
+        agreements: state.agreements,
         payments: state.payments,
+        projects: state.projects,
         accountLedgers: state.accountLedgers,
     };
 }
 
 function mapDispatchToProps(dispatch, params) {
-    const selectedLot = params.params.id;
+    const selectedAgreement = params.params.id;
 
     return {
         onComponentDidMount() {
-            dispatch(getLotPayments(selectedLot));
-            dispatch(getLotAccountLedgers(selectedLot));
-            dispatch(getLotID(selectedLot))
-            .then((lot_data) => {
-                if (lot_data.response.account) {
-                    dispatch(getAccountID(lot_data.response.account));
+            dispatch(getAgreementPayments(selectedAgreement));
+            dispatch(getAgreementProjects(selectedAgreement));
+            dispatch(getAgreementAccountLedgers(selectedAgreement));
+            dispatch(getAgreementID(selectedAgreement))
+            .then((data_agreement) => {
+                if (data_agreement.response.account_id) {
+                    dispatch(getAccountID(data_agreement.response.account_id));
                 }
             });
         },
     };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(LotSummary);
+export default connect(mapStateToProps, mapDispatchToProps)(AgreementSummary);
+

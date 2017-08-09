@@ -8,49 +8,48 @@ import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
 
 import {
-    getPlats,
-    getPlatQuery,
+    getProjects,
+    getProjectQuery,
 } from '../actions/apiActions';
 
 import {
     formUpdate,
 } from '../actions/formActions';
 
-class PlatExisting extends React.Component {
+class ProjectExisting extends React.Component {
     static propTypes = {
-        plats: React.PropTypes.object,
+        projects: React.PropTypes.object,
         route: React.PropTypes.object,
         onComponentDidMount: React.PropTypes.func,
-        onPlatQuery: React.PropTypes.func,
+        onProjectQuery: React.PropTypes.func,
     };
 
     componentDidMount() {
         this.props.onComponentDidMount();
     }
 
-
     render() {
         const {
-            plats,
-            onPlatQuery,
+            projects,
+            onProjectQuery,
         } = this.props;
 
-        const plats_list = plats.length > 0 ? (
-            map((plat) => {
+        const projects_list = projects.length > 0 ? (
+            map((project) => {
                 return (
-                    <div key={plat.id} className="col-xs-12">
+                    <div key={project.id} className="col-xs-12">
                         <div className="row form-subheading">
                             <div className="col-sm-7 col-md-9">
-                                <h3>{plat.name}</h3>
+                                <h3>Project Category : {project.project_category}</h3>
                             </div>
                             <div className="col-sm-5 col-md-3">
                                 <div className="col-xs-5">
-                                    <Link to={`plat/summary/${plat.id}`} className="btn btn-mid-level">
+                                    <Link to={`project/summary/${project.id}`} className="btn btn-mid-level">
                                         Summary
                                     </Link>
                                 </div>
                                 <div className="col-xs-5 col-xs-offset-1">
-                                    <Link to={`plat/form/${plat.id}`} className="btn btn-mid-level">
+                                    <Link to={`project/form/${project.id}`} className="btn btn-mid-level">
                                         Edit
                                     </Link>
                                 </div>
@@ -58,30 +57,30 @@ class PlatExisting extends React.Component {
                         </div>
                         <div className="row">
                             <div className="col-sm-offset-1">
-                                <p className="col-sm-4 col-xs-6">Expansion Area: {plat.expansion_area}</p>
-                                <p className="col-sm-4 col-xs-6">Plat Type: {plat.plat_type_display}</p>
-                                <p className="col-sm-4 col-xs-6">Unit: {plat.unit}</p>
-                                <p className="col-sm-4 col-xs-6">Section: {plat.section}</p>
-                                <p className="col-sm-4 col-xs-6">Block: {plat.block}</p>
-                                <p className="col-sm-4 col-xs-6">Slide: {plat.slide}</p>
+                                <p className="col-md-4 col-xs-6">Agreement: {project.agreement_id}</p>
+                                <p className="col-md-4 col-xs-6">Project Type: {project.project_type}</p>
+                                <p className="col-md-4 col-xs-6">Expansion Area: {project.expansion_area}</p>
+                                <p className="col-md-4 col-xs-6 ">Project Status: {project.project_status}</p>
+                                <p className="col-md-4 col-xs-6 ">Status Date: {project.status_date}</p>
+                                <p className="col-xs-12">Project Description: {project.project_description}</p>
                             </div>
                         </div>
                     </div>
                 );
-            })(plats)
+            })(projects)
         ) : null;
 
         return (
-            <div className="plat-existing">
+            <div className="project-existing">
                 <Navbar />
 
                 <div className="form-header">
                     <div className="container">
                         <div className="col-sm-8">
-                            <h1>PLATS - EXISTING</h1>
+                            <h1>PROJECTS - EXISTING</h1>
                         </div>
                         <div className="col-sm-2 col-sm-offset-1">
-                            <Link to={'plat/form/'} className="btn btn-top-level" >
+                            <Link to={'project/form/'} className="btn btn-top-level" >
                                 Create
                             </Link>
                         </div>
@@ -91,7 +90,7 @@ class PlatExisting extends React.Component {
                 <Breadcrumbs route={this.props.route} />
 
                 <div className="row search-box">
-                    <form onChange={onPlatQuery('query')} className="col-sm-10 col-sm-offset-1" >
+                    <form onChange={onProjectQuery('query')} className="col-sm-10 col-sm-offset-1" >
                         <fieldset>
                             <div className="col-sm-2 col-xs-12">
                                 <label htmlFor="query" className="form-label">Search</label>
@@ -100,7 +99,7 @@ class PlatExisting extends React.Component {
                                 <input
                                   type="text"
                                   className="form-control"
-                                  placeholder="Search Plats"
+                                  placeholder="Search Projects"
                                 />
                             </div>
                         </fieldset>
@@ -109,7 +108,7 @@ class PlatExisting extends React.Component {
 
                 <div className="inside-body">
                     <div className="container">
-                        {plats_list}
+                        {projects_list}
                     </div>
                 </div>
                 <Footer />
@@ -120,28 +119,27 @@ class PlatExisting extends React.Component {
 
 function mapStateToProps(state) {
     return {
-        plats: state.plats,
+        projects: state.projects,
     };
 }
 
 function mapDispatchToProps(dispatch) {
     return {
         onComponentDidMount() {
-            dispatch(getPlats());
+            dispatch(getProjects());
         },
-        onPlatQuery(field) {
+        onProjectQuery(field) {
             return (e, ...args) => {
                 const value = typeof e.target.value !== 'undefined' ? e.target.value : args[1];
                 const update = {
                     [field]: value,
                 };
                 dispatch(formUpdate(update));
-                dispatch(getPlatQuery());
+                dispatch(getProjectQuery());
             };
         },
     };
 }
 
-
-export default connect(mapStateToProps, mapDispatchToProps)(PlatExisting);
+export default connect(mapStateToProps, mapDispatchToProps)(ProjectExisting);
 

@@ -57,7 +57,7 @@ class SubdivisionForm extends React.Component {
                     </div>
                 </div>
 
-                <Breadcrumbs route={this.props.route} parent_link={'subdivision/existing'} parent_name={'Subdivisions'} />
+                <Breadcrumbs route={this.props.route} parent_link={'subdivision'} parent_name={'Subdivisions'} />
 
                 <div className="inside-body">
                     <div className="container">
@@ -129,7 +129,7 @@ function mapDispatchToProps(dispatch, params) {
             event.preventDefault();
             dispatch(postSubdivision())
             .then(() => {
-                hashHistory.push('subdivision/existing/');
+                hashHistory.push('subdivision/');
             });
         },
     };

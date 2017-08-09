@@ -9,7 +9,6 @@ import {
 export default function activeFormReducer(state = {}, action) {
     switch (action.type) {
     case FORM_INIT:
-        return {};
     case FORM_RESET:
         return {};
     case FORM_UPDATE:

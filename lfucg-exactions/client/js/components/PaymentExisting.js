@@ -8,49 +8,48 @@ import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
 
 import {
-    getPlats,
-    getPlatQuery,
+    getPayments,
+    getPaymentQuery,
 } from '../actions/apiActions';
 
 import {
     formUpdate,
 } from '../actions/formActions';
 
-class PlatExisting extends React.Component {
+class PaymentExisting extends React.Component {
     static propTypes = {
-        plats: React.PropTypes.object,
+        payments: React.PropTypes.object,
         route: React.PropTypes.object,
         onComponentDidMount: React.PropTypes.func,
-        onPlatQuery: React.PropTypes.func,
+        onPaymentQuery: React.PropTypes.func,
     };
 
     componentDidMount() {
         this.props.onComponentDidMount();
     }
 
-
     render() {
         const {
-            plats,
-            onPlatQuery,
+            payments,
+            onPaymentQuery,
         } = this.props;
 
-        const plats_list = plats.length > 0 ? (
-            map((plat) => {
+        const payments_list = payments.length > 0 ? (
+            map((payment) => {
                 return (
-                    <div key={plat.id} className="col-xs-12">
+                    <div key={payment.id} className="col-xs-12">
                         <div className="row form-subheading">
                             <div className="col-sm-7 col-md-9">
-                                <h3>{plat.name}</h3>
+                                <h3>Payment Category: {payment.payment_category}</h3>
                             </div>
                             <div className="col-sm-5 col-md-3">
                                 <div className="col-xs-5">
-                                    <Link to={`plat/summary/${plat.id}`} className="btn btn-mid-level">
+                                    <Link to={`payment/summary/${payment.id}`} className="btn btn-mid-level">
                                         Summary
                                     </Link>
                                 </div>
                                 <div className="col-xs-5 col-xs-offset-1">
-                                    <Link to={`plat/form/${plat.id}`} className="btn btn-mid-level">
+                                    <Link to={`payment/form/${payment.id}`} className="btn btn-mid-level">
                                         Edit
                                     </Link>
                                 </div>
@@ -58,30 +57,28 @@ class PlatExisting extends React.Component {
                         </div>
                         <div className="row">
                             <div className="col-sm-offset-1">
-                                <p className="col-sm-4 col-xs-6">Expansion Area: {plat.expansion_area}</p>
-                                <p className="col-sm-4 col-xs-6">Plat Type: {plat.plat_type_display}</p>
-                                <p className="col-sm-4 col-xs-6">Unit: {plat.unit}</p>
-                                <p className="col-sm-4 col-xs-6">Section: {plat.section}</p>
-                                <p className="col-sm-4 col-xs-6">Block: {plat.block}</p>
-                                <p className="col-sm-4 col-xs-6">Slide: {plat.slide}</p>
+                                <p className="col-md-4 col-xs-6">Lot: {payment.lot_id}</p>
+                                <p className="col-md-4 col-xs-6">Credit Source: {payment.credit_source}</p>
+                                <p className="col-md-4 col-xs-6 ">Credit Account: {payment.credit_account}</p>
+                                <p className="col-md-4 col-xs-6">Payment Type: {payment.payment_type}</p>
                             </div>
                         </div>
                     </div>
                 );
-            })(plats)
+            })(payments)
         ) : null;
 
         return (
-            <div className="plat-existing">
+            <div className="payment-existing">
                 <Navbar />
 
                 <div className="form-header">
                     <div className="container">
                         <div className="col-sm-8">
-                            <h1>PLATS - EXISTING</h1>
+                            <h1>PAYMENTS - EXISTING</h1>
                         </div>
                         <div className="col-sm-2 col-sm-offset-1">
-                            <Link to={'plat/form/'} className="btn btn-top-level" >
+                            <Link to={'payment/form/'} className="btn btn-top-level" >
                                 Create
                             </Link>
                         </div>
@@ -91,7 +88,7 @@ class PlatExisting extends React.Component {
                 <Breadcrumbs route={this.props.route} />
 
                 <div className="row search-box">
-                    <form onChange={onPlatQuery('query')} className="col-sm-10 col-sm-offset-1" >
+                    <form onChange={onPaymentQuery('query')} className="col-sm-10 col-sm-offset-1" >
                         <fieldset>
                             <div className="col-sm-2 col-xs-12">
                                 <label htmlFor="query" className="form-label">Search</label>
@@ -100,7 +97,7 @@ class PlatExisting extends React.Component {
                                 <input
                                   type="text"
                                   className="form-control"
-                                  placeholder="Search Plats"
+                                  placeholder="Search Payments"
                                 />
                             </div>
                         </fieldset>
@@ -109,7 +106,7 @@ class PlatExisting extends React.Component {
 
                 <div className="inside-body">
                     <div className="container">
-                        {plats_list}
+                        {payments_list}
                     </div>
                 </div>
                 <Footer />
@@ -120,28 +117,27 @@ class PlatExisting extends React.Component {
 
 function mapStateToProps(state) {
     return {
-        plats: state.plats,
+        payments: state.payments,
     };
 }
 
 function mapDispatchToProps(dispatch) {
     return {
         onComponentDidMount() {
-            dispatch(getPlats());
+            dispatch(getPayments());
         },
-        onPlatQuery(field) {
+        onPaymentQuery(field) {
             return (e, ...args) => {
                 const value = typeof e.target.value !== 'undefined' ? e.target.value : args[1];
                 const update = {
                     [field]: value,
                 };
                 dispatch(formUpdate(update));
-                dispatch(getPlatQuery());
+                dispatch(getPaymentQuery());
             };
         },
     };
 }
 
-
-export default connect(mapStateToProps, mapDispatchToProps)(PlatExisting);
+export default connect(mapStateToProps, mapDispatchToProps)(PaymentExisting);
 
