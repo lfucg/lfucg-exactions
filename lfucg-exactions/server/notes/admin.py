@@ -16,3 +16,4 @@ class NoteHistoryAdmin(SimpleHistoryAdmin):
 admin.site.register(Note, NoteHistoryAdmin)
 admin.site.register(RateTable, SimpleHistoryAdmin)
 admin.site.register(Rate, SimpleHistoryAdmin)
+admin.site.register(FileUpload, SimpleHistoryAdmin)
