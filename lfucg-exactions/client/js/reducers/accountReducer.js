@@ -13,13 +13,10 @@ const accountReducer = (state = {}, action) => {
     } = action;
     switch (endpoint) {
     case GET_ACCOUNT_ID:
-        return action.response;
     case GET_ACCOUNTS:
-        return action.response;
     case GET_ACCOUNT_QUERY:
         return action.response;
     case POST_ACCOUNT:
-        return {};
     case PUT_ACCOUNT:
         return {};
     default:

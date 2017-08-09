@@ -28,17 +28,30 @@ class AccountLedgerSerializer(serializers.ModelSerializer):
         )
 
 class PaymentSerializer(serializers.ModelSerializer):
+    total_paid = serializers.SerializerMethodField(read_only=True)
+
+    def get_total_paid(self,obj):
+        total = (
+            obj.paid_roads +
+            obj.paid_sewer_trans +
+            obj.paid_sewer_cap +
+            obj.paid_parks +
+            obj.paid_storm +
+            obj.paid_open_space
+        )
+        return total
+
     class Meta:
         model = Payment
         fields = (
             'id',
             'is_approved',
             'is_active',
-            'lot_id',
             'date_created',
             'date_modified',
             'created_by',
             'modified_by',
+            'lot_id',
             'paid_by',
             'paid_by_type',
             'payment_type',
@@ -51,9 +64,23 @@ class PaymentSerializer(serializers.ModelSerializer):
             'paid_parks',
             'paid_storm',
             'paid_open_space',
+
+            'total_paid',
         )
 
 class ProjectCostEstimateSerializer(serializers.ModelSerializer):
+    total_costs = serializers.SerializerMethodField(read_only=True)
+
+    def get_total_costs(self,obj):
+        total = (
+            obj.land_cost +
+            obj.design_cost +
+            obj.construction_cost +
+            obj.admin_cost +
+            obj.management_cost
+        )
+        return total
+
     class Meta:
         model = ProjectCostEstimate
         fields = (
@@ -72,10 +99,12 @@ class ProjectCostEstimateSerializer(serializers.ModelSerializer):
             'admin_cost',
             'management_cost',
             'credits_available',
+
+            'total_costs',
         )
 
 class ProjectSerializer(serializers.ModelSerializer):
-    project_cost_estimates = ProjectCostEstimateSerializer(many=True, read_only=True)
+    project_cost_estimate = ProjectCostEstimateSerializer(many=True, read_only=True)
 
     class Meta:
         model = Project
@@ -94,7 +123,7 @@ class ProjectSerializer(serializers.ModelSerializer):
             'project_description',
             'project_status',
             'status_date',
-            'project_cost_estimates',
+            'project_cost_estimate',
         )
 
 class AgreementSerializer(serializers.ModelSerializer):
@@ -119,6 +148,7 @@ class AgreementSerializer(serializers.ModelSerializer):
             'agreement_type',
             'projects',
             'account_ledgers',
+            'payments',
         )
 
 class AccountSerializer(serializers.ModelSerializer):

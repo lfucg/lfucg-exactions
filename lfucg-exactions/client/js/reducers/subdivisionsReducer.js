@@ -13,13 +13,10 @@ const subdivisionsReducer = (state = {}, action) => {
     } = action;
     switch (endpoint) {
     case GET_SUBDIVISION_ID:
-        return action.response;
     case GET_SUBDIVISIONS:
-        return action.response;
     case GET_SUBDIVISION_QUERY:
         return action.response;
     case POST_SUBDIVISION:
-        return {};
     case PUT_SUBDIVISION:
         return {};
     default:

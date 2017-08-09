@@ -8,49 +8,48 @@ import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
 
 import {
-    getPlats,
-    getPlatQuery,
+    getAccountLedgers,
+    getAccountLedgerQuery,
 } from '../actions/apiActions';
 
 import {
     formUpdate,
 } from '../actions/formActions';
 
-class PlatExisting extends React.Component {
+class AccountLedgerExisting extends React.Component {
     static propTypes = {
-        plats: React.PropTypes.object,
+        accountLedgers: React.PropTypes.object,
         route: React.PropTypes.object,
         onComponentDidMount: React.PropTypes.func,
-        onPlatQuery: React.PropTypes.func,
+        onAccountLedgerQuery: React.PropTypes.func,
     };
 
     componentDidMount() {
         this.props.onComponentDidMount();
     }
 
-
     render() {
         const {
-            plats,
-            onPlatQuery,
+            accountLedgers,
+            onAccountLedgerQuery,
         } = this.props;
 
-        const plats_list = plats.length > 0 ? (
-            map((plat) => {
+        const accountLedgers_list = accountLedgers.length > 0 ? (
+            map((accountLedger) => {
                 return (
-                    <div key={plat.id} className="col-xs-12">
+                    <div key={accountLedger.id} className="col-xs-12">
                         <div className="row form-subheading">
                             <div className="col-sm-7 col-md-9">
-                                <h3>{plat.name}</h3>
+                                <h3>{accountLedger.entry_type}</h3>
                             </div>
                             <div className="col-sm-5 col-md-3">
                                 <div className="col-xs-5">
-                                    <Link to={`plat/summary/${plat.id}`} className="btn btn-mid-level">
+                                    <Link to={`account-ledger/summary/${accountLedger.id}`} className="btn btn-mid-level">
                                         Summary
                                     </Link>
                                 </div>
                                 <div className="col-xs-5 col-xs-offset-1">
-                                    <Link to={`plat/form/${plat.id}`} className="btn btn-mid-level">
+                                    <Link to={`account-ledger/form/${accountLedger.id}`} className="btn btn-mid-level">
                                         Edit
                                     </Link>
                                 </div>
@@ -58,30 +57,28 @@ class PlatExisting extends React.Component {
                         </div>
                         <div className="row">
                             <div className="col-sm-offset-1">
-                                <p className="col-sm-4 col-xs-6">Expansion Area: {plat.expansion_area}</p>
-                                <p className="col-sm-4 col-xs-6">Plat Type: {plat.plat_type_display}</p>
-                                <p className="col-sm-4 col-xs-6">Unit: {plat.unit}</p>
-                                <p className="col-sm-4 col-xs-6">Section: {plat.section}</p>
-                                <p className="col-sm-4 col-xs-6">Block: {plat.block}</p>
-                                <p className="col-sm-4 col-xs-6">Slide: {plat.slide}</p>
+                                <p className="col-md-4 col-xs-6">Lot: {accountLedger.lot}</p>
+                                <p className="col-md-4 col-xs-6">Account From: {accountLedger.account_from}</p>
+                                <p className="col-md-4 col-xs-6">Account To: {accountLedger.account_to}</p>
+                                <p className="col-md-4 col-xs-6">Agreement: {accountLedger.agreement}</p>
                             </div>
                         </div>
                     </div>
                 );
-            })(plats)
+            })(accountLedgers)
         ) : null;
 
         return (
-            <div className="plat-existing">
+            <div className="accountLedger-existing">
                 <Navbar />
 
                 <div className="form-header">
                     <div className="container">
                         <div className="col-sm-8">
-                            <h1>PLATS - EXISTING</h1>
+                            <h1>ACCOUNT LEDGERS - EXISTING</h1>
                         </div>
                         <div className="col-sm-2 col-sm-offset-1">
-                            <Link to={'plat/form/'} className="btn btn-top-level" >
+                            <Link to={'account-ledger/form/'} className="btn btn-top-level" >
                                 Create
                             </Link>
                         </div>
@@ -91,7 +88,7 @@ class PlatExisting extends React.Component {
                 <Breadcrumbs route={this.props.route} />
 
                 <div className="row search-box">
-                    <form onChange={onPlatQuery('query')} className="col-sm-10 col-sm-offset-1" >
+                    <form onChange={onAccountLedgerQuery('query')} className="col-sm-10 col-sm-offset-1" >
                         <fieldset>
                             <div className="col-sm-2 col-xs-12">
                                 <label htmlFor="query" className="form-label">Search</label>
@@ -100,7 +97,7 @@ class PlatExisting extends React.Component {
                                 <input
                                   type="text"
                                   className="form-control"
-                                  placeholder="Search Plats"
+                                  placeholder="Search AccountLedgers"
                                 />
                             </div>
                         </fieldset>
@@ -109,7 +106,7 @@ class PlatExisting extends React.Component {
 
                 <div className="inside-body">
                     <div className="container">
-                        {plats_list}
+                        {accountLedgers_list}
                     </div>
                 </div>
                 <Footer />
@@ -120,28 +117,27 @@ class PlatExisting extends React.Component {
 
 function mapStateToProps(state) {
     return {
-        plats: state.plats,
+        accountLedgers: state.accountLedgers,
     };
 }
 
 function mapDispatchToProps(dispatch) {
     return {
         onComponentDidMount() {
-            dispatch(getPlats());
+            dispatch(getAccountLedgers());
         },
-        onPlatQuery(field) {
+        onAccountLedgerQuery(field) {
             return (e, ...args) => {
                 const value = typeof e.target.value !== 'undefined' ? e.target.value : args[1];
                 const update = {
                     [field]: value,
                 };
                 dispatch(formUpdate(update));
-                dispatch(getPlatQuery());
+                dispatch(getAccountLedgerQuery());
             };
         },
     };
 }
 
-
-export default connect(mapStateToProps, mapDispatchToProps)(PlatExisting);
+export default connect(mapStateToProps, mapDispatchToProps)(AccountLedgerExisting);
 

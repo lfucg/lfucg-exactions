@@ -11,6 +11,11 @@ import platsReducer from './platsReducer';
 import lotsReducer from './lotsReducer';
 
 import accountReducer from './accountReducer';
+import agreementsReducer from './agreementsReducer';
+import paymentsReducer from './paymentsReducer';
+import projectsReducer from './projectsReducer';
+import projectCostsReducer from './projectCostsReducer';
+import accountLedgersReducer from './accountLedgersReducer';
 
 import notesReducer from './notesReducer';
 
@@ -27,6 +32,11 @@ const dashboardReducer = combineReducers({
     lots: lotsReducer,
 
     accounts: accountReducer,
+    agreements: agreementsReducer,
+    payments: paymentsReducer,
+    projects: projectsReducer,
+    projectCosts: projectCostsReducer,
+    accountLedgers: accountLedgersReducer,
 
     notes: notesReducer,
 });
