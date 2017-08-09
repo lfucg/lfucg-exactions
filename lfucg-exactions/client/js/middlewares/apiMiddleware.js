@@ -10,6 +10,7 @@ import {
 import {
     BASE_URL,
     LOGIN,
+    ME,
 } from '../constants/apiConstants';
 
 export default function api({ getState, dispatch }) {
@@ -50,6 +51,9 @@ export default function api({ getState, dispatch }) {
             null;
             if (endpoint === LOGIN) {
                 global.Authorization = `Token ${response.data.key}`;
+            }
+            if (endpoint === ME) {
+                global.Authorization = `Token ${response.data.token}`;
             }
             if (error) {
                 dispatch({
