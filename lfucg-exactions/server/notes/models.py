@@ -102,3 +102,6 @@ class FileUpload(models.Model):
     file_object_id = models.PositiveIntegerField()
     file_content_object = GenericForeignKey('file_content_type', 'file_object_id')
 
+    def __str__(self):
+        return self.upload
+
