@@ -91,10 +91,9 @@ class Rate(models.Model):
         return self.zone + ': ' + self.category
 
 def model_directory_path(instance, filename):
-    instance_file_object_string = str(instance.file_content_object)
-    name_string = instance_file_object_string.replace(" ", "")[0:15]
+    instance_name = type(instance.file_content_object).__name__
 
-    return '{0}/{1}'.format(name_string, filename)
+    return '{0}/{1}'.format(instance_name, filename)
 
 class FileUpload(models.Model):
     upload = models.FileField(upload_to=model_directory_path)
