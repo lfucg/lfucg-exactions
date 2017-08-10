@@ -1,5 +1,5 @@
-import axios from 'axios';
 import Promise from 'bluebird';
+import axios from 'axios';
 
 import {
   API_CALL,
