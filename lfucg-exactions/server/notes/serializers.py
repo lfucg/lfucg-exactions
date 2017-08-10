@@ -83,3 +83,16 @@ class RateTableSerializer(serializers.ModelSerializer):
             'resolution_number',
             'rates',
         )
+
+class FileUploadSerializer(serializers.ModelSerializer):
+    # file_content_type = ContentTypeField()
+
+    class Meta:
+        model = FileUpload
+        fields = (
+            'id',
+            'upload',
+            # 'file_content_type',
+            # 'file_object_id',
+            # 'file_content_object',
+        )

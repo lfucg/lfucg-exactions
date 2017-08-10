@@ -53,4 +53,30 @@ class RateTableViewSet(viewsets.ModelViewSet):
 class RateViewSet(viewsets.ModelViewSet):
     serializer_class = RateSerializer
     queryset = Rate.objects.all()
+
+class FileUploadViewSet(viewsets.ModelViewSet):
+    serializer_class = FileUploadSerializer
+    queryset = FileUpload.objects.all()
+
+    def get_queryset(self):
+        queryset = FileUpload.objects.all()
+
+        file_content_type_string = self.request.query_params.get('file_content_type', None)
+        file_object_id = self.request.query_params.get('file_object_id', None)
+                
+        if file_content_type_string is not None:
+            if file_content_type_string == 'Plat':
+                file_content_type = ContentType.objects.get_for_model(Plat)
+            elif file_content_type_string == 'Lot':
+                file_content_type = ContentType.objects.get_for_model(Lot)
+
+            query_list = queryset.filter(
+                Q(content_type=file_content_type, object_id=file_object_id))
+
+            queryset = query_list
+
+        else:
+            queryset = queryset
+
+        return queryset.order_by('-date')
     
