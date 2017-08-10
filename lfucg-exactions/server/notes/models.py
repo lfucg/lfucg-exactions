@@ -1,4 +1,7 @@
 from django.db import models
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
+
 from django.contrib.auth.models import User
 
 from simple_history.models import HistoricalRecords
@@ -7,6 +10,10 @@ class Note(models.Model):
     is_active = models.BooleanField(default=True)
 
     user = models.ForeignKey(User, related_name='note')
+
+    content_type = models.ForeignKey(ContentType)
+    object_id = models.PositiveIntegerField()
+    content_object = GenericForeignKey('content_type', 'object_id')
 
     note = models.TextField()
     date = models.DateTimeField(auto_now=True)
@@ -40,7 +47,7 @@ class Rate(models.Model):
     
     ZONES = (
         ('EAR-1', 'EAR-1'),
-        ('EAR-1SRA', 'EAR-1SRA'),
+        ('EAR1-SRA', 'EAR1-SRA'),
         ('EAR-2', 'EAR-2'),
         ('EAR-3', 'EAR-3'),
         ('CC(RES)', 'CC(RES)'),

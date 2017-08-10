@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import {
-    Link,
     hashHistory,
 } from 'react-router';
 import { map } from 'ramda';
@@ -9,6 +8,7 @@ import { map } from 'ramda';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
+import Notes from './Notes';
 
 import FormGroup from './FormGroup';
 import PlatZoneForm from './PlatZoneForm';
@@ -20,11 +20,14 @@ import {
 } from '../actions/formActions';
 
 import {
+    getMe,
     getSubdivisions,
     getSubdivisionID,
     getPlatID,
     postPlat,
     putPlat,
+    getAccounts,
+    getAccountID,
 } from '../actions/apiActions';
 
 class PlatForm extends React.Component {
@@ -32,6 +35,7 @@ class PlatForm extends React.Component {
         activeForm: React.PropTypes.object,
         subdivisions: React.PropTypes.object,
         plats: React.PropTypes.object,
+        accounts: React.PropTypes.object,
         route: React.PropTypes.object,
         onComponentDidMount: React.PropTypes.func,
         formChange: React.PropTypes.func,
@@ -50,6 +54,7 @@ class PlatForm extends React.Component {
             activeForm,
             subdivisions,
             plats,
+            accounts,
             formChange,
             onPlatSubmit,
             onPlatAndCreateLot,
@@ -64,6 +69,14 @@ class PlatForm extends React.Component {
                 </option>
             );
         })(subdivisions)) : null;
+
+        const accountsList = accounts.length > 0 ? (map((single_account) => {
+            return (
+                <option key={single_account.id} value={[single_account.id, single_account.account_name]} >
+                    {single_account.account_name}
+                </option>
+            );
+        })(accounts)) : null;
 
         const platZonesList = plats.plat_zone ? (map((single_plat_zone) => {
             return (
@@ -146,10 +159,10 @@ class PlatForm extends React.Component {
                               aria-controls="collapseGeneralPlat"
                             >
                                 <div className="row section-heading" role="tab" id="headingPlat">
-                                    <h2>General Plat Information</h2>
-                                    {activeForm.first_section ?
-                                        <h4>(Click to View or Edit)</h4>
-                                    : null}
+                                    <div className="col-xs-1 caret-indicator" />
+                                    <div className="col-xs-10">
+                                        <h2>General Plat Information</h2>
+                                    </div>
                                 </div>
                             </a>
                             <div
@@ -163,6 +176,26 @@ class PlatForm extends React.Component {
 
                                         <fieldset>
                                             <div className="row form-subheading">
+                                                <h3>Account</h3>
+                                            </div>
+                                            <div className="row">
+                                                <div className="col-sm-6 form-group">
+                                                    <label htmlFor="account" className="form-label" id="account">Account</label>
+                                                    <select className="form-control" id="account" onChange={formChange('account')} >
+                                                        {activeForm.account_name ? (
+                                                            <option value="choose_account" aria-label="Selected Account">
+                                                                {activeForm.account_name}
+                                                            </option>
+                                                        ) : (
+                                                            <option value="choose_account" aria-label="Select an Account">
+                                                                Select an Account
+                                                            </option>
+                                                        )}
+                                                        {accountsList}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div className="row form-subheading">
                                                 <h3>Location</h3>
                                             </div>
                                             <div className="row">
@@ -170,7 +203,7 @@ class PlatForm extends React.Component {
                                                     <label htmlFor="subdivision" className="form-label" id="subdivision">Subdivision</label>
                                                     <select className="form-control" id="subdivision" onChange={formChange('subdivision')} >
                                                         {activeForm.subdivision ? (
-                                                            <option value="choose_subdivision" aria-label="Select a Subdivision">
+                                                            <option value="choose_subdivision" aria-label="Selected Subdivision">
                                                                 {activeForm.subdivision_name}
                                                             </option>
                                                         ) : (
@@ -250,8 +283,8 @@ class PlatForm extends React.Component {
                                                 <div className="col-sm-6 form-group">
                                                     <label htmlFor="plat_type" className="form-label" id="plat_type">* Plat Type</label>
                                                     <select className="form-control" id="plat_type" onChange={formChange('plat_type')} >
-                                                        {plats.plat_type ? (
-                                                            <option value="plat_type" aria-label={`Plat Type ${plats.plat_type}`}>{plats.plat_type}</option>
+                                                        {plats.plat_type_display ? (
+                                                            <option value="plat_type" aria-label={`Plat Type ${plats.plat_type_display}`}>{plats.plat_type_display}</option>
                                                         ) : (
                                                             <option value="choose_plat_type" aria-label="Choose a Plat Type">Choose an Plat Type</option>
                                                         )}
@@ -301,126 +334,187 @@ class PlatForm extends React.Component {
                                     </form>
                                 </div>
                             </div>
-                            { activeForm.first_section && plats.plat_zone && plats.plat_zone.length === 0 ? (
+                            { activeForm.first_section ? (
                                 <div>
-                                    <div className="row section-heading">
-                                        <h2>Plat Zone</h2>
-                                    </div>
-                                    <PlatZoneForm
-                                      props={this.props}
-                                      acre_id="acres"
-                                      zone_id="zone"
-                                    />
+                                    { activeForm.zone_section ? (
+                                        <div>
+                                            <a
+                                              role="button"
+                                              data-toggle="collapse"
+                                              data-parent="#accordion"
+                                              href="#collapsePlatZones"
+                                              aria-expanded="false"
+                                              aria-controls="collapsePlatZones"
+                                            >
+                                                <div className="row section-heading" role="tab" id="headingPlatZone">
+                                                    <div className="col-xs-1 caret-indicator" />
+                                                    <div className="col-sm-10">
+                                                        <h2>Plat Zones</h2>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                            <div
+                                              id="collapsePlatZones"
+                                              className="panel-collapse collapse row"
+                                              role="tabpanel"
+                                              aria-labelledby="#headingPlatZone"
+                                            >
+                                                <div className="panel-body">
+                                                    <div className="col-xs-12">
+                                                        { platZonesList }
+                                                    </div>
+                                                    { plats.plat_zone && plats.plat_zone.length > 0 ?
+                                                        <div className="col-xs-12">
+                                                            <button className="btn btn-lex" onClick={addAnotherPlatZone} >Add Another Plat Zone</button>
+                                                        </div>
+                                                    : null}
+                                                    { activeForm.add_another_plat_zone &&
+                                                        <div className="col-xs-12">
+                                                            <PlatZoneForm
+                                                              props={this.props}
+                                                              acre_id="acres"
+                                                              zone_id="zone"
+                                                            />
+                                                        </div>
+                                                    }
+                                                </div>
+                                            </div>
+                                            <a
+                                              role="button"
+                                              data-toggle="collapse"
+                                              data-parent="#accordion"
+                                              href="#collapsePlatExactions"
+                                              aria-expanded="true"
+                                              aria-controls="collapsePlatExactions"
+                                            >
+                                                <div className="row section-heading" role="tab" id="headingPlatExactions">
+                                                    <div className="col-xs-1 caret-indicator" />
+                                                    <div className="col-xs-10">
+                                                        <h2>Plat Exactions</h2>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                            <div
+                                              id="collapsePlatExactions"
+                                              className="panel-collapse collapse in row"
+                                              role="tabpanel"
+                                              aria-labelledby="#headingPlatExactions"
+                                            >
+                                                <div className="panel-body">
+                                                    <div className="col-xs-12">
+                                                        <form onSubmit={onPlatDues}>
+                                                            <fieldset>
+                                                                <div className="row form-subheading">
+                                                                    <h3>Exactions and Calculations</h3>
+                                                                </div>
+                                                                <div className="row">
+                                                                    <div className="col-xs-3">
+                                                                        <div className="col-xs-12 dues-table-heading">
+                                                                            <h3>Zone</h3>
+                                                                        </div>
+                                                                        <div className="col-xs-12 dues-label">
+                                                                            <h4>Gross Acreage</h4>
+                                                                        </div>
+                                                                        <div className="col-xs-12 dues-label">
+                                                                            <h4>Roads</h4>
+                                                                        </div>
+                                                                        <div className="col-xs-12 dues-label">
+                                                                            <h4>Open Space</h4>
+                                                                        </div>
+                                                                        <div className="col-xs-12 dues-label">
+                                                                            <h4>Sewer Capacity</h4>
+                                                                        </div>
+                                                                        <div className="col-xs-12 dues-label">
+                                                                            <h4>Sewer Transmmission</h4>
+                                                                        </div>
+                                                                        <div className="col-xs-12 dues-label">
+                                                                            <h4>Parks</h4>
+                                                                        </div>
+                                                                        <div className="col-xs-12 dues-label">
+                                                                            <h4>Storm Water</h4>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div className="col-xs-9">
+                                                                        {platZoneDuesList}
+                                                                    </div>
+                                                                </div>
+                                                                <div className="col-xs-12 dues-table-heading"><h3>Plat Exactions</h3></div>
+                                                                <div className="row">
+                                                                    <div className="col-sm-6">
+                                                                        <FormGroup label="Sewer Exactions" id="sewer_due">
+                                                                            <input type="number" className="form-control" placeholder="Sewer Exactions" disabled />
+                                                                        </FormGroup>
+                                                                    </div>
+                                                                    <div className="col-sm-6">
+                                                                        <FormGroup label="Non-Sewer Exactions" id="non_sewer_due">
+                                                                            <input type="number" className="form-control" placeholder="Non-Sewer Exactions" disabled />
+                                                                        </FormGroup>
+                                                                    </div>
+                                                                </div>
+                                                                {
+                                                                // <div className="row">
+                                                                //     <div className="col-xs-12">
+                                                                //         <FormGroup label="* Calculation Notes" id="calculation_note">
+                                                                //             <textarea type="text" className="form-control" placeholder="Calculation Notes" rows="4" />
+                                                                //         </FormGroup>
+                                                                //     </div>
+                                                                // </div>
+                                                                }
+                                                            </fieldset>
+                                                            <div className="col-xs-offset-2 col-xs-4">
+                                                                <button className="btn btn-lex" >Submit Exactions</button>
+                                                            </div>
+                                                            <div className="col-xs-offset-1 col-xs-4">
+                                                                <button className="btn btn-lex" onClick={onPlatAndCreateLot} >Submit and Create Lot</button>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        <div>
+                                            <div className="row section-heading">
+                                                <h2>Plat Zone</h2>
+                                            </div>
+                                            <PlatZoneForm
+                                              props={this.props}
+                                              acre_id="acres"
+                                              zone_id="zone"
+                                            />
+                                        </div>
+                                    )}
                                 </div>
                             ) : null }
-                            {plats.plat_zone && plats.plat_zone.length > 0 ? (
-                                <div>
-                                    <a
-                                      role="button"
-                                      data-toggle="collapse"
-                                      data-parent="#accordion"
-                                      href="#collapsePlatZones"
-                                      aria-expanded="false"
-                                      aria-controls="collapsePlatZones"
-                                    >
-                                        <div className="row section-heading" role="tab" id="headingPlatZone">
-                                            <h2>Plat Zones</h2>
-                                            <h4>(Click to View or Edit)</h4>
-                                        </div>
-                                    </a>
-                                    <div
-                                      id="collapsePlatZones"
-                                      className="panel-collapse collapse row"
-                                      role="tabpanel"
-                                      aria-labelledby="#headingPlatZone"
-                                    >
-                                        <div className="panel-body">
-                                            <div className="col-xs-12">
-                                                { platZonesList }
-                                            </div>
-                                            { plats.plat_zone && plats.plat_zone.length > 0 ?
-                                                <div className="col-xs-12">
-                                                    <button className="btn btn-lex" onClick={addAnotherPlatZone} >Add Another Plat Zone</button>
-                                                </div>
-                                            : null}
-                                        </div>
+                            <a
+                              role="button"
+                              data-toggle="collapse"
+                              data-parent="#accordion"
+                              href="#collapseNotes"
+                              aria-expanded="true"
+                              aria-controls="collapseNotes"
+                            >
+                                <div className="row section-heading" role="tab" id="headingNotes">
+                                    <div className="col-xs-1 caret-indicator" />
+                                    <div className="col-xs-10">
+                                        <h2>Notes</h2>
                                     </div>
-                                    { activeForm.add_another_plat_zone ? (
-                                        <PlatZoneForm
-                                          props={this.props}
-                                          acre_id="acres"
-                                          zone_id="zone"
-                                        />
-                                    ) : null}
-                                    <div className="row section-heading">
-                                        <h2>Plat Exactions</h2>
-                                    </div>
-                                    <form onSubmit={onPlatDues}>
-                                        <fieldset>
-                                            <div className="row form-subheading">
-                                                <h3>Exactions and Calculations</h3>
-                                            </div>
-                                            <div className="row">
-                                                <div className="col-xs-3">
-                                                    <div className="col-xs-12 dues-table-heading">
-                                                        <h3>Zone</h3>
-                                                    </div>
-                                                    <div className="col-xs-12 dues-label">
-                                                        <h4>Gross Acreage</h4>
-                                                    </div>
-                                                    <div className="col-xs-12 dues-label">
-                                                        <h4>Roads</h4>
-                                                    </div>
-                                                    <div className="col-xs-12 dues-label">
-                                                        <h4>Open Space</h4>
-                                                    </div>
-                                                    <div className="col-xs-12 dues-label">
-                                                        <h4>Sewer Capacity</h4>
-                                                    </div>
-                                                    <div className="col-xs-12 dues-label">
-                                                        <h4>Sewer Transmmission</h4>
-                                                    </div>
-                                                    <div className="col-xs-12 dues-label">
-                                                        <h4>Parks</h4>
-                                                    </div>
-                                                    <div className="col-xs-12 dues-label">
-                                                        <h4>Storm Water</h4>
-                                                    </div>
-                                                </div>
-                                                <div className="col-xs-9">
-                                                    {platZoneDuesList}
-                                                </div>
-                                            </div>
-                                            <div className="col-xs-12 dues-table-heading"><h3>Plat Exactions</h3></div>
-                                            <div className="row">
-                                                <div className="col-sm-6">
-                                                    <FormGroup label="Sewer Exactions" id="sewer_due">
-                                                        <input type="number" className="form-control" placeholder="Sewer Exactions" disabled />
-                                                    </FormGroup>
-                                                </div>
-                                                <div className="col-sm-6">
-                                                    <FormGroup label="Non-Sewer Exactions" id="non_sewer_due">
-                                                        <input type="number" className="form-control" placeholder="Non-Sewer Exactions" disabled />
-                                                    </FormGroup>
-                                                </div>
-                                            </div>
-                                            <div className="row">
-                                                <div className="col-xs-12">
-                                                    <FormGroup label="* Calculation Notes" id="calculation_note">
-                                                        <textarea type="text" className="form-control" placeholder="Calculation Notes" rows="4" />
-                                                    </FormGroup>
-                                                </div>
-                                            </div>
-                                        </fieldset>
-                                        <div className="col-xs-offset-2 col-xs-4">
-                                            <button className="btn btn-lex" >Submit Exactions</button>
-                                        </div>
-                                        <div className="col-xs-offset-1 col-xs-4">
-                                            <button className="btn btn-lex" onClick={onPlatAndCreateLot} >Submit and Create Lot</button>
-                                        </div>
-                                    </form>
                                 </div>
-                            ) : null }
+                            </a>
+                            <div
+                              id="collapseNotes"
+                              className="panel-collapse collapse in row"
+                              role="tabpanel"
+                              aria-labelledby="#headingNotes"
+                            >
+                                <div className="panel-body">
+                                    <div className="col-xs-12">
+                                        {plats.id &&
+                                            <Notes content_type="Plat" object_id={plats.id} />
+                                        }
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -436,6 +530,7 @@ function mapStateToProps(state) {
         activeForm: state.activeForm,
         subdivisions: state.subdivisions,
         plats: state.plats,
+        accounts: state.accounts,
     };
 }
 
@@ -445,58 +540,80 @@ function mapDispatchToProps(dispatch, params) {
     return {
         onComponentDidMount() {
             dispatch(formInit());
+            const else_update = {
+                first_section: false,
+                add_another_plat_zone: false,
+            };
+            dispatch(formUpdate(else_update));
             dispatch(getSubdivisions());
-            if (selectedPlat) {
-                dispatch(getPlatID(selectedPlat))
-                .then((data_plat) => {
-                    if (data_plat.response.subdivision) {
-                        dispatch(getSubdivisionID(data_plat.response.subdivision))
-                        .then((data_sub_id) => {
-                            const update2 = {
-                                subdivision_name: data_sub_id.response.name,
+            dispatch(getAccounts());
+            dispatch(getMe())
+            .then((data_me) => {
+                if (data_me.error) {
+                    hashHistory.push('login/');
+                }
+                if (selectedPlat) {
+                    dispatch(getPlatID(selectedPlat))
+                    .then((data_plat) => {
+                        if (data_plat.response.subdivision) {
+                            dispatch(getSubdivisionID(data_plat.response.subdivision))
+                            .then((data_sub_id) => {
+                                const sub_update = {
+                                    subdivision_name: data_sub_id.response.name,
+                                };
+                                dispatch(formUpdate(sub_update));
+                            });
+                        }
+                        if (data_plat.response.account) {
+                            dispatch(getAccountID(data_plat.response.account))
+                            .then((data_account) => {
+                                const update_account = {
+                                    account_name: data_account.response.account_name,
+                                };
+                                dispatch(formUpdate(update_account));
+                            });
+                        }
+                        if (data_plat.response.plat_zone && data_plat.response.plat_zone.length === 0) {
+                            const zone_update = {
+                                acres: data_plat.response.cleaned_total_acreage,
                             };
-                            dispatch(formUpdate(update2));
-                        });
-                    }
-                    if (data_plat.response.plat_zone && data_plat.response.plat_zone.length === 0) {
-                        const zone_update = {
-                            acres: data_plat.response.cleaned_total_acreage,
+                            dispatch(formUpdate(zone_update));
+                        }
+                        if (data_plat.response.plat_zone && data_plat.response.plat_zone.length > 0) {
+                            const zones_exist_update = {
+                                zone_section: true,
+                            };
+                            dispatch(formUpdate(zones_exist_update));
+                        }
+                        const update = {
+                            subdivision: data_plat.response.subdivision,
+                            date_recorded: data_plat.response.date_recorded,
+                            latitude: data_plat.response.latitude,
+                            longitude: data_plat.response.longitude,
+                            expansion_area: data_plat.response.expansion_area,
+                            total_acreage: data_plat.response.cleaned_total_acreage,
+                            buildable_lots: data_plat.response.buildable_lots,
+                            non_buildable_lots: data_plat.response.non_buildable_lots,
+                            sewer_due: data_plat.response.sewer_due,
+                            non_sewer_due: data_plat.response.non_sewer_due,
+                            calculation_note: data_plat.response.calculation_note,
+                            name: data_plat.response.name,
+                            plat_type: data_plat.response.plat_type,
+                            plat_type_display: data_plat.response.plat_type_display,
+                            section: data_plat.response.section,
+                            unit: data_plat.response.unit,
+                            block: data_plat.response.block,
+                            cabinet: data_plat.response.cabinet,
+                            slide: data_plat.response.slide,
+                            plat: data_plat.response.id,
+                            plat_name: data_plat.response.name,
+                            first_section: true,
+                            add_another_plat_zone: false,
                         };
-                        dispatch(formUpdate(zone_update));
-                    }
-                    const update = {
-                        subdivision: data_plat.response.subdivision,
-                        date_recorded: data_plat.response.date_recorded,
-                        latitude: data_plat.response.latitude,
-                        longitude: data_plat.response.longitude,
-                        expansion_area: data_plat.response.expansion_area,
-                        total_acreage: data_plat.response.cleaned_total_acreage,
-                        buildable_lots: data_plat.response.buildable_lots,
-                        non_buildable_lots: data_plat.response.non_buildable_lots,
-                        sewer_due: data_plat.response.sewer_due,
-                        non_sewer_due: data_plat.response.non_sewer_due,
-                        calculation_note: data_plat.response.calculation_note,
-                        name: data_plat.response.name,
-                        plat_type: data_plat.response.plat_type,
-                        section: data_plat.response.section,
-                        unit: data_plat.response.unit,
-                        block: data_plat.response.block,
-                        cabinet: data_plat.response.cabinet,
-                        slide: data_plat.response.slide,
-                        plat: data_plat.response.id,
-                        plat_name: data_plat.response.name,
-                        first_section: true,
-                        add_another_plat_zone: false,
-                    };
-                    dispatch(formUpdate(update));
-                });
-            } else {
-                const else_update = {
-                    first_section: false,
-                    add_another_plat_zone: false,
-                };
-                dispatch(formUpdate(else_update));
-            }
+                        dispatch(formUpdate(update));
+                    });
+                }
+            });
         },
         formChange(field) {
             return (e, ...args) => {
@@ -517,7 +634,13 @@ function mapDispatchToProps(dispatch, params) {
         onPlatSubmit(event) {
             event.preventDefault();
             if (selectedPlat) {
-                dispatch(putPlat(selectedPlat));
+                dispatch(putPlat(selectedPlat))
+                .then(() => {
+                    const put_update = {
+                        first_section: true,
+                    };
+                    dispatch(formUpdate(put_update));
+                });
             } else {
                 dispatch(postPlat())
                 .then((data_post) => {
@@ -525,6 +648,7 @@ function mapDispatchToProps(dispatch, params) {
                         plat: data_post.response.id,
                         plat_name: data_post.response.name,
                         acres: data_post.response.total_acreage,
+                        first_section: true,
                     };
                     dispatch(formUpdate(zone_update));
                     hashHistory.push(`plat/form/${data_post.response.id}`);
@@ -544,10 +668,7 @@ function mapDispatchToProps(dispatch, params) {
             }
         },
         onPlatAndCreateLot() {
-            console.log('PLAT PUSH');
             if (selectedPlat) {
-                console.log('PUSH CREATE', selectedPlat);
-                console.log('PUSH', `plat/${selectedPlat}/lot/form`);
                 dispatch(putPlat(selectedPlat))
                 .then(() => {
                     hashHistory.push(`plat/${selectedPlat}/lot/form`);

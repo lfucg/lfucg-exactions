@@ -9,6 +9,7 @@ import { map } from 'ramda';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
+import Notes from './Notes';
 
 import FormGroup from './FormGroup';
 
@@ -18,11 +19,14 @@ import {
 } from '../actions/formActions';
 
 import {
+    getMe,
     getLotID,
     postLot,
     putLot,
     getPlats,
     getPlatID,
+    getAccounts,
+    getAccountID,
 } from '../actions/apiActions';
 
 class LotForm extends React.Component {
@@ -30,6 +34,7 @@ class LotForm extends React.Component {
         activeForm: React.PropTypes.object,
         plats: React.PropTypes.object,
         lots: React.PropTypes.object,
+        accounts: React.PropTypes.object,
         route: React.PropTypes.object,
         onComponentDidMount: React.PropTypes.func,
         formChange: React.PropTypes.func,
@@ -46,6 +51,7 @@ class LotForm extends React.Component {
             activeForm,
             plats,
             lots,
+            accounts,
             formChange,
             onLotSubmit,
             onLotDues,
@@ -58,6 +64,24 @@ class LotForm extends React.Component {
                 </option>
             );
         })(plats)) : null;
+
+        const accountsList = accounts.length > 0 ? (map((single_account) => {
+            return (
+                <option key={single_account.id} value={[single_account.id, single_account.account_name]} >
+                    {single_account.account_name}
+                </option>
+            );
+        })(accounts)) : null;
+
+        const ownerDisabled =
+            lots &&
+            lots.dues_roads_own &&
+            lots.dues_roads_own === "0.00" &&
+            lots.dues_parks_own === "0.00" &&
+            lots.dues_storm_own === "0.00" &&
+            lots.dues_open_space_own === "0.00" &&
+            lots.dues_sewer_cap_own === "0.00" &&
+            lots.dues_sewer_trans_own === "0.00";
 
         const submitEnabled =
             activeForm.plat !== 'choose_plat' &&
@@ -90,10 +114,10 @@ class LotForm extends React.Component {
                               aria-controls="collapseGeneralLot"
                             >
                                 <div className="row section-heading" role="tab" id="headingLot">
-                                    <h2>General Lot Information</h2>
-                                    {activeForm.first_section ?
-                                        <h4>(Click to View or Edit)</h4>
-                                    : null}
+                                    <div className="col-xs-1 caret-indicator" />
+                                    <div className="col-xs-10">
+                                        <h2>General Lot Information</h2>
+                                    </div>
                                 </div>
                             </a>
                             <div
@@ -106,6 +130,27 @@ class LotForm extends React.Component {
                                     <form onSubmit={onLotSubmit} >
 
                                         <fieldset>
+                                            <div className="row form-subheading">
+                                                <h3>Account</h3>
+                                            </div>
+                                            <div className="row">
+                                                <div className="col-sm-6 form-group">
+                                                    <label htmlFor="account" className="form-label" id="account">Account</label>
+                                                    <select className="form-control" id="account" onChange={formChange('account')} >
+                                                        {activeForm.account_name ? (
+                                                            <option value="choose_account" aria-label="Selected Account">
+                                                                {activeForm.account_name}
+                                                            </option>
+                                                        ) : (
+                                                            <option value="choose_account" aria-label="Select an Account">
+                                                                Select an Account
+                                                            </option>
+                                                        )}
+                                                        {accountsList}
+                                                    </select>
+                                                </div>
+                                            </div>
+
                                             <div className="row form-subheading">
                                                 <h3>Address</h3>
                                             </div>
@@ -165,6 +210,7 @@ class LotForm extends React.Component {
                                                     </select>
                                                 </div>
                                             </div>
+
                                             <div className="row form-subheading">
                                                 <h3>Location Identification</h3>
                                             </div>
@@ -227,87 +273,142 @@ class LotForm extends React.Component {
                                 </div>
                             </div>
                             { activeForm.first_section ? (
-                                <form onSubmit={onLotDues} >
-                                    <fieldset>
-                                        <div className="row form-subheading">
-                                            <h3>Exactions</h3>
-                                        </div>
-                                        <div className="row">
-                                            <div className="col-sm-6">
-                                                <FormGroup label="Road Developer Exactions" id="dues_roads_dev">
-                                                    <input type="number" className="form-control" placeholder="Road Developer Exactions" />
-                                                </FormGroup>
-                                            </div>
-                                            <div className="col-sm-6">
-                                                <FormGroup label="Road Owner Exactions" id="dues_roads_own">
-                                                    <input type="number" className="form-control" placeholder="Road Owner Exactions" />
-                                                </FormGroup>
+                                <div>
+                                    <a
+                                      role="button"
+                                      data-toggle="collapse"
+                                      data-parent="#accordion"
+                                      href="#collapseLotExactions"
+                                      aria-expanded="false"
+                                      aria-controls="collapseLotExactions"
+                                    >
+                                        <div className="row section-heading" role="tab" id="headingLotExactions">
+                                            <div className="col-xs-1 caret-indicator" />
+                                            <div className="col-xs-10">
+                                                <h2>Lot Exactions</h2>
                                             </div>
                                         </div>
-                                        <div className="row">
-                                            <div className="col-sm-6">
-                                                <FormGroup label="Sewer Transmission Developer Exactions" id="dues_sewer_trans_dev">
-                                                    <input type="number" className="form-control" placeholder="Sewer Transmission Developer Exactions" />
-                                                </FormGroup>
-                                            </div>
-                                            <div className="col-sm-6">
-                                                <FormGroup label="Sewer Transmission Owner Exactions" id="dues_sewer_trans_own">
-                                                    <input type="number" className="form-control" placeholder="Sewer Transmission Owner Exactions" />
-                                                </FormGroup>
-                                            </div>
+                                    </a>
+                                    <div
+                                      id="collapseLotExactions"
+                                      className="panel-collapse collapse in row"
+                                      role="tabpanel"
+                                      aria-labelledby="#headingLotExactions"
+                                    >
+                                        <div className="panel-body">
+                                            <form onSubmit={onLotDues} >
+                                                <fieldset>
+                                                    <div className="row form-subheading">
+                                                        <h3>Exactions</h3>
+                                                    </div>
+                                                    <div className="row">
+                                                        <div className="col-sm-6">
+                                                            <FormGroup label="Road Developer Exactions" id="dues_roads_dev">
+                                                                <input type="number" className="form-control" placeholder="Road Developer Exactions" />
+                                                            </FormGroup>
+                                                        </div>
+                                                        <div className="col-sm-6">
+                                                            <FormGroup label="Road Owner Exactions" id="dues_roads_own">
+                                                                <input type="number" className="form-control" placeholder="Road Owner Exactions" disabled={ownerDisabled} />
+                                                            </FormGroup>
+                                                        </div>
+                                                    </div>
+                                                    <div className="row">
+                                                        <div className="col-sm-6">
+                                                            <FormGroup label="Sewer Transmission Developer Exactions" id="dues_sewer_trans_dev">
+                                                                <input type="number" className="form-control" placeholder="Sewer Transmission Developer Exactions" />
+                                                            </FormGroup>
+                                                        </div>
+                                                        <div className="col-sm-6">
+                                                            <FormGroup label="Sewer Transmission Owner Exactions" id="dues_sewer_trans_own">
+                                                                <input type="number" className="form-control" placeholder="Sewer Transmission Owner Exactions" disabled={ownerDisabled} />
+                                                            </FormGroup>
+                                                        </div>
+                                                    </div>
+                                                    <div className="row">
+                                                        <div className="col-sm-6">
+                                                            <FormGroup label="Sewer Capacity Developer Exactions" id="dues_sewer_cap_dev">
+                                                                <input type="number" className="form-control" placeholder="Sewer Capacity Developer Exactions" />
+                                                            </FormGroup>
+                                                        </div>
+                                                        <div className="col-sm-6">
+                                                            <FormGroup label="Sewer Capacity Owner Exactions" id="dues_sewer_cap_own">
+                                                                <input type="number" className="form-control" placeholder="Sewer Capacity Owner Exactions" disabled={ownerDisabled} />
+                                                            </FormGroup>
+                                                        </div>
+                                                    </div>
+                                                    <div className="row">
+                                                        <div className="col-sm-6">
+                                                            <FormGroup label="Parks Developer Exactions" id="dues_parks_dev">
+                                                                <input type="number" className="form-control" placeholder="Parks Developer Exactions" />
+                                                            </FormGroup>
+                                                        </div>
+                                                        <div className="col-sm-6">
+                                                            <FormGroup label="Parks Owner Exactions" id="dues_parks_own">
+                                                                <input type="number" className="form-control" placeholder="Parks Owner Exactions" disabled={ownerDisabled} />
+                                                            </FormGroup>
+                                                        </div>
+                                                    </div>
+                                                    <div className="row">
+                                                        <div className="col-sm-6">
+                                                            <FormGroup label="Storm Developer Exactions" id="dues_storm_dev">
+                                                                <input type="number" className="form-control" placeholder="Storm Developer Exactions" />
+                                                            </FormGroup>
+                                                        </div>
+                                                        <div className="col-sm-6">
+                                                            <FormGroup label="Storm Owner Exactions" id="dues_storm_own">
+                                                                <input type="number" className="form-control" placeholder="Storm Owner Exactions" disabled={ownerDisabled} />
+                                                            </FormGroup>
+                                                        </div>
+                                                    </div>
+                                                    <div className="row">
+                                                        <div className="col-sm-6">
+                                                            <FormGroup label="Open Space Developer Exactions" id="dues_open_space_dev">
+                                                                <input type="number" className="form-control" placeholder="Open Space Developer Exactions" />
+                                                            </FormGroup>
+                                                        </div>
+                                                        <div className="col-sm-6">
+                                                            <FormGroup label="Open Space Owner Exactions" id="dues_open_space_own">
+                                                                <input type="number" className="form-control" placeholder="Open Space Owner Exactions" disabled={ownerDisabled} />
+                                                            </FormGroup>
+                                                        </div>
+                                                    </div>
+                                                </fieldset>
+                                                <button className="btn btn-lex" >Submit</button>
+                                            </form>
                                         </div>
-                                        <div className="row">
-                                            <div className="col-sm-6">
-                                                <FormGroup label="Sewer Capacity Developer Exactions" id="dues_sewer_cap_dev">
-                                                    <input type="number" className="form-control" placeholder="Sewer Capacity Developer Exactions" />
-                                                </FormGroup>
-                                            </div>
-                                            <div className="col-sm-6">
-                                                <FormGroup label="Sewer Capacity Owner Exactions" id="dues_sewer_cap_own">
-                                                    <input type="number" className="form-control" placeholder="Sewer Capacity Owner Exactions" />
-                                                </FormGroup>
-                                            </div>
-                                        </div>
-                                        <div className="row">
-                                            <div className="col-sm-6">
-                                                <FormGroup label="Parks Developer Exactions" id="dues_parks_dev">
-                                                    <input type="number" className="form-control" placeholder="Parks Developer Exactions" />
-                                                </FormGroup>
-                                            </div>
-                                            <div className="col-sm-6">
-                                                <FormGroup label="Parks Owner Exactions" id="dues_parks_own">
-                                                    <input type="number" className="form-control" placeholder="Parks Owner Exactions" />
-                                                </FormGroup>
-                                            </div>
-                                        </div>
-                                        <div className="row">
-                                            <div className="col-sm-6">
-                                                <FormGroup label="Storm Developer Exactions" id="dues_storm_dev">
-                                                    <input type="number" className="form-control" placeholder="Storm Developer Exactions" />
-                                                </FormGroup>
-                                            </div>
-                                            <div className="col-sm-6">
-                                                <FormGroup label="Storm Owner Exactions" id="dues_storm_own">
-                                                    <input type="number" className="form-control" placeholder="Storm Owner Exactions" />
-                                                </FormGroup>
-                                            </div>
-                                        </div>
-                                        <div className="row">
-                                            <div className="col-sm-6">
-                                                <FormGroup label="Open Space Developer Exactions" id="dues_open_space_dev">
-                                                    <input type="number" className="form-control" placeholder="Open Space Developer Exactions" />
-                                                </FormGroup>
-                                            </div>
-                                            <div className="col-sm-6">
-                                                <FormGroup label="Open Space Owner Exactions" id="dues_open_space_own">
-                                                    <input type="number" className="form-control" placeholder="Open Space Owner Exactions" />
-                                                </FormGroup>
-                                            </div>
-                                        </div>
-                                    </fieldset>
-                                    <button className="btn btn-lex" >Submit</button>
-                                </form>
+                                    </div>
+                                </div>
                             ) : null}
+                            <a
+                              role="button"
+                              data-toggle="collapse"
+                              data-parent="#accordion"
+                              href="#collapseNotes"
+                              aria-expanded="true"
+                              aria-controls="collapseNotes"
+                            >
+                                <div className="row section-heading" role="tab" id="headingNotes">
+                                    <div className="col-xs-1 caret-indicator" />
+                                    <div className="col-xs-10">
+                                        <h2>Notes</h2>
+                                    </div>
+                                </div>
+                            </a>
+                            <div
+                              id="collapseNotes"
+                              className="panel-collapse collapse in row"
+                              role="tabpanel"
+                              aria-labelledby="#headingNotes"
+                            >
+                                <div className="panel-body">
+                                    <div className="col-xs-12">
+                                        {lots.id && lots.plat &&
+                                            <Notes content_type="Lot" object_id={lots.id} parent_content_type="Plat" parent_object_id={lots.plat} />
+                                        }
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -323,6 +424,7 @@ function mapStateToProps(state) {
         activeForm: state.activeForm,
         plats: state.plats,
         lots: state.lots,
+        accounts: state.accounts,
     };
 }
 
@@ -335,65 +437,89 @@ function mapDispatchToProps(dispatch, params) {
         onComponentDidMount() {
             dispatch(formInit());
             dispatch(getPlats());
-            if (selectedLot) {
-                dispatch(getLotID(selectedLot))
-                .then((data_lot) => {
-                    if (data_lot.response.plat) {
-                        dispatch(getPlatID(data_lot.response.plat))
-                        .then((data_plat_id) => {
-                            const update2 = {
-                                plat_name: data_plat_id.response.name,
-                            };
-                            dispatch(formUpdate(update2));
-                        });
-                    }
-                    const update = {
-                        address_number: data_lot.response.address_number,
-                        address_street: data_lot.response.address_street,
-                        address_direction: data_lot.response.address_direction,
-                        address_unit: data_lot.response.address_unit,
-                        address_suffix: data_lot.response.address_suffix,
-                        address_city: data_lot.response.address_city,
-                        address_state: data_lot.response.address_state,
-                        address_zip: data_lot.response.address_zip,
-                        plat: data_lot.response.plat,
-                        lot_number: data_lot.response.lot_number,
-                        parcel_id: data_lot.response.parcel_id,
-                        permit_id: data_lot.response.permit_id,
-                        latitude: data_lot.response.latitude,
-                        longitude: data_lot.response.longitude,
-                        dues_roads_dev: data_lot.response.dues_roads_dev,
-                        dues_roads_own: data_lot.response.dues_roads_own,
-                        dues_sewer_trans_dev: data_lot.response.dues_sewer_trans_dev,
-                        dues_sewer_trans_own: data_lot.response.dues_sewer_trans_own,
-                        dues_sewer_cap_dev: data_lot.response.dues_sewer_cap_dev,
-                        dues_sewer_cap_own: data_lot.response.dues_sewer_cap_own,
-                        dues_parks_dev: data_lot.response.dues_parks_dev,
-                        dues_parks_own: data_lot.response.dues_parks_own,
-                        dues_storm_dev: data_lot.response.dues_storm_dev,
-                        dues_storm_own: data_lot.response.dues_storm_own,
-                        dues_open_space_dev: data_lot.response.dues_open_space_dev,
-                        dues_open_space_own: data_lot.response.dues_open_space_own,
-                        first_section: true,
-                    };
-                    dispatch(formUpdate(update));
-                });
-            } else if (plat_start) {
-                dispatch(getPlatID(plat_start))
-                .then((data_plat_start) => {
-                    const plat_update = {
-                        plat: data_plat_start.response.id,
-                        plat_name: data_plat_start.response.name,
+            dispatch(getAccounts());
+            dispatch(getMe())
+            .then((data_me) => {
+                if (data_me.error) {
+                    hashHistory.push('login/');
+                }
+                if (selectedLot) {
+                    dispatch(getLotID(selectedLot))
+                    .then((data_lot) => {
+                        const update = {
+                            address_number: data_lot.response.address_number,
+                            address_street: data_lot.response.address_street,
+                            address_direction: data_lot.response.address_direction,
+                            address_unit: data_lot.response.address_unit,
+                            address_suffix: data_lot.response.address_suffix,
+                            address_city: data_lot.response.address_city,
+                            address_state: data_lot.response.address_state,
+                            address_zip: data_lot.response.address_zip,
+                            plat: data_lot.response.plat,
+                            lot_number: data_lot.response.lot_number,
+                            parcel_id: data_lot.response.parcel_id,
+                            permit_id: data_lot.response.permit_id,
+                            latitude: data_lot.response.latitude,
+                            longitude: data_lot.response.longitude,
+                            dues_roads_dev: data_lot.response.dues_roads_dev,
+                            dues_roads_own: data_lot.response.dues_roads_own,
+                            dues_sewer_trans_dev: data_lot.response.dues_sewer_trans_dev,
+                            dues_sewer_trans_own: data_lot.response.dues_sewer_trans_own,
+                            dues_sewer_cap_dev: data_lot.response.dues_sewer_cap_dev,
+                            dues_sewer_cap_own: data_lot.response.dues_sewer_cap_own,
+                            dues_parks_dev: data_lot.response.dues_parks_dev,
+                            dues_parks_own: data_lot.response.dues_parks_own,
+                            dues_storm_dev: data_lot.response.dues_storm_dev,
+                            dues_storm_own: data_lot.response.dues_storm_own,
+                            dues_open_space_dev: data_lot.response.dues_open_space_dev,
+                            dues_open_space_own: data_lot.response.dues_open_space_own,
+                            first_section: true,
+                        };
+                        dispatch(formUpdate(update));
+                        if (data_lot.response.plat) {
+                            dispatch(getPlatID(data_lot.response.plat))
+                            .then((data_plat_id) => {
+                                const update2 = {
+                                    plat_name: data_plat_id.response.name,
+                                };
+                                dispatch(formUpdate(update2));
+                                if (data_lot.response.account) {
+                                    dispatch(getAccountID(data_lot.response.account))
+                                    .then((data_account_id) => {
+                                        const update_lot_account = {
+                                            account_name: data_account_id.response.account_name,
+                                        };
+                                        dispatch(formUpdate(update_lot_account));
+                                    });
+                                } else if (data_plat_id.response.account) {
+                                    dispatch(getAccountID(data_plat_id.response.account))
+                                    .then((data_plat_account_id) => {
+                                        const update_account = {
+                                            account_name: data_plat_account_id.response.account_name,
+                                        };
+                                        dispatch(formUpdate(update_account));
+                                    });
+                                }
+                            });
+                        }
+                    });
+                } else if (plat_start) {
+                    dispatch(getPlatID(plat_start))
+                    .then((data_plat_start) => {
+                        const plat_update = {
+                            plat: data_plat_start.response.id,
+                            plat_name: data_plat_start.response.name,
+                            first_section: false,
+                        };
+                        dispatch(formUpdate(plat_update));
+                    });
+                } else {
+                    const else_update = {
                         first_section: false,
                     };
-                    dispatch(formUpdate(plat_update));
-                });
-            } else {
-                const else_update = {
-                    first_section: false,
-                };
-                dispatch(formUpdate(else_update));
-            }
+                    dispatch(formUpdate(else_update));
+                }
+            });
         },
         formChange(field) {
             return (e, ...args) => {
@@ -458,7 +584,10 @@ function mapDispatchToProps(dispatch, params) {
         },
         onLotDues() {
             if (selectedLot) {
-                dispatch(putLot(selectedLot));
+                dispatch(putLot(selectedLot))
+                .then(() => {
+                    hashHistory.push('lot/');
+                });
             }
         },
     };

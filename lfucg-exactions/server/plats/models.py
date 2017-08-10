@@ -1,12 +1,14 @@
 from django.db import models
+from django.contrib.contenttypes.fields import GenericRelation
+
 from django.contrib.auth.models import User
 
 from simple_history.models import HistoricalRecords
-from notes.models import Rate
+from notes.models import *
 
 ZONES = (
     ('EAR-1', 'EAR-1'),
-    ('EAR-1SRA', 'EAR-1SRA'),
+    ('EAR1-SRA', 'EAR1-SRA'),
     ('EAR-2', 'EAR-2'),
     ('EAR-3', 'EAR-3'),
     ('CC(RES)', 'CC(RES)'),
@@ -37,6 +39,8 @@ class Subdivision(models.Model):
             existing_subdivision = Subdivision.objects.get(id=self.id)
             if existing_subdivision.exists():
                 created_by = existing_subdivision.created_by
+            else:
+                created_by = self.created_by
         except:
             created_by = self.created_by
 
@@ -60,6 +64,7 @@ class Plat(models.Model):
     )
 
     subdivision = models.ForeignKey(Subdivision, blank=True, null=True, related_name='plat')
+    account = models.ForeignKey('accounts.Account', blank=True, null=True, related_name='plat_account')
 
     date_recorded = models.DateField()
     date_created = models.DateField(auto_now_add=True)
@@ -69,7 +74,7 @@ class Plat(models.Model):
     modified_by = models.ForeignKey(User, related_name='plat_modified')
 
     name = models.CharField(max_length=300)    
-    total_acreage = models.DecimalField(max_digits=20, decimal_places=3)
+    total_acreage = models.DecimalField(max_digits=20, decimal_places=2)
     latitude = models.CharField(max_length=100, null=True, blank=True)
     longitude = models.CharField(max_length=100, null=True, blank=True)
 
@@ -100,7 +105,7 @@ class Plat(models.Model):
     def save(self, *args, **kwargs):
         try:
             existing_plat = Plat.objects.get(id=self.id)
-            if existing_plat.exists():
+            if existing_plat is not None:
                 created_by = existing_plat.created_by
         except:
             created_by = self.created_by
@@ -192,6 +197,7 @@ class Lot(models.Model):
     )
 
     plat = models.ForeignKey(Plat, related_name='lot')
+    account = models.ForeignKey('accounts.Account', blank=True, null=True, related_name='lot_account')
     parcel_id = models.CharField(max_length=200, null=True, blank=True)
     
     date_created = models.DateField(auto_now_add=True)
@@ -239,19 +245,25 @@ class Lot(models.Model):
         return self.address_full    
 
     def save(self, *args, **kwargs):
+        plat = Plat.objects.get(id=self.plat.id)
+
         try:
             existing_lot = Lot.objects.get(id=self.id)
-            if existing_lot.exists():
+            if existing_lot is not None:
                 created_by = existing_lot.created_by
+            else:
+                created_by = self.created_by
+                account = self.plat.account
         except:
             created_by = self.created_by
 
-        plat_expansion_area = Plat.objects.get(id=self.plat.id).expansion_area
+        plat_expansion_area = plat.expansion_area
         if plat_expansion_area == 'EA-1':
             self.address_zip = '40515'
 
-        plat_zones = Plat.objects.get(id=self.plat.id).plat_zone.all()
-        plat_buildable = Plat.objects.get(id=self.plat.id).buildable_lots
+
+        plat_zones = plat.plat_zone.all()
+        plat_buildable = plat.buildable_lots
 
         if plat_zones is not None:
             road_calc = 0
@@ -312,28 +324,34 @@ class PlatZone(models.Model):
         return self.zone
 
     def save(self, *args, **kwargs):
-        if self.dues_roads == 0:
-            road_rate = Rate.objects.get(zone=self.zone, category='ROADS')
+        if (self.dues_roads == 0 and
+            self.dues_open_spaces == 0 and
+            self.dues_sewer_cap == 0 and
+            self.dues_sewer_trans == 0 and
+            self.dues_parks == 0 and
+            self.dues_storm_water == 0
+        ):
+            road_rate = Rate.objects.get(expansion_area=self.plat.expansion_area, zone=self.zone, category='ROADS')
             if road_rate is not None:
                 self.dues_roads = (self.acres * road_rate.rate)
-        if self.dues_open_spaces == 0:
-            open_space_rate = Rate.objects.get(zone=self.zone, category='OPEN_SPACE')
+
+            open_space_rate = Rate.objects.get(expansion_area=self.plat.expansion_area, zone=self.zone, category='OPEN_SPACE')
             if open_space_rate is not None:
                 self.dues_open_spaces = (self.acres * open_space_rate.rate)
-        if self.dues_sewer_cap == 0:
-            sewer_cap_rate = Rate.objects.get(zone=self.zone, category='SEWER_CAP')
+
+            sewer_cap_rate = Rate.objects.get(expansion_area=self.plat.expansion_area, zone=self.zone, category='SEWER_CAP')
             if sewer_cap_rate is not None:
                 self.dues_sewer_cap = (self.acres * sewer_cap_rate.rate)
-        if self.dues_sewer_trans == 0:
-            sewer_trans_rate = Rate.objects.get(zone=self.zone, category='SEWER_TRANS')
+
+            sewer_trans_rate = Rate.objects.get(expansion_area=self.plat.expansion_area, zone=self.zone, category='SEWER_TRANS')
             if sewer_trans_rate is not None:
                 self.dues_sewer_trans = (self.acres * sewer_trans_rate.rate)
-        if self.dues_parks == 0:
-            parks_rate = Rate.objects.get(zone=self.zone, category='PARK')
+
+            parks_rate = Rate.objects.get(expansion_area=self.plat.expansion_area, zone=self.zone, category='PARK')
             if parks_rate is not None:
                 self.dues_parks = (self.acres * parks_rate.rate)
-        if self.dues_storm_water == 0:
-            storm_water_rate = Rate.objects.get(zone=self.zone, category='STORM_WATER')
+
+            storm_water_rate = Rate.objects.get(expansion_area=self.plat.expansion_area, zone=self.zone, category='STORM_WATER')
             if storm_water_rate is not None:
                 self.dues_storm_water = (self.acres * storm_water_rate.rate)
 
