@@ -5,5 +5,5 @@ cookbook 'nvm', '~> 0.1.7'
 cookbook 'nodejs', '~> 4.0.0'
 cookbook 'poise-python', '~> 1.6.0'
 cookbook 'postgresql', '~> 6.1.1'
-cookbook 'database', '~> 6.1.1'
+cookbook 'database', '~> 6.0.0'
 metadata
