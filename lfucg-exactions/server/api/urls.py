@@ -21,6 +21,7 @@ router.register(r'worksheet', CalculationWorksheetViewSet)
 router.register(r'note', NoteViewSet)
 router.register(r'rateTable', RateTableViewSet)
 router.register(r'rate', RateViewSet)
+router.register(r'media', FileUploadViewSet)
 
 router.register(r'account', AccountViewSet)
 router.register(r'agreement', AgreementViewSet)
