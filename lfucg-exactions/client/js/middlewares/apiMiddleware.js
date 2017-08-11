@@ -1,5 +1,5 @@
-import axios from 'axios';
 import Promise from 'bluebird';
+import axios from 'axios';
 
 import {
   API_CALL,
@@ -10,6 +10,7 @@ import {
 import {
     BASE_URL,
     LOGIN,
+    ME,
 } from '../constants/apiConstants';
 
 export default function api({ getState, dispatch }) {
@@ -33,12 +34,15 @@ export default function api({ getState, dispatch }) {
         if (shouldCallAPI && !shouldCallAPI()) {
             return next(action);
         }
+        const header = (global.Authorization && global.Authorization.length > 1) ? {
+            'X-CSRFToken': global.CSRFToken,
+            Authorization: `Token ${global.Authorization}`,
+        } : {
+            'X-CSRFToken': global.CSRFToken,
+        };
         console.log('GLOBAL TOKEN', global.auth_token);
         return Promise.resolve(axios({
-            headers: {
-                'X-CSRFToken': global.CSRFToken,
-                Authorization: global.Authorization,
-            },
+            headers: header,
             url: baseURL + (typeof url === 'function' ? url(getState) : url),
             params: typeof qs === 'function' ? qs(getState) : qs,
             data: typeof body === 'function' ? body(getState) : body,
@@ -49,7 +53,10 @@ export default function api({ getState, dispatch }) {
             responseValidation(response.data, { getState, dispatch }) :
             null;
             if (endpoint === LOGIN) {
-                global.Authorization = `Token ${response.data.key}`;
+                global.Authorization = response.data.key;
+            }
+            if (endpoint === ME) {
+                global.Authorization = response.data.token;
             }
             if (error) {
                 dispatch({

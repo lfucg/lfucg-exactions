@@ -25,7 +25,7 @@
             window.CSRFToken = '{{ csrf_token|escapejs }}'
         </script>
         <script type="text/javascript">
-            window.Authorization = 'Token {{ user.auth_token|escapejs }}'
+            window.Authorization = '{{ user.auth_token|escapejs }}'
         </script>
 
         <!-- jquery for site -->
