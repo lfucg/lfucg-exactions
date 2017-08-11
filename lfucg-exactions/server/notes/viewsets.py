@@ -71,7 +71,7 @@ class FileUploadViewSet(viewsets.ModelViewSet):
                 file_content_type = ContentType.objects.get_for_model(Lot)
 
             query_list = queryset.filter(
-                Q(content_type=file_content_type, object_id=file_object_id))
+                Q(file_content_type=file_content_type, file_object_id=file_object_id))
 
             queryset = query_list
 
