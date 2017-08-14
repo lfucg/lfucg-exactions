@@ -86,12 +86,14 @@ class RateTableSerializer(serializers.ModelSerializer):
 
 class FileUploadSerializer(serializers.ModelSerializer):
     # file_content_type = ContentTypeField()
+    date = CleanedDateField(read_only=True)
 
     class Meta:
         model = FileUpload
         fields = (
             'id',
             'upload',
+            'date',
             # 'file_content_type',
             # 'file_object_id',
             # 'file_content_object',
