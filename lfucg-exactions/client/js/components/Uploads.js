@@ -42,26 +42,16 @@ class Uploads extends React.Component {
             return (
                 <div key={single_upload.id} >
                     <div className="row">
-                        <div className="col-sm-3">
-                            <div className="row">
-                                <div className="col-sm-6">
-                                    {single_upload.date}
-                                </div>
-                                <div className="col-sm-6">
-                                    on {single_upload.file_content_type}
-                                </div>
+                        <h5>
+                            <div className="col-sm-3">
+                                {single_upload.date}
                             </div>
-                            <div className="row">
-                                <div className="col-sm-12">
-                                    {single_upload.user}
-                                </div>
+                            <div className="col-sm-8">
+                                <a href={single_upload.upload} >
+                                    {single_upload.upload}
+                                </a>
                             </div>
-                        </div>
-                        <div className="col-sm-8">
-                            <h5>
-                                {single_upload.upload}
-                            </h5>
-                        </div>
+                        </h5>
                     </div>
                     <hr aria-hidden="true" />
                 </div>
