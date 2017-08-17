@@ -89,9 +89,8 @@ class SubdivisionForm extends React.Component {
                         </div>
                         <div className="row">
                             <h1>UPLOADS</h1>
-                            {subdivisions.id &&
-                                <Uploads file_content_type="Plat" file_object_id={subdivisions.id} />
-                            }
+                            <Uploads file_content_type="Plat" file_object_id={subdivisions.id} />
+                            
                         </div>
                     </div>
                 </div>
