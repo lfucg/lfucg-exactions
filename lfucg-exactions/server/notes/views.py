@@ -42,7 +42,7 @@ class FileUploadView(APIView):
         # ...
         content_type = ContentType.objects.get_for_model(Plat)
         new_upload = FileUpload.objects.create(
-            upload=my_saved_file,
+            upload=my_file,
             file_content_type=content_type,
             file_object_id=20,
         )
