@@ -89,8 +89,7 @@ class SubdivisionForm extends React.Component {
                         </div>
                         <div className="row">
                             <h1>UPLOADS</h1>
-                            <Uploads file_content_type="Plat" file_object_id={subdivisions.id} />
-                            
+                            <Uploads file_content_type="Subdivision" file_object_id={activeForm.sub_id} />
                         </div>
                     </div>
                 </div>
@@ -123,6 +122,7 @@ function mapDispatchToProps(dispatch, params) {
                     dispatch(getSubdivisionID(selectedSubdivision))
                     .then((data_subdivision) => {
                         const update = {
+                            sub_id: selectedSubdivision,
                             name: data_subdivision.response.name,
                             gross_acreage: data_subdivision.response.cleaned_gross_acreage,
                         };
