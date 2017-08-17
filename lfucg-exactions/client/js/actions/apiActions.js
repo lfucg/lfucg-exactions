@@ -809,6 +809,7 @@ export function getUploadContent() {
                 file_content_type,
                 file_object_id,
             } = activeForm;
+            console.log('ACTION ACTIVE FORM', activeForm);
 
             return `/upload/?file_content_type=${file_content_type}&file_object_id=${file_object_id}`;
         },

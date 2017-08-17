@@ -6,7 +6,7 @@ from rest_framework.parsers import FormParser, FileUploadParser, MultiPartParser
 
 from django.contrib.contenttypes.models import ContentType
 from .models import FileUpload
-from plats.models import Plat, Lot
+from plats.models import *
 from .serializers import FileUploadSerializer
 
 class FileUploadView(APIView):
@@ -40,11 +40,11 @@ class FileUploadView(APIView):
         # ...
         # do some stuff with uploaded file
         # ...
-        content_type = ContentType.objects.get_for_model(Plat)
+        content_type = ContentType.objects.get_for_model(Subdivision)
         new_upload = FileUpload.objects.create(
             upload=my_file,
             file_content_type=content_type,
-            file_object_id=20,
+            file_object_id=1,
         )
         # upload_serializer = FileUploadSerializer(context = {
         #     'upload': request.data['file'],

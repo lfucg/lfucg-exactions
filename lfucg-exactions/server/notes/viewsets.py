@@ -12,7 +12,7 @@ from rest_framework.parsers import FormParser, FileUploadParser, MultiPartParser
 
 from .models import *
 from .serializers import *
-from plats.models import Plat, Lot
+from plats.models import *
 
 class NoteViewSet(viewsets.ModelViewSet):
     serializer_class = NoteSerializer
@@ -72,13 +72,16 @@ class FileUploadViewSet(viewsets.ModelViewSet):
 
         file_content_type_string = self.request.query_params.get('file_content_type', None)
         file_object_id = self.request.query_params.get('file_object_id', None)
-                
+        
         if file_content_type_string is not None:
             if file_content_type_string == 'Plat':
                 file_content_type = ContentType.objects.get_for_model(Plat)
             elif file_content_type_string == 'Lot':
                 file_content_type = ContentType.objects.get_for_model(Lot)
+            elif file_content_type_string == 'Subdivision':
+                file_content_type = ContentType.objects.get_for_model(Subdivision)
 
+            print('FILE CONTENT VIEWSET', file_content_type)
             query_list = queryset.filter(
                 Q(file_content_type=file_content_type, file_object_id=file_object_id))
 
