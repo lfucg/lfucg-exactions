@@ -9,12 +9,10 @@ import {
 } from '../constants/actionTypes';
 import {
     BASE_URL,
-    LOGIN,
-    ME,
     POST_UPLOAD,
 } from '../constants/apiConstants';
 
-export default function api({ getState, dispatch }) {
+export default function upload({ getState, dispatch }) {
     return next => (action) => {
         const {
             type,
@@ -24,6 +22,7 @@ export default function api({ getState, dispatch }) {
             responseValidation,
             qs,
             body,
+            headers,
             baseURL = BASE_URL,
             method = 'GET',
         } = action;
@@ -32,7 +31,7 @@ export default function api({ getState, dispatch }) {
             return next(action);
         }
 
-        if (endpoint === POST_UPLOAD) {
+        if (endpoint !== POST_UPLOAD) {
             return next(action);
         }
 
@@ -45,9 +44,10 @@ export default function api({ getState, dispatch }) {
         } : {
             'X-CSRFToken': global.CSRFToken,
         };
-        console.log('GLOBAL TOKEN', global.auth_token);
+        const header_set = typeof headers === 'function' ? headers(getState) : header;
+
         return Promise.resolve(axios({
-            headers: header,
+            headers: header_set,
             url: baseURL + (typeof url === 'function' ? url(getState) : url),
             params: typeof qs === 'function' ? qs(getState) : qs,
             data: typeof body === 'function' ? body(getState) : body,
@@ -57,12 +57,7 @@ export default function api({ getState, dispatch }) {
             const error = responseValidation ?
             responseValidation(response.data, { getState, dispatch }) :
             null;
-            if (endpoint === LOGIN) {
-                global.Authorization = response.data.key;
-            }
-            if (endpoint === ME) {
-                global.Authorization = response.data.token;
-            }
+
             if (error) {
                 dispatch({
                     type: API_CALL_VALIDATION_ERROR,

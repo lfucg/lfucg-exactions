@@ -76,12 +76,12 @@ class Uploads extends React.Component {
                     <fieldset>
                         <div className="row">
                             <FormGroup label="Add Uploads" id="upload">
-                                <textarea type="text" className="form-control" placeholder="Add Uploads" rows="5" />
+                                <input type="file" accept="file_extention|image/*" className="form-control" placeholder="Upload files" />
                             </FormGroup>
                         </div>
                         <div className="col-sm-3">
                             <button className="btn btn-lex">
-                                Add Upload
+                                Upload
                             </button>
                         </div>
                     </fieldset>
@@ -114,7 +114,8 @@ function mapDispatchToProps(dispatch) {
         onSubmit() {
             dispatch(postUpload())
             .then(() => {
-                dispatch(getUploadContent());
+                console.log('UPLOADED');
+                // dispatch(getUploadContent());
             });
         },
     };
