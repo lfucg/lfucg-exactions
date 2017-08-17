@@ -81,7 +81,6 @@ class FileUploadViewSet(viewsets.ModelViewSet):
             elif file_content_type_string == 'Subdivision':
                 file_content_type = ContentType.objects.get_for_model(Subdivision)
 
-            print('FILE CONTENT VIEWSET', file_content_type)
             query_list = queryset.filter(
                 Q(file_content_type=file_content_type, file_object_id=file_object_id))
 
