@@ -10,6 +10,7 @@ import Footer from './Footer';
 
 import FormGroup from './FormGroup';
 import Breadcrumbs from './Breadcrumbs';
+import Uploads from './Uploads';
 
 import {
     formInit,
@@ -85,6 +86,12 @@ class SubdivisionForm extends React.Component {
                                 ) : null
                                 }
                             </form>
+                        </div>
+                        <div className="row">
+                            <h1>UPLOADS</h1>
+                            {subdivisions.id &&
+                                <Uploads file_content_type="Plat" file_object_id={subdivisions.id} />
+                            }
                         </div>
                     </div>
                 </div>
