@@ -819,17 +819,17 @@ export function postUpload() {
     return {
         type: API_CALL,
         endpoint: POST_UPLOAD,
-        url: '/upload/',
-        // url: (getState) => {
-        //     const {
-        //         activeForm,
-        //     } = getState();
-        //     const {
-        //         upload,
-        //     } = activeForm;
-        //     const upload_index = upload.lastIndexOf('\\') + 1;
-        //     return `/upload/${upload.slice(upload_index, upload.length)}`;
-        // },
+        // url: '/upload/',
+        url: (getState) => {
+            const {
+                activeForm,
+            } = getState();
+            const {
+                upload,
+            } = activeForm;
+            const upload_index = upload.lastIndexOf('\\') + 1;
+            return `/upload/${upload.slice(upload_index, upload.length)}`;
+        },
         headers: (getState) => {
             const {
                 activeForm,

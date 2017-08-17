@@ -65,7 +65,7 @@ class RateViewSet(viewsets.ModelViewSet):
 class FileUploadViewSet(viewsets.ModelViewSet):
     serializer_class = FileUploadSerializer
     queryset = FileUpload.objects.all()
-    # parser_classes = (FileUploadParser, MultiPartParser)
+    parser_classes = (FileUploadParser, MultiPartParser)
 
     def get_queryset(self):
         queryset = FileUpload.objects.all()
