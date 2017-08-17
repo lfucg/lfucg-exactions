@@ -2,6 +2,14 @@ from rest_framework import viewsets
 from django.db.models import Q
 from django.contrib.contenttypes.models import ContentType
 
+from rest_framework.mixins import (CreateModelMixin,
+                   DestroyModelMixin,
+                   RetrieveModelMixin,
+                   UpdateModelMixin,
+                   ListModelMixin)
+
+from rest_framework.parsers import FormParser, FileUploadParser, MultiPartParser
+
 from .models import *
 from .serializers import *
 from plats.models import Plat, Lot
@@ -57,6 +65,7 @@ class RateViewSet(viewsets.ModelViewSet):
 class FileUploadViewSet(viewsets.ModelViewSet):
     serializer_class = FileUploadSerializer
     queryset = FileUpload.objects.all()
+    parser_classes = (FileUploadParser, MultiPartParser)
 
     def get_queryset(self):
         queryset = FileUpload.objects.all()
@@ -79,4 +88,36 @@ class FileUploadViewSet(viewsets.ModelViewSet):
             queryset = queryset
 
         return queryset.order_by('-date')
+
+    # def get_object(self):
+    #     print('GET OBJECT SELF', self)
+
+    # def post(self, request, filename, format=None):
+    #     print('VIEW REQUEST ', request)
+    #     # print('VIEW DIR REQUEST', dir(request))
+    #     print('VIEW REQUEST DATA', self.request.data.get('file_content_type'))
+    #     print('VIEW REQUEST DATA FILE', request.data['file'])
+    #     # print('VIEW REQUEST DATA CONTENT TYPE', request.query_params.get('upload', None))
+    #     # print('VIEW REQUEST DIR DATA', dir(request.data))
+    #     print('VIEW SELF', self)
+    #     print('VIEW DIR SELF', dir(self))
+    #     file_obj = request.data['file']
+    #     # ...
+    #     # do some stuff with uploaded file
+    #     # ...
+    #     content_type = ContentType.objects.get_for_model(Plat)
+    #     new_upload = FileUpload.objects.create(
+    #         upload=request.data['file'],
+    #         file_content_type=content_type,
+    #         file_object_id=20,
+    #     )
+        # upload_serializer = FileUploadSerializer(context = {
+        #     'upload': request.data['file'],
+        #     'file_content_type': file_content_type,
+        #     'file_object_id': 20,
+        # }).data
+
+        # print('SERIALIZED', upload_serializer)
+
+        return Response(status=204)
     

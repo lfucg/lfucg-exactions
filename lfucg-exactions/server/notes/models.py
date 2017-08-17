@@ -1,10 +1,14 @@
 from django.db import models
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
+from storages.backends.s3boto import S3BotoStorage
 
 from django.contrib.auth.models import User
 
 from simple_history.models import HistoricalRecords
+
+# class MediaRootS3BotoStorage(S3BotoStorage):
+#     location = 'media'
 
 class Note(models.Model):
     is_active = models.BooleanField(default=True)
@@ -105,4 +109,24 @@ class FileUpload(models.Model):
 
     def __str__(self):
         return str(self.upload)
+
+    def save(self, *args, **kwargs):
+        print('MODEL SAVE')
+        print('MODEL SAVE SELF', self)
+        super(FileUpload, self).save(*args, **kwargs)
+        self.create_file_image()
+
+    def create_file_image(self):
+        from django.core.files.storage import default_storage
+        print('MODEL CONTENT TYPE', self.file_content_type)
+        print('MODEL SELF UPLOAD', self.upload)
+        print('MODEL DIR UPLOAD', dir(self.upload))
+        print('MODEL UPLOAD FILE', self.upload.file)
+        print('MODEL UPLOAD PATH', self.upload.path)
+    #     f = default_storage.open(self.upload.path, 'r')
+    #     # image = Image.open(f)
+    #     print('MODEL F READ', f.read())
+    #     print('MODEL OPEN F DIR', dir(f))
+    #     # f.save()
+    #     # f.close()
 

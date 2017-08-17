@@ -24,3 +24,10 @@ psycopg2
 
 # for bcrypt passwords
 bcrypt
+
+# Media
+boto==2.48.0
+-e git+https://github.com/chris-allen/django-storages.git#egg=django-storages-redux
+
+Pillow-4.2.1
+olefile-0.44

@@ -819,7 +819,34 @@ export function postUpload() {
     return {
         type: API_CALL,
         endpoint: POST_UPLOAD,
-        url: '/upload/',
+        // url: '/upload/',
+        url: (getState) => {
+            const {
+                activeForm,
+            } = getState();
+            const {
+                upload,
+            } = activeForm;
+            const upload_index = upload.lastIndexOf('\\') + 1;
+            return `/upload/${upload.slice(upload_index, upload.length)}`;
+        },
+        headers: (getState) => {
+            const {
+                activeForm,
+            } = getState();
+            const {
+                upload,
+            } = activeForm;
+            const upload_index = upload.lastIndexOf('\\') + 1;
+            return {
+                'X-CSRFToken': global.CSRFToken,
+                Authorization: `Token ${global.Authorization}`,
+                // filename: upload.slice(upload_index, upload.length),
+                'Content-Disposition': `attachment; filename=${upload}`,
+                'Content-Type': undefined,
+                enctype: 'multipart/form-data',
+            };
+        },
         method: 'POST',
         body: (getState) => {
             const {
@@ -834,11 +861,26 @@ export function postUpload() {
             const {
                 id,
             } = currentUser;
-            return {
-                user: id,
-                upload,
+            const upload_index = upload.lastIndexOf('\\') + 1;
+            const upload_file = document.getElementById('upload').files[0];
+            const formData = new FormData();
+            formData.append('upload', upload_file);
+            formData.append(
+                // upload,
                 file_content_type,
                 file_object_id,
+            );
+            console.log('UPLOAD FILE', upload_file);
+            console.log('UPLOAD', upload);
+            // console.log('CONTENT TYPE', file_content_type);
+            return {
+                user: id,
+                filename: upload,
+                upload: upload_file,
+                // upload: upload.slice(upload_index, upload.length),
+                file_content_type,
+                file_object_id,
+                // transformRequest: formData,
             };
         },
     };
