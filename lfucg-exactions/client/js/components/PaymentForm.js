@@ -40,6 +40,7 @@ class PaymentForm extends React.Component {
         onComponentDidMount: React.PropTypes.func,
         onSubmit: React.PropTypes.func,
         formChange: React.PropTypes.func,
+        lotChange: React.PropTypes.func,
     };
 
     componentDidMount() {
@@ -55,6 +56,7 @@ class PaymentForm extends React.Component {
             payments,
             onSubmit,
             formChange,
+            lotChange,
         } = this.props;
 
         const lotsList = lots.length > 0 ? (map((lot) => {
@@ -105,7 +107,7 @@ class PaymentForm extends React.Component {
                                     <div className="row">
                                         <div className="col-sm-6 form-group">
                                             <label htmlFor="lot_id" className="form-label" id="lot_id">Lot</label>
-                                            <select className="form-control" id="lot_id" onChange={formChange('lot_id')} >
+                                            <select className="form-control" id="lot_id" onChange={lotChange('lot_id')} >
                                                 {activeForm.address_full ? (
                                                     <option value="choose_source" aria-label="Selected Lot">
                                                         {activeForm.address_full}
@@ -300,6 +302,36 @@ function mapDispatchToProps(dispatch, params) {
                     });
                 }
             });
+        },
+        lotChange() {
+            return (e, ...args) => {
+                const value = typeof e.target.value !== 'undefined' ? e.target.value : args[1];
+
+                const comma_index = value.indexOf(',');
+                const value_id = value.substring(0, comma_index);
+                const value_name = value.substring(comma_index + 1, value.length);
+
+                dispatch(getLotID(value_id))
+                .then((lot_id) => {
+                    if (lot_id.response.account) {
+                        dispatch(getAccountID(lot_id.response.account))
+                        .then((account) => {
+                            const update = {
+                                account_name: account.response.account_name,
+                                lot_id: value_id,
+                                address_full: value_name,
+                            };
+                            dispatch(formUpdate(update));
+                        });
+                    } else {
+                        const update = {
+                            lot_id: value_id,
+                            address_full: value_name,
+                        };
+                        dispatch(formUpdate(update));
+                    }
+                });
+            };
         },
         formChange(field) {
             return (e, ...args) => {
