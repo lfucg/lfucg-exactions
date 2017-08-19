@@ -13,14 +13,6 @@ EXPANSION_AREAS = (
     ('EA-3', 'EA-3'),
 )
 
-CATEGORIES = (
-    ('ROADS', 'Roads'),
-    ('OPEN_SPACE', 'Open Space'),
-    ('SEWER_CAP', 'Sewer Capacity'),
-    ('SEWER_TRANS', 'Sewer Trans.'),
-    ('PARK', 'Park'),
-    ('STORM_WATER', 'Storm Water'),
-)
 
 class Account(models.Model):
     is_active = models.BooleanField(default=True)
@@ -167,9 +159,17 @@ class Project(models.Model):
     is_approved = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
 
+    CATEGORIES = (
+        ('ROADS', 'Roads'),
+        ('OPEN_SPACE', 'Open Space'),
+        ('SEWER', 'Sanitary Sewer'),
+        ('PARK', 'Park'),
+        ('STORM_WATER', 'Storm Water'),
+    )
+
     PROJECT_TYPES = (
         ('Roads', (
-                ('BOULVARD', 'Boulevard'),
+                ('BOULEVARD', 'Boulevard'),
                 ('PARKWAY', 'Parkway'),
                 ('TWO_LANE_BOULEVARD', 'Two-Lane Boulevard'),
                 ('TWO_LANE_PARKWAY', 'Two-Lane Parkway'),
@@ -209,7 +209,7 @@ class Project(models.Model):
     project_type = models.CharField(max_length=200, choices=PROJECT_TYPES)
     project_status = models.CharField(max_length=100, choices=STATUS_CHOICES)
     status_date = models.DateField()
-    
+
     project_description = models.TextField()
 
     history = HistoricalRecords()

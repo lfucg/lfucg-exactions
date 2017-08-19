@@ -105,6 +105,18 @@ class ProjectCostEstimateSerializer(serializers.ModelSerializer):
 
 class ProjectSerializer(serializers.ModelSerializer):
     project_cost_estimate = ProjectCostEstimateSerializer(many=True, read_only=True)
+    project_category_display = serializers.SerializerMethodField(read_only=True)
+    project_type_display = serializers.SerializerMethodField(read_only=True)
+    project_status_display = serializers.SerializerMethodField(read_only=True)
+
+    def get_project_category_display(self, obj):
+        return obj.get_project_category_display()
+
+    def get_project_type_display(self, obj):
+        return obj.get_project_type_display()
+
+    def get_project_status_display(self, obj):
+        return obj.get_project_status_display()
 
     class Meta:
         model = Project
@@ -118,10 +130,16 @@ class ProjectSerializer(serializers.ModelSerializer):
             'modified_by',
             'agreement_id',
             'expansion_area',
+
             'project_category',
             'project_type',
-            'project_description',
             'project_status',
+
+            'project_category_display',
+            'project_type_display',
+            'project_status_display',
+
+            'project_description',
             'status_date',
             'project_cost_estimate',
         )
