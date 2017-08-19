@@ -161,7 +161,6 @@ class Project(models.Model):
 
     CATEGORIES = (
         ('ROADS', 'Roads'),
-        ('OPEN_SPACE', 'Open Space'),
         ('SEWER', 'Sanitary Sewer'),
         ('PARK', 'Park'),
         ('STORM_WATER', 'Storm Water'),
