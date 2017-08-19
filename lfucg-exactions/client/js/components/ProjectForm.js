@@ -94,8 +94,8 @@ class ProjectForm extends React.Component {
                                         <div className="col-sm-6 form-group">
                                             <label htmlFor="expansion_area" className="form-label" id="expansion_area">Expansion Area</label>
                                             <select className="form-control" id="expansion_area" onChange={formChange('expansion_area')} >
-                                                {agreements.expansion_area ? (
-                                                    <option value="expansion_area" aria-label={`Expansion Area ${agreements.expansion_area}`}>{agreements.expansion_area}</option>
+                                                {projects.expansion_area ? (
+                                                    <option value="expansion_area" aria-label={`Expansion Area ${projects.expansion_area}`}>{projects.expansion_area}</option>
                                                 ) : (
                                                     <option value="choose_expansion_area" aria-label="Choose an Expansion Area">Choose an Expansion Area</option>
                                                 )}
@@ -108,22 +108,52 @@ class ProjectForm extends React.Component {
                                         </div>
                                     </div>
                                     <div className="row">
-                                        <div className="col-sm-6">
-                                            <FormGroup label="Project Category" id="project_category">
-                                                <input type="text" className="form-control" placeholder="Project Category" />
-                                            </FormGroup>
+                                        <div className="col-sm-6 form-group">
+                                            <label htmlFor="project_category" className="form-label" id="project_category">Project Category</label>
+                                            <select className="form-control" id="project_category" onChange={formChange('project_category')} >
+                                                {projects.project_category ? (
+                                                    <option value="project_category" aria-label={`Project Category ${projects.project_category_display}`}>{projects.project_category_display}</option>
+                                                ) : (
+                                                    <option value="choose_project_category" aria-label="Choose a Project Category">Choose a Project Category</option>
+                                                )}
+                                                <option value={'ROADS'}>Roads</option>
+                                                <option value={'OPEN_SPACE'}>Open Space</option>
+                                                <option value={'SEWER'}>Sanitary Sewer</option>
+                                                <option value={'PARK'}>Park</option>
+                                                <option value={'STORM_WATER'}>Storm Water</option>
+                                            </select>
                                         </div>
-                                        <div className="col-sm-6">
-                                            <FormGroup label="Project Type" id="project_type">
-                                                <input type="text" className="form-control" placeholder="Project Type" />
-                                            </FormGroup>
+                                        <div className="col-sm-6 form-group">
+                                            <label htmlFor="project_type" className="form-label" id="project_type">Project Type</label>
+                                            <select className="form-control" id="project_type" onChange={formChange('project_type')} >
+                                                {projects.project_type ? (
+                                                    <option value="project_type" aria-label={`Project Type ${projects.project_type_display}`}>{projects.project_type_display}</option>
+                                                ) : (
+                                                    <option value="choose_project_type" aria-label="Choose a Project Type">Choose a Project Type</option>
+                                                )}
+                                                <option value={'BOULEVARD'}>Roads: Boulevard</option>
+                                                <option value={'PARKWAY'}>Roads: Parkway</option>
+                                                <option value={'TWO_LANE_BOULEVARD'}>Roads: Two-Lane Boulevard</option>
+                                                <option value={'TWO_LANE_PARKWAY'}>Roads: Two-Lane Parkway</option>
+                                                <option value={'SEWER_TRANSMISSION'}>Sewer: Sanitary Sewer Transmission</option>
+                                                <option value={'STORMWATER'}>Storm Water</option>
+                                                <option value={'LAND_AQUISITION'}>Storm Water: Land Aquisition</option>
+                                                <option value={'PARKS_AQUISITION'}>Parks Aquisition</option>
+                                            </select>
                                         </div>
                                     </div>
                                     <div className="row">
-                                        <div className="col-sm-6">
-                                            <FormGroup label="Project Status" id="project_status">
-                                                <input type="text" className="form-control" placeholder="Project Status" />
-                                            </FormGroup>
+                                        <div className="col-sm-6 form-group">
+                                            <label htmlFor="project_status" className="form-label" id="project_status">Project Status</label>
+                                            <select className="form-control" id="project_status" onChange={formChange('project_status')} >
+                                                {projects.project_status ? (
+                                                    <option value="project_status" aria-label={`Project Status ${projects.project_status_display}`}>{projects.project_status_display}</option>
+                                                ) : (
+                                                    <option value="choose_project_status" aria-label="Choose a Project Status">Choose a Project Status</option>
+                                                )}
+                                                <option value={'IN_PROGRESS'}>In Progress</option>
+                                                <option value={'COMPLETE'}>Complete</option>
+                                            </select>
                                         </div>
                                         <div className="col-sm-6">
                                             <FormGroup label="Status Date" id="status_date" >
