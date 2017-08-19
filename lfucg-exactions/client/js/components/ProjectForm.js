@@ -116,31 +116,80 @@ class ProjectForm extends React.Component {
                                                 ) : (
                                                     <option value="choose_project_category" aria-label="Choose a Project Category">Choose a Project Category</option>
                                                 )}
-                                                <option value={'ROADS'}>Roads</option>
-                                                <option value={'OPEN_SPACE'}>Open Space</option>
-                                                <option value={'SEWER'}>Sanitary Sewer</option>
-                                                <option value={'PARK'}>Park</option>
-                                                <option value={'STORM_WATER'}>Storm Water</option>
+                                                <option value={['ROADS', 'Roads']}>Roads</option>
+                                                <option value={['SEWER', 'Sanitary Sewer']}>Sanitary Sewer</option>
+                                                <option value={['PARK', 'Park']}>Park</option>
+                                                <option value={['STORM_WATER', 'Storm Water']}>Storm Water</option>
                                             </select>
                                         </div>
-                                        <div className="col-sm-6 form-group">
-                                            <label htmlFor="project_type" className="form-label" id="project_type">Project Type</label>
-                                            <select className="form-control" id="project_type" onChange={formChange('project_type')} >
-                                                {projects.project_type ? (
-                                                    <option value="project_type" aria-label={`Project Type ${projects.project_type_display}`}>{projects.project_type_display}</option>
-                                                ) : (
-                                                    <option value="choose_project_type" aria-label="Choose a Project Type">Choose a Project Type</option>
+                                        {activeForm.project_category ? (
+                                            <div className="col-sm-6 form-group">
+                                                <label htmlFor="project_type" className="form-label" id="project_type">Project Type</label>
+                                                {activeForm.project_category === 'ROADS' && (
+                                                    <select className="form-control" id="project_type" onChange={formChange('project_type')} >
+                                                        {projects.project_type ? (
+                                                            <option value="project_type" aria-label={`Project Type ${projects.project_type_display}`}>{projects.project_type_display}</option>
+                                                        ) : (
+                                                            <option value="choose_project_type" aria-label="Choose a Project Type">Choose a Project Type</option>
+                                                        )}
+                                                        <option value={['BOULEVARD', 'Roads: Boulevard']}>Roads: Boulevard</option>
+                                                        <option value={['PARKWAY', 'Roads: Parkway']}>Roads: Parkway</option>
+                                                        <option value={['TWO_LANE_BOULEVARD', 'Roads: Two-Lane Boulevard']}>Roads: Two-Lane Boulevard</option>
+                                                        <option value={['TWO_LANE_PARKWAY', 'Roads: Two-Lane Parkway']}>Roads: Two-Lane Parkway</option>
+                                                    </select>
                                                 )}
-                                                <option value={'BOULEVARD'}>Roads: Boulevard</option>
-                                                <option value={'PARKWAY'}>Roads: Parkway</option>
-                                                <option value={'TWO_LANE_BOULEVARD'}>Roads: Two-Lane Boulevard</option>
-                                                <option value={'TWO_LANE_PARKWAY'}>Roads: Two-Lane Parkway</option>
-                                                <option value={'SEWER_TRANSMISSION'}>Sewer: Sanitary Sewer Transmission</option>
-                                                <option value={'STORMWATER'}>Storm Water</option>
-                                                <option value={'LAND_AQUISITION'}>Storm Water: Land Aquisition</option>
-                                                <option value={'PARKS_AQUISITION'}>Parks Aquisition</option>
-                                            </select>
-                                        </div>
+                                                {activeForm.project_category === 'SEWER' && (
+                                                    <select className="form-control" id="project_type" onChange={formChange('project_type')} >
+                                                        {projects.project_type ? (
+                                                            <option value="project_type" aria-label={`Project Type ${projects.project_type_display}`}>{projects.project_type_display}</option>
+                                                        ) : (
+                                                            <option value="choose_project_type" aria-label="Choose a Project Type">Choose a Project Type</option>
+                                                        )}
+                                                        <option value={['SEWER_TRANSMISSION', 'Sewer: Sanitary Sewer Transmission']}>Sewer: Sanitary Sewer Transmission</option>
+                                                    </select>
+                                                )}
+                                                {activeForm.project_category === 'PARK' && (
+                                                    <select className="form-control" id="project_type" onChange={formChange('project_type')} >
+                                                        {projects.project_type ? (
+                                                            <option value="project_type" aria-label={`Project Type ${projects.project_type_display}`}>{projects.project_type_display}</option>
+                                                        ) : (
+                                                            <option value="choose_project_type" aria-label="Choose a Project Type">Choose a Project Type</option>
+                                                        )}
+                                                        <option value={['PARKS_AQUISITION', 'Parks Aquisition']}>Parks Aquisition</option>
+                                                    </select>
+                                                )}
+                                                {activeForm.project_category === 'STORM_WATER' && (
+                                                    <select className="form-control" id="project_type" onChange={formChange('project_type')} >
+                                                        {projects.project_type ? (
+                                                            <option value="project_type" aria-label={`Project Type ${projects.project_type_display}`}>{projects.project_type_display}</option>
+                                                        ) : (
+                                                            <option value="choose_project_type" aria-label="Choose a Project Type">Choose a Project Type</option>
+                                                        )}
+                                                        <option value={['STORMWATER', 'Storm Water']}>Storm Water</option>
+                                                        <option value={['LAND_AQUISITION', 'Storm Water: Land Aquisition']}>Storm Water: Land Aquisition</option>
+                                                    </select>
+                                                )}
+                                            </div>
+                                        ) : (
+                                            <div className="col-sm-6 form-group">
+                                                <label htmlFor="project_type" className="form-label" id="project_type">Project Type</label>
+                                                <select className="form-control" id="project_type" onChange={formChange('project_type')} >
+                                                    {projects.project_type ? (
+                                                        <option value="project_type" aria-label={`Project Type ${projects.project_type_display}`}>{projects.project_type_display}</option>
+                                                    ) : (
+                                                        <option value="choose_project_type" aria-label="Choose a Project Type">Choose a Project Type</option>
+                                                    )}
+                                                    <option value={['BOULEVARD', 'Roads: Boulevard']}>Roads: Boulevard</option>
+                                                    <option value={['PARKWAY', 'Roads: Parkway']}>Roads: Parkway</option>
+                                                    <option value={['TWO_LANE_BOULEVARD', 'Roads: Two-Lane Boulevard']}>Roads: Two-Lane Boulevard</option>
+                                                    <option value={['TWO_LANE_PARKWAY', 'Roads: Two-Lane Parkway']}>Roads: Two-Lane Parkway</option>
+                                                    <option value={['SEWER_TRANSMISSION', 'Sewer: Sanitary Sewer Transmission']}>Sewer: Sanitary Sewer Transmission</option>
+                                                    <option value={['STORMWATER', 'Storm Water']}>Storm Water</option>
+                                                    <option value={['LAND_AQUISITION', 'Storm Water: Land Aquisition']}>Storm Water: Land Aquisition</option>
+                                                    <option value={['PARKS_AQUISITION', 'Parks Aquisition']}>Parks Aquisition</option>
+                                                </select>
+                                            </div>
+                                        )}
                                     </div>
                                     <div className="row">
                                         <div className="col-sm-6 form-group">
@@ -151,8 +200,8 @@ class ProjectForm extends React.Component {
                                                 ) : (
                                                     <option value="choose_project_status" aria-label="Choose a Project Status">Choose a Project Status</option>
                                                 )}
-                                                <option value={'IN_PROGRESS'}>In Progress</option>
-                                                <option value={'COMPLETE'}>Complete</option>
+                                                <option value={['IN_PROGRESS', 'In Progress']}>In Progress</option>
+                                                <option value={['COMPLETE', 'Complete']}>Complete</option>
                                             </select>
                                         </div>
                                         <div className="col-sm-6">
