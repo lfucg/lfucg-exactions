@@ -22,6 +22,7 @@ import {
     getLotID,
     getAccounts,
     getAccountID,
+    getAccountAgreements,
     getAgreements,
     getAgreementID,
     getPaymentID,
@@ -316,12 +317,14 @@ function mapDispatchToProps(dispatch, params) {
                     if (lot_id.response.account) {
                         dispatch(getAccountID(lot_id.response.account))
                         .then((account) => {
+                            console.log('ACCOUNT NUMBER', lot_id.response.account);
                             const update = {
                                 account_name: account.response.account_name,
                                 lot_id: value_id,
                                 address_full: value_name,
                             };
                             dispatch(formUpdate(update));
+                            dispatch(getAccountAgreements(lot_id.response.account));
                         });
                     } else {
                         const update = {
