@@ -84,6 +84,12 @@ class PaymentForm extends React.Component {
             );
         })(agreements)) : null;
 
+        const submitEnabled =
+            activeForm.lot_id &&
+            activeForm.credit_account &&
+            activeForm.paid_by &&
+            activeForm.paid_by_type;
+
         return (
             <div className="payment-form">
                 <Navbar />
@@ -107,7 +113,7 @@ class PaymentForm extends React.Component {
                                     </div>
                                     <div className="row">
                                         <div className="col-sm-6 form-group">
-                                            <label htmlFor="lot_id" className="form-label" id="lot_id">Lot</label>
+                                            <label htmlFor="lot_id" className="form-label" id="lot_id" aria-label="Required Lot">* Lot</label>
                                             <select className="form-control" id="lot_id" onChange={lotChange('lot_id')} >
                                                 {activeForm.address_full ? (
                                                     <option value="choose_source" aria-label="Selected Lot">
@@ -124,7 +130,7 @@ class PaymentForm extends React.Component {
                                     </div>
                                     <div className="row">
                                         <div className="col-sm-6 form-group">
-                                            <label htmlFor="credit_account" className="form-label" id="credit_account">Account</label>
+                                            <label htmlFor="credit_account" className="form-label" id="credit_account" aria-label="Required Account">* Account</label>
                                             <select className="form-control" id="credit_account" onChange={formChange('credit_account')} >
                                                 {activeForm.account_name ? (
                                                     <option value="choose_account" aria-label="Selected Account">
@@ -139,7 +145,7 @@ class PaymentForm extends React.Component {
                                             </select>
                                         </div>
                                         <div className="col-sm-6 form-group">
-                                            <label htmlFor="credit_source" className="form-label" id="credit_source">Agreement</label>
+                                            <label htmlFor="credit_source" className="form-label" id="credit_source" aria-label="Agreement">Agreement</label>
                                             <select className="form-control" id="credit_source" onChange={formChange('credit_source')} >
                                                 {activeForm.resolution_number ? (
                                                     <option value="choose_source" aria-label="Selected Agreement">
@@ -159,12 +165,12 @@ class PaymentForm extends React.Component {
                                     </div>
                                     <div className="row">
                                         <div className="col-sm-6">
-                                            <FormGroup label="Paid By" id="paid_by">
+                                            <FormGroup label="* Paid By" id="paid_by">
                                                 <input type="text" className="form-control" placeholder="Paid By" />
                                             </FormGroup>
                                         </div>
                                         <div className="col-sm-6">
-                                            <FormGroup label="Paid By Type" id="paid_by_type">
+                                            <FormGroup label="* Paid By Type" id="paid_by_type">
                                                 <input type="text" className="form-control" placeholder="Paid By Type" />
                                             </FormGroup>
                                         </div>
@@ -221,7 +227,14 @@ class PaymentForm extends React.Component {
                                         </div>
                                     </div>
                                 </fieldset>
-                                <button className="btn btn-lex">Submit</button>
+                                <button disabled={!submitEnabled} className="btn btn-lex">Submit</button>
+                                {!submitEnabled ? (
+                                    <div>
+                                        <div className="clearfix" />
+                                        <span> * All required fields must be filled.</span>
+                                    </div>
+                                ) : null
+                                }
                             </form>
                         </div>
                     </div>
@@ -289,7 +302,7 @@ function mapDispatchToProps(dispatch, params) {
                         }
                         const update = {
                             paid_by: data_payment.response.paid_by,
-                            paid_by_type: data_payment.response.paid_by_type,
+                            paid_by_type: data_payment.response.paid_by_type_display,
                             payment_type: data_payment.response.payment_type,
                             check_number: data_payment.response.check_number,
                             paid_roads: data_payment.response.paid_roads,

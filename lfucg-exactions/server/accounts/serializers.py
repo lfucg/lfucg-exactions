@@ -29,6 +29,7 @@ class AccountLedgerSerializer(serializers.ModelSerializer):
 
 class PaymentSerializer(serializers.ModelSerializer):
     total_paid = serializers.SerializerMethodField(read_only=True)
+    paid_by_type_display = serializers.SerializerMethodField(read_only=True)
 
     def get_total_paid(self,obj):
         total = (
@@ -40,6 +41,10 @@ class PaymentSerializer(serializers.ModelSerializer):
             obj.paid_open_space
         )
         return total
+
+    def get_paid_by_type_display(self, obj):
+        return obj.get_paid_by_type_display()
+
 
     class Meta:
         model = Payment
@@ -66,6 +71,7 @@ class PaymentSerializer(serializers.ModelSerializer):
             'paid_open_space',
 
             'total_paid',
+            'paid_by_type_display',
         )
 
 class ProjectCostEstimateSerializer(serializers.ModelSerializer):
@@ -149,6 +155,11 @@ class AgreementSerializer(serializers.ModelSerializer):
     account_ledgers = AccountLedgerSerializer(many=True, read_only=True)
     payments = PaymentSerializer(many=True, read_only=True)
 
+    agreement_type_display = serializers.SerializerMethodField(read_only=True)
+
+    def get_agreement_type_display(self, obj):
+        return obj.get_agreement_type_display()
+
     class Meta:
         model = Agreement
         fields = (
@@ -167,6 +178,7 @@ class AgreementSerializer(serializers.ModelSerializer):
             'projects',
             'account_ledgers',
             'payments',
+            'agreement_type_display',
         )
 
 class AccountSerializer(serializers.ModelSerializer):

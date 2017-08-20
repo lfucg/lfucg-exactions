@@ -99,7 +99,7 @@ class AccountForm extends React.Component {
                                             </FormGroup>
                                         </div>
                                         <div className="col-sm-4 form-group">
-                                            <label htmlFor="address_state" className="form-label" id="address_state">* State</label>
+                                            <label htmlFor="address_state" className="form-label" id="address_state" aria-label="Required State">* State</label>
                                             <select className="form-control" onChange={formChange('address_state')} >
                                                 <option value="start_state">State</option>
                                                 <option value={['AK', 'Alaska']}>Alaska</option>
