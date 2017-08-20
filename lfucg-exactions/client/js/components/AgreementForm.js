@@ -176,7 +176,7 @@ function mapDispatchToProps(dispatch, params) {
                             date_executed: data_agreement.response.date_executed,
                             resolution_number: data_agreement.response.resolution_number,
                             expansion_area: data_agreement.response.expansion_area,
-                            agreement_type: data_agreement.response.agreement_type,
+                            agreement_type: data_agreement.response.agreement_type_display,
                         };
                         dispatch(formUpdate(update));
                     });
