@@ -169,10 +169,17 @@ class PaymentForm extends React.Component {
                                                 <input type="text" className="form-control" placeholder="Paid By" />
                                             </FormGroup>
                                         </div>
-                                        <div className="col-sm-6">
-                                            <FormGroup label="* Paid By Type" id="paid_by_type">
-                                                <input type="text" className="form-control" placeholder="Paid By Type" />
-                                            </FormGroup>
+                                        <div className="col-sm-6 form-group">
+                                            <label htmlFor="paid_by_type" className="form-label" id="paid_by_type" aria-label="Required Paid By Type">* Paid By Type</label>
+                                            <select className="form-control" id="paid_by_type" onChange={formChange('paid_by_type')} >
+                                                {payments.paid_by_type ? (
+                                                    <option value="paid_by_type" aria-label={`Paid By Type ${payments.paid_by_type_display}`}>{payments.paid_by_type_display}</option>
+                                                ) : (
+                                                    <option value="choose_paid_by_type" aria-label="Choose a Paid By Type">Choose a Paid By Type</option>
+                                                )}
+                                                <option value={['DEVELOPER', 'Developer']}>Developer</option>
+                                                <option value={['OWNER', 'Home Owner']}>Home Owner</option>
+                                            </select>
                                         </div>
                                     </div>
                                     <div className="row">
