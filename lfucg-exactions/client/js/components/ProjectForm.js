@@ -85,7 +85,7 @@ class ProjectForm extends React.Component {
                                 <fieldset>
                                     <div className="row">
                                         <div className="col-sm-6 form-group">
-                                            <label htmlFor="agreement_id" className="form-label" id="agreement_id" aria-label="Required Agreement">* Agreement</label>
+                                            <label htmlFor="agreement_id" className="form-label" id="agreement_id" aria-label="Agreement" aria-required="true">* Agreement</label>
                                             <select className="form-control" id="agreement_id" onChange={formChange('agreement_id')} >
                                                 {activeForm.resolution_number ? (
                                                     <option value="choose_agreement" aria-label="Selected Agreement">
@@ -100,7 +100,7 @@ class ProjectForm extends React.Component {
                                             </select>
                                         </div>
                                         <div className="col-sm-6 form-group">
-                                            <label htmlFor="expansion_area" className="form-label" id="expansion_area" aria-label="Required Expansion Area">* Expansion Area</label>
+                                            <label htmlFor="expansion_area" className="form-label" id="expansion_area" aria-label="Expansion Area" aria-required="true">* Expansion Area</label>
                                             <select className="form-control" id="expansion_area" onChange={formChange('expansion_area')} >
                                                 {projects.expansion_area ? (
                                                     <option value="expansion_area" aria-label={`Expansion Area ${projects.expansion_area}`}>{projects.expansion_area}</option>
@@ -117,7 +117,7 @@ class ProjectForm extends React.Component {
                                     </div>
                                     <div className="row">
                                         <div className="col-sm-6 form-group">
-                                            <label htmlFor="project_category" className="form-label" id="project_category" aria-label="Required Project Category">* Project Category</label>
+                                            <label htmlFor="project_category" className="form-label" id="project_category" aria-label="Project Category" aria-required="true">* Project Category</label>
                                             <select className="form-control" id="project_category" onChange={formChange('project_category')} >
                                                 {projects.project_category ? (
                                                     <option value="project_category" aria-label={`Project Category ${projects.project_category_display}`}>{projects.project_category_display}</option>
@@ -132,7 +132,7 @@ class ProjectForm extends React.Component {
                                         </div>
                                         {activeForm.project_category ? (
                                             <div className="col-sm-6 form-group">
-                                                <label htmlFor="project_type" className="form-label" id="project_type" aria-label="Required Project Type">* Project Type</label>
+                                                <label htmlFor="project_type" className="form-label" id="project_type" aria-label="Project Type" aria-required="true">* Project Type</label>
                                                 {activeForm.project_category === 'ROADS' && (
                                                     <select className="form-control" id="project_type" onChange={formChange('project_type')} >
                                                         {projects.project_type ? (
@@ -180,7 +180,7 @@ class ProjectForm extends React.Component {
                                             </div>
                                         ) : (
                                             <div className="col-sm-6 form-group">
-                                                <label htmlFor="project_type" className="form-label" id="project_type" aria-label="Required Project Type">* Project Type</label>
+                                                <label htmlFor="project_type" className="form-label" id="project_type" aria-label="Project Type" aria-required="true">* Project Type</label>
                                                 <select className="form-control" id="project_type" onChange={formChange('project_type')} >
                                                     {projects.project_type ? (
                                                         <option value="project_type" aria-label={`Project Type ${projects.project_type_display}`}>{projects.project_type_display}</option>
@@ -201,7 +201,7 @@ class ProjectForm extends React.Component {
                                     </div>
                                     <div className="row">
                                         <div className="col-sm-6 form-group">
-                                            <label htmlFor="project_status" className="form-label" id="project_status" aria-label="Required Project Status">* Project Status</label>
+                                            <label htmlFor="project_status" className="form-label" id="project_status" aria-label="Project Status" aria-required="true">* Project Status</label>
                                             <select className="form-control" id="project_status" onChange={formChange('project_status')} >
                                                 {projects.project_status ? (
                                                     <option value="project_status" aria-label={`Project Status ${projects.project_status_display}`}>{projects.project_status_display}</option>

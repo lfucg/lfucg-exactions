@@ -92,8 +92,8 @@ class AgreementForm extends React.Component {
                                             </select>
                                         </div>
                                         <div className="col-sm-6">
-                                            <FormGroup label="Resolution Number" id="resolution_number">
-                                                <input type="text" className="form-control" placeholder="Resolution Number" />
+                                            <FormGroup label="* Resolution / Memo Number" id="resolution_number" aria-required="true">
+                                                <input type="text" className="form-control" placeholder="Resolution / Memo Number" />
                                             </FormGroup>
                                         </div>
                                     </div>

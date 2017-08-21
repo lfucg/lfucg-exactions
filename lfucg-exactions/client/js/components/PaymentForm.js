@@ -113,7 +113,7 @@ class PaymentForm extends React.Component {
                                     </div>
                                     <div className="row">
                                         <div className="col-sm-6 form-group">
-                                            <label htmlFor="lot_id" className="form-label" id="lot_id" aria-label="Required Lot">* Lot</label>
+                                            <label htmlFor="lot_id" className="form-label" id="lot_id" aria-label="Lot" aria-required="true">* Lot</label>
                                             <select className="form-control" id="lot_id" onChange={lotChange('lot_id')} >
                                                 {activeForm.address_full ? (
                                                     <option value="choose_source" aria-label="Selected Lot">
@@ -130,7 +130,7 @@ class PaymentForm extends React.Component {
                                     </div>
                                     <div className="row">
                                         <div className="col-sm-6 form-group">
-                                            <label htmlFor="credit_account" className="form-label" id="credit_account" aria-label="Required Account">* Account</label>
+                                            <label htmlFor="credit_account" className="form-label" id="credit_account" aria-label="Account" aria-required="true">* Account</label>
                                             <select className="form-control" id="credit_account" onChange={formChange('credit_account')} >
                                                 {activeForm.account_name ? (
                                                     <option value="choose_account" aria-label="Selected Account">
@@ -165,12 +165,12 @@ class PaymentForm extends React.Component {
                                     </div>
                                     <div className="row">
                                         <div className="col-sm-6">
-                                            <FormGroup label="* Paid By" id="paid_by">
+                                            <FormGroup label="* Paid By" id="paid_by" aria-required="true">
                                                 <input type="text" className="form-control" placeholder="Paid By" />
                                             </FormGroup>
                                         </div>
                                         <div className="col-sm-6 form-group">
-                                            <label htmlFor="paid_by_type" className="form-label" id="paid_by_type" aria-label="Required Paid By Type">* Paid By Type</label>
+                                            <label htmlFor="paid_by_type" className="form-label" id="paid_by_type" aria-label="Paid By Type" aria-required="true">* Paid By Type</label>
                                             <select className="form-control" id="paid_by_type" onChange={formChange('paid_by_type')} >
                                                 {payments.paid_by_type ? (
                                                     <option value="paid_by_type" aria-label={`Paid By Type ${payments.paid_by_type_display}`}>{payments.paid_by_type_display}</option>
