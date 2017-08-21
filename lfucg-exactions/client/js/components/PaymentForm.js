@@ -22,6 +22,7 @@ import {
     getLotID,
     getAccounts,
     getAccountID,
+    getAccountAgreements,
     getAgreements,
     getAgreementID,
     getPaymentID,
@@ -40,6 +41,7 @@ class PaymentForm extends React.Component {
         onComponentDidMount: React.PropTypes.func,
         onSubmit: React.PropTypes.func,
         formChange: React.PropTypes.func,
+        lotChange: React.PropTypes.func,
     };
 
     componentDidMount() {
@@ -55,6 +57,7 @@ class PaymentForm extends React.Component {
             payments,
             onSubmit,
             formChange,
+            lotChange,
         } = this.props;
 
         const lotsList = lots.length > 0 ? (map((lot) => {
@@ -81,6 +84,12 @@ class PaymentForm extends React.Component {
             );
         })(agreements)) : null;
 
+        const submitEnabled =
+            activeForm.lot_id &&
+            activeForm.credit_account &&
+            activeForm.paid_by &&
+            activeForm.paid_by_type;
+
         return (
             <div className="payment-form">
                 <Navbar />
@@ -104,8 +113,8 @@ class PaymentForm extends React.Component {
                                     </div>
                                     <div className="row">
                                         <div className="col-sm-6 form-group">
-                                            <label htmlFor="lot_id" className="form-label" id="lot_id">Lot</label>
-                                            <select className="form-control" id="lot_id" onChange={formChange('lot_id')} >
+                                            <label htmlFor="lot_id" className="form-label" id="lot_id" aria-label="Lot" aria-required="true">* Lot</label>
+                                            <select className="form-control" id="lot_id" onChange={lotChange('lot_id')} >
                                                 {activeForm.address_full ? (
                                                     <option value="choose_source" aria-label="Selected Lot">
                                                         {activeForm.address_full}
@@ -121,7 +130,7 @@ class PaymentForm extends React.Component {
                                     </div>
                                     <div className="row">
                                         <div className="col-sm-6 form-group">
-                                            <label htmlFor="credit_account" className="form-label" id="credit_account">Account</label>
+                                            <label htmlFor="credit_account" className="form-label" id="credit_account" aria-label="Account" aria-required="true">* Account</label>
                                             <select className="form-control" id="credit_account" onChange={formChange('credit_account')} >
                                                 {activeForm.account_name ? (
                                                     <option value="choose_account" aria-label="Selected Account">
@@ -136,7 +145,7 @@ class PaymentForm extends React.Component {
                                             </select>
                                         </div>
                                         <div className="col-sm-6 form-group">
-                                            <label htmlFor="credit_source" className="form-label" id="credit_source">Agreement</label>
+                                            <label htmlFor="credit_source" className="form-label" id="credit_source" aria-label="Agreement">Agreement</label>
                                             <select className="form-control" id="credit_source" onChange={formChange('credit_source')} >
                                                 {activeForm.resolution_number ? (
                                                     <option value="choose_source" aria-label="Selected Agreement">
@@ -156,14 +165,21 @@ class PaymentForm extends React.Component {
                                     </div>
                                     <div className="row">
                                         <div className="col-sm-6">
-                                            <FormGroup label="Paid By" id="paid_by">
+                                            <FormGroup label="* Paid By" id="paid_by" aria-required="true">
                                                 <input type="text" className="form-control" placeholder="Paid By" />
                                             </FormGroup>
                                         </div>
-                                        <div className="col-sm-6">
-                                            <FormGroup label="Paid By Type" id="paid_by_type">
-                                                <input type="text" className="form-control" placeholder="Paid By Type" />
-                                            </FormGroup>
+                                        <div className="col-sm-6 form-group">
+                                            <label htmlFor="paid_by_type" className="form-label" id="paid_by_type" aria-label="Paid By Type" aria-required="true">* Paid By Type</label>
+                                            <select className="form-control" id="paid_by_type" onChange={formChange('paid_by_type')} >
+                                                {payments.paid_by_type ? (
+                                                    <option value="paid_by_type" aria-label={`Paid By Type ${payments.paid_by_type_display}`}>{payments.paid_by_type_display}</option>
+                                                ) : (
+                                                    <option value="choose_paid_by_type" aria-label="Choose a Paid By Type">Choose a Paid By Type</option>
+                                                )}
+                                                <option value={['DEVELOPER', 'Developer']}>Developer</option>
+                                                <option value={['OWNER', 'Home Owner']}>Home Owner</option>
+                                            </select>
                                         </div>
                                     </div>
                                     <div className="row">
@@ -218,7 +234,14 @@ class PaymentForm extends React.Component {
                                         </div>
                                     </div>
                                 </fieldset>
-                                <button className="btn btn-lex">Submit</button>
+                                <button disabled={!submitEnabled} className="btn btn-lex">Submit</button>
+                                {!submitEnabled ? (
+                                    <div>
+                                        <div className="clearfix" />
+                                        <span> * All required fields must be filled.</span>
+                                    </div>
+                                ) : null
+                                }
                             </form>
                         </div>
                     </div>
@@ -286,7 +309,7 @@ function mapDispatchToProps(dispatch, params) {
                         }
                         const update = {
                             paid_by: data_payment.response.paid_by,
-                            paid_by_type: data_payment.response.paid_by_type,
+                            paid_by_type: data_payment.response.paid_by_type_display,
                             payment_type: data_payment.response.payment_type,
                             check_number: data_payment.response.check_number,
                             paid_roads: data_payment.response.paid_roads,
@@ -300,6 +323,38 @@ function mapDispatchToProps(dispatch, params) {
                     });
                 }
             });
+        },
+        lotChange() {
+            return (e, ...args) => {
+                const value = typeof e.target.value !== 'undefined' ? e.target.value : args[1];
+
+                const comma_index = value.indexOf(',');
+                const value_id = value.substring(0, comma_index);
+                const value_name = value.substring(comma_index + 1, value.length);
+
+                dispatch(getLotID(value_id))
+                .then((lot_id) => {
+                    if (lot_id.response.account) {
+                        dispatch(getAccountID(lot_id.response.account))
+                        .then((account) => {
+                            console.log('ACCOUNT NUMBER', lot_id.response.account);
+                            const update = {
+                                account_name: account.response.account_name,
+                                lot_id: value_id,
+                                address_full: value_name,
+                            };
+                            dispatch(formUpdate(update));
+                            dispatch(getAccountAgreements(lot_id.response.account));
+                        });
+                    } else {
+                        const update = {
+                            lot_id: value_id,
+                            address_full: value_name,
+                        };
+                        dispatch(formUpdate(update));
+                    }
+                });
+            };
         },
         formChange(field) {
             return (e, ...args) => {

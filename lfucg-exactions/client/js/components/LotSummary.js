@@ -65,7 +65,6 @@ class LotSummary extends React.Component {
                         </div>
                         <div className="row">
                             <p className="col-md-3 col-sm-4 col-xs-6">Payment Type: {payment.payment_type}</p>
-                            <p className="col-md-3 col-sm-4 col-xs-6">Lot: {payment.lot_id}</p>
                             <p className="col-md-3 col-sm-4 col-xs-6">Paid By: {payment.paid_by}</p>
                             <p className="col-md-3 col-sm-4 col-xs-6">Total Paid: {payment.total_paid}</p>
                         </div>
@@ -98,7 +97,6 @@ class LotSummary extends React.Component {
                         <div className="row">
                             <p className="col-md-3 col-sm-4 col-xs-6">Account From: {accountLedger.account_from}</p>
                             <p className="col-md-3 col-sm-4 col-xs-6">Account To: {accountLedger.account_to}</p>
-                            <p className="col-md-3 col-sm-4 col-xs-6">Lot: {accountLedger.lot}</p>
                         </div>
                     </div>
                 );

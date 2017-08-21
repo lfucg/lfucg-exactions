@@ -75,7 +75,7 @@ class PaymentSummary extends React.Component {
                                         <p className="col-md-4 col-xs-6">Payment Category: {payments.payment_category}</p>
                                         <p className="col-md-4 col-xs-6">Payment Type: {payments.payment_type}</p>
                                         <p className="col-md-4 col-xs-6">Paid By: {payments.paid_by}</p>
-                                        <p className="col-md-4 col-xs-6">Paid By Type: {payments.paid_by_type}</p>
+                                        <p className="col-md-4 col-xs-6">Paid By Type: {payments.paid_by_type_display}</p>
                                         <p className="col-md-4 col-xs-6">Check Number: {payments.check_number}</p>
                                         <p className="col-md-4 col-xs-6">Paid Roads: {payments.paid_roads}</p>
                                         <p className="col-md-4 col-xs-6">Paid Sewer Capacity: {payments.paid_sewer_cap}</p>
@@ -177,7 +177,7 @@ class PaymentSummary extends React.Component {
                                         <p className="col-md-4 col-xs-6">Resolution Number: {agreements.resolution_number}</p>
                                         <p className="col-md-4 col-xs-6">Account: {agreements.account_id}</p>
                                         <p className="col-md-4 col-xs-6">Expansion Area: {agreements.expansion_area}</p>
-                                        <p className="col-md-4 col-xs-6">Agreement Type: {agreements.agreement_type}</p>
+                                        <p className="col-md-4 col-xs-6">Agreement Type: {agreements.agreement_type_display}</p>
                                         <p className="col-md-4 col-xs-6">Date Executed: {agreements.date_executed}</p>
                                     </div>
                                 </div>
