@@ -156,12 +156,12 @@ class LotForm extends React.Component {
                                             </div>
                                             <div className="row">
                                                 <div className="col-sm-4">
-                                                    <FormGroup label="* Address Number" id="address_number">
+                                                    <FormGroup label="* Address Number" id="address_number" aria-required="true">
                                                         <input type="number" className="form-control" placeholder="Address Number" autoFocus />
                                                     </FormGroup>
                                                 </div>
                                                 <div className="col-sm-8">
-                                                    <FormGroup label="* Street" id="address_street">
+                                                    <FormGroup label="* Street" id="address_street" aria-required="true">
                                                         <input type="text" className="form-control" placeholder="Street" />
                                                     </FormGroup>
                                                 </div>
@@ -195,7 +195,7 @@ class LotForm extends React.Component {
                                                     </FormGroup>
                                                 </div>
                                                 <div className="col-sm-3 form-group">
-                                                    <label htmlFor="address_zip" className="form-label" id="address_zip">* Zipcode</label>
+                                                    <label htmlFor="address_zip" className="form-label" id="address_zip">Zipcode</label>
                                                     <select className="form-control" id="address_zip" onChange={formChange('address_zip')} >
                                                         {lots.address_zip ? (
                                                             <option value="address_zip" aria-label={`Zipcode ${lots.address_zip}`}>{lots.address_zip}</option>
@@ -216,7 +216,7 @@ class LotForm extends React.Component {
                                             </div>
                                             <div className="row">
                                                 <div className="col-sm-6 form-group">
-                                                    <label htmlFor="plat" className="form-label" id="plat">* Plat</label>
+                                                    <label htmlFor="plat" className="form-label" id="plat" aria-required="true">* Plat</label>
                                                     <select className="form-control" id="plat" onChange={formChange('plat')} >
                                                         {activeForm.plat ? (
                                                             <option value="choose_plat" aria-label={activeForm.plat_name}>
@@ -231,7 +231,7 @@ class LotForm extends React.Component {
                                                     </select>
                                                 </div>
                                                 <div className="col-sm-6">
-                                                    <FormGroup label="* Lot Number" id="lot_number">
+                                                    <FormGroup label="* Lot Number" id="lot_number" aria-required="true">
                                                         <input type="text" className="form-control" placeholder="Lot Number" />
                                                     </FormGroup>
                                                 </div>

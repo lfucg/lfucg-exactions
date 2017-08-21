@@ -81,6 +81,16 @@ class AccountLedgerForm extends React.Component {
             );
         })(agreements)) : null;
 
+        const submitEnabled =
+            activeForm.account_from &&
+            activeForm.account_to &&
+            activeForm.lot &&
+            activeForm.agreement &&
+            activeForm.entry_type &&
+            activeForm.non_sewer_credits &&
+            activeForm.sewer_credits &&
+            activeForm.entry_date;
+
         return (
             <div className="account-ledger-form">
                 <Navbar />
@@ -101,7 +111,7 @@ class AccountLedgerForm extends React.Component {
                                 <fieldset>
                                     <div className="row">
                                         <div className="col-sm-6 form-group">
-                                            <label htmlFor="lot_id" className="form-label" id="lot_id">Lot</label>
+                                            <label htmlFor="lot_id" className="form-label" id="lot_id" aria-label="Lot" aria-required="true">* Lot</label>
                                             <select className="form-control" id="lot_id" onChange={formChange('lot_id')} >
                                                 {activeForm.lot_id ? (
                                                     <option value="choose_source" aria-label="Selected Lot">
@@ -116,7 +126,7 @@ class AccountLedgerForm extends React.Component {
                                             </select>
                                         </div>
                                         <div className="col-sm-6 form-group">
-                                            <label htmlFor="credit_source" className="form-label" id="credit_source">Agreement</label>
+                                            <label htmlFor="credit_source" className="form-label" id="credit_source" aria-label="Agreement" aria-required="true">* Agreement</label>
                                             <select className="form-control" id="credit_source" onChange={formChange('credit_source')} >
                                                 {activeForm.credit_source ? (
                                                     <option value="choose_source" aria-label="Selected Agreement">
@@ -133,7 +143,7 @@ class AccountLedgerForm extends React.Component {
                                     </div>
                                     <div className="row">
                                         <div className="col-sm-6 form-group">
-                                            <label htmlFor="account_from" className="form-label" id="account_from">Account From</label>
+                                            <label htmlFor="account_from" className="form-label" id="account_from" aria-label="Account From" aria-required="true">* Account From</label>
                                             <select className="form-control" id="account_from" onChange={formChange('account_from')} >
                                                 {activeForm.account_name ? (
                                                     <option value="choose_account" aria-label="Selected Account From">
@@ -148,7 +158,7 @@ class AccountLedgerForm extends React.Component {
                                             </select>
                                         </div>
                                         <div className="col-sm-6 form-group">
-                                            <label htmlFor="account_to" className="form-label" id="account_to">Account To</label>
+                                            <label htmlFor="account_to" className="form-label" id="account_to" aria-label="Account To" aria-required="true">* Account To</label>
                                             <select className="form-control" id="account_to" onChange={formChange('account_to')} >
                                                 {activeForm.account_name ? (
                                                     <option value="choose_account" aria-label="Selected Account To">
@@ -165,30 +175,37 @@ class AccountLedgerForm extends React.Component {
                                     </div>
                                     <div className="row">
                                         <div className="col-sm-6">
-                                            <FormGroup label="Entry Date" id="entry_date">
+                                            <FormGroup label="* Entry Date" id="entry_date" aria-required="true">
                                                 <input type="date" className="form-control" placeholder="Entry Date" />
                                             </FormGroup>
                                         </div>
                                         <div className="col-sm-6">
-                                            <FormGroup label="Entry Type" id="entry_type">
+                                            <FormGroup label="* Entry Type" id="entry_type" aria-required="true">
                                                 <input type="text" className="form-control" placeholder="Entry Type" />
                                             </FormGroup>
                                         </div>
                                     </div>
                                     <div className="row">
                                         <div className="col-sm-6">
-                                            <FormGroup label="Non-Sewer Credits" id="non_sewer_credits">
+                                            <FormGroup label="* Non-Sewer Credits" id="non_sewer_credits" aria-required="true">
                                                 <input type="number" className="form-control" placeholder="Non-Sewer Credits" />
                                             </FormGroup>
                                         </div>
                                         <div className="col-sm-6">
-                                            <FormGroup label="Sewer Credits" id="sewer_credits">
+                                            <FormGroup label="* Sewer Credits" id="sewer_credits" aria-required="true">
                                                 <input type="number" className="form-control" placeholder="Sewer Credits" />
                                             </FormGroup>
                                         </div>
                                     </div>
                                 </fieldset>
-                                <button className="btn btn-lex">Submit</button>
+                                <button disabled={!submitEnabled} className="btn btn-lex">Submit</button>
+                                {!submitEnabled ? (
+                                    <div>
+                                        <div className="clearfix" />
+                                        <span> * All required fields must be filled.</span>
+                                    </div>
+                                ) : null
+                                }
                             </form>
                         </div>
                     </div>
