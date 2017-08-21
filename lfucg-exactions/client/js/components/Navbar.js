@@ -68,6 +68,7 @@ class Navbar extends React.Component {
                         </div>
                     </div>
                 </header>
+                <div className="clearfix" />
             </div>
         );
     }

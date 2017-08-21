@@ -94,8 +94,8 @@ class AgreementSummary extends React.Component {
                         </div>
                         <div className="row">
                             <p className="col-md-3 col-sm-4 col-xs-6">Expansion Area: {project.expansion_area}</p>
-                            <p className="col-md-3 col-sm-4 col-xs-6">Project Type: {project.project_type}</p>
-                            <p className="col-md-3 col-sm-4 col-xs-6">Project Status: {project.project_status}</p>
+                            <p className="col-md-3 col-sm-4 col-xs-6">Project Type: {project.project_type_display}</p>
+                            <p className="col-md-3 col-sm-4 col-xs-6">Project Status: {project.project_status_display}</p>
                             <p className="col-md-3 col-sm-4 col-xs-6">Status Date: {project.status_date}</p>
                             <p className="col-xs-12">Project Description: {project.project_description}</p>
                         </div>
@@ -176,7 +176,7 @@ class AgreementSummary extends React.Component {
                                         <p className="col-md-4 col-xs-6">Resolution Number: {agreements.resolution_number}</p>
                                         <p className="col-md-4 col-xs-6">Account: {agreements.account_id}</p>
                                         <p className="col-md-4 col-xs-6">Expansion Area: {agreements.expansion_area}</p>
-                                        <p className="col-md-4 col-xs-6">Agreement Type: {agreements.agreement_type}</p>
+                                        <p className="col-md-4 col-xs-6">Agreement Type: {agreements.agreement_type_display}</p>
                                         <p className="col-md-4 col-xs-6">Date Executed: {agreements.date_executed}</p>
                                     </div>
                                 </div>
