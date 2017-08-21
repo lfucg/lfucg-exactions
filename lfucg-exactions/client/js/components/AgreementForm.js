@@ -120,10 +120,17 @@ class AgreementForm extends React.Component {
                                         </div>
                                     </div>
                                     <div className="row">
-                                        <div className="col-sm-6">
-                                            <FormGroup label="Agreement Type" id="agreement_type">
-                                                <input type="text" className="form-control" placeholder="Agreement Type" />
-                                            </FormGroup>
+                                        <div className="col-sm-6 form-group">
+                                            <label htmlFor="agreement_type" className="form-label" id="agreement_type" aria-label="Agreement Type">Agreement Type</label>
+                                            <select className="form-control" id="agreement_type" onChange={formChange('agreement_type')} >
+                                                {agreements.agreement_type ? (
+                                                    <option value="agreement_type" aria-label={`Agreement Type ${agreements.agreement_type_display}`}>{agreements.agreement_type_display}</option>
+                                                ) : (
+                                                    <option value="choose_agreement_type" aria-label="Choose an Agreement Type">Choose an Agreement Type</option>
+                                                )}
+                                                <option value={['MEMO', 'Memo']}>Memo</option>
+                                                <option value={['RESOLUTION', 'Resolution']}>Resolution</option>
+                                            </select>
                                         </div>
                                     </div>
                                 </fieldset>
