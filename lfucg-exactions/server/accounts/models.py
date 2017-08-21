@@ -13,6 +13,7 @@ EXPANSION_AREAS = (
     ('EA-3', 'EA-3'),
 )
 
+
 class Account(models.Model):
     is_active = models.BooleanField(default=True)
 
@@ -105,6 +106,11 @@ class Agreement(models.Model):
     is_approved = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
 
+    AGREEMENT_TYPES = (
+        ('MEMO', 'Memo'),
+        ('RESOLUTION', 'Resolution'),
+    )
+ 
     date_executed = models.DateField()
     date_created = models.DateField(auto_now_add=True)
     date_modified = models.DateField(auto_now=True)
@@ -116,7 +122,7 @@ class Agreement(models.Model):
     resolution_number = models.CharField(max_length=100)
 
     expansion_area = models.CharField(max_length=100, choices=EXPANSION_AREAS)
-    agreement_type = models.CharField(max_length=100)
+    agreement_type = models.CharField(max_length=100, choices=AGREEMENT_TYPES)
 
     history = HistoricalRecords()
 
@@ -127,8 +133,13 @@ class Payment(models.Model):
     is_approved = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
 
+    PAID_BY_TYPE_CHOICES = (
+        ('DEVELOPER', 'Developer'),
+        ('OWNER', 'Home Owner'),
+    )
+
     lot_id = models.ForeignKey(Lot, related_name='payment')
-    credit_source = models.ForeignKey(Agreement, related_name='payment_source')
+    credit_source = models.ForeignKey(Agreement, related_name='payment_source', null=True, blank=True)
     credit_account = models.ForeignKey(Account, related_name='payment_account')
 
     date_created = models.DateField(auto_now_add=True)
@@ -138,16 +149,16 @@ class Payment(models.Model):
     modified_by = models.ForeignKey(User, related_name='payment_modified')
 
     paid_by = models.CharField(max_length=100)
-    paid_by_type = models.CharField(max_length=100)
-    payment_type = models.CharField(max_length=100)
-    check_number = models.IntegerField()
+    paid_by_type = models.CharField(max_length=100, choices=PAID_BY_TYPE_CHOICES)
+    payment_type = models.CharField(max_length=100, null=True, blank=True)
+    check_number = models.IntegerField(null=True, blank=True)
 
-    paid_roads = models.DecimalField(max_digits=20, decimal_places=2)
-    paid_sewer_trans = models.DecimalField(max_digits=20, decimal_places=2)
-    paid_sewer_cap = models.DecimalField(max_digits=20, decimal_places=2)
-    paid_parks = models.DecimalField(max_digits=20, decimal_places=2)
-    paid_storm = models.DecimalField(max_digits=20, decimal_places=2)
-    paid_open_space = models.DecimalField(max_digits=20, decimal_places=2)
+    paid_roads = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True)
+    paid_sewer_trans = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True)
+    paid_sewer_cap = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True)
+    paid_parks = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True)
+    paid_storm = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True)
+    paid_open_space = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True)
 
     history = HistoricalRecords()
 
@@ -157,6 +168,41 @@ class Payment(models.Model):
 class Project(models.Model):
     is_approved = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
+
+    CATEGORIES = (
+        ('ROADS', 'Roads'),
+        ('SEWER', 'Sanitary Sewer'),
+        ('PARK', 'Park'),
+        ('STORM_WATER', 'Storm Water'),
+    )
+
+    PROJECT_TYPES = (
+        ('Roads', (
+                ('BOULEVARD', 'Boulevard'),
+                ('PARKWAY', 'Parkway'),
+                ('TWO_LANE_BOULEVARD', 'Two-Lane Boulevard'),
+                ('TWO_LANE_PARKWAY', 'Two-Lane Parkway'),
+            )
+        ),
+        ('Sewer', (
+                ('SEWER_TRANSIMSSION', 'Sanitary sewer transmission'),
+            )
+        ),
+        ('Stormwater', (
+                ('STORMWATER', 'Stormwater'),
+                ('LAND_AQUISITION', 'Land Aquisition'),
+            )
+        ),
+        ('Parks', (
+                ('PARKS_AQUISITION', 'Parks Aquisition'),
+            )
+        ),
+    )
+
+    STATUS_CHOICES = (
+        ('IN_PROGRESS', 'In progress'),
+        ('COMPLETE', 'Complete'),
+    )
 
     date_created = models.DateField(auto_now_add=True)
     date_modified = models.DateField(auto_now=True)
@@ -168,11 +214,12 @@ class Project(models.Model):
 
     expansion_area = models.CharField(max_length=100, choices=EXPANSION_AREAS)
     
-    project_category = models.CharField(max_length=200)
-    project_type = models.CharField(max_length=200)
-    project_description = models.TextField()
-    project_status = models.CharField(max_length=200)
+    project_category = models.CharField(max_length=100, choices=CATEGORIES)
+    project_type = models.CharField(max_length=200, choices=PROJECT_TYPES)
+    project_status = models.CharField(max_length=100, choices=STATUS_CHOICES)
     status_date = models.DateField()
+
+    project_description = models.TextField(null=True, blank=True)
 
     history = HistoricalRecords()
 
