@@ -29,6 +29,7 @@ class AccountLedgerSerializer(serializers.ModelSerializer):
 
 class PaymentSerializer(serializers.ModelSerializer):
     total_paid = serializers.SerializerMethodField(read_only=True)
+    paid_by_type_display = serializers.SerializerMethodField(read_only=True)
 
     def get_total_paid(self,obj):
         total = (
@@ -40,6 +41,10 @@ class PaymentSerializer(serializers.ModelSerializer):
             obj.paid_open_space
         )
         return total
+
+    def get_paid_by_type_display(self, obj):
+        return obj.get_paid_by_type_display()
+
 
     class Meta:
         model = Payment
@@ -66,6 +71,7 @@ class PaymentSerializer(serializers.ModelSerializer):
             'paid_open_space',
 
             'total_paid',
+            'paid_by_type_display',
         )
 
 class ProjectCostEstimateSerializer(serializers.ModelSerializer):
@@ -105,6 +111,18 @@ class ProjectCostEstimateSerializer(serializers.ModelSerializer):
 
 class ProjectSerializer(serializers.ModelSerializer):
     project_cost_estimate = ProjectCostEstimateSerializer(many=True, read_only=True)
+    project_category_display = serializers.SerializerMethodField(read_only=True)
+    project_type_display = serializers.SerializerMethodField(read_only=True)
+    project_status_display = serializers.SerializerMethodField(read_only=True)
+
+    def get_project_category_display(self, obj):
+        return obj.get_project_category_display()
+
+    def get_project_type_display(self, obj):
+        return obj.get_project_type_display()
+
+    def get_project_status_display(self, obj):
+        return obj.get_project_status_display()
 
     class Meta:
         model = Project
@@ -118,10 +136,16 @@ class ProjectSerializer(serializers.ModelSerializer):
             'modified_by',
             'agreement_id',
             'expansion_area',
+
             'project_category',
             'project_type',
-            'project_description',
             'project_status',
+
+            'project_category_display',
+            'project_type_display',
+            'project_status_display',
+
+            'project_description',
             'status_date',
             'project_cost_estimate',
         )
@@ -130,6 +154,11 @@ class AgreementSerializer(serializers.ModelSerializer):
     projects = ProjectSerializer(many=True, read_only=True)
     account_ledgers = AccountLedgerSerializer(many=True, read_only=True)
     payments = PaymentSerializer(many=True, read_only=True)
+
+    agreement_type_display = serializers.SerializerMethodField(read_only=True)
+
+    def get_agreement_type_display(self, obj):
+        return obj.get_agreement_type_display()
 
     class Meta:
         model = Agreement
@@ -149,6 +178,7 @@ class AgreementSerializer(serializers.ModelSerializer):
             'projects',
             'account_ledgers',
             'payments',
+            'agreement_type_display',
         )
 
 class AccountSerializer(serializers.ModelSerializer):

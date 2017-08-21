@@ -125,7 +125,7 @@ class AccountSummary extends React.Component {
                         </div>
                         <div className="row">
                             <p className="col-md-3 col-sm-4 col-xs-6">Expansion Area: {agreement.expansion_area}</p>
-                            <p className="col-md-3 col-sm-4 col-xs-6">Agreement Type: {agreement.agreement_type}</p>
+                            <p className="col-md-3 col-sm-4 col-xs-6">Agreement Type: {agreement.agreement_type_display}</p>
                             <p className="col-md-3 col-sm-4 col-xs-6">Date Executed: {agreement.date_executed}</p>
                         </div>
                     </div>
