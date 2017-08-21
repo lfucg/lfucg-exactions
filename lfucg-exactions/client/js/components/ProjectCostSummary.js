@@ -103,10 +103,10 @@ class ProjectCostSummary extends React.Component {
                             >
                                 <div className="panel-body">
                                     <div className="col-xs-12">
-                                        <p className="col-md-3 col-sm-4 col-xs-6">Project Category: {projects.project_category}</p>
-                                        <p className="col-md-3 col-sm-4 col-xs-6">Project Type: {projects.project_type}</p>
+                                        <p className="col-md-3 col-sm-4 col-xs-6">Project Category: {projects.project_category_display}</p>
+                                        <p className="col-md-3 col-sm-4 col-xs-6">Project Type: {projects.project_type_display}</p>
                                         <p className="col-md-3 col-sm-4 col-xs-6">Expansion Area: {projects.expansion_area}</p>
-                                        <p className="col-md-3 col-sm-4 col-xs-6 ">Project Status: {projects.project_status}</p>
+                                        <p className="col-md-3 col-sm-4 col-xs-6 ">Project Status: {projects.project_status_display}</p>
                                         <p className="col-md-3 col-sm-4 col-xs-6 ">Status Date: {projects.status_date}</p>
                                         <p className="col-xs-12">Project Description: {projects.project_description}</p>
                                     </div>

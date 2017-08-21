@@ -77,7 +77,7 @@ class ProjectCostForm extends React.Component {
                                 <fieldset>
                                     <div className="row">
                                         <div className="col-sm-6 form-group">
-                                            <label htmlFor="project_id" className="form-label" id="project_id">Project</label>
+                                            <label htmlFor="project_id" className="form-label" id="project_id" aria-label="Project">Project</label>
                                             <select className="form-control" id="project_id" onChange={formChange('project_id')} >
                                                 {activeForm.project_name ? (
                                                     <option value="choose_project" aria-label="Selected Project">
