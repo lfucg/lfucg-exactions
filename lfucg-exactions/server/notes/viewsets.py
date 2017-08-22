@@ -9,6 +9,7 @@ from plats.models import Plat, Lot
 class NoteViewSet(viewsets.ModelViewSet):
     serializer_class = NoteSerializer
     queryset = Note.objects.all()
+    permission_classes = (CanAdminister,)
 
     def get_queryset(self):
         queryset = Note.objects.all()
@@ -49,8 +50,10 @@ class NoteViewSet(viewsets.ModelViewSet):
 class RateTableViewSet(viewsets.ModelViewSet):
     serializer_class = RateTableSerializer
     queryset = RateTable.objects.all()
+    permission_classes = (CanAdminister,)
 
 class RateViewSet(viewsets.ModelViewSet):
     serializer_class = RateSerializer
     queryset = Rate.objects.all()
+    permission_classes = (CanAdminister,)
     
