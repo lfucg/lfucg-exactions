@@ -4,6 +4,7 @@ from django.contrib.contenttypes.models import ContentType
 
 from .models import *
 from .serializers import *
+from .permissions import CanAdminister
 from plats.models import Plat, Lot
 
 class NoteViewSet(viewsets.ModelViewSet):
