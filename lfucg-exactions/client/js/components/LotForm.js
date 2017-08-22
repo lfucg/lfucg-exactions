@@ -76,19 +76,18 @@ class LotForm extends React.Component {
         const ownerDisabled =
             lots &&
             lots.dues_roads_own &&
-            lots.dues_roads_own === "0.00" &&
-            lots.dues_parks_own === "0.00" &&
-            lots.dues_storm_own === "0.00" &&
-            lots.dues_open_space_own === "0.00" &&
-            lots.dues_sewer_cap_own === "0.00" &&
-            lots.dues_sewer_trans_own === "0.00";
+            lots.dues_roads_own === '0.00' &&
+            lots.dues_parks_own === '0.00' &&
+            lots.dues_storm_own === '0.00' &&
+            lots.dues_open_space_own === '0.00' &&
+            lots.dues_sewer_cap_own === '0.00' &&
+            lots.dues_sewer_trans_own === '0.00';
 
         const submitEnabled =
             activeForm.plat !== 'choose_plat' &&
             activeForm.lot_number &&
             activeForm.address_number &&
-            activeForm.address_street &&
-            activeForm.address_zip;
+            activeForm.address_street;
 
         return (
             <div className="lot-form">

@@ -8,6 +8,7 @@ from .serializers import *
 class AccountViewSet(viewsets.ModelViewSet):
     serializer_class = AccountSerializer
     queryset = Account.objects.all()
+    permission_classes = (CanAdminister,)
 
     def get_queryset(self):
         queryset = Account.objects.all()
@@ -28,6 +29,7 @@ class AccountViewSet(viewsets.ModelViewSet):
 class AgreementViewSet(viewsets.ModelViewSet):
     serializer_class = AgreementSerializer
     queryset = Agreement.objects.all()
+    permission_classes = (CanAdminister,)
 
     def get_queryset(self):
         queryset = Agreement.objects.all()
@@ -51,6 +53,7 @@ class AgreementViewSet(viewsets.ModelViewSet):
 class PaymentViewSet(viewsets.ModelViewSet):
     serializer_class = PaymentSerializer
     queryset = Payment.objects.all()
+    permission_classes = (CanAdminister,)
 
     def get_queryset(self):
         queryset = Payment.objects.all()
@@ -72,6 +75,7 @@ class PaymentViewSet(viewsets.ModelViewSet):
 class ProjectViewSet(viewsets.ModelViewSet):
     serializer_class = ProjectSerializer
     queryset = Project.objects.all()
+    permission_classes = (CanAdminister,)
 
     def get_queryset(self):
         queryset = Project.objects.all()
@@ -85,10 +89,12 @@ class ProjectViewSet(viewsets.ModelViewSet):
 class ProjectCostEstimateViewSet(viewsets.ModelViewSet):
     serializer_class = ProjectCostEstimateSerializer
     queryset = ProjectCostEstimate.objects.all()
+    permission_classes = (CanAdminister,)
 
 class AccountLedgerViewSet(viewsets.ModelViewSet):
     serializer_class = AccountLedgerSerializer
     queryset = AccountLedger.objects.all()
+    permission_classes = (CanAdminister,)
 
     def get_queryset(self):
         queryset = AccountLedger.objects.all()
