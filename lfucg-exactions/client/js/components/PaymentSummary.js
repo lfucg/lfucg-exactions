@@ -110,11 +110,11 @@ class PaymentSummary extends React.Component {
                             >
                                 <div className="panel-body">
                                     <div className="col-xs-12">
-                                        <h4 className="col-xs-12">Lot Address: {lots.address_full}</h4>
-                                        <h4 className="col-md-4 col-xs-6">Total Exactions: {lots.total_due}</h4>
-                                        <h4 className="col-md-4 col-xs-6">Plat: {lots.plat}</h4>
-                                        <h4 className="col-md-4 col-xs-6 ">Lot Number: {lots.lot_number}</h4>
-                                        <h4 className="col-md-4 col-xs-6">Permit ID: {lots.permit_id}</h4>
+                                        <h4 className="col-xs-12">Lot Address: {payments.lot_id.address_full}</h4>
+                                        <h4 className="col-md-4 col-xs-6">Total Exactions: {payments.lot_id.total_due}</h4>
+                                        <h4 className="col-md-4 col-xs-6">Plat: {payments.lot_id.plat}</h4>
+                                        <h4 className="col-md-4 col-xs-6 ">Lot Number: {payments.lot_id.lot_number}</h4>
+                                        <h4 className="col-md-4 col-xs-6">Permit ID: {payments.lot_id.permit_id}</h4>
                                     </div>
                                 </div>
                             </div>
@@ -210,7 +210,7 @@ function mapDispatchToProps(dispatch, params) {
             dispatch(getPaymentID(selectedPayment))
             .then((data_payment) => {
                 if (data_payment.response.lot_id) {
-                    dispatch(getLotID(data_payment.response.lot_id));
+                    dispatch(getLotID(data_payment.response.lot_id.id));
                 }
                 if (data_payment.response.credit_account) {
                     dispatch(getAccountID(data_payment.response.credit_account));

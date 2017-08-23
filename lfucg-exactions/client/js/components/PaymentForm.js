@@ -299,13 +299,10 @@ function mapDispatchToProps(dispatch, params) {
                             });
                         }
                         if (data_payment.response.lot_id) {
-                            dispatch(getLotID(data_payment.response.lot_id))
-                            .then((data_lot) => {
-                                const lot_update = {
-                                    address_full: data_lot.response.address_full,
-                                };
-                                dispatch(formUpdate(lot_update));
-                            });
+                            const lot_update = {
+                                address_full: data_payment.response.lot_id.address_full,
+                            };
+                            dispatch(formUpdate(lot_update));
                         }
                         const update = {
                             paid_by: data_payment.response.paid_by,
