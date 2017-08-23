@@ -73,7 +73,7 @@ class AccountLedgerForm extends React.Component {
         const submitEnabled =
             activeForm.account_from &&
             activeForm.account_to &&
-            activeForm.lot &&
+            activeForm.lot_id &&
             activeForm.agreement &&
             activeForm.entry_type &&
             activeForm.non_sewer_credits &&
