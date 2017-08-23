@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 import Navbar from './Navbar';
 import Footer from './Footer';
@@ -13,15 +14,6 @@ import {
 } from '../actions/apiActions';
 
 class PaymentSummary extends React.Component {
-    static propTypes = {
-        lots: React.PropTypes.object,
-        accounts: React.PropTypes.object,
-        agreements: React.PropTypes.object,
-        payments: React.PropTypes.object,
-        route: React.PropTypes.object,
-        onComponentDidMount: React.PropTypes.func,
-    };
-
     componentDidMount() {
         this.props.onComponentDidMount();
     }
@@ -87,37 +79,39 @@ class PaymentSummary extends React.Component {
                                 </div>
                             </div>
 
-                            <a
-                              role="button"
-                              data-toggle="collapse"
-                              data-parent="#accordion"
-                              href="#collapseLotInfo"
-                              aria-expanded="false"
-                              aria-controls="collapseLotInfo"
-                            >
-                                <div className="row section-heading" role="tab" id="headingLotInfo">
-                                    <div className="col-xs-1 caret-indicator" />
-                                    <div className="col-xs-10">
-                                        <h2>Lot</h2>
+                            {payments && payments.lot_id && <div>
+                                <a
+                                  role="button"
+                                  data-toggle="collapse"
+                                  data-parent="#accordion"
+                                  href="#collapseLotInfo"
+                                  aria-expanded="false"
+                                  aria-controls="collapseLotInfo"
+                                >
+                                    <div className="row section-heading" role="tab" id="headingLotInfo">
+                                        <div className="col-xs-1 caret-indicator" />
+                                        <div className="col-xs-10">
+                                            <h2>Lot</h2>
+                                        </div>
+                                    </div>
+                                </a>
+                                <div
+                                  id="collapseLotInfo"
+                                  className="panel-collapse collapse row"
+                                  role="tabpanel"
+                                  aria-labelledby="#headingLotInfo"
+                                >
+                                    <div className="panel-body">
+                                        <div className="col-xs-12">
+                                            <h4 className="col-xs-12">Lot Address: {payments.lot_id.address_full}</h4>
+                                            <h4 className="col-md-4 col-xs-6">Total Exactions: {payments.lot_id.total_due}</h4>
+                                            <h4 className="col-md-4 col-xs-6">Plat: {payments.lot_id.plat}</h4>
+                                            <h4 className="col-md-4 col-xs-6 ">Lot Number: {payments.lot_id.lot_number}</h4>
+                                            <h4 className="col-md-4 col-xs-6">Permit ID: {payments.lot_id.permit_id}</h4>
+                                        </div>
                                     </div>
                                 </div>
-                            </a>
-                            <div
-                              id="collapseLotInfo"
-                              className="panel-collapse collapse row"
-                              role="tabpanel"
-                              aria-labelledby="#headingLotInfo"
-                            >
-                                <div className="panel-body">
-                                    <div className="col-xs-12">
-                                        <h4 className="col-xs-12">Lot Address: {payments.lot_id.address_full}</h4>
-                                        <h4 className="col-md-4 col-xs-6">Total Exactions: {payments.lot_id.total_due}</h4>
-                                        <h4 className="col-md-4 col-xs-6">Plat: {payments.lot_id.plat}</h4>
-                                        <h4 className="col-md-4 col-xs-6 ">Lot Number: {payments.lot_id.lot_number}</h4>
-                                        <h4 className="col-md-4 col-xs-6">Permit ID: {payments.lot_id.permit_id}</h4>
-                                    </div>
-                                </div>
-                            </div>
+                            </div>}
 
                             <a
                               role="button"
@@ -190,6 +184,15 @@ class PaymentSummary extends React.Component {
         );
     }
 }
+
+PaymentSummary.propTypes = {
+    lots: PropTypes.object,
+    accounts: PropTypes.object,
+    agreements: PropTypes.object,
+    payments: PropTypes.object,
+    route: PropTypes.object,
+    onComponentDidMount: PropTypes.func,
+};
 
 function mapStateToProps(state) {
     return {

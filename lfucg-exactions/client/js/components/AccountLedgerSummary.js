@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 import Navbar from './Navbar';
 import Footer from './Footer';
@@ -17,16 +18,6 @@ import {
 } from '../actions/formActions';
 
 class AccountLedgerSummary extends React.Component {
-    static propTypes = {
-        activeForm: React.PropTypes.object,
-        lots: React.PropTypes.object,
-        accounts: React.PropTypes.object,
-        agreements: React.PropTypes.object,
-        accountLedgers: React.PropTypes.object,
-        route: React.PropTypes.object,
-        onComponentDidMount: React.PropTypes.func,
-    };
-
     componentDidMount() {
         this.props.onComponentDidMount();
     }
@@ -252,6 +243,16 @@ class AccountLedgerSummary extends React.Component {
         );
     }
 }
+
+AccountLedgerSummary.propTypes = {
+    activeForm: PropTypes.object,
+    lots: PropTypes.object,
+    accounts: PropTypes.object,
+    agreements: PropTypes.object,
+    accountLedgers: PropTypes.object,
+    route: PropTypes.object,
+    onComponentDidMount: PropTypes.func,
+};
 
 function mapStateToProps(state) {
     return {

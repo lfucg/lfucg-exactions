@@ -57,6 +57,7 @@ global.BASE_STATIC_URL = (window.location.host === '52.201.224.95') ?
 
 const history = syncHistoryWithStore(hashHistory, dashboardStore);
 global.Promise = require('bluebird');
+global.PropTypes = require('prop-types');
 
 ReactDOM.render(
     <Provider store={dashboardStore}>

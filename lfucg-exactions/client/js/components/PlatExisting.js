@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { map } from 'ramda';
+import PropTypes from 'prop-types';
 
 import Navbar from './Navbar';
 import Footer from './Footer';
@@ -17,17 +18,9 @@ import {
 } from '../actions/formActions';
 
 class PlatExisting extends React.Component {
-    static propTypes = {
-        plats: React.PropTypes.object,
-        route: React.PropTypes.object,
-        onComponentDidMount: React.PropTypes.func,
-        onPlatQuery: React.PropTypes.func,
-    };
-
     componentDidMount() {
         this.props.onComponentDidMount();
     }
-
 
     render() {
         const {
@@ -117,6 +110,13 @@ class PlatExisting extends React.Component {
         );
     }
 }
+
+PlatExisting.propTypes = {
+    plats: PropTypes.object,
+    route: PropTypes.object,
+    onComponentDidMount: PropTypes.func,
+    onPlatQuery: PropTypes.func,
+};
 
 function mapStateToProps(state) {
     return {

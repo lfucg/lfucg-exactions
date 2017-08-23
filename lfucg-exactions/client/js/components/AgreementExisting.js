@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { map } from 'ramda';
+import PropTypes from 'prop-types';
 
 import Navbar from './Navbar';
 import Footer from './Footer';
@@ -17,13 +18,6 @@ import {
 } from '../actions/formActions';
 
 class AgreementExisting extends React.Component {
-    static propTypes = {
-        agreements: React.PropTypes.object,
-        route: React.PropTypes.object,
-        onComponentDidMount: React.PropTypes.func,
-        onAgreementQuery: React.PropTypes.func,
-    };
-
     componentDidMount() {
         this.props.onComponentDidMount();
     }
@@ -114,6 +108,13 @@ class AgreementExisting extends React.Component {
         );
     }
 }
+
+AgreementExisting.propTypes = {
+    agreements: PropTypes.object,
+    route: PropTypes.object,
+    onComponentDidMount: PropTypes.func,
+    onAgreementQuery: PropTypes.func,
+};
 
 function mapStateToProps(state) {
     return {

@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { map } from 'ramda';
+import PropTypes from 'prop-types';
 
 import Navbar from './Navbar';
 import Footer from './Footer';
@@ -20,15 +21,6 @@ import {
 // } from '../actions/formActions';
 
 class LotSummary extends React.Component {
-    static propTypes = {
-        lots: React.PropTypes.object,
-        accounts: React.PropTypes.object,
-        payments: React.PropTypes.object,
-        accountLedgers: React.PropTypes.object,
-        route: React.PropTypes.object,
-        onComponentDidMount: React.PropTypes.func,
-    };
-
     componentDidMount() {
         this.props.onComponentDidMount();
     }
@@ -361,6 +353,15 @@ class LotSummary extends React.Component {
         );
     }
 }
+
+LotSummary.propTypes = {
+    lots: PropTypes.object,
+    accounts: PropTypes.object,
+    payments: PropTypes.object,
+    accountLedgers: PropTypes.object,
+    route: PropTypes.object,
+    onComponentDidMount: PropTypes.func,
+};
 
 function mapStateToProps(state) {
     return {

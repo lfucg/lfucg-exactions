@@ -4,6 +4,7 @@ import {
     hashHistory,
 } from 'react-router';
 import { map } from 'ramda';
+import PropTypes from 'prop-types';
 
 import Navbar from './Navbar';
 import Footer from './Footer';
@@ -31,20 +32,6 @@ import {
 } from '../actions/apiActions';
 
 class PlatForm extends React.Component {
-    static propTypes = {
-        activeForm: React.PropTypes.object,
-        subdivisions: React.PropTypes.object,
-        plats: React.PropTypes.object,
-        accounts: React.PropTypes.object,
-        route: React.PropTypes.object,
-        onComponentDidMount: React.PropTypes.func,
-        formChange: React.PropTypes.func,
-        onPlatSubmit: React.PropTypes.func,
-        onPlatAndCreateLot: React.PropTypes.func,
-        addAnotherPlatZone: React.PropTypes.func,
-        onPlatDues: React.PropTypes.func,
-    };
-
     componentDidMount() {
         this.props.onComponentDidMount();
     }
@@ -524,6 +511,20 @@ class PlatForm extends React.Component {
         );
     }
 }
+
+PlatForm.propTypes = {
+    activeForm: PropTypes.object,
+    subdivisions: PropTypes.object,
+    plats: PropTypes.object,
+    accounts: PropTypes.object,
+    route: PropTypes.object,
+    onComponentDidMount: PropTypes.func,
+    formChange: PropTypes.func,
+    onPlatSubmit: PropTypes.func,
+    onPlatAndCreateLot: PropTypes.func,
+    addAnotherPlatZone: PropTypes.func,
+    onPlatDues: PropTypes.func,
+};
 
 function mapStateToProps(state) {
     return {

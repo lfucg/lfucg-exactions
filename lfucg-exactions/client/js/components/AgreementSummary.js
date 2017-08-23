@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { map } from 'ramda';
+import PropTypes from 'prop-types';
 
 import Navbar from './Navbar';
 import Footer from './Footer';
@@ -16,16 +17,6 @@ import {
 } from '../actions/apiActions';
 
 class AgreementSummary extends React.Component {
-    static propTypes = {
-        accounts: React.PropTypes.object,
-        agreements: React.PropTypes.object,
-        payments: React.PropTypes.object,
-        projects: React.PropTypes.object,
-        accountLedgers: React.PropTypes.object,
-        route: React.PropTypes.object,
-        onComponentDidMount: React.PropTypes.func,
-    };
-
     componentDidMount() {
         this.props.onComponentDidMount();
     }
@@ -330,6 +321,16 @@ class AgreementSummary extends React.Component {
         );
     }
 }
+
+AgreementSummary.propTypes = {
+    accounts: PropTypes.object,
+    agreements: PropTypes.object,
+    payments: PropTypes.object,
+    projects: PropTypes.object,
+    accountLedgers: PropTypes.object,
+    route: PropTypes.object,
+    onComponentDidMount: PropTypes.func,
+};
 
 function mapStateToProps(state) {
     return {

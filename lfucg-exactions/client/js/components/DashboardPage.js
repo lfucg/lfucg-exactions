@@ -1,5 +1,4 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import {
     Link,
 } from 'react-router';
@@ -8,13 +7,7 @@ import Navbar from './Navbar';
 import Footer from './Footer';
 
 class DashboardPage extends React.Component {
-    static propTypes = {
-    };
-
     render() {
-        const {
-        } = this.props;
-
         return (
             <div className="dashboard">
                 <Navbar />
@@ -68,16 +61,5 @@ class DashboardPage extends React.Component {
     }
 }
 
-function mapStateToProps(state) {
-    return {
-    };
-}
-
-function mapDispatchToProps(dispatch) {
-    return {
-    };
-}
-
-
-export default connect(mapStateToProps, mapDispatchToProps)(DashboardPage);
+export default (DashboardPage);
 
