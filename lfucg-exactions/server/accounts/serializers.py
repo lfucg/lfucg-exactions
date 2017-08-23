@@ -6,6 +6,16 @@ from .models import *
 from plats.models import Plat, Lot
 from plats.serializers import PlatSerializer, LotSerializer
 
+class LotField(serializers.Field):
+    def to_internal_value(self, data):
+        try: 
+            return Lot.objects.get(id=data)
+        except: 
+            return None
+
+    def to_representation(self, obj):
+        return LotSerializer(obj).data
+
 class AccountLedgerSerializer(serializers.ModelSerializer):
     class Meta:
         model = AccountLedger
@@ -26,16 +36,6 @@ class AccountLedgerSerializer(serializers.ModelSerializer):
             'non_sewer_credits',
             'sewer_credits',
         )
-
-class LotField(serializers.Field):
-    def to_internal_value(self, data):
-        try: 
-            return Lot.objects.get(id=data)
-        except: 
-            return None
-
-    def to_representation(self, obj):
-        return LotSerializer(obj).data['address_full']
 
 class PaymentSerializer(serializers.ModelSerializer):
     total_paid = serializers.SerializerMethodField(read_only=True)
