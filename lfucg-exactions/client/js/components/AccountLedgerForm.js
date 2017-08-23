@@ -74,7 +74,7 @@ class AccountLedgerForm extends React.Component {
             activeForm.account_from &&
             activeForm.account_to &&
             activeForm.lot_id &&
-            activeForm.agreement &&
+            activeForm.credit_source &&
             activeForm.entry_type &&
             activeForm.non_sewer_credits &&
             activeForm.sewer_credits &&
