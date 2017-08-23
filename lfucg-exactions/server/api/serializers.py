@@ -12,7 +12,13 @@ class CurrentUserSerializer(serializers.ModelSerializer):
         return token_value
 
     def get_permissions(self, obj):
-        return obj.get_all_permissions()
+        permission_set = {}
+        for permission in obj.get_all_permissions():
+            permission_name = permission[permission.index('_') + 1: len(permission)]
+
+            permission_set[permission_name] = True
+
+        return permission_set
 
     class Meta:
         model = User
