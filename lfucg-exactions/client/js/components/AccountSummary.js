@@ -8,6 +8,7 @@ import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
 
 import {
+    getMe,
     getAccountID,
     getAccountAgreements,
     getAccountPayments,
@@ -16,6 +17,7 @@ import {
 
 class AccountSummary extends React.Component {
     static propTypes = {
+        currentUser: React.PropTypes.object,
         accounts: React.PropTypes.object,
         agreements: React.PropTypes.object,
         payments: React.PropTypes.object,
@@ -30,6 +32,7 @@ class AccountSummary extends React.Component {
 
     render() {
         const {
+            currentUser,
             accounts,
             agreements,
             payments,
@@ -108,7 +111,7 @@ class AccountSummary extends React.Component {
                     <div key={agreement.id} className="col-xs-12">
                         <div className="row form-subheading">
                             <div className="col-sm-7 col-md-9">
-                                <h3>{agreement.resolution_number}</h3>
+                                <h3>Resolution: {agreement.resolution_number}</h3>
                             </div>
                             <div className="col-sm-5 col-md-3">
                                 <div className="col-xs-5">
@@ -236,9 +239,11 @@ class AccountSummary extends React.Component {
                                     <div className="col-xs-12">
                                         <h4 className="col-md-4 col-xs-6">Account Name: {accounts.account_name}</h4>
                                         <h4 className="col-md-4 col-xs-6">Contact Name: {accounts.contact_full_name}</h4>
-                                        <h4 className="col-xs-12">Address: {accounts.address_full}</h4>
-                                        <h4 className="col-md-4 col-xs-6 ">Phone: {accounts.phone}</h4>
-                                        <h4 className="col-md-4 col-xs-6">Email: {accounts.email}</h4>
+                                        { currentUser.username && <div>
+                                            <h4 className="col-xs-12">Address: {accounts.address_full}</h4>
+                                            <h4 className="col-md-4 col-xs-6 ">Phone: {accounts.phone}</h4>
+                                            <h4 className="col-md-4 col-xs-6">Email: {accounts.email}</h4>
+                                        </div>}
                                     </div>
                                 </div>
                             </div>
@@ -433,6 +438,7 @@ class AccountSummary extends React.Component {
 
 function mapStateToProps(state) {
     return {
+        currentUser: state.currentUser,
         accounts: state.accounts,
         agreements: state.agreements,
         payments: state.payments,

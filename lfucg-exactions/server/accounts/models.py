@@ -153,12 +153,12 @@ class Payment(models.Model):
     payment_type = models.CharField(max_length=100, null=True, blank=True)
     check_number = models.IntegerField(null=True, blank=True)
 
-    paid_roads = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True)
-    paid_sewer_trans = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True)
-    paid_sewer_cap = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True)
-    paid_parks = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True)
-    paid_storm = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True)
-    paid_open_space = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True)
+    paid_roads = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True, default=0)
+    paid_sewer_trans = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True, default=0)
+    paid_sewer_cap = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True, default=0)
+    paid_parks = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True, default=0)
+    paid_storm = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True, default=0)
+    paid_open_space = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True, default=0)
 
     history = HistoricalRecords()
 
@@ -240,11 +240,11 @@ class ProjectCostEstimate(models.Model):
 
     estimate_type = models.CharField(max_length=200)
 
-    land_cost = models.DecimalField(max_digits=20, decimal_places=2)
-    design_cost = models.DecimalField(max_digits=20, decimal_places=2)
-    construction_cost = models.DecimalField(max_digits=20, decimal_places=2)
-    admin_cost = models.DecimalField(max_digits=20, decimal_places=2)
-    management_cost = models.DecimalField(max_digits=20, decimal_places=2)
+    land_cost = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True, default=0)
+    design_cost = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True, default=0)
+    construction_cost = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True, default=0)
+    admin_cost = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True, default=0)
+    management_cost = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True, default=0)
 
     credits_available = models.DecimalField(max_digits=20, decimal_places=2)
 

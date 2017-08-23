@@ -27,9 +27,21 @@ class AccountLedgerSerializer(serializers.ModelSerializer):
             'sewer_credits',
         )
 
+class LotField(serializers.Field):
+    def to_internal_value(self, data):
+        try: 
+            return Lot.objects.get(id=data)
+        except: 
+            return None
+
+    def to_representation(self, obj):
+        return LotSerializer(obj).data['address_full']
+
 class PaymentSerializer(serializers.ModelSerializer):
     total_paid = serializers.SerializerMethodField(read_only=True)
     paid_by_type_display = serializers.SerializerMethodField(read_only=True)
+
+    lot_id = LotField()
 
     def get_total_paid(self,obj):
         total = (
