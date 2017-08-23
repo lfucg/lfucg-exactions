@@ -4,6 +4,7 @@ import { map } from 'ramda';
 import {
     hashHistory,
 } from 'react-router';
+import PropTypes from 'prop-types';
 
 import Navbar from './Navbar';
 import Footer from './Footer';
@@ -26,16 +27,6 @@ import {
 } from '../actions/apiActions';
 
 class ProjectForm extends React.Component {
-    static propTypes = {
-        activeForm: React.PropTypes.object,
-        projects: React.PropTypes.object,
-        agreements: React.PropTypes.object,
-        route: React.PropTypes.object,
-        onComponentDidMount: React.PropTypes.func,
-        onSubmit: React.PropTypes.func,
-        formChange: React.PropTypes.func,
-    };
-
     componentDidMount() {
         this.props.onComponentDidMount();
     }
@@ -244,6 +235,16 @@ class ProjectForm extends React.Component {
         );
     }
 }
+
+ProjectForm.propTypes = {
+    activeForm: PropTypes.object,
+    projects: PropTypes.object,
+    agreements: PropTypes.object,
+    route: PropTypes.object,
+    onComponentDidMount: PropTypes.func,
+    onSubmit: PropTypes.func,
+    formChange: PropTypes.func,
+};
 
 function mapStateToProps(state) {
     return {

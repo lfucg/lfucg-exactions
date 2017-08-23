@@ -1,10 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import {
-    Link,
+    // Link,
     hashHistory,
 } from 'react-router';
 import { map } from 'ramda';
+import PropTypes from 'prop-types';
 
 import Navbar from './Navbar';
 import Footer from './Footer';
@@ -30,18 +31,6 @@ import {
 } from '../actions/apiActions';
 
 class LotForm extends React.Component {
-    static propTypes = {
-        activeForm: React.PropTypes.object,
-        plats: React.PropTypes.object,
-        lots: React.PropTypes.object,
-        accounts: React.PropTypes.object,
-        route: React.PropTypes.object,
-        onComponentDidMount: React.PropTypes.func,
-        formChange: React.PropTypes.func,
-        onLotSubmit: React.PropTypes.func,
-        onLotDues: React.PropTypes.func,
-    };
-
     componentDidMount() {
         this.props.onComponentDidMount();
     }
@@ -76,12 +65,12 @@ class LotForm extends React.Component {
         const ownerDisabled =
             lots &&
             lots.dues_roads_own &&
-            lots.dues_roads_own === "0.00" &&
-            lots.dues_parks_own === "0.00" &&
-            lots.dues_storm_own === "0.00" &&
-            lots.dues_open_space_own === "0.00" &&
-            lots.dues_sewer_cap_own === "0.00" &&
-            lots.dues_sewer_trans_own === "0.00";
+            lots.dues_roads_own === '0.00' &&
+            lots.dues_parks_own === '0.00' &&
+            lots.dues_storm_own === '0.00' &&
+            lots.dues_open_space_own === '0.00' &&
+            lots.dues_sewer_cap_own === '0.00' &&
+            lots.dues_sewer_trans_own === '0.00';
 
         const submitEnabled =
             activeForm.plat !== 'choose_plat' &&
@@ -418,6 +407,18 @@ class LotForm extends React.Component {
         );
     }
 }
+
+LotForm.propTypes = {
+    activeForm: PropTypes.object,
+    plats: PropTypes.object,
+    lots: PropTypes.object,
+    accounts: PropTypes.object,
+    route: PropTypes.object,
+    onComponentDidMount: PropTypes.func,
+    formChange: PropTypes.func,
+    onLotSubmit: PropTypes.func,
+    onLotDues: PropTypes.func,
+};
 
 function mapStateToProps(state) {
     return {

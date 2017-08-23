@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { map } from 'ramda';
+import PropTypes from 'prop-types';
 
 import Navbar from './Navbar';
 import Footer from './Footer';
@@ -17,13 +18,6 @@ import {
 } from '../actions/formActions';
 
 class ProjectExisting extends React.Component {
-    static propTypes = {
-        projects: React.PropTypes.object,
-        route: React.PropTypes.object,
-        onComponentDidMount: React.PropTypes.func,
-        onProjectQuery: React.PropTypes.func,
-    };
-
     componentDidMount() {
         this.props.onComponentDidMount();
     }
@@ -116,6 +110,13 @@ class ProjectExisting extends React.Component {
         );
     }
 }
+
+ProjectExisting.propTypes = {
+    projects: PropTypes.object,
+    route: PropTypes.object,
+    onComponentDidMount: PropTypes.func,
+    onProjectQuery: PropTypes.func,
+};
 
 function mapStateToProps(state) {
     return {

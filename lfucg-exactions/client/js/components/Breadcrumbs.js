@@ -1,16 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
-
-import {
-    formUpdate,
-} from '../actions/formActions';
+import PropTypes from 'prop-types';
 
 class Breadcrumbs extends React.Component {
-    static propTypes = {
-        route: React.PropTypes.object,
-    };
-
     render() {
         const {
             route,
@@ -37,12 +30,16 @@ class Breadcrumbs extends React.Component {
     }
 }
 
+Breadcrumbs.propTypes = {
+    route: PropTypes.object,
+};
+
 function mapStateToProps(state) {
     return {
     };
 }
 
-function mapDispatchToProps(dispatch, route) {
+function mapDispatchToProps(dispatch) {
     return {
     };
 }

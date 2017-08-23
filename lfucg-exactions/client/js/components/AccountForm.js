@@ -4,6 +4,7 @@ import {
     Link,
     hashHistory,
 } from 'react-router';
+import PropTypes from 'prop-types';
 
 import Navbar from './Navbar';
 import Footer from './Footer';
@@ -24,15 +25,6 @@ import {
 } from '../actions/apiActions';
 
 class AccountForm extends React.Component {
-    static propTypes = {
-        activeForm: React.PropTypes.object,
-        accounts: React.PropTypes.object,
-        route: React.PropTypes.object,
-        onComponentDidMount: React.PropTypes.func,
-        onSubmit: React.PropTypes.func,
-        formChange: React.PropTypes.func,
-    };
-
     componentDidMount() {
         this.props.onComponentDidMount();
     }
@@ -197,6 +189,15 @@ class AccountForm extends React.Component {
         );
     }
 }
+
+AccountForm.propTypes = {
+    activeForm: PropTypes.object,
+    accounts: PropTypes.object,
+    route: PropTypes.object,
+    onComponentDidMount: PropTypes.func,
+    onSubmit: PropTypes.func,
+    formChange: PropTypes.func,
+};
 
 function mapStateToProps(state) {
     return {
