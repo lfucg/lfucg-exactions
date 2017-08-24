@@ -30,7 +30,7 @@ class SubdivisionExisting extends React.Component {
             onSubdivisionQuery,
         } = this.props;
 
-        const subdivisions_list = subdivisions.length > 0 ? (
+        const subdivisions_list = subdivisions && subdivisions.length > 0 &&
             map((subdivision) => {
                 return (
                     <div key={subdivision.id} className="col-xs-12">
@@ -38,23 +38,27 @@ class SubdivisionExisting extends React.Component {
                             <div className="col-sm-7 col-md-9">
                                 <h3>{subdivision.name}</h3>
                             </div>
-                            {currentUser && currentUser.permissions && currentUser.permissions.subdivision &&
-                                <div className="col-sm-5 col-md-3">
-                                    <div className="col-xs-5 col-xs-offset-6">
+                            <div className="col-sm-5 col-md-3">
+                                <div className="col-xs-5">
+                                    {currentUser && currentUser.permissions && currentUser.permissions.subdivision &&
                                         <Link to={`subdivision/form/${subdivision.id}`} className="btn btn-mid-level">
                                             Edit
                                         </Link>
-                                    </div>
+                                    }
                                 </div>
-                            }
+                                <div className="col-xs-5 col-xs-offset-1">
+                                    <Link to={`subdivision/summary/${subdivision.id}`} className="btn btn-mid-level">
+                                        Summary
+                                    </Link>
+                                </div>
+                            </div>
                         </div>
                         <div className="row">
                             <p className="col-md-3 col-sm-offset-1 col-sm-4 col-xs-6">Acres: {subdivision.cleaned_gross_acreage}</p>
                         </div>
                     </div>
                 );
-            })(subdivisions)
-        ) : null;
+            })(subdivisions);
 
         return (
             <div className="subdivision-existing">

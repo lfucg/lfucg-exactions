@@ -144,10 +144,7 @@ class SubdivisionField(serializers.Field):
             None
 
     def to_representation(self, obj):
-        try:
-            return SubdivisionSerializer(obj).data['id']
-        except:
-            None
+        return SubdivisionSerializer(obj).data
 
 class PlatSerializer(serializers.ModelSerializer):
     lot = LotSerializer(many=True, read_only=True)
