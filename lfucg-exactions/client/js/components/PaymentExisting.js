@@ -18,6 +18,7 @@ import {
 
 class PaymentExisting extends React.Component {
     static propTypes = {
+        currentUser: React.PropTypes.object,
         payments: React.PropTypes.object,
         route: React.PropTypes.object,
         onComponentDidMount: React.PropTypes.func,
@@ -30,6 +31,7 @@ class PaymentExisting extends React.Component {
 
     render() {
         const {
+            currentUser,
             payments,
             onPaymentQuery,
         } = this.props;
@@ -44,13 +46,15 @@ class PaymentExisting extends React.Component {
                             </div>
                             <div className="col-sm-5 col-md-3">
                                 <div className="col-xs-5">
-                                    <Link to={`payment/summary/${payment.id}`} className="btn btn-mid-level">
-                                        Summary
-                                    </Link>
+                                    {currentUser && currentUser.permissions && currentUser.permissions.payment &&
+                                        <Link to={`payment/form/${payment.id}`} className="btn btn-mid-level">
+                                            Edit
+                                        </Link>
+                                    }
                                 </div>
                                 <div className="col-xs-5 col-xs-offset-1">
-                                    <Link to={`payment/form/${payment.id}`} className="btn btn-mid-level">
-                                        Edit
+                                    <Link to={`payment/summary/${payment.id}`} className="btn btn-mid-level">
+                                        Summary
                                     </Link>
                                 </div>
                             </div>
@@ -77,11 +81,13 @@ class PaymentExisting extends React.Component {
                         <div className="col-sm-8">
                             <h1>PAYMENTS - EXISTING</h1>
                         </div>
-                        <div className="col-sm-2 col-sm-offset-1">
-                            <Link to={'payment/form/'} className="btn btn-top-level" >
-                                Create
-                            </Link>
-                        </div>
+                        {currentUser && currentUser.permissions && currentUser.permissions.payment &&
+                            <div className="col-sm-2 col-sm-offset-1">
+                                <Link to={'payment/form/'} className="btn btn-top-level" >
+                                    Create
+                                </Link>
+                            </div>
+                        }
                     </div>
                 </div>
 
@@ -117,6 +123,7 @@ class PaymentExisting extends React.Component {
 
 function mapStateToProps(state) {
     return {
+        currentUser: state.currentUser,
         payments: state.payments,
     };
 }

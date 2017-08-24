@@ -19,6 +19,7 @@ import {
 
 class PlatSummary extends React.Component {
     static propTypes = {
+        currentUser: React.PropTypes.object,
         plats: React.PropTypes.object,
         accounts: React.PropTypes.object,
         route: React.PropTypes.object,
@@ -32,6 +33,7 @@ class PlatSummary extends React.Component {
 
     render() {
         const {
+            currentUser,
             plats,
             accounts,
         } = this.props;
@@ -94,13 +96,15 @@ class PlatSummary extends React.Component {
                         </div>
                         <div className="col-sm-5 col-md-3">
                             <div className="col-xs-5">
-                                <Link to={`lot/summary/${lot.id}`} className="btn btn-mid-level">
-                                    Summary
-                                </Link>
+                                {currentUser && currentUser.permissions && currentUser.permissions.lot &&
+                                    <Link to={`lot/form/${lot.id}`} className="btn btn-mid-level">
+                                        Edit
+                                    </Link>
+                                }
                             </div>
                             <div className="col-xs-5 col-xs-offset-1">
-                                <Link to={`lot/form/${lot.id}`} className="btn btn-mid-level">
-                                    Edit
+                                <Link to={`lot/summary/${lot.id}`} className="btn btn-mid-level">
+                                    Summary
                                 </Link>
                             </div>
                         </div>
@@ -170,11 +174,13 @@ class PlatSummary extends React.Component {
                                         <p className="col-md-3 col-sm-4 col-xs-6">Non-Sewer Exactions: ${plats.non_sewer_due}</p>
                                         <p className="col-xs-12">Calculation Note: {plats.calculation_note}</p>
                                     </div>
-                                    <div className="col-md-offset-11 col-sm-offset-10 col-xs-offset-8">
-                                        <Link to={`plat/form/${plats.id}`} role="link" >
-                                            <h4>Edit</h4>
-                                        </Link>
-                                    </div>
+                                    {currentUser && currentUser.permissions && currentUser.permissions.plat &&
+                                        <div className="col-md-offset-11 col-sm-offset-10 col-xs-offset-8">
+                                            <Link to={`plat/form/${plats.id}`} role="link" >
+                                                <h4>Edit</h4>
+                                            </Link>
+                                        </div>
+                                    }
                                 </div>
                             </div>
 
@@ -205,11 +211,13 @@ class PlatSummary extends React.Component {
                                             <div className="col-xs-12">
                                                 { platZonesList }
                                             </div>
-                                            <div className="col-md-offset-11 col-sm-offset-10 col-xs-offset-8">
-                                                <Link to={`plat/form/${plats.id}`} role="link" >
-                                                    <h4>Edit</h4>
-                                                </Link>
-                                            </div>
+                                            {currentUser && currentUser.permissions && currentUser.permissions.platzone &&
+                                                <div className="col-md-offset-11 col-sm-offset-10 col-xs-offset-8">
+                                                    <Link to={`plat/form/${plats.id}`} role="link" >
+                                                        <h4>Edit</h4>
+                                                    </Link>
+                                                </div>
+                                            }
                                         </div>
                                     </div>
                                 </div>
@@ -284,11 +292,13 @@ class PlatSummary extends React.Component {
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div className="col-md-offset-11 col-sm-offset-10 col-xs-offset-8">
-                                                    <Link to={`plat/form/${plats.id}`} role="link" >
-                                                        <h4>Edit</h4>
-                                                    </Link>
-                                                </div>
+                                                {currentUser && currentUser.permissions && currentUser.permissions.platzone &&
+                                                    <div className="col-md-offset-11 col-sm-offset-10 col-xs-offset-8">
+                                                        <Link to={`plat/form/${plats.id}`} role="link" >
+                                                            <h4>Edit</h4>
+                                                        </Link>
+                                                    </div>
+                                                }
                                             </div>
                                         </div>
                                     </div>
@@ -391,13 +401,15 @@ class PlatSummary extends React.Component {
                                             </div>
                                             <div className="col-md-offset-8 col-sm-offset-6">
                                                 <div className="col-xs-6">
-                                                    <Link to={`account/summary/${accounts.id}`} role="link" >
-                                                        <h4>Summary</h4>
-                                                    </Link>
+                                                    {currentUser && currentUser.permissions && currentUser.permissions.account &&
+                                                        <Link to={`account/form/${accounts.id}`} role="link" >
+                                                            <h4>Edit</h4>
+                                                        </Link>
+                                                    }
                                                 </div>
                                                 <div className="col-xs-6">
-                                                    <Link to={`account/form/${accounts.id}`} role="link" >
-                                                        <h4>Edit</h4>
+                                                    <Link to={`account/summary/${accounts.id}`} role="link" >
+                                                        <h4>Summary</h4>
                                                     </Link>
                                                 </div>
                                             </div>
@@ -416,6 +428,7 @@ class PlatSummary extends React.Component {
 
 function mapStateToProps(state) {
     return {
+        currentUser: state.currentUser,
         plats: state.plats,
         accounts: state.accounts,
     };

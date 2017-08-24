@@ -14,6 +14,7 @@ import {
 
 class ProjectCostSummary extends React.Component {
     static propTypes = {
+        currentUser: React.PropTypes.object,
         projects: React.PropTypes.object,
         projectCosts: React.PropTypes.object,
         route: React.PropTypes.object,
@@ -26,6 +27,7 @@ class ProjectCostSummary extends React.Component {
 
     render() {
         const {
+            currentUser,
             projects,
             projectCosts,
         } = this.props;
@@ -77,6 +79,13 @@ class ProjectCostSummary extends React.Component {
                                         <p className="col-md-3 col-sm-4 col-xs-6">Administrative Cost: {projectCosts.admin_cost}</p>
                                         <p className="col-md-3 col-sm-4 col-xs-6">Management Cost: {projectCosts.management_cost}</p>
                                     </div>
+                                    {currentUser && currentUser.permissions && currentUser.permissions.projectcost &&
+                                        <div className="col-md-offset-11 col-sm-offset-10 col-xs-offset-8">
+                                            <Link to={`project-cost/form/${projectCosts.id}`} role="link" >
+                                                <h4>Edit</h4>
+                                            </Link>
+                                        </div>
+                                    }
                                 </div>
                             </div>
 
@@ -110,6 +119,20 @@ class ProjectCostSummary extends React.Component {
                                         <p className="col-md-3 col-sm-4 col-xs-6 ">Status Date: {projects.status_date}</p>
                                         <p className="col-xs-12">Project Description: {projects.project_description}</p>
                                     </div>
+                                    <div className="col-md-offset-8 col-sm-offset-6">
+                                        <div className="col-xs-6">
+                                            {currentUser && currentUser.permissions && currentUser.permissions.project &&
+                                                <Link to={`project/form/${projects.id}`} role="link" >
+                                                    <h4>Edit</h4>
+                                                </Link>
+                                            }
+                                        </div>
+                                        <div className="col-xs-6">
+                                            <Link to={`project/summary/${projects.id}`} role="link" >
+                                                <h4>Summary</h4>
+                                            </Link>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -123,6 +146,7 @@ class ProjectCostSummary extends React.Component {
 
 function mapStateToProps(state) {
     return {
+        currentUser: state.currentUser,
         projects: state.projects,
         projectCosts: state.projectCosts,
     };
