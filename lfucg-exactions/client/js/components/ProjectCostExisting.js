@@ -18,6 +18,7 @@ import {
 
 class ProjectCostExisting extends React.Component {
     static propTypes = {
+        currentUser: React.PropTypes.object,
         projectCosts: React.PropTypes.object,
         route: React.PropTypes.object,
         onComponentDidMount: React.PropTypes.func,
@@ -30,6 +31,7 @@ class ProjectCostExisting extends React.Component {
 
     render() {
         const {
+            currentUser,
             projectCosts,
             onProjectCostQuery,
         } = this.props;
@@ -44,13 +46,15 @@ class ProjectCostExisting extends React.Component {
                             </div>
                             <div className="col-sm-5 col-md-3">
                                 <div className="col-xs-5">
-                                    <Link to={`project-cost/summary/${projectCost.id}`} className="btn btn-mid-level">
-                                        Summary
-                                    </Link>
+                                    {currentUser && currentUser.permissions && currentUser.permissions.projectcost &&
+                                        <Link to={`project-cost/form/${projectCost.id}`} className="btn btn-mid-level">
+                                            Edit
+                                        </Link>
+                                    }
                                 </div>
                                 <div className="col-xs-5 col-xs-offset-1">
-                                    <Link to={`project-cost/form/${projectCost.id}`} className="btn btn-mid-level">
-                                        Edit
+                                    <Link to={`project-cost/summary/${projectCost.id}`} className="btn btn-mid-level">
+                                        Summary
                                     </Link>
                                 </div>
                             </div>
@@ -76,11 +80,13 @@ class ProjectCostExisting extends React.Component {
                         <div className="col-sm-8">
                             <h1>PROJECT COSTS - EXISTING</h1>
                         </div>
-                        <div className="col-sm-2 col-sm-offset-1">
-                            <Link to={'project-cost/form/'} className="btn btn-top-level" >
-                                Create
-                            </Link>
-                        </div>
+                        {currentUser && currentUser.permissions && currentUser.permissions.projectcost &&
+                            <div className="col-sm-2 col-sm-offset-1">
+                                <Link to={'project-cost/form/'} className="btn btn-top-level" >
+                                    Create
+                                </Link>
+                            </div>
+                        }
                     </div>
                 </div>
 
@@ -116,6 +122,7 @@ class ProjectCostExisting extends React.Component {
 
 function mapStateToProps(state) {
     return {
+        currentUser: state.currentUser,
         projectCosts: state.projectCosts,
     };
 }

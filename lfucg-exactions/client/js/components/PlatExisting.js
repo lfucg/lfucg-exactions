@@ -18,6 +18,7 @@ import {
 
 class PlatExisting extends React.Component {
     static propTypes = {
+        currentUser: React.PropTypes.object,
         plats: React.PropTypes.object,
         route: React.PropTypes.object,
         onComponentDidMount: React.PropTypes.func,
@@ -31,6 +32,7 @@ class PlatExisting extends React.Component {
 
     render() {
         const {
+            currentUser,
             plats,
             onPlatQuery,
         } = this.props;
@@ -45,13 +47,15 @@ class PlatExisting extends React.Component {
                             </div>
                             <div className="col-sm-5 col-md-3">
                                 <div className="col-xs-5">
-                                    <Link to={`plat/summary/${plat.id}`} className="btn btn-mid-level">
-                                        Summary
-                                    </Link>
+                                    {currentUser && currentUser.permissions && currentUser.permissions.plat &&
+                                        <Link to={`plat/form/${plat.id}`} className="btn btn-mid-level">
+                                            Edit
+                                        </Link>
+                                    }
                                 </div>
                                 <div className="col-xs-5 col-xs-offset-1">
-                                    <Link to={`plat/form/${plat.id}`} className="btn btn-mid-level">
-                                        Edit
+                                    <Link to={`plat/summary/${plat.id}`} className="btn btn-mid-level">
+                                        Summary
                                     </Link>
                                 </div>
                             </div>
@@ -80,11 +84,13 @@ class PlatExisting extends React.Component {
                         <div className="col-sm-8">
                             <h1>PLATS - EXISTING</h1>
                         </div>
-                        <div className="col-sm-2 col-sm-offset-1">
-                            <Link to={'plat/form/'} className="btn btn-top-level" >
-                                Create
-                            </Link>
-                        </div>
+                        {currentUser && currentUser.permissions && currentUser.permissions.plat &&
+                            <div className="col-sm-2 col-sm-offset-1">
+                                <Link to={'plat/form/'} className="btn btn-top-level" >
+                                    Create
+                                </Link>
+                            </div>
+                        }
                     </div>
                 </div>
 
@@ -120,6 +126,7 @@ class PlatExisting extends React.Component {
 
 function mapStateToProps(state) {
     return {
+        currentUser: state.currentUser,
         plats: state.plats,
     };
 }
