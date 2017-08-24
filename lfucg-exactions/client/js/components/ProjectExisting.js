@@ -24,6 +24,7 @@ class ProjectExisting extends React.Component {
 
     render() {
         const {
+            currentUser,
             projects,
             onProjectQuery,
         } = this.props;
@@ -38,13 +39,15 @@ class ProjectExisting extends React.Component {
                             </div>
                             <div className="col-sm-5 col-md-3">
                                 <div className="col-xs-5">
-                                    <Link to={`project/summary/${project.id}`} className="btn btn-mid-level">
-                                        Summary
-                                    </Link>
+                                    {currentUser && currentUser.permissions && currentUser.permissions.project &&
+                                        <Link to={`project/form/${project.id}`} className="btn btn-mid-level">
+                                            Edit
+                                        </Link>
+                                    }
                                 </div>
                                 <div className="col-xs-5 col-xs-offset-1">
-                                    <Link to={`project/form/${project.id}`} className="btn btn-mid-level">
-                                        Edit
+                                    <Link to={`project/summary/${project.id}`} className="btn btn-mid-level">
+                                        Summary
                                     </Link>
                                 </div>
                             </div>
@@ -73,11 +76,13 @@ class ProjectExisting extends React.Component {
                         <div className="col-sm-8">
                             <h1>PROJECTS - EXISTING</h1>
                         </div>
-                        <div className="col-sm-2 col-sm-offset-1">
-                            <Link to={'project/form/'} className="btn btn-top-level" >
-                                Create
-                            </Link>
-                        </div>
+                        {currentUser && currentUser.permissions && currentUser.permissions.project &&
+                            <div className="col-sm-2 col-sm-offset-1">
+                                <Link to={'project/form/'} className="btn btn-top-level" >
+                                    Create
+                                </Link>
+                            </div>
+                        }
                     </div>
                 </div>
 
@@ -112,6 +117,7 @@ class ProjectExisting extends React.Component {
 }
 
 ProjectExisting.propTypes = {
+    currentUser: PropTypes.object,
     projects: PropTypes.object,
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
@@ -120,6 +126,7 @@ ProjectExisting.propTypes = {
 
 function mapStateToProps(state) {
     return {
+        currentUser: state.currentUser,
         projects: state.projects,
     };
 }

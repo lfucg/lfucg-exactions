@@ -24,6 +24,7 @@ class AccountExisting extends React.Component {
 
     render() {
         const {
+            currentUser,
             accounts,
             onAccountQuery,
         } = this.props;
@@ -38,13 +39,15 @@ class AccountExisting extends React.Component {
                             </div>
                             <div className="col-sm-5 col-md-3">
                                 <div className="col-xs-5">
-                                    <Link to={`account/summary/${account.id}`} className="btn btn-mid-level">
-                                        Summary
-                                    </Link>
+                                    {currentUser && currentUser.permissions && currentUser.permissions.account &&
+                                        <Link to={`account/form/${account.id}`} className="btn btn-mid-level">
+                                            Edit
+                                        </Link>
+                                    }
                                 </div>
                                 <div className="col-xs-5 col-xs-offset-1">
-                                    <Link to={`account/form/${account.id}`} className="btn btn-mid-level">
-                                        Edit
+                                    <Link to={`account/summary/${account.id}`} className="btn btn-mid-level">
+                                        Summary
                                     </Link>
                                 </div>
                             </div>
@@ -69,11 +72,13 @@ class AccountExisting extends React.Component {
                         <div className="col-sm-8">
                             <h1>ACCOUNTS - EXISTING</h1>
                         </div>
-                        <div className="col-sm-2 col-sm-offset-1">
-                            <Link to={'account/form/'} className="btn btn-top-level" >
-                                Create
-                            </Link>
-                        </div>
+                        {currentUser && currentUser.permissions && currentUser.permissions.account &&
+                            <div className="col-sm-2 col-sm-offset-1">
+                                <Link to={'account/form/'} className="btn btn-top-level" >
+                                    Create
+                                </Link>
+                            </div>
+                        }
                     </div>
                 </div>
 
@@ -109,6 +114,7 @@ class AccountExisting extends React.Component {
 
 function mapStateToProps(state) {
     return {
+        currentUser: state.currentUser,
         accounts: state.accounts,
     };
 }
@@ -132,6 +138,7 @@ function mapDispatchToProps(dispatch) {
 }
 
 AccountExisting.propTypes = {
+    currentUser: PropTypes.object,
     accounts: PropTypes.object,
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,

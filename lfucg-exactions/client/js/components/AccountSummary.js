@@ -39,13 +39,15 @@ class AccountSummary extends React.Component {
                             </div>
                             <div className="col-sm-5 col-md-3">
                                 <div className="col-xs-5">
-                                    <Link to={`plat/summary/${plat.id}`} className="btn btn-mid-level">
-                                        Summary
-                                    </Link>
+                                    {currentUser && currentUser.permissions && currentUser.permissions.plat &&
+                                        <Link to={`plat/form/${plat.id}`} className="btn btn-mid-level">
+                                            Edit
+                                        </Link>
+                                    }
                                 </div>
                                 <div className="col-xs-5 col-xs-offset-1">
-                                    <Link to={`plat/form/${plat.id}`} className="btn btn-mid-level">
-                                        Edit
+                                    <Link to={`plat/summary/${plat.id}`} className="btn btn-mid-level">
+                                        Summary
                                     </Link>
                                 </div>
                             </div>
@@ -73,13 +75,15 @@ class AccountSummary extends React.Component {
                             </div>
                             <div className="col-sm-5 col-md-3">
                                 <div className="col-xs-5">
-                                    <Link to={`lot/summary/${lot.id}`} className="btn btn-mid-level">
-                                        Summary
-                                    </Link>
+                                    {currentUser && currentUser.permissions && currentUser.permissions.lot &&
+                                        <Link to={`lot/form/${lot.id}`} className="btn btn-mid-level">
+                                            Edit
+                                        </Link>
+                                    }
                                 </div>
                                 <div className="col-xs-5 col-xs-offset-1">
-                                    <Link to={`lot/form/${lot.id}`} className="btn btn-mid-level">
-                                        Edit
+                                    <Link to={`lot/summary/${lot.id}`} className="btn btn-mid-level">
+                                        Summary
                                     </Link>
                                 </div>
                             </div>
@@ -105,13 +109,15 @@ class AccountSummary extends React.Component {
                             </div>
                             <div className="col-sm-5 col-md-3">
                                 <div className="col-xs-5">
-                                    <Link to={`agreement/summary/${agreement.id}`} className="btn btn-mid-level">
-                                        Summary
-                                    </Link>
+                                    {currentUser && currentUser.permissions && currentUser.permissions.agreement &&
+                                        <Link to={`agreement/form/${agreement.id}`} className="btn btn-mid-level">
+                                            Edit
+                                        </Link>
+                                    }
                                 </div>
                                 <div className="col-xs-5 col-xs-offset-1">
-                                    <Link to={`agreement/form/${agreement.id}`} className="btn btn-mid-level">
-                                        Edit
+                                    <Link to={`agreement/summary/${agreement.id}`} className="btn btn-mid-level">
+                                        Summary
                                     </Link>
                                 </div>
                             </div>
@@ -136,13 +142,15 @@ class AccountSummary extends React.Component {
                             </div>
                             <div className="col-sm-5 col-md-3">
                                 <div className="col-xs-5">
-                                    <Link to={`payment/summary/${payment.id}`} className="btn btn-mid-level">
-                                        Summary
-                                    </Link>
+                                    {currentUser && currentUser.permissions && currentUser.permissions.payment &&
+                                        <Link to={`payment/form/${payment.id}`} className="btn btn-mid-level">
+                                            Edit
+                                        </Link>
+                                    }
                                 </div>
                                 <div className="col-xs-5 col-xs-offset-1">
-                                    <Link to={`payment/form/${payment.id}`} className="btn btn-mid-level">
-                                        Edit
+                                    <Link to={`payment/summary/${payment.id}`} className="btn btn-mid-level">
+                                        Summary
                                     </Link>
                                 </div>
                             </div>
@@ -167,13 +175,15 @@ class AccountSummary extends React.Component {
                             </div>
                             <div className="col-sm-5 col-md-3">
                                 <div className="col-xs-5">
-                                    <Link to={`account-ledger/summary/${accountLedger.id}`} className="btn btn-mid-level">
-                                        Summary
-                                    </Link>
+                                    {currentUser && currentUser.permissions && currentUser.permissions.accountledger &&
+                                        <Link to={`account-ledger/form/${accountLedger.id}`} className="btn btn-mid-level">
+                                            Edit
+                                        </Link>
+                                    }
                                 </div>
                                 <div className="col-xs-5 col-xs-offset-1">
-                                    <Link to={`account-ledger/form/${accountLedger.id}`} className="btn btn-mid-level">
-                                        Edit
+                                    <Link to={`account-ledger/summary/${accountLedger.id}`} className="btn btn-mid-level">
+                                        Summary
                                     </Link>
                                 </div>
                             </div>
@@ -235,6 +245,13 @@ class AccountSummary extends React.Component {
                                             <h4 className="col-md-4 col-xs-6">Email: {accounts.email}</h4>
                                         </div>}
                                     </div>
+                                    {currentUser && currentUser.permissions && currentUser.permissions.accountledger &&
+                                        <div className="col-md-offset-11 col-sm-offset-10 col-xs-offset-8">
+                                            <Link to={`account/form/${accounts.id}`} role="link" >
+                                                <h4>Edit</h4>
+                                            </Link>
+                                        </div>
+                                    }
                                 </div>
                             </div>
                             {plats_list ? (

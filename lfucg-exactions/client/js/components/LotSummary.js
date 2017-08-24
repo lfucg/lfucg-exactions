@@ -16,10 +16,6 @@ import {
     getLotAccountLedgers,
 } from '../actions/apiActions';
 
-// import {
-//     formUpdate,
-// } from '../actions/formActions';
-
 class LotSummary extends React.Component {
     componentDidMount() {
         this.props.onComponentDidMount();
@@ -28,6 +24,7 @@ class LotSummary extends React.Component {
 
     render() {
         const {
+            currentUser,
             lots,
             accounts,
             payments,
@@ -44,13 +41,15 @@ class LotSummary extends React.Component {
                             </div>
                             <div className="col-sm-5 col-md-3">
                                 <div className="col-xs-5">
-                                    <Link to={`payment/summary/${payment.id}`} className="btn btn-mid-level">
-                                        Summary
-                                    </Link>
+                                    {currentUser && currentUser.permissions && currentUser.permissions.payment &&
+                                        <Link to={`payment/form/${payment.id}`} className="btn btn-mid-level">
+                                            Edit
+                                        </Link>
+                                    }
                                 </div>
                                 <div className="col-xs-5 col-xs-offset-1">
-                                    <Link to={`payment/form/${payment.id}`} className="btn btn-mid-level">
-                                        Edit
+                                    <Link to={`payment/summary/${payment.id}`} className="btn btn-mid-level">
+                                        Summary
                                     </Link>
                                 </div>
                             </div>
@@ -75,13 +74,15 @@ class LotSummary extends React.Component {
                             </div>
                             <div className="col-sm-5 col-md-3">
                                 <div className="col-xs-5">
-                                    <Link to={`account-ledger/summary/${accountLedger.id}`} className="btn btn-mid-level">
-                                        Summary
-                                    </Link>
+                                    {currentUser && currentUser.permissions && currentUser.permissions.accountledger &&
+                                        <Link to={`account-ledger/form/${accountLedger.id}`} className="btn btn-mid-level">
+                                            Edit
+                                        </Link>
+                                    }
                                 </div>
                                 <div className="col-xs-5 col-xs-offset-1">
-                                    <Link to={`account-ledger/form/${accountLedger.id}`} className="btn btn-mid-level">
-                                        Edit
+                                    <Link to={`account-ledger/summary/${accountLedger.id}`} className="btn btn-mid-level">
+                                        Summary
                                     </Link>
                                 </div>
                             </div>
@@ -142,11 +143,13 @@ class LotSummary extends React.Component {
                                         <p className="col-md-4 col-xs-6">Longitude: {lots.longitude}</p>
                                         <p className="col-md-4 col-xs-6">Approved: {lots.is_approved ? 'Approved' : 'Not Approved'}</p>
                                     </div>
-                                    <div className="col-md-offset-11 col-sm-offset-10 col-xs-offset-8">
-                                        <Link to={`lot/form/${lots.id}`} role="link" >
-                                            <h4>Edit</h4>
-                                        </Link>
-                                    </div>
+                                    {currentUser && currentUser.permissions && currentUser.permissions.lot &&
+                                        <div className="col-md-offset-11 col-sm-offset-10 col-xs-offset-8">
+                                            <Link to={`lot/form/${lots.id}`} role="link" >
+                                                <h4>Edit</h4>
+                                            </Link>
+                                        </div>
+                                    }
                                 </div>
                             </div>
 
@@ -187,11 +190,13 @@ class LotSummary extends React.Component {
                                         <p className="col-sm-6">Open Space Developer Exactions: ${lots.dues_open_space_dev}</p>
                                         <p className="col-sm-6">Open Space Owner Exactions: ${lots.dues_open_space_own}</p>
                                     </div>
-                                    <div className="col-md-offset-11 col-sm-offset-10 col-xs-offset-8">
-                                        <Link to={`lot/form/${lots.id}`} role="link" >
-                                            <h4>Edit</h4>
-                                        </Link>
-                                    </div>
+                                    {currentUser && currentUser.permissions && currentUser.permissions.lot &&
+                                        <div className="col-md-offset-11 col-sm-offset-10 col-xs-offset-8">
+                                            <Link to={`lot/form/${lots.id}`} role="link" >
+                                                <h4>Edit</h4>
+                                            </Link>
+                                        </div>
+                                    }
                                 </div>
                             </div>
 
@@ -259,13 +264,15 @@ class LotSummary extends React.Component {
                                             </div>
                                             <div className="col-md-offset-8 col-sm-offset-6">
                                                 <div className="col-xs-6">
-                                                    <Link to={`account/summary/${accounts.id}`} role="link" >
-                                                        <h4>Summary</h4>
-                                                    </Link>
+                                                    {currentUser && currentUser.permissions && currentUser.permissions.account &&
+                                                        <Link to={`account/form/${accounts.id}`} role="link" >
+                                                            <h4>Edit</h4>
+                                                        </Link>
+                                                    }
                                                 </div>
                                                 <div className="col-xs-6">
-                                                    <Link to={`account/form/${accounts.id}`} role="link" >
-                                                        <h4>Edit</h4>
+                                                    <Link to={`account/summary/${accounts.id}`} role="link" >
+                                                        <h4>Summary</h4>
                                                     </Link>
                                                 </div>
                                             </div>
@@ -355,6 +362,7 @@ class LotSummary extends React.Component {
 }
 
 LotSummary.propTypes = {
+    currentUser: PropTypes.object,
     lots: PropTypes.object,
     accounts: PropTypes.object,
     payments: PropTypes.object,
@@ -365,6 +373,7 @@ LotSummary.propTypes = {
 
 function mapStateToProps(state) {
     return {
+        currentUser: state.currentUser,
         lots: state.lots,
         accounts: state.accounts,
         payments: state.payments,

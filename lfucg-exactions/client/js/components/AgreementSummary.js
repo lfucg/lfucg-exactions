@@ -23,6 +23,7 @@ class AgreementSummary extends React.Component {
 
     render() {
         const {
+            currentUser,
             accounts,
             agreements,
             payments,
@@ -40,13 +41,15 @@ class AgreementSummary extends React.Component {
                             </div>
                             <div className="col-sm-5 col-md-3">
                                 <div className="col-xs-5">
-                                    <Link to={`payment/summary/${payment.id}`} className="btn btn-mid-level">
-                                        Summary
-                                    </Link>
+                                    {currentUser && currentUser.permissions && currentUser.permissions.payment &&
+                                        <Link to={`payment/form/${payment.id}`} className="btn btn-mid-level">
+                                            Edit
+                                        </Link>
+                                    }
                                 </div>
                                 <div className="col-xs-5 col-xs-offset-1">
-                                    <Link to={`payment/form/${payment.id}`} className="btn btn-mid-level">
-                                        Edit
+                                    <Link to={`payment/summary/${payment.id}`} className="btn btn-mid-level">
+                                        Summary
                                     </Link>
                                 </div>
                             </div>
@@ -72,13 +75,15 @@ class AgreementSummary extends React.Component {
                             </div>
                             <div className="col-sm-5 col-md-3">
                                 <div className="col-xs-5">
-                                    <Link to={`project/summary/${project.id}`} className="btn btn-mid-level">
-                                        Summary
-                                    </Link>
+                                    {currentUser && currentUser.permissions && currentUser.permissions.project &&
+                                        <Link to={`project/form/${project.id}`} className="btn btn-mid-level">
+                                            Edit
+                                        </Link>
+                                    }
                                 </div>
                                 <div className="col-xs-5 col-xs-offset-1">
-                                    <Link to={`project/form/${project.id}`} className="btn btn-mid-level">
-                                        Edit
+                                    <Link to={`project/summary/${project.id}`} className="btn btn-mid-level">
+                                        Summary
                                     </Link>
                                 </div>
                             </div>
@@ -105,13 +110,15 @@ class AgreementSummary extends React.Component {
                             </div>
                             <div className="col-sm-5 col-md-3">
                                 <div className="col-xs-5">
-                                    <Link to={`account-ledger/summary/${accountLedger.id}`} className="btn btn-mid-level">
-                                        Summary
-                                    </Link>
+                                    {currentUser && currentUser.permissions && currentUser.permissions.accountledger &&
+                                        <Link to={`account-ledger/form/${accountLedger.id}`} className="btn btn-mid-level">
+                                            Edit
+                                        </Link>
+                                    }
                                 </div>
                                 <div className="col-xs-5 col-xs-offset-1">
-                                    <Link to={`account-ledger/form/${accountLedger.id}`} className="btn btn-mid-level">
-                                        Edit
+                                    <Link to={`account-ledger/summary/${accountLedger.id}`} className="btn btn-mid-level">
+                                        Summary
                                     </Link>
                                 </div>
                             </div>
@@ -170,6 +177,13 @@ class AgreementSummary extends React.Component {
                                         <p className="col-md-4 col-xs-6">Agreement Type: {agreements.agreement_type_display}</p>
                                         <p className="col-md-4 col-xs-6">Date Executed: {agreements.date_executed}</p>
                                     </div>
+                                    {currentUser && currentUser.permissions && currentUser.permissions.agreement &&
+                                        <div className="col-md-offset-11 col-sm-offset-10 col-xs-offset-8">
+                                            <Link to={`agreement/form/${agreements.id}`} role="link" >
+                                                <h4>Edit</h4>
+                                            </Link>
+                                        </div>
+                                    }
                                 </div>
                             </div>
 
@@ -201,6 +215,20 @@ class AgreementSummary extends React.Component {
                                         <h4 className="col-xs-12">Address: {accounts.address_full}</h4>
                                         <h4 className="col-md-4 col-xs-6 ">Phone: {accounts.phone}</h4>
                                         <h4 className="col-md-4 col-xs-6">Email: {accounts.email}</h4>
+                                    </div>
+                                    <div className="col-md-offset-8 col-sm-offset-6">
+                                        <div className="col-xs-6">
+                                            {currentUser && currentUser.permissions && currentUser.permissions.account &&
+                                                <Link to={`account/form/${accounts.id}`} role="link" >
+                                                    <h4>Edit</h4>
+                                                </Link>
+                                            }
+                                        </div>
+                                        <div className="col-xs-6">
+                                            <Link to={`account/summary/${accounts.id}`} role="link" >
+                                                <h4>Summary</h4>
+                                            </Link>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -323,6 +351,7 @@ class AgreementSummary extends React.Component {
 }
 
 AgreementSummary.propTypes = {
+    currentUser: PropTypes.object,
     accounts: PropTypes.object,
     agreements: PropTypes.object,
     payments: PropTypes.object,
@@ -334,6 +363,7 @@ AgreementSummary.propTypes = {
 
 function mapStateToProps(state) {
     return {
+        currentUser: state.currentUser,
         accounts: state.accounts,
         agreements: state.agreements,
         payments: state.payments,
