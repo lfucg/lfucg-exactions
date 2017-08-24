@@ -34,7 +34,7 @@ class ProjectSummary extends React.Component {
                         </div>
                         <div className="col-sm-5 col-md-3">
                             <div className="col-xs-5">
-                                {currentUser && currentUser.permissions && currentUser.permissions.projectcost &&
+                                {currentUser && currentUser.permissions && currentUser.permissions.projectcostestimate &&
                                     <Link to={`project-cost/form/${projectCost.id}`} className="btn btn-mid-level">
                                         Edit
                                     </Link>

@@ -16,7 +16,7 @@ class Breadcrumbs extends React.Component {
         return (
             <div className="breadcrumb">
                 <div className="container">
-                    <div className="col-xs-7 col-md-9">
+                    <div className="col-xs-8 col-md-9">
                         <h4>
                             <Link to="/" role="link">Home</Link>
                             <span> / </span>
