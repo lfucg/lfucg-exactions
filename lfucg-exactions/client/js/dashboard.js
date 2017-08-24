@@ -15,6 +15,7 @@ import ForgotUsername from './components/ForgotUsername';
 
 import SubdivisionExisting from './components/SubdivisionExisting';
 import SubdivisionForm from './components/SubdivisionForm';
+import SubdivisionSummary from './components/SubdivisionSummary';
 
 import PlatExisting from './components/PlatExisting';
 import PlatForm from './components/PlatForm';
@@ -71,6 +72,7 @@ ReactDOM.render(
             <Route path="forgot-username/" component={ForgotUsername} name="Forgot Username" />
 
             <Route path="subdivision" component={SubdivisionExisting} name="Existing Subdivisions" />
+            <Route path="subdivision/summary/:id" component={SubdivisionSummary} name="Subdivision Summary" />
             <Route path="subdivision/form" component={SubdivisionForm} name="Subdivision Form" />
             <Route path="subdivision/form/:id" component={SubdivisionForm} name="Current Subdivision Form" />
 

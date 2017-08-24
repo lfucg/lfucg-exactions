@@ -20,6 +20,7 @@ import {
     GET_PLATS,
     GET_PLAT_ID,
     GET_PLAT_QUERY,
+    GET_SUBDIVISION_PLATS,
     POST_PLAT,
     PUT_PLAT,
 
@@ -315,6 +316,14 @@ export function getPlatQuery() {
             const query_all = `/plat/?query=${query}`;
             return query_all;
         },
+    };
+}
+
+export function getSubdivisionPlats(selectedSubdivision) {
+    return {
+        type: API_CALL,
+        endpoint: GET_SUBDIVISION_PLATS,
+        url: `/plat/?subdivision=${selectedSubdivision}`,
     };
 }
 
