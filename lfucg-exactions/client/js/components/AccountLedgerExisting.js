@@ -18,6 +18,7 @@ import {
 
 class AccountLedgerExisting extends React.Component {
     static propTypes = {
+        currentUser: React.PropTypes.object,
         accountLedgers: React.PropTypes.object,
         route: React.PropTypes.object,
         onComponentDidMount: React.PropTypes.func,
@@ -30,6 +31,7 @@ class AccountLedgerExisting extends React.Component {
 
     render() {
         const {
+            currentUser,
             accountLedgers,
             onAccountLedgerQuery,
         } = this.props;
@@ -44,13 +46,15 @@ class AccountLedgerExisting extends React.Component {
                             </div>
                             <div className="col-sm-5 col-md-3">
                                 <div className="col-xs-5">
-                                    <Link to={`account-ledger/summary/${accountLedger.id}`} className="btn btn-mid-level">
-                                        Summary
-                                    </Link>
+                                    {currentUser && currentUser.permissions && currentUser.permissions.accountledger &&
+                                        <Link to={`account-ledger/form/${accountLedger.id}`} className="btn btn-mid-level">
+                                            Edit
+                                        </Link>
+                                    }
                                 </div>
                                 <div className="col-xs-5 col-xs-offset-1">
-                                    <Link to={`account-ledger/form/${accountLedger.id}`} className="btn btn-mid-level">
-                                        Edit
+                                    <Link to={`account-ledger/summary/${accountLedger.id}`} className="btn btn-mid-level">
+                                        Summary
                                     </Link>
                                 </div>
                             </div>
@@ -77,11 +81,13 @@ class AccountLedgerExisting extends React.Component {
                         <div className="col-sm-8">
                             <h1>ACCOUNT LEDGERS - EXISTING</h1>
                         </div>
-                        <div className="col-sm-2 col-sm-offset-1">
-                            <Link to={'account-ledger/form/'} className="btn btn-top-level" >
-                                Create
-                            </Link>
-                        </div>
+                        {currentUser && currentUser.permissions && currentUser.permissions.accountledger &&
+                            <div className="col-sm-2 col-sm-offset-1">
+                                <Link to={'account-ledger/form/'} className="btn btn-top-level" >
+                                    Create
+                                </Link>
+                            </div>
+                        }
                     </div>
                 </div>
 
@@ -117,6 +123,7 @@ class AccountLedgerExisting extends React.Component {
 
 function mapStateToProps(state) {
     return {
+        currentUser: state.currentUser,
         accountLedgers: state.accountLedgers,
     };
 }

@@ -3,10 +3,12 @@ from django.db.models import Q
 
 from .models import *
 from .serializers import *
+from .permissions import CanAdminister
 
 class SubdivisionViewSet(viewsets.ModelViewSet):
     serializer_class = SubdivisionSerializer
     queryset = Subdivision.objects.all()
+    permission_classes = (CanAdminister,)
 
     def get_queryset(self):
         queryset = Subdivision.objects.all()
@@ -22,6 +24,7 @@ class SubdivisionViewSet(viewsets.ModelViewSet):
 class PlatViewSet(viewsets.ModelViewSet):
     serializer_class = PlatSerializer
     queryset = Plat.objects.all()
+    permission_classes = (CanAdminister,)
 
     def get_queryset(self):
         queryset = Plat.objects.all()
@@ -41,6 +44,7 @@ class PlatViewSet(viewsets.ModelViewSet):
 class LotViewSet(viewsets.ModelViewSet):
     serializer_class = LotSerializer
     queryset = Lot.objects.all()
+    permission_classes = (CanAdminister,)
 
     def get_queryset(self):
         queryset = Lot.objects.all()
@@ -63,6 +67,7 @@ class LotViewSet(viewsets.ModelViewSet):
 class PlatZoneViewSet(viewsets.ModelViewSet):
     serializer_class = PlatZoneSerializer
     queryset = PlatZone.objects.all()
+    permission_classes = (CanAdminister,)
 
 class CalculationWorksheetViewSet(viewsets.ModelViewSet):
     serializer_class = CalculationWorksheetSerializer
