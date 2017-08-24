@@ -71,7 +71,7 @@ class ProjectCostSummary extends React.Component {
                                         <p className="col-md-3 col-sm-4 col-xs-6">Administrative Cost: {projectCosts.admin_cost}</p>
                                         <p className="col-md-3 col-sm-4 col-xs-6">Management Cost: {projectCosts.management_cost}</p>
                                     </div>
-                                    {currentUser && currentUser.permissions && currentUser.permissions.projectcost &&
+                                    {currentUser && currentUser.permissions && currentUser.permissions.projectcostestimate &&
                                         <div className="col-md-offset-11 col-sm-offset-10 col-xs-offset-8">
                                             <Link to={`project-cost/form/${projectCosts.id}`} role="link" >
                                                 <h4>Edit</h4>

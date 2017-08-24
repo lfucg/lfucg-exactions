@@ -37,17 +37,25 @@ class ProjectCostExisting extends React.Component {
                             <div className="col-sm-7 col-md-9">
                                 <h3>Project Cost Category: {projectCost.estimate_type}</h3>
                             </div>
-                            <div className="col-sm-5 col-md-3">
+                        </div>
+                        <div className="row link-row">
+                            <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
                                 <div className="col-xs-5">
-                                    {currentUser && currentUser.permissions && currentUser.permissions.projectcost &&
-                                        <Link to={`project-cost/form/${projectCost.id}`} className="btn btn-mid-level">
-                                            Edit
+                                    {currentUser && currentUser.permissions && currentUser.permissions.projectcostestimate &&
+                                        <Link to={`project-cost/form/${projectCost.id}`} aria-label="Edit">
+                                            <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
+                                            <div className="col-xs-7 link-label">
+                                                Edit
+                                            </div>
                                         </Link>
                                     }
                                 </div>
-                                <div className="col-xs-5 col-xs-offset-1">
-                                    <Link to={`project-cost/summary/${projectCost.id}`} className="btn btn-mid-level">
-                                        Summary
+                                <div className="col-xs-5 ">
+                                    <Link to={`project-cost/summary/${projectCost.id}`} aria-label="Summary">
+                                        <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
+                                        <div className="col-xs-7 link-label">
+                                            Summary
+                                        </div>
                                     </Link>
                                 </div>
                             </div>
@@ -73,13 +81,6 @@ class ProjectCostExisting extends React.Component {
                         <div className="col-sm-8">
                             <h1>PROJECT COSTS - EXISTING</h1>
                         </div>
-                        {currentUser && currentUser.permissions && currentUser.permissions.projectcost &&
-                            <div className="col-sm-2 col-sm-offset-1">
-                                <Link to={'project-cost/form/'} className="btn btn-top-level" >
-                                    Create
-                                </Link>
-                            </div>
-                        }
                     </div>
                 </div>
 

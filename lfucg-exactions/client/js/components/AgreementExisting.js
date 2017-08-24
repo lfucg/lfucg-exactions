@@ -37,17 +37,25 @@ class AgreementExisting extends React.Component {
                             <div className="col-sm-7 col-md-9">
                                 <h3>Resolution Number: {agreement.resolution_number}</h3>
                             </div>
-                            <div className="col-sm-5 col-md-3">
+                        </div>
+                        <div className="row link-row">
+                            <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
                                 <div className="col-xs-5">
                                     {currentUser && currentUser.permissions && currentUser.permissions.agreement &&
-                                        <Link to={`agreement/form/${agreement.id}`} className="btn btn-mid-level">
-                                            Edit
+                                        <Link to={`agreement/form/${agreement.id}`} aria-label="Edit">
+                                            <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
+                                            <div className="col-xs-7 link-label">
+                                                Edit
+                                            </div>
                                         </Link>
                                     }
                                 </div>
-                                <div className="col-xs-5 col-xs-offset-1">
-                                    <Link to={`agreement/summary/${agreement.id}`} className="btn btn-mid-level">
-                                        Summary
+                                <div className="col-xs-5 ">
+                                    <Link to={`agreement/summary/${agreement.id}`} aria-label="Summary">
+                                        <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
+                                        <div className="col-xs-7 link-label">
+                                            Summary
+                                        </div>
                                     </Link>
                                 </div>
                             </div>
@@ -56,7 +64,7 @@ class AgreementExisting extends React.Component {
                             <div className="col-sm-offset-1">
                                 <p className="col-md-4 col-xs-6">Developer Account: {agreement.account_id}</p>
                                 <p className="col-md-4 col-xs-6">Expansion Area: {agreement.expansion_area}</p>
-                                <p className="col-xs-12">Agreement Type: {agreement.agreement_type_display}</p>
+                                <p className="col-md-4 col-xs-6">Agreement Type: {agreement.agreement_type_display}</p>
                                 <p className="col-md-4 col-xs-6 ">Date Executed: {agreement.date_executed}</p>
                             </div>
                         </div>
@@ -74,13 +82,6 @@ class AgreementExisting extends React.Component {
                         <div className="col-sm-8">
                             <h1>AGREEMENTS - EXISTING</h1>
                         </div>
-                        {currentUser && currentUser.permissions && currentUser.permissions.agreement &&
-                            <div className="col-sm-2 col-sm-offset-1">
-                                <Link to={'agreement/form/'} className="btn btn-top-level" >
-                                    Create
-                                </Link>
-                            </div>
-                        }
                     </div>
                 </div>
 

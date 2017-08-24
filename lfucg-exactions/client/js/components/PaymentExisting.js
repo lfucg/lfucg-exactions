@@ -37,17 +37,25 @@ class PaymentExisting extends React.Component {
                             <div className="col-sm-7 col-md-9">
                                 <h3>Payment Category: {payment.payment_category}</h3>
                             </div>
-                            <div className="col-sm-5 col-md-3">
+                        </div>
+                        <div className="row link-row">
+                            <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
                                 <div className="col-xs-5">
                                     {currentUser && currentUser.permissions && currentUser.permissions.payment &&
-                                        <Link to={`payment/form/${payment.id}`} className="btn btn-mid-level">
-                                            Edit
+                                        <Link to={`payment/form/${payment.id}`} aria-label="Edit">
+                                            <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
+                                            <div className="col-xs-7 link-label">
+                                                Edit
+                                            </div>
                                         </Link>
                                     }
                                 </div>
-                                <div className="col-xs-5 col-xs-offset-1">
-                                    <Link to={`payment/summary/${payment.id}`} className="btn btn-mid-level">
-                                        Summary
+                                <div className="col-xs-5 ">
+                                    <Link to={`payment/summary/${payment.id}`} aria-label="Summary">
+                                        <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
+                                        <div className="col-xs-7 link-label">
+                                            Summary
+                                        </div>
                                     </Link>
                                 </div>
                             </div>
@@ -76,13 +84,6 @@ class PaymentExisting extends React.Component {
                         <div className="col-sm-8">
                             <h1>PAYMENTS - EXISTING</h1>
                         </div>
-                        {currentUser && currentUser.permissions && currentUser.permissions.payment &&
-                            <div className="col-sm-2 col-sm-offset-1">
-                                <Link to={'payment/form/'} className="btn btn-top-level" >
-                                    Create
-                                </Link>
-                            </div>
-                        }
                     </div>
                 </div>
 
