@@ -132,8 +132,8 @@ function mapDispatchToProps(dispatch, params) {
                 dispatch(putSubdivision(selectedSubdivision));
             } else {
                 dispatch(postSubdivision())
-                .then(() => {
-                    hashHistory.push('subdivision/');
+                .then((data_sub_post) => {
+                    hashHistory.push(`subdivision/form/${data_sub_post.response.id}`);
                 });
             }
         },

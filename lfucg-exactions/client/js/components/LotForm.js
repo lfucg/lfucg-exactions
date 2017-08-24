@@ -76,8 +76,7 @@ class LotForm extends React.Component {
             activeForm.plat !== 'choose_plat' &&
             activeForm.lot_number &&
             activeForm.address_number &&
-            activeForm.address_street &&
-            activeForm.address_zip;
+            activeForm.address_street;
 
         return (
             <div className="lot-form">
