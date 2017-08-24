@@ -222,7 +222,7 @@ class AccountLedgerSummary extends React.Component {
                                         <div className="panel-body">
                                             <div className="col-xs-12">
                                                 <p className="col-md-4 col-xs-6">Resolution Number: {agreements.resolution_number}</p>
-                                                <p className="col-md-4 col-xs-6">Account: {agreements.account_id}</p>
+                                                <p className="col-md-4 col-xs-6">Devleoper Account: {agreements.account_id}</p>
                                                 <p className="col-md-4 col-xs-6">Expansion Area: {agreements.expansion_area}</p>
                                                 <p className="col-md-4 col-xs-6">Agreement Type: {agreements.agreement_type_display}</p>
                                                 <p className="col-md-4 col-xs-6">Date Executed: {agreements.date_executed}</p>

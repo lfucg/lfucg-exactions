@@ -51,7 +51,7 @@ class AccountExisting extends React.Component {
                         </div>
                         <div className="row">
                             <div className="col-sm-offset-1">
-                                <p className="col-md-4 col-xs-6">Account Name: {account.account_name}</p>
+                                <p className="col-md-4 col-xs-6">Developer Account Name: {account.account_name}</p>
                                 <p className="col-md-4 col-xs-6">Contact Name: {account.contact_full_name}</p>
                             </div>
                         </div>
@@ -89,7 +89,7 @@ class AccountExisting extends React.Component {
                                 <input
                                   type="text"
                                   className="form-control"
-                                  placeholder="Search Accounts"
+                                  placeholder="Search Developer Accounts"
                                 />
                             </div>
                         </fieldset>

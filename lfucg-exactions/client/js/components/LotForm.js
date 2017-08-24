@@ -120,19 +120,19 @@ class LotForm extends React.Component {
 
                                         <fieldset>
                                             <div className="row form-subheading">
-                                                <h3>Account</h3>
+                                                <h3>Developer Account</h3>
                                             </div>
                                             <div className="row">
                                                 <div className="col-sm-6 form-group">
-                                                    <label htmlFor="account" className="form-label" id="account">Account</label>
+                                                    <label htmlFor="account" className="form-label" id="account">Developer Account</label>
                                                     <select className="form-control" id="account" onChange={formChange('account')} >
                                                         {activeForm.account_name ? (
-                                                            <option value="choose_account" aria-label="Selected Account">
+                                                            <option value="choose_account" aria-label="Selected Developer Account">
                                                                 {activeForm.account_name}
                                                             </option>
                                                         ) : (
-                                                            <option value="choose_account" aria-label="Select an Account">
-                                                                Select an Account
+                                                            <option value="choose_account" aria-label="Select a Developer Account">
+                                                                Select a Developer Account
                                                             </option>
                                                         )}
                                                         {accountsList}

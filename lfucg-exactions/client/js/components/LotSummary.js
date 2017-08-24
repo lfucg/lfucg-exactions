@@ -238,7 +238,7 @@ class LotSummary extends React.Component {
                                         <div className="row section-heading" role="tab" id="headingAccount">
                                             <div className="col-xs-1 caret-indicator" />
                                             <div className="col-xs-10">
-                                                <h2>Account</h2>
+                                                <h2>Developer Account</h2>
                                             </div>
                                         </div>
                                     </a>
@@ -251,7 +251,7 @@ class LotSummary extends React.Component {
                                         <div className="panel-body">
                                             <div className="col-xs-12">
                                                 <div className="col-sm-6">
-                                                    <p>Account Name: {accounts.account_name}</p>
+                                                    <p>Developer Account Name: {accounts.account_name}</p>
                                                 </div>
                                                 <div className="col-sm-6">
                                                     <p>Contact Name: {accounts.contact_full_name}</p>
