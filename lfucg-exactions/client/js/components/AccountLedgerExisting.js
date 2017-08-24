@@ -91,7 +91,7 @@ class AccountLedgerExisting extends React.Component {
                                 <input
                                   type="text"
                                   className="form-control"
-                                  placeholder="Search AccountLedgers"
+                                  placeholder="Search Account Ledgers"
                                 />
                             </div>
                         </fieldset>

@@ -118,15 +118,15 @@ class PaymentForm extends React.Component {
                                     </div>
                                     <div className="row">
                                         <div className="col-sm-6 form-group">
-                                            <label htmlFor="credit_account" className="form-label" id="credit_account" aria-label="Account" aria-required="true">* Account</label>
+                                            <label htmlFor="credit_account" className="form-label" id="credit_account" aria-label="Developer Account" aria-required="true">* Developer Account</label>
                                             <select className="form-control" id="credit_account" onChange={formChange('credit_account')} >
                                                 {activeForm.account_name ? (
-                                                    <option value="choose_account" aria-label="Selected Account">
+                                                    <option value="choose_account" aria-label="Selected Developer Account">
                                                         {activeForm.account_name}
                                                     </option>
                                                 ) : (
-                                                    <option value="choose_account" aria-label="Select an Account">
-                                                        Select an Account
+                                                    <option value="choose_account" aria-label="Select a Developer Account">
+                                                        Select a Developer Account
                                                     </option>
                                                 )}
                                                 {accountsList}

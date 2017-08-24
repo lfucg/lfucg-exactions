@@ -56,7 +56,7 @@ class AccountForm extends React.Component {
                     </div>
                 </div>
 
-                <Breadcrumbs route={this.props.route} parent_link={'account'} parent_name={'Accounts'} />
+                <Breadcrumbs route={this.props.route} parent_link={'account'} parent_name={'Developer Accounts'} />
 
                 <div className="inside-body">
                     <div className="container">
@@ -66,8 +66,8 @@ class AccountForm extends React.Component {
                                 <fieldset>
                                     <div className="row">
                                         <div className="col-sm-12">
-                                            <FormGroup label="* Account Name" id="account_name" aria-required="true">
-                                                <input type="text" className="form-control" placeholder="Account Name" autoFocus />
+                                            <FormGroup label="* Developer Account Name" id="account_name" aria-required="true">
+                                                <input type="text" className="form-control" placeholder="Developer Account Name" autoFocus />
                                             </FormGroup>
                                         </div>
                                     </div>

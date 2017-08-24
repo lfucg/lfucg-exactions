@@ -124,7 +124,7 @@ class PaymentSummary extends React.Component {
                                 <div className="row section-heading" role="tab" id="headingAccountInfo">
                                     <div className="col-xs-1 caret-indicator" />
                                     <div className="col-xs-10">
-                                        <h2>Credit Account</h2>
+                                        <h2>Developer Credit Account</h2>
                                     </div>
                                 </div>
                             </a>
@@ -136,7 +136,7 @@ class PaymentSummary extends React.Component {
                             >
                                 <div className="panel-body">
                                     <div className="col-xs-12">
-                                        <h4 className="col-md-4 col-xs-6">Account Name: {accounts.account_name}</h4>
+                                        <h4 className="col-md-4 col-xs-6">Developer Account Name: {accounts.account_name}</h4>
                                         <h4 className="col-md-4 col-xs-6">Contact Name: {accounts.contact_full_name}</h4>
                                         <h4 className="col-md-4 col-xs-6">Address: {accounts.address_full}</h4>
                                         <h4 className="col-md-4 col-xs-6 ">Phone: {accounts.phone}</h4>
@@ -156,7 +156,7 @@ class PaymentSummary extends React.Component {
                                 <div className="row section-heading" role="tab" id="headingAgreementInfo">
                                     <div className="col-xs-1 caret-indicator" />
                                     <div className="col-xs-10">
-                                        <h2>Credit Source</h2>
+                                        <h2>Agreement Credit Source</h2>
                                     </div>
                                 </div>
                             </a>
@@ -169,7 +169,7 @@ class PaymentSummary extends React.Component {
                                 <div className="panel-body">
                                     <div className="col-xs-12">
                                         <p className="col-md-4 col-xs-6">Resolution Number: {agreements.resolution_number}</p>
-                                        <p className="col-md-4 col-xs-6">Account: {agreements.account_id}</p>
+                                        <p className="col-md-4 col-xs-6">Developer Account: {agreements.account_id}</p>
                                         <p className="col-md-4 col-xs-6">Expansion Area: {agreements.expansion_area}</p>
                                         <p className="col-md-4 col-xs-6">Agreement Type: {agreements.agreement_type_display}</p>
                                         <p className="col-md-4 col-xs-6">Date Executed: {agreements.date_executed}</p>
