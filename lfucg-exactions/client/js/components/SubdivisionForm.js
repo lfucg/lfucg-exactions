@@ -127,10 +127,14 @@ function mapDispatchToProps(dispatch, params) {
         },
         onSubmit(event) {
             event.preventDefault();
-            dispatch(postSubdivision())
-            .then(() => {
-                hashHistory.push('subdivision/');
-            });
+            if (selectedSubdivision) {
+                dispatch(putSubdivision(selectedSubdivision));
+            } else {
+                dispatch(postSubdivision())
+                .then((data_sub_post) => {
+                    hashHistory.push(`subdivision/form/${data_sub_post.response.id}`);
+                });
+            }
         },
     };
 }

@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router';
 
 import Navbar from './Navbar';
 import Footer from './Footer';
@@ -14,6 +15,7 @@ import {
 
 class PaymentSummary extends React.Component {
     static propTypes = {
+        currentUser: React.PropTypes.object,
         lots: React.PropTypes.object,
         accounts: React.PropTypes.object,
         agreements: React.PropTypes.object,
@@ -28,6 +30,7 @@ class PaymentSummary extends React.Component {
 
     render() {
         const {
+            currentUser,
             lots,
             accounts,
             agreements,
@@ -84,6 +87,13 @@ class PaymentSummary extends React.Component {
                                         <p className="col-md-4 col-xs-6">Paid Storm: {payments.paid_storm}</p>
                                         <p className="col-md-4 col-xs-6">Paid Open Space: {payments.paid_open_space}</p>
                                     </div>
+                                    {currentUser && currentUser.permissions && currentUser.permissions.payment &&
+                                        <div className="col-md-offset-11 col-sm-offset-10 col-xs-offset-8">
+                                            <Link to={`payment/form/${payments.id}`} role="link" >
+                                                <h4>Edit</h4>
+                                            </Link>
+                                        </div>
+                                    }
                                 </div>
                             </div>
 
@@ -115,6 +125,20 @@ class PaymentSummary extends React.Component {
                                         <h4 className="col-md-4 col-xs-6">Plat: {lots.plat}</h4>
                                         <h4 className="col-md-4 col-xs-6 ">Lot Number: {lots.lot_number}</h4>
                                         <h4 className="col-md-4 col-xs-6">Permit ID: {lots.permit_id}</h4>
+                                    </div>
+                                    <div className="col-md-offset-8 col-sm-offset-6">
+                                        <div className="col-xs-6">
+                                            {currentUser && currentUser.permissions && currentUser.permissions.lot &&
+                                                <Link to={`lot/form/${lots.id}`} role="link" >
+                                                    <h4>Edit</h4>
+                                                </Link>
+                                            }
+                                        </div>
+                                        <div className="col-xs-6">
+                                            <Link to={`lot/summary/${lots.id}`} role="link" >
+                                                <h4>Summary</h4>
+                                            </Link>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -148,6 +172,20 @@ class PaymentSummary extends React.Component {
                                         <h4 className="col-md-4 col-xs-6 ">Phone: {accounts.phone}</h4>
                                         <h4 className="col-md-4 col-xs-6">Email: {accounts.email}</h4>
                                     </div>
+                                    <div className="col-md-offset-8 col-sm-offset-6">
+                                        <div className="col-xs-6">
+                                            {currentUser && currentUser.permissions && currentUser.permissions.account &&
+                                                <Link to={`account/form/${accounts.id}`} role="link" >
+                                                    <h4>Edit</h4>
+                                                </Link>
+                                            }
+                                        </div>
+                                        <div className="col-xs-6">
+                                            <Link to={`account/summary/${accounts.id}`} role="link" >
+                                                <h4>Summary</h4>
+                                            </Link>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
@@ -180,6 +218,20 @@ class PaymentSummary extends React.Component {
                                         <p className="col-md-4 col-xs-6">Agreement Type: {agreements.agreement_type_display}</p>
                                         <p className="col-md-4 col-xs-6">Date Executed: {agreements.date_executed}</p>
                                     </div>
+                                    <div className="col-md-offset-8 col-sm-offset-6">
+                                        <div className="col-xs-6">
+                                            {currentUser && currentUser.permissions && currentUser.permissions.agreement &&
+                                                <Link to={`agreement/form/${agreements.id}`} role="link" >
+                                                    <h4>Edit</h4>
+                                                </Link>
+                                            }
+                                        </div>
+                                        <div className="col-xs-6">
+                                            <Link to={`agreement/summary/${agreements.id}`} role="link" >
+                                                <h4>Summary</h4>
+                                            </Link>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -193,6 +245,7 @@ class PaymentSummary extends React.Component {
 
 function mapStateToProps(state) {
     return {
+        currentUser: state.currentUser,
         lots: state.lots,
         accounts: state.accounts,
         agreements: state.agreements,
