@@ -38,17 +38,25 @@ class SubdivisionExisting extends React.Component {
                             <div className="col-sm-7 col-md-9">
                                 <h3>{subdivision.name}</h3>
                             </div>
-                            <div className="col-sm-5 col-md-3">
+                        </div>
+                        <div className="row link-row">
+                            <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
                                 <div className="col-xs-5">
                                     {currentUser && currentUser.permissions && currentUser.permissions.subdivision &&
-                                        <Link to={`subdivision/form/${subdivision.id}`} className="btn btn-mid-level">
-                                            Edit
+                                        <Link to={`subdivision/form/${subdivision.id}`} aria-label="Edit">
+                                            <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
+                                            <div className="col-xs-7 link-label">
+                                                Edit
+                                            </div>
                                         </Link>
                                     }
                                 </div>
-                                <div className="col-xs-5 col-xs-offset-1">
-                                    <Link to={`subdivision/summary/${subdivision.id}`} className="btn btn-mid-level">
-                                        Summary
+                                <div className="col-xs-5 ">
+                                    <Link to={`subdivision/summary/${subdivision.id}`} aria-label="Summary">
+                                        <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
+                                        <div className="col-xs-7 link-label">
+                                            Summary
+                                        </div>
                                     </Link>
                                 </div>
                             </div>
@@ -69,13 +77,6 @@ class SubdivisionExisting extends React.Component {
                         <div className="col-sm-8">
                             <h1>SUBDIVISIONS - EXISTING</h1>
                         </div>
-                        {currentUser && currentUser.permissions && currentUser.permissions.subdivision &&
-                            <div className="col-sm-2 col-sm-offset-1">
-                                <Link to={'subdivision/form/'} className="btn btn-top-level" >
-                                    Create
-                                </Link>
-                            </div>
-                        }
                     </div>
                 </div>
 

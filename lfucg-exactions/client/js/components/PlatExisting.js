@@ -37,17 +37,25 @@ class PlatExisting extends React.Component {
                             <div className="col-sm-7 col-md-9">
                                 <h3>{plat.name}</h3>
                             </div>
-                            <div className="col-sm-5 col-md-3">
+                        </div>
+                        <div className="row link-row">
+                            <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
                                 <div className="col-xs-5">
                                     {currentUser && currentUser.permissions && currentUser.permissions.plat &&
-                                        <Link to={`plat/form/${plat.id}`} className="btn btn-mid-level">
-                                            Edit
+                                        <Link to={`plat/form/${plat.id}`} aria-label="Edit">
+                                            <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
+                                            <div className="col-xs-7 link-label">
+                                                Edit
+                                            </div>
                                         </Link>
                                     }
                                 </div>
-                                <div className="col-xs-5 col-xs-offset-1">
-                                    <Link to={`plat/summary/${plat.id}`} className="btn btn-mid-level">
-                                        Summary
+                                <div className="col-xs-5 ">
+                                    <Link to={`plat/summary/${plat.id}`} aria-label="Summary">
+                                        <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
+                                        <div className="col-xs-7 link-label">
+                                            Summary
+                                        </div>
                                     </Link>
                                 </div>
                             </div>
@@ -73,16 +81,9 @@ class PlatExisting extends React.Component {
 
                 <div className="form-header">
                     <div className="container">
-                        <div className="col-sm-8">
+                        <div className="col-sm-9">
                             <h1>PLATS - EXISTING</h1>
                         </div>
-                        {currentUser && currentUser.permissions && currentUser.permissions.plat &&
-                            <div className="col-sm-2 col-sm-offset-1">
-                                <Link to={'plat/form/'} className="btn btn-top-level" >
-                                    Create
-                                </Link>
-                            </div>
-                        }
                     </div>
                 </div>
 
