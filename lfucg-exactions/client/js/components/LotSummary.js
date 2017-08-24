@@ -10,6 +10,7 @@ import Breadcrumbs from './Breadcrumbs';
 import Notes from './Notes';
 
 import {
+    getPlatID,
     getLotID,
     getAccountID,
     getLotPayments,
@@ -25,6 +26,7 @@ class LotSummary extends React.Component {
     render() {
         const {
             currentUser,
+            plats,
             lots,
             accounts,
             payments,
@@ -230,6 +232,47 @@ class LotSummary extends React.Component {
                                 </div>
                             </div>
 
+                            <a
+                              role="button"
+                              data-toggle="collapse"
+                              data-parent="#accordion"
+                              href="#collapsePlat"
+                              aria-expanded="false"
+                              aria-controls="collapsePlat"
+                            >
+                                <div className="row section-heading" role="tab" id="headingPlat">
+                                    <div className="col-xs-1 caret-indicator" />
+                                    <div className="col-xs-10">
+                                        <h2>Plat Information</h2>
+                                    </div>
+                                </div>
+                            </a>
+                            <div
+                              id="collapsePlat"
+                              className="panel-collapse collapse row"
+                              role="tabpanel"
+                              aria-labelledby="#headingPlat"
+                            >
+                                <div className="panel-body">
+                                    <div className="col-xs-12">
+                                        <p className="col-md-4 col-xs-6">Plat Name: {plats.name}</p>
+                                        <p className="col-md-4 col-xs-6">Expansion Area: {plats.expansion_area}</p>
+                                        <p className="col-md-4 col-xs-6">Slide: {plats.slide}</p>
+                                        <p className="col-md-4 col-xs-6">Buildable Lots: {plats.buildable_lots}</p>
+                                        <p className="col-md-4 col-xs-6">Non-Buildable Lots: {plats.non_buildable_lots}</p>
+                                        <p className="col-md-4 col-xs-6">Sewer Exactions: ${plats.sewer_due}</p>
+                                        <p className="col-md-4 col-xs-6">Non-Sewer Exactions: ${plats.non_sewer_due}</p>
+                                    </div>
+                                    {currentUser && currentUser.permissions && currentUser.permissions.plat &&
+                                        <div className="col-md-offset-11 col-sm-offset-10 col-xs-offset-8">
+                                            <Link to={`plat/form/${plats.id}`} role="link" >
+                                                <h4>Edit</h4>
+                                            </Link>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+
                             {lots.account && accounts &&
                                 <div>
                                     <a
@@ -363,6 +406,7 @@ class LotSummary extends React.Component {
 
 LotSummary.propTypes = {
     currentUser: PropTypes.object,
+    plats: PropTypes.object,
     lots: PropTypes.object,
     accounts: PropTypes.object,
     payments: PropTypes.object,
@@ -374,6 +418,7 @@ LotSummary.propTypes = {
 function mapStateToProps(state) {
     return {
         currentUser: state.currentUser,
+        plats: state.plats,
         lots: state.lots,
         accounts: state.accounts,
         payments: state.payments,
@@ -390,6 +435,9 @@ function mapDispatchToProps(dispatch, params) {
             dispatch(getLotAccountLedgers(selectedLot));
             dispatch(getLotID(selectedLot))
             .then((lot_data) => {
+                if (lot_data.response.plat) {
+                    dispatch(getPlatID(lot_data.response.plat));
+                }
                 if (lot_data.response.account) {
                     dispatch(getAccountID(lot_data.response.account));
                 }
