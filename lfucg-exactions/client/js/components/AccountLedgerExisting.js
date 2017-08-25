@@ -62,7 +62,9 @@ class AccountLedgerExisting extends React.Component {
                         </div>
                         <div className="row">
                             <div className="col-sm-offset-1">
-                                <p className="col-md-4 col-xs-6">Lot: {accountLedger.lot}</p>
+                                {accountLedger.lot && accountLedger.lot.address_full &&
+                                    <p className="col-md-4 col-xs-6">Lot: {accountLedger.lot.address_full}</p>
+                                }
                                 <p className="col-md-4 col-xs-6">Account From: {accountLedger.account_from}</p>
                                 <p className="col-md-4 col-xs-6">Account To: {accountLedger.account_to}</p>
                                 <p className="col-md-4 col-xs-6">Agreement: {accountLedger.agreement}</p>
@@ -79,9 +81,7 @@ class AccountLedgerExisting extends React.Component {
 
                 <div className="form-header">
                     <div className="container">
-                        <div className="col-sm-8">
-                            <h1>ACCOUNT LEDGERS - EXISTING</h1>
-                        </div>
+                        <h1>ACCOUNT LEDGERS - EXISTING</h1>
                     </div>
                 </div>
 

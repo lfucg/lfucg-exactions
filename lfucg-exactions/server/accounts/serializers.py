@@ -17,6 +17,8 @@ class LotField(serializers.Field):
         return LotSerializer(obj).data
 
 class AccountLedgerSerializer(serializers.ModelSerializer):
+    lot = LotField()
+
     class Meta:
         model = AccountLedger
         fields = (
