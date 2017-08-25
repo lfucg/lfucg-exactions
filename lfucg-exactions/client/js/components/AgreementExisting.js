@@ -79,9 +79,7 @@ class AgreementExisting extends React.Component {
 
                 <div className="form-header">
                     <div className="container">
-                        <div className="col-sm-8">
-                            <h1>AGREEMENTS - EXISTING</h1>
-                        </div>
+                        <h1>AGREEMENTS - EXISTING</h1>
                     </div>
                 </div>
 

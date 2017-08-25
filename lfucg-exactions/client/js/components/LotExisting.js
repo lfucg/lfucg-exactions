@@ -35,9 +35,7 @@ class LotExisting extends React.Component {
                 return (
                     <div key={lot.id} className="col-xs-12">
                         <div className="row form-subheading">
-                            <div className="col-sm-7 col-md-9">
-                                <h3>{lot.address_full}</h3>
-                            </div>
+                            <h3>{lot.address_full}</h3>
                         </div>
                         <div className="row link-row">
                             <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
@@ -80,9 +78,7 @@ class LotExisting extends React.Component {
 
                 <div className="form-header">
                     <div className="container">
-                        <div className="col-sm-8">
-                            <h1>LOTS - EXISTING</h1>
-                        </div>
+                        <h1>LOTS - EXISTING</h1>
                     </div>
                 </div>
 

@@ -81,9 +81,7 @@ class PlatExisting extends React.Component {
 
                 <div className="form-header">
                     <div className="container">
-                        <div className="col-sm-9">
-                            <h1>PLATS - EXISTING</h1>
-                        </div>
+                        <h1>PLATS - EXISTING</h1>
                     </div>
                 </div>
 

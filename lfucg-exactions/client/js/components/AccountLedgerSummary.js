@@ -70,22 +70,29 @@ class AccountLedgerSummary extends React.Component {
                               aria-labelledby="#headingAccountLedgerInfo"
                             >
                                 <div className="panel-body">
+                                    <div className="row link-row">
+                                        <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
+                                            <div className="col-xs-5 col-xs-offset-5">
+                                                {currentUser && currentUser.permissions && currentUser.permissions.accountledger &&
+                                                    <Link to={`account-ledger/form/${accountLedgers.id}`} aria-label="Edit">
+                                                        <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
+                                                        <div className="col-xs-7 link-label">
+                                                            Edit
+                                                        </div>
+                                                    </Link>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div className="col-xs-12">
                                         <p className="col-md-4 col-xs-6">Entry Type: {accountLedgers.entry_type}</p>
                                         <p className="col-md-4 col-xs-6">Sewer Credits: {accountLedgers.sewer_credits}</p>
                                         <p className="col-md-4 col-xs-6">Non-Sewer Credits: {accountLedgers.non_sewer_credits}</p>
                                     </div>
-                                    {currentUser && currentUser.permissions && currentUser.permissions.accountledger &&
-                                        <div className="col-md-offset-11 col-sm-offset-10 col-xs-offset-8">
-                                            <Link to={`account-ledger/form/${accountLedgers.id}`} role="link" >
-                                                <h4>Edit</h4>
-                                            </Link>
-                                        </div>
-                                    }
                                 </div>
                             </div>
 
-                            {(lots && lots.length > 0) ?
+                            {(accountLedgers.lot && accountLedgers.lot.id) ?
                                 <div>
                                     <a
                                       role="button"
@@ -109,26 +116,33 @@ class AccountLedgerSummary extends React.Component {
                                       aria-labelledby="#headingLotInfo"
                                     >
                                         <div className="panel-body">
-                                            <div className="col-xs-12">
-                                                <h4 className="col-xs-12">Lot Address: {lots.address_full}</h4>
-                                                <h4 className="col-md-4 col-xs-6">Total Exactions: {lots.total_due}</h4>
-                                                <h4 className="col-md-4 col-xs-6">Plat: {lots.plat}</h4>
-                                                <h4 className="col-md-4 col-xs-6 ">Lot Number: {lots.lot_number}</h4>
-                                                <h4 className="col-md-4 col-xs-6">Permit ID: {lots.permit_id}</h4>
-                                            </div>
-                                            <div className="col-md-offset-8 col-sm-offset-6">
-                                                <div className="col-xs-6">
-                                                    {currentUser && currentUser.permissions && currentUser.permissions.lot &&
-                                                        <Link to={`lot/form/${lots.id}`} role="link" >
-                                                            <h4>Edit</h4>
+                                            <div className="row link-row">
+                                                <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
+                                                    <div className="col-xs-5">
+                                                        {currentUser && currentUser.permissions && currentUser.permissions.lot &&
+                                                            <Link to={`lot/form/${accountLedgers.lot.id}`} aria-label="Edit">
+                                                                <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
+                                                                <div className="col-xs-7 link-label">
+                                                                    Edit
+                                                                </div>
+                                                            </Link>
+                                                        }
+                                                    </div>
+                                                    <div className="col-xs-5 ">
+                                                        <Link to={`lot/summary/${accountLedgers.lot.id}`} aria-label="Summary">
+                                                            <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
+                                                            <div className="col-xs-7 link-label">
+                                                                Summary
+                                                            </div>
                                                         </Link>
-                                                    }
+                                                    </div>
                                                 </div>
-                                                <div className="col-xs-6">
-                                                    <Link to={`lot/summary/${lots.id}`} role="link" >
-                                                        <h4>Summary</h4>
-                                                    </Link>
-                                                </div>
+                                            </div>
+                                            <div className="col-xs-12">
+                                                <h4 className="col-xs-12">Lot Address: {accountLedgers.lot.address_full}</h4>
+                                                <h4 className="col-md-4 col-xs-6">Total Exactions: {accountLedgers.lot.total_due}</h4>
+                                                <h4 className="col-md-4 col-xs-6 ">Lot Number: {accountLedgers.lot.lot_number}</h4>
+                                                <h4 className="col-md-4 col-xs-6">Permit ID: {accountLedgers.lot.permit_id}</h4>
                                             </div>
                                         </div>
                                     </div>
@@ -163,26 +177,36 @@ class AccountLedgerSummary extends React.Component {
                                       aria-labelledby="#headingAccountFromInfo"
                                     >
                                         <div className="panel-body">
+                                            <div className="row link-row">
+                                                <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
+                                                    <div className="col-xs-5">
+                                                        {currentUser && currentUser.permissions && currentUser.permissions.account &&
+                                                            <Link to={`account/form/${accountLedgers.account_from.id}`} aria-label="Edit">
+                                                                <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
+                                                                <div className="col-xs-7 link-label">
+                                                                    Edit
+                                                                </div>
+                                                            </Link>
+                                                        }
+                                                    </div>
+                                                    <div className="col-xs-5 ">
+                                                        <Link to={`account/summary/${accountLedgers.account_from.id}`} aria-label="Summary">
+                                                            <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
+                                                            <div className="col-xs-7 link-label">
+                                                                Summary
+                                                            </div>
+                                                        </Link>
+                                                    </div>
+                                                </div>
+                                            </div>
                                             <div className="col-xs-12">
                                                 <h4 className="col-md-4 col-xs-6">Account From Name: {activeForm.account_from_name}</h4>
-                                                <h4 className="col-md-4 col-xs-6">Account From Contact Name: {activeForm.account_from_contact_full_name}</h4>
-                                                <h4 className="col-md-4 col-xs-6">Account From Address: {activeForm.account_from_address_full}</h4>
-                                                <h4 className="col-md-4 col-xs-6 ">Account From Phone: {activeForm.account_from_phone}</h4>
-                                                <h4 className="col-md-4 col-xs-6">Account From Email: {activeForm.account_from_email}</h4>
-                                            </div>
-                                            <div className="col-md-offset-8 col-sm-offset-6">
-                                                <div className="col-xs-6">
-                                                    {currentUser && currentUser.permissions && currentUser.permissions.account &&
-                                                        <Link to={`account/form/${accounts.id}`} role="link" >
-                                                            <h4>Edit</h4>
-                                                        </Link>
-                                                    }
-                                                </div>
-                                                <div className="col-xs-6">
-                                                    <Link to={`account/summary/${accounts.id}`} role="link" >
-                                                        <h4>Summary</h4>
-                                                    </Link>
-                                                </div>
+                                                {currentUser && currentUser.username && <div>
+                                                    <h4 className="col-md-4 col-xs-6">Account From Contact Name: {activeForm.account_from_contact_full_name}</h4>
+                                                    <h4 className="col-md-4 col-xs-6">Account From Address: {activeForm.account_from_address_full}</h4>
+                                                    <h4 className="col-md-4 col-xs-6 ">Account From Phone: {activeForm.account_from_phone}</h4>
+                                                    <h4 className="col-md-4 col-xs-6">Account From Email: {activeForm.account_from_email}</h4>
+                                                </div>}
                                             </div>
                                         </div>
                                     </div>
@@ -217,26 +241,36 @@ class AccountLedgerSummary extends React.Component {
                                       aria-labelledby="#headingAccountToInfo"
                                     >
                                         <div className="panel-body">
+                                            <div className="row link-row">
+                                                <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
+                                                    <div className="col-xs-5">
+                                                        {currentUser && currentUser.permissions && currentUser.permissions.account &&
+                                                            <Link to={`account/form/${accountLedgers.account_to.id}`} aria-label="Edit">
+                                                                <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
+                                                                <div className="col-xs-7 link-label">
+                                                                    Edit
+                                                                </div>
+                                                            </Link>
+                                                        }
+                                                    </div>
+                                                    <div className="col-xs-5 ">
+                                                        <Link to={`account/summary/${accountLedgers.account_to.id}`} aria-label="Summary">
+                                                            <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
+                                                            <div className="col-xs-7 link-label">
+                                                                Summary
+                                                            </div>
+                                                        </Link>
+                                                    </div>
+                                                </div>
+                                            </div>
                                             <div className="col-xs-12">
                                                 <h4 className="col-md-4 col-xs-6">Account To Name: {activeForm.account_to_name}</h4>
-                                                <h4 className="col-md-4 col-xs-6">Account To Contact Name: {activeForm.account_to_contact_full_name}</h4>
-                                                <h4 className="col-md-4 col-xs-6">Account To Address: {activeForm.account_to_address_full}</h4>
-                                                <h4 className="col-md-4 col-xs-6 ">Account To Phone: {activeForm.account_to_phone}</h4>
-                                                <h4 className="col-md-4 col-xs-6">Account To Email: {activeForm.account_to_email}</h4>
-                                            </div>
-                                            <div className="col-md-offset-8 col-sm-offset-6">
-                                                <div className="col-xs-6">
-                                                    {currentUser && currentUser.permissions && currentUser.permissions.account &&
-                                                        <Link to={`account/form/${accounts.id}`} role="link" >
-                                                            <h4>Edit</h4>
-                                                        </Link>
-                                                    }
-                                                </div>
-                                                <div className="col-xs-6">
-                                                    <Link to={`account/summary/${accounts.id}`} role="link" >
-                                                        <h4>Summary</h4>
-                                                    </Link>
-                                                </div>
+                                                {currentUser && currentUser.username && <div>
+                                                    <h4 className="col-md-4 col-xs-6">Account To Contact Name: {activeForm.account_to_contact_full_name}</h4>
+                                                    <h4 className="col-md-4 col-xs-6">Account To Address: {activeForm.account_to_address_full}</h4>
+                                                    <h4 className="col-md-4 col-xs-6 ">Account To Phone: {activeForm.account_to_phone}</h4>
+                                                    <h4 className="col-md-4 col-xs-6">Account To Email: {activeForm.account_to_email}</h4>
+                                                </div>}
                                             </div>
                                         </div>
                                     </div>
@@ -247,7 +281,7 @@ class AccountLedgerSummary extends React.Component {
                                 </div>
                             }
 
-                            {agreements && agreements.length > 0 ?
+                            {agreements && agreements.id ?
                                 <div>
                                     <a
                                       role="button"
@@ -271,26 +305,33 @@ class AccountLedgerSummary extends React.Component {
                                       aria-labelledby="#headingAgreementInfo"
                                     >
                                         <div className="panel-body">
+                                            <div className="row link-row">
+                                                <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
+                                                    <div className="col-xs-5">
+                                                        {currentUser && currentUser.permissions && currentUser.permissions.agreement &&
+                                                            <Link to={`agreement/form/${agreements.id}`} aria-label="Edit">
+                                                                <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
+                                                                <div className="col-xs-7 link-label">
+                                                                    Edit
+                                                                </div>
+                                                            </Link>
+                                                        }
+                                                    </div>
+                                                    <div className="col-xs-5 ">
+                                                        <Link to={`agreement/summary/${agreements.id}`} aria-label="Summary">
+                                                            <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
+                                                            <div className="col-xs-7 link-label">
+                                                                Summary
+                                                            </div>
+                                                        </Link>
+                                                    </div>
+                                                </div>
+                                            </div>
                                             <div className="col-xs-12">
                                                 <p className="col-md-4 col-xs-6">Resolution Number: {agreements.resolution_number}</p>
-                                                <p className="col-md-4 col-xs-6">Devleoper Account: {agreements.account_id}</p>
                                                 <p className="col-md-4 col-xs-6">Expansion Area: {agreements.expansion_area}</p>
                                                 <p className="col-md-4 col-xs-6">Agreement Type: {agreements.agreement_type_display}</p>
                                                 <p className="col-md-4 col-xs-6">Date Executed: {agreements.date_executed}</p>
-                                            </div>
-                                            <div className="col-md-offset-8 col-sm-offset-6">
-                                                <div className="col-xs-6">
-                                                    {currentUser && currentUser.permissions && currentUser.permissions.agreement &&
-                                                        <Link to={`agreement/form/${agreements.id}`} role="link" >
-                                                            <h4>Edit</h4>
-                                                        </Link>
-                                                    }
-                                                </div>
-                                                <div className="col-xs-6">
-                                                    <Link to={`agreement/summary/${agreements.id}`} role="link" >
-                                                        <h4>Summary</h4>
-                                                    </Link>
-                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -339,9 +380,9 @@ function mapDispatchToProps(dispatch, params) {
         onComponentDidMount() {
             dispatch(getAccountLedgerID(selectedAccountLedger))
             .then((data_accountLedger) => {
-                if (data_accountLedger.response.lot) {
-                    dispatch(getLotID(data_accountLedger.response.lot));
-                }
+                // if (data_accountLedger.response.lot) {
+                //     dispatch(getLotID(data_accountLedger.response.lot));
+                // }
                 if (data_accountLedger.response.agreement) {
                     dispatch(getAgreementID(data_accountLedger.response.agreement));
                 }
