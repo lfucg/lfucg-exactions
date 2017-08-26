@@ -17,7 +17,12 @@ class LotField(serializers.Field):
         return LotSerializer(obj).data
 
 class AccountLedgerSerializer(serializers.ModelSerializer):
+    entry_type_display = serializers.SerializerMethodField(read_only=True)
+
     lot = LotField()
+
+    def get_entry_type_display(self, obj):
+        return get_entry_type_display()
 
     class Meta:
         model = AccountLedger
@@ -30,6 +35,7 @@ class AccountLedgerSerializer(serializers.ModelSerializer):
             'date_modified',
             'created_by',
             'modified_by',
+
             'account_from',
             'account_to',
             'lot',
@@ -37,10 +43,13 @@ class AccountLedgerSerializer(serializers.ModelSerializer):
             'entry_type',
             'non_sewer_credits',
             'sewer_credits',
+
+            'entry_type_display',
         )
 
 class PaymentSerializer(serializers.ModelSerializer):
     total_paid = serializers.SerializerMethodField(read_only=True)
+    payment_type_display = serializers.SerializerMethodField(read_only=True)
     paid_by_type_display = serializers.SerializerMethodField(read_only=True)
 
     lot_id = LotField()
@@ -56,6 +65,9 @@ class PaymentSerializer(serializers.ModelSerializer):
         )
         return total
 
+    def get_payment_type_display(self, obj):
+        return obj.get_payment_type_display()
+
     def get_paid_by_type_display(self, obj):
         return obj.get_paid_by_type_display()
 
@@ -70,13 +82,16 @@ class PaymentSerializer(serializers.ModelSerializer):
             'date_modified',
             'created_by',
             'modified_by',
+
             'lot_id',
+            'credit_source',
+            'credit_account',
+
             'paid_by',
             'paid_by_type',
             'payment_type',
             'check_number',
-            'credit_source',
-            'credit_account',
+
             'paid_roads',
             'paid_sewer_trans',
             'paid_sewer_cap',
@@ -85,6 +100,7 @@ class PaymentSerializer(serializers.ModelSerializer):
             'paid_open_space',
 
             'total_paid',
+            'payment_type_display',
             'paid_by_type_display',
         )
 
@@ -111,6 +127,7 @@ class ProjectCostEstimateSerializer(serializers.ModelSerializer):
             'date_modified',
             'created_by',
             'modified_by',
+
             'project_id',
             'estimate_type',
             'land_cost',
@@ -118,6 +135,7 @@ class ProjectCostEstimateSerializer(serializers.ModelSerializer):
             'construction_cost',
             'admin_cost',
             'management_cost',
+            'other_cost',
             'credits_available',
 
             'total_costs',
@@ -148,19 +166,21 @@ class ProjectSerializer(serializers.ModelSerializer):
             'date_modified',
             'created_by',
             'modified_by',
+
             'agreement_id',
+            'name',
             'expansion_area',
 
             'project_category',
             'project_type',
             'project_status',
+            'status_date',
+            'project_description',
 
             'project_category_display',
             'project_type_display',
             'project_status_display',
 
-            'project_description',
-            'status_date',
             'project_cost_estimate',
         )
 
@@ -185,10 +205,12 @@ class AgreementSerializer(serializers.ModelSerializer):
             'date_modified',
             'created_by',
             'modified_by',
+
             'account_id',
             'resolution_number',
             'expansion_area',
             'agreement_type',
+
             'projects',
             'account_ledgers',
             'payments',
@@ -220,10 +242,14 @@ class AccountSerializer(serializers.ModelSerializer):
             'contact_first_name',
             'contact_last_name',
             'contact_full_name',
+
+            'address_number',
+            'address_street',
             'address_city',
             'address_state',
             'address_zip',
             'address_full',
+
             'phone',
             'email',
             'agreements',
