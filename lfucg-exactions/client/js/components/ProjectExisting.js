@@ -29,14 +29,12 @@ class ProjectExisting extends React.Component {
             onProjectQuery,
         } = this.props;
 
-        const projects_list = projects.length > 0 ? (
+        const projects_list = projects.length > 0 &&
             map((project) => {
                 return (
                     <div key={project.id} className="col-xs-12">
                         <div className="row form-subheading">
-                            <div className="col-sm-7 col-md-9">
-                                <h3>Project Category : {project.project_category_display}</h3>
-                            </div>
+                            <h3>Project Category : {project.project_category_display}</h3>
                         </div>
                         <div className="row link-row">
                             <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
@@ -62,18 +60,15 @@ class ProjectExisting extends React.Component {
                         </div>
                         <div className="row">
                             <div className="col-sm-offset-1">
-                                <p className="col-md-4 col-xs-6">Agreement: {project.agreement_id}</p>
                                 <p className="col-md-4 col-xs-6">Project Type: {project.project_type_display}</p>
                                 <p className="col-md-4 col-xs-6">Expansion Area: {project.expansion_area}</p>
                                 <p className="col-md-4 col-xs-6 ">Project Status: {project.project_status_display}</p>
                                 <p className="col-md-4 col-xs-6 ">Status Date: {project.status_date}</p>
-                                <p className="col-xs-12">Project Description: {project.project_description}</p>
                             </div>
                         </div>
                     </div>
                 );
-            })(projects)
-        ) : null;
+            })(projects);
 
         return (
             <div className="project-existing">
@@ -81,9 +76,7 @@ class ProjectExisting extends React.Component {
 
                 <div className="form-header">
                     <div className="container">
-                        <div className="col-sm-8">
-                            <h1>PROJECTS - EXISTING</h1>
-                        </div>
+                        <h1>PROJECTS - EXISTING</h1>
                     </div>
                 </div>
 

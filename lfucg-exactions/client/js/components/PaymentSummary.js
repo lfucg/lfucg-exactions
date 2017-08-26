@@ -65,6 +65,20 @@ class PaymentSummary extends React.Component {
                               aria-labelledby="#headingPaymentInfo"
                             >
                                 <div className="panel-body">
+                                    <div className="row link-row">
+                                        <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
+                                            <div className="col-xs-5 col-xs-offset-5">
+                                                {currentUser && currentUser.permissions && currentUser.permissions.payment &&
+                                                    <Link to={`payment/form/${payments.id}`} aria-label="Edit">
+                                                        <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
+                                                        <div className="col-xs-7 link-label">
+                                                            Edit
+                                                        </div>
+                                                    </Link>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div className="col-xs-12">
                                         <p className="col-md-4 col-xs-6">Payment Category: {payments.payment_category}</p>
                                         <p className="col-md-4 col-xs-6">Payment Type: {payments.payment_type}</p>
@@ -78,13 +92,6 @@ class PaymentSummary extends React.Component {
                                         <p className="col-md-4 col-xs-6">Paid Storm: {payments.paid_storm}</p>
                                         <p className="col-md-4 col-xs-6">Paid Open Space: {payments.paid_open_space}</p>
                                     </div>
-                                    {currentUser && currentUser.permissions && currentUser.permissions.payment &&
-                                        <div className="col-md-offset-11 col-sm-offset-10 col-xs-offset-8">
-                                            <Link to={`payment/form/${payments.id}`} role="link" >
-                                                <h4>Edit</h4>
-                                            </Link>
-                                        </div>
-                                    }
                                 </div>
                             </div>
 
@@ -111,26 +118,33 @@ class PaymentSummary extends React.Component {
                                   aria-labelledby="#headingLotInfo"
                                 >
                                     <div className="panel-body">
+                                        <div className="row link-row">
+                                            <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
+                                                <div className="col-xs-5">
+                                                    {currentUser && currentUser.permissions && currentUser.permissions.lot &&
+                                                        <Link to={`lot/form/${payments.lot_id.id}`} aria-label="Edit">
+                                                            <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
+                                                            <div className="col-xs-7 link-label">
+                                                                Edit
+                                                            </div>
+                                                        </Link>
+                                                    }
+                                                </div>
+                                                <div className="col-xs-5 ">
+                                                    <Link to={`lot/summary/${payments.lot_id.id}`} aria-label="Summary">
+                                                        <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
+                                                        <div className="col-xs-7 link-label">
+                                                            Summary
+                                                        </div>
+                                                    </Link>
+                                                </div>
+                                            </div>
+                                        </div>
                                         <div className="col-xs-12">
                                             <h4 className="col-xs-12">Lot Address: {payments.lot_id.address_full}</h4>
                                             <h4 className="col-md-4 col-xs-6">Total Exactions: {payments.lot_id.total_due}</h4>
-                                            <h4 className="col-md-4 col-xs-6">Plat: {payments.lot_id.plat}</h4>
                                             <h4 className="col-md-4 col-xs-6 ">Lot Number: {payments.lot_id.lot_number}</h4>
                                             <h4 className="col-md-4 col-xs-6">Permit ID: {payments.lot_id.permit_id}</h4>
-                                        </div>
-                                    </div>
-                                    <div className="col-md-offset-8 col-sm-offset-6">
-                                        <div className="col-xs-6">
-                                            {currentUser && currentUser.permissions && currentUser.permissions.lot &&
-                                                <Link to={`lot/form/${lots.id}`} role="link" >
-                                                    <h4>Edit</h4>
-                                                </Link>
-                                            }
-                                        </div>
-                                        <div className="col-xs-6">
-                                            <Link to={`lot/summary/${lots.id}`} role="link" >
-                                                <h4>Summary</h4>
-                                            </Link>
                                         </div>
                                     </div>
                                 </div>
@@ -158,26 +172,38 @@ class PaymentSummary extends React.Component {
                               aria-labelledby="#headingAccountInfo"
                             >
                                 <div className="panel-body">
+                                    <div className="row link-row">
+                                        <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
+                                            <div className="col-xs-5">
+                                                {currentUser && currentUser.permissions && currentUser.permissions.account &&
+                                                    <Link to={`account/form/${accounts.id}`} aria-label="Edit">
+                                                        <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
+                                                        <div className="col-xs-7 link-label">
+                                                            Edit
+                                                        </div>
+                                                    </Link>
+                                                }
+                                            </div>
+                                            <div className="col-xs-5 ">
+                                                <Link to={`account/summary/${accounts.id}`} aria-label="Summary">
+                                                    <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
+                                                    <div className="col-xs-7 link-label">
+                                                        Summary
+                                                    </div>
+                                                </Link>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div className="col-xs-12">
                                         <h4 className="col-md-4 col-xs-6">Developer Account Name: {accounts.account_name}</h4>
-                                        <h4 className="col-md-4 col-xs-6">Contact Name: {accounts.contact_full_name}</h4>
-                                        <h4 className="col-md-4 col-xs-6">Address: {accounts.address_full}</h4>
-                                        <h4 className="col-md-4 col-xs-6 ">Phone: {accounts.phone}</h4>
-                                        <h4 className="col-md-4 col-xs-6">Email: {accounts.email}</h4>
-                                    </div>
-                                    <div className="col-md-offset-8 col-sm-offset-6">
-                                        <div className="col-xs-6">
-                                            {currentUser && currentUser.permissions && currentUser.permissions.account &&
-                                                <Link to={`account/form/${accounts.id}`} role="link" >
-                                                    <h4>Edit</h4>
-                                                </Link>
-                                            }
-                                        </div>
-                                        <div className="col-xs-6">
-                                            <Link to={`account/summary/${accounts.id}`} role="link" >
-                                                <h4>Summary</h4>
-                                            </Link>
-                                        </div>
+                                        {currentUser && currentUser.username &&
+                                            <div>
+                                                <h4 className="col-md-4 col-xs-6">Contact Name: {accounts.contact_full_name}</h4>
+                                                <h4 className="col-md-4 col-xs-6">Address: {accounts.address_full}</h4>
+                                                <h4 className="col-md-4 col-xs-6 ">Phone: {accounts.phone}</h4>
+                                                <h4 className="col-md-4 col-xs-6">Email: {accounts.email}</h4>
+                                            </div>
+                                        }
                                     </div>
                                 </div>
                             </div>
@@ -204,26 +230,33 @@ class PaymentSummary extends React.Component {
                               aria-labelledby="#headingAgreementInfo"
                             >
                                 <div className="panel-body">
+                                    <div className="row link-row">
+                                        <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
+                                            <div className="col-xs-5">
+                                                {currentUser && currentUser.permissions && currentUser.permissions.agreement &&
+                                                    <Link to={`agreement/form/${agreements.id}`} aria-label="Edit">
+                                                        <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
+                                                        <div className="col-xs-7 link-label">
+                                                            Edit
+                                                        </div>
+                                                    </Link>
+                                                }
+                                            </div>
+                                            <div className="col-xs-5 ">
+                                                <Link to={`agreement/summary/${agreements.id}`} aria-label="Summary">
+                                                    <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
+                                                    <div className="col-xs-7 link-label">
+                                                        Summary
+                                                    </div>
+                                                </Link>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div className="col-xs-12">
                                         <p className="col-md-4 col-xs-6">Resolution Number: {agreements.resolution_number}</p>
-                                        <p className="col-md-4 col-xs-6">Developer Account: {agreements.account_id}</p>
                                         <p className="col-md-4 col-xs-6">Expansion Area: {agreements.expansion_area}</p>
                                         <p className="col-md-4 col-xs-6">Agreement Type: {agreements.agreement_type_display}</p>
                                         <p className="col-md-4 col-xs-6">Date Executed: {agreements.date_executed}</p>
-                                    </div>
-                                    <div className="col-md-offset-8 col-sm-offset-6">
-                                        <div className="col-xs-6">
-                                            {currentUser && currentUser.permissions && currentUser.permissions.agreement &&
-                                                <Link to={`agreement/form/${agreements.id}`} role="link" >
-                                                    <h4>Edit</h4>
-                                                </Link>
-                                            }
-                                        </div>
-                                        <div className="col-xs-6">
-                                            <Link to={`agreement/summary/${agreements.id}`} role="link" >
-                                                <h4>Summary</h4>
-                                            </Link>
-                                        </div>
                                     </div>
                                 </div>
                             </div>
