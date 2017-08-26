@@ -101,7 +101,7 @@ class LotSummary extends React.Component {
                             </div>
                         </div>
                         <div className="row">
-                            <p className="col-md-3 col-sm-4 col-xs-6">Entry Type: {accountLedger.entry_type}</p>
+                            <p className="col-md-3 col-sm-4 col-xs-6">Entry Type: {accountLedger.entry_type_display}</p>
                             <p className="col-md-3 col-sm-4 col-xs-6">Non-Sewer Credits: {accountLedger.non_sewer_credits}</p>
                             <p className="col-md-3 col-sm-4 col-xs-6">Sewer Credits: {accountLedger.sewer_credits}</p>
                         </div>

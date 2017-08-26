@@ -121,6 +121,7 @@ class AgreementForm extends React.Component {
                                                 )}
                                                 <option value={['MEMO', 'Memo']}>Memo</option>
                                                 <option value={['RESOLUTION', 'Resolution']}>Resolution</option>
+                                                <option value={['OTHER', 'Other']}>Other</option>
                                             </select>
                                         </div>
                                     </div>

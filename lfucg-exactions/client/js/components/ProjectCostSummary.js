@@ -84,6 +84,7 @@ class ProjectCostSummary extends React.Component {
                                         <p className="col-md-3 col-sm-4 col-xs-6">Construction Cost: {projectCosts.construction_cost}</p>
                                         <p className="col-md-3 col-sm-4 col-xs-6">Administrative Cost: {projectCosts.admin_cost}</p>
                                         <p className="col-md-3 col-sm-4 col-xs-6">Management Cost: {projectCosts.management_cost}</p>
+                                        <p className="col-md-3 col-sm-4 col-xs-6">Other Costs: {projectCosts.other_cost}</p>
                                     </div>
                                 </div>
                             </div>
@@ -133,6 +134,7 @@ class ProjectCostSummary extends React.Component {
                                         </div>
                                     </div>
                                     <div className="col-xs-12">
+                                        <p className="col-md-3 col-sm-4 col-xs-6">Project Name: {projects.name}</p>
                                         <p className="col-md-3 col-sm-4 col-xs-6">Project Category: {projects.project_category_display}</p>
                                         <p className="col-md-3 col-sm-4 col-xs-6">Project Type: {projects.project_type_display}</p>
                                         <p className="col-md-3 col-sm-4 col-xs-6">Expansion Area: {projects.expansion_area}</p>

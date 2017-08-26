@@ -166,15 +166,24 @@ class PaymentForm extends React.Component {
                                                     <option value="choose_paid_by_type" aria-label="Choose a Paid By Type">Choose a Paid By Type</option>
                                                 )}
                                                 <option value={['DEVELOPER', 'Developer']}>Developer</option>
+                                                <option value={['BUILDER', 'Builder']}>Builder</option>
                                                 <option value={['OWNER', 'Home Owner']}>Home Owner</option>
                                             </select>
                                         </div>
                                     </div>
                                     <div className="row">
-                                        <div className="col-sm-6">
-                                            <FormGroup label="Payment Type" id="payment_type">
-                                                <input type="text" className="form-control" placeholder="Payment Type" />
-                                            </FormGroup>
+                                        <div className="col-sm-6 form-group">
+                                            <label htmlFor="payment_type" className="form-label" id="payment_type" aria-label="Payment Type" aria-required="true">* Payment Type</label>
+                                            <select className="form-control" id="payment_type" onChange={formChange('payment_type')} >
+                                                {payments.payment_type ? (
+                                                    <option value="payment_type" aria-label={`Payment Type ${payments.payment_type_display}`}>{payments.payment_type_display}</option>
+                                                ) : (
+                                                    <option value="choose_payment_type" aria-label="Choose a Payment Type">Choose a Payment Type</option>
+                                                )}
+                                                <option value={['CHECK', 'Check']}>Check</option>
+                                                <option value={['CREDIT_CARD', 'Credit Card']}>Credit Card</option>
+                                                <option value={['OTHER', 'Other']}>Other</option>
+                                            </select>
                                         </div>
                                         <div className="col-sm-6">
                                             <FormGroup label="Check Number" id="check_number">
