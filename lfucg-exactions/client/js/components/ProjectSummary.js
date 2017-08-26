@@ -118,6 +118,7 @@ class ProjectSummary extends React.Component {
                                         </div>
                                     </div>
                                     <div className="col-xs-12">
+                                        <p className="col-md-4 col-xs-6">Project Name: {projects.name}</p>
                                         <p className="col-md-4 col-xs-6">Project Category: {projects.project_category_display}</p>
                                         <p className="col-md-4 col-xs-6">Project Type: {projects.project_type_display}</p>
                                         <p className="col-md-4 col-xs-6">Expansion Area: {projects.expansion_area}</p>

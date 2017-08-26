@@ -75,7 +75,7 @@ class AgreementSummary extends React.Component {
                 return (
                     <div key={project.id} className="col-xs-12">
                         <div className="row form-subheading">
-                            <h3>{project.project_category}</h3>
+                            <h3>{project.name}</h3>
                         </div>
                         <div className="row link-row">
                             <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
@@ -100,6 +100,7 @@ class AgreementSummary extends React.Component {
                             </div>
                         </div>
                         <div className="row">
+                            <p className="col-md-3 col-sm-4 col-xs-6">Project Category: {project.project_category}</p>
                             <p className="col-md-3 col-sm-4 col-xs-6">Expansion Area: {project.expansion_area}</p>
                             <p className="col-md-3 col-sm-4 col-xs-6">Project Type: {project.project_type_display}</p>
                             <p className="col-md-3 col-sm-4 col-xs-6">Project Status: {project.project_status_display}</p>
@@ -140,7 +141,7 @@ class AgreementSummary extends React.Component {
                             </div>
                         </div>
                         <div className="row">
-                            <p className="col-md-3 col-sm-4 col-xs-6">Entry Type: {accountLedger.entry_type}</p>
+                            <p className="col-md-3 col-sm-4 col-xs-6">Entry Type: {accountLedger.entry_type_display}</p>
                             <p className="col-md-3 col-sm-4 col-xs-6">Non-Sewer Credits: {accountLedger.non_sewer_credits}</p>
                             <p className="col-md-3 col-sm-4 col-xs-6">Sewer Credits: {accountLedger.sewer_credits}</p>
                         </div>

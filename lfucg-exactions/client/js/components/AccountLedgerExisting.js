@@ -35,7 +35,7 @@ class AccountLedgerExisting extends React.Component {
                     <div key={accountLedger.id} className="col-xs-12">
                         <div className="row form-subheading">
                             <div className="col-sm-7 col-md-9">
-                                <h3>{accountLedger.entry_type}</h3>
+                                <h3>{accountLedger.entry_type_display}</h3>
                             </div>
                         </div>
                         <div className="row link-row">

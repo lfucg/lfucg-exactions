@@ -85,7 +85,7 @@ class AccountLedgerSummary extends React.Component {
                                         </div>
                                     </div>
                                     <div className="col-xs-12">
-                                        <p className="col-md-4 col-xs-6">Entry Type: {accountLedgers.entry_type}</p>
+                                        <p className="col-md-4 col-xs-6">Entry Type: {accountLedgers.entry_type_display}</p>
                                         <p className="col-md-4 col-xs-6">Sewer Credits: {accountLedgers.sewer_credits}</p>
                                         <p className="col-md-4 col-xs-6">Non-Sewer Credits: {accountLedgers.non_sewer_credits}</p>
                                     </div>

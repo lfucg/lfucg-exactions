@@ -1257,6 +1257,7 @@ export function postProject() {
             const {
                 agreement_id,
                 project_category,
+                name,
                 expansion_area,
                 project_type,
                 project_status,
@@ -1272,6 +1273,7 @@ export function postProject() {
                 modified_by: id,
                 agreement_id,
                 project_category,
+                name,
                 expansion_area,
                 project_type,
                 project_status,
@@ -1297,6 +1299,7 @@ export function putProject(selectedProject) {
             const {
                 agreement_id,
                 project_category,
+                name,
                 expansion_area,
                 project_type,
                 project_status,
@@ -1312,6 +1315,7 @@ export function putProject(selectedProject) {
                 modified_by: id,
                 agreement_id,
                 project_category,
+                name,
                 expansion_area,
                 project_type,
                 project_status,

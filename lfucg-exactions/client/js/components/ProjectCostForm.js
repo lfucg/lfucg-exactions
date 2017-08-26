@@ -42,8 +42,8 @@ class ProjectCostForm extends React.Component {
 
         const projectsList = projects.length > 0 ? (map((project) => {
             return (
-                <option key={project.id} value={[project.id, project.project_description]} >
-                    {project.project_description}
+                <option key={project.id} value={[project.id, project.name]} >
+                    {project.name}
                 </option>
             );
         })(projects)) : null;
@@ -75,8 +75,8 @@ class ProjectCostForm extends React.Component {
                                                         {activeForm.project_name}
                                                     </option>
                                                 ) : (
-                                                    <option value="choose_project" aria-label="Select an Project">
-                                                        Select an Project
+                                                    <option value="choose_project" aria-label="Select a Project">
+                                                        Select a Project
                                                     </option>
                                                 )}
                                                 {projectsList}
@@ -118,6 +118,13 @@ class ProjectCostForm extends React.Component {
                                                 <input type="number" className="form-control" placeholder="Management Cost" />
                                             </FormGroup>
                                         </div>
+                                        <div className="col-sm-6">
+                                            <FormGroup label="Other Costs" id="other_cost">
+                                                <input type="number" className="form-control" placeholder="Other Costs" />
+                                            </FormGroup>
+                                        </div>
+                                    </div>
+                                    <div className="row">
                                         <div className="col-sm-6">
                                             <FormGroup label="Credits Available" id="credits_available">
                                                 <input type="number" className="form-control" placeholder="Credits Available" />
