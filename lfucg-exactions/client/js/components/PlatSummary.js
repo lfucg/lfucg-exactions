@@ -80,20 +80,26 @@ class PlatSummary extends React.Component {
             return (
                 <div key={lot.id}>
                     <div className="row form-subheading">
-                        <div className="col-sm-7 col-md-9">
-                            <h3>{lot.address_full}</h3>
-                        </div>
-                        <div className="col-sm-5 col-md-3">
+                        <h3>{lot.address_full}</h3>
+                    </div>
+                    <div className="row link-row">
+                        <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
                             <div className="col-xs-5">
                                 {currentUser && currentUser.permissions && currentUser.permissions.lot &&
-                                    <Link to={`lot/form/${lot.id}`} className="btn btn-mid-level">
-                                        Edit
+                                    <Link to={`lot/form/${lot.id}`} aria-label="Edit">
+                                        <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
+                                        <div className="col-xs-7 link-label">
+                                            Edit
+                                        </div>
                                     </Link>
                                 }
                             </div>
-                            <div className="col-xs-5 col-xs-offset-1">
-                                <Link to={`lot/summary/${lot.id}`} className="btn btn-mid-level">
-                                    Summary
+                            <div className="col-xs-5 ">
+                                <Link to={`lot/summary/${lot.id}`} aria-label="Summary">
+                                    <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
+                                    <div className="col-xs-7 link-label">
+                                        Summary
+                                    </div>
                                 </Link>
                             </div>
                         </div>
@@ -146,6 +152,20 @@ class PlatSummary extends React.Component {
                               aria-labelledby="#headingPlat"
                             >
                                 <div className="panel-body">
+                                    <div className="row link-row">
+                                        <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
+                                            <div className="col-xs-5 col-xs-offset-5">
+                                                {currentUser && currentUser.permissions && currentUser.permissions.plat &&
+                                                    <Link to={`plat/form/${plats.id}`} aria-label="Edit">
+                                                        <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
+                                                        <div className="col-xs-7 link-label">
+                                                            Edit
+                                                        </div>
+                                                    </Link>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div className="col-xs-12">
                                         <p className="col-md-3 col-sm-4 col-xs-6">Plat Name: {plats.name}</p>
                                         <p className="col-md-3 col-sm-4 col-xs-6">Plat Type: {plats.plat_type_display}</p>
@@ -163,13 +183,6 @@ class PlatSummary extends React.Component {
                                         <p className="col-md-3 col-sm-4 col-xs-6">Non-Sewer Exactions: ${plats.non_sewer_due}</p>
                                         <p className="col-xs-12">Calculation Note: {plats.calculation_note}</p>
                                     </div>
-                                    {currentUser && currentUser.permissions && currentUser.permissions.plat &&
-                                        <div className="col-md-offset-11 col-sm-offset-10 col-xs-offset-8">
-                                            <Link to={`plat/form/${plats.id}`} role="link" >
-                                                <h4>Edit</h4>
-                                            </Link>
-                                        </div>
-                                    }
                                 </div>
                             </div>
 
@@ -196,17 +209,24 @@ class PlatSummary extends React.Component {
                                   aria-labelledby="#headingPlatZone"
                                 >
                                     <div className="panel-body">
+                                        <div className="row link-row">
+                                            <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
+                                                <div className="col-xs-5 col-xs-offset-5">
+                                                    {currentUser && currentUser.permissions && currentUser.permissions.plat &&
+                                                        <Link to={`plat/form/${plats.id}`} aria-label="Edit">
+                                                            <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
+                                                            <div className="col-xs-7 link-label">
+                                                                Edit
+                                                            </div>
+                                                        </Link>
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
                                         <div className="col-xs-12">
                                             <div className="col-xs-12">
                                                 { platZonesList }
                                             </div>
-                                            {currentUser && currentUser.permissions && currentUser.permissions.platzone &&
-                                                <div className="col-md-offset-11 col-sm-offset-10 col-xs-offset-8">
-                                                    <Link to={`plat/form/${plats.id}`} role="link" >
-                                                        <h4>Edit</h4>
-                                                    </Link>
-                                                </div>
-                                            }
                                         </div>
                                     </div>
                                 </div>
@@ -236,6 +256,20 @@ class PlatSummary extends React.Component {
                                       aria-labelledby="#headingPlatExactions"
                                     >
                                         <div className="panel-body">
+                                            <div className="row link-row">
+                                                <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
+                                                    <div className="col-xs-5 col-xs-offset-5">
+                                                        {currentUser && currentUser.permissions && currentUser.permissions.plat &&
+                                                            <Link to={`plat/form/${plats.id}`} aria-label="Edit">
+                                                                <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
+                                                                <div className="col-xs-7 link-label">
+                                                                    Edit
+                                                                </div>
+                                                            </Link>
+                                                        }
+                                                    </div>
+                                                </div>
+                                            </div>
                                             <div className="col-xs-12">
                                                 <div className="col-xs-12">
                                                     <div className="col-xs-3">
@@ -281,13 +315,6 @@ class PlatSummary extends React.Component {
                                                         </div>
                                                     </div>
                                                 </div>
-                                                {currentUser && currentUser.permissions && currentUser.permissions.platzone &&
-                                                    <div className="col-md-offset-11 col-sm-offset-10 col-xs-offset-8">
-                                                        <Link to={`plat/form/${plats.id}`} role="link" >
-                                                            <h4>Edit</h4>
-                                                        </Link>
-                                                    </div>
-                                                }
                                             </div>
                                         </div>
                                     </div>
@@ -380,27 +407,37 @@ class PlatSummary extends React.Component {
                                       aria-labelledby="#headingAccounts"
                                     >
                                         <div className="panel-body">
+                                            <div className="row link-row">
+                                                <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
+                                                    <div className="col-xs-5">
+                                                        {currentUser && currentUser.permissions && currentUser.permissions.account &&
+                                                            <Link to={`account/form/${accounts.id}`} aria-label="Edit">
+                                                                <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
+                                                                <div className="col-xs-7 link-label">
+                                                                    Edit
+                                                                </div>
+                                                            </Link>
+                                                        }
+                                                    </div>
+                                                    <div className="col-xs-5 ">
+                                                        <Link to={`account/summary/${accounts.id}`} aria-label="Summary">
+                                                            <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
+                                                            <div className="col-xs-7 link-label">
+                                                                Summary
+                                                            </div>
+                                                        </Link>
+                                                    </div>
+                                                </div>
+                                            </div>
                                             <div className="col-xs-12">
                                                 <div className="col-sm-6">
                                                     <p>Developer Account Name: {accounts.account_name}</p>
                                                 </div>
-                                                <div className="col-sm-6">
-                                                    <p>Contact Name: {accounts.contact_full_name}</p>
-                                                </div>
-                                            </div>
-                                            <div className="col-md-offset-8 col-sm-offset-6">
-                                                <div className="col-xs-6">
-                                                    {currentUser && currentUser.permissions && currentUser.permissions.account &&
-                                                        <Link to={`account/form/${accounts.id}`} role="link" >
-                                                            <h4>Edit</h4>
-                                                        </Link>
-                                                    }
-                                                </div>
-                                                <div className="col-xs-6">
-                                                    <Link to={`account/summary/${accounts.id}`} role="link" >
-                                                        <h4>Summary</h4>
-                                                    </Link>
-                                                </div>
+                                                {currentUser && currentUser.username &&
+                                                    <div className="col-sm-6">
+                                                        <p>Contact Name: {accounts.contact_full_name}</p>
+                                                    </div>
+                                                }
                                             </div>
                                         </div>
                                     </div>

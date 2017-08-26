@@ -29,14 +29,12 @@ class PaymentExisting extends React.Component {
             onPaymentQuery,
         } = this.props;
 
-        const payments_list = payments.length > 0 ? (
+        const payments_list = payments.length > 0 &&
             map((payment) => {
                 return (
                     <div key={payment.id} className="col-xs-12">
                         <div className="row form-subheading">
-                            <div className="col-sm-7 col-md-9">
-                                <h3>Payment Category: {payment.payment_category}</h3>
-                            </div>
+                            <h3>Paid By {payment.paid_by}</h3>
                         </div>
                         <div className="row link-row">
                             <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
@@ -72,8 +70,7 @@ class PaymentExisting extends React.Component {
                         </div>
                     </div>
                 );
-            })(payments)
-        ) : null;
+            })(payments);
 
         return (
             <div className="payment-existing">
