@@ -22,7 +22,7 @@ class AccountLedgerSerializer(serializers.ModelSerializer):
     lot = LotField()
 
     def get_entry_type_display(self, obj):
-        return get_entry_type_display()
+        return obj.get_entry_type_display()
 
     class Meta:
         model = AccountLedger
