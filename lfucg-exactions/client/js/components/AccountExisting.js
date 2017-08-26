@@ -63,7 +63,9 @@ class AccountExisting extends React.Component {
                         <div className="row">
                             <div className="col-sm-offset-1">
                                 <p className="col-md-4 col-xs-6">Developer Account Name: {account.account_name}</p>
-                                <p className="col-md-4 col-xs-6">Contact Name: {account.contact_full_name}</p>
+                                {currentUser && currentUser.username &&
+                                    <p className="col-md-4 col-xs-6">Contact Name: {account.contact_full_name}</p>
+                                }
                             </div>
                         </div>
                     </div>
