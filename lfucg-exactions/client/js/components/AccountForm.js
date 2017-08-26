@@ -71,6 +71,7 @@ class AccountForm extends React.Component {
                                             </FormGroup>
                                         </div>
                                     </div>
+
                                     <div className="row">
                                         <div className="col-sm-6">
                                             <FormGroup label="* Contact First Name" id="contact_first_name" aria-required="true">
@@ -80,6 +81,18 @@ class AccountForm extends React.Component {
                                         <div className="col-sm-6">
                                             <FormGroup label="* Contact Last Name" id="contact_last_name" aria-required="true">
                                                 <input type="text" className="form-control" placeholder="Contact Last Name" />
+                                            </FormGroup>
+                                        </div>
+                                    </div>
+                                    <div className="row">
+                                        <div className="col-sm-4">
+                                            <FormGroup label="* Address Number" id="address_number" aria-required="true">
+                                                <input type="number" className="form-control" placeholder="Address Number" />
+                                            </FormGroup>
+                                        </div>
+                                        <div className="col-sm-8">
+                                            <FormGroup label="* Street" id="address_street" aria-required="true">
+                                                <input type="text" className="form-control" placeholder="Street" />
                                             </FormGroup>
                                         </div>
                                     </div>
