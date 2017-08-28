@@ -367,14 +367,12 @@ class PlatSummary extends React.Component {
                                             </div>
                                         </div>
                                     </div>
-                                </div> : <div>
-                                    <div className="col-xs-10">
-                                        <h2>Lots - None</h2>
-                                    </div>
+                                </div> : <div className="row section-heading" role="tab" id="headingAccountPlats">
+                                    <h2>Lots - None</h2>
                                 </div>
                             }
 
-                            {plats.account && accounts &&
+                            {plats.account && accounts ?
                                 <div>
                                     <a
                                       role="button"
@@ -422,6 +420,8 @@ class PlatSummary extends React.Component {
                                             </div>
                                         </div>
                                     </div>
+                                </div> : <div className="row section-heading" role="tab" id="headingAccountPlats">
+                                    <h2>Account - None</h2>
                                 </div>
                             }
                         </div>

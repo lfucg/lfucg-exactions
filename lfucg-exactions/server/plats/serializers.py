@@ -129,7 +129,7 @@ class PlatSerializer(serializers.ModelSerializer):
             'calculation_note',
             'sewer_due',
             'non_sewer_due',
-            'lot',
+            # 'lot',
             'plat_zone',
             'plat_type_display',
         )
