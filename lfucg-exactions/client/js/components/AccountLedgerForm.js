@@ -84,8 +84,8 @@ class AccountLedgerForm extends React.Component {
         const submitEnabled =
             activeForm.account_from &&
             activeForm.account_to &&
-            activeForm.lot_id &&
-            activeForm.credit_source &&
+            activeForm.lot &&
+            activeForm.agreement &&
             activeForm.entry_type &&
             activeForm.non_sewer_credits &&
             activeForm.sewer_credits &&
@@ -111,11 +111,11 @@ class AccountLedgerForm extends React.Component {
                                 <fieldset>
                                     <div className="row">
                                         <div className="col-sm-6 form-group">
-                                            <label htmlFor="lot_id" className="form-label" id="lot_id" aria-label="Lot" aria-required="true">* Lot</label>
-                                            <select className="form-control" id="lot_id" onChange={formChange('lot_id')} >
-                                                {activeForm.lot_id ? (
+                                            <label htmlFor="lot" className="form-label" id="lot" aria-label="Lot" aria-required="true">* Lot</label>
+                                            <select className="form-control" id="lot" onChange={formChange('lot')} >
+                                                {accountLedgers.lot ? (
                                                     <option value="choose_source" aria-label="Selected Lot">
-                                                        {activeForm.lot_id}
+                                                        {accountLedgers.lot.address_full}
                                                     </option>
                                                 ) : (
                                                     <option value="choose_source" aria-label="Select an Lot">
@@ -126,11 +126,11 @@ class AccountLedgerForm extends React.Component {
                                             </select>
                                         </div>
                                         <div className="col-sm-6 form-group">
-                                            <label htmlFor="credit_source" className="form-label" id="credit_source" aria-label="Agreement" aria-required="true">* Agreement</label>
-                                            <select className="form-control" id="credit_source" onChange={formChange('credit_source')} >
-                                                {activeForm.credit_source ? (
+                                            <label htmlFor="agreement" className="form-label" id="agreement" aria-label="Agreement" aria-required="true">* Agreement</label>
+                                            <select className="form-control" id="agreement" onChange={formChange('agreement')} >
+                                                {accountLedgers.agreement ? (
                                                     <option value="choose_source" aria-label="Selected Agreement">
-                                                        {activeForm.credit_source}
+                                                        {accountLedgers.agreement.resolution_number}
                                                     </option>
                                                 ) : (
                                                     <option value="choose_source" aria-label="Select an Agreement">
@@ -145,9 +145,9 @@ class AccountLedgerForm extends React.Component {
                                         <div className="col-sm-6 form-group">
                                             <label htmlFor="account_from" className="form-label" id="account_from" aria-label="Account From" aria-required="true">* Account From</label>
                                             <select className="form-control" id="account_from" onChange={formChange('account_from')} >
-                                                {activeForm.account_name ? (
+                                                {accountLedgers.account_from ? (
                                                     <option value="choose_account" aria-label="Selected Account From">
-                                                        {activeForm.account_from_name}
+                                                        {accountLedgers.account_from.account_name}
                                                     </option>
                                                 ) : (
                                                     <option value="choose_account" aria-label="Select an Account From">
@@ -160,9 +160,9 @@ class AccountLedgerForm extends React.Component {
                                         <div className="col-sm-6 form-group">
                                             <label htmlFor="account_to" className="form-label" id="account_to" aria-label="Account To" aria-required="true">* Account To</label>
                                             <select className="form-control" id="account_to" onChange={formChange('account_to')} >
-                                                {activeForm.account_name ? (
+                                                {accountLedgers.account_to ? (
                                                     <option value="choose_account" aria-label="Selected Account To">
-                                                        {activeForm.account_to_name}
+                                                        {accountLedgers.account_to.account_name}
                                                     </option>
                                                 ) : (
                                                     <option value="choose_account" aria-label="Select an Account To">
