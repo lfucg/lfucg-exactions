@@ -6,73 +6,15 @@ from .models import *
 from plats.models import Plat, Lot
 from plats.serializers import PlatSerializer, LotSerializer
 
-class AccountLedgerSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = AccountLedger
-        fields = (
-            'id',
-            'is_approved',
-            'is_active',
-            'entry_date',
-            'date_created',
-            'date_modified',
-            'created_by',
-            'modified_by',
-            'account_from',
-            'account_to',
-            'lot',
-            'agreement',
-            'entry_type',
-            'non_sewer_credits',
-            'sewer_credits',
-        )
+class LotField(serializers.Field):
+    def to_internal_value(self, data):
+        try: 
+            return Lot.objects.get(id=data)
+        except: 
+            return None
 
-class PaymentSerializer(serializers.ModelSerializer):
-    total_paid = serializers.SerializerMethodField(read_only=True)
-    paid_by_type_display = serializers.SerializerMethodField(read_only=True)
-
-    def get_total_paid(self,obj):
-        total = (
-            obj.paid_roads +
-            obj.paid_sewer_trans +
-            obj.paid_sewer_cap +
-            obj.paid_parks +
-            obj.paid_storm +
-            obj.paid_open_space
-        )
-        return total
-
-    def get_paid_by_type_display(self, obj):
-        return obj.get_paid_by_type_display()
-
-
-    class Meta:
-        model = Payment
-        fields = (
-            'id',
-            'is_approved',
-            'is_active',
-            'date_created',
-            'date_modified',
-            'created_by',
-            'modified_by',
-            'lot_id',
-            'paid_by',
-            'paid_by_type',
-            'payment_type',
-            'check_number',
-            'credit_source',
-            'credit_account',
-            'paid_roads',
-            'paid_sewer_trans',
-            'paid_sewer_cap',
-            'paid_parks',
-            'paid_storm',
-            'paid_open_space',
-
-            'total_paid',
-            'paid_by_type_display',
-        )
+    def to_representation(self, obj):
+        return LotSerializer(obj).data
 
 class ProjectCostEstimateSerializer(serializers.ModelSerializer):
     total_costs = serializers.SerializerMethodField(read_only=True)
@@ -152,8 +94,8 @@ class ProjectSerializer(serializers.ModelSerializer):
 
 class AgreementSerializer(serializers.ModelSerializer):
     projects = ProjectSerializer(many=True, read_only=True)
-    account_ledgers = AccountLedgerSerializer(many=True, read_only=True)
-    payments = PaymentSerializer(many=True, read_only=True)
+    # account_ledgers = AccountLedgerSerializer(many=True, read_only=True)
+    # payments = PaymentSerializer(many=True, read_only=True)
 
     agreement_type_display = serializers.SerializerMethodField(read_only=True)
 
@@ -176,15 +118,15 @@ class AgreementSerializer(serializers.ModelSerializer):
             'expansion_area',
             'agreement_type',
             'projects',
-            'account_ledgers',
-            'payments',
+            # 'account_ledgers',
+            # 'payments',
             'agreement_type_display',
         )
 
 class AccountSerializer(serializers.ModelSerializer):
     agreements = AgreementSerializer(many=True, read_only=True)
-    account_ledgers = AccountLedgerSerializer(many=True, read_only=True)
-    payments = PaymentSerializer(many=True, read_only=True)
+    # account_ledgers = AccountLedgerSerializer(many=True, read_only=True)
+    # payments = PaymentSerializer(many=True, read_only=True)
 
     plat_account = PlatSerializer(many=True, required=False)
     lot_account = LotSerializer(many=True, required=False)
@@ -213,8 +155,104 @@ class AccountSerializer(serializers.ModelSerializer):
             'phone',
             'email',
             'agreements',
-            'account_ledgers',
-            'payments',
+            # 'account_ledgers',
+            # 'payments',
+        )
+
+class AccountField(serializers.Field):
+    def to_internal_value(self, data):
+        try: 
+            return Account.objects.get(id=data)
+        except: 
+            return None
+
+    def to_representation(self, obj):
+        return AccountSerializer(obj).data
+
+class AgreementField(serializers.Field):
+    def to_internal_value(self, data):
+        try: 
+            return Agreement.objects.get(id=data)
+        except: 
+            return None
+
+    def to_representation(self, obj):
+        return AgreementSerializer(obj).data
+
+class AccountLedgerSerializer(serializers.ModelSerializer):
+    lot = LotField()
+    agreement = AgreementField()
+    account_from = AccountField()
+    account_to = AccountField()
+
+    class Meta:
+        model = AccountLedger
+        fields = (
+            'id',
+            'is_approved',
+            'is_active',
+            'entry_date',
+            'date_created',
+            'date_modified',
+            'created_by',
+            'modified_by',
+            
+            'account_from',
+            'account_to',
+            'lot',
+            'agreement',
+            'entry_type',
+            'non_sewer_credits',
+            'sewer_credits',
+        )
+
+class PaymentSerializer(serializers.ModelSerializer):
+    lot_id = LotField()
+
+    total_paid = serializers.SerializerMethodField(read_only=True)
+    paid_by_type_display = serializers.SerializerMethodField(read_only=True)
+
+    def get_total_paid(self,obj):
+        total = (
+            obj.paid_roads +
+            obj.paid_sewer_trans +
+            obj.paid_sewer_cap +
+            obj.paid_parks +
+            obj.paid_storm +
+            obj.paid_open_space
+        )
+        return total
+
+    def get_paid_by_type_display(self, obj):
+        return obj.get_paid_by_type_display()
+
+
+    class Meta:
+        model = Payment
+        fields = (
+            'id',
+            'is_approved',
+            'is_active',
+            'date_created',
+            'date_modified',
+            'created_by',
+            'modified_by',
+            'lot_id',
+            'paid_by',
+            'paid_by_type',
+            'payment_type',
+            'check_number',
+            'credit_source',
+            'credit_account',
+            'paid_roads',
+            'paid_sewer_trans',
+            'paid_sewer_cap',
+            'paid_parks',
+            'paid_storm',
+            'paid_open_space',
+
+            'total_paid',
+            'paid_by_type_display',
         )
 
 class UserSerializer(serializers.ModelSerializer):
