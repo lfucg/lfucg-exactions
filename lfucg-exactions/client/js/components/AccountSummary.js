@@ -166,8 +166,8 @@ class AccountSummary extends React.Component {
                         </div>
                         <div className="row">
                             <p className="col-md-3 col-sm-4 col-xs-6">Payment Type: {payment.payment_type}</p>
-                            <p className="col-md-3 col-sm-4 col-xs-6">Lot: {payment.lot_id}</p>
-                            <p className="col-md-3 col-sm-4 col-xs-6">Credit Source: {payment.credit_source}</p>
+                            <p className="col-md-3 col-sm-4 col-xs-6">Lot: {payment.lot_id.address_full}</p>
+                            <p className="col-md-3 col-sm-4 col-xs-6">Credit Source: {payment.credit_source.resolution_number}</p>
                         </div>
                     </div>
                 );
@@ -198,10 +198,10 @@ class AccountSummary extends React.Component {
                             </div>
                         </div>
                         <div className="row">
-                            <p className="col-md-3 col-sm-4 col-xs-6">Lot: {accountLedger.lot}</p>
-                            <p className="col-md-3 col-sm-4 col-xs-6">Account From: {accountLedger.account_from}</p>
-                            <p className="col-md-3 col-sm-4 col-xs-6">Account To: {accountLedger.account_to}</p>
-                            <p className="col-md-3 col-sm-4 col-xs-6">Agreement: {accountLedger.agreement}</p>
+                            <p className="col-md-3 col-sm-4 col-xs-6">Lot: {accountLedger.lot.address_full}</p>
+                            <p className="col-md-3 col-sm-4 col-xs-6">Account From: {accountLedger.account_from.account_name}</p>
+                            <p className="col-md-3 col-sm-4 col-xs-6">Account To: {accountLedger.account_to.account_name}</p>
+                            <p className="col-md-3 col-sm-4 col-xs-6">Agreement: {accountLedger.agreement.resolution_number}</p>
                         </div>
                     </div>
                 );

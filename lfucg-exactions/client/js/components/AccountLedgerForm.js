@@ -244,45 +244,13 @@ function mapDispatchToProps(dispatch, params) {
                 if (selectedAccountLedger) {
                     dispatch(getAccountLedgerID(selectedAccountLedger))
                     .then((data_account_ledger) => {
-                        if (data_account_ledger.response.account_to) {
-                            dispatch(getAccountID(data_account_ledger.response.account_to))
-                            .then((data_account_to) => {
-                                const account_to_update = {
-                                    account_to_name: data_account_to.response.account_name,
-                                };
-                                dispatch(formUpdate(account_to_update));
-                            });
-                        }
-                        if (data_account_ledger.response.account_from) {
-                            dispatch(getAccountID(data_account_ledger.response.account_from))
-                            .then((data_account_from) => {
-                                const account_from_update = {
-                                    account_from_name: data_account_from.response.account_name,
-                                };
-                                dispatch(formUpdate(account_from_update));
-                            });
-                        }
-                        if (data_account_ledger.response.agreement_id) {
-                            dispatch(getAgreementID(data_account_ledger.response.agreement_id))
-                            .then((data_agreement) => {
-                                const agreement_update = {
-                                    resolution_number: data_agreement.response.resolution_number,
-                                };
-                                dispatch(formUpdate(agreement_update));
-                            });
-                        }
-                        if (data_account_ledger.response.lot_id) {
-                            dispatch(getLotID(data_account_ledger.response.lot_id))
-                            .then((data_lot) => {
-                                const lot_update = {
-                                    address_full: data_lot.response.address_full,
-                                };
-                                dispatch(formUpdate(lot_update));
-                            });
-                        }
                         const update = {
+                            lot: data_account_ledger.response.lot ? data_account_ledger.response.lot.id : null,
+                            account_from: data_account_ledger.response.account_from ? data_account_ledger.response.account_from.id : null,
+                            account_to: data_account_ledger.response.account_to ? data_account_ledger.response.account_to.id : null,
+                            agreement: data_account_ledger.response.agreement ? data_account_ledger.response.agreement.id : null,
                             entry_date: data_account_ledger.response.entry_date,
-                            entry_type: data_account_ledger.response.paid_by_type,
+                            entry_type: data_account_ledger.response.entry_type,
                             non_sewer_credits: data_account_ledger.response.non_sewer_credits,
                             sewer_credits: data_account_ledger.response.sewer_credits,
                         };

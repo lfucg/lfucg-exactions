@@ -7,23 +7,13 @@ import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
 
 import {
-    getLotID,
-    getAccountID,
-    getAgreementID,
     getAccountLedgerID,
 } from '../actions/apiActions';
 
-import {
-    formUpdate,
-} from '../actions/formActions';
 
 class AccountLedgerSummary extends React.Component {
     static propTypes = {
         currentUser: React.PropTypes.object,
-        activeForm: React.PropTypes.object,
-        lots: React.PropTypes.object,
-        accounts: React.PropTypes.object,
-        agreements: React.PropTypes.object,
         accountLedgers: React.PropTypes.object,
         route: React.PropTypes.object,
         onComponentDidMount: React.PropTypes.func,
@@ -36,10 +26,6 @@ class AccountLedgerSummary extends React.Component {
     render() {
         const {
             currentUser,
-            activeForm,
-            lots,
-            accounts,
-            agreements,
             accountLedgers,
         } = this.props;
 
@@ -336,40 +322,6 @@ function mapDispatchToProps(dispatch, params) {
     return {
         onComponentDidMount() {
             dispatch(getAccountLedgerID(selectedAccountLedger));
-            // .then((data_accountLedger) => {
-            //     if (data_accountLedger.response.lot) {
-            //         dispatch(getLotID(data_accountLedger.response.lot));
-            //     }
-            //     if (data_accountLedger.response.agreement) {
-            //         dispatch(getAgreementID(data_accountLedger.response.agreement));
-            //     }
-            //     if (data_accountLedger.response.account_from) {
-            //         dispatch(getAccountID(data_accountLedger.response.account_from))
-            //         .then((data_account_from) => {
-            //             const account_from = {
-            //                 account_from_name: data_account_from.response.account_name,
-            //                 account_from_contact_full_name: data_account_from.response.contact_full_name,
-            //                 account_from_address_full: data_account_from.response.address_full,
-            //                 account_from_phone: data_account_from.response.phone,
-            //                 account_from_email: data_account_from.response.email,
-            //             };
-            //             dispatch(formUpdate(account_from));
-            //         });
-            //     }
-            //     if (data_accountLedger.response.account_to) {
-            //         dispatch(getAccountID(data_accountLedger.response.account_to))
-            //         .then((data_account_to) => {
-            //             const account_to = {
-            //                 account_to_name: data_account_to.response.account_name,
-            //                 account_to_contact_full_name: data_account_to.response.contact_full_name,
-            //                 account_to_address_full: data_account_to.response.address_full,
-            //                 account_to_phone: data_account_to.response.phone,
-            //                 account_to_email: data_account_to.response.email,
-            //             };
-            //             dispatch(formUpdate(account_to));
-            //         });
-            //     }
-            // });
         },
     };
 }

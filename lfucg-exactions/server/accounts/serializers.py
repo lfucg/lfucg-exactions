@@ -94,8 +94,6 @@ class ProjectSerializer(serializers.ModelSerializer):
 
 class AgreementSerializer(serializers.ModelSerializer):
     projects = ProjectSerializer(many=True, read_only=True)
-    # account_ledgers = AccountLedgerSerializer(many=True, read_only=True)
-    # payments = PaymentSerializer(many=True, read_only=True)
 
     agreement_type_display = serializers.SerializerMethodField(read_only=True)
 
@@ -118,16 +116,11 @@ class AgreementSerializer(serializers.ModelSerializer):
             'expansion_area',
             'agreement_type',
             'projects',
-            # 'account_ledgers',
-            # 'payments',
             'agreement_type_display',
         )
 
 class AccountSerializer(serializers.ModelSerializer):
     agreements = AgreementSerializer(many=True, read_only=True)
-    # account_ledgers = AccountLedgerSerializer(many=True, read_only=True)
-    # payments = PaymentSerializer(many=True, read_only=True)
-
     plat_account = PlatSerializer(many=True, required=False)
     lot_account = LotSerializer(many=True, required=False)
 
@@ -155,8 +148,6 @@ class AccountSerializer(serializers.ModelSerializer):
             'phone',
             'email',
             'agreements',
-            # 'account_ledgers',
-            # 'payments',
         )
 
 class AccountField(serializers.Field):
@@ -208,6 +199,8 @@ class AccountLedgerSerializer(serializers.ModelSerializer):
 
 class PaymentSerializer(serializers.ModelSerializer):
     lot_id = LotField()
+    credit_account = AccountField()
+    credit_source = AgreementField()
 
     total_paid = serializers.SerializerMethodField(read_only=True)
     paid_by_type_display = serializers.SerializerMethodField(read_only=True)
