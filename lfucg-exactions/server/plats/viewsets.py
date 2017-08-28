@@ -49,6 +49,10 @@ class LotViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         queryset = Lot.objects.all()
 
+        plat_set = self.request.query_params.get('plat', None)
+        if plat_set is not None:
+            queryset = queryset.filter(plat=plat_set)
+
         query_text = self.request.query_params.get('query', None)
         if query_text is not None:
             query_text = query_text.lower()

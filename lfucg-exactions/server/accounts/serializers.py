@@ -92,35 +92,8 @@ class ProjectSerializer(serializers.ModelSerializer):
             'project_cost_estimate',
         )
 
-class AgreementSerializer(serializers.ModelSerializer):
-    projects = ProjectSerializer(many=True, read_only=True)
-
-    agreement_type_display = serializers.SerializerMethodField(read_only=True)
-
-    def get_agreement_type_display(self, obj):
-        return obj.get_agreement_type_display()
-
-    class Meta:
-        model = Agreement
-        fields = (
-            'id',
-            'is_approved',
-            'is_active',
-            'date_executed',
-            'date_created',
-            'date_modified',
-            'created_by',
-            'modified_by',
-            'account_id',
-            'resolution_number',
-            'expansion_area',
-            'agreement_type',
-            'projects',
-            'agreement_type_display',
-        )
-
 class AccountSerializer(serializers.ModelSerializer):
-    agreements = AgreementSerializer(many=True, read_only=True)
+    # agreements = AgreementSerializer(many=True, read_only=True)
     plat_account = PlatSerializer(many=True, required=False)
     lot_account = LotSerializer(many=True, required=False)
 
@@ -147,7 +120,7 @@ class AccountSerializer(serializers.ModelSerializer):
             'address_full',
             'phone',
             'email',
-            'agreements',
+            # 'agreements',
         )
 
 class AccountField(serializers.Field):
@@ -159,6 +132,34 @@ class AccountField(serializers.Field):
 
     def to_representation(self, obj):
         return AccountSerializer(obj).data
+
+class AgreementSerializer(serializers.ModelSerializer):
+    projects = ProjectSerializer(many=True, read_only=True)
+    account_id = AccountField()
+
+    agreement_type_display = serializers.SerializerMethodField(read_only=True)
+
+    def get_agreement_type_display(self, obj):
+        return obj.get_agreement_type_display()
+
+    class Meta:
+        model = Agreement
+        fields = (
+            'id',
+            'is_approved',
+            'is_active',
+            'date_executed',
+            'date_created',
+            'date_modified',
+            'created_by',
+            'modified_by',
+            'account_id',
+            'resolution_number',
+            'expansion_area',
+            'agreement_type',
+            'projects',
+            'agreement_type_display',
+        )
 
 class AgreementField(serializers.Field):
     def to_internal_value(self, data):

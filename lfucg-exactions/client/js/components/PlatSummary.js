@@ -10,6 +10,7 @@ import Notes from './Notes';
 
 import {
     getPlatID,
+    getPlatLots,
     getAccountID,
 } from '../actions/apiActions';
 
@@ -21,6 +22,7 @@ class PlatSummary extends React.Component {
     static propTypes = {
         currentUser: React.PropTypes.object,
         plats: React.PropTypes.object,
+        lots: React.PropTypes.object,
         accounts: React.PropTypes.object,
         route: React.PropTypes.object,
         onComponentDidMount: React.PropTypes.func,
@@ -35,6 +37,7 @@ class PlatSummary extends React.Component {
         const {
             currentUser,
             plats,
+            lots,
             accounts,
         } = this.props;
 
@@ -87,7 +90,7 @@ class PlatSummary extends React.Component {
             );
         })(plats.plat_zone));
 
-        const platLots = plats.lot && plats.lot.length > 0 && (map((lot) => {
+        const platLots = lots && lots.length > 0 && (map((lot) => {
             return (
                 <div key={lot.id}>
                     <div className="row form-subheading">
@@ -118,7 +121,7 @@ class PlatSummary extends React.Component {
                     </div>
                 </div>
             );
-        })(plats.lot));
+        })(lots));
 
         return (
             <div className="plat-summary">
@@ -335,7 +338,7 @@ class PlatSummary extends React.Component {
                                 </div>
                             </div>
 
-                            {plats.lot &&
+                            {platLots ?
                                 <div>
                                     <a
                                       role="button"
@@ -363,6 +366,10 @@ class PlatSummary extends React.Component {
                                                 {platLots}
                                             </div>
                                         </div>
+                                    </div>
+                                </div> : <div>
+                                    <div className="col-xs-10">
+                                        <h2>Lots - None</h2>
                                     </div>
                                 </div>
                             }
@@ -430,6 +437,7 @@ function mapStateToProps(state) {
     return {
         currentUser: state.currentUser,
         plats: state.plats,
+        lots: state.lots,
         accounts: state.accounts,
     };
 }
@@ -439,6 +447,7 @@ function mapDispatchToProps(dispatch, params) {
 
     return {
         onComponentDidMount() {
+            dispatch(getPlatLots(selectedPlat));
             dispatch(getPlatID(selectedPlat))
             .then((plat_data) => {
                 if (plat_data.response.account) {

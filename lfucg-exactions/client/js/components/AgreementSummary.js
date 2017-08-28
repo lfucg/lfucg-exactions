@@ -47,7 +47,7 @@ class AgreementSummary extends React.Component {
                     <div key={payment.id} className="col-xs-12">
                         <div className="row form-subheading">
                             <div className="col-sm-7 col-md-9">
-                                <h3>{payment.payment_category}</h3>
+                                <h3>Account: {payment.credit_account.account_name}</h3>
                             </div>
                             <div className="col-sm-5 col-md-3">
                                 <div className="col-xs-5">
@@ -66,9 +66,9 @@ class AgreementSummary extends React.Component {
                         </div>
                         <div className="row">
                             <p className="col-md-3 col-sm-4 col-xs-6">Payment Type: {payment.payment_type}</p>
-                            <p className="col-md-3 col-sm-4 col-xs-6">Lot: {payment.lot_id}</p>
                             <p className="col-md-3 col-sm-4 col-xs-6">Paid By: {payment.paid_by}</p>
                             <p className="col-md-3 col-sm-4 col-xs-6">Total Paid: {payment.total_paid}</p>
+                            <p className="col-xs-12">Lot: {payment.lot_id.address_full}</p>
                         </div>
                     </div>
                 );
@@ -134,9 +134,15 @@ class AgreementSummary extends React.Component {
                             </div>
                         </div>
                         <div className="row">
-                            <p className="col-md-3 col-sm-4 col-xs-6">Account From: {accountLedger.account_from}</p>
-                            <p className="col-md-3 col-sm-4 col-xs-6">Account To: {accountLedger.account_to}</p>
-                            <p className="col-md-3 col-sm-4 col-xs-6">Lot: {accountLedger.lot}</p>
+                            { accountLedger.account_from &&
+                                <p className="col-md-3 col-sm-4 col-xs-6">Account From: {accountLedger.account_from.account_name}</p>
+                            }
+                            { accountLedger.account_to &&
+                                <p className="col-md-3 col-sm-4 col-xs-6">Account To: {accountLedger.account_to.account_name}</p>
+                            }
+                            { accountLedger.lot &&
+                                <p className="col-xs-12">Lot: {accountLedger.lot.address_full}</p>
+                            }
                         </div>
                     </div>
                 );
@@ -182,7 +188,6 @@ class AgreementSummary extends React.Component {
                                 <div className="panel-body">
                                     <div className="col-xs-12">
                                         <p className="col-md-4 col-xs-6">Resolution Number: {agreements.resolution_number}</p>
-                                        <p className="col-md-4 col-xs-6">Account: {agreements.account_id}</p>
                                         <p className="col-md-4 col-xs-6">Expansion Area: {agreements.expansion_area}</p>
                                         <p className="col-md-4 col-xs-6">Agreement Type: {agreements.agreement_type_display}</p>
                                         <p className="col-md-4 col-xs-6">Date Executed: {agreements.date_executed}</p>
@@ -197,51 +202,57 @@ class AgreementSummary extends React.Component {
                                 </div>
                             </div>
 
-                            <a
-                              role="button"
-                              data-toggle="collapse"
-                              data-parent="#accordion"
-                              href="#collapseAccountInfo"
-                              aria-expanded="false"
-                              aria-controls="collapseAccountInfo"
-                            >
-                                <div className="row section-heading" role="tab" id="headingAccountInfo">
-                                    <div className="col-xs-1 caret-indicator" />
-                                    <div className="col-xs-10">
-                                        <h2>Account Information</h2>
-                                    </div>
-                                </div>
-                            </a>
-                            <div
-                              id="collapseAccountInfo"
-                              className="panel-collapse collapse row"
-                              role="tabpanel"
-                              aria-labelledby="#headingAccountInfo"
-                            >
-                                <div className="panel-body">
-                                    <div className="col-xs-12">
-                                        <h4 className="col-md-4 col-xs-6">Account Name: {accounts.account_name}</h4>
-                                        <h4 className="col-md-4 col-xs-6">Contact Name: {accounts.contact_full_name}</h4>
-                                        <h4 className="col-xs-12">Address: {accounts.address_full}</h4>
-                                        <h4 className="col-md-4 col-xs-6 ">Phone: {accounts.phone}</h4>
-                                        <h4 className="col-md-4 col-xs-6">Email: {accounts.email}</h4>
-                                    </div>
-                                    <div className="col-md-offset-8 col-sm-offset-6">
-                                        <div className="col-xs-6">
-                                            {currentUser && currentUser.permissions && currentUser.permissions.account &&
-                                                <Link to={`account/form/${accounts.id}`} role="link" >
-                                                    <h4>Edit</h4>
-                                                </Link>
-                                            }
+                            {agreements && agreements.account_id && agreements.account_id.id ?
+                                <div>
+                                    <a
+                                      role="button"
+                                      data-toggle="collapse"
+                                      data-parent="#accordion"
+                                      href="#collapseAccountInfo"
+                                      aria-expanded="false"
+                                      aria-controls="collapseAccountInfo"
+                                    >
+                                        <div className="row section-heading" role="tab" id="headingAccountInfo">
+                                            <div className="col-xs-1 caret-indicator" />
+                                            <div className="col-xs-10">
+                                                <h2>Account Information</h2>
+                                            </div>
                                         </div>
-                                        <div className="col-xs-6">
-                                            <Link to={`account/summary/${accounts.id}`} role="link" >
-                                                <h4>Summary</h4>
-                                            </Link>
+                                    </a>
+                                    <div
+                                      id="collapseAccountInfo"
+                                      className="panel-collapse collapse row"
+                                      role="tabpanel"
+                                      aria-labelledby="#headingAccountInfo"
+                                    >
+                                        <div className="panel-body">
+                                            <div className="col-xs-12">
+                                                <h4 className="col-md-4 col-xs-6">Account Name: {agreements.account_id.account_name}</h4>
+                                                <h4 className="col-md-4 col-xs-6">Contact Name: {agreements.account_id.contact_full_name}</h4>
+                                                <h4 className="col-xs-12">Address: {agreements.account_id.address_full}</h4>
+                                                <h4 className="col-md-4 col-xs-6 ">Phone: {agreements.account_id.phone}</h4>
+                                                <h4 className="col-md-4 col-xs-6">Email: {agreements.account_id.email}</h4>
+                                            </div>
+                                            <div className="col-md-offset-8 col-sm-offset-6">
+                                                <div className="col-xs-6">
+                                                    {currentUser && currentUser.permissions && currentUser.permissions.account &&
+                                                        <Link to={`account/form/${agreements.account_id.id}`} role="link" >
+                                                            <h4>Edit</h4>
+                                                        </Link>
+                                                    }
+                                                </div>
+                                                <div className="col-xs-6">
+                                                    <Link to={`account/summary/${agreements.account_id.id}`} role="link" >
+                                                        <h4>Summary</h4>
+                                                    </Link>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
+                                </div> : <div className="row section-heading" role="tab" id="headingAccountProjects">
+                                    <h2>Account - None</h2>
                                 </div>
-                            </div>
+                            }
 
                             {payments_list ? (
                                 <div>
@@ -379,12 +390,12 @@ function mapDispatchToProps(dispatch, params) {
             dispatch(getAgreementPayments(selectedAgreement));
             dispatch(getAgreementProjects(selectedAgreement));
             dispatch(getAgreementAccountLedgers(selectedAgreement));
-            dispatch(getAgreementID(selectedAgreement))
-            .then((data_agreement) => {
-                if (data_agreement.response.account_id) {
-                    dispatch(getAccountID(data_agreement.response.account_id));
-                }
-            });
+            dispatch(getAgreementID(selectedAgreement));
+            // .then((data_agreement) => {
+            //     if (data_agreement.response.account_id) {
+            //         dispatch(getAccountID(data_agreement.response.account_id));
+            //     }
+            // });
         },
     };
 }
