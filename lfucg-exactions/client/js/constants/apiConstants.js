@@ -29,6 +29,7 @@ export const PUT_PLAT_ZONE_DUES = 'PUT_PLAT_ZONE_DUES';
 export const GET_LOTS = 'GET_LOTS';
 export const GET_LOT_ID = 'GET_LOT_ID';
 export const GET_LOT_QUERY = 'GET_LOT_QUERY';
+export const GET_PLAT_LOTS = 'GET_PLAT_LOTS';
 export const POST_LOT = 'POST_LOT';
 export const PUT_LOT = 'PUT_LOT';
 

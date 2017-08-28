@@ -30,6 +30,7 @@ import {
     GET_LOTS,
     GET_LOT_ID,
     GET_LOT_QUERY,
+    GET_PLAT_LOTS,
     POST_LOT,
     PUT_LOT,
 
@@ -577,6 +578,14 @@ export function getLotQuery() {
             const query_all = `/lot/?query=${query}`;
             return query_all;
         },
+    };
+}
+
+export function getPlatLots(selectedPlat) {
+    return {
+        type: API_CALL,
+        endpoint: GET_PLAT_LOTS,
+        url: `/lot/?plat=${selectedPlat}`,
     };
 }
 
