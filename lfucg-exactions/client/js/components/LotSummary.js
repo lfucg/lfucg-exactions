@@ -50,7 +50,7 @@ class LotSummary extends React.Component {
                     <div key={payment.id} className="col-xs-12">
                         <div className="row form-subheading">
                             <div className="col-sm-7 col-md-9">
-                                <h3>{payment.payment_category}</h3>
+                                <h3>Developer Account: {payment.credit_account.account_name}</h3>
                             </div>
                             <div className="col-sm-5 col-md-3">
                                 <div className="col-xs-5">
@@ -68,9 +68,10 @@ class LotSummary extends React.Component {
                             </div>
                         </div>
                         <div className="row">
-                            <p className="col-md-3 col-sm-4 col-xs-6">Payment Type: {payment.payment_type}</p>
-                            <p className="col-md-3 col-sm-4 col-xs-6">Paid By: {payment.paid_by}</p>
-                            <p className="col-md-3 col-sm-4 col-xs-6">Total Paid: {payment.total_paid}</p>
+                            <p className="col-sm-4 col-xs-6">Agreement Resolution: {payment.credit_source.resolution_number}</p>
+                            <p className="col-sm-4 col-xs-6">Payment Type: {payment.payment_type}</p>
+                            <p className="col-sm-4 col-xs-6">Paid By: {payment.paid_by}</p>
+                            <p className="col-sm-4 col-xs-6">Total Paid: {payment.total_paid}</p>
                         </div>
                     </div>
                 );
