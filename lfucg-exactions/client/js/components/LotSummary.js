@@ -101,9 +101,9 @@ class LotSummary extends React.Component {
                             </div>
                         </div>
                         <div className="row">
-                            <p className="col-md-3 col-sm-4 col-xs-6">Account From: {accountLedger.account_from.account_name}</p>
-                            <p className="col-md-3 col-sm-4 col-xs-6">Account To: {accountLedger.account_to.account_name}</p>
-                            <p className="col-md-3 col-sm-4 col-xs-6">Agreement: {accountLedger.agreement.resolution_number}</p>
+                            <p className="col-sm-4 col-xs-6">Account From: {accountLedger.account_from.account_name}</p>
+                            <p className="col-sm-4 col-xs-6">Account To: {accountLedger.account_to.account_name}</p>
+                            <p className="col-sm-4 col-xs-6">Agreement Resolution: {accountLedger.agreement.resolution_number}</p>
                         </div>
                     </div>
                 );
