@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { map } from 'ramda';
+import PropTypes from 'prop-types';
 
 import Navbar from './Navbar';
 import Footer from './Footer';
@@ -17,14 +18,6 @@ import {
 } from '../actions/formActions';
 
 class AgreementExisting extends React.Component {
-    static propTypes = {
-        currentUser: React.PropTypes.object,
-        agreements: React.PropTypes.object,
-        route: React.PropTypes.object,
-        onComponentDidMount: React.PropTypes.func,
-        onAgreementQuery: React.PropTypes.func,
-    };
-
     componentDidMount() {
         this.props.onComponentDidMount();
     }
@@ -44,26 +37,34 @@ class AgreementExisting extends React.Component {
                             <div className="col-sm-7 col-md-9">
                                 <h3>Resolution Number: {agreement.resolution_number}</h3>
                             </div>
-                            <div className="col-sm-5 col-md-3">
+                        </div>
+                        <div className="row link-row">
+                            <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
                                 <div className="col-xs-5">
                                     {currentUser && currentUser.permissions && currentUser.permissions.agreement &&
-                                        <Link to={`agreement/form/${agreement.id}`} className="btn btn-mid-level">
-                                            Edit
+                                        <Link to={`agreement/form/${agreement.id}`} aria-label="Edit">
+                                            <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
+                                            <div className="col-xs-7 link-label">
+                                                Edit
+                                            </div>
                                         </Link>
                                     }
                                 </div>
-                                <div className="col-xs-5 col-xs-offset-1">
-                                    <Link to={`agreement/summary/${agreement.id}`} className="btn btn-mid-level">
-                                        Summary
+                                <div className="col-xs-5 ">
+                                    <Link to={`agreement/summary/${agreement.id}`} aria-label="Summary">
+                                        <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
+                                        <div className="col-xs-7 link-label">
+                                            Summary
+                                        </div>
                                     </Link>
                                 </div>
                             </div>
                         </div>
                         <div className="row">
                             <div className="col-sm-offset-1">
-                                <p className="col-md-4 col-xs-6">Account: {agreement.account_id}</p>
+                                <p className="col-md-4 col-xs-6">Developer Account: {agreement.account_id}</p>
                                 <p className="col-md-4 col-xs-6">Expansion Area: {agreement.expansion_area}</p>
-                                <p className="col-xs-12">Agreement Type: {agreement.agreement_type_display}</p>
+                                <p className="col-md-4 col-xs-6">Agreement Type: {agreement.agreement_type_display}</p>
                                 <p className="col-md-4 col-xs-6 ">Date Executed: {agreement.date_executed}</p>
                             </div>
                         </div>
@@ -78,16 +79,7 @@ class AgreementExisting extends React.Component {
 
                 <div className="form-header">
                     <div className="container">
-                        <div className="col-sm-8">
-                            <h1>AGREEMENTS - EXISTING</h1>
-                        </div>
-                        {currentUser && currentUser.permissions && currentUser.permissions.agreement &&
-                            <div className="col-sm-2 col-sm-offset-1">
-                                <Link to={'agreement/form/'} className="btn btn-top-level" >
-                                    Create
-                                </Link>
-                            </div>
-                        }
+                        <h1>AGREEMENTS - EXISTING</h1>
                     </div>
                 </div>
 
@@ -120,6 +112,14 @@ class AgreementExisting extends React.Component {
         );
     }
 }
+
+AgreementExisting.propTypes = {
+    currentUser: PropTypes.object,
+    agreements: PropTypes.object,
+    route: PropTypes.object,
+    onComponentDidMount: PropTypes.func,
+    onAgreementQuery: PropTypes.func,
+};
 
 function mapStateToProps(state) {
     return {

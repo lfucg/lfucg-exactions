@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { map } from 'ramda';
+import PropTypes from 'prop-types';
 
 import Navbar from './Navbar';
 import Footer from './Footer';
@@ -17,14 +18,6 @@ import {
 } from '../actions/formActions';
 
 class PaymentExisting extends React.Component {
-    static propTypes = {
-        currentUser: React.PropTypes.object,
-        payments: React.PropTypes.object,
-        route: React.PropTypes.object,
-        onComponentDidMount: React.PropTypes.func,
-        onPaymentQuery: React.PropTypes.func,
-    };
-
     componentDidMount() {
         this.props.onComponentDidMount();
     }
@@ -36,41 +29,48 @@ class PaymentExisting extends React.Component {
             onPaymentQuery,
         } = this.props;
 
-        const payments_list = payments.length > 0 ? (
+        const payments_list = payments.length > 0 &&
             map((payment) => {
                 return (
                     <div key={payment.id} className="col-xs-12">
                         <div className="row form-subheading">
-                            <div className="col-sm-7 col-md-9">
-                                <h3>Payment Category: {payment.payment_category}</h3>
-                            </div>
-                            <div className="col-sm-5 col-md-3">
+                            <h3>Paid By {payment.paid_by}</h3>
+                        </div>
+                        <div className="row link-row">
+                            <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
                                 <div className="col-xs-5">
                                     {currentUser && currentUser.permissions && currentUser.permissions.payment &&
-                                        <Link to={`payment/form/${payment.id}`} className="btn btn-mid-level">
-                                            Edit
+                                        <Link to={`payment/form/${payment.id}`} aria-label="Edit">
+                                            <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
+                                            <div className="col-xs-7 link-label">
+                                                Edit
+                                            </div>
                                         </Link>
                                     }
                                 </div>
-                                <div className="col-xs-5 col-xs-offset-1">
-                                    <Link to={`payment/summary/${payment.id}`} className="btn btn-mid-level">
-                                        Summary
+                                <div className="col-xs-5 ">
+                                    <Link to={`payment/summary/${payment.id}`} aria-label="Summary">
+                                        <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
+                                        <div className="col-xs-7 link-label">
+                                            Summary
+                                        </div>
                                     </Link>
                                 </div>
                             </div>
                         </div>
                         <div className="row">
                             <div className="col-sm-offset-1">
-                                <p className="col-md-4 col-xs-6">Lot: {payment.lot_id}</p>
-                                <p className="col-md-4 col-xs-6">Credit Source: {payment.credit_source}</p>
-                                <p className="col-md-4 col-xs-6 ">Credit Account: {payment.credit_account}</p>
+                                {payment.lot_id &&
+                                    <p className="col-md-4 col-xs-6">Lot: {payment.lot_id.address_full}</p>
+                                }
+                                <p className="col-md-4 col-xs-6">Agreement Credit Source: {payment.credit_source}</p>
+                                <p className="col-md-4 col-xs-6 ">Developer Credit Account: {payment.credit_account}</p>
                                 <p className="col-md-4 col-xs-6">Payment Type: {payment.payment_type}</p>
                             </div>
                         </div>
                     </div>
                 );
-            })(payments)
-        ) : null;
+            })(payments);
 
         return (
             <div className="payment-existing">
@@ -78,16 +78,7 @@ class PaymentExisting extends React.Component {
 
                 <div className="form-header">
                     <div className="container">
-                        <div className="col-sm-8">
-                            <h1>PAYMENTS - EXISTING</h1>
-                        </div>
-                        {currentUser && currentUser.permissions && currentUser.permissions.payment &&
-                            <div className="col-sm-2 col-sm-offset-1">
-                                <Link to={'payment/form/'} className="btn btn-top-level" >
-                                    Create
-                                </Link>
-                            </div>
-                        }
+                        <h1>PAYMENTS - EXISTING</h1>
                     </div>
                 </div>
 
@@ -120,6 +111,14 @@ class PaymentExisting extends React.Component {
         );
     }
 }
+
+PaymentExisting.propTypes = {
+    currentUser: PropTypes.object,
+    payments: PropTypes.object,
+    route: PropTypes.object,
+    onComponentDidMount: PropTypes.func,
+    onPaymentQuery: PropTypes.func,
+};
 
 function mapStateToProps(state) {
     return {

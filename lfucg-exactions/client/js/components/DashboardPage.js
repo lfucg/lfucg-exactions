@@ -1,5 +1,4 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import {
     Link,
 } from 'react-router';
@@ -8,13 +7,7 @@ import Navbar from './Navbar';
 import Footer from './Footer';
 
 class DashboardPage extends React.Component {
-    static propTypes = {
-    };
-
     render() {
-        const {
-        } = this.props;
-
         return (
             <div className="dashboard">
                 <Navbar />
@@ -36,8 +29,8 @@ class DashboardPage extends React.Component {
                                 <p>Lexington lots.</p>
                             </div>
                             <div className="col-md-4 col-sm-6">
-                                <Link to="account" role="link"><h2 className="in-page-link">Accounts</h2></Link>
-                                <p>Lexington accounts.</p>
+                                <Link to="account" role="link"><h2 className="in-page-link">Developers / Accounts</h2></Link>
+                                <p>Developers and associated accounts.</p>
                             </div>
                             <div className="col-md-4 col-sm-6">
                                 <Link to="agreement" role="link"><h2 className="in-page-link">Agreements</h2></Link>
@@ -68,16 +61,5 @@ class DashboardPage extends React.Component {
     }
 }
 
-function mapStateToProps(state) {
-    return {
-    };
-}
-
-function mapDispatchToProps(dispatch) {
-    return {
-    };
-}
-
-
-export default connect(mapStateToProps, mapDispatchToProps)(DashboardPage);
+export default (DashboardPage);
 

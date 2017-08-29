@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { map } from 'ramda';
+import PropTypes from 'prop-types';
 
 import Navbar from './Navbar';
 import Footer from './Footer';
@@ -15,16 +16,6 @@ import {
 } from '../actions/apiActions';
 
 class AccountSummary extends React.Component {
-    static propTypes = {
-        currentUser: React.PropTypes.object,
-        accounts: React.PropTypes.object,
-        agreements: React.PropTypes.object,
-        payments: React.PropTypes.object,
-        accountLedgers: React.PropTypes.object,
-        route: React.PropTypes.object,
-        onComponentDidMount: React.PropTypes.func,
-    };
-
     componentDidMount() {
         this.props.onComponentDidMount();
     }
@@ -38,25 +29,31 @@ class AccountSummary extends React.Component {
             accountLedgers,
         } = this.props;
 
-        const plats_list = (accounts.plat_account && accounts.plat_account.length > 0) ? (
+        const plats_list = accounts.plat_account && accounts.plat_account.length > 0 &&
             map((plat) => {
                 return (
                     <div key={plat.id} className="col-xs-12">
                         <div className="row form-subheading">
-                            <div className="col-sm-7 col-md-9">
-                                <h3>{plat.name}</h3>
-                            </div>
-                            <div className="col-sm-5 col-md-3">
+                            <h3>{plat.name}</h3>
+                        </div>
+                        <div className="row link-row">
+                            <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
                                 <div className="col-xs-5">
                                     {currentUser && currentUser.permissions && currentUser.permissions.plat &&
-                                        <Link to={`plat/form/${plat.id}`} className="btn btn-mid-level">
-                                            Edit
+                                        <Link to={`plat/form/${plat.id}`} aria-label="Edit">
+                                            <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
+                                            <div className="col-xs-7 link-label">
+                                                Edit
+                                            </div>
                                         </Link>
                                     }
                                 </div>
-                                <div className="col-xs-5 col-xs-offset-1">
-                                    <Link to={`plat/summary/${plat.id}`} className="btn btn-mid-level">
-                                        Summary
+                                <div className="col-xs-5 ">
+                                    <Link to={`plat/summary/${plat.id}`} aria-label="Summary">
+                                        <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
+                                        <div className="col-xs-7 link-label">
+                                            Summary
+                                        </div>
                                     </Link>
                                 </div>
                             </div>
@@ -71,62 +68,72 @@ class AccountSummary extends React.Component {
                         </div>
                     </div>
                 );
-            })(accounts.plat_account)
-        ) : null;
+            })(accounts.plat_account);
 
-        const lots_list = (accounts.lot_account && accounts.lot_account.length > 0) ? (
+        const lots_list = accounts.lot_account && accounts.lot_account.length > 0 &&
             map((lot) => {
                 return (
                     <div key={lot.id} className="col-xs-12">
                         <div className="row form-subheading">
-                            <div className="col-sm-7 col-md-9">
-                                <h3>{lot.address_full}</h3>
-                            </div>
-                            <div className="col-sm-5 col-md-3">
+                            <h3>{lot.address_full}</h3>
+                        </div>
+                        <div className="row link-row">
+                            <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
                                 <div className="col-xs-5">
                                     {currentUser && currentUser.permissions && currentUser.permissions.lot &&
-                                        <Link to={`lot/form/${lot.id}`} className="btn btn-mid-level">
-                                            Edit
+                                        <Link to={`lot/form/${lot.id}`} aria-label="Edit">
+                                            <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
+                                            <div className="col-xs-7 link-label">
+                                                Edit
+                                            </div>
                                         </Link>
                                     }
                                 </div>
-                                <div className="col-xs-5 col-xs-offset-1">
-                                    <Link to={`lot/summary/${lot.id}`} className="btn btn-mid-level">
-                                        Summary
+                                <div className="col-xs-5 ">
+                                    <Link to={`lot/summary/${lot.id}`} aria-label="Summary">
+                                        <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
+                                        <div className="col-xs-7 link-label">
+                                            Summary
+                                        </div>
                                     </Link>
                                 </div>
                             </div>
                         </div>
                         <div className="row">
-                            <p className="col-md-3 col-sm-4 col-xs-6">Total Due: {lot.total_due}</p>
+                            <p className="col-md-3 col-sm-4 col-xs-6">Total Exactions: ${lot.total_due}</p>
                             <p className="col-md-3 col-sm-4 col-xs-6">Approval: {lot.is_approved ? 'Approved' : 'Not Approved'}</p>
                             <p className="col-md-3 col-sm-4 col-xs-6">Lot Number: {lot.lot_number}</p>
                             <p className="col-md-3 col-sm-4 col-xs-6">Parcel ID: {lot.parcel_id}</p>
                         </div>
                     </div>
                 );
-            })(accounts.lot_account)
-        ) : null;
+            })(accounts.lot_account);
 
-        const agreements_list = (agreements && agreements.length > 0) ? (
+        const agreements_list = agreements && agreements.length > 0 &&
             map((agreement) => {
                 return (
                     <div key={agreement.id} className="col-xs-12">
                         <div className="row form-subheading">
-                            <div className="col-sm-7 col-md-9">
-                                <h3>{agreement.resolution_number}</h3>
-                            </div>
-                            <div className="col-sm-5 col-md-3">
+                            <h3>Resolution: {agreement.resolution_number}</h3>
+                        </div>
+                        <div className="row link-row">
+                            <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
                                 <div className="col-xs-5">
                                     {currentUser && currentUser.permissions && currentUser.permissions.agreement &&
-                                        <Link to={`agreement/form/${agreement.id}`} className="btn btn-mid-level">
-                                            Edit
+                                        <Link to={`agreement/form/${agreement.id}`} aria-label="Edit">
+                                            <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
+                                            <div className="col-xs-7 link-label">
+                                                Edit
+                                            </div>
                                         </Link>
                                     }
                                 </div>
-                                <div className="col-xs-5 col-xs-offset-1">
-                                    <Link to={`agreement/summary/${agreement.id}`} className="btn btn-mid-level">
-                                        Summary
+                                <div className="col-xs-5 ">
+                                    <Link to={`agreement/summary/${agreement.id}`} aria-label="Summary">
+                                        <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
+                                        <div className="col-xs-7 link-label">
+                                            Summary
+                                        </div>
                                     </Link>
                                 </div>
                             </div>
@@ -138,61 +145,71 @@ class AccountSummary extends React.Component {
                         </div>
                     </div>
                 );
-            })(agreements)
-        ) : null;
+            })(agreements);
 
-        const payments_list = (payments && payments.length > 0) ? (
+        const payments_list = payments && payments.length > 0 &&
             map((payment) => {
                 return (
                     <div key={payment.id} className="col-xs-12">
                         <div className="row form-subheading">
-                            <div className="col-sm-7 col-md-9">
-                                <h3>{payment.payment_category}</h3>
-                            </div>
-                            <div className="col-sm-5 col-md-3">
+                            <h3>Paid By {payment.paid_by}</h3>
+                        </div>
+                        <div className="row link-row">
+                            <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
                                 <div className="col-xs-5">
                                     {currentUser && currentUser.permissions && currentUser.permissions.payment &&
-                                        <Link to={`payment/form/${payment.id}`} className="btn btn-mid-level">
-                                            Edit
+                                        <Link to={`payment/form/${payment.id}`} aria-label="Edit">
+                                            <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
+                                            <div className="col-xs-7 link-label">
+                                                Edit
+                                            </div>
                                         </Link>
                                     }
                                 </div>
-                                <div className="col-xs-5 col-xs-offset-1">
-                                    <Link to={`payment/summary/${payment.id}`} className="btn btn-mid-level">
-                                        Summary
+                                <div className="col-xs-5 ">
+                                    <Link to={`payment/summary/${payment.id}`} aria-label="Summary">
+                                        <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
+                                        <div className="col-xs-7 link-label">
+                                            Summary
+                                        </div>
                                     </Link>
                                 </div>
                             </div>
                         </div>
                         <div className="row">
+                            <p className="col-md-3 col-sm-4 col-xs-6">Paid By: {payment.total_paid}</p>
                             <p className="col-md-3 col-sm-4 col-xs-6">Payment Type: {payment.payment_type}</p>
-                            <p className="col-md-3 col-sm-4 col-xs-6">Lot: {payment.lot_id}</p>
-                            <p className="col-md-3 col-sm-4 col-xs-6">Credit Source: {payment.credit_source}</p>
+                            <p className="col-md-3 col-sm-4 col-xs-6">Paid By Type: {payment.paid_by_type_display}</p>
                         </div>
                     </div>
                 );
-            })(payments)
-        ) : null;
+            })(payments);
 
-        const accountLedgers_list = (accountLedgers && accountLedgers.length > 0) ? (
+        const accountLedgers_list = accountLedgers && accountLedgers.length > 0 &&
             map((accountLedger) => {
                 return (
                     <div key={accountLedger.id} className="col-xs-12">
                         <div className="row form-subheading">
-                            <div className="col-sm-7 col-md-9">
-                                <h3>{accountLedger.entry_type}</h3>
-                            </div>
-                            <div className="col-sm-5 col-md-3">
+                            <h3>{accountLedger.entry_type_display}</h3>
+                        </div>
+                        <div className="row link-row">
+                            <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
                                 <div className="col-xs-5">
                                     {currentUser && currentUser.permissions && currentUser.permissions.accountledger &&
-                                        <Link to={`account-ledger/form/${accountLedger.id}`} className="btn btn-mid-level">
-                                            Edit
+                                        <Link to={`account-ledger/form/${accountLedger.id}`} aria-label="Edit">
+                                            <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
+                                            <div className="col-xs-7 link-label">
+                                                Edit
+                                            </div>
                                         </Link>
                                     }
                                 </div>
-                                <div className="col-xs-5 col-xs-offset-1">
-                                    <Link to={`account-ledger/summary/${accountLedger.id}`} className="btn btn-mid-level">
-                                        Summary
+                                <div className="col-xs-5 ">
+                                    <Link to={`account-ledger/summary/${accountLedger.id}`} aria-label="Summary">
+                                        <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
+                                        <div className="col-xs-7 link-label">
+                                            Summary
+                                        </div>
                                     </Link>
                                 </div>
                             </div>
@@ -205,8 +222,7 @@ class AccountSummary extends React.Component {
                         </div>
                     </div>
                 );
-            })(accountLedgers)
-        ) : null;
+            })(accountLedgers);
 
         return (
             <div className="account-summary">
@@ -218,7 +234,7 @@ class AccountSummary extends React.Component {
                     </div>
                 </div>
 
-                <Breadcrumbs route={this.props.route} parent_link={'account'} parent_name={'Accounts'} />
+                <Breadcrumbs route={this.props.route} parent_link={'account'} parent_name={'Developer Accounts'} />
 
                 <div className="inside-body">
                     <div className="container">
@@ -234,7 +250,7 @@ class AccountSummary extends React.Component {
                                 <div className="row section-heading" role="tab" id="headingAccountInfo">
                                     <div className="col-xs-1 caret-indicator" />
                                     <div className="col-xs-10">
-                                        <h2>Account Information</h2>
+                                        <h2>Developer Account Information</h2>
                                     </div>
                                 </div>
                             </a>
@@ -245,20 +261,29 @@ class AccountSummary extends React.Component {
                               aria-labelledby="#headingAccountInfo"
                             >
                                 <div className="panel-body">
-                                    <div className="col-xs-12">
-                                        <h4 className="col-md-4 col-xs-6">Account Name: {accounts.account_name}</h4>
-                                        <h4 className="col-md-4 col-xs-6">Contact Name: {accounts.contact_full_name}</h4>
-                                        <h4 className="col-xs-12">Address: {accounts.address_full}</h4>
-                                        <h4 className="col-md-4 col-xs-6 ">Phone: {accounts.phone}</h4>
-                                        <h4 className="col-md-4 col-xs-6">Email: {accounts.email}</h4>
-                                    </div>
-                                    {currentUser && currentUser.permissions && currentUser.permissions.accountledger &&
-                                        <div className="col-md-offset-11 col-sm-offset-10 col-xs-offset-8">
-                                            <Link to={`account/form/${accounts.id}`} role="link" >
-                                                <h4>Edit</h4>
-                                            </Link>
+                                    <div className="row link-row">
+                                        <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
+                                            <div className="col-xs-5 col-xs-offset-5">
+                                                {currentUser && currentUser.permissions && currentUser.permissions.account &&
+                                                    <Link to={`account/form/${accounts.id}`} aria-label="Edit">
+                                                        <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
+                                                        <div className="col-xs-7 link-label">
+                                                            Edit
+                                                        </div>
+                                                    </Link>
+                                                }
+                                            </div>
                                         </div>
-                                    }
+                                    </div>
+                                    <div className="col-xs-12">
+                                        <h4 className="col-md-4 col-xs-6">Developer Account Name: {accounts.account_name}</h4>
+                                        {currentUser && currentUser.username && <div>
+                                            <h4 className="col-md-4 col-xs-6">Contact Name: {accounts.contact_full_name}</h4>
+                                            <h4 className="col-xs-12">Address: {accounts.address_full}</h4>
+                                            <h4 className="col-md-4 col-xs-6 ">Phone: {accounts.phone}</h4>
+                                            <h4 className="col-md-4 col-xs-6">Email: {accounts.email}</h4>
+                                        </div>}
+                                    </div>
                                 </div>
                             </div>
                             {plats_list ? (
@@ -274,7 +299,7 @@ class AccountSummary extends React.Component {
                                         <div className="row section-heading" role="tab" id="headingAccountPlats">
                                             <div className="col-xs-1 caret-indicator" />
                                             <div className="col-xs-10">
-                                                <h2>Account Plats</h2>
+                                                <h2>Plats</h2>
                                             </div>
                                         </div>
                                     </a>
@@ -293,7 +318,7 @@ class AccountSummary extends React.Component {
                                 </div>
                             ) : (
                                 <div className="row section-heading" role="tab" id="headingAccountPlats">
-                                    <h2>Account Plats - None</h2>
+                                    <h2>Plats - None</h2>
                                 </div>
                             )}
 
@@ -310,7 +335,7 @@ class AccountSummary extends React.Component {
                                         <div className="row section-heading" role="tab" id="headingAccountLots">
                                             <div className="col-xs-1 caret-indicator" />
                                             <div className="col-xs-10">
-                                                <h2>Account Lots</h2>
+                                                <h2>Lots</h2>
                                             </div>
                                         </div>
                                     </a>
@@ -329,7 +354,7 @@ class AccountSummary extends React.Component {
                                 </div>
                             ) : (
                                 <div className="row section-heading" role="tab" id="headingAccountLots">
-                                    <h2>Account Lots - None</h2>
+                                    <h2>Lots - None</h2>
                                 </div>
                             )}
 
@@ -346,7 +371,7 @@ class AccountSummary extends React.Component {
                                         <div className="row section-heading" role="tab" id="headingAccountAgreements">
                                             <div className="col-xs-1 caret-indicator" />
                                             <div className="col-xs-10">
-                                                <h2>Account Agreements</h2>
+                                                <h2>Agreements</h2>
                                             </div>
                                         </div>
                                     </a>
@@ -365,7 +390,7 @@ class AccountSummary extends React.Component {
                                 </div>
                             ) : (
                                 <div className="row section-heading" role="tab" id="headingAccountAgreements">
-                                    <h2>Account Agreements - None</h2>
+                                    <h2>Agreements - None</h2>
                                 </div>
                             )}
 
@@ -382,7 +407,7 @@ class AccountSummary extends React.Component {
                                         <div className="row section-heading" role="tab" id="headingAccountPayments">
                                             <div className="col-xs-1 caret-indicator" />
                                             <div className="col-xs-10">
-                                                <h2>Account Payments</h2>
+                                                <h2>Payments</h2>
                                             </div>
                                         </div>
                                     </a>
@@ -401,7 +426,7 @@ class AccountSummary extends React.Component {
                                 </div>
                             ) : (
                                 <div className="row section-heading" role="tab" id="headingAccountPayments">
-                                    <h2>Account Payments - None</h2>
+                                    <h2>Payments - None</h2>
                                 </div>
                             )}
 
@@ -449,6 +474,16 @@ class AccountSummary extends React.Component {
         );
     }
 }
+
+AccountSummary.propTypes = {
+    currentUser: PropTypes.object,
+    accounts: PropTypes.object,
+    agreements: PropTypes.object,
+    payments: PropTypes.object,
+    accountLedgers: PropTypes.object,
+    route: PropTypes.object,
+    onComponentDidMount: PropTypes.func,
+};
 
 function mapStateToProps(state) {
     return {
