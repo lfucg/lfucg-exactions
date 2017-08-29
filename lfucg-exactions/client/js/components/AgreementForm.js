@@ -4,6 +4,7 @@ import {
     hashHistory,
 } from 'react-router';
 import { map } from 'ramda';
+import PropTypes from 'prop-types';
 
 import Navbar from './Navbar';
 import Footer from './Footer';
@@ -25,16 +26,6 @@ import {
 } from '../actions/apiActions';
 
 class AgreementForm extends React.Component {
-    static propTypes = {
-        activeForm: React.PropTypes.object,
-        accounts: React.PropTypes.object,
-        agreements: React.PropTypes.object,
-        route: React.PropTypes.object,
-        onComponentDidMount: React.PropTypes.func,
-        onSubmit: React.PropTypes.func,
-        formChange: React.PropTypes.func,
-    };
-
     componentDidMount() {
         this.props.onComponentDidMount();
     }
@@ -48,13 +39,14 @@ class AgreementForm extends React.Component {
             formChange,
         } = this.props;
 
-        const accountsList = accounts.length > 0 ? (map((account) => {
-            return (
-                <option key={account.id} value={[account.id, account.account_name]} >
-                    {account.account_name}
-                </option>
-            );
-        })(accounts)) : null;
+        const accountsList = accounts.length > 0 &&
+            (map((account) => {
+                return (
+                    <option key={account.id} value={[account.id, account.account_name]} >
+                        {account.account_name}
+                    </option>
+                );
+            })(accounts));
 
         return (
             <div className="agreement-form">
@@ -76,15 +68,15 @@ class AgreementForm extends React.Component {
                                 <fieldset>
                                     <div className="row">
                                         <div className="col-sm-6 form-group">
-                                            <label htmlFor="account_id" className="form-label" id="account_id">Account</label>
+                                            <label htmlFor="account_id" className="form-label" id="account_id">Developer Account</label>
                                             <select className="form-control" id="account_id" onChange={formChange('account_id')} >
                                                 {agreements.account_id ? (
                                                     <option value="choose_account" aria-label="Selected Account">
                                                         {agreements.account_id.account_name}
                                                     </option>
                                                 ) : (
-                                                    <option value="choose_account" aria-label="Select an Account">
-                                                        Select an Account
+                                                    <option value="choose_account" aria-label="Select a Developer Account">
+                                                        Select a Developer Account
                                                     </option>
                                                 )}
                                                 {accountsList}
@@ -129,6 +121,7 @@ class AgreementForm extends React.Component {
                                                 )}
                                                 <option value={['MEMO', 'Memo']}>Memo</option>
                                                 <option value={['RESOLUTION', 'Resolution']}>Resolution</option>
+                                                <option value={['OTHER', 'Other']}>Other</option>
                                             </select>
                                         </div>
                                     </div>
@@ -144,6 +137,16 @@ class AgreementForm extends React.Component {
         );
     }
 }
+
+AgreementForm.propTypes = {
+    activeForm: PropTypes.object,
+    accounts: PropTypes.object,
+    agreements: PropTypes.object,
+    route: PropTypes.object,
+    onComponentDidMount: PropTypes.func,
+    onSubmit: PropTypes.func,
+    formChange: PropTypes.func,
+};
 
 function mapStateToProps(state) {
     return {

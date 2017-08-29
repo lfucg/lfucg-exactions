@@ -4,6 +4,7 @@ import {
     Link,
     hashHistory,
 } from 'react-router';
+import PropTypes from 'prop-types';
 
 import Navbar from './Navbar';
 import Footer from './Footer';
@@ -24,15 +25,6 @@ import {
 } from '../actions/apiActions';
 
 class AccountForm extends React.Component {
-    static propTypes = {
-        activeForm: React.PropTypes.object,
-        accounts: React.PropTypes.object,
-        route: React.PropTypes.object,
-        onComponentDidMount: React.PropTypes.func,
-        onSubmit: React.PropTypes.func,
-        formChange: React.PropTypes.func,
-    };
-
     componentDidMount() {
         this.props.onComponentDidMount();
     }
@@ -64,7 +56,7 @@ class AccountForm extends React.Component {
                     </div>
                 </div>
 
-                <Breadcrumbs route={this.props.route} parent_link={'account'} parent_name={'Accounts'} />
+                <Breadcrumbs route={this.props.route} parent_link={'account'} parent_name={'Developer Accounts'} />
 
                 <div className="inside-body">
                     <div className="container">
@@ -74,11 +66,12 @@ class AccountForm extends React.Component {
                                 <fieldset>
                                     <div className="row">
                                         <div className="col-sm-12">
-                                            <FormGroup label="* Account Name" id="account_name" aria-required="true">
-                                                <input type="text" className="form-control" placeholder="Account Name" autoFocus />
+                                            <FormGroup label="* Developer Account Name" id="account_name" aria-required="true">
+                                                <input type="text" className="form-control" placeholder="Developer Account Name" autoFocus />
                                             </FormGroup>
                                         </div>
                                     </div>
+
                                     <div className="row">
                                         <div className="col-sm-6">
                                             <FormGroup label="* Contact First Name" id="contact_first_name" aria-required="true">
@@ -88,6 +81,18 @@ class AccountForm extends React.Component {
                                         <div className="col-sm-6">
                                             <FormGroup label="* Contact Last Name" id="contact_last_name" aria-required="true">
                                                 <input type="text" className="form-control" placeholder="Contact Last Name" />
+                                            </FormGroup>
+                                        </div>
+                                    </div>
+                                    <div className="row">
+                                        <div className="col-sm-4">
+                                            <FormGroup label="* Address Number" id="address_number" aria-required="true">
+                                                <input type="number" className="form-control" placeholder="Address Number" />
+                                            </FormGroup>
+                                        </div>
+                                        <div className="col-sm-8">
+                                            <FormGroup label="* Street" id="address_street" aria-required="true">
+                                                <input type="text" className="form-control" placeholder="Street" />
                                             </FormGroup>
                                         </div>
                                     </div>
@@ -198,6 +203,15 @@ class AccountForm extends React.Component {
     }
 }
 
+AccountForm.propTypes = {
+    activeForm: PropTypes.object,
+    accounts: PropTypes.object,
+    route: PropTypes.object,
+    onComponentDidMount: PropTypes.func,
+    onSubmit: PropTypes.func,
+    formChange: PropTypes.func,
+};
+
 function mapStateToProps(state) {
     return {
         activeForm: state.activeForm,
@@ -223,6 +237,8 @@ function mapDispatchToProps(dispatch, params) {
                             account_name: data_account.response.account_name,
                             contact_first_name: data_account.response.contact_first_name,
                             contact_last_name: data_account.response.contact_last_name,
+                            address_number: data_account.response.address_number,
+                            address_street: data_account.response.address_street,
                             address_city: data_account.response.address_city,
                             address_state: data_account.response.address_state,
                             address_zip: data_account.response.address_zip,

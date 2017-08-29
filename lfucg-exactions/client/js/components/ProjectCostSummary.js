@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
+import PropTypes from 'prop-types';
 
 import Navbar from './Navbar';
 import Footer from './Footer';
@@ -11,13 +12,6 @@ import {
 } from '../actions/apiActions';
 
 class ProjectCostSummary extends React.Component {
-    static propTypes = {
-        currentUser: React.PropTypes.object,
-        projectCosts: React.PropTypes.object,
-        route: React.PropTypes.object,
-        onComponentDidMount: React.PropTypes.func,
-    };
-
     componentDidMount() {
         this.props.onComponentDidMount();
     }
@@ -65,6 +59,20 @@ class ProjectCostSummary extends React.Component {
                               aria-labelledby="#headingProjectCostInfo"
                             >
                                 <div className="panel-body">
+                                    <div className="row link-row">
+                                        <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
+                                            <div className="col-xs-5 col-xs-offset-5">
+                                                {currentUser && currentUser.permissions && currentUser.permissions.projectcostestimate &&
+                                                    <Link to={`project-cost/form/${projectCosts.id}`} aria-label="Edit">
+                                                        <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
+                                                        <div className="col-xs-7 link-label">
+                                                            Edit
+                                                        </div>
+                                                    </Link>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div className="col-xs-12">
                                         <p className="col-md-3 col-sm-4 col-xs-6">Estimate Type: {projectCosts.estimate_type}</p>
                                         <p className="col-md-3 col-sm-4 col-xs-6">Total Costs: ${projectCosts.total_costs}</p>
@@ -74,14 +82,8 @@ class ProjectCostSummary extends React.Component {
                                         <p className="col-md-3 col-sm-4 col-xs-6">Construction Cost: ${projectCosts.construction_cost}</p>
                                         <p className="col-md-3 col-sm-4 col-xs-6">Administrative Cost: ${projectCosts.admin_cost}</p>
                                         <p className="col-md-3 col-sm-4 col-xs-6">Management Cost: ${projectCosts.management_cost}</p>
+                                        <p className="col-md-3 col-sm-4 col-xs-6">Other Costs: ${projectCosts.other_cost}</p>
                                     </div>
-                                    {currentUser && currentUser.permissions && currentUser.permissions.projectcost &&
-                                        <div className="col-md-offset-11 col-sm-offset-10 col-xs-offset-8">
-                                            <Link to={`project-cost/form/${projectCosts.id}`} role="link" >
-                                                <h4>Edit</h4>
-                                            </Link>
-                                        </div>
-                                    }
                                 </div>
                             </div>
 
@@ -108,27 +110,36 @@ class ProjectCostSummary extends React.Component {
                                   aria-labelledby="#headingProjectInfo"
                                 >
                                     <div className="panel-body">
+                                        <div className="row link-row">
+                                            <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
+                                                <div className="col-xs-5">
+                                                    {currentUser && currentUser.permissions && currentUser.permissions.project &&
+                                                        <Link to={`project/form/${projectCosts.project_id.id}`} aria-label="Edit">
+                                                            <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
+                                                            <div className="col-xs-7 link-label">
+                                                                Edit
+                                                            </div>
+                                                        </Link>
+                                                    }
+                                                </div>
+                                                <div className="col-xs-5 ">
+                                                    <Link to={`project/summary/${projectCosts.project_id.id}`} aria-label="Summary">
+                                                        <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
+                                                        <div className="col-xs-7 link-label">
+                                                            Summary
+                                                        </div>
+                                                    </Link>
+                                                </div>
+                                            </div>
+                                        </div>
                                         <div className="col-xs-12">
+                                            <p className="col-md-3 col-sm-4 col-xs-6">Project Name: {projectCosts.project_id.name}</p>
                                             <p className="col-sm-4 col-xs-6">Project Category: {projectCosts.project_id.project_category_display}</p>
                                             <p className="col-sm-4 col-xs-6">Project Type: {projectCosts.project_id.project_type_display}</p>
                                             <p className="col-sm-4 col-xs-6">Expansion Area: {projectCosts.project_id.expansion_area}</p>
                                             <p className="col-sm-4 col-xs-6 ">Project Status: {projectCosts.project_id.project_status_display}</p>
                                             <p className="col-sm-4 col-xs-6 ">Status Date: {projectCosts.project_id.status_date}</p>
                                             <p className="col-xs-12">Project Description: {projectCosts.project_id.project_description}</p>
-                                        </div>
-                                        <div className="col-md-offset-8 col-sm-offset-6">
-                                            <div className="col-xs-6">
-                                                {currentUser && currentUser.permissions && currentUser.permissions.project &&
-                                                    <Link to={`project/form/${projectCosts.project_id.id}`} role="link" >
-                                                        <h4>Edit</h4>
-                                                    </Link>
-                                                }
-                                            </div>
-                                            <div className="col-xs-6">
-                                                <Link to={`project/summary/${projectCosts.project_id.id}`} role="link" >
-                                                    <h4>Summary</h4>
-                                                </Link>
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -143,6 +154,13 @@ class ProjectCostSummary extends React.Component {
         );
     }
 }
+
+ProjectCostSummary.propTypes = {
+    currentUser: PropTypes.object,
+    projectCosts: PropTypes.object,
+    route: PropTypes.object,
+    onComponentDidMount: PropTypes.func,
+};
 
 function mapStateToProps(state) {
     return {

@@ -20,6 +20,7 @@ import {
     GET_PLATS,
     GET_PLAT_ID,
     GET_PLAT_QUERY,
+    GET_SUBDIVISION_PLATS,
     POST_PLAT,
     PUT_PLAT,
 
@@ -69,6 +70,7 @@ import {
     GET_PROJECT_COSTS,
     GET_PROJECT_COST_ID,
     GET_PROJECT_COST_QUERY,
+    GET_PROJECT_PROJECT_COSTS,
     POST_PROJECT_COST,
     PUT_PROJECT_COST,
 
@@ -316,6 +318,14 @@ export function getPlatQuery() {
             const query_all = `/plat/?query=${query}`;
             return query_all;
         },
+    };
+}
+
+export function getSubdivisionPlats(selectedSubdivision) {
+    return {
+        type: API_CALL,
+        endpoint: GET_SUBDIVISION_PLATS,
+        url: `/plat/?subdivision=${selectedSubdivision}`,
     };
 }
 
@@ -852,6 +862,8 @@ export function postAccount() {
                 account_name,
                 contact_first_name,
                 contact_last_name,
+                address_number,
+                address_street,
                 address_city,
                 address_state,
                 address_zip,
@@ -868,10 +880,12 @@ export function postAccount() {
                 contact_first_name,
                 contact_last_name,
                 contact_full_name: `${contact_first_name} ${contact_last_name}`,
+                address_number,
+                address_street,
                 address_city,
                 address_state,
                 address_zip,
-                address_full: `${address_city}, ${address_state} ${address_zip}`,
+                address_full: `${address_number} ${address_street}, ${address_city}, ${address_state} ${address_zip}`,
                 phone,
                 email,
             };
@@ -894,6 +908,8 @@ export function putAccount(selectedAccount) {
                 account_name,
                 contact_first_name,
                 contact_last_name,
+                address_number,
+                address_street,
                 address_city,
                 address_state,
                 address_zip,
@@ -910,10 +926,12 @@ export function putAccount(selectedAccount) {
                 contact_first_name,
                 contact_last_name,
                 contact_full_name: `${contact_first_name} ${contact_last_name}`,
+                address_number,
+                address_street,
                 address_city,
                 address_state,
                 address_zip,
-                address_full: `${address_city}, ${address_state} ${address_zip}`,
+                address_full: `${address_number} ${address_street}, ${address_city}, ${address_state} ${address_zip}`,
                 phone,
                 email,
             };
@@ -1249,6 +1267,7 @@ export function postProject() {
             const {
                 agreement_id,
                 project_category,
+                name,
                 expansion_area,
                 project_type,
                 project_status,
@@ -1264,6 +1283,7 @@ export function postProject() {
                 modified_by: id,
                 agreement_id,
                 project_category,
+                name,
                 expansion_area,
                 project_type,
                 project_status,
@@ -1289,6 +1309,7 @@ export function putProject(selectedProject) {
             const {
                 agreement_id,
                 project_category,
+                name,
                 expansion_area,
                 project_type,
                 project_status,
@@ -1304,6 +1325,7 @@ export function putProject(selectedProject) {
                 modified_by: id,
                 agreement_id,
                 project_category,
+                name,
                 expansion_area,
                 project_type,
                 project_status,
@@ -1347,6 +1369,14 @@ export function getProjectCostQuery() {
             const query_all = `/estimate/?query=${query}`;
             return query_all;
         },
+    };
+}
+
+export function getProjectProjectCosts(selectedProject) {
+    return {
+        type: API_CALL,
+        endpoint: GET_PROJECT_PROJECT_COSTS,
+        url: `/estimate/?project_id=${selectedProject}`,
     };
 }
 

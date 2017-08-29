@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 import { formUpdate } from '../actions/formActions';
 
@@ -28,11 +29,11 @@ const FormGroup = ({
 };
 
 FormGroup.propTypes = {
-    children: React.PropTypes.element.isRequired,
-    label: React.PropTypes.string.isRequired,
-    id: React.PropTypes.string.isRequired,
-    activeForm: React.PropTypes.object.isRequired,
-    formChange: React.PropTypes.func.isRequired,
+    children: PropTypes.element.isRequired,
+    label: PropTypes.string.isRequired,
+    id: PropTypes.string.isRequired,
+    activeForm: PropTypes.object.isRequired,
+    formChange: PropTypes.func.isRequired,
 };
 
 const mapState = ({ activeForm }) => {

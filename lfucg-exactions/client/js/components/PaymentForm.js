@@ -4,6 +4,7 @@ import {
     hashHistory,
 } from 'react-router';
 import { map } from 'ramda';
+import PropTypes from 'prop-types';
 
 import Navbar from './Navbar';
 import Footer from './Footer';
@@ -30,19 +31,6 @@ import {
 } from '../actions/apiActions';
 
 class PaymentForm extends React.Component {
-    static propTypes = {
-        activeForm: React.PropTypes.object,
-        lots: React.PropTypes.object,
-        accounts: React.PropTypes.object,
-        agreements: React.PropTypes.object,
-        payments: React.PropTypes.object,
-        route: React.PropTypes.object,
-        onComponentDidMount: React.PropTypes.func,
-        onSubmit: React.PropTypes.func,
-        formChange: React.PropTypes.func,
-        lotChange: React.PropTypes.func,
-    };
-
     componentDidMount() {
         this.props.onComponentDidMount();
     }
@@ -129,15 +117,15 @@ class PaymentForm extends React.Component {
                                     </div>
                                     <div className="row">
                                         <div className="col-sm-6 form-group">
-                                            <label htmlFor="credit_account" className="form-label" id="credit_account" aria-label="Account" aria-required="true">* Account</label>
+                                            <label htmlFor="credit_account" className="form-label" id="credit_account" aria-label="Developer Account" aria-required="true">* Developer Account</label>
                                             <select className="form-control" id="credit_account" onChange={formChange('credit_account')} >
                                                 {payments.credit_account ? (
                                                     <option value="credit_account" aria-label="Selected Account">
                                                         {payments.credit_account.account_name}
                                                     </option>
                                                 ) : (
-                                                    <option value="choose_account" aria-label="Select an Account">
-                                                        Select an Account
+                                                    <option value="choose_account" aria-label="Select a Developer Account">
+                                                        Select a Developer Account
                                                     </option>
                                                 )}
                                                 {accountsList}
@@ -177,15 +165,24 @@ class PaymentForm extends React.Component {
                                                     <option value="choose_paid_by_type" aria-label="Choose a Paid By Type">Choose a Paid By Type</option>
                                                 )}
                                                 <option value={['DEVELOPER', 'Developer']}>Developer</option>
+                                                <option value={['BUILDER', 'Builder']}>Builder</option>
                                                 <option value={['OWNER', 'Home Owner']}>Home Owner</option>
                                             </select>
                                         </div>
                                     </div>
                                     <div className="row">
-                                        <div className="col-sm-6">
-                                            <FormGroup label="Payment Type" id="payment_type">
-                                                <input type="text" className="form-control" placeholder="Payment Type" />
-                                            </FormGroup>
+                                        <div className="col-sm-6 form-group">
+                                            <label htmlFor="payment_type" className="form-label" id="payment_type" aria-label="Payment Type" aria-required="true">* Payment Type</label>
+                                            <select className="form-control" id="payment_type" onChange={formChange('payment_type')} >
+                                                {payments.payment_type ? (
+                                                    <option value="payment_type" aria-label={`Payment Type ${payments.payment_type_display}`}>{payments.payment_type_display}</option>
+                                                ) : (
+                                                    <option value="choose_payment_type" aria-label="Choose a Payment Type">Choose a Payment Type</option>
+                                                )}
+                                                <option value={['CHECK', 'Check']}>Check</option>
+                                                <option value={['CREDIT_CARD', 'Credit Card']}>Credit Card</option>
+                                                <option value={['OTHER', 'Other']}>Other</option>
+                                            </select>
                                         </div>
                                         <div className="col-sm-6">
                                             <FormGroup label="Check Number" id="check_number">
@@ -251,6 +248,19 @@ class PaymentForm extends React.Component {
         );
     }
 }
+
+PaymentForm.propTypes = {
+    activeForm: PropTypes.object,
+    lots: PropTypes.object,
+    accounts: PropTypes.object,
+    agreements: PropTypes.object,
+    payments: PropTypes.object,
+    route: PropTypes.object,
+    onComponentDidMount: PropTypes.func,
+    onSubmit: PropTypes.func,
+    formChange: PropTypes.func,
+    lotChange: PropTypes.func,
+};
 
 function mapStateToProps(state) {
     return {
