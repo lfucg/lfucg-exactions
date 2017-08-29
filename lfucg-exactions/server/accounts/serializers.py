@@ -16,41 +16,6 @@ class LotField(serializers.Field):
     def to_representation(self, obj):
         return LotSerializer(obj).data
 
-class ProjectCostEstimateSerializer(serializers.ModelSerializer):
-    total_costs = serializers.SerializerMethodField(read_only=True)
-
-    def get_total_costs(self,obj):
-        total = (
-            obj.land_cost +
-            obj.design_cost +
-            obj.construction_cost +
-            obj.admin_cost +
-            obj.management_cost
-        )
-        return total
-
-    class Meta:
-        model = ProjectCostEstimate
-        fields = (
-            'id',
-            'is_approved',
-            'is_active',
-            'date_created',
-            'date_modified',
-            'created_by',
-            'modified_by',
-            'project_id',
-            'estimate_type',
-            'land_cost',
-            'design_cost',
-            'construction_cost',
-            'admin_cost',
-            'management_cost',
-            'credits_available',
-
-            'total_costs',
-        )
-
 class AccountSerializer(serializers.ModelSerializer):
     # agreements = AgreementSerializer(many=True, read_only=True)
     plat_account = PlatSerializer(many=True, required=False)
@@ -133,7 +98,7 @@ class AgreementField(serializers.Field):
 class ProjectSerializer(serializers.ModelSerializer):
     agreement_id = AgreementField()
 
-    project_cost_estimate = ProjectCostEstimateSerializer(many=True, read_only=True)
+    # project_cost_estimate = ProjectCostEstimateSerializer(many=True, read_only=True)
     project_category_display = serializers.SerializerMethodField(read_only=True)
     project_type_display = serializers.SerializerMethodField(read_only=True)
     project_status_display = serializers.SerializerMethodField(read_only=True)
@@ -170,7 +135,55 @@ class ProjectSerializer(serializers.ModelSerializer):
 
             'project_description',
             'status_date',
-            'project_cost_estimate',
+            # 'project_cost_estimate',
+        )
+
+class ProjectField(serializers.Field):
+    def to_internal_value(self, data):
+        try: 
+            return Project.objects.get(id=data)
+        except: 
+            return None
+
+    def to_representation(self, obj):
+        return ProjectSerializer(obj).data
+
+class ProjectCostEstimateSerializer(serializers.ModelSerializer):
+    project_id = ProjectField()
+
+    total_costs = serializers.SerializerMethodField(read_only=True)
+
+    def get_total_costs(self,obj):
+        total = (
+            obj.land_cost +
+            obj.design_cost +
+            obj.construction_cost +
+            obj.admin_cost +
+            obj.management_cost
+        )
+        return total
+
+    class Meta:
+        model = ProjectCostEstimate
+        fields = (
+            'id',
+            'is_approved',
+            'is_active',
+            'date_created',
+            'date_modified',
+            'created_by',
+            'modified_by',
+            
+            'project_id',
+            'estimate_type',
+            'land_cost',
+            'design_cost',
+            'construction_cost',
+            'admin_cost',
+            'management_cost',
+            'credits_available',
+
+            'total_costs',
         )
 
 class AccountLedgerSerializer(serializers.ModelSerializer):

@@ -455,7 +455,6 @@ function mapDispatchToProps(dispatch, params) {
                             address_city: data_lot.response.address_city,
                             address_state: data_lot.response.address_state,
                             address_zip: data_lot.response.address_zip,
-                            plat: data_lot.response.plat,
                             lot_number: data_lot.response.lot_number,
                             parcel_id: data_lot.response.parcel_id,
                             permit_id: data_lot.response.permit_id,
@@ -577,7 +576,7 @@ function mapDispatchToProps(dispatch, params) {
             if (selectedLot) {
                 dispatch(putLot(selectedLot))
                 .then(() => {
-                    hashHistory.push('lot/');
+                    hashHistory.push(`lot/summary/${selectedLot}`);
                 });
             }
         },
