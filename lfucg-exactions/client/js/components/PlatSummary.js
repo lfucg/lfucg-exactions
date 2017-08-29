@@ -14,10 +14,6 @@ import {
     getAccountID,
 } from '../actions/apiActions';
 
-// import {
-//     formUpdate,
-// } from '../actions/formActions';
-
 class PlatSummary extends React.Component {
     static propTypes = {
         currentUser: React.PropTypes.object,

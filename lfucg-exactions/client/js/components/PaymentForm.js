@@ -24,7 +24,6 @@ import {
     getAccountID,
     getAccountAgreements,
     getAgreements,
-    getAgreementID,
     getPaymentID,
     postPayment,
     putPayment,

@@ -17,7 +17,6 @@ class LotField(serializers.Field):
         return LotSerializer(obj).data
 
 class AccountSerializer(serializers.ModelSerializer):
-    # agreements = AgreementSerializer(many=True, read_only=True)
     plat_account = PlatSerializer(many=True, required=False)
     lot_account = LotSerializer(many=True, required=False)
 
@@ -44,7 +43,6 @@ class AccountSerializer(serializers.ModelSerializer):
             'address_full',
             'phone',
             'email',
-            # 'agreements',
         )
 
 class AccountField(serializers.Field):
@@ -58,7 +56,6 @@ class AccountField(serializers.Field):
         return AccountSerializer(obj).data
 
 class AgreementSerializer(serializers.ModelSerializer):
-    # projects = ProjectSerializer(many=True, read_only=True)
     account_id = AccountField()
 
     agreement_type_display = serializers.SerializerMethodField(read_only=True)
@@ -81,7 +78,6 @@ class AgreementSerializer(serializers.ModelSerializer):
             'resolution_number',
             'expansion_area',
             'agreement_type',
-            # 'projects',
             'agreement_type_display',
         )
 
@@ -98,7 +94,6 @@ class AgreementField(serializers.Field):
 class ProjectSerializer(serializers.ModelSerializer):
     agreement_id = AgreementField()
 
-    # project_cost_estimate = ProjectCostEstimateSerializer(many=True, read_only=True)
     project_category_display = serializers.SerializerMethodField(read_only=True)
     project_type_display = serializers.SerializerMethodField(read_only=True)
     project_status_display = serializers.SerializerMethodField(read_only=True)
@@ -135,7 +130,6 @@ class ProjectSerializer(serializers.ModelSerializer):
 
             'project_description',
             'status_date',
-            # 'project_cost_estimate',
         )
 
 class ProjectField(serializers.Field):
@@ -173,7 +167,7 @@ class ProjectCostEstimateSerializer(serializers.ModelSerializer):
             'date_modified',
             'created_by',
             'modified_by',
-            
+
             'project_id',
             'estimate_type',
             'land_cost',

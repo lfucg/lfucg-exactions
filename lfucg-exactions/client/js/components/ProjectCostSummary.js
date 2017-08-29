@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
-// import { map } from 'ramda';
 
 import Navbar from './Navbar';
 import Footer from './Footer';

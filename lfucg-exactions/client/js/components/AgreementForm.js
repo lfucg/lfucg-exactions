@@ -19,7 +19,6 @@ import {
 import {
     getMe,
     getAccounts,
-    getAccountID,
     getAgreementID,
     postAgreement,
     putAgreement,

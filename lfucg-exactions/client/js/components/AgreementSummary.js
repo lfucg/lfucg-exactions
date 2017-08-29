@@ -8,7 +8,6 @@ import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
 
 import {
-    getAccountID,
     getAgreementID,
     getAgreementPayments,
     getAgreementProjects,
@@ -18,7 +17,6 @@ import {
 class AgreementSummary extends React.Component {
     static propTypes = {
         currentUser: React.PropTypes.object,
-        accounts: React.PropTypes.object,
         agreements: React.PropTypes.object,
         payments: React.PropTypes.object,
         projects: React.PropTypes.object,
@@ -34,7 +32,6 @@ class AgreementSummary extends React.Component {
     render() {
         const {
             currentUser,
-            accounts,
             agreements,
             payments,
             projects,
@@ -391,11 +388,6 @@ function mapDispatchToProps(dispatch, params) {
             dispatch(getAgreementProjects(selectedAgreement));
             dispatch(getAgreementAccountLedgers(selectedAgreement));
             dispatch(getAgreementID(selectedAgreement));
-            // .then((data_agreement) => {
-            //     if (data_agreement.response.account_id) {
-            //         dispatch(getAccountID(data_agreement.response.account_id));
-            //     }
-            // });
         },
     };
 }

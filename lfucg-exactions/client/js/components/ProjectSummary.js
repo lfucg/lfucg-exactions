@@ -8,14 +8,12 @@ import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
 
 import {
-    getAgreementID,
     getProjectID,
 } from '../actions/apiActions';
 
 class ProjectSummary extends React.Component {
     static propTypes = {
         currentUser: React.PropTypes.object,
-        agreements: React.PropTypes.object,
         projects: React.PropTypes.object,
         route: React.PropTypes.object,
         onComponentDidMount: React.PropTypes.func,
@@ -28,7 +26,6 @@ class ProjectSummary extends React.Component {
     render() {
         const {
             currentUser,
-            agreements,
             projects,
         } = this.props;
 
