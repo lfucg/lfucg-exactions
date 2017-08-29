@@ -4,6 +4,7 @@ import {
     Link,
     hashHistory,
 } from 'react-router';
+import PropTypes from 'prop-types';
 
 import Navbar from './Navbar';
 import Footer from './Footer';
@@ -24,14 +25,6 @@ import {
 } from '../actions/apiActions';
 
 class SubdivisionForm extends React.Component {
-    static propTypes = {
-        activeForm: React.PropTypes.object,
-        subdivisions: React.PropTypes.object,
-        route: React.PropTypes.object,
-        onComponentDidMount: React.PropTypes.func,
-        onSubmit: React.PropTypes.func,
-    };
-
     componentDidMount() {
         this.props.onComponentDidMount();
     }
@@ -94,6 +87,14 @@ class SubdivisionForm extends React.Component {
         );
     }
 }
+
+SubdivisionForm.propTypes = {
+    activeForm: PropTypes.object,
+    subdivisions: PropTypes.object,
+    route: PropTypes.object,
+    onComponentDidMount: PropTypes.func,
+    onSubmit: PropTypes.func,
+};
 
 function mapStateToProps(state) {
     return {

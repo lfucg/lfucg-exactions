@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import {
     hashHistory,
 } from 'react-router';
+import PropTypes from 'prop-types';
 
 import FormGroup from './FormGroup';
 
@@ -17,20 +18,6 @@ import {
 } from '../actions/apiActions';
 
 class PlatZoneForm extends React.Component {
-    static propTypes = {
-        activeForm: React.PropTypes.object,
-        plats: React.PropTypes.object,
-        plat_zone_id: React.PropTypes.string,
-        plat_zone_value: React.PropTypes.number,
-        acre_id: React.PropTypes.string,
-        acre_value: React.PropTypes.number,
-        zone_id: React.PropTypes.string,
-        zone_value: React.PropTypes.string,
-        onComponentDidMount: React.PropTypes.func,
-        formChange: React.PropTypes.func,
-        onPlatZoneSubmit: React.PropTypes.func,
-    };
-
     componentDidMount() {
         this.props.onComponentDidMount({
             plat_zone_id: this.props.plat_zone_id,
@@ -115,6 +102,20 @@ class PlatZoneForm extends React.Component {
         );
     }
 }
+
+PlatZoneForm.propTypes = {
+    activeForm: PropTypes.object,
+    plats: PropTypes.object,
+    plat_zone_id: PropTypes.string,
+    plat_zone_value: PropTypes.number,
+    acre_id: PropTypes.string,
+    acre_value: PropTypes.number,
+    zone_id: PropTypes.string,
+    zone_value: PropTypes.string,
+    onComponentDidMount: PropTypes.func,
+    formChange: PropTypes.func,
+    onPlatZoneSubmit: PropTypes.func,
+};
 
 function mapStateToProps(state) {
     return {

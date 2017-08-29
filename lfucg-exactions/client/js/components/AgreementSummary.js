@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { map } from 'ramda';
+import PropTypes from 'prop-types';
 
 import Navbar from './Navbar';
 import Footer from './Footer';
@@ -16,17 +17,6 @@ import {
 } from '../actions/apiActions';
 
 class AgreementSummary extends React.Component {
-    static propTypes = {
-        currentUser: React.PropTypes.object,
-        accounts: React.PropTypes.object,
-        agreements: React.PropTypes.object,
-        payments: React.PropTypes.object,
-        projects: React.PropTypes.object,
-        accountLedgers: React.PropTypes.object,
-        route: React.PropTypes.object,
-        onComponentDidMount: React.PropTypes.func,
-    };
-
     componentDidMount() {
         this.props.onComponentDidMount();
     }
@@ -41,64 +31,76 @@ class AgreementSummary extends React.Component {
             accountLedgers,
         } = this.props;
 
-        const payments_list = (payments && payments.length > 0) ? (
+        const payments_list = payments && payments.length > 0 &&
             map((payment) => {
                 return (
                     <div key={payment.id} className="col-xs-12">
                         <div className="row form-subheading">
-                            <div className="col-sm-7 col-md-9">
-                                <h3>{payment.payment_category}</h3>
-                            </div>
-                            <div className="col-sm-5 col-md-3">
+                            <h3>Paid By {payment.paid_by}</h3>
+                        </div>
+                        <div className="row link-row">
+                            <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
                                 <div className="col-xs-5">
                                     {currentUser && currentUser.permissions && currentUser.permissions.payment &&
-                                        <Link to={`payment/form/${payment.id}`} className="btn btn-mid-level">
-                                            Edit
+                                        <Link to={`payment/form/${payment.id}`} aria-label="Edit">
+                                            <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
+                                            <div className="col-xs-7 link-label">
+                                                Edit
+                                            </div>
                                         </Link>
                                     }
                                 </div>
-                                <div className="col-xs-5 col-xs-offset-1">
-                                    <Link to={`payment/summary/${payment.id}`} className="btn btn-mid-level">
-                                        Summary
+                                <div className="col-xs-5 ">
+                                    <Link to={`payment/summary/${payment.id}`} aria-label="Summary">
+                                        <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
+                                        <div className="col-xs-7 link-label">
+                                            Summary
+                                        </div>
                                     </Link>
                                 </div>
                             </div>
                         </div>
                         <div className="row">
-                            <p className="col-md-3 col-sm-4 col-xs-6">Payment Type: {payment.payment_type}</p>
-                            <p className="col-md-3 col-sm-4 col-xs-6">Lot: {payment.lot_id}</p>
-                            <p className="col-md-3 col-sm-4 col-xs-6">Paid By: {payment.paid_by}</p>
                             <p className="col-md-3 col-sm-4 col-xs-6">Total Paid: {payment.total_paid}</p>
+                            <p className="col-md-3 col-sm-4 col-xs-6">Payment Type: {payment.payment_type_display}</p>
+                            <p className="col-md-3 col-sm-4 col-xs-6">Paid By Type: {payment.paid_by_type_display}</p>
+                            <p className="col-xs-12">Lot: {payment.lot_id.address_full}</p>
                         </div>
                     </div>
                 );
-            })(payments)
-        ) : null;
+            })(payments);
 
-        const projects_list = (projects && projects.length > 0) ? (
+        const projects_list = projects && projects.length > 0 &&
             map((project) => {
                 return (
                     <div key={project.id} className="col-xs-12">
                         <div className="row form-subheading">
-                            <div className="col-sm-7 col-md-9">
-                                <h3>{project.project_category}</h3>
-                            </div>
-                            <div className="col-sm-5 col-md-3">
+                            <h3>{project.name}</h3>
+                        </div>
+                        <div className="row link-row">
+                            <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
                                 <div className="col-xs-5">
                                     {currentUser && currentUser.permissions && currentUser.permissions.project &&
-                                        <Link to={`project/form/${project.id}`} className="btn btn-mid-level">
-                                            Edit
+                                        <Link to={`project/form/${project.id}`} aria-label="Edit">
+                                            <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
+                                            <div className="col-xs-7 link-label">
+                                                Edit
+                                            </div>
                                         </Link>
                                     }
                                 </div>
-                                <div className="col-xs-5 col-xs-offset-1">
-                                    <Link to={`project/summary/${project.id}`} className="btn btn-mid-level">
-                                        Summary
+                                <div className="col-xs-5 ">
+                                    <Link to={`project/summary/${project.id}`} aria-label="Summary">
+                                        <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
+                                        <div className="col-xs-7 link-label">
+                                            Summary
+                                        </div>
                                     </Link>
                                 </div>
                             </div>
                         </div>
                         <div className="row">
+                            <p className="col-md-3 col-sm-4 col-xs-6">Project Category: {project.project_category}</p>
                             <p className="col-md-3 col-sm-4 col-xs-6">Expansion Area: {project.expansion_area}</p>
                             <p className="col-md-3 col-sm-4 col-xs-6">Project Type: {project.project_type_display}</p>
                             <p className="col-md-3 col-sm-4 col-xs-6">Project Status: {project.project_status_display}</p>
@@ -107,41 +109,45 @@ class AgreementSummary extends React.Component {
                         </div>
                     </div>
                 );
-            })(projects)
-        ) : null;
+            })(projects);
 
-        const account_ledgers_list = (accountLedgers && accountLedgers.length > 0) ? (
+        const account_ledgers_list = accountLedgers && accountLedgers.length > 0 &&
             map((accountLedger) => {
                 return (
                     <div key={accountLedger.id} className="col-xs-12">
                         <div className="row form-subheading">
-                            <div className="col-sm-7 col-md-9">
-                                <h3>{accountLedger.entry_type}</h3>
-                            </div>
-                            <div className="col-sm-5 col-md-3">
+                            <h3>{accountLedger.entry_date}</h3>
+                        </div>
+                        <div className="row link-row">
+                            <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
                                 <div className="col-xs-5">
                                     {currentUser && currentUser.permissions && currentUser.permissions.accountledger &&
-                                        <Link to={`account-ledger/form/${accountLedger.id}`} className="btn btn-mid-level">
-                                            Edit
+                                        <Link to={`account-ledger/form/${accountLedger.id}`} aria-label="Edit">
+                                            <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
+                                            <div className="col-xs-7 link-label">
+                                                Edit
+                                            </div>
                                         </Link>
                                     }
                                 </div>
-                                <div className="col-xs-5 col-xs-offset-1">
-                                    <Link to={`account-ledger/summary/${accountLedger.id}`} className="btn btn-mid-level">
-                                        Summary
+                                <div className="col-xs-5 ">
+                                    <Link to={`account-ledger/summary/${accountLedger.id}`} aria-label="Summary">
+                                        <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
+                                        <div className="col-xs-7 link-label">
+                                            Summary
+                                        </div>
                                     </Link>
                                 </div>
                             </div>
                         </div>
                         <div className="row">
-                            <p className="col-md-3 col-sm-4 col-xs-6">Account From: {accountLedger.account_from}</p>
-                            <p className="col-md-3 col-sm-4 col-xs-6">Account To: {accountLedger.account_to}</p>
-                            <p className="col-md-3 col-sm-4 col-xs-6">Lot: {accountLedger.lot}</p>
+                            <p className="col-md-3 col-sm-4 col-xs-6">Entry Type: {accountLedger.entry_type_display}</p>
+                            <p className="col-md-3 col-sm-4 col-xs-6">Non-Sewer Credits: {accountLedger.non_sewer_credits}</p>
+                            <p className="col-md-3 col-sm-4 col-xs-6">Sewer Credits: {accountLedger.sewer_credits}</p>
                         </div>
                     </div>
                 );
-            })(accountLedgers)
-        ) : null;
+            })(accountLedgers);
 
         return (
             <div className="agreement-summary">
@@ -180,68 +186,93 @@ class AgreementSummary extends React.Component {
                               aria-labelledby="#headingAgreementInfo"
                             >
                                 <div className="panel-body">
+                                    <div className="row link-row">
+                                        <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
+                                            <div className="col-xs-5">
+                                                {currentUser && currentUser.permissions && currentUser.permissions.agreement &&
+                                                    <Link to={`agreement/form/${agreements.id}`} aria-label="Edit">
+                                                        <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
+                                                        <div className="col-xs-7 link-label">
+                                                            Edit
+                                                        </div>
+                                                    </Link>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div className="col-xs-12">
                                         <p className="col-md-4 col-xs-6">Resolution Number: {agreements.resolution_number}</p>
-                                        <p className="col-md-4 col-xs-6">Account: {agreements.account_id}</p>
                                         <p className="col-md-4 col-xs-6">Expansion Area: {agreements.expansion_area}</p>
                                         <p className="col-md-4 col-xs-6">Agreement Type: {agreements.agreement_type_display}</p>
                                         <p className="col-md-4 col-xs-6">Date Executed: {agreements.date_executed}</p>
                                     </div>
-                                    {currentUser && currentUser.permissions && currentUser.permissions.agreement &&
-                                        <div className="col-md-offset-11 col-sm-offset-10 col-xs-offset-8">
-                                            <Link to={`agreement/form/${agreements.id}`} role="link" >
-                                                <h4>Edit</h4>
-                                            </Link>
-                                        </div>
-                                    }
                                 </div>
                             </div>
 
-                            <a
-                              role="button"
-                              data-toggle="collapse"
-                              data-parent="#accordion"
-                              href="#collapseAccountInfo"
-                              aria-expanded="false"
-                              aria-controls="collapseAccountInfo"
-                            >
+                            {accounts && accounts.id ? (
+                                <div>
+                                    <a
+                                      role="button"
+                                      data-toggle="collapse"
+                                      data-parent="#accordion"
+                                      href="#collapseAccountInfo"
+                                      aria-expanded="false"
+                                      aria-controls="collapseAccountInfo"
+                                    >
+                                        <div className="row section-heading" role="tab" id="headingAccountInfo">
+                                            <div className="col-xs-1 caret-indicator" />
+                                            <div className="col-xs-10">
+                                                <h2>Developer Account Information</h2>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <div
+                                      id="collapseAccountInfo"
+                                      className="panel-collapse collapse row"
+                                      role="tabpanel"
+                                      aria-labelledby="#headingAccountInfo"
+                                    >
+                                        <div className="panel-body">
+                                            <div className="row link-row">
+                                                <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
+                                                    <div className="col-xs-5">
+                                                        {currentUser && currentUser.permissions && currentUser.permissions.account &&
+                                                            <Link to={`account/form/${accounts.id}`} aria-label="Edit">
+                                                                <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
+                                                                <div className="col-xs-7 link-label">
+                                                                    Edit
+                                                                </div>
+                                                            </Link>
+                                                        }
+                                                    </div>
+                                                    <div className="col-xs-5 ">
+                                                        <Link to={`account/summary/${accounts.id}`} aria-label="Summary">
+                                                            <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
+                                                            <div className="col-xs-7 link-label">
+                                                                Summary
+                                                            </div>
+                                                        </Link>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="col-xs-12">
+                                                <h4 className="col-md-4 col-xs-6">Developer Account Name: {accounts.account_name}</h4>
+                                                {currentUser && currentUser.username &&
+                                                    <div>
+                                                        <h4 className="col-md-4 col-xs-6">Contact Name: {accounts.contact_full_name}</h4>
+                                                        <h4 className="col-xs-12">Address: {accounts.address_full}</h4>
+                                                        <h4 className="col-md-4 col-xs-6 ">Phone: {accounts.phone}</h4>
+                                                        <h4 className="col-md-4 col-xs-6">Email: {accounts.email}</h4>
+                                                    </div>}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            ) : (
                                 <div className="row section-heading" role="tab" id="headingAccountInfo">
-                                    <div className="col-xs-1 caret-indicator" />
-                                    <div className="col-xs-10">
-                                        <h2>Account Information</h2>
-                                    </div>
+                                    <h2>Developer Account - None</h2>
                                 </div>
-                            </a>
-                            <div
-                              id="collapseAccountInfo"
-                              className="panel-collapse collapse row"
-                              role="tabpanel"
-                              aria-labelledby="#headingAccountInfo"
-                            >
-                                <div className="panel-body">
-                                    <div className="col-xs-12">
-                                        <h4 className="col-md-4 col-xs-6">Account Name: {accounts.account_name}</h4>
-                                        <h4 className="col-md-4 col-xs-6">Contact Name: {accounts.contact_full_name}</h4>
-                                        <h4 className="col-xs-12">Address: {accounts.address_full}</h4>
-                                        <h4 className="col-md-4 col-xs-6 ">Phone: {accounts.phone}</h4>
-                                        <h4 className="col-md-4 col-xs-6">Email: {accounts.email}</h4>
-                                    </div>
-                                    <div className="col-md-offset-8 col-sm-offset-6">
-                                        <div className="col-xs-6">
-                                            {currentUser && currentUser.permissions && currentUser.permissions.account &&
-                                                <Link to={`account/form/${accounts.id}`} role="link" >
-                                                    <h4>Edit</h4>
-                                                </Link>
-                                            }
-                                        </div>
-                                        <div className="col-xs-6">
-                                            <Link to={`account/summary/${accounts.id}`} role="link" >
-                                                <h4>Summary</h4>
-                                            </Link>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            )}
 
                             {payments_list ? (
                                 <div>
@@ -359,6 +390,17 @@ class AgreementSummary extends React.Component {
         );
     }
 }
+
+AgreementSummary.propTypes = {
+    currentUser: PropTypes.object,
+    accounts: PropTypes.object,
+    agreements: PropTypes.object,
+    payments: PropTypes.object,
+    projects: PropTypes.object,
+    accountLedgers: PropTypes.object,
+    route: PropTypes.object,
+    onComponentDidMount: PropTypes.func,
+};
 
 function mapStateToProps(state) {
     return {

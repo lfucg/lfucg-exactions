@@ -15,6 +15,7 @@ import ForgotUsername from './components/ForgotUsername';
 
 import SubdivisionExisting from './components/SubdivisionExisting';
 import SubdivisionForm from './components/SubdivisionForm';
+import SubdivisionSummary from './components/SubdivisionSummary';
 
 import PlatExisting from './components/PlatExisting';
 import PlatForm from './components/PlatForm';
@@ -57,6 +58,7 @@ global.BASE_STATIC_URL = (window.location.host === '52.201.224.95') ?
 
 const history = syncHistoryWithStore(hashHistory, dashboardStore);
 global.Promise = require('bluebird');
+global.PropTypes = require('prop-types');
 
 ReactDOM.render(
     <Provider store={dashboardStore}>
@@ -70,6 +72,7 @@ ReactDOM.render(
             <Route path="forgot-username/" component={ForgotUsername} name="Forgot Username" />
 
             <Route path="subdivision" component={SubdivisionExisting} name="Existing Subdivisions" />
+            <Route path="subdivision/summary/:id" component={SubdivisionSummary} name="Subdivision Summary" />
             <Route path="subdivision/form" component={SubdivisionForm} name="Subdivision Form" />
             <Route path="subdivision/form/:id" component={SubdivisionForm} name="Current Subdivision Form" />
 
@@ -84,10 +87,10 @@ ReactDOM.render(
             <Route path="plat/:id/lot/form" component={LotForm} name="Lot Form with Plat" />
             <Route path="lot/form/:id" component={LotForm} name="Current Lot Form" />
 
-            <Route path="account" component={AccountExisting} name="Existing Accounts" />
-            <Route path="account/summary/:id" component={AccountSummary} name="Account Summary" />
-            <Route path="account/form" component={AccountForm} name="Account Form" />
-            <Route path="account/form/:id" component={AccountForm} name="Current Account Form" />
+            <Route path="account" component={AccountExisting} name="Existing Developer Accounts" />
+            <Route path="account/summary/:id" component={AccountSummary} name="Developer Account Summary" />
+            <Route path="account/form" component={AccountForm} name="Developer Account Form" />
+            <Route path="account/form/:id" component={AccountForm} name="Current Developer Account Form" />
 
             <Route path="agreement" component={AgreementExisting} name="Existing Agreements" />
             <Route path="agreement/summary/:id" component={AgreementSummary} name="Agreement Summary" />

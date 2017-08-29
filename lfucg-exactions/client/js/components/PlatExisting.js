@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { map } from 'ramda';
+import PropTypes from 'prop-types';
 
 import Navbar from './Navbar';
 import Footer from './Footer';
@@ -17,18 +18,9 @@ import {
 } from '../actions/formActions';
 
 class PlatExisting extends React.Component {
-    static propTypes = {
-        currentUser: React.PropTypes.object,
-        plats: React.PropTypes.object,
-        route: React.PropTypes.object,
-        onComponentDidMount: React.PropTypes.func,
-        onPlatQuery: React.PropTypes.func,
-    };
-
     componentDidMount() {
         this.props.onComponentDidMount();
     }
-
 
     render() {
         const {
@@ -45,17 +37,25 @@ class PlatExisting extends React.Component {
                             <div className="col-sm-7 col-md-9">
                                 <h3>{plat.name}</h3>
                             </div>
-                            <div className="col-sm-5 col-md-3">
+                        </div>
+                        <div className="row link-row">
+                            <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
                                 <div className="col-xs-5">
                                     {currentUser && currentUser.permissions && currentUser.permissions.plat &&
-                                        <Link to={`plat/form/${plat.id}`} className="btn btn-mid-level">
-                                            Edit
+                                        <Link to={`plat/form/${plat.id}`} aria-label="Edit">
+                                            <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
+                                            <div className="col-xs-7 link-label">
+                                                Edit
+                                            </div>
                                         </Link>
                                     }
                                 </div>
-                                <div className="col-xs-5 col-xs-offset-1">
-                                    <Link to={`plat/summary/${plat.id}`} className="btn btn-mid-level">
-                                        Summary
+                                <div className="col-xs-5 ">
+                                    <Link to={`plat/summary/${plat.id}`} aria-label="Summary">
+                                        <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
+                                        <div className="col-xs-7 link-label">
+                                            Summary
+                                        </div>
                                     </Link>
                                 </div>
                             </div>
@@ -81,16 +81,7 @@ class PlatExisting extends React.Component {
 
                 <div className="form-header">
                     <div className="container">
-                        <div className="col-sm-8">
-                            <h1>PLATS - EXISTING</h1>
-                        </div>
-                        {currentUser && currentUser.permissions && currentUser.permissions.plat &&
-                            <div className="col-sm-2 col-sm-offset-1">
-                                <Link to={'plat/form/'} className="btn btn-top-level" >
-                                    Create
-                                </Link>
-                            </div>
-                        }
+                        <h1>PLATS - EXISTING</h1>
                     </div>
                 </div>
 
@@ -123,6 +114,14 @@ class PlatExisting extends React.Component {
         );
     }
 }
+
+PlatExisting.propTypes = {
+    currentUser: PropTypes.object,
+    plats: PropTypes.object,
+    route: PropTypes.object,
+    onComponentDidMount: PropTypes.func,
+    onPlatQuery: PropTypes.func,
+};
 
 function mapStateToProps(state) {
     return {

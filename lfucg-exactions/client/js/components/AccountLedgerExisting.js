@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { map } from 'ramda';
+import PropTypes from 'prop-types';
 
 import Navbar from './Navbar';
 import Footer from './Footer';
@@ -17,14 +18,6 @@ import {
 } from '../actions/formActions';
 
 class AccountLedgerExisting extends React.Component {
-    static propTypes = {
-        currentUser: React.PropTypes.object,
-        accountLedgers: React.PropTypes.object,
-        route: React.PropTypes.object,
-        onComponentDidMount: React.PropTypes.func,
-        onAccountLedgerQuery: React.PropTypes.func,
-    };
-
     componentDidMount() {
         this.props.onComponentDidMount();
     }
@@ -42,26 +35,36 @@ class AccountLedgerExisting extends React.Component {
                     <div key={accountLedger.id} className="col-xs-12">
                         <div className="row form-subheading">
                             <div className="col-sm-7 col-md-9">
-                                <h3>{accountLedger.entry_type}</h3>
+                                <h3>{accountLedger.entry_type_display}</h3>
                             </div>
-                            <div className="col-sm-5 col-md-3">
+                        </div>
+                        <div className="row link-row">
+                            <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
                                 <div className="col-xs-5">
                                     {currentUser && currentUser.permissions && currentUser.permissions.accountledger &&
-                                        <Link to={`account-ledger/form/${accountLedger.id}`} className="btn btn-mid-level">
-                                            Edit
+                                        <Link to={`account-ledger/form/${accountLedger.id}`} aria-label="Edit">
+                                            <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
+                                            <div className="col-xs-7 link-label">
+                                                Edit
+                                            </div>
                                         </Link>
                                     }
                                 </div>
-                                <div className="col-xs-5 col-xs-offset-1">
-                                    <Link to={`account-ledger/summary/${accountLedger.id}`} className="btn btn-mid-level">
-                                        Summary
+                                <div className="col-xs-5 ">
+                                    <Link to={`account-ledger/summary/${accountLedger.id}`} aria-label="Summary">
+                                        <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
+                                        <div className="col-xs-7 link-label">
+                                            Summary
+                                        </div>
                                     </Link>
                                 </div>
                             </div>
                         </div>
                         <div className="row">
                             <div className="col-sm-offset-1">
-                                <p className="col-md-4 col-xs-6">Lot: {accountLedger.lot}</p>
+                                {accountLedger.lot && accountLedger.lot.address_full &&
+                                    <p className="col-md-4 col-xs-6">Lot: {accountLedger.lot.address_full}</p>
+                                }
                                 <p className="col-md-4 col-xs-6">Account From: {accountLedger.account_from}</p>
                                 <p className="col-md-4 col-xs-6">Account To: {accountLedger.account_to}</p>
                                 <p className="col-md-4 col-xs-6">Agreement: {accountLedger.agreement}</p>
@@ -78,16 +81,7 @@ class AccountLedgerExisting extends React.Component {
 
                 <div className="form-header">
                     <div className="container">
-                        <div className="col-sm-8">
-                            <h1>ACCOUNT LEDGERS - EXISTING</h1>
-                        </div>
-                        {currentUser && currentUser.permissions && currentUser.permissions.accountledger &&
-                            <div className="col-sm-2 col-sm-offset-1">
-                                <Link to={'account-ledger/form/'} className="btn btn-top-level" >
-                                    Create
-                                </Link>
-                            </div>
-                        }
+                        <h1>ACCOUNT LEDGERS - EXISTING</h1>
                     </div>
                 </div>
 
@@ -103,7 +97,7 @@ class AccountLedgerExisting extends React.Component {
                                 <input
                                   type="text"
                                   className="form-control"
-                                  placeholder="Search AccountLedgers"
+                                  placeholder="Search Account Ledgers"
                                 />
                             </div>
                         </fieldset>
@@ -120,6 +114,14 @@ class AccountLedgerExisting extends React.Component {
         );
     }
 }
+
+AccountLedgerExisting.propTypes = {
+    currentUser: PropTypes.object,
+    accountLedgers: PropTypes.object,
+    route: PropTypes.object,
+    onComponentDidMount: PropTypes.func,
+    onAccountLedgerQuery: PropTypes.func,
+};
 
 function mapStateToProps(state) {
     return {

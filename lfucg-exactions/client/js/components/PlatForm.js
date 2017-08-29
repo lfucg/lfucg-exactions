@@ -4,6 +4,7 @@ import {
     hashHistory,
 } from 'react-router';
 import { map } from 'ramda';
+import PropTypes from 'prop-types';
 
 import Navbar from './Navbar';
 import Footer from './Footer';
@@ -31,20 +32,6 @@ import {
 } from '../actions/apiActions';
 
 class PlatForm extends React.Component {
-    static propTypes = {
-        activeForm: React.PropTypes.object,
-        subdivisions: React.PropTypes.object,
-        plats: React.PropTypes.object,
-        accounts: React.PropTypes.object,
-        route: React.PropTypes.object,
-        onComponentDidMount: React.PropTypes.func,
-        formChange: React.PropTypes.func,
-        onPlatSubmit: React.PropTypes.func,
-        onPlatAndCreateLot: React.PropTypes.func,
-        addAnotherPlatZone: React.PropTypes.func,
-        onPlatDues: React.PropTypes.func,
-    };
-
     componentDidMount() {
         this.props.onComponentDidMount();
     }
@@ -176,19 +163,19 @@ class PlatForm extends React.Component {
 
                                         <fieldset>
                                             <div className="row form-subheading">
-                                                <h3>Account</h3>
+                                                <h3>Developer Account</h3>
                                             </div>
                                             <div className="row">
                                                 <div className="col-sm-6 form-group">
-                                                    <label htmlFor="account" className="form-label" id="account" aria-label="Account">Account</label>
+                                                    <label htmlFor="account" className="form-label" id="account" aria-label="Developer Account">Developer Account</label>
                                                     <select className="form-control" id="account" onChange={formChange('account')} >
                                                         {activeForm.account_name ? (
-                                                            <option value="choose_account" aria-label="Selected Account">
+                                                            <option value="choose_account" aria-label="Selected Developer Account">
                                                                 {activeForm.account_name}
                                                             </option>
                                                         ) : (
-                                                            <option value="choose_account" aria-label="Select an Account">
-                                                                Select an Account
+                                                            <option value="choose_account" aria-label="Select a Developer Account">
+                                                                Select a Developer Account
                                                             </option>
                                                         )}
                                                         {accountsList}
@@ -524,6 +511,20 @@ class PlatForm extends React.Component {
         );
     }
 }
+
+PlatForm.propTypes = {
+    activeForm: PropTypes.object,
+    subdivisions: PropTypes.object,
+    plats: PropTypes.object,
+    accounts: PropTypes.object,
+    route: PropTypes.object,
+    onComponentDidMount: PropTypes.func,
+    formChange: PropTypes.func,
+    onPlatSubmit: PropTypes.func,
+    onPlatAndCreateLot: PropTypes.func,
+    addAnotherPlatZone: PropTypes.func,
+    onPlatDues: PropTypes.func,
+};
 
 function mapStateToProps(state) {
     return {
