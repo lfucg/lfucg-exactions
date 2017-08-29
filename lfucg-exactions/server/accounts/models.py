@@ -185,7 +185,7 @@ class Project(models.Model):
             )
         ),
         ('Sewer', (
-                ('SEWER_TRANSIMSSION', 'Sanitary sewer transmission'),
+                ('SEWER_TRANSMISSION', 'Sanitary sewer transmission'),
             )
         ),
         ('Stormwater', (

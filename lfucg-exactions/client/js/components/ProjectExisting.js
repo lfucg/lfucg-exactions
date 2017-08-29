@@ -36,7 +36,7 @@ class ProjectExisting extends React.Component {
             onProjectQuery,
         } = this.props;
 
-        const projects_list = projects.length > 0 ? (
+        const projects_list = projects && projects.length > 0 &&
             map((project) => {
                 return (
                     <div key={project.id} className="col-xs-12">
@@ -61,18 +61,17 @@ class ProjectExisting extends React.Component {
                         </div>
                         <div className="row">
                             <div className="col-sm-offset-1">
-                                <p className="col-md-4 col-xs-6">Agreement: {project.agreement_id}</p>
+                                {project.agreement_id &&
+                                    <p className="col-md-4 col-xs-6">Agreement: {project.agreement_id.resolution_number}</p>
+                                }
                                 <p className="col-md-4 col-xs-6">Project Type: {project.project_type_display}</p>
-                                <p className="col-md-4 col-xs-6">Expansion Area: {project.expansion_area}</p>
                                 <p className="col-md-4 col-xs-6 ">Project Status: {project.project_status_display}</p>
                                 <p className="col-md-4 col-xs-6 ">Status Date: {project.status_date}</p>
-                                <p className="col-xs-12">Project Description: {project.project_description}</p>
                             </div>
                         </div>
                     </div>
                 );
-            })(projects)
-        ) : null;
+            })(projects);
 
         return (
             <div className="project-existing">

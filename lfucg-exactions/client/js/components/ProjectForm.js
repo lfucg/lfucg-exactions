@@ -87,9 +87,9 @@ class ProjectForm extends React.Component {
                                         <div className="col-sm-6 form-group">
                                             <label htmlFor="agreement_id" className="form-label" id="agreement_id" aria-label="Agreement" aria-required="true">* Agreement</label>
                                             <select className="form-control" id="agreement_id" onChange={formChange('agreement_id')} >
-                                                {activeForm.resolution_number ? (
+                                                {projects.agreement_id ? (
                                                     <option value="choose_agreement" aria-label="Selected Agreement">
-                                                        {activeForm.resolution_number}
+                                                        {projects.agreement_id.resolution_number}
                                                     </option>
                                                 ) : (
                                                     <option value="choose_agreement" aria-label="Select an Agreement">
@@ -120,7 +120,9 @@ class ProjectForm extends React.Component {
                                             <label htmlFor="project_category" className="form-label" id="project_category" aria-label="Project Category" aria-required="true">* Project Category</label>
                                             <select className="form-control" id="project_category" onChange={formChange('project_category')} >
                                                 {projects.project_category ? (
-                                                    <option value="project_category" aria-label={`Project Category ${projects.project_category_display}`}>{projects.project_category_display}</option>
+                                                    <option value="project_category" aria-label={`Project Category ${projects.project_category_display}`}>
+                                                        {projects.project_category_display}
+                                                    </option>
                                                 ) : (
                                                     <option value="choose_project_category" aria-label="Choose a Project Category">Choose a Project Category</option>
                                                 )}
@@ -136,7 +138,9 @@ class ProjectForm extends React.Component {
                                                 {activeForm.project_category === 'ROADS' && (
                                                     <select className="form-control" id="project_type" onChange={formChange('project_type')} >
                                                         {projects.project_type ? (
-                                                            <option value="project_type" aria-label={`Project Type ${projects.project_type_display}`}>{projects.project_type_display}</option>
+                                                            <option value="project_type" aria-label={`Project Type ${projects.project_type_display}`}>
+                                                                {projects.project_type_display}
+                                                            </option>
                                                         ) : (
                                                             <option value="choose_project_type" aria-label="Choose a Project Type">Choose a Project Type</option>
                                                         )}
@@ -149,7 +153,9 @@ class ProjectForm extends React.Component {
                                                 {activeForm.project_category === 'SEWER' && (
                                                     <select className="form-control" id="project_type" onChange={formChange('project_type')} >
                                                         {projects.project_type ? (
-                                                            <option value="project_type" aria-label={`Project Type ${projects.project_type_display}`}>{projects.project_type_display}</option>
+                                                            <option value="project_type" aria-label={`Project Type ${projects.project_type_display}`}>
+                                                                {projects.project_type_display}
+                                                            </option>
                                                         ) : (
                                                             <option value="choose_project_type" aria-label="Choose a Project Type">Choose a Project Type</option>
                                                         )}
@@ -159,7 +165,9 @@ class ProjectForm extends React.Component {
                                                 {activeForm.project_category === 'PARK' && (
                                                     <select className="form-control" id="project_type" onChange={formChange('project_type')} >
                                                         {projects.project_type ? (
-                                                            <option value="project_type" aria-label={`Project Type ${projects.project_type_display}`}>{projects.project_type_display}</option>
+                                                            <option value="project_type" aria-label={`Project Type ${projects.project_type_display}`}>
+                                                                {projects.project_type_display}
+                                                            </option>
                                                         ) : (
                                                             <option value="choose_project_type" aria-label="Choose a Project Type">Choose a Project Type</option>
                                                         )}
@@ -169,7 +177,9 @@ class ProjectForm extends React.Component {
                                                 {activeForm.project_category === 'STORM_WATER' && (
                                                     <select className="form-control" id="project_type" onChange={formChange('project_type')} >
                                                         {projects.project_type ? (
-                                                            <option value="project_type" aria-label={`Project Type ${projects.project_type_display}`}>{projects.project_type_display}</option>
+                                                            <option value="project_type" aria-label={`Project Type ${projects.project_type_display}`}>
+                                                                {projects.project_type_display}
+                                                            </option>
                                                         ) : (
                                                             <option value="choose_project_type" aria-label="Choose a Project Type">Choose a Project Type</option>
                                                         )}
@@ -183,7 +193,9 @@ class ProjectForm extends React.Component {
                                                 <label htmlFor="project_type" className="form-label" id="project_type" aria-label="Project Type" aria-required="true">* Project Type</label>
                                                 <select className="form-control" id="project_type" onChange={formChange('project_type')} >
                                                     {projects.project_type ? (
-                                                        <option value="project_type" aria-label={`Project Type ${projects.project_type_display}`}>{projects.project_type_display}</option>
+                                                        <option value="project_type" aria-label={`Project Type ${projects.project_type_display}`}>
+                                                            {projects.project_type_display}
+                                                        </option>
                                                     ) : (
                                                         <option value="choose_project_type" aria-label="Choose a Project Type">Choose a Project Type</option>
                                                     )}
@@ -268,16 +280,8 @@ function mapDispatchToProps(dispatch, params) {
                 if (selectedProject) {
                     dispatch(getProjectID(selectedProject))
                     .then((data_project) => {
-                        if (data_project.response.agreement_id) {
-                            dispatch(getAgreementID(data_project.response.agreement_id))
-                            .then((data_agreement) => {
-                                const agreement_update = {
-                                    resolution_number: data_agreement.response.resolution_number,
-                                };
-                                dispatch(formUpdate(agreement_update));
-                            });
-                        }
                         const update = {
+                            agreement_id: data_project.response.agreement_id ? data_project.response.agreement_id.id : null,
                             expansion_area: data_project.response.expansion_area,
                             project_category: data_project.response.project_category,
                             project_type: data_project.response.project_type,

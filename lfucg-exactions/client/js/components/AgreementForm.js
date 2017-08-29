@@ -79,9 +79,9 @@ class AgreementForm extends React.Component {
                                         <div className="col-sm-6 form-group">
                                             <label htmlFor="account_id" className="form-label" id="account_id">Account</label>
                                             <select className="form-control" id="account_id" onChange={formChange('account_id')} >
-                                                {activeForm.account_name ? (
+                                                {agreements.account_id ? (
                                                     <option value="choose_account" aria-label="Selected Account">
-                                                        {activeForm.account_name}
+                                                        {agreements.account_id.account_name}
                                                     </option>
                                                 ) : (
                                                     <option value="choose_account" aria-label="Select an Account">
@@ -169,16 +169,8 @@ function mapDispatchToProps(dispatch, params) {
                 if (selectedAgreement) {
                     dispatch(getAgreementID(selectedAgreement))
                     .then((data_agreement) => {
-                        if (data_agreement.response.account_id) {
-                            dispatch(getAccountID(data_agreement.response.account_id))
-                            .then((data_account) => {
-                                const account_update = {
-                                    account_name: data_account.response.account_name,
-                                };
-                                dispatch(formUpdate(account_update));
-                            });
-                        }
                         const update = {
+                            account_id: data_agreement.response.account_id ? data_agreement.response.account_id.id : null,
                             agreement_name: data_agreement.response.agreement_name,
                             date_executed: data_agreement.response.date_executed,
                             resolution_number: data_agreement.response.resolution_number,

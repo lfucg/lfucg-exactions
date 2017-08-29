@@ -239,7 +239,7 @@ class LotSummary extends React.Component {
                                 <div className="panel-body">
                                     <div className="col-xs-12">
                                         {lots.id &&
-                                            <Notes content_type="Plat" object_id={lots.id} />
+                                            <Notes content_type="Lot" object_id={lots.id} parent_content_type="Plat" parent_object_id={lots.plat.id} />
                                         }
                                     </div>
                                 </div>
