@@ -51,47 +51,6 @@ class ProjectCostEstimateSerializer(serializers.ModelSerializer):
             'total_costs',
         )
 
-class ProjectSerializer(serializers.ModelSerializer):
-    project_cost_estimate = ProjectCostEstimateSerializer(many=True, read_only=True)
-    project_category_display = serializers.SerializerMethodField(read_only=True)
-    project_type_display = serializers.SerializerMethodField(read_only=True)
-    project_status_display = serializers.SerializerMethodField(read_only=True)
-
-    def get_project_category_display(self, obj):
-        return obj.get_project_category_display()
-
-    def get_project_type_display(self, obj):
-        return obj.get_project_type_display()
-
-    def get_project_status_display(self, obj):
-        return obj.get_project_status_display()
-
-    class Meta:
-        model = Project
-        fields = (
-            'id',
-            'is_approved',
-            'is_active',
-            'date_created',
-            'date_modified',
-            'created_by',
-            'modified_by',
-            'agreement_id',
-            'expansion_area',
-
-            'project_category',
-            'project_type',
-            'project_status',
-
-            'project_category_display',
-            'project_type_display',
-            'project_status_display',
-
-            'project_description',
-            'status_date',
-            'project_cost_estimate',
-        )
-
 class AccountSerializer(serializers.ModelSerializer):
     # agreements = AgreementSerializer(many=True, read_only=True)
     plat_account = PlatSerializer(many=True, required=False)
@@ -134,7 +93,7 @@ class AccountField(serializers.Field):
         return AccountSerializer(obj).data
 
 class AgreementSerializer(serializers.ModelSerializer):
-    projects = ProjectSerializer(many=True, read_only=True)
+    # projects = ProjectSerializer(many=True, read_only=True)
     account_id = AccountField()
 
     agreement_type_display = serializers.SerializerMethodField(read_only=True)
@@ -157,7 +116,7 @@ class AgreementSerializer(serializers.ModelSerializer):
             'resolution_number',
             'expansion_area',
             'agreement_type',
-            'projects',
+            # 'projects',
             'agreement_type_display',
         )
 
@@ -170,6 +129,49 @@ class AgreementField(serializers.Field):
 
     def to_representation(self, obj):
         return AgreementSerializer(obj).data
+
+class ProjectSerializer(serializers.ModelSerializer):
+    agreement_id = AgreementField()
+
+    project_cost_estimate = ProjectCostEstimateSerializer(many=True, read_only=True)
+    project_category_display = serializers.SerializerMethodField(read_only=True)
+    project_type_display = serializers.SerializerMethodField(read_only=True)
+    project_status_display = serializers.SerializerMethodField(read_only=True)
+
+    def get_project_category_display(self, obj):
+        return obj.get_project_category_display()
+
+    def get_project_type_display(self, obj):
+        return obj.get_project_type_display()
+
+    def get_project_status_display(self, obj):
+        return obj.get_project_status_display()
+
+    class Meta:
+        model = Project
+        fields = (
+            'id',
+            'is_approved',
+            'is_active',
+            'date_created',
+            'date_modified',
+            'created_by',
+            'modified_by',
+            'agreement_id',
+            'expansion_area',
+
+            'project_category',
+            'project_type',
+            'project_status',
+
+            'project_category_display',
+            'project_type_display',
+            'project_status_display',
+
+            'project_description',
+            'status_date',
+            'project_cost_estimate',
+        )
 
 class AccountLedgerSerializer(serializers.ModelSerializer):
     lot = LotField()

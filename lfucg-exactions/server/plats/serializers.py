@@ -83,7 +83,6 @@ class SubdivisionField(serializers.Field):
             None
 
 class PlatSerializer(serializers.ModelSerializer):
-    # lot = LotSerializer(many=True, read_only=True)
     plat_zone = PlatZoneSerializer(many=True, read_only=True)
     subdivision = SubdivisionSerializer(read_only=True)
     cleaned_total_acreage = serializers.SerializerMethodField(read_only=True)
@@ -129,7 +128,6 @@ class PlatSerializer(serializers.ModelSerializer):
             'calculation_note',
             'sewer_due',
             'non_sewer_due',
-            # 'lot',
             'plat_zone',
             'plat_type_display',
         )
@@ -208,6 +206,5 @@ class LotSerializer(serializers.ModelSerializer):
             'dues_storm_own',
             'dues_open_space_dev',
             'dues_open_space_own',
-            # 'payment',
             'total_due',
         )
