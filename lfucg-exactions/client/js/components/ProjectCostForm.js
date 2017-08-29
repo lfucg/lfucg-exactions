@@ -19,7 +19,6 @@ import {
 import {
     getMe,
     getProjects,
-    getProjectID,
     getProjectCostID,
     postProjectCost,
     putProjectCost,

@@ -451,15 +451,13 @@ class PlatForm extends React.Component {
                                                                         </FormGroup>
                                                                     </div>
                                                                 </div>
-                                                                {
-                                                                // <div className="row">
-                                                                //     <div className="col-xs-12">
-                                                                //         <FormGroup label="* Calculation Notes" id="calculation_note">
-                                                                //             <textarea type="text" className="form-control" placeholder="Calculation Notes" rows="4" />
-                                                                //         </FormGroup>
-                                                                //     </div>
-                                                                // </div>
-                                                                }
+                                                                <div className="row">
+                                                                    <div className="col-xs-12">
+                                                                        <FormGroup label="* Calculation Notes" id="calculation_note">
+                                                                            <textarea type="text" className="form-control" placeholder="Calculation Notes" rows="4" />
+                                                                        </FormGroup>
+                                                                    </div>
+                                                                </div>
                                                             </fieldset>
                                                             <div className="col-xs-offset-2 col-xs-4">
                                                                 <button className="btn btn-lex" >Submit Exactions</button>
@@ -586,29 +584,29 @@ function mapDispatchToProps(dispatch, params) {
                             dispatch(formUpdate(zones_exist_update));
                         }
                         const update = {
-                            subdivision: data_plat.response.subdivision,
+                            add_another_plat_zone: false,
+                            block: data_plat.response.block,
+                            buildable_lots: data_plat.response.buildable_lots,
+                            cabinet: data_plat.response.cabinet,
+                            calculation_note: data_plat.response.calculation_note,
                             date_recorded: data_plat.response.date_recorded,
+                            expansion_area: data_plat.response.expansion_area,
+                            first_section: true,
                             latitude: data_plat.response.latitude,
                             longitude: data_plat.response.longitude,
-                            expansion_area: data_plat.response.expansion_area,
-                            total_acreage: data_plat.response.cleaned_total_acreage,
-                            buildable_lots: data_plat.response.buildable_lots,
-                            non_buildable_lots: data_plat.response.non_buildable_lots,
-                            sewer_due: data_plat.response.sewer_due,
-                            non_sewer_due: data_plat.response.non_sewer_due,
-                            calculation_note: data_plat.response.calculation_note,
                             name: data_plat.response.name,
+                            non_buildable_lots: data_plat.response.non_buildable_lots,
+                            non_sewer_due: data_plat.response.non_sewer_due,
+                            plat: data_plat.response.id,
+                            plat_name: data_plat.response.name,
                             plat_type: data_plat.response.plat_type,
                             plat_type_display: data_plat.response.plat_type_display,
                             section: data_plat.response.section,
-                            unit: data_plat.response.unit,
-                            block: data_plat.response.block,
-                            cabinet: data_plat.response.cabinet,
+                            sewer_due: data_plat.response.sewer_due,
                             slide: data_plat.response.slide,
-                            plat: data_plat.response.id,
-                            plat_name: data_plat.response.name,
-                            first_section: true,
-                            add_another_plat_zone: false,
+                            subdivision: data_plat.response.subdivision,
+                            total_acreage: data_plat.response.cleaned_total_acreage,
+                            unit: data_plat.response.unit,
                         };
                         dispatch(formUpdate(update));
                     });
