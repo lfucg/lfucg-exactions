@@ -51,8 +51,8 @@ class ProjectCostForm extends React.Component {
 
         const projectsList = projects.length > 0 ? (map((project) => {
             return (
-                <option key={project.id} value={[project.id, project.project_description]} >
-                    {project.project_description}
+                <option key={project.id} value={[project.id, project.name]} >
+                    {project.name}
                 </option>
             );
         })(projects)) : null;
@@ -79,9 +79,9 @@ class ProjectCostForm extends React.Component {
                                         <div className="col-sm-6 form-group">
                                             <label htmlFor="project_id" className="form-label" id="project_id" aria-label="Project">Project</label>
                                             <select className="form-control" id="project_id" onChange={formChange('project_id')} >
-                                                {activeForm.project_name ? (
+                                                {projectCosts.project_id ? (
                                                     <option value="choose_project" aria-label="Selected Project">
-                                                        {activeForm.project_name}
+                                                        {projectCosts.project_id.name}
                                                     </option>
                                                 ) : (
                                                     <option value="choose_project" aria-label="Select an Project">
@@ -169,16 +169,8 @@ function mapDispatchToProps(dispatch, params) {
                 if (selectedProjectCost) {
                     dispatch(getProjectCostID(selectedProjectCost))
                     .then((data_project_cost) => {
-                        if (data_project_cost.response.project_id) {
-                            dispatch(getProjectID(data_project_cost.response.project_id))
-                            .then((data_project) => {
-                                const project_update = {
-                                    project_description: data_project.response.project_description,
-                                };
-                                dispatch(formUpdate(project_update));
-                            });
-                        }
                         const update = {
+                            project_id: data_project_cost.response.project_id ? data_project_cost.response.project_id.name : null,
                             estimate_type: data_project_cost.response.estimate_type,
                             land_cost: data_project_cost.response.land_cost,
                             design_cost: data_project_cost.response.design_cost,

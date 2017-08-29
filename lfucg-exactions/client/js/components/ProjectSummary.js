@@ -57,8 +57,8 @@ class ProjectSummary extends React.Component {
                     <div className="row">
                         <div className="col-sm-offset-1">
                             <p className="col-md-4 col-xs-6">Project: {projectCost.project_id}</p>
-                            <p className="col-md-4 col-xs-6">Total Costs: {projectCost.total_costs}</p>
-                            <p className="col-md-4 col-xs-6 ">Credits Available: {projectCost.credits_available}</p>
+                            <p className="col-md-4 col-xs-6">Total Costs: ${projectCost.total_costs}</p>
+                            <p className="col-md-4 col-xs-6 ">Credits Available: ${projectCost.credits_available}</p>
                         </div>
                     </div>
                 </div>
@@ -152,56 +152,64 @@ class ProjectSummary extends React.Component {
                                     </div>
                                 </div>
                             ) : (
-                                <div className="row section-heading" role="tab" id="headingAccountPlats">
+                                <div className="row section-heading" role="tab" id="headingCostEstimates">
                                     <h2>Project Cost Estimates - None</h2>
                                 </div>
                             )}
 
-                            <a
-                              role="button"
-                              data-toggle="collapse"
-                              data-parent="#accordion"
-                              href="#collapseAgreementInfo"
-                              aria-expanded="false"
-                              aria-controls="collapseAgreementInfo"
-                            >
-                                <div className="row section-heading" role="tab" id="headingAgreementInfo">
-                                    <div className="col-xs-1 caret-indicator" />
-                                    <div className="col-xs-10">
-                                        <h2>Agreement</h2>
-                                    </div>
-                                </div>
-                            </a>
-                            <div
-                              id="collapseAgreementInfo"
-                              className="panel-collapse collapse row"
-                              role="tabpanel"
-                              aria-labelledby="#headingAgreementInfo"
-                            >
-                                <div className="panel-body">
-                                    <div className="col-xs-12">
-                                        <p className="col-md-4 col-xs-6">Resolution Number: {agreements.resolution_number}</p>
-                                        <p className="col-md-4 col-xs-6">Account: {agreements.account_id}</p>
-                                        <p className="col-md-4 col-xs-6">Expansion Area: {agreements.expansion_area}</p>
-                                        <p className="col-md-4 col-xs-6">Agreement Type: {agreements.agreement_type_display}</p>
-                                        <p className="col-md-4 col-xs-6">Date Executed: {agreements.date_executed}</p>
-                                    </div>
-                                    <div className="col-md-offset-8 col-sm-offset-6">
-                                        <div className="col-xs-6">
-                                            {currentUser && currentUser.permissions && currentUser.permissions.agreement &&
-                                                <Link to={`agreement/form/${agreements.id}`} role="link" >
-                                                    <h4>Edit</h4>
-                                                </Link>
-                                            }
+                            {projects.agreement_id && projects.agreement_id.id ?
+                                <div>
+                                    <a
+                                      role="button"
+                                      data-toggle="collapse"
+                                      data-parent="#accordion"
+                                      href="#collapseAgreementInfo"
+                                      aria-expanded="false"
+                                      aria-controls="collapseAgreementInfo"
+                                    >
+                                        <div className="row section-heading" role="tab" id="headingAgreementInfo">
+                                            <div className="col-xs-1 caret-indicator" />
+                                            <div className="col-xs-10">
+                                                <h2>Agreement</h2>
+                                            </div>
                                         </div>
-                                        <div className="col-xs-6">
-                                            <Link to={`agreement/summary/${agreements.id}`} role="link" >
-                                                <h4>Summary</h4>
-                                            </Link>
+                                    </a>
+                                    <div
+                                      id="collapseAgreementInfo"
+                                      className="panel-collapse collapse row"
+                                      role="tabpanel"
+                                      aria-labelledby="#headingAgreementInfo"
+                                    >
+                                        <div className="panel-body">
+                                            <div className="col-xs-12">
+                                                <p className="col-md-4 col-xs-6">Resolution Number: {projects.agreement_id.resolution_number}</p>
+                                                {projects.agreement_id.account_id &&
+                                                    <p className="col-md-4 col-xs-6">Account: {projects.agreement_id.account_id.account_name}</p>
+                                                }
+                                                <p className="col-md-4 col-xs-6">Expansion Area: {projects.agreement_id.expansion_area}</p>
+                                                <p className="col-md-4 col-xs-6">Agreement Type: {projects.agreement_id.agreement_type_display}</p>
+                                                <p className="col-md-4 col-xs-6">Date Executed: {projects.agreement_id.date_executed}</p>
+                                            </div>
+                                            <div className="col-md-offset-8 col-sm-offset-6">
+                                                <div className="col-xs-6">
+                                                    {currentUser && currentUser.permissions && currentUser.permissions.agreement &&
+                                                        <Link to={`agreement/form/${projects.agreement_id.id}`} role="link" >
+                                                            <h4>Edit</h4>
+                                                        </Link>
+                                                    }
+                                                </div>
+                                                <div className="col-xs-6">
+                                                    <Link to={`agreement/summary/${projects.agreement_id.id}`} role="link" >
+                                                        <h4>Summary</h4>
+                                                    </Link>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
+                                </div> : <div className="row section-heading" role="tab" id="headingAgreementInfo">
+                                    <h2>Agreement - None</h2>
                                 </div>
-                            </div>
+                            }
                         </div>
                     </div>
                 </div>
@@ -214,7 +222,6 @@ class ProjectSummary extends React.Component {
 function mapStateToProps(state) {
     return {
         currentUser: state.currentUser,
-        agreements: state.agreements,
         projects: state.projects,
     };
 }
@@ -224,12 +231,7 @@ function mapDispatchToProps(dispatch, params) {
 
     return {
         onComponentDidMount() {
-            dispatch(getProjectID(selectedProject))
-            .then((data_project) => {
-                if (data_project.response.agreement_id) {
-                    dispatch(getAgreementID(data_project.response.agreement_id));
-                }
-            });
+            dispatch(getProjectID(selectedProject));
         },
     };
 }
