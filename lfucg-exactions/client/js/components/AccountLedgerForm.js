@@ -4,6 +4,7 @@ import {
     hashHistory,
 } from 'react-router';
 import { map } from 'ramda';
+import PropTypes from 'prop-types';
 
 import Navbar from './Navbar';
 import Footer from './Footer';
@@ -27,18 +28,6 @@ import {
 } from '../actions/apiActions';
 
 class AccountLedgerForm extends React.Component {
-    static propTypes = {
-        activeForm: React.PropTypes.object,
-        lots: React.PropTypes.object,
-        accounts: React.PropTypes.object,
-        agreements: React.PropTypes.object,
-        accountLedgers: React.PropTypes.object,
-        route: React.PropTypes.object,
-        onComponentDidMount: React.PropTypes.func,
-        onSubmit: React.PropTypes.func,
-        formChange: React.PropTypes.func,
-    };
-
     componentDidMount() {
         this.props.onComponentDidMount();
     }
@@ -73,7 +62,7 @@ class AccountLedgerForm extends React.Component {
         const agreementsList = agreements.length > 0 ? (map((agreement) => {
             return (
                 <option key={agreement.id} value={[agreement.id, agreement.resolution_number]} >
-                    {agreement.resolution_number}
+                    Resolution: {agreement.resolution_number}
                 </option>
             );
         })(agreements)) : null;
@@ -176,10 +165,18 @@ class AccountLedgerForm extends React.Component {
                                                 <input type="date" className="form-control" placeholder="Entry Date" />
                                             </FormGroup>
                                         </div>
-                                        <div className="col-sm-6">
-                                            <FormGroup label="* Entry Type" id="entry_type" aria-required="true">
-                                                <input type="text" className="form-control" placeholder="Entry Type" />
-                                            </FormGroup>
+                                        <div className="col-sm-6 form-group">
+                                            <label htmlFor="entry_type" className="form-label" id="entry_type" aria-label="Entry Type">Entry Type</label>
+                                            <select className="form-control" id="entry_type" onChange={formChange('entry_type')} >
+                                                {accountLedgers.entry_type ? (
+                                                    <option value="entry_type" aria-label={`Entry Type ${accountLedgers.entry_type_display}`}>{accountLedgers.entry_type_display}</option>
+                                                ) : (
+                                                    <option value="choose_entry_type" aria-label="Choose an Entry Type">Choose an Entry Type</option>
+                                                )}
+                                                <option value={['NEW', 'New']}>New</option>
+                                                <option value={['SELL', 'Sell']}>Sell</option>
+                                                <option value={['TRANSFER', 'Transfer']}>Transfer</option>
+                                            </select>
                                         </div>
                                     </div>
                                     <div className="row">
@@ -213,6 +210,18 @@ class AccountLedgerForm extends React.Component {
         );
     }
 }
+
+AccountLedgerForm.propTypes = {
+    activeForm: PropTypes.object,
+    lots: PropTypes.object,
+    accounts: PropTypes.object,
+    agreements: PropTypes.object,
+    accountLedgers: PropTypes.object,
+    route: PropTypes.object,
+    onComponentDidMount: PropTypes.func,
+    onSubmit: PropTypes.func,
+    formChange: PropTypes.func,
+};
 
 function mapStateToProps(state) {
     return {
@@ -248,6 +257,7 @@ function mapDispatchToProps(dispatch, params) {
                             agreement: data_account_ledger.response.agreement ? data_account_ledger.response.agreement.id : null,
                             entry_date: data_account_ledger.response.entry_date,
                             entry_type: data_account_ledger.response.entry_type,
+                            entry_type_display: data_account_ledger.response.entry_type_display,
                             non_sewer_credits: data_account_ledger.response.non_sewer_credits,
                             sewer_credits: data_account_ledger.response.sewer_credits,
                         };

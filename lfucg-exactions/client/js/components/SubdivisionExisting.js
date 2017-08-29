@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { map } from 'ramda';
+import PropTypes from 'prop-types';
 
 import Navbar from './Navbar';
 import Footer from './Footer';
@@ -17,14 +18,6 @@ import {
 } from '../actions/formActions';
 
 class SubdivisionExisting extends React.Component {
-    static propTypes = {
-        currentUser: React.PropTypes.object,
-        subdivisions: React.PropTypes.object,
-        route: React.PropTypes.object,
-        onComponentDidMount: React.PropTypes.func,
-        onSubdivisionQuery: React.PropTypes.func,
-    };
-
     componentDidMount() {
         this.props.onComponentDidMount();
     }
@@ -37,7 +30,7 @@ class SubdivisionExisting extends React.Component {
             onSubdivisionQuery,
         } = this.props;
 
-        const subdivisions_list = subdivisions.length > 0 ? (
+        const subdivisions_list = subdivisions && subdivisions.length > 0 &&
             map((subdivision) => {
                 return (
                     <div key={subdivision.id} className="col-xs-12">
@@ -45,23 +38,35 @@ class SubdivisionExisting extends React.Component {
                             <div className="col-sm-7 col-md-9">
                                 <h3>{subdivision.name}</h3>
                             </div>
-                            {currentUser && currentUser.permissions && currentUser.permissions.subdivision &&
-                                <div className="col-sm-5 col-md-3">
-                                    <div className="col-xs-5 col-xs-offset-6">
-                                        <Link to={`subdivision/form/${subdivision.id}`} className="btn btn-mid-level">
-                                            Edit
+                        </div>
+                        <div className="row link-row">
+                            <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
+                                <div className="col-xs-5">
+                                    {currentUser && currentUser.permissions && currentUser.permissions.subdivision &&
+                                        <Link to={`subdivision/form/${subdivision.id}`} aria-label="Edit">
+                                            <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
+                                            <div className="col-xs-7 link-label">
+                                                Edit
+                                            </div>
                                         </Link>
-                                    </div>
+                                    }
                                 </div>
-                            }
+                                <div className="col-xs-5 ">
+                                    <Link to={`subdivision/summary/${subdivision.id}`} aria-label="Summary">
+                                        <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
+                                        <div className="col-xs-7 link-label">
+                                            Summary
+                                        </div>
+                                    </Link>
+                                </div>
+                            </div>
                         </div>
                         <div className="row">
                             <p className="col-md-3 col-sm-offset-1 col-sm-4 col-xs-6">Acres: {subdivision.cleaned_gross_acreage}</p>
                         </div>
                     </div>
                 );
-            })(subdivisions)
-        ) : null;
+            })(subdivisions);
 
         return (
             <div className="subdivision-existing">
@@ -69,16 +74,7 @@ class SubdivisionExisting extends React.Component {
 
                 <div className="form-header">
                     <div className="container">
-                        <div className="col-sm-8">
-                            <h1>SUBDIVISIONS - EXISTING</h1>
-                        </div>
-                        {currentUser && currentUser.permissions && currentUser.permissions.subdivision &&
-                            <div className="col-sm-2 col-sm-offset-1">
-                                <Link to={'subdivision/form/'} className="btn btn-top-level" >
-                                    Create
-                                </Link>
-                            </div>
-                        }
+                        <h1>SUBDIVISIONS - EXISTING</h1>
                     </div>
                 </div>
 
@@ -111,6 +107,14 @@ class SubdivisionExisting extends React.Component {
         );
     }
 }
+
+SubdivisionExisting.propTypes = {
+    currentUser: PropTypes.object,
+    subdivisions: PropTypes.object,
+    route: PropTypes.object,
+    onComponentDidMount: PropTypes.func,
+    onSubdivisionQuery: PropTypes.func,
+};
 
 function mapStateToProps(state) {
     return {

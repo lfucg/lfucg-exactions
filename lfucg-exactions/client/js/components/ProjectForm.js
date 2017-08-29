@@ -4,6 +4,7 @@ import { map } from 'ramda';
 import {
     hashHistory,
 } from 'react-router';
+import PropTypes from 'prop-types';
 
 import Navbar from './Navbar';
 import Footer from './Footer';
@@ -25,16 +26,6 @@ import {
 } from '../actions/apiActions';
 
 class ProjectForm extends React.Component {
-    static propTypes = {
-        activeForm: React.PropTypes.object,
-        projects: React.PropTypes.object,
-        agreements: React.PropTypes.object,
-        route: React.PropTypes.object,
-        onComponentDidMount: React.PropTypes.func,
-        onSubmit: React.PropTypes.func,
-        formChange: React.PropTypes.func,
-    };
-
     componentDidMount() {
         this.props.onComponentDidMount();
     }
@@ -82,6 +73,13 @@ class ProjectForm extends React.Component {
                             <form onSubmit={onSubmit} >
 
                                 <fieldset>
+                                    <div className="row">
+                                        <div className="col-sm-6">
+                                            <FormGroup label="* Project Name" id="name" >
+                                                <input type="text" className="form-control" placeholder="Name" />
+                                            </FormGroup>
+                                        </div>
+                                    </div>
                                     <div className="row">
                                         <div className="col-sm-6 form-group">
                                             <label htmlFor="agreement_id" className="form-label" id="agreement_id" aria-label="Agreement" aria-required="true">* Agreement</label>
@@ -147,6 +145,7 @@ class ProjectForm extends React.Component {
                                                         <option value={['PARKWAY', 'Roads: Parkway']}>Roads: Parkway</option>
                                                         <option value={['TWO_LANE_BOULEVARD', 'Roads: Two-Lane Boulevard']}>Roads: Two-Lane Boulevard</option>
                                                         <option value={['TWO_LANE_PARKWAY', 'Roads: Two-Lane Parkway']}>Roads: Two-Lane Parkway</option>
+                                                        <option value={['OTHER_NON_SEWER', 'Other Non-Sewer']} >Other Non-Sewer</option>
                                                     </select>
                                                 )}
                                                 {activeForm.project_category === 'SEWER' && (
@@ -159,6 +158,7 @@ class ProjectForm extends React.Component {
                                                             <option value="choose_project_type" aria-label="Choose a Project Type">Choose a Project Type</option>
                                                         )}
                                                         <option value={['SEWER_TRANSMISSION', 'Sewer: Sanitary Sewer Transmission']}>Sewer: Sanitary Sewer Transmission</option>
+                                                        <option value={['SEWER_OTHER', 'Sewer: Other']}>Sewer: Other</option>
                                                     </select>
                                                 )}
                                                 {activeForm.project_category === 'PARK' && (
@@ -171,6 +171,7 @@ class ProjectForm extends React.Component {
                                                             <option value="choose_project_type" aria-label="Choose a Project Type">Choose a Project Type</option>
                                                         )}
                                                         <option value={['PARKS_AQUISITION', 'Parks Aquisition']}>Parks Aquisition</option>
+                                                        <option value={['OTHER_NON_SEWER', 'Other Non-Sewer']} >Other Non-Sewer</option>
                                                     </select>
                                                 )}
                                                 {activeForm.project_category === 'STORM_WATER' && (
@@ -184,6 +185,7 @@ class ProjectForm extends React.Component {
                                                         )}
                                                         <option value={['STORMWATER', 'Storm Water']}>Storm Water</option>
                                                         <option value={['LAND_AQUISITION', 'Storm Water: Land Aquisition']}>Storm Water: Land Aquisition</option>
+                                                        <option value={['OTHER_NON_SEWER', 'Other Non-Sewer']} >Other Non-Sewer</option>
                                                     </select>
                                                 )}
                                             </div>
@@ -206,6 +208,8 @@ class ProjectForm extends React.Component {
                                                     <option value={['STORMWATER', 'Storm Water']}>Storm Water</option>
                                                     <option value={['LAND_AQUISITION', 'Storm Water: Land Aquisition']}>Storm Water: Land Aquisition</option>
                                                     <option value={['PARKS_AQUISITION', 'Parks Aquisition']}>Parks Aquisition</option>
+                                                    <option value={['SEWER_OTHER', 'Sewer: Other']}>Sewer: Other</option>
+                                                    <option value={['OTHER_NON_SEWER', 'Other Non-Sewer']} >Other Non-Sewer</option>
                                                 </select>
                                             </div>
                                         )}
@@ -221,6 +225,7 @@ class ProjectForm extends React.Component {
                                                 )}
                                                 <option value={['IN_PROGRESS', 'In Progress']}>In Progress</option>
                                                 <option value={['COMPLETE', 'Complete']}>Complete</option>
+                                                <option value={['CLOSED', 'Closed Out']}>Closed Out</option>
                                             </select>
                                         </div>
                                         <div className="col-sm-6">
@@ -255,6 +260,16 @@ class ProjectForm extends React.Component {
         );
     }
 }
+
+ProjectForm.propTypes = {
+    activeForm: PropTypes.object,
+    projects: PropTypes.object,
+    agreements: PropTypes.object,
+    route: PropTypes.object,
+    onComponentDidMount: PropTypes.func,
+    onSubmit: PropTypes.func,
+    formChange: PropTypes.func,
+};
 
 function mapStateToProps(state) {
     return {
