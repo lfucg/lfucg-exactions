@@ -31,6 +31,7 @@ import {
     GET_LOTS,
     GET_LOT_ID,
     GET_LOT_QUERY,
+    GET_PLAT_LOTS,
     POST_LOT,
     PUT_LOT,
 
@@ -69,6 +70,7 @@ import {
     GET_PROJECT_COSTS,
     GET_PROJECT_COST_ID,
     GET_PROJECT_COST_QUERY,
+    GET_PROJECT_PROJECT_COSTS,
     POST_PROJECT_COST,
     PUT_PROJECT_COST,
 
@@ -586,6 +588,14 @@ export function getLotQuery() {
             const query_all = `/lot/?query=${query}`;
             return query_all;
         },
+    };
+}
+
+export function getPlatLots(selectedPlat) {
+    return {
+        type: API_CALL,
+        endpoint: GET_PLAT_LOTS,
+        url: `/lot/?plat=${selectedPlat}`,
     };
 }
 
@@ -1359,6 +1369,14 @@ export function getProjectCostQuery() {
             const query_all = `/estimate/?query=${query}`;
             return query_all;
         },
+    };
+}
+
+export function getProjectProjectCosts(selectedProject) {
+    return {
+        type: API_CALL,
+        endpoint: GET_PROJECT_PROJECT_COSTS,
+        url: `/estimate/?project_id=${selectedProject}`,
     };
 }
 

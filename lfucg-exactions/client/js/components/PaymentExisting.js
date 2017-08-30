@@ -34,7 +34,9 @@ class PaymentExisting extends React.Component {
                 return (
                     <div key={payment.id} className="col-xs-12">
                         <div className="row form-subheading">
-                            <h3>Paid By {payment.paid_by}</h3>
+                            <div className="col-sm-7 col-md-9">
+                                <h3>Developer Account: {payment.credit_account.account_name}</h3>
+                            </div>
                         </div>
                         <div className="row link-row">
                             <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
@@ -60,12 +62,9 @@ class PaymentExisting extends React.Component {
                         </div>
                         <div className="row">
                             <div className="col-sm-offset-1">
-                                {payment.lot_id &&
-                                    <p className="col-md-4 col-xs-6">Lot: {payment.lot_id.address_full}</p>
-                                }
-                                <p className="col-md-4 col-xs-6">Agreement Credit Source: {payment.credit_source}</p>
-                                <p className="col-md-4 col-xs-6 ">Developer Credit Account: {payment.credit_account}</p>
+                                <p className="col-md-4 col-xs-6">Agreement Resolution: {payment.credit_source.resolution_number}</p>
                                 <p className="col-md-4 col-xs-6">Payment Type: {payment.payment_type}</p>
+                                <p className="col-xs-12">Lot: {payment.lot_id.address_full}</p>
                             </div>
                         </div>
                     </div>

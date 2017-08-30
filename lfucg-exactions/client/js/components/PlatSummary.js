@@ -11,6 +11,7 @@ import Notes from './Notes';
 
 import {
     getPlatID,
+    getPlatLots,
     getAccountID,
 } from '../actions/apiActions';
 
@@ -24,6 +25,7 @@ class PlatSummary extends React.Component {
         const {
             currentUser,
             plats,
+            lots,
             accounts,
         } = this.props;
 
@@ -76,7 +78,7 @@ class PlatSummary extends React.Component {
             );
         })(plats.plat_zone));
 
-        const platLots = plats.lot && plats.lot.length > 0 && (map((lot) => {
+        const platLots = lots && lots.length > 0 && (map((lot) => {
             return (
                 <div key={lot.id}>
                     <div className="row form-subheading">
@@ -113,7 +115,7 @@ class PlatSummary extends React.Component {
                     </div>
                 </div>
             );
-        })(plats.lot));
+        })(lots));
 
         return (
             <div className="plat-summary">
@@ -272,7 +274,7 @@ class PlatSummary extends React.Component {
                                             </div>
                                             <div className="col-xs-12">
                                                 <div className="col-xs-12">
-                                                    <div className="col-xs-3">
+                                                    <div className="col-xs-6 col-sm-5 col-md-3">
                                                         <div className="col-xs-12 table-border">
                                                             <h4>Zone</h4>
                                                         </div>
@@ -298,7 +300,7 @@ class PlatSummary extends React.Component {
                                                             <p>Storm Water</p>
                                                         </div>
                                                     </div>
-                                                    <div className="col-xs-9">
+                                                    <div className="col-xs-6 col-sm-7 col-md-9">
                                                         {platZoneExactions}
                                                     </div>
                                                 </div>
@@ -351,7 +353,7 @@ class PlatSummary extends React.Component {
                                 </div>
                             </div>
 
-                            {plats.lot &&
+                            {platLots ?
                                 <div>
                                     <a
                                       role="button"
@@ -380,10 +382,12 @@ class PlatSummary extends React.Component {
                                             </div>
                                         </div>
                                     </div>
+                                </div> : <div className="row section-heading" role="tab" id="headingAccountPlats">
+                                    <h2>Lots - None</h2>
                                 </div>
                             }
 
-                            {plats.account && accounts &&
+                            {plats.account && accounts ?
                                 <div>
                                     <a
                                       role="button"
@@ -430,17 +434,22 @@ class PlatSummary extends React.Component {
                                                 </div>
                                             </div>
                                             <div className="col-xs-12">
-                                                <div className="col-sm-6">
+                                                <div className="col-md-4 col-sm-6">
                                                     <p>Developer Account Name: {accounts.account_name}</p>
                                                 </div>
                                                 {currentUser && currentUser.username &&
-                                                    <div className="col-sm-6">
-                                                        <p>Contact Name: {accounts.contact_full_name}</p>
+                                                    <div>
+                                                        <p className="col-md-4 col-xs-6">Contact Name: {accounts.contact_full_name}</p>
+                                                        <p className="col-md-4 col-xs-6 ">Phone: {accounts.phone}</p>
+                                                        <p className="col-md-4 col-xs-6">Email: {accounts.email}</p>
+                                                        <p className="col-xs-12">Address: {accounts.address_full}</p>
                                                     </div>
                                                 }
                                             </div>
                                         </div>
                                     </div>
+                                </div> : <div className="row section-heading" role="tab" id="headingAccountPlats">
+                                    <h2>Account - None</h2>
                                 </div>
                             }
                         </div>
@@ -455,6 +464,7 @@ class PlatSummary extends React.Component {
 PlatSummary.propTypes = {
     currentUser: PropTypes.object,
     plats: PropTypes.object,
+    lots: PropTypes.object,
     accounts: PropTypes.object,
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
@@ -464,6 +474,7 @@ function mapStateToProps(state) {
     return {
         currentUser: state.currentUser,
         plats: state.plats,
+        lots: state.lots,
         accounts: state.accounts,
     };
 }
@@ -473,6 +484,7 @@ function mapDispatchToProps(dispatch, params) {
 
     return {
         onComponentDidMount() {
+            dispatch(getPlatLots(selectedPlat));
             dispatch(getPlatID(selectedPlat))
             .then((plat_data) => {
                 if (plat_data.response.account) {
