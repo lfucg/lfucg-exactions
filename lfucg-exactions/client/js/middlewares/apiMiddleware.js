@@ -34,13 +34,15 @@ export default function api({ getState, dispatch }) {
         if (shouldCallAPI && !shouldCallAPI()) {
             return next(action);
         }
-        const header = (global.Authorization && global.Authorization.length > 1) ? {
+        const local_store = localStorage.getItem('Token') ? localStorage.getItem('Token') : null;
+        const authorization = global.Authorization ? global.Authorization : local_store;
+        const header = (authorization !== null) ? {
             'X-CSRFToken': global.CSRFToken,
-            Authorization: `Token ${global.Authorization}`,
+            Authorization: `Token ${authorization}`,
         } : {
             'X-CSRFToken': global.CSRFToken,
         };
-        console.log('GLOBAL TOKEN', global.auth_token);
+
         return Promise.resolve(axios({
             headers: header,
             url: baseURL + (typeof url === 'function' ? url(getState) : url),
@@ -52,12 +54,6 @@ export default function api({ getState, dispatch }) {
             const error = responseValidation ?
             responseValidation(response.data, { getState, dispatch }) :
             null;
-            if (endpoint === LOGIN) {
-                global.Authorization = response.data.key;
-            }
-            if (endpoint === ME) {
-                global.Authorization = response.data.token;
-            }
             if (error) {
                 dispatch({
                     type: API_CALL_VALIDATION_ERROR,
