@@ -4,6 +4,7 @@ import {
     hashHistory,
 } from 'react-router';
 import { map } from 'ramda';
+import PropTypes from 'prop-types';
 
 import Navbar from './Navbar';
 import Footer from './Footer';
@@ -26,16 +27,6 @@ import {
 } from '../actions/apiActions';
 
 class ProjectCostForm extends React.Component {
-    static propTypes = {
-        activeForm: React.PropTypes.object,
-        projects: React.PropTypes.object,
-        projectCosts: React.PropTypes.object,
-        route: React.PropTypes.object,
-        onComponentDidMount: React.PropTypes.func,
-        onSubmit: React.PropTypes.func,
-        formChange: React.PropTypes.func,
-    };
-
     componentDidMount() {
         this.props.onComponentDidMount();
     }
@@ -51,8 +42,8 @@ class ProjectCostForm extends React.Component {
 
         const projectsList = projects.length > 0 ? (map((project) => {
             return (
-                <option key={project.id} value={[project.id, project.project_description]} >
-                    {project.project_description}
+                <option key={project.id} value={[project.id, project.name]} >
+                    {project.name}
                 </option>
             );
         })(projects)) : null;
@@ -77,15 +68,15 @@ class ProjectCostForm extends React.Component {
                                 <fieldset>
                                     <div className="row">
                                         <div className="col-sm-6 form-group">
-                                            <label htmlFor="project_id" className="form-label" id="project_id">Project</label>
+                                            <label htmlFor="project_id" className="form-label" id="project_id" aria-label="Project">Project</label>
                                             <select className="form-control" id="project_id" onChange={formChange('project_id')} >
                                                 {activeForm.project_name ? (
                                                     <option value="choose_project" aria-label="Selected Project">
                                                         {activeForm.project_name}
                                                     </option>
                                                 ) : (
-                                                    <option value="choose_project" aria-label="Select an Project">
-                                                        Select an Project
+                                                    <option value="choose_project" aria-label="Select a Project">
+                                                        Select a Project
                                                     </option>
                                                 )}
                                                 {projectsList}
@@ -128,6 +119,13 @@ class ProjectCostForm extends React.Component {
                                             </FormGroup>
                                         </div>
                                         <div className="col-sm-6">
+                                            <FormGroup label="Other Costs" id="other_cost">
+                                                <input type="number" className="form-control" placeholder="Other Costs" />
+                                            </FormGroup>
+                                        </div>
+                                    </div>
+                                    <div className="row">
+                                        <div className="col-sm-6">
                                             <FormGroup label="Credits Available" id="credits_available">
                                                 <input type="number" className="form-control" placeholder="Credits Available" />
                                             </FormGroup>
@@ -145,6 +143,16 @@ class ProjectCostForm extends React.Component {
         );
     }
 }
+
+ProjectCostForm.propTypes = {
+    activeForm: PropTypes.object,
+    projects: PropTypes.object,
+    projectCosts: PropTypes.object,
+    route: PropTypes.object,
+    onComponentDidMount: PropTypes.func,
+    onSubmit: PropTypes.func,
+    formChange: PropTypes.func,
+};
 
 function mapStateToProps(state) {
     return {

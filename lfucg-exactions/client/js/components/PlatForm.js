@@ -4,6 +4,7 @@ import {
     hashHistory,
 } from 'react-router';
 import { map } from 'ramda';
+import PropTypes from 'prop-types';
 
 import Navbar from './Navbar';
 import Footer from './Footer';
@@ -31,20 +32,6 @@ import {
 } from '../actions/apiActions';
 
 class PlatForm extends React.Component {
-    static propTypes = {
-        activeForm: React.PropTypes.object,
-        subdivisions: React.PropTypes.object,
-        plats: React.PropTypes.object,
-        accounts: React.PropTypes.object,
-        route: React.PropTypes.object,
-        onComponentDidMount: React.PropTypes.func,
-        formChange: React.PropTypes.func,
-        onPlatSubmit: React.PropTypes.func,
-        onPlatAndCreateLot: React.PropTypes.func,
-        addAnotherPlatZone: React.PropTypes.func,
-        onPlatDues: React.PropTypes.func,
-    };
-
     componentDidMount() {
         this.props.onComponentDidMount();
     }
@@ -176,19 +163,19 @@ class PlatForm extends React.Component {
 
                                         <fieldset>
                                             <div className="row form-subheading">
-                                                <h3>Account</h3>
+                                                <h3>Developer Account</h3>
                                             </div>
                                             <div className="row">
                                                 <div className="col-sm-6 form-group">
-                                                    <label htmlFor="account" className="form-label" id="account">Account</label>
+                                                    <label htmlFor="account" className="form-label" id="account" aria-label="Developer Account">Developer Account</label>
                                                     <select className="form-control" id="account" onChange={formChange('account')} >
                                                         {activeForm.account_name ? (
-                                                            <option value="choose_account" aria-label="Selected Account">
+                                                            <option value="choose_account" aria-label="Selected Developer Account">
                                                                 {activeForm.account_name}
                                                             </option>
                                                         ) : (
-                                                            <option value="choose_account" aria-label="Select an Account">
-                                                                Select an Account
+                                                            <option value="choose_account" aria-label="Select a Developer Account">
+                                                                Select a Developer Account
                                                             </option>
                                                         )}
                                                         {accountsList}
@@ -200,7 +187,7 @@ class PlatForm extends React.Component {
                                             </div>
                                             <div className="row">
                                                 <div className="col-sm-6 form-group">
-                                                    <label htmlFor="subdivision" className="form-label" id="subdivision">Subdivision</label>
+                                                    <label htmlFor="subdivision" className="form-label" id="subdivision" aria-label="Subdivision" >Subdivision</label>
                                                     <select className="form-control" id="subdivision" onChange={formChange('subdivision')} >
                                                         {activeForm.subdivision ? (
                                                             <option value="choose_subdivision" aria-label="Selected Subdivision">
@@ -232,7 +219,7 @@ class PlatForm extends React.Component {
                                             </div>
                                             <div className="row">
                                                 <div className="col-sm-6 form-group">
-                                                    <label htmlFor="expansion_area" className="form-label" id="expansion_area">* Expansion Area</label>
+                                                    <label htmlFor="expansion_area" className="form-label" id="expansion_area" aria-label="Expansion Area" aria-required="true">* Expansion Area</label>
                                                     <select className="form-control" id="expansion_area" onChange={formChange('expansion_area')} >
                                                         {plats.expansion_area ? (
                                                             <option value="expansion_area" aria-label={`Expansion Area ${plats.expansion_area}`}>{plats.expansion_area}</option>
@@ -247,19 +234,19 @@ class PlatForm extends React.Component {
                                                     </select>
                                                 </div>
                                                 <div className="col-sm-6">
-                                                    <FormGroup label="* Gross Acreage" id="total_acreage">
+                                                    <FormGroup label="* Gross Acreage" id="total_acreage" aria-required="true">
                                                         <input type="number" className="form-control" placeholder="Gross Acreage" />
                                                     </FormGroup>
                                                 </div>
                                             </div>
                                             <div className="row">
                                                 <div className="col-sm-6">
-                                                    <FormGroup label="* Buildable Lots" id="buildable_lots">
+                                                    <FormGroup label="* Buildable Lots" id="buildable_lots" aria-required="true">
                                                         <input type="number" className="form-control" placeholder="Buildable Lots" />
                                                     </FormGroup>
                                                 </div>
                                                 <div className="col-sm-6">
-                                                    <FormGroup label="* Non-Buildable Lots" id="non_buildable_lots">
+                                                    <FormGroup label="* Non-Buildable Lots" id="non_buildable_lots" aria-required="true">
                                                         <input type="number" className="form-control" placeholder="Non-Buildable Lots" />
                                                     </FormGroup>
                                                 </div>
@@ -269,19 +256,19 @@ class PlatForm extends React.Component {
                                             </div>
                                             <div className="row">
                                                 <div className="col-sm-6">
-                                                    <FormGroup label="* Name" id="name">
+                                                    <FormGroup label="* Name" id="name" aria-required="true">
                                                         <input type="text" className="form-control" placeholder="Name" />
                                                     </FormGroup>
                                                 </div>
                                                 <div className="col-sm-6">
-                                                    <FormGroup label="* Date Recorded" id="date_recorded">
+                                                    <FormGroup label="* Date Recorded" id="date_recorded" aria-required="true">
                                                         <input type="date" className="form-control" placeholder="Date Recorded" />
                                                     </FormGroup>
                                                 </div>
                                             </div>
                                             <div className="row">
                                                 <div className="col-sm-6 form-group">
-                                                    <label htmlFor="plat_type" className="form-label" id="plat_type">* Plat Type</label>
+                                                    <label htmlFor="plat_type" className="form-label" id="plat_type" aria-label="Plat Type" aria-required="true">* Plat Type</label>
                                                     <select className="form-control" id="plat_type" onChange={formChange('plat_type')} >
                                                         {plats.plat_type_display ? (
                                                             <option value="plat_type" aria-label={`Plat Type ${plats.plat_type_display}`}>{plats.plat_type_display}</option>
@@ -293,7 +280,7 @@ class PlatForm extends React.Component {
                                                     </select>
                                                 </div>
                                                 <div className="col-sm-6">
-                                                    <FormGroup label="* Section" id="section">
+                                                    <FormGroup label="* Section" id="section" aria-required="true">
                                                         <input type="text" className="form-control" placeholder="Section" />
                                                     </FormGroup>
                                                 </div>
@@ -305,19 +292,19 @@ class PlatForm extends React.Component {
                                                     </FormGroup>
                                                 </div>
                                                 <div className="col-sm-6">
-                                                    <FormGroup label="* Block" id="block">
+                                                    <FormGroup label="* Block" id="block" aria-required="true">
                                                         <input type="text" className="form-control" placeholder="Block" />
                                                     </FormGroup>
                                                 </div>
                                             </div>
                                             <div className="row">
                                                 <div className="col-sm-6">
-                                                    <FormGroup label="* Cabinet" id="cabinet">
+                                                    <FormGroup label="* Cabinet" id="cabinet" aria-required="true">
                                                         <input type="text" className="form-control" placeholder="Cabinet" />
                                                     </FormGroup>
                                                 </div>
                                                 <div className="col-sm-6">
-                                                    <FormGroup label="* Slide" id="slide">
+                                                    <FormGroup label="* Slide" id="slide" aria-required="true">
                                                         <input type="text" className="form-control" placeholder="Slide" />
                                                     </FormGroup>
                                                 </div>
@@ -524,6 +511,20 @@ class PlatForm extends React.Component {
         );
     }
 }
+
+PlatForm.propTypes = {
+    activeForm: PropTypes.object,
+    subdivisions: PropTypes.object,
+    plats: PropTypes.object,
+    accounts: PropTypes.object,
+    route: PropTypes.object,
+    onComponentDidMount: PropTypes.func,
+    formChange: PropTypes.func,
+    onPlatSubmit: PropTypes.func,
+    onPlatAndCreateLot: PropTypes.func,
+    addAnotherPlatZone: PropTypes.func,
+    onPlatDues: PropTypes.func,
+};
 
 function mapStateToProps(state) {
     return {

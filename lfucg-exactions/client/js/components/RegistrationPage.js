@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { hashHistory } from 'react-router';
+import PropTypes from 'prop-types';
 
 import Navbar from './Navbar';
 import Footer from './Footer';
@@ -11,11 +12,6 @@ import {
 } from '../actions/apiActions';
 
 class Registration extends React.Component {
-    static propTypes = {
-        activeForm: React.PropTypes.object,
-        onRegister: React.PropTypes.func,
-    }
-
     render() {
         const {
             activeForm,
@@ -91,6 +87,11 @@ class Registration extends React.Component {
         );
     }
 }
+
+Registration.propTypes = {
+    activeForm: PropTypes.object,
+    onRegister: PropTypes.func,
+};
 
 function mapStateToProps(state) {
     return {

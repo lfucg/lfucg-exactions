@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { map } from 'ramda';
+import PropTypes from 'prop-types';
 
 import Navbar from './Navbar';
 import Footer from './Footer';
@@ -17,19 +18,13 @@ import {
 } from '../actions/formActions';
 
 class ProjectCostExisting extends React.Component {
-    static propTypes = {
-        projectCosts: React.PropTypes.object,
-        route: React.PropTypes.object,
-        onComponentDidMount: React.PropTypes.func,
-        onProjectCostQuery: React.PropTypes.func,
-    };
-
     componentDidMount() {
         this.props.onComponentDidMount();
     }
 
     render() {
         const {
+            currentUser,
             projectCosts,
             onProjectCostQuery,
         } = this.props;
@@ -42,22 +37,31 @@ class ProjectCostExisting extends React.Component {
                             <div className="col-sm-7 col-md-9">
                                 <h3>Project Cost Category: {projectCost.estimate_type}</h3>
                             </div>
-                            <div className="col-sm-5 col-md-3">
+                        </div>
+                        <div className="row link-row">
+                            <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
                                 <div className="col-xs-5">
-                                    <Link to={`project-cost/summary/${projectCost.id}`} className="btn btn-mid-level">
-                                        Summary
-                                    </Link>
+                                    {currentUser && currentUser.permissions && currentUser.permissions.projectcostestimate &&
+                                        <Link to={`project-cost/form/${projectCost.id}`} aria-label="Edit">
+                                            <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
+                                            <div className="col-xs-7 link-label">
+                                                Edit
+                                            </div>
+                                        </Link>
+                                    }
                                 </div>
-                                <div className="col-xs-5 col-xs-offset-1">
-                                    <Link to={`project-cost/form/${projectCost.id}`} className="btn btn-mid-level">
-                                        Edit
+                                <div className="col-xs-5 ">
+                                    <Link to={`project-cost/summary/${projectCost.id}`} aria-label="Summary">
+                                        <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
+                                        <div className="col-xs-7 link-label">
+                                            Summary
+                                        </div>
                                     </Link>
                                 </div>
                             </div>
                         </div>
                         <div className="row">
                             <div className="col-sm-offset-1">
-                                <p className="col-md-4 col-xs-6">Project: {projectCost.project_id}</p>
                                 <p className="col-md-4 col-xs-6">Total Costs: {projectCost.total_costs}</p>
                                 <p className="col-md-4 col-xs-6 ">Credits Available: {projectCost.credits_available}</p>
                             </div>
@@ -73,14 +77,7 @@ class ProjectCostExisting extends React.Component {
 
                 <div className="form-header">
                     <div className="container">
-                        <div className="col-sm-8">
-                            <h1>PROJECT COSTS - EXISTING</h1>
-                        </div>
-                        <div className="col-sm-2 col-sm-offset-1">
-                            <Link to={'project-cost/form/'} className="btn btn-top-level" >
-                                Create
-                            </Link>
-                        </div>
+                        <h1>PROJECT COSTS - EXISTING</h1>
                     </div>
                 </div>
 
@@ -114,8 +111,17 @@ class ProjectCostExisting extends React.Component {
     }
 }
 
+ProjectCostExisting.propTypes = {
+    currentUser: PropTypes.object,
+    projectCosts: PropTypes.object,
+    route: PropTypes.object,
+    onComponentDidMount: PropTypes.func,
+    onProjectCostQuery: PropTypes.func,
+};
+
 function mapStateToProps(state) {
     return {
+        currentUser: state.currentUser,
         projectCosts: state.projectCosts,
     };
 }

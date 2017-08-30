@@ -219,7 +219,7 @@ class Lot(models.Model):
     address_unit = models.CharField(max_length=100, null=True, blank=True)
     address_city = models.CharField(max_length=100, default='Lexington')
     address_state = models.CharField(max_length=50, choices=STATES, default='KY')
-    address_zip = models.CharField(max_length=10, choices=ZIPCODES)
+    address_zip = models.CharField(max_length=10, choices=ZIPCODES, blank=True, null=True)
     address_full = models.CharField(max_length=300)
 
     dues_roads_dev = models.DecimalField(max_digits=20, decimal_places=2, default=0)
