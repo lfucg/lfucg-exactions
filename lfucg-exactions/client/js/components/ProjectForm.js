@@ -4,6 +4,7 @@ import { map } from 'ramda';
 import {
     hashHistory,
 } from 'react-router';
+import PropTypes from 'prop-types';
 
 import Navbar from './Navbar';
 import Footer from './Footer';
@@ -26,16 +27,6 @@ import {
 } from '../actions/apiActions';
 
 class ProjectForm extends React.Component {
-    static propTypes = {
-        activeForm: React.PropTypes.object,
-        projects: React.PropTypes.object,
-        agreements: React.PropTypes.object,
-        route: React.PropTypes.object,
-        onComponentDidMount: React.PropTypes.func,
-        onSubmit: React.PropTypes.func,
-        formChange: React.PropTypes.func,
-    };
-
     componentDidMount() {
         this.props.onComponentDidMount();
     }
@@ -57,6 +48,14 @@ class ProjectForm extends React.Component {
             );
         })(agreements)) : null;
 
+        const submitEnabled =
+            activeForm.agreement_id &&
+            activeForm.expansion_area &&
+            activeForm.project_category &&
+            activeForm.project_type &&
+            activeForm.project_status &&
+            activeForm.status_date;
+
         return (
             <div className="project-form">
                 <Navbar />
@@ -76,8 +75,15 @@ class ProjectForm extends React.Component {
 
                                 <fieldset>
                                     <div className="row">
+                                        <div className="col-sm-6">
+                                            <FormGroup label="* Project Name" id="name" >
+                                                <input type="text" className="form-control" placeholder="Name" />
+                                            </FormGroup>
+                                        </div>
+                                    </div>
+                                    <div className="row">
                                         <div className="col-sm-6 form-group">
-                                            <label htmlFor="agreement_id" className="form-label" id="agreement_id">Agreement</label>
+                                            <label htmlFor="agreement_id" className="form-label" id="agreement_id" aria-label="Agreement" aria-required="true">* Agreement</label>
                                             <select className="form-control" id="agreement_id" onChange={formChange('agreement_id')} >
                                                 {activeForm.resolution_number ? (
                                                     <option value="choose_agreement" aria-label="Selected Agreement">
@@ -92,10 +98,10 @@ class ProjectForm extends React.Component {
                                             </select>
                                         </div>
                                         <div className="col-sm-6 form-group">
-                                            <label htmlFor="expansion_area" className="form-label" id="expansion_area">Expansion Area</label>
+                                            <label htmlFor="expansion_area" className="form-label" id="expansion_area" aria-label="Expansion Area" aria-required="true">* Expansion Area</label>
                                             <select className="form-control" id="expansion_area" onChange={formChange('expansion_area')} >
-                                                {agreements.expansion_area ? (
-                                                    <option value="expansion_area" aria-label={`Expansion Area ${agreements.expansion_area}`}>{agreements.expansion_area}</option>
+                                                {projects.expansion_area ? (
+                                                    <option value="expansion_area" aria-label={`Expansion Area ${projects.expansion_area}`}>{projects.expansion_area}</option>
                                                 ) : (
                                                     <option value="choose_expansion_area" aria-label="Choose an Expansion Area">Choose an Expansion Area</option>
                                                 )}
@@ -108,25 +114,111 @@ class ProjectForm extends React.Component {
                                         </div>
                                     </div>
                                     <div className="row">
-                                        <div className="col-sm-6">
-                                            <FormGroup label="Project Category" id="project_category">
-                                                <input type="text" className="form-control" placeholder="Project Category" />
-                                            </FormGroup>
+                                        <div className="col-sm-6 form-group">
+                                            <label htmlFor="project_category" className="form-label" id="project_category" aria-label="Project Category" aria-required="true">* Project Category</label>
+                                            <select className="form-control" id="project_category" onChange={formChange('project_category')} >
+                                                {projects.project_category ? (
+                                                    <option value="project_category" aria-label={`Project Category ${projects.project_category_display}`}>{projects.project_category_display}</option>
+                                                ) : (
+                                                    <option value="choose_project_category" aria-label="Choose a Project Category">Choose a Project Category</option>
+                                                )}
+                                                <option value={['ROADS', 'Roads']}>Roads</option>
+                                                <option value={['SEWER', 'Sanitary Sewer']}>Sanitary Sewer</option>
+                                                <option value={['PARK', 'Park']}>Park</option>
+                                                <option value={['STORM_WATER', 'Storm Water']}>Storm Water</option>
+                                            </select>
                                         </div>
-                                        <div className="col-sm-6">
-                                            <FormGroup label="Project Type" id="project_type">
-                                                <input type="text" className="form-control" placeholder="Project Type" />
-                                            </FormGroup>
-                                        </div>
+                                        {activeForm.project_category ? (
+                                            <div className="col-sm-6 form-group">
+                                                <label htmlFor="project_type" className="form-label" id="project_type" aria-label="Project Type" aria-required="true">* Project Type</label>
+                                                {activeForm.project_category === 'ROADS' && (
+                                                    <select className="form-control" id="project_type" onChange={formChange('project_type')} >
+                                                        {projects.project_type ? (
+                                                            <option value="project_type" aria-label={`Project Type ${projects.project_type_display}`}>{projects.project_type_display}</option>
+                                                        ) : (
+                                                            <option value="choose_project_type" aria-label="Choose a Project Type">Choose a Project Type</option>
+                                                        )}
+                                                        <option value={['BOULEVARD', 'Roads: Boulevard']}>Roads: Boulevard</option>
+                                                        <option value={['PARKWAY', 'Roads: Parkway']}>Roads: Parkway</option>
+                                                        <option value={['TWO_LANE_BOULEVARD', 'Roads: Two-Lane Boulevard']}>Roads: Two-Lane Boulevard</option>
+                                                        <option value={['TWO_LANE_PARKWAY', 'Roads: Two-Lane Parkway']}>Roads: Two-Lane Parkway</option>
+                                                        <option value={['OTHER_NON_SEWER', 'Other Non-Sewer']} >Other Non-Sewer</option>
+                                                    </select>
+                                                )}
+                                                {activeForm.project_category === 'SEWER' && (
+                                                    <select className="form-control" id="project_type" onChange={formChange('project_type')} >
+                                                        {projects.project_type ? (
+                                                            <option value="project_type" aria-label={`Project Type ${projects.project_type_display}`}>{projects.project_type_display}</option>
+                                                        ) : (
+                                                            <option value="choose_project_type" aria-label="Choose a Project Type">Choose a Project Type</option>
+                                                        )}
+                                                        <option value={['SEWER_TRANSMISSION', 'Sewer: Sanitary Sewer Transmission']}>Sewer: Sanitary Sewer Transmission</option>
+                                                        <option value={['SEWER_OTHER', 'Sewer: Other']}>Sewer: Other</option>
+                                                    </select>
+                                                )}
+                                                {activeForm.project_category === 'PARK' && (
+                                                    <select className="form-control" id="project_type" onChange={formChange('project_type')} >
+                                                        {projects.project_type ? (
+                                                            <option value="project_type" aria-label={`Project Type ${projects.project_type_display}`}>{projects.project_type_display}</option>
+                                                        ) : (
+                                                            <option value="choose_project_type" aria-label="Choose a Project Type">Choose a Project Type</option>
+                                                        )}
+                                                        <option value={['PARKS_AQUISITION', 'Parks Aquisition']}>Parks Aquisition</option>
+                                                        <option value={['OTHER_NON_SEWER', 'Other Non-Sewer']} >Other Non-Sewer</option>
+                                                    </select>
+                                                )}
+                                                {activeForm.project_category === 'STORM_WATER' && (
+                                                    <select className="form-control" id="project_type" onChange={formChange('project_type')} >
+                                                        {projects.project_type ? (
+                                                            <option value="project_type" aria-label={`Project Type ${projects.project_type_display}`}>{projects.project_type_display}</option>
+                                                        ) : (
+                                                            <option value="choose_project_type" aria-label="Choose a Project Type">Choose a Project Type</option>
+                                                        )}
+                                                        <option value={['STORMWATER', 'Storm Water']}>Storm Water</option>
+                                                        <option value={['LAND_AQUISITION', 'Storm Water: Land Aquisition']}>Storm Water: Land Aquisition</option>
+                                                        <option value={['OTHER_NON_SEWER', 'Other Non-Sewer']} >Other Non-Sewer</option>
+                                                    </select>
+                                                )}
+                                            </div>
+                                        ) : (
+                                            <div className="col-sm-6 form-group">
+                                                <label htmlFor="project_type" className="form-label" id="project_type" aria-label="Project Type" aria-required="true">* Project Type</label>
+                                                <select className="form-control" id="project_type" onChange={formChange('project_type')} >
+                                                    {projects.project_type ? (
+                                                        <option value="project_type" aria-label={`Project Type ${projects.project_type_display}`}>{projects.project_type_display}</option>
+                                                    ) : (
+                                                        <option value="choose_project_type" aria-label="Choose a Project Type">Choose a Project Type</option>
+                                                    )}
+                                                    <option value={['BOULEVARD', 'Roads: Boulevard']}>Roads: Boulevard</option>
+                                                    <option value={['PARKWAY', 'Roads: Parkway']}>Roads: Parkway</option>
+                                                    <option value={['TWO_LANE_BOULEVARD', 'Roads: Two-Lane Boulevard']}>Roads: Two-Lane Boulevard</option>
+                                                    <option value={['TWO_LANE_PARKWAY', 'Roads: Two-Lane Parkway']}>Roads: Two-Lane Parkway</option>
+                                                    <option value={['SEWER_TRANSMISSION', 'Sewer: Sanitary Sewer Transmission']}>Sewer: Sanitary Sewer Transmission</option>
+                                                    <option value={['STORMWATER', 'Storm Water']}>Storm Water</option>
+                                                    <option value={['LAND_AQUISITION', 'Storm Water: Land Aquisition']}>Storm Water: Land Aquisition</option>
+                                                    <option value={['PARKS_AQUISITION', 'Parks Aquisition']}>Parks Aquisition</option>
+                                                    <option value={['SEWER_OTHER', 'Sewer: Other']}>Sewer: Other</option>
+                                                    <option value={['OTHER_NON_SEWER', 'Other Non-Sewer']} >Other Non-Sewer</option>
+                                                </select>
+                                            </div>
+                                        )}
                                     </div>
                                     <div className="row">
-                                        <div className="col-sm-6">
-                                            <FormGroup label="Project Status" id="project_status">
-                                                <input type="text" className="form-control" placeholder="Project Status" />
-                                            </FormGroup>
+                                        <div className="col-sm-6 form-group">
+                                            <label htmlFor="project_status" className="form-label" id="project_status" aria-label="Project Status" aria-required="true">* Project Status</label>
+                                            <select className="form-control" id="project_status" onChange={formChange('project_status')} >
+                                                {projects.project_status ? (
+                                                    <option value="project_status" aria-label={`Project Status ${projects.project_status_display}`}>{projects.project_status_display}</option>
+                                                ) : (
+                                                    <option value="choose_project_status" aria-label="Choose a Project Status">Choose a Project Status</option>
+                                                )}
+                                                <option value={['IN_PROGRESS', 'In Progress']}>In Progress</option>
+                                                <option value={['COMPLETE', 'Complete']}>Complete</option>
+                                                <option value={['CLOSED', 'Closed Out']}>Closed Out</option>
+                                            </select>
                                         </div>
                                         <div className="col-sm-6">
-                                            <FormGroup label="Status Date" id="status_date" >
+                                            <FormGroup label="* Status Date" id="status_date" >
                                                 <input type="date" className="form-control" placeholder="Status Date" />
                                             </FormGroup>
                                         </div>
@@ -139,7 +231,14 @@ class ProjectForm extends React.Component {
                                         </div>
                                     </div>
                                 </fieldset>
-                                <button className="btn btn-lex">Submit</button>
+                                <button disabled={!submitEnabled} className="btn btn-lex">Submit</button>
+                                {!submitEnabled ? (
+                                    <div>
+                                        <div className="clearfix" />
+                                        <span> * All required fields must be filled.</span>
+                                    </div>
+                                ) : null
+                                }
                             </form>
                         </div>
                     </div>
@@ -150,6 +249,16 @@ class ProjectForm extends React.Component {
         );
     }
 }
+
+ProjectForm.propTypes = {
+    activeForm: PropTypes.object,
+    projects: PropTypes.object,
+    agreements: PropTypes.object,
+    route: PropTypes.object,
+    onComponentDidMount: PropTypes.func,
+    onSubmit: PropTypes.func,
+    formChange: PropTypes.func,
+};
 
 function mapStateToProps(state) {
     return {

@@ -13,6 +13,7 @@ EXPANSION_AREAS = (
     ('EA-3', 'EA-3'),
 )
 
+
 class Account(models.Model):
     is_active = models.BooleanField(default=True)
 
@@ -88,6 +89,8 @@ class Account(models.Model):
     contact_last_name = models.CharField(max_length=100)
     contact_full_name = models.CharField(max_length=200)
 
+    address_number = models.IntegerField()
+    address_street = models.CharField(max_length=200)
     address_city = models.CharField(max_length=100)
     address_state = models.CharField(max_length=50, choices=STATES)
     address_zip = models.CharField(max_length=10)
@@ -105,6 +108,12 @@ class Agreement(models.Model):
     is_approved = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
 
+    AGREEMENT_TYPES = (
+        ('MEMO', 'Memo'),
+        ('RESOLUTION', 'Resolution'),
+        ('OTHER', 'Other'),
+    )
+ 
     date_executed = models.DateField()
     date_created = models.DateField(auto_now_add=True)
     date_modified = models.DateField(auto_now=True)
@@ -116,7 +125,7 @@ class Agreement(models.Model):
     resolution_number = models.CharField(max_length=100)
 
     expansion_area = models.CharField(max_length=100, choices=EXPANSION_AREAS)
-    agreement_type = models.CharField(max_length=100)
+    agreement_type = models.CharField(max_length=100, choices=AGREEMENT_TYPES)
 
     history = HistoricalRecords()
 
@@ -127,8 +136,20 @@ class Payment(models.Model):
     is_approved = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
 
+    PAYMENT_TYPE = (
+        ('CHECK', 'Check'),
+        ('CREDIT_CARD', 'Credit Card'),
+        ('OTHER', 'Other'),
+    )
+
+    PAID_BY_TYPE_CHOICES = (
+        ('BUILDER', 'Builder'),
+        ('DEVELOPER', 'Developer'),
+        ('OWNER', 'Home Owner'),
+    )
+
     lot_id = models.ForeignKey(Lot, related_name='payment')
-    credit_source = models.ForeignKey(Agreement, related_name='payment_source')
+    credit_source = models.ForeignKey(Agreement, related_name='payment_source', null=True, blank=True)
     credit_account = models.ForeignKey(Account, related_name='payment_account')
 
     date_created = models.DateField(auto_now_add=True)
@@ -138,16 +159,16 @@ class Payment(models.Model):
     modified_by = models.ForeignKey(User, related_name='payment_modified')
 
     paid_by = models.CharField(max_length=100)
-    paid_by_type = models.CharField(max_length=100)
-    payment_type = models.CharField(max_length=100)
-    check_number = models.IntegerField()
+    paid_by_type = models.CharField(max_length=100, choices=PAID_BY_TYPE_CHOICES)
+    payment_type = models.CharField(max_length=100, choices=PAYMENT_TYPE)
+    check_number = models.IntegerField(null=True, blank=True)
 
-    paid_roads = models.DecimalField(max_digits=20, decimal_places=2)
-    paid_sewer_trans = models.DecimalField(max_digits=20, decimal_places=2)
-    paid_sewer_cap = models.DecimalField(max_digits=20, decimal_places=2)
-    paid_parks = models.DecimalField(max_digits=20, decimal_places=2)
-    paid_storm = models.DecimalField(max_digits=20, decimal_places=2)
-    paid_open_space = models.DecimalField(max_digits=20, decimal_places=2)
+    paid_roads = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True, default=0)
+    paid_sewer_trans = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True, default=0)
+    paid_sewer_cap = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True, default=0)
+    paid_parks = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True, default=0)
+    paid_storm = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True, default=0)
+    paid_open_space = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True, default=0)
 
     history = HistoricalRecords()
 
@@ -158,6 +179,46 @@ class Project(models.Model):
     is_approved = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
 
+    CATEGORIES = (
+        ('ROADS', 'Roads'),
+        ('SEWER', 'Sanitary Sewer'),
+        ('PARK', 'Park'),
+        ('STORM_WATER', 'Storm Water'),
+    )
+
+    PROJECT_TYPES = (
+        ('Roads', (
+                ('BOULEVARD', 'Boulevard'),
+                ('PARKWAY', 'Parkway'),
+                ('TWO_LANE_BOULEVARD', 'Two-Lane Boulevard'),
+                ('TWO_LANE_PARKWAY', 'Two-Lane Parkway'),
+            )
+        ),
+        ('Sewer', (
+                ('SEWER_TRANSIMSSION', 'Sanitary sewer transmission'),
+                ('SEWER_OTHER', 'Other Sewer'),
+            )
+        ),
+        ('Stormwater', (
+                ('STORMWATER', 'Stormwater'),
+                ('LAND_AQUISITION', 'Land Aquisition'),
+            )
+        ),
+        ('Parks', (
+                ('PARKS_AQUISITION', 'Parks Aquisition'),
+            )
+        ),
+        ('Other', (
+            ('OTHER_NON_SEWER', 'Other Non-Sewer'),
+        ))
+    )
+
+    STATUS_CHOICES = (
+        ('IN_PROGRESS', 'In progress'),
+        ('COMPLETE', 'Complete'),
+        ('CLOSED', 'Closed Out'),
+    )
+
     date_created = models.DateField(auto_now_add=True)
     date_modified = models.DateField(auto_now=True)
 
@@ -167,12 +228,14 @@ class Project(models.Model):
     agreement_id = models.ForeignKey(Agreement, related_name='project')
 
     expansion_area = models.CharField(max_length=100, choices=EXPANSION_AREAS)
-    
-    project_category = models.CharField(max_length=200)
-    project_type = models.CharField(max_length=200)
-    project_description = models.TextField()
-    project_status = models.CharField(max_length=200)
+    name = models.CharField(max_length=200)
+
+    project_category = models.CharField(max_length=100, choices=CATEGORIES)
+    project_type = models.CharField(max_length=200, choices=PROJECT_TYPES)
+    project_status = models.CharField(max_length=100, choices=STATUS_CHOICES)
     status_date = models.DateField()
+
+    project_description = models.TextField(null=True, blank=True)
 
     history = HistoricalRecords()
 
@@ -193,11 +256,12 @@ class ProjectCostEstimate(models.Model):
 
     estimate_type = models.CharField(max_length=200)
 
-    land_cost = models.DecimalField(max_digits=20, decimal_places=2)
-    design_cost = models.DecimalField(max_digits=20, decimal_places=2)
-    construction_cost = models.DecimalField(max_digits=20, decimal_places=2)
-    admin_cost = models.DecimalField(max_digits=20, decimal_places=2)
-    management_cost = models.DecimalField(max_digits=20, decimal_places=2)
+    land_cost = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True, default=0)
+    design_cost = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True, default=0)
+    construction_cost = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True, default=0)
+    admin_cost = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True, default=0)
+    management_cost = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True, default=0)
+    other_cost = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True, default=0)
 
     credits_available = models.DecimalField(max_digits=20, decimal_places=2)
 
@@ -209,6 +273,12 @@ class ProjectCostEstimate(models.Model):
 class AccountLedger(models.Model):
     is_approved = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
+
+    ENTRY_TYPE = (
+        ('NEW', 'New'),
+        ('SELL', 'Sell'),
+        ('TRANSFER', 'Transfer'),
+    )
 
     entry_date = models.DateField()
     date_created = models.DateField(auto_now_add=True)
@@ -222,7 +292,7 @@ class AccountLedger(models.Model):
     lot = models.ForeignKey(Lot, related_name='ledger_lot', blank=True, null=True)
     agreement = models.ForeignKey(Agreement, related_name='ledger', blank=True, null=True)
 
-    entry_type = models.CharField(max_length=200)
+    entry_type = models.CharField(max_length=100, choices=ENTRY_TYPE)
 
     non_sewer_credits = models.DecimalField(max_digits=20, decimal_places=2)
     sewer_credits = models.DecimalField(max_digits=20, decimal_places=2)

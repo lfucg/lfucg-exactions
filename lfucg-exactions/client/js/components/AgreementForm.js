@@ -4,6 +4,7 @@ import {
     hashHistory,
 } from 'react-router';
 import { map } from 'ramda';
+import PropTypes from 'prop-types';
 
 import Navbar from './Navbar';
 import Footer from './Footer';
@@ -26,16 +27,6 @@ import {
 } from '../actions/apiActions';
 
 class AgreementForm extends React.Component {
-    static propTypes = {
-        activeForm: React.PropTypes.object,
-        accounts: React.PropTypes.object,
-        agreements: React.PropTypes.object,
-        route: React.PropTypes.object,
-        onComponentDidMount: React.PropTypes.func,
-        onSubmit: React.PropTypes.func,
-        formChange: React.PropTypes.func,
-    };
-
     componentDidMount() {
         this.props.onComponentDidMount();
     }
@@ -77,23 +68,23 @@ class AgreementForm extends React.Component {
                                 <fieldset>
                                     <div className="row">
                                         <div className="col-sm-6 form-group">
-                                            <label htmlFor="account_id" className="form-label" id="account_id">Account</label>
+                                            <label htmlFor="account_id" className="form-label" id="account_id">Developer Account</label>
                                             <select className="form-control" id="account_id" onChange={formChange('account_id')} >
                                                 {activeForm.account_name ? (
-                                                    <option value="choose_account" aria-label="Selected Account">
+                                                    <option value="choose_account" aria-label="Selected Developer Account">
                                                         {activeForm.account_name}
                                                     </option>
                                                 ) : (
-                                                    <option value="choose_account" aria-label="Select an Account">
-                                                        Select an Account
+                                                    <option value="choose_account" aria-label="Select a Developer Account">
+                                                        Select a Developer Account
                                                     </option>
                                                 )}
                                                 {accountsList}
                                             </select>
                                         </div>
                                         <div className="col-sm-6">
-                                            <FormGroup label="Resolution Number" id="resolution_number">
-                                                <input type="text" className="form-control" placeholder="Resolution Number" />
+                                            <FormGroup label="* Resolution / Memo Number" id="resolution_number" aria-required="true">
+                                                <input type="text" className="form-control" placeholder="Resolution / Memo Number" />
                                             </FormGroup>
                                         </div>
                                     </div>
@@ -120,10 +111,18 @@ class AgreementForm extends React.Component {
                                         </div>
                                     </div>
                                     <div className="row">
-                                        <div className="col-sm-6">
-                                            <FormGroup label="Agreement Type" id="agreement_type">
-                                                <input type="text" className="form-control" placeholder="Agreement Type" />
-                                            </FormGroup>
+                                        <div className="col-sm-6 form-group">
+                                            <label htmlFor="agreement_type" className="form-label" id="agreement_type" aria-label="Agreement Type">Agreement Type</label>
+                                            <select className="form-control" id="agreement_type" onChange={formChange('agreement_type')} >
+                                                {agreements.agreement_type ? (
+                                                    <option value="agreement_type" aria-label={`Agreement Type ${agreements.agreement_type_display}`}>{agreements.agreement_type_display}</option>
+                                                ) : (
+                                                    <option value="choose_agreement_type" aria-label="Choose an Agreement Type">Choose an Agreement Type</option>
+                                                )}
+                                                <option value={['MEMO', 'Memo']}>Memo</option>
+                                                <option value={['RESOLUTION', 'Resolution']}>Resolution</option>
+                                                <option value={['OTHER', 'Other']}>Other</option>
+                                            </select>
                                         </div>
                                     </div>
                                 </fieldset>
@@ -138,6 +137,16 @@ class AgreementForm extends React.Component {
         );
     }
 }
+
+AgreementForm.propTypes = {
+    activeForm: PropTypes.object,
+    accounts: PropTypes.object,
+    agreements: PropTypes.object,
+    route: PropTypes.object,
+    onComponentDidMount: PropTypes.func,
+    onSubmit: PropTypes.func,
+    formChange: PropTypes.func,
+};
 
 function mapStateToProps(state) {
     return {
@@ -176,7 +185,7 @@ function mapDispatchToProps(dispatch, params) {
                             date_executed: data_agreement.response.date_executed,
                             resolution_number: data_agreement.response.resolution_number,
                             expansion_area: data_agreement.response.expansion_area,
-                            agreement_type: data_agreement.response.agreement_type,
+                            agreement_type: data_agreement.response.agreement_type_display,
                         };
                         dispatch(formUpdate(update));
                     });

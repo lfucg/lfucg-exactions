@@ -1,10 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import {
-    Link,
+    // Link,
     hashHistory,
 } from 'react-router';
 import { map } from 'ramda';
+import PropTypes from 'prop-types';
 
 import Navbar from './Navbar';
 import Footer from './Footer';
@@ -30,18 +31,6 @@ import {
 } from '../actions/apiActions';
 
 class LotForm extends React.Component {
-    static propTypes = {
-        activeForm: React.PropTypes.object,
-        plats: React.PropTypes.object,
-        lots: React.PropTypes.object,
-        accounts: React.PropTypes.object,
-        route: React.PropTypes.object,
-        onComponentDidMount: React.PropTypes.func,
-        formChange: React.PropTypes.func,
-        onLotSubmit: React.PropTypes.func,
-        onLotDues: React.PropTypes.func,
-    };
-
     componentDidMount() {
         this.props.onComponentDidMount();
     }
@@ -76,19 +65,18 @@ class LotForm extends React.Component {
         const ownerDisabled =
             lots &&
             lots.dues_roads_own &&
-            lots.dues_roads_own === "0.00" &&
-            lots.dues_parks_own === "0.00" &&
-            lots.dues_storm_own === "0.00" &&
-            lots.dues_open_space_own === "0.00" &&
-            lots.dues_sewer_cap_own === "0.00" &&
-            lots.dues_sewer_trans_own === "0.00";
+            lots.dues_roads_own === '0.00' &&
+            lots.dues_parks_own === '0.00' &&
+            lots.dues_storm_own === '0.00' &&
+            lots.dues_open_space_own === '0.00' &&
+            lots.dues_sewer_cap_own === '0.00' &&
+            lots.dues_sewer_trans_own === '0.00';
 
         const submitEnabled =
             activeForm.plat !== 'choose_plat' &&
             activeForm.lot_number &&
             activeForm.address_number &&
-            activeForm.address_street &&
-            activeForm.address_zip;
+            activeForm.address_street;
 
         return (
             <div className="lot-form">
@@ -131,19 +119,19 @@ class LotForm extends React.Component {
 
                                         <fieldset>
                                             <div className="row form-subheading">
-                                                <h3>Account</h3>
+                                                <h3>Developer Account</h3>
                                             </div>
                                             <div className="row">
                                                 <div className="col-sm-6 form-group">
-                                                    <label htmlFor="account" className="form-label" id="account">Account</label>
+                                                    <label htmlFor="account" className="form-label" id="account">Developer Account</label>
                                                     <select className="form-control" id="account" onChange={formChange('account')} >
                                                         {activeForm.account_name ? (
-                                                            <option value="choose_account" aria-label="Selected Account">
+                                                            <option value="choose_account" aria-label="Selected Developer Account">
                                                                 {activeForm.account_name}
                                                             </option>
                                                         ) : (
-                                                            <option value="choose_account" aria-label="Select an Account">
-                                                                Select an Account
+                                                            <option value="choose_account" aria-label="Select a Developer Account">
+                                                                Select a Developer Account
                                                             </option>
                                                         )}
                                                         {accountsList}
@@ -156,12 +144,12 @@ class LotForm extends React.Component {
                                             </div>
                                             <div className="row">
                                                 <div className="col-sm-4">
-                                                    <FormGroup label="* Address Number" id="address_number">
+                                                    <FormGroup label="* Address Number" id="address_number" aria-required="true">
                                                         <input type="number" className="form-control" placeholder="Address Number" autoFocus />
                                                     </FormGroup>
                                                 </div>
                                                 <div className="col-sm-8">
-                                                    <FormGroup label="* Street" id="address_street">
+                                                    <FormGroup label="* Street" id="address_street" aria-required="true">
                                                         <input type="text" className="form-control" placeholder="Street" />
                                                     </FormGroup>
                                                 </div>
@@ -195,7 +183,7 @@ class LotForm extends React.Component {
                                                     </FormGroup>
                                                 </div>
                                                 <div className="col-sm-3 form-group">
-                                                    <label htmlFor="address_zip" className="form-label" id="address_zip">* Zipcode</label>
+                                                    <label htmlFor="address_zip" className="form-label" id="address_zip">Zipcode</label>
                                                     <select className="form-control" id="address_zip" onChange={formChange('address_zip')} >
                                                         {lots.address_zip ? (
                                                             <option value="address_zip" aria-label={`Zipcode ${lots.address_zip}`}>{lots.address_zip}</option>
@@ -216,7 +204,7 @@ class LotForm extends React.Component {
                                             </div>
                                             <div className="row">
                                                 <div className="col-sm-6 form-group">
-                                                    <label htmlFor="plat" className="form-label" id="plat">* Plat</label>
+                                                    <label htmlFor="plat" className="form-label" id="plat" aria-required="true">* Plat</label>
                                                     <select className="form-control" id="plat" onChange={formChange('plat')} >
                                                         {activeForm.plat ? (
                                                             <option value="choose_plat" aria-label={activeForm.plat_name}>
@@ -231,7 +219,7 @@ class LotForm extends React.Component {
                                                     </select>
                                                 </div>
                                                 <div className="col-sm-6">
-                                                    <FormGroup label="* Lot Number" id="lot_number">
+                                                    <FormGroup label="* Lot Number" id="lot_number" aria-required="true">
                                                         <input type="text" className="form-control" placeholder="Lot Number" />
                                                     </FormGroup>
                                                 </div>
@@ -418,6 +406,18 @@ class LotForm extends React.Component {
         );
     }
 }
+
+LotForm.propTypes = {
+    activeForm: PropTypes.object,
+    plats: PropTypes.object,
+    lots: PropTypes.object,
+    accounts: PropTypes.object,
+    route: PropTypes.object,
+    onComponentDidMount: PropTypes.func,
+    formChange: PropTypes.func,
+    onLotSubmit: PropTypes.func,
+    onLotDues: PropTypes.func,
+};
 
 function mapStateToProps(state) {
     return {

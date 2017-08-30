@@ -1,5 +1,5 @@
-import axios from 'axios';
 import Promise from 'bluebird';
+import axios from 'axios';
 
 import {
   API_CALL,
@@ -34,7 +34,7 @@ export default function api({ getState, dispatch }) {
         if (shouldCallAPI && !shouldCallAPI()) {
             return next(action);
         }
-        const header = (global.Authorization.length > 1) ? {
+        const header = (global.Authorization && global.Authorization.length > 1) ? {
             'X-CSRFToken': global.CSRFToken,
             Authorization: `Token ${global.Authorization}`,
         } : {

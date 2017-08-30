@@ -6,7 +6,24 @@ from .models import *
 from plats.models import Plat, Lot
 from plats.serializers import PlatSerializer, LotSerializer
 
+class LotField(serializers.Field):
+    def to_internal_value(self, data):
+        try: 
+            return Lot.objects.get(id=data)
+        except: 
+            return None
+
+    def to_representation(self, obj):
+        return LotSerializer(obj).data
+
 class AccountLedgerSerializer(serializers.ModelSerializer):
+    entry_type_display = serializers.SerializerMethodField(read_only=True)
+
+    lot = LotField()
+
+    def get_entry_type_display(self, obj):
+        return obj.get_entry_type_display()
+
     class Meta:
         model = AccountLedger
         fields = (
@@ -18,6 +35,7 @@ class AccountLedgerSerializer(serializers.ModelSerializer):
             'date_modified',
             'created_by',
             'modified_by',
+
             'account_from',
             'account_to',
             'lot',
@@ -25,10 +43,16 @@ class AccountLedgerSerializer(serializers.ModelSerializer):
             'entry_type',
             'non_sewer_credits',
             'sewer_credits',
+
+            'entry_type_display',
         )
 
 class PaymentSerializer(serializers.ModelSerializer):
     total_paid = serializers.SerializerMethodField(read_only=True)
+    payment_type_display = serializers.SerializerMethodField(read_only=True)
+    paid_by_type_display = serializers.SerializerMethodField(read_only=True)
+
+    lot_id = LotField()
 
     def get_total_paid(self,obj):
         total = (
@@ -41,6 +65,13 @@ class PaymentSerializer(serializers.ModelSerializer):
         )
         return total
 
+    def get_payment_type_display(self, obj):
+        return obj.get_payment_type_display()
+
+    def get_paid_by_type_display(self, obj):
+        return obj.get_paid_by_type_display()
+
+
     class Meta:
         model = Payment
         fields = (
@@ -51,13 +82,16 @@ class PaymentSerializer(serializers.ModelSerializer):
             'date_modified',
             'created_by',
             'modified_by',
+
             'lot_id',
+            'credit_source',
+            'credit_account',
+
             'paid_by',
             'paid_by_type',
             'payment_type',
             'check_number',
-            'credit_source',
-            'credit_account',
+
             'paid_roads',
             'paid_sewer_trans',
             'paid_sewer_cap',
@@ -66,6 +100,8 @@ class PaymentSerializer(serializers.ModelSerializer):
             'paid_open_space',
 
             'total_paid',
+            'payment_type_display',
+            'paid_by_type_display',
         )
 
 class ProjectCostEstimateSerializer(serializers.ModelSerializer):
@@ -91,6 +127,7 @@ class ProjectCostEstimateSerializer(serializers.ModelSerializer):
             'date_modified',
             'created_by',
             'modified_by',
+
             'project_id',
             'estimate_type',
             'land_cost',
@@ -98,6 +135,7 @@ class ProjectCostEstimateSerializer(serializers.ModelSerializer):
             'construction_cost',
             'admin_cost',
             'management_cost',
+            'other_cost',
             'credits_available',
 
             'total_costs',
@@ -105,6 +143,18 @@ class ProjectCostEstimateSerializer(serializers.ModelSerializer):
 
 class ProjectSerializer(serializers.ModelSerializer):
     project_cost_estimate = ProjectCostEstimateSerializer(many=True, read_only=True)
+    project_category_display = serializers.SerializerMethodField(read_only=True)
+    project_type_display = serializers.SerializerMethodField(read_only=True)
+    project_status_display = serializers.SerializerMethodField(read_only=True)
+
+    def get_project_category_display(self, obj):
+        return obj.get_project_category_display()
+
+    def get_project_type_display(self, obj):
+        return obj.get_project_type_display()
+
+    def get_project_status_display(self, obj):
+        return obj.get_project_status_display()
 
     class Meta:
         model = Project
@@ -116,13 +166,21 @@ class ProjectSerializer(serializers.ModelSerializer):
             'date_modified',
             'created_by',
             'modified_by',
+
             'agreement_id',
+            'name',
             'expansion_area',
+
             'project_category',
             'project_type',
-            'project_description',
             'project_status',
             'status_date',
+            'project_description',
+
+            'project_category_display',
+            'project_type_display',
+            'project_status_display',
+
             'project_cost_estimate',
         )
 
@@ -130,6 +188,11 @@ class AgreementSerializer(serializers.ModelSerializer):
     projects = ProjectSerializer(many=True, read_only=True)
     account_ledgers = AccountLedgerSerializer(many=True, read_only=True)
     payments = PaymentSerializer(many=True, read_only=True)
+
+    agreement_type_display = serializers.SerializerMethodField(read_only=True)
+
+    def get_agreement_type_display(self, obj):
+        return obj.get_agreement_type_display()
 
     class Meta:
         model = Agreement
@@ -142,13 +205,16 @@ class AgreementSerializer(serializers.ModelSerializer):
             'date_modified',
             'created_by',
             'modified_by',
+
             'account_id',
             'resolution_number',
             'expansion_area',
             'agreement_type',
+
             'projects',
             'account_ledgers',
             'payments',
+            'agreement_type_display',
         )
 
 class AccountSerializer(serializers.ModelSerializer):
@@ -176,10 +242,14 @@ class AccountSerializer(serializers.ModelSerializer):
             'contact_first_name',
             'contact_last_name',
             'contact_full_name',
+
+            'address_number',
+            'address_street',
             'address_city',
             'address_state',
             'address_zip',
             'address_full',
+
             'phone',
             'email',
             'agreements',

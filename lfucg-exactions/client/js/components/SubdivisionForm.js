@@ -4,6 +4,7 @@ import {
     Link,
     hashHistory,
 } from 'react-router';
+import PropTypes from 'prop-types';
 
 import Navbar from './Navbar';
 import Footer from './Footer';
@@ -24,14 +25,6 @@ import {
 } from '../actions/apiActions';
 
 class SubdivisionForm extends React.Component {
-    static propTypes = {
-        activeForm: React.PropTypes.object,
-        subdivisions: React.PropTypes.object,
-        route: React.PropTypes.object,
-        onComponentDidMount: React.PropTypes.func,
-        onSubmit: React.PropTypes.func,
-    };
-
     componentDidMount() {
         this.props.onComponentDidMount();
     }
@@ -66,12 +59,12 @@ class SubdivisionForm extends React.Component {
 
                                 <fieldset>
                                     <div className="row">
-                                        <FormGroup label="* Subdivision Name" id="name">
+                                        <FormGroup label="* Subdivision Name" id="name" aria-required="true">
                                             <input type="text" className="form-control" placeholder="Subdivision Name" autoFocus />
                                         </FormGroup>
                                     </div>
                                     <div className="row">
-                                        <FormGroup label="* Gross Acreage" id="gross_acreage">
+                                        <FormGroup label="* Gross Acreage" id="gross_acreage" aria-required="true">
                                             <input type="text" className="form-control" placeholder="Gross Acreage" />
                                         </FormGroup>
                                     </div>
@@ -94,6 +87,14 @@ class SubdivisionForm extends React.Component {
         );
     }
 }
+
+SubdivisionForm.propTypes = {
+    activeForm: PropTypes.object,
+    subdivisions: PropTypes.object,
+    route: PropTypes.object,
+    onComponentDidMount: PropTypes.func,
+    onSubmit: PropTypes.func,
+};
 
 function mapStateToProps(state) {
     return {
@@ -127,10 +128,14 @@ function mapDispatchToProps(dispatch, params) {
         },
         onSubmit(event) {
             event.preventDefault();
-            dispatch(postSubdivision())
-            .then(() => {
-                hashHistory.push('subdivision/');
-            });
+            if (selectedSubdivision) {
+                dispatch(putSubdivision(selectedSubdivision));
+            } else {
+                dispatch(postSubdivision())
+                .then((data_sub_post) => {
+                    hashHistory.push(`subdivision/form/${data_sub_post.response.id}`);
+                });
+            }
         },
     };
 }
