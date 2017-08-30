@@ -38,7 +38,7 @@ class LotSummary extends React.Component {
                 return (
                     <div key={payment.id} className="col-xs-12">
                         <div className="row form-subheading">
-                            <h3>Paid By {payment.paid_by}</h3>
+                            <h3>Developer Account: {payment.credit_account.account_name}</h3>
                         </div>
                         <div className="row link-row">
                             <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
@@ -63,9 +63,10 @@ class LotSummary extends React.Component {
                             </div>
                         </div>
                         <div className="row">
-                            <p className="col-md-3 col-sm-4 col-xs-6">Total Paid: {payment.total_paid}</p>
-                            <p className="col-md-3 col-sm-4 col-xs-6">Payment Type: {payment.payment_type}</p>
-                            <p className="col-md-3 col-sm-4 col-xs-6">Paid By Type: {payment.paid_by_type}</p>
+                            <p className="col-sm-4 col-xs-6">Agreement Resolution: {payment.credit_source.resolution_number}</p>
+                            <p className="col-sm-4 col-xs-6">Total Paid: {payment.total_paid}</p>
+                            <p className="col-sm-4 col-xs-6">Payment Type: {payment.payment_type}</p>
+                            <p className="col-sm-4 col-xs-6">Paid By: {payment.paid_by}</p>
                         </div>
                     </div>
                 );
@@ -101,6 +102,9 @@ class LotSummary extends React.Component {
                             </div>
                         </div>
                         <div className="row">
+                            <p className="col-sm-4 col-xs-6">Account From: {accountLedger.account_from.account_name}</p>
+                            <p className="col-sm-4 col-xs-6">Account To: {accountLedger.account_to.account_name}</p>
+                            <p className="col-sm-4 col-xs-6">Agreement Resolution: {accountLedger.agreement.resolution_number}</p>
                             <p className="col-md-3 col-sm-4 col-xs-6">Entry Type: {accountLedger.entry_type_display}</p>
                             <p className="col-md-3 col-sm-4 col-xs-6">Non-Sewer Credits: {accountLedger.non_sewer_credits}</p>
                             <p className="col-md-3 col-sm-4 col-xs-6">Sewer Credits: {accountLedger.sewer_credits}</p>
@@ -163,7 +167,6 @@ class LotSummary extends React.Component {
                                     <div className="col-xs-12">
                                         <h3 className="col-xs-12 ">Total Exactions: {lots.total_due}</h3>
                                         <p className="col-md-8 col-xs-12">Address: {lots.address_full}</p>
-                                        <p className="col-md-4 col-xs-6">Plat Name: {lots.plat ? lots.plat.name : null}</p>
                                         <p className="col-md-4 col-xs-6">Lot Number: {lots.lot_number}</p>
                                         <p className="col-md-4 col-xs-6 ">Permit ID: {lots.permit_id}</p>
                                         <p className="col-md-4 col-xs-6">Latitude: {lots.latitude}</p>
@@ -251,69 +254,73 @@ class LotSummary extends React.Component {
                                 <div className="panel-body">
                                     <div className="col-xs-12">
                                         {lots.id &&
-                                            <Notes content_type="Lot" object_id={lots.id} parent_content_type="Plat" parent_object_id={lots.plat} />
+                                            <Notes content_type="Lot" object_id={lots.id} parent_content_type="Plat" parent_object_id={lots.plat.id} />
                                         }
                                     </div>
                                 </div>
                             </div>
 
-                            <a
-                              role="button"
-                              data-toggle="collapse"
-                              data-parent="#accordion"
-                              href="#collapsePlat"
-                              aria-expanded="false"
-                              aria-controls="collapsePlat"
-                            >
-                                <div className="row section-heading" role="tab" id="headingPlat">
-                                    <div className="col-xs-1 caret-indicator" />
-                                    <div className="col-xs-10">
-                                        <h2>Plat Information</h2>
-                                    </div>
-                                </div>
-                            </a>
-                            <div
-                              id="collapsePlat"
-                              className="panel-collapse collapse row"
-                              role="tabpanel"
-                              aria-labelledby="#headingPlat"
-                            >
-                                <div className="panel-body">
-                                    <div className="row link-row">
-                                        <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
-                                            <div className="col-xs-5">
-                                                {currentUser && currentUser.permissions && currentUser.permissions.plat &&
-                                                    <Link to={`plat/form/${plats.id}`} aria-label="Edit">
-                                                        <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
-                                                        <div className="col-xs-7 link-label">
-                                                            Edit
-                                                        </div>
-                                                    </Link>
-                                                }
-                                            </div>
-                                            <div className="col-xs-5 ">
-                                                <Link to={`plat/summary/${plats.id}`} aria-label="Summary">
-                                                    <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
-                                                    <div className="col-xs-7 link-label">
-                                                        Summary
-                                                    </div>
-                                                </Link>
-                                            </div>
+                            {lots.plat ? <div>
+                                <a
+                                  role="button"
+                                  data-toggle="collapse"
+                                  data-parent="#accordion"
+                                  href="#collapsePlat"
+                                  aria-expanded="false"
+                                  aria-controls="collapsePlat"
+                                >
+                                    <div className="row section-heading" role="tab" id="headingPlat">
+                                        <div className="col-xs-1 caret-indicator" />
+                                        <div className="col-xs-10">
+                                            <h2>Plat Information</h2>
                                         </div>
                                     </div>
-                                    <div className="col-xs-12">
-                                        <p className="col-md-4 col-xs-6">Plat Name: {plats.name}</p>
-                                        <p className="col-md-4 col-xs-6">Expansion Area: {plats.expansion_area}</p>
-                                        <p className="col-md-4 col-xs-6">Slide: {plats.slide}</p>
-                                        <p className="col-md-4 col-xs-6">Buildable Lots: {plats.buildable_lots}</p>
-                                        <p className="col-md-4 col-xs-6">Non-Buildable Lots: {plats.non_buildable_lots}</p>
-                                        <p className="col-md-4 col-xs-6">Sewer Exactions: ${plats.sewer_due}</p>
-                                        <p className="col-md-4 col-xs-6">Non-Sewer Exactions: ${plats.non_sewer_due}</p>
+                                </a>
+                                <div
+                                  id="collapsePlat"
+                                  className="panel-collapse collapse row"
+                                  role="tabpanel"
+                                  aria-labelledby="#headingPlat"
+                                >
+                                    <div className="panel-body">
+                                        <div className="row link-row">
+                                            <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
+                                                <div className="col-xs-5">
+                                                    {currentUser && currentUser.permissions && currentUser.permissions.plat &&
+                                                        <Link to={`plat/form/${lots.plat.id}`} aria-label="Edit">
+                                                            <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
+                                                            <div className="col-xs-7 link-label">
+                                                                Edit
+                                                            </div>
+                                                        </Link>
+                                                    }
+                                                </div>
+                                                <div className="col-xs-5 ">
+                                                    <Link to={`plat/summary/${lots.plat.id}`} aria-label="Summary">
+                                                        <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
+                                                        <div className="col-xs-7 link-label">
+                                                            Summary
+                                                        </div>
+                                                    </Link>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="col-xs-12">
+                                            <p className="col-md-4 col-xs-6">Plat Name: {lots.plat.name}</p>
+                                            <p className="col-md-4 col-xs-6">Expansion Area: {lots.plat.expansion_area}</p>
+                                            <p className="col-md-4 col-xs-6">Slide: {lots.plat.slide}</p>
+                                            <p className="col-md-4 col-xs-6">Buildable Lots: {lots.plat.buildable_lots}</p>
+                                            <p className="col-md-4 col-xs-6">Non-Buildable Lots: {lots.plat.non_buildable_lots}</p>
+                                            <p className="col-md-4 col-xs-6">Sewer Exactions: ${lots.plat.sewer_due}</p>
+                                            <p className="col-md-4 col-xs-6">Non-Sewer Exactions: ${lots.plat.non_sewer_due}</p>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> : <div className="row section-heading" role="tab" id="headingAccountPayments">
+                                <h2>Plat - None</h2>
+                            </div>}
 
-                            {lots.account && accounts &&
+                            {lots.account && accounts ?
                                 <div>
                                     <a
                                       role="button"
@@ -371,6 +378,8 @@ class LotSummary extends React.Component {
                                             </div>
                                         </div>
                                     </div>
+                                </div> : <div className="row section-heading" role="tab" id="headingAccountPayments">
+                                    <h2>Account - None</h2>
                                 </div>
                             }
 
@@ -485,9 +494,6 @@ function mapDispatchToProps(dispatch, params) {
             dispatch(getLotAccountLedgers(selectedLot));
             dispatch(getLotID(selectedLot))
             .then((lot_data) => {
-                if (lot_data.response.plat) {
-                    dispatch(getPlatID(lot_data.response.plat));
-                }
                 if (lot_data.response.account) {
                     dispatch(getAccountID(lot_data.response.account));
                 }

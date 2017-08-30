@@ -206,9 +206,9 @@ class LotForm extends React.Component {
                                                 <div className="col-sm-6 form-group">
                                                     <label htmlFor="plat" className="form-label" id="plat" aria-required="true">* Plat</label>
                                                     <select className="form-control" id="plat" onChange={formChange('plat')} >
-                                                        {activeForm.plat ? (
-                                                            <option value="choose_plat" aria-label={activeForm.plat_name}>
-                                                                {activeForm.plat_name}
+                                                        {lots.plat && lots.plat.id ? (
+                                                            <option value="choose_plat" aria-label={lots.plat.name}>
+                                                                {lots.plat.name}
                                                             </option>
                                                         ) : (
                                                             <option value="choose_plat" aria-label="Select a Plat">
@@ -392,7 +392,7 @@ class LotForm extends React.Component {
                                 <div className="panel-body">
                                     <div className="col-xs-12">
                                         {lots.id && lots.plat &&
-                                            <Notes content_type="Lot" object_id={lots.id} parent_content_type="Plat" parent_object_id={lots.plat} />
+                                            <Notes content_type="Lot" object_id={lots.id} parent_content_type="Plat" parent_object_id={lots.plat.id} />
                                         }
                                     </div>
                                 </div>
@@ -447,6 +447,7 @@ function mapDispatchToProps(dispatch, params) {
                     dispatch(getLotID(selectedLot))
                     .then((data_lot) => {
                         const update = {
+                            plat: data_lot.response.plat ? data_lot.response.plat.id : null,
                             address_number: data_lot.response.address_number,
                             address_street: data_lot.response.address_street,
                             address_direction: data_lot.response.address_direction,
@@ -455,7 +456,6 @@ function mapDispatchToProps(dispatch, params) {
                             address_city: data_lot.response.address_city,
                             address_state: data_lot.response.address_state,
                             address_zip: data_lot.response.address_zip,
-                            plat: data_lot.response.plat,
                             lot_number: data_lot.response.lot_number,
                             parcel_id: data_lot.response.parcel_id,
                             permit_id: data_lot.response.permit_id,
@@ -476,30 +476,21 @@ function mapDispatchToProps(dispatch, params) {
                             first_section: true,
                         };
                         dispatch(formUpdate(update));
-                        if (data_lot.response.plat) {
-                            dispatch(getPlatID(data_lot.response.plat))
-                            .then((data_plat_id) => {
-                                const update2 = {
-                                    plat_name: data_plat_id.response.name,
+                        if (data_lot.response.account) {
+                            dispatch(getAccountID(data_lot.response.account))
+                            .then((data_account_id) => {
+                                const update_lot_account = {
+                                    account_name: data_account_id.response.account_name,
                                 };
-                                dispatch(formUpdate(update2));
-                                if (data_lot.response.account) {
-                                    dispatch(getAccountID(data_lot.response.account))
-                                    .then((data_account_id) => {
-                                        const update_lot_account = {
-                                            account_name: data_account_id.response.account_name,
-                                        };
-                                        dispatch(formUpdate(update_lot_account));
-                                    });
-                                } else if (data_plat_id.response.account) {
-                                    dispatch(getAccountID(data_plat_id.response.account))
-                                    .then((data_plat_account_id) => {
-                                        const update_account = {
-                                            account_name: data_plat_account_id.response.account_name,
-                                        };
-                                        dispatch(formUpdate(update_account));
-                                    });
-                                }
+                                dispatch(formUpdate(update_lot_account));
+                            });
+                        } else if (data_lot.response.plat && data_lot.response.plat.account) {
+                            dispatch(getAccountID(data_lot.response.plat.account))
+                            .then((data_plat_account_id) => {
+                                const update_account = {
+                                    account_name: data_plat_account_id.response.account_name,
+                                };
+                                dispatch(formUpdate(update_account));
                             });
                         }
                     });
@@ -586,7 +577,7 @@ function mapDispatchToProps(dispatch, params) {
             if (selectedLot) {
                 dispatch(putLot(selectedLot))
                 .then(() => {
-                    hashHistory.push('lot/');
+                    hashHistory.push(`lot/summary/${selectedLot}`);
                 });
             }
         },

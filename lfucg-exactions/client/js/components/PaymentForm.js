@@ -25,7 +25,6 @@ import {
     getAccountID,
     getAccountAgreements,
     getAgreements,
-    getAgreementID,
     getPaymentID,
     postPayment,
     putPayment,
@@ -103,9 +102,9 @@ class PaymentForm extends React.Component {
                                         <div className="col-sm-6 form-group">
                                             <label htmlFor="lot_id" className="form-label" id="lot_id" aria-label="Lot" aria-required="true">* Lot</label>
                                             <select className="form-control" id="lot_id" onChange={lotChange('lot_id')} >
-                                                {activeForm.address_full ? (
+                                                {payments.lot_id ? (
                                                     <option value="choose_source" aria-label="Selected Lot">
-                                                        {activeForm.address_full}
+                                                        {payments.lot_id.address_full}
                                                     </option>
                                                 ) : (
                                                     <option value="choose_source" aria-label="Select an Lot">
@@ -120,9 +119,9 @@ class PaymentForm extends React.Component {
                                         <div className="col-sm-6 form-group">
                                             <label htmlFor="credit_account" className="form-label" id="credit_account" aria-label="Developer Account" aria-required="true">* Developer Account</label>
                                             <select className="form-control" id="credit_account" onChange={formChange('credit_account')} >
-                                                {activeForm.account_name ? (
-                                                    <option value="choose_account" aria-label="Selected Developer Account">
-                                                        {activeForm.account_name}
+                                                {payments.credit_account ? (
+                                                    <option value="credit_account" aria-label="Selected Account">
+                                                        {payments.credit_account.account_name}
                                                     </option>
                                                 ) : (
                                                     <option value="choose_account" aria-label="Select a Developer Account">
@@ -135,9 +134,9 @@ class PaymentForm extends React.Component {
                                         <div className="col-sm-6 form-group">
                                             <label htmlFor="credit_source" className="form-label" id="credit_source" aria-label="Agreement">Agreement</label>
                                             <select className="form-control" id="credit_source" onChange={formChange('credit_source')} >
-                                                {activeForm.resolution_number ? (
+                                                {payments.credit_source ? (
                                                     <option value="choose_source" aria-label="Selected Agreement">
-                                                        {activeForm.resolution_number}
+                                                        {payments.credit_source.resolution_number}
                                                     </option>
                                                 ) : (
                                                     <option value="choose_source" aria-label="Select an Agreement">
@@ -290,33 +289,12 @@ function mapDispatchToProps(dispatch, params) {
                 if (selectedPayment) {
                     dispatch(getPaymentID(selectedPayment))
                     .then((data_payment) => {
-                        if (data_payment.response.credit_account) {
-                            dispatch(getAccountID(data_payment.response.credit_account))
-                            .then((data_account) => {
-                                const account_update = {
-                                    account_name: data_account.response.account_name,
-                                };
-                                dispatch(formUpdate(account_update));
-                            });
-                        }
-                        if (data_payment.response.credit_source) {
-                            dispatch(getAgreementID(data_payment.response.credit_source))
-                            .then((data_agreement) => {
-                                const agreement_update = {
-                                    resolution_number: data_agreement.response.resolution_number,
-                                };
-                                dispatch(formUpdate(agreement_update));
-                            });
-                        }
-                        if (data_payment.response.lot_id) {
-                            const lot_update = {
-                                address_full: data_payment.response.lot_id.address_full,
-                            };
-                            dispatch(formUpdate(lot_update));
-                        }
                         const update = {
+                            credit_account: data_payment.response.credit_account ? data_payment.response.credit_account.id : null,
+                            credit_source: data_payment.response.credit_source ? data_payment.response.credit_source.id : null,
+                            lot_id: data_payment.response.lot_id ? data_payment.response.lot_id.id : null,
                             paid_by: data_payment.response.paid_by,
-                            paid_by_type: data_payment.response.paid_by_type_display,
+                            paid_by_type: data_payment.response.paid_by_type,
                             payment_type: data_payment.response.payment_type,
                             check_number: data_payment.response.check_number,
                             paid_roads: data_payment.response.paid_roads,
