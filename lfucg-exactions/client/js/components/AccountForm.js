@@ -237,6 +237,8 @@ function mapDispatchToProps(dispatch, params) {
                             account_name: data_account.response.account_name,
                             contact_first_name: data_account.response.contact_first_name,
                             contact_last_name: data_account.response.contact_last_name,
+                            address_number: data_account.response.address_number,
+                            address_street: data_account.response.address_street,
                             address_city: data_account.response.address_city,
                             address_state: data_account.response.address_state,
                             address_zip: data_account.response.address_zip,

@@ -60,9 +60,11 @@ class ProjectExisting extends React.Component {
                         </div>
                         <div className="row">
                             <div className="col-sm-offset-1">
+                                {project.agreement_id &&
+                                    <p className="col-md-4 col-xs-6">Agreement: {project.agreement_id.resolution_number}</p>
+                                }
                                 <p className="col-md-4 col-xs-6">Project Category: {project.project_category_display}</p>
                                 <p className="col-md-4 col-xs-6">Project Type: {project.project_type_display}</p>
-                                <p className="col-md-4 col-xs-6">Expansion Area: {project.expansion_area}</p>
                                 <p className="col-md-4 col-xs-6 ">Project Status: {project.project_status_display}</p>
                                 <p className="col-md-4 col-xs-6 ">Status Date: {project.status_date}</p>
                             </div>

@@ -8,9 +8,6 @@ import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
 
 import {
-    getLotID,
-    getAccountID,
-    getAgreementID,
     getPaymentID,
 } from '../actions/apiActions';
 
@@ -22,9 +19,6 @@ class PaymentSummary extends React.Component {
     render() {
         const {
             currentUser,
-            lots,
-            accounts,
-            agreements,
             payments,
         } = this.props;
 
@@ -95,7 +89,7 @@ class PaymentSummary extends React.Component {
                                 </div>
                             </div>
 
-                            {payments && payments.lot_id && <div>
+                            {payments && payments.lot_id ? <div>
                                 <a
                                   role="button"
                                   data-toggle="collapse"
@@ -141,125 +135,137 @@ class PaymentSummary extends React.Component {
                                             </div>
                                         </div>
                                         <div className="col-xs-12">
-                                            <h4 className="col-xs-12">Lot Address: {payments.lot_id.address_full}</h4>
-                                            <h4 className="col-md-4 col-xs-6">Total Exactions: {payments.lot_id.total_due}</h4>
-                                            <h4 className="col-md-4 col-xs-6 ">Lot Number: {payments.lot_id.lot_number}</h4>
-                                            <h4 className="col-md-4 col-xs-6">Permit ID: {payments.lot_id.permit_id}</h4>
+                                            <p className="col-xs-12">Lot Address: {payments.lot_id.address_full}</p>
+                                            <p className="col-md-4 col-xs-6">Total Exactions: {payments.lot_id.total_due}</p>
+                                            <p className="col-md-4 col-xs-6">Plat: {payments.lot_id.plat.name}</p>
+                                            <p className="col-md-4 col-xs-6 ">Lot Number: {payments.lot_id.lot_number}</p>
+                                            <p className="col-md-4 col-xs-6">Permit ID: {payments.lot_id.permit_id}</p>
                                         </div>
                                     </div>
                                 </div>
+                            </div> : <div className="row section-heading" role="tab" id="headingLotInfo">
+                                <h2>Lot - None</h2>
                             </div>}
 
-                            <a
-                              role="button"
-                              data-toggle="collapse"
-                              data-parent="#accordion"
-                              href="#collapseAccountInfo"
-                              aria-expanded="false"
-                              aria-controls="collapseAccountInfo"
-                            >
-                                <div className="row section-heading" role="tab" id="headingAccountInfo">
-                                    <div className="col-xs-1 caret-indicator" />
-                                    <div className="col-xs-10">
-                                        <h2>Developer Credit Account</h2>
-                                    </div>
-                                </div>
-                            </a>
-                            <div
-                              id="collapseAccountInfo"
-                              className="panel-collapse collapse row"
-                              role="tabpanel"
-                              aria-labelledby="#headingAccountInfo"
-                            >
-                                <div className="panel-body">
-                                    <div className="row link-row">
-                                        <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
-                                            <div className="col-xs-5">
-                                                {currentUser && currentUser.permissions && currentUser.permissions.account &&
-                                                    <Link to={`account/form/${accounts.id}`} aria-label="Edit">
-                                                        <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
-                                                        <div className="col-xs-7 link-label">
-                                                            Edit
-                                                        </div>
-                                                    </Link>
-                                                }
-                                            </div>
-                                            <div className="col-xs-5 ">
-                                                <Link to={`account/summary/${accounts.id}`} aria-label="Summary">
-                                                    <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
-                                                    <div className="col-xs-7 link-label">
-                                                        Summary
-                                                    </div>
-                                                </Link>
-                                            </div>
+                            {payments.credit_account ? <div>
+                                <a
+                                  role="button"
+                                  data-toggle="collapse"
+                                  data-parent="#accordion"
+                                  href="#collapseAccountInfo"
+                                  aria-expanded="false"
+                                  aria-controls="collapseAccountInfo"
+                                >
+                                    <div className="row section-heading" role="tab" id="headingAccountInfo">
+                                        <div className="col-xs-1 caret-indicator" />
+                                        <div className="col-xs-10">
+                                            <h2>Developer Credit Account</h2>
                                         </div>
                                     </div>
-                                    <div className="col-xs-12">
-                                        <h4 className="col-md-4 col-xs-6">Developer Account Name: {accounts.account_name}</h4>
-                                        {currentUser && currentUser.username &&
-                                            <div>
-                                                <h4 className="col-md-4 col-xs-6">Contact Name: {accounts.contact_full_name}</h4>
-                                                <h4 className="col-md-4 col-xs-6">Address: {accounts.address_full}</h4>
-                                                <h4 className="col-md-4 col-xs-6 ">Phone: {accounts.phone}</h4>
-                                                <h4 className="col-md-4 col-xs-6">Email: {accounts.email}</h4>
+                                </a>
+                                <div
+                                  id="collapseAccountInfo"
+                                  className="panel-collapse collapse row"
+                                  role="tabpanel"
+                                  aria-labelledby="#headingAccountInfo"
+                                >
+                                    <div className="panel-body">
+                                        <div className="row link-row">
+                                            <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
+                                                <div className="col-xs-5">
+                                                    {currentUser && currentUser.permissions && currentUser.permissions.account &&
+                                                        <Link to={`account/form/${payments.credit_account.id}`} aria-label="Edit">
+                                                            <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
+                                                            <div className="col-xs-7 link-label">
+                                                                Edit
+                                                            </div>
+                                                        </Link>
+                                                    }
+                                                </div>
+                                                <div className="col-xs-5 ">
+                                                    <Link to={`account/summary/${payments.credit_account.id}`} aria-label="Summary">
+                                                        <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
+                                                        <div className="col-xs-7 link-label">
+                                                            Summary
+                                                        </div>
+                                                    </Link>
+                                                </div>
                                             </div>
-                                        }
+                                        </div>
+                                        <div className="col-xs-12">
+                                            <p className="col-md-4 col-xs-6">Developer Account Name: {payments.credit_account.account_name}</p>
+                                            {currentUser && currentUser.username &&
+                                                <div>
+                                                    <p className="col-md-4 col-xs-6">Contact Name: {payments.credit_account.contact_full_name}</p>
+                                                    <p className="col-md-4 col-xs-6 ">Phone: {payments.credit_account.phone}</p>
+                                                    <p className="col-md-4 col-xs-6">Email: {payments.credit_account.email}</p>
+                                                    <p className="col-xs-12">Address: {payments.credit_account.address_full}</p>
+                                                </div>
+                                            }
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> : <div className="row section-heading" role="tab" id="headingAccountInfo">
+                                <h2>Developer Account - None</h2>
+                            </div>}
 
-                            <a
-                              role="button"
-                              data-toggle="collapse"
-                              data-parent="#accordion"
-                              href="#collapseAgreementInfo"
-                              aria-expanded="false"
-                              aria-controls="collapseAgreementInfo"
-                            >
-                                <div className="row section-heading" role="tab" id="headingAgreementInfo">
-                                    <div className="col-xs-1 caret-indicator" />
-                                    <div className="col-xs-10">
-                                        <h2>Agreement Credit Source</h2>
-                                    </div>
-                                </div>
-                            </a>
-                            <div
-                              id="collapseAgreementInfo"
-                              className="panel-collapse collapse row"
-                              role="tabpanel"
-                              aria-labelledby="#headingAgreementInfo"
-                            >
-                                <div className="panel-body">
-                                    <div className="row link-row">
-                                        <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
-                                            <div className="col-xs-5">
-                                                {currentUser && currentUser.permissions && currentUser.permissions.agreement &&
-                                                    <Link to={`agreement/form/${agreements.id}`} aria-label="Edit">
-                                                        <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
-                                                        <div className="col-xs-7 link-label">
-                                                            Edit
-                                                        </div>
-                                                    </Link>
-                                                }
-                                            </div>
-                                            <div className="col-xs-5 ">
-                                                <Link to={`agreement/summary/${agreements.id}`} aria-label="Summary">
-                                                    <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
-                                                    <div className="col-xs-7 link-label">
-                                                        Summary
-                                                    </div>
-                                                </Link>
-                                            </div>
+                            {payments.credit_source ? <div>
+                                <a
+                                  role="button"
+                                  data-toggle="collapse"
+                                  data-parent="#accordion"
+                                  href="#collapseAgreementInfo"
+                                  aria-expanded="false"
+                                  aria-controls="collapseAgreementInfo"
+                                >
+                                    <div className="row section-heading" role="tab" id="headingAgreementInfo">
+                                        <div className="col-xs-1 caret-indicator" />
+                                        <div className="col-xs-10">
+                                            <h2>Agreement Credit Source</h2>
                                         </div>
                                     </div>
-                                    <div className="col-xs-12">
-                                        <p className="col-md-4 col-xs-6">Resolution Number: {agreements.resolution_number}</p>
-                                        <p className="col-md-4 col-xs-6">Expansion Area: {agreements.expansion_area}</p>
-                                        <p className="col-md-4 col-xs-6">Agreement Type: {agreements.agreement_type_display}</p>
-                                        <p className="col-md-4 col-xs-6">Date Executed: {agreements.date_executed}</p>
+                                </a>
+                                <div
+                                  id="collapseAgreementInfo"
+                                  className="panel-collapse collapse row"
+                                  role="tabpanel"
+                                  aria-labelledby="#headingAgreementInfo"
+                                >
+                                    <div className="panel-body">
+                                        <div className="row link-row">
+                                            <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
+                                                <div className="col-xs-5">
+                                                    {currentUser && currentUser.permissions && currentUser.permissions.agreement &&
+                                                        <Link to={`agreement/form/${payments.credit_source.id}`} aria-label="Edit">
+                                                            <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
+                                                            <div className="col-xs-7 link-label">
+                                                                Edit
+                                                            </div>
+                                                        </Link>
+                                                    }
+                                                </div>
+                                                <div className="col-xs-5 ">
+                                                    <Link to={`agreement/summary/${payments.credit_source.id}`} aria-label="Summary">
+                                                        <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
+                                                        <div className="col-xs-7 link-label">
+                                                            Summary
+                                                        </div>
+                                                    </Link>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="col-xs-12">
+                                            <p className="col-md-4 col-xs-6">Resolution Number: {payments.credit_source.resolution_number}</p>
+                                            <p className="col-md-4 col-xs-6">Account: {payments.credit_source.account_id.account_name}</p>
+                                            <p className="col-md-4 col-xs-6">Expansion Area: {payments.credit_source.expansion_area}</p>
+                                            <p className="col-md-4 col-xs-6">Agreement Type: {payments.credit_source.agreement_type_display}</p>
+                                            <p className="col-md-4 col-xs-6">Date Executed: {payments.credit_source.date_executed}</p>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> : <div className="row section-heading" role="tab" id="headingAgreementInfo">
+                                <h2>Payments - None</h2>
+                            </div>}
                         </div>
                     </div>
                 </div>
@@ -271,9 +277,6 @@ class PaymentSummary extends React.Component {
 
 PaymentSummary.propTypes = {
     currentUser: PropTypes.object,
-    lots: PropTypes.object,
-    accounts: PropTypes.object,
-    agreements: PropTypes.object,
     payments: PropTypes.object,
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
@@ -296,18 +299,7 @@ function mapDispatchToProps(dispatch, params) {
 
     return {
         onComponentDidMount() {
-            dispatch(getPaymentID(selectedPayment))
-            .then((data_payment) => {
-                if (data_payment.response.lot_id) {
-                    dispatch(getLotID(data_payment.response.lot_id.id));
-                }
-                if (data_payment.response.credit_account) {
-                    dispatch(getAccountID(data_payment.response.credit_account));
-                }
-                if (data_payment.response.credit_source) {
-                    dispatch(getAgreementID(data_payment.response.credit_source));
-                }
-            });
+            dispatch(getPaymentID(selectedPayment));
         },
     };
 }
