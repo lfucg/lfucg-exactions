@@ -59,12 +59,12 @@ class AccountSummary extends React.Component {
                             </div>
                         </div>
                         <div className="row">
-                            <p className="col-md-3 col-sm-4 col-xs-6">Gross Acreage: {plat.cleaned_total_acreage}</p>
-                            <p className="col-md-3 col-sm-4 col-xs-6">Approval: {plat.is_approved ? 'Approved' : 'Not Approved'}</p>
-                            <p className="col-md-3 col-sm-4 col-xs-6">Expansion Area: {plat.expansion_area}</p>
-                            <p className="col-md-3 col-sm-4 col-xs-6">Slide: {plat.slide}</p>
-                            <p className="col-md-3 col-sm-4 col-xs-6">Sewer Exactions: ${plat.sewer_due}</p>
-                            <p className="col-md-3 col-sm-4 col-xs-6">Non-Sewer Exactions: ${plat.non_sewer_due}</p>
+                            <p className="col-sm-4 col-xs-6">Gross Acreage: {plat.cleaned_total_acreage}</p>
+                            <p className="col-sm-4 col-xs-6">Approval: {plat.is_approved ? 'Approved' : 'Not Approved'}</p>
+                            <p className="col-sm-4 col-xs-6">Expansion Area: {plat.expansion_area}</p>
+                            <p className="col-sm-4 col-xs-6">Slide: {plat.slide}</p>
+                            <p className="col-sm-4 col-xs-6">Sewer Exactions: ${plat.sewer_due}</p>
+                            <p className="col-sm-4 col-xs-6">Non-Sewer Exactions: ${plat.non_sewer_due}</p>
                         </div>
                     </div>
                 );
@@ -100,10 +100,10 @@ class AccountSummary extends React.Component {
                             </div>
                         </div>
                         <div className="row">
-                            <p className="col-md-3 col-sm-4 col-xs-6">Total Exactions: ${lot.total_due}</p>
-                            <p className="col-md-3 col-sm-4 col-xs-6">Approval: {lot.is_approved ? 'Approved' : 'Not Approved'}</p>
-                            <p className="col-md-3 col-sm-4 col-xs-6">Lot Number: {lot.lot_number}</p>
-                            <p className="col-md-3 col-sm-4 col-xs-6">Parcel ID: {lot.parcel_id}</p>
+                            <p className="col-sm-4 col-xs-6">Total Exactions: ${lot.total_due}</p>
+                            <p className="col-sm-4 col-xs-6">Approval: {lot.is_approved ? 'Approved' : 'Not Approved'}</p>
+                            <p className="col-sm-4 col-xs-6">Lot Number: {lot.lot_number}</p>
+                            <p className="col-sm-4 col-xs-6">Parcel ID: {lot.parcel_id}</p>
                         </div>
                     </div>
                 );
@@ -139,9 +139,9 @@ class AccountSummary extends React.Component {
                             </div>
                         </div>
                         <div className="row">
-                            <p className="col-md-3 col-sm-4 col-xs-6">Expansion Area: {agreement.expansion_area}</p>
-                            <p className="col-md-3 col-sm-4 col-xs-6">Agreement Type: {agreement.agreement_type_display}</p>
-                            <p className="col-md-3 col-sm-4 col-xs-6">Date Executed: {agreement.date_executed}</p>
+                            <p className="col-sm-4 col-xs-6">Expansion Area: {agreement.expansion_area}</p>
+                            <p className="col-sm-4 col-xs-6">Agreement Type: {agreement.agreement_type_display}</p>
+                            <p className="col-sm-4 col-xs-6">Date Executed: {agreement.date_executed}</p>
                         </div>
                     </div>
                 );
@@ -152,7 +152,7 @@ class AccountSummary extends React.Component {
                 return (
                     <div key={payment.id} className="col-xs-12">
                         <div className="row form-subheading">
-                            <h3>Paid By {payment.paid_by}</h3>
+                            <h3>Agreement Resolution: {payment.credit_source.resolution_number}</h3>
                         </div>
                         <div className="row link-row">
                             <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
@@ -177,9 +177,10 @@ class AccountSummary extends React.Component {
                             </div>
                         </div>
                         <div className="row">
-                            <p className="col-md-3 col-sm-4 col-xs-6">Paid By: {payment.total_paid}</p>
-                            <p className="col-md-3 col-sm-4 col-xs-6">Payment Type: {payment.payment_type}</p>
-                            <p className="col-md-3 col-sm-4 col-xs-6">Paid By Type: {payment.paid_by_type_display}</p>
+                            <p className="col-sm-4 col-xs-6">Payment Type: {payment.payment_type}</p>
+                            <p className="col-sm-4 col-xs-6">Paid By: {payment.total_paid}</p>
+                            <p className="col-sm-4 col-xs-6">Paid By Type: {payment.paid_by_type_display}</p>
+                            <p className="col-xs-12">Lot: {payment.lot_id.address_full}</p>
                         </div>
                     </div>
                 );
@@ -215,10 +216,10 @@ class AccountSummary extends React.Component {
                             </div>
                         </div>
                         <div className="row">
-                            <p className="col-md-3 col-sm-4 col-xs-6">Lot: {accountLedger.lot}</p>
-                            <p className="col-md-3 col-sm-4 col-xs-6">Account From: {accountLedger.account_from}</p>
-                            <p className="col-md-3 col-sm-4 col-xs-6">Account To: {accountLedger.account_to}</p>
-                            <p className="col-md-3 col-sm-4 col-xs-6">Agreement: {accountLedger.agreement}</p>
+                            <p className="col-sm-4 col-xs-6">Account From: {accountLedger.account_from.account_name}</p>
+                            <p className="col-sm-4 col-xs-6">Account To: {accountLedger.account_to.account_name}</p>
+                            <p className="col-sm-4 col-xs-6">Agreement: {accountLedger.agreement.resolution_number}</p>
+                            <p className="col-xs-12">Lot: {accountLedger.lot.address_full}</p>
                         </div>
                     </div>
                 );
@@ -276,12 +277,12 @@ class AccountSummary extends React.Component {
                                         </div>
                                     </div>
                                     <div className="col-xs-12">
-                                        <h4 className="col-md-4 col-xs-6">Developer Account Name: {accounts.account_name}</h4>
+                                        <p className="col-md-4 col-xs-6">Developer Account Name: {accounts.account_name}</p>
                                         {currentUser && currentUser.username && <div>
-                                            <h4 className="col-md-4 col-xs-6">Contact Name: {accounts.contact_full_name}</h4>
-                                            <h4 className="col-xs-12">Address: {accounts.address_full}</h4>
-                                            <h4 className="col-md-4 col-xs-6 ">Phone: {accounts.phone}</h4>
-                                            <h4 className="col-md-4 col-xs-6">Email: {accounts.email}</h4>
+                                            <p className="col-md-4 col-xs-6">Contact Name: {accounts.contact_full_name}</p>
+                                            <p className="col-md-4 col-xs-6 ">Phone: {accounts.phone}</p>
+                                            <p className="col-md-4 col-xs-6">Email: {accounts.email}</p>
+                                            <p className="col-xs-12">Address: {accounts.address_full}</p>
                                         </div>}
                                     </div>
                                 </div>
