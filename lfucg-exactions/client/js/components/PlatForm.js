@@ -21,7 +21,6 @@ import {
 } from '../actions/formActions';
 
 import {
-    getMe,
     getSubdivisions,
     getSubdivisionID,
     getPlatID,
