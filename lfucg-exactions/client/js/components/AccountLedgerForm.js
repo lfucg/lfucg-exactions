@@ -18,7 +18,6 @@ import {
 } from '../actions/formActions';
 
 import {
-    getMe,
     getLots,
     getAccounts,
     getAgreements,
@@ -98,31 +97,15 @@ class AccountLedgerForm extends React.Component {
                                     <div className="row">
                                         <div className="col-sm-6 form-group">
                                             <label htmlFor="lot" className="form-label" id="lot" aria-label="Lot" aria-required="true">* Lot</label>
-                                            <select className="form-control" id="lot" onChange={formChange('lot')} >
-                                                {accountLedgers.lot ? (
-                                                    <option value="choose_source" aria-label="Selected Lot">
-                                                        {accountLedgers.lot.address_full}
-                                                    </option>
-                                                ) : (
-                                                    <option value="choose_source" aria-label="Select an Lot">
-                                                        Select a Lot
-                                                    </option>
-                                                )}
+                                            <select className="form-control" id="lot" onChange={formChange('lot')} value={activeForm.lot_show} >
+                                                <option value="start_lot">Lot</option>
                                                 {lotsList}
                                             </select>
                                         </div>
                                         <div className="col-sm-6 form-group">
                                             <label htmlFor="agreement" className="form-label" id="agreement" aria-label="Agreement" aria-required="true">* Agreement</label>
-                                            <select className="form-control" id="agreement" onChange={formChange('agreement')} >
-                                                {accountLedgers.agreement ? (
-                                                    <option value="choose_source" aria-label="Selected Agreement">
-                                                        {accountLedgers.agreement.resolution_number}
-                                                    </option>
-                                                ) : (
-                                                    <option value="choose_source" aria-label="Select an Agreement">
-                                                        Select an Agreement
-                                                    </option>
-                                                )}
+                                            <select className="form-control" id="agreement" onChange={formChange('agreement')} value={activeForm.agreement_show} >
+                                                <option value="start_agreement">Agreement Resolution</option>
                                                 {agreementsList}
                                             </select>
                                         </div>
@@ -130,31 +113,15 @@ class AccountLedgerForm extends React.Component {
                                     <div className="row">
                                         <div className="col-sm-6 form-group">
                                             <label htmlFor="account_from" className="form-label" id="account_from" aria-label="Account From" aria-required="true">* Account From</label>
-                                            <select className="form-control" id="account_from" onChange={formChange('account_from')} >
-                                                {accountLedgers.account_from ? (
-                                                    <option value="choose_account" aria-label="Selected Account From">
-                                                        {accountLedgers.account_from.account_name}
-                                                    </option>
-                                                ) : (
-                                                    <option value="choose_account" aria-label="Select an Account From">
-                                                        Select an Account From
-                                                    </option>
-                                                )}
+                                            <select className="form-control" id="account_from" onChange={formChange('account_from')} value={activeForm.account_from_show} >
+                                                <option value="start_account_from">Account From</option>
                                                 {accountsList}
                                             </select>
                                         </div>
                                         <div className="col-sm-6 form-group">
                                             <label htmlFor="account_to" className="form-label" id="account_to" aria-label="Account To" aria-required="true">* Account To</label>
-                                            <select className="form-control" id="account_to" onChange={formChange('account_to')} >
-                                                {accountLedgers.account_to ? (
-                                                    <option value="choose_account" aria-label="Selected Account To">
-                                                        {accountLedgers.account_to.account_name}
-                                                    </option>
-                                                ) : (
-                                                    <option value="choose_account" aria-label="Select an Account To">
-                                                        Select an Account To
-                                                    </option>
-                                                )}
+                                            <select className="form-control" id="account_to" onChange={formChange('account_to')} value={activeForm.account_to_show} >
+                                                <option value="start_account_to">Account To</option>
                                                 {accountsList}
                                             </select>
                                         </div>
@@ -167,12 +134,8 @@ class AccountLedgerForm extends React.Component {
                                         </div>
                                         <div className="col-sm-6 form-group">
                                             <label htmlFor="entry_type" className="form-label" id="entry_type" aria-label="Entry Type">Entry Type</label>
-                                            <select className="form-control" id="entry_type" onChange={formChange('entry_type')} >
-                                                {accountLedgers.entry_type ? (
-                                                    <option value="entry_type" aria-label={`Entry Type ${accountLedgers.entry_type_display}`}>{accountLedgers.entry_type_display}</option>
-                                                ) : (
-                                                    <option value="choose_entry_type" aria-label="Choose an Entry Type">Choose an Entry Type</option>
-                                                )}
+                                            <select className="form-control" id="entry_type" onChange={formChange('entry_type')} value={activeForm.entry_type_show} >
+                                                <option value="start_entry">Entry Type</option>
                                                 <option value={['NEW', 'New']}>New</option>
                                                 <option value={['SELL', 'Sell']}>Sell</option>
                                                 <option value={['TRANSFER', 'Transfer']}>Transfer</option>
@@ -242,29 +205,36 @@ function mapDispatchToProps(dispatch, params) {
             dispatch(getLots());
             dispatch(getAccounts());
             dispatch(getAgreements());
-            dispatch(getMe())
-            .then((data_me) => {
-                if (data_me.error) {
-                    hashHistory.push('login/');
-                }
-                if (selectedAccountLedger) {
-                    dispatch(getAccountLedgerID(selectedAccountLedger))
-                    .then((data_account_ledger) => {
-                        const update = {
-                            lot: data_account_ledger.response.lot ? data_account_ledger.response.lot.id : null,
-                            account_from: data_account_ledger.response.account_from ? data_account_ledger.response.account_from.id : null,
-                            account_to: data_account_ledger.response.account_to ? data_account_ledger.response.account_to.id : null,
-                            agreement: data_account_ledger.response.agreement ? data_account_ledger.response.agreement.id : null,
-                            entry_date: data_account_ledger.response.entry_date,
-                            entry_type: data_account_ledger.response.entry_type,
-                            entry_type_display: data_account_ledger.response.entry_type_display,
-                            non_sewer_credits: data_account_ledger.response.non_sewer_credits,
-                            sewer_credits: data_account_ledger.response.sewer_credits,
-                        };
-                        dispatch(formUpdate(update));
-                    });
-                }
-            });
+            if (selectedAccountLedger) {
+                dispatch(getAccountLedgerID(selectedAccountLedger))
+                .then((data_account_ledger) => {
+                    const update = {
+                        lot: data_account_ledger.response.lot ? data_account_ledger.response.lot.id : null,
+                        lot_show: data_account_ledger.response.lot ? `${data_account_ledger.response.lot.id},${data_account_ledger.response.lot.address_full}` : '',
+                        account_from: data_account_ledger.response.account_from ? data_account_ledger.response.account_from.id : null,
+                        account_from_show: data_account_ledger.response.account_from ? `${data_account_ledger.response.account_from.id},${data_account_ledger.response.account_from.account_name}` : '',
+                        account_to: data_account_ledger.response.account_to ? data_account_ledger.response.account_to.id : null,
+                        account_to_show: data_account_ledger.response.account_to ? `${data_account_ledger.response.account_to.id},${data_account_ledger.response.account_to.account_name}` : '',
+                        agreement: data_account_ledger.response.agreement ? data_account_ledger.response.agreement.id : null,
+                        agreement_show: data_account_ledger.response.agreement ? `${data_account_ledger.response.agreement.id},${data_account_ledger.response.agreement.resolution_number}` : '',
+                        entry_date: data_account_ledger.response.entry_date,
+                        entry_type: data_account_ledger.response.entry_type,
+                        entry_type_show: `${data_account_ledger.response.entry_type},${data_account_ledger.response.entry_type_display}`,
+                        non_sewer_credits: data_account_ledger.response.non_sewer_credits,
+                        sewer_credits: data_account_ledger.response.sewer_credits,
+                    };
+                    dispatch(formUpdate(update));
+                });
+            } else {
+                const initial_constants = {
+                    lot_show: '',
+                    account_from_show: '',
+                    account_to_show: '',
+                    agreement_show: '',
+                    entry_type_show: '',
+                };
+                dispatch(formUpdate(initial_constants));
+            }
         },
         formChange(field) {
             return (e, ...args) => {
@@ -274,10 +244,12 @@ function mapDispatchToProps(dispatch, params) {
                 const value_id = value.substring(0, comma_index);
                 const value_name = value.substring(comma_index + 1, value.length);
                 const field_name = `${[field]}_name`;
+                const field_show = `${[field]}_show`;
 
                 const update = {
                     [field]: value_id,
                     [field_name]: value_name,
+                    [field_show]: value,
                 };
                 dispatch(formUpdate(update));
             };

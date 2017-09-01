@@ -20,6 +20,11 @@ class AccountSerializer(serializers.ModelSerializer):
     plat_account = PlatSerializer(many=True, required=False)
     lot_account = LotSerializer(many=True, required=False)
 
+    address_state_display = serializers.SerializerMethodField(read_only=True)
+
+    def get_address_state_display(self, obj):
+        return obj.get_address_state_display()
+
     class Meta:
         model = Account
         fields = (
@@ -47,6 +52,8 @@ class AccountSerializer(serializers.ModelSerializer):
 
             'phone',
             'email',
+
+            'address_state_display',
         )
 
 class AccountField(serializers.Field):

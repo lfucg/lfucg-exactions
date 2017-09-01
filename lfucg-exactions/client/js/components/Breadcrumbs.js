@@ -15,7 +15,7 @@ class Breadcrumbs extends React.Component {
         return (
             <div className="breadcrumb">
                 <div className="container">
-                    <div className="col-xs-8 col-md-9">
+                    <div className={route.name && route.name.includes('Existing') ? 'col-xs-8 col-md-9' : 'col-xs-12'}>
                         <h4>
                             <Link to="/" role="link">Home</Link>
                             <span> / </span>
