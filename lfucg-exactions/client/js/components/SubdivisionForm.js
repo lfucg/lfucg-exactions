@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import {
-    Link,
     hashHistory,
 } from 'react-router';
 import PropTypes from 'prop-types';
@@ -18,7 +17,6 @@ import {
 } from '../actions/formActions';
 
 import {
-    getMe,
     getSubdivisionID,
     postSubdivision,
     putSubdivision,
@@ -109,22 +107,16 @@ function mapDispatchToProps(dispatch, params) {
     return {
         onComponentDidMount() {
             dispatch(formInit());
-            dispatch(getMe())
-            .then((data_me) => {
-                if (data_me.error) {
-                    hashHistory.push('login/');
-                }
-                if (selectedSubdivision) {
-                    dispatch(getSubdivisionID(selectedSubdivision))
-                    .then((data_subdivision) => {
-                        const update = {
-                            name: data_subdivision.response.name,
-                            gross_acreage: data_subdivision.response.cleaned_gross_acreage,
-                        };
-                        dispatch(formUpdate(update));
-                    });
-                }
-            });
+            if (selectedSubdivision) {
+                dispatch(getSubdivisionID(selectedSubdivision))
+                .then((data_subdivision) => {
+                    const update = {
+                        name: data_subdivision.response.name,
+                        gross_acreage: data_subdivision.response.cleaned_gross_acreage,
+                    };
+                    dispatch(formUpdate(update));
+                });
+            }
         },
         onSubmit(event) {
             event.preventDefault();

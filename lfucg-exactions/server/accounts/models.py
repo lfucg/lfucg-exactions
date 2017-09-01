@@ -195,12 +195,12 @@ class Project(models.Model):
             )
         ),
         ('Sewer', (
-                ('SEWER_TRANSMISSION', 'Sanitary sewer transmission'),
+                ('SEWER_TRANSMISSION', 'Sanitary Sewer Transmission'),
                 ('SEWER_OTHER', 'Other Sewer'),
             )
         ),
         ('Stormwater', (
-                ('STORMWATER', 'Stormwater'),
+                ('STORMWATER', 'Storm Water'),
                 ('LAND_AQUISITION', 'Land Aquisition'),
             )
         ),
@@ -214,7 +214,7 @@ class Project(models.Model):
     )
 
     STATUS_CHOICES = (
-        ('IN_PROGRESS', 'In progress'),
+        ('IN_PROGRESS', 'In Progress'),
         ('COMPLETE', 'Complete'),
         ('CLOSED', 'Closed Out'),
     )
