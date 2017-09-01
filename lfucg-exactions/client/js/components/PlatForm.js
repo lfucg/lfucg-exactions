@@ -21,7 +21,6 @@ import {
 } from '../actions/formActions';
 
 import {
-    getMe,
     getSubdivisions,
     getSubdivisionID,
     getPlatID,
@@ -49,67 +48,71 @@ class PlatForm extends React.Component {
             onPlatDues,
         } = this.props;
 
-        const subdivisionsList = subdivisions.length > 0 ? (map((single_subdivision) => {
-            return (
-                <option key={single_subdivision.id} value={[single_subdivision.id, single_subdivision.name]} >
-                    {single_subdivision.name}
-                </option>
-            );
-        })(subdivisions)) : null;
+        const subdivisionsList = subdivisions.length > 0 &&
+            (map((single_subdivision) => {
+                return (
+                    <option key={single_subdivision.id} value={[single_subdivision.id, single_subdivision.name]} >
+                        {single_subdivision.name}
+                    </option>
+                );
+            })(subdivisions));
 
-        const accountsList = accounts.length > 0 ? (map((single_account) => {
-            return (
-                <option key={single_account.id} value={[single_account.id, single_account.account_name]} >
-                    {single_account.account_name}
-                </option>
-            );
-        })(accounts)) : null;
+        const accountsList = accounts.length > 0 &&
+            (map((single_account) => {
+                return (
+                    <option key={single_account.id} value={[single_account.id, single_account.account_name]} >
+                        {single_account.account_name}
+                    </option>
+                );
+            })(accounts));
 
-        const platZonesList = plats.plat_zone ? (map((single_plat_zone) => {
-            return (
-                <div key={single_plat_zone.id} >
-                    <PlatZoneForm
-                      props={this.props}
-                      acre_id={`${single_plat_zone.id}_acres`}
-                      acre_value={single_plat_zone.cleaned_acres}
-                      zone_id={`${single_plat_zone.id}_zone`}
-                      zone_value={single_plat_zone.zone}
-                      plat_zone_id={`${single_plat_zone.id}_plat_zone`}
-                      plat_zone_value={single_plat_zone.id}
-                    />
-                </div>
-            );
-        })(plats.plat_zone)) : null;
-
-        const platZoneDuesList = plats.plat_zone ? (map((single_plat_zone) => {
-            return (
-                <div key={single_plat_zone.id} >
-                    <div className={plats.plat_zone.length < 1 ? 'col-xs-6' : 'col-xs-4'}>
-                        <PlatZoneDuesForm
+        const platZonesList = plats.plat_zone &&
+            (map((single_plat_zone) => {
+                return (
+                    <div key={single_plat_zone.id} >
+                        <PlatZoneForm
                           props={this.props}
-                          plat_zone_id={`${single_plat_zone.id}_plat_zone`}
-                          plat_zone_value={single_plat_zone.id}
-                          zone_id={`${single_plat_zone.id}_zone`}
-                          zone_value={single_plat_zone.zone}
                           acre_id={`${single_plat_zone.id}_acres`}
                           acre_value={single_plat_zone.cleaned_acres}
-                          dues_roads_id={`${single_plat_zone.id}_dues_roads`}
-                          dues_roads_value={single_plat_zone.dues_roads}
-                          dues_open_spaces_id={`${single_plat_zone.id}_dues_open_spaces`}
-                          dues_open_spaces_value={single_plat_zone.dues_open_spaces}
-                          dues_sewer_cap_id={`${single_plat_zone.id}_dues_sewer_cap`}
-                          dues_sewer_cap_value={single_plat_zone.dues_sewer_cap}
-                          dues_sewer_trans_id={`${single_plat_zone.id}_dues_sewer_trans`}
-                          dues_sewer_trans_value={single_plat_zone.dues_sewer_trans}
-                          dues_parks_id={`${single_plat_zone.id}_dues_parks`}
-                          dues_parks_value={single_plat_zone.dues_parks}
-                          dues_storm_water_id={`${single_plat_zone.id}_dues_storm_water`}
-                          dues_storm_water_value={single_plat_zone.dues_storm_water}
+                          zone_id={`${single_plat_zone.id}_zone`}
+                          zone_value={single_plat_zone.zone}
+                          plat_zone_id={`${single_plat_zone.id}_plat_zone`}
+                          plat_zone_value={single_plat_zone.id}
                         />
                     </div>
-                </div>
-            );
-        })(plats.plat_zone)) : null;
+                );
+            })(plats.plat_zone));
+
+        const platZoneDuesList = plats.plat_zone &&
+            (map((single_plat_zone) => {
+                return (
+                    <div key={single_plat_zone.id} >
+                        <div className={plats.plat_zone.length < 1 ? 'col-xs-6' : 'col-xs-4'}>
+                            <PlatZoneDuesForm
+                              props={this.props}
+                              plat_zone_id={`${single_plat_zone.id}_plat_zone`}
+                              plat_zone_value={single_plat_zone.id}
+                              zone_id={`${single_plat_zone.id}_zone`}
+                              zone_value={single_plat_zone.zone}
+                              acre_id={`${single_plat_zone.id}_acres`}
+                              acre_value={single_plat_zone.cleaned_acres}
+                              dues_roads_id={`${single_plat_zone.id}_dues_roads`}
+                              dues_roads_value={single_plat_zone.dues_roads}
+                              dues_open_spaces_id={`${single_plat_zone.id}_dues_open_spaces`}
+                              dues_open_spaces_value={single_plat_zone.dues_open_spaces}
+                              dues_sewer_cap_id={`${single_plat_zone.id}_dues_sewer_cap`}
+                              dues_sewer_cap_value={single_plat_zone.dues_sewer_cap}
+                              dues_sewer_trans_id={`${single_plat_zone.id}_dues_sewer_trans`}
+                              dues_sewer_trans_value={single_plat_zone.dues_sewer_trans}
+                              dues_parks_id={`${single_plat_zone.id}_dues_parks`}
+                              dues_parks_value={single_plat_zone.dues_parks}
+                              dues_storm_water_id={`${single_plat_zone.id}_dues_storm_water`}
+                              dues_storm_water_value={single_plat_zone.dues_storm_water}
+                            />
+                        </div>
+                    </div>
+                );
+            })(plats.plat_zone));
 
         const submitEnabled =
             activeForm.total_acreage &&
@@ -168,16 +171,8 @@ class PlatForm extends React.Component {
                                             <div className="row">
                                                 <div className="col-sm-6 form-group">
                                                     <label htmlFor="account" className="form-label" id="account" aria-label="Developer Account">Developer Account</label>
-                                                    <select className="form-control" id="account" onChange={formChange('account')} >
-                                                        {activeForm.account_name ? (
-                                                            <option value="choose_account" aria-label="Selected Developer Account">
-                                                                {activeForm.account_name}
-                                                            </option>
-                                                        ) : (
-                                                            <option value="choose_account" aria-label="Select a Developer Account">
-                                                                Select a Developer Account
-                                                            </option>
-                                                        )}
+                                                    <select className="form-control" id="account" onChange={formChange('account')} value={activeForm.account_show} >
+                                                        <option value="start_account">Developer Account</option>
                                                         {accountsList}
                                                     </select>
                                                 </div>
@@ -188,16 +183,8 @@ class PlatForm extends React.Component {
                                             <div className="row">
                                                 <div className="col-sm-6 form-group">
                                                     <label htmlFor="subdivision" className="form-label" id="subdivision" aria-label="Subdivision" >Subdivision</label>
-                                                    <select className="form-control" id="subdivision" onChange={formChange('subdivision')} >
-                                                        {activeForm.subdivision ? (
-                                                            <option value="choose_subdivision" aria-label="Selected Subdivision">
-                                                                {activeForm.subdivision_name}
-                                                            </option>
-                                                        ) : (
-                                                            <option value="choose_subdivision" aria-label="Select a Subdivision">
-                                                                Select a Subdivision
-                                                            </option>
-                                                        )}
+                                                    <select className="form-control" id="subdivision" onChange={formChange('subdivision')} value={activeForm.subdivision_show} >
+                                                        <option value="start_subdivision">Subdivision</option>
                                                         {subdivisionsList}
                                                     </select>
                                                 </div>
@@ -220,12 +207,8 @@ class PlatForm extends React.Component {
                                             <div className="row">
                                                 <div className="col-sm-6 form-group">
                                                     <label htmlFor="expansion_area" className="form-label" id="expansion_area" aria-label="Expansion Area" aria-required="true">* Expansion Area</label>
-                                                    <select className="form-control" id="expansion_area" onChange={formChange('expansion_area')} >
-                                                        {plats.expansion_area ? (
-                                                            <option value="expansion_area" aria-label={`Expansion Area ${plats.expansion_area}`}>{plats.expansion_area}</option>
-                                                        ) : (
-                                                            <option value="choose_expansion_area" aria-label="Choose an Expansion Area">Choose an Expansion Area</option>
-                                                        )}
+                                                    <select className="form-control" id="expansion_area" onChange={formChange('expansion_area')} value={activeForm.expansion_area_show} >
+                                                        <option value="start_expansion">Expansion Area</option>
                                                         <option value={['EA-1', 'EA-1']}>EA-1</option>
                                                         <option value={['EA-2A', 'EA-2A']}>EA-2A</option>
                                                         <option value={['EA-2B', 'EA-2B']}>EA-2B</option>
@@ -269,12 +252,8 @@ class PlatForm extends React.Component {
                                             <div className="row">
                                                 <div className="col-sm-6 form-group">
                                                     <label htmlFor="plat_type" className="form-label" id="plat_type" aria-label="Plat Type" aria-required="true">* Plat Type</label>
-                                                    <select className="form-control" id="plat_type" onChange={formChange('plat_type')} >
-                                                        {plats.plat_type_display ? (
-                                                            <option value="plat_type" aria-label={`Plat Type ${plats.plat_type_display}`}>{plats.plat_type_display}</option>
-                                                        ) : (
-                                                            <option value="choose_plat_type" aria-label="Choose a Plat Type">Choose an Plat Type</option>
-                                                        )}
+                                                    <select className="form-control" id="plat_type" onChange={formChange('plat_type')} value={activeForm.plat_type_show} >
+                                                        <option value="start_plat_type">Plat Type</option>
                                                         <option value={['PLAT', 'Final Record Plat']}>Final Record Plat</option>
                                                         <option value={['DEVELOPMENT_PLAN', 'Final Development Plan']}>Final Development Plan</option>
                                                     </select>
@@ -546,75 +525,81 @@ function mapDispatchToProps(dispatch, params) {
             dispatch(formUpdate(else_update));
             dispatch(getSubdivisions());
             dispatch(getAccounts());
-            dispatch(getMe())
-            .then((data_me) => {
-                if (data_me.error) {
-                    hashHistory.push('login/');
-                }
-                if (selectedPlat) {
-                    dispatch(getPlatID(selectedPlat))
-                    .then((data_plat) => {
-                        if (data_plat.response.subdivision) {
-                            dispatch(getSubdivisionID(data_plat.response.subdivision.id))
-                            .then((data_sub_id) => {
-                                const sub_update = {
-                                    subdivision: data_sub_id.response.id,
-                                    subdivision_name: data_sub_id.response.name,
-                                };
-                                dispatch(formUpdate(sub_update));
-                            });
-                        }
-                        if (data_plat.response.account) {
-                            dispatch(getAccountID(data_plat.response.account))
-                            .then((data_account) => {
-                                const update_account = {
-                                    account: data_account.response.id,
-                                    account_name: data_account.response.account_name,
-                                };
-                                dispatch(formUpdate(update_account));
-                            });
-                        }
-                        if (data_plat.response.plat_zone && data_plat.response.plat_zone.length === 0) {
-                            const zone_update = {
-                                acres: data_plat.response.cleaned_total_acreage,
+            if (selectedPlat) {
+                dispatch(getPlatID(selectedPlat))
+                .then((data_plat) => {
+                    if (data_plat.response.subdivision) {
+                        dispatch(getSubdivisionID(data_plat.response.subdivision.id))
+                        .then((data_sub_id) => {
+                            const sub_update = {
+                                subdivision: data_sub_id.response.id,
+                                subdivision_show: `${data_sub_id.response.id},${data_sub_id.response.name}`,
                             };
-                            dispatch(formUpdate(zone_update));
-                        }
-                        if (data_plat.response.plat_zone && data_plat.response.plat_zone.length > 0) {
-                            const zones_exist_update = {
-                                zone_section: true,
+                            dispatch(formUpdate(sub_update));
+                            dispatch(getSubdivisions());
+                        });
+                    }
+                    if (data_plat.response.account) {
+                        dispatch(getAccountID(data_plat.response.account))
+                        .then((data_account) => {
+                            const update_account = {
+                                account: data_account.response.id,
+                                account_show: `${data_account.response.id},${data_account.response.account_name}`,
                             };
-                            dispatch(formUpdate(zones_exist_update));
-                        }
-                        const update = {
-                            add_another_plat_zone: false,
-                            block: data_plat.response.block,
-                            buildable_lots: data_plat.response.buildable_lots,
-                            cabinet: data_plat.response.cabinet,
-                            calculation_note: data_plat.response.calculation_note,
-                            date_recorded: data_plat.response.date_recorded,
-                            expansion_area: data_plat.response.expansion_area,
-                            first_section: true,
-                            latitude: data_plat.response.latitude,
-                            longitude: data_plat.response.longitude,
-                            name: data_plat.response.name,
-                            non_buildable_lots: data_plat.response.non_buildable_lots,
-                            non_sewer_due: data_plat.response.non_sewer_due,
-                            plat: data_plat.response.id,
-                            plat_name: data_plat.response.name,
-                            plat_type: data_plat.response.plat_type,
-                            plat_type_display: data_plat.response.plat_type_display,
-                            section: data_plat.response.section,
-                            sewer_due: data_plat.response.sewer_due,
-                            slide: data_plat.response.slide,
-                            subdivision: data_plat.response.subdivision,
-                            total_acreage: data_plat.response.cleaned_total_acreage,
-                            unit: data_plat.response.unit,
+                            dispatch(formUpdate(update_account));
+                            dispatch(getAccounts());
+                        });
+                    }
+                    if (data_plat.response.plat_zone && data_plat.response.plat_zone.length === 0) {
+                        const zone_update = {
+                            acres: data_plat.response.cleaned_total_acreage,
                         };
-                        dispatch(formUpdate(update));
-                    });
-                }
-            });
+                        dispatch(formUpdate(zone_update));
+                    }
+                    if (data_plat.response.plat_zone && data_plat.response.plat_zone.length > 0) {
+                        const zones_exist_update = {
+                            zone_section: true,
+                        };
+                        dispatch(formUpdate(zones_exist_update));
+                    }
+                    const update = {
+                        add_another_plat_zone: false,
+                        block: data_plat.response.block,
+                        buildable_lots: data_plat.response.buildable_lots,
+                        cabinet: data_plat.response.cabinet,
+                        calculation_note: data_plat.response.calculation_note,
+                        date_recorded: data_plat.response.date_recorded,
+                        expansion_area: data_plat.response.expansion_area,
+                        expansion_area_show: `${data_plat.response.expansion_area},${data_plat.response.expansion_area}`,
+                        first_section: true,
+                        latitude: data_plat.response.latitude,
+                        longitude: data_plat.response.longitude,
+                        name: data_plat.response.name,
+                        non_buildable_lots: data_plat.response.non_buildable_lots,
+                        non_sewer_due: data_plat.response.non_sewer_due,
+                        plat: data_plat.response.id,
+                        plat_show: `${data_plat.response.id},${data_plat.response.name}`,
+                        plat_name: data_plat.response.name,
+                        plat_type: data_plat.response.plat_type,
+                        plat_type_show: `${data_plat.response.plat_type},${data_plat.response.plat_type_display}`,
+                        section: data_plat.response.section,
+                        sewer_due: data_plat.response.sewer_due,
+                        slide: data_plat.response.slide,
+                        subdivision: data_plat.response.subdivision,
+                        total_acreage: data_plat.response.cleaned_total_acreage,
+                        unit: data_plat.response.unit,
+                    };
+                    dispatch(formUpdate(update));
+                });
+            } else {
+                const initial_constants = {
+                    subdivision_show: '',
+                    account_show: '',
+                    expansion_area_show: '',
+                    plat_type_show: '',
+                };
+                dispatch(formUpdate(initial_constants));
+            }
         },
         formChange(field) {
             return (e, ...args) => {
@@ -624,10 +609,12 @@ function mapDispatchToProps(dispatch, params) {
                 const value_id = value.substring(0, comma_index);
                 const value_name = value.substring(comma_index + 1, value.length);
                 const field_name = `${[field]}_name`;
+                const field_show = `${[field]}_show`;
 
                 const update = {
                     [field]: value_id,
                     [field_name]: value_name,
+                    [field_show]: value,
                 };
                 dispatch(formUpdate(update));
             };
@@ -636,9 +623,10 @@ function mapDispatchToProps(dispatch, params) {
             event.preventDefault();
             if (selectedPlat) {
                 dispatch(putPlat(selectedPlat))
-                .then(() => {
+                .then((data_plat_put) => {
                     const put_update = {
                         first_section: true,
+                        plat_show: `${data_plat_put.response.id},${data_plat_put.response.name}`,
                     };
                     dispatch(formUpdate(put_update));
                 });
@@ -650,6 +638,7 @@ function mapDispatchToProps(dispatch, params) {
                         plat_name: data_post.response.name,
                         acres: data_post.response.total_acreage,
                         first_section: true,
+                        plat_show: `${data_post.response.id},${data_post.response.name}`,
                     };
                     dispatch(formUpdate(zone_update));
                     hashHistory.push(`plat/form/${data_post.response.id}`);

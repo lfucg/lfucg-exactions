@@ -20,7 +20,6 @@ import {
 } from '../actions/formActions';
 
 import {
-    getMe,
     getLotID,
     postLot,
     putLot,
@@ -46,21 +45,23 @@ class LotForm extends React.Component {
             onLotDues,
         } = this.props;
 
-        const platsList = plats.length > 0 ? (map((single_plat) => {
-            return (
-                <option key={single_plat.id} value={[single_plat.id, single_plat.name]} >
-                    {single_plat.name}
-                </option>
-            );
-        })(plats)) : null;
+        const platsList = plats && plats.length > 0 &&
+            (map((single_plat) => {
+                return (
+                    <option key={single_plat.id} value={[single_plat.id, single_plat.name]} >
+                        {single_plat.name}
+                    </option>
+                );
+            })(plats));
 
-        const accountsList = accounts.length > 0 ? (map((single_account) => {
-            return (
-                <option key={single_account.id} value={[single_account.id, single_account.account_name]} >
-                    {single_account.account_name}
-                </option>
-            );
-        })(accounts)) : null;
+        const accountsList = accounts && accounts.length > 0 &&
+            (map((single_account) => {
+                return (
+                    <option key={single_account.id} value={[single_account.id, single_account.account_name]} >
+                        {single_account.account_name}
+                    </option>
+                );
+            })(accounts));
 
         const ownerDisabled =
             lots &&
@@ -124,16 +125,8 @@ class LotForm extends React.Component {
                                             <div className="row">
                                                 <div className="col-sm-6 form-group">
                                                     <label htmlFor="account" className="form-label" id="account">Developer Account</label>
-                                                    <select className="form-control" id="account" onChange={formChange('account')} >
-                                                        {activeForm.account_name ? (
-                                                            <option value="choose_account" aria-label="Selected Developer Account">
-                                                                {activeForm.account_name}
-                                                            </option>
-                                                        ) : (
-                                                            <option value="choose_account" aria-label="Select a Developer Account">
-                                                                Select a Developer Account
-                                                            </option>
-                                                        )}
+                                                    <select className="form-control" id="account" onChange={formChange('account')} value={activeForm.account_show} >
+                                                        <option value="start_account">Developer Account</option>
                                                         {accountsList}
                                                     </select>
                                                 </div>
@@ -184,12 +177,8 @@ class LotForm extends React.Component {
                                                 </div>
                                                 <div className="col-sm-3 form-group">
                                                     <label htmlFor="address_zip" className="form-label" id="address_zip">Zipcode</label>
-                                                    <select className="form-control" id="address_zip" onChange={formChange('address_zip')} >
-                                                        {lots.address_zip ? (
-                                                            <option value="address_zip" aria-label={`Zipcode ${lots.address_zip}`}>{lots.address_zip}</option>
-                                                        ) : (
-                                                            <option value="choose_zip" aria-label="Zipcode">Zipcode</option>
-                                                        )}
+                                                    <select className="form-control" id="address_zip" onChange={formChange('address_zip')} value={activeForm.address_zip_show} >
+                                                        <option value="start_zip">Zipcode</option>
                                                         <option value={['40505', '40505']}>40505</option>
                                                         <option value={['40509', '40509']}>40509</option>
                                                         <option value={['40511', '40511']}>40511</option>
@@ -205,16 +194,8 @@ class LotForm extends React.Component {
                                             <div className="row">
                                                 <div className="col-sm-6 form-group">
                                                     <label htmlFor="plat" className="form-label" id="plat" aria-required="true">* Plat</label>
-                                                    <select className="form-control" id="plat" onChange={formChange('plat')} >
-                                                        {lots.plat && lots.plat.id ? (
-                                                            <option value="choose_plat" aria-label={lots.plat.name}>
-                                                                {lots.plat.name}
-                                                            </option>
-                                                        ) : (
-                                                            <option value="choose_plat" aria-label="Select a Plat">
-                                                                Select a Plat
-                                                            </option>
-                                                        )}
+                                                    <select className="form-control" id="plat" onChange={formChange('plat')} value={activeForm.plat_show} >
+                                                        <option value="start_plat">Plat</option>
                                                         {platsList}
                                                     </select>
                                                 </div>
@@ -438,79 +419,85 @@ function mapDispatchToProps(dispatch, params) {
             dispatch(formInit());
             dispatch(getPlats());
             dispatch(getAccounts());
-            dispatch(getMe())
-            .then((data_me) => {
-                if (data_me.error) {
-                    hashHistory.push('login/');
-                }
-                if (selectedLot) {
-                    dispatch(getLotID(selectedLot))
-                    .then((data_lot) => {
-                        const update = {
-                            plat: data_lot.response.plat ? data_lot.response.plat.id : null,
-                            address_number: data_lot.response.address_number,
-                            address_street: data_lot.response.address_street,
-                            address_direction: data_lot.response.address_direction,
-                            address_unit: data_lot.response.address_unit,
-                            address_suffix: data_lot.response.address_suffix,
-                            address_city: data_lot.response.address_city,
-                            address_state: data_lot.response.address_state,
-                            address_zip: data_lot.response.address_zip,
-                            lot_number: data_lot.response.lot_number,
-                            parcel_id: data_lot.response.parcel_id,
-                            permit_id: data_lot.response.permit_id,
-                            latitude: data_lot.response.latitude,
-                            longitude: data_lot.response.longitude,
-                            dues_roads_dev: data_lot.response.dues_roads_dev,
-                            dues_roads_own: data_lot.response.dues_roads_own,
-                            dues_sewer_trans_dev: data_lot.response.dues_sewer_trans_dev,
-                            dues_sewer_trans_own: data_lot.response.dues_sewer_trans_own,
-                            dues_sewer_cap_dev: data_lot.response.dues_sewer_cap_dev,
-                            dues_sewer_cap_own: data_lot.response.dues_sewer_cap_own,
-                            dues_parks_dev: data_lot.response.dues_parks_dev,
-                            dues_parks_own: data_lot.response.dues_parks_own,
-                            dues_storm_dev: data_lot.response.dues_storm_dev,
-                            dues_storm_own: data_lot.response.dues_storm_own,
-                            dues_open_space_dev: data_lot.response.dues_open_space_dev,
-                            dues_open_space_own: data_lot.response.dues_open_space_own,
-                            first_section: true,
-                        };
-                        dispatch(formUpdate(update));
-                        if (data_lot.response.account) {
-                            dispatch(getAccountID(data_lot.response.account))
-                            .then((data_account_id) => {
-                                const update_lot_account = {
-                                    account_name: data_account_id.response.account_name,
-                                };
-                                dispatch(formUpdate(update_lot_account));
-                            });
-                        } else if (data_lot.response.plat && data_lot.response.plat.account) {
-                            dispatch(getAccountID(data_lot.response.plat.account))
-                            .then((data_plat_account_id) => {
-                                const update_account = {
-                                    account_name: data_plat_account_id.response.account_name,
-                                };
-                                dispatch(formUpdate(update_account));
-                            });
-                        }
-                    });
-                } else if (plat_start) {
-                    dispatch(getPlatID(plat_start))
-                    .then((data_plat_start) => {
-                        const plat_update = {
-                            plat: data_plat_start.response.id,
-                            plat_name: data_plat_start.response.name,
-                            first_section: false,
-                        };
-                        dispatch(formUpdate(plat_update));
-                    });
-                } else {
-                    const else_update = {
-                        first_section: false,
+            if (selectedLot) {
+                dispatch(getLotID(selectedLot))
+                .then((data_lot) => {
+                    const update = {
+                        plat: data_lot.response.plat ? data_lot.response.plat.id : null,
+                        plat_show: data_lot.response.plat ? `${data_lot.response.plat.id},${data_lot.response.plat.name}` : '',
+                        address_number: data_lot.response.address_number,
+                        address_street: data_lot.response.address_street,
+                        address_direction: data_lot.response.address_direction,
+                        address_unit: data_lot.response.address_unit,
+                        address_suffix: data_lot.response.address_suffix,
+                        address_city: data_lot.response.address_city,
+                        address_state: data_lot.response.address_state,
+                        address_zip: data_lot.response.address_zip,
+                        address_zip_show: `${data_lot.response.address_zip},${data_lot.response.address_zip}`,
+                        lot_number: data_lot.response.lot_number,
+                        parcel_id: data_lot.response.parcel_id,
+                        permit_id: data_lot.response.permit_id,
+                        latitude: data_lot.response.latitude,
+                        longitude: data_lot.response.longitude,
+                        dues_roads_dev: data_lot.response.dues_roads_dev,
+                        dues_roads_own: data_lot.response.dues_roads_own,
+                        dues_sewer_trans_dev: data_lot.response.dues_sewer_trans_dev,
+                        dues_sewer_trans_own: data_lot.response.dues_sewer_trans_own,
+                        dues_sewer_cap_dev: data_lot.response.dues_sewer_cap_dev,
+                        dues_sewer_cap_own: data_lot.response.dues_sewer_cap_own,
+                        dues_parks_dev: data_lot.response.dues_parks_dev,
+                        dues_parks_own: data_lot.response.dues_parks_own,
+                        dues_storm_dev: data_lot.response.dues_storm_dev,
+                        dues_storm_own: data_lot.response.dues_storm_own,
+                        dues_open_space_dev: data_lot.response.dues_open_space_dev,
+                        dues_open_space_own: data_lot.response.dues_open_space_own,
+                        first_section: true,
                     };
-                    dispatch(formUpdate(else_update));
-                }
-            });
+                    dispatch(formUpdate(update));
+                    if (data_lot.response.account) {
+                        dispatch(getAccountID(data_lot.response.account))
+                        .then((data_account_id) => {
+                            const update_lot_account = {
+                                account: data_account_id.response.id,
+                                account_show: `${data_account_id.response.id},${data_account_id.response.account_name}`,
+                            };
+                            dispatch(formUpdate(update_lot_account));
+                            dispatch(getAccounts());
+                        });
+                    } else if (data_lot.response.plat && data_lot.response.plat.account) {
+                        dispatch(getAccountID(data_lot.response.plat.account))
+                        .then((data_plat_account_id) => {
+                            const update_account = {
+                                account: data_plat_account_id.response.id,
+                                account_show: `${data_plat_account_id.response.id},${data_plat_account_id.response.account_name}`,
+                            };
+                            dispatch(formUpdate(update_account));
+                            dispatch(getAccounts());
+                        });
+                    }
+                });
+            } else if (plat_start) {
+                dispatch(getPlatID(plat_start))
+                .then((data_plat_start) => {
+                    const plat_update = {
+                        plat: data_plat_start.response.id,
+                        plat_name: data_plat_start.response.name,
+                        first_section: false,
+                        account_show: '',
+                        plat_show: data_plat_start.response.plat ? `${data_plat_start.response.plat.id},${data_plat_start.response.plat.name}` : '',
+                        address_zip_show: '',
+                    };
+                    dispatch(formUpdate(plat_update));
+                });
+            } else {
+                const else_update = {
+                    first_section: false,
+                    account_show: '',
+                    plat_show: '',
+                    address_zip_show: '',
+                };
+                dispatch(formUpdate(else_update));
+            }
         },
         formChange(field) {
             return (e, ...args) => {
@@ -520,10 +507,12 @@ function mapDispatchToProps(dispatch, params) {
                 const value_id = value.substring(0, comma_index);
                 const value_name = value.substring(comma_index + 1, value.length);
                 const field_name = `${[field]}_name`;
+                const field_show = `${[field]}_show`;
 
                 const update = {
                     [field]: value_id,
                     [field_name]: value_name,
+                    [field_show]: value,
                 };
                 dispatch(formUpdate(update));
             };
