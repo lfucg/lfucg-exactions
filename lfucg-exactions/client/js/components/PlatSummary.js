@@ -318,6 +318,12 @@ class PlatSummary extends React.Component {
                                                     </div>
                                                 </div>
                                             </div>
+                                            <div className="col-xs-12">
+                                                <h4>Calculation Notes:</h4>
+                                                <div className="col-xs-12">
+                                                    <p>{plats.calculation_note}</p>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
