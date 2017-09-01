@@ -13,7 +13,10 @@ const tokenReducer = (state = {}, action) => {
         try {
             localStorage.setItem('Token', action.response.key);
         } catch (e) {
-            document.cookie = `Token=${action.response.key}`;
+            const date = new Date();
+            date.setTime(date.getTime() + (3 * 24 * 60 * 60 * 1000));
+            const date_expires = date.toGMTString();
+            document.cookie = `Token=${action.response.key}; expires=${date_expires}`;
         }
         global.Authorization = action.response.key;
         return action.response;
