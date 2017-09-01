@@ -2,6 +2,7 @@ from rest_framework import serializers
 
 from django.contrib.auth.models import User
 from .models import *
+from .utils import calculate_account_balance
 
 from plats.models import Plat, Lot
 from plats.serializers import PlatSerializer, LotSerializer
@@ -21,9 +22,13 @@ class AccountSerializer(serializers.ModelSerializer):
     lot_account = LotSerializer(many=True, required=False)
 
     address_state_display = serializers.SerializerMethodField(read_only=True)
+    balance = serializers.SerializerMethodField(read_only=True)
 
     def get_address_state_display(self, obj):
         return obj.get_address_state_display()
+
+    def get_balance(self, obj):
+        return calculate_account_balance(obj.id)
 
     class Meta:
         model = Account
@@ -54,6 +59,7 @@ class AccountSerializer(serializers.ModelSerializer):
             'email',
 
             'address_state_display',
+            'balance',
         )
 
 class AccountField(serializers.Field):
