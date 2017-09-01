@@ -11,7 +11,6 @@ class Breadcrumbs extends React.Component {
         } = this.props;
 
         const route_permission = `currentUser.permissions.${route.name}`;
-        console.log('ROUTE PERMISSION', route_permission);
 
         return (
             <div className="breadcrumb">
