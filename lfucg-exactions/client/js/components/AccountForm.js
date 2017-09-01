@@ -18,7 +18,6 @@ import {
 } from '../actions/formActions';
 
 import {
-    getMe,
     getAccountID,
     postAccount,
     putAccount,
@@ -104,7 +103,7 @@ class AccountForm extends React.Component {
                                         </div>
                                         <div className="col-sm-4 form-group">
                                             <label htmlFor="address_state" className="form-label" id="address_state" aria-label="State" aria-required="true">* State</label>
-                                            <select className="form-control" onChange={formChange('address_state')} >
+                                            <select className="form-control" onChange={formChange('address_state')} value={activeForm.address_state_show} >
                                                 <option value="start_state">State</option>
                                                 <option value={['AK', 'Alaska']}>Alaska</option>
                                                 <option value={['AL', 'Alabama']}>Alabama</option>
@@ -225,43 +224,44 @@ function mapDispatchToProps(dispatch, params) {
     return {
         onComponentDidMount() {
             dispatch(formInit());
-            dispatch(getMe())
-            .then((data_me) => {
-                if (data_me.error) {
-                    hashHistory.push('login/');
-                }
-                if (selectedAccount) {
-                    dispatch(getAccountID(selectedAccount))
-                    .then((data_account) => {
-                        const update = {
-                            account_name: data_account.response.account_name,
-                            contact_first_name: data_account.response.contact_first_name,
-                            contact_last_name: data_account.response.contact_last_name,
-                            address_number: data_account.response.address_number,
-                            address_street: data_account.response.address_street,
-                            address_city: data_account.response.address_city,
-                            address_state: data_account.response.address_state,
-                            address_zip: data_account.response.address_zip,
-                            phone: data_account.response.phone,
-                            email: data_account.response.email,
-                        };
-                        dispatch(formUpdate(update));
-                    });
-                }
-            });
+            if (selectedAccount) {
+                dispatch(getAccountID(selectedAccount))
+                .then((data_account) => {
+                    const update = {
+                        account_name: data_account.response.account_name,
+                        contact_first_name: data_account.response.contact_first_name,
+                        contact_last_name: data_account.response.contact_last_name,
+                        address_number: data_account.response.address_number,
+                        address_street: data_account.response.address_street,
+                        address_city: data_account.response.address_city,
+                        address_state: data_account.response.address_state,
+                        address_state_show: `${data_account.response.address_state},${data_account.response.address_state_display}`,
+                        address_zip: data_account.response.address_zip,
+                        phone: data_account.response.phone,
+                        email: data_account.response.email,
+                    };
+                    dispatch(formUpdate(update));
+                });
+            } else {
+                const initial_constants = {
+                    address_state_show: '',
+                };
+                dispatch(formUpdate(initial_constants));
+            }
         },
         formChange(field) {
             return (e, ...args) => {
                 const value = typeof e.target.value !== 'undefined' ? e.target.value : args[1];
-
                 const comma_index = value.indexOf(',');
                 const value_id = value.substring(0, comma_index);
                 const value_name = value.substring(comma_index + 1, value.length);
                 const field_name = `${[field]}_name`;
+                const field_show = `${[field]}_show`;
 
                 const update = {
                     [field]: value_id,
                     [field_name]: value_name,
+                    [field_show]: value,
                 };
                 dispatch(formUpdate(update));
             };
