@@ -22,13 +22,23 @@ class AccountSerializer(serializers.ModelSerializer):
     lot_account = LotSerializer(many=True, required=False)
 
     address_state_display = serializers.SerializerMethodField(read_only=True)
+
     balance = serializers.SerializerMethodField(read_only=True)
+    credit_availability = serializers.SerializerMethodField(read_only=True)
 
     def get_address_state_display(self, obj):
         return obj.get_address_state_display()
 
     def get_balance(self, obj):
-        return calculate_account_balance(obj.id)
+        calculated_balance = calculate_account_balance(obj.id)
+        return '${:,.2f}'.format(calculated_balance)
+
+    def get_credit_availability(self, obj):
+        calculated_balance = calculate_account_balance(obj.id)
+        if calculated_balance > 0:
+            return 'Credit Available'
+        else:
+            return 'No Credit Available'
 
     class Meta:
         model = Account
@@ -59,7 +69,9 @@ class AccountSerializer(serializers.ModelSerializer):
             'email',
 
             'address_state_display',
+
             'balance',
+            'credit_availability',
         )
 
 class AccountField(serializers.Field):
