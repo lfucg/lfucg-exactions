@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
 
 from .models import *
+from .utils import created_by_modified_by
 from plats.models import Plat, Lot
 
 class UserNameField(serializers.Field):
@@ -66,6 +67,9 @@ class RateSerializer(serializers.ModelSerializer):
             'rate',
         )
 
+    def save(self, **kwargs):
+        created_by_modified_by(self, **kwargs)
+
 class RateTableSerializer(serializers.ModelSerializer):
     rates = RateSerializer(many=True, read_only=True)
 
@@ -83,3 +87,6 @@ class RateTableSerializer(serializers.ModelSerializer):
             'resolution_number',
             'rates',
         )
+
+    def save(self, **kwargs):
+        created_by_modified_by(self, **kwargs)
