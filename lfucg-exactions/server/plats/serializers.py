@@ -20,13 +20,22 @@ class SubdivisionSerializer(serializers.ModelSerializer):
             'is_active',
             'date_created',
             'date_modified',
-            'created_by',
-            'modified_by',   
 
             'name',
             'gross_acreage',
             'cleaned_gross_acreage',
         )
+
+    def save(self, **kwargs):
+        request = self.context.get('request', None)
+
+        if request is not None:
+            self.validated_data['modified_by'] = request.user
+
+            if self.instance is None:
+                self.validated_data['created_by'] = request.user
+
+        subdivision = super(self.__class__, self).save(**kwargs)
 
 class CalculationWorksheetSerializer(serializers.ModelSerializer):
     class Meta:

@@ -239,18 +239,12 @@ export function postSubdivision() {
         body: (getState) => {
             const {
                 activeForm,
-                currentUser,
             } = getState();
             const {
                 name,
                 gross_acreage,
             } = activeForm;
-            const {
-                id,
-            } = currentUser;
             return {
-                created_by: id,
-                modified_by: id,
                 name,
                 gross_acreage,
             };
@@ -267,18 +261,12 @@ export function putSubdivision(selectedSubdivision) {
         body: (getState) => {
             const {
                 activeForm,
-                currentUser,
             } = getState();
             const {
                 name,
                 gross_acreage,
             } = activeForm;
-            const {
-                id,
-            } = currentUser;
             return {
-                created_by: id,
-                modified_by: id,
                 name,
                 gross_acreage,
             };
