@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from .models import *
+from .utils import created_by_modified_by
 from notes.models import Note
 from notes.serializers import NoteSerializer
 
@@ -27,15 +28,7 @@ class SubdivisionSerializer(serializers.ModelSerializer):
         )
 
     def save(self, **kwargs):
-        request = self.context.get('request', None)
-
-        if request is not None:
-            self.validated_data['modified_by'] = request.user
-
-            if self.instance is None:
-                self.validated_data['created_by'] = request.user
-
-        subdivision = super(self.__class__, self).save(**kwargs)
+        created_by_modified_by(self, **kwargs)
 
 class CalculationWorksheetSerializer(serializers.ModelSerializer):
     class Meta:
@@ -77,6 +70,9 @@ class PlatZoneSerializer(serializers.ModelSerializer):
 
             'cleaned_acres',
         )
+
+    def save(self, **kwargs):
+        created_by_modified_by(self, **kwargs)
 
 class SubdivisionField(serializers.Field):
     def to_internal_value(self, data):
@@ -137,6 +133,9 @@ class PlatSerializer(serializers.ModelSerializer):
             'plat_zone',
             'plat_type_display',
         )
+
+    def save(self, **kwargs):
+        created_by_modified_by(self, **kwargs)
 
 class PlatField(serializers.Field):
     def to_internal_value(self, data):
@@ -214,3 +213,7 @@ class LotSerializer(serializers.ModelSerializer):
             'dues_open_space_own',
             'total_due',
         )
+
+    def save(self, **kwargs):
+        created_by_modified_by(self, **kwargs)
+        
