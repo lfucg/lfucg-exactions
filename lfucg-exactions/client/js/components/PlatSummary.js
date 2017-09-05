@@ -440,11 +440,11 @@ class PlatSummary extends React.Component {
                                                 </div>
                                             </div>
                                             <div className="col-xs-12">
-                                                <div className="col-md-4 col-sm-6">
-                                                    <p>Developer Account Name: {accounts.account_name}</p>
-                                                </div>
+                                                <p className="col-md-4 col-xs-6">Developer Account Name: {accounts.account_name}</p>
+                                                <p className="col-md-4 col-xs-6">{accounts.credit_availability}</p>
                                                 {currentUser && currentUser.username &&
                                                     <div>
+                                                        <p className="col-md-4 col-xs-6">Account Balance: {accounts.balance}</p>
                                                         <p className="col-md-4 col-xs-6">Contact Name: {accounts.contact_full_name}</p>
                                                         <p className="col-md-4 col-xs-6 ">Phone: {accounts.phone}</p>
                                                         <p className="col-md-4 col-xs-6">Email: {accounts.email}</p>
