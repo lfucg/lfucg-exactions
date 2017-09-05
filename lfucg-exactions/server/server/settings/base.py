@@ -19,7 +19,6 @@ def get_env_setting(setting):
         error_msg = "Set the %s env variable" % setting
         raise ImproperlyConfigured(error_msg)
 
-
 # Your project root
 PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__) + "../../../")
 
@@ -165,6 +164,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'django.template.context_processors.media',
+                'server.settings.context_processors.set_static_url',
             ],
         },
     },
