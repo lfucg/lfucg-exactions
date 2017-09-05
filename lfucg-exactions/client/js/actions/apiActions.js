@@ -83,6 +83,10 @@ import {
     POST_ACCOUNT_LEDGER,
     PUT_ACCOUNT_LEDGER,
 
+    GET_RATES,
+    POST_RATE,
+    PUT_RATE,
+
 } from '../constants/apiConstants';
 
 export function getMe() {
@@ -1594,6 +1598,70 @@ export function putAccountLedger(selectedAccountLedger) {
                 entry_type,
                 non_sewer_credits,
                 sewer_credits,
+            };
+        },
+    };
+}
+
+export function getRates() {
+    return {
+        type: API_CALL,
+        endpoint: GET_RATES,
+        url: '/rate',
+    };
+}
+
+export function postRate() {
+    return {
+        type: API_CALL,
+        endpoint: POST_RATE,
+        url: '/rate',
+        method: 'POST',
+        body: (getState) => {
+            const {
+                activeForm,
+            } = getState();
+            const {
+                rate_table_id,
+                expansion_area,
+                zone,
+                category,
+                rate,
+            } = activeForm;
+            return {
+                rate_table_id,
+                expansion_area,
+                zone,
+                category,
+                rate,
+            };
+        },
+    };
+}
+
+export function putRate(selectedRate) {
+    return {
+        type: API_CALL,
+        endpoint: PUT_RATE,
+        url: `/rate/${selectedRate}`,
+        method: 'PUT',
+        body: (getState) => {
+            const {
+                activeForm,
+            } = getState();
+            const {
+                rate_table_id,
+                expansion_area,
+                zone,
+                category,
+                rate,
+            } = activeForm;
+            return {
+                rate_table_id,
+                expansion_area,
+                zone,
+                category,
+                rate,
             };
         },
     };
