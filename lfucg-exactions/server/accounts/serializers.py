@@ -24,26 +24,23 @@ class AccountSerializer(serializers.ModelSerializer):
     address_state_display = serializers.SerializerMethodField(read_only=True)
 
     balance = serializers.SerializerMethodField(read_only=True)
-    credit_availability = serializers.SerializerMethodField(read_only=True)
-
-    def _get_account_balance(self, obj):
-        _account_balance = calculate_account_balance(obj.id)
-        return _account_balance
 
     def get_address_state_display(self, obj):
         return obj.get_address_state_display()
 
     def get_balance(self, obj):
-        print('SELF TWO VALUES BALANCE', self._get_account_balance(obj))
-        calculated_balance = self._get_account_balance(obj)
-        return '${:,.2f}'.format(calculated_balance)
+        calculated_balance = calculate_account_balance(obj.id)
 
-    def get_credit_availability(self, obj):
-        calculated_balance = self._get_account_balance(obj)
         if calculated_balance > 0:
-            return 'Credit Available'
+            return {
+                'balance': '${:,.2f}'.format(calculated_balance),
+                'credit_availability': 'Credit Available'
+            }
         else:
-            return 'No Credit Available'
+            return {
+                'balance': '${:,.2f}'.format(calculated_balance),
+                'credit_availability': 'No Credit Available'
+            }
 
     class Meta:
         model = Account
@@ -76,7 +73,6 @@ class AccountSerializer(serializers.ModelSerializer):
             'address_state_display',
 
             'balance',
-            'credit_availability',
         )
 
     def save(self, **kwargs):
