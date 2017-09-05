@@ -26,15 +26,20 @@ class AccountSerializer(serializers.ModelSerializer):
     balance = serializers.SerializerMethodField(read_only=True)
     credit_availability = serializers.SerializerMethodField(read_only=True)
 
+    def _get_account_balance(self, obj):
+        _account_balance = calculate_account_balance(obj.id)
+        return _account_balance
+
     def get_address_state_display(self, obj):
         return obj.get_address_state_display()
 
     def get_balance(self, obj):
-        calculated_balance = calculate_account_balance(obj.id)
+        print('SELF TWO VALUES BALANCE', self._get_account_balance(obj))
+        calculated_balance = self._get_account_balance(obj)
         return '${:,.2f}'.format(calculated_balance)
 
     def get_credit_availability(self, obj):
-        calculated_balance = calculate_account_balance(obj.id)
+        calculated_balance = self._get_account_balance(obj)
         if calculated_balance > 0:
             return 'Credit Available'
         else:
