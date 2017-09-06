@@ -264,8 +264,10 @@ class AgreementSummary extends React.Component {
                                             </div>
                                             <div className="col-xs-12">
                                                 <p className="col-md-4 col-xs-6">Developer Account Name: {agreements.account_id.account_name}</p>
+                                                <p className="col-md-4 col-xs-6">{agreements.account_id.credit_availability}</p>
                                                 {currentUser && currentUser.username &&
                                                     <div>
+                                                        <p className="col-md-4 col-xs-6">Account Balance: {agreements.account_id.balance}</p>
                                                         <p className="col-md-4 col-xs-6">Contact Name: {agreements.account_id.contact_full_name}</p>
                                                         <p className="col-md-4 col-xs-6 ">Phone: {agreements.account_id.phone}</p>
                                                         <p className="col-md-4 col-xs-6">Email: {agreements.account_id.email}</p>
