@@ -15,7 +15,10 @@ const accountReducer = (state = {}, action) => {
     case GET_ACCOUNT_ID:
     case GET_ACCOUNTS:
     case GET_ACCOUNT_QUERY:
-        return action.response;
+        const response = action.response.results;
+        response.next = action.response.next;
+        response.prev = action.response.previous;
+        return response;
     case POST_ACCOUNT:
     case PUT_ACCOUNT:
         return {};
