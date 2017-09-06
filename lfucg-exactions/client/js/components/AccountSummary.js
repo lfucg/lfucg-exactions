@@ -278,9 +278,9 @@ class AccountSummary extends React.Component {
                                     </div>
                                     <div className="col-xs-12">
                                         <p className="col-md-4 col-xs-6">Developer Account Name: {accounts.account_name}</p>
-                                        <p className="col-md-4 col-xs-6">{accounts.credit_availability}</p>
+                                        {accounts.balance && <p className="col-md-4 col-xs-6">{accounts.balance.credit_availability}</p>}
                                         {currentUser && currentUser.username && <div>
-                                            <p className="col-md-4 col-xs-6">Account Balance: {accounts.balance}</p>
+                                            {accounts.balance && <p className="col-md-4 col-xs-6">Account Balance: {accounts.balance.balance}</p>}
                                             <p className="col-md-4 col-xs-6">Contact Name: {accounts.contact_full_name}</p>
                                             <p className="col-md-4 col-xs-6 ">Phone: {accounts.phone}</p>
                                             <p className="col-md-4 col-xs-6">Email: {accounts.email}</p>
