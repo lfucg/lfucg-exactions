@@ -20,8 +20,6 @@ class SubdivisionSerializer(serializers.ModelSerializer):
             'is_active',
             'date_created',
             'date_modified',
-            'created_by',
-            'modified_by',   
 
             'name',
             'gross_acreage',

@@ -6,9 +6,6 @@ import {
     ME,
 
     LOGIN,
-    REGISTER,
-    PASSWORD,
-    SEND_USERNAME,
     LOGOUT,
 
     GET_SUBDIVISIONS,
@@ -116,76 +113,6 @@ export function login() {
     };
 }
 
-export function register() {
-    return {
-        type: API_CALL,
-        endpoint: REGISTER,
-        url: '/register/',
-        method: 'POST',
-        body: (getState) => {
-            const {
-                activeForm,
-            } = getState();
-            const {
-                username_1,
-                password_1,
-                // password_2,
-                first_name,
-                last_name,
-                email,
-            } = activeForm;
-            return {
-                username: username_1,
-                password_1,
-                // password_2,
-                first_name,
-                last_name,
-                email,
-            };
-        },
-    };
-}
-
-export function passwordReset() {
-    return {
-        type: API_CALL,
-        endpoint: PASSWORD,
-        url: '/forgot-password/',
-        method: 'POST',
-        body: (getState) => {
-            const {
-                activeForm,
-            } = getState();
-            const {
-                email_2,
-            } = activeForm;
-            return {
-                email: email_2,
-            };
-        },
-    };
-}
-
-export function sendUsername() {
-    return {
-        type: API_CALL,
-        endpoint: SEND_USERNAME,
-        url: '/forgot-username/',
-        method: 'POST',
-        body: (getState) => {
-            const {
-                activeForm,
-            } = getState();
-            const {
-                email_3,
-            } = activeForm;
-            return {
-                email: email_3,
-            };
-        },
-    };
-}
-
 export function logout() {
     return {
         type: API_CALL,
@@ -239,18 +166,12 @@ export function postSubdivision() {
         body: (getState) => {
             const {
                 activeForm,
-                currentUser,
             } = getState();
             const {
                 name,
                 gross_acreage,
             } = activeForm;
-            const {
-                id,
-            } = currentUser;
             return {
-                created_by: id,
-                modified_by: id,
                 name,
                 gross_acreage,
             };
@@ -267,18 +188,12 @@ export function putSubdivision(selectedSubdivision) {
         body: (getState) => {
             const {
                 activeForm,
-                currentUser,
             } = getState();
             const {
                 name,
                 gross_acreage,
             } = activeForm;
-            const {
-                id,
-            } = currentUser;
             return {
-                created_by: id,
-                modified_by: id,
                 name,
                 gross_acreage,
             };
@@ -338,7 +253,6 @@ export function postPlat() {
         body: (getState) => {
             const {
                 activeForm,
-                currentUser,
             } = getState();
             const {
                 subdivision,
@@ -361,12 +275,7 @@ export function postPlat() {
                 non_sewer_due,
                 account,
             } = activeForm;
-            const {
-                id,
-            } = currentUser;
             return {
-                created_by: id,
-                modified_by: id,
                 name,
                 subdivision,
                 date_recorded,
@@ -400,7 +309,6 @@ export function putPlat(selectedPlat) {
         body: (getState) => {
             const {
                 activeForm,
-                currentUser,
             } = getState();
             const {
                 subdivision,
@@ -423,12 +331,7 @@ export function putPlat(selectedPlat) {
                 non_sewer_due,
                 account,
             } = activeForm;
-            const {
-                id,
-            } = currentUser;
             return {
-                created_by: id,
-                modified_by: id,
                 name,
                 subdivision,
                 date_recorded,
@@ -463,19 +366,13 @@ export function postPlatZone() {
         body: (getState) => {
             const {
                 activeForm,
-                currentUser,
             } = getState();
             const {
                 plat,
                 zone,
                 acres,
             } = activeForm;
-            const {
-                id,
-            } = currentUser;
             return {
-                created_by: id,
-                modified_by: id,
                 plat,
                 zone,
                 acres,
@@ -493,17 +390,11 @@ export function putPlatZone(selectedPlatZone, zone, acres) {
         body: (getState) => {
             const {
                 activeForm,
-                currentUser,
             } = getState();
             const {
                 plat,
             } = activeForm;
-            const {
-                id,
-            } = currentUser;
             return {
-                created_by: id,
-                modified_by: id,
                 plat,
                 zone,
                 acres,
@@ -531,17 +422,11 @@ export function putPlatZoneDues(
         body: (getState) => {
             const {
                 activeForm,
-                currentUser,
             } = getState();
             const {
                 plat,
             } = activeForm;
-            const {
-                id,
-            } = currentUser;
             return {
-                created_by: id,
-                modified_by: id,
                 plat,
                 zone,
                 acres,
@@ -608,7 +493,6 @@ export function postLot() {
         body: (getState) => {
             const {
                 activeForm,
-                currentUser,
             } = getState();
             const {
                 plat,
@@ -638,14 +522,8 @@ export function postLot() {
                 dues_open_space_dev,
                 dues_open_space_own,
                 account,
-                // payment,
             } = activeForm;
-            const {
-                id,
-            } = currentUser;
             return {
-                created_by: id,
-                modified_by: id,
                 plat,
                 parcel_id,
                 lot_number,
@@ -674,7 +552,6 @@ export function postLot() {
                 dues_open_space_dev,
                 dues_open_space_own,
                 account,
-                // payment,
             };
         },
     };
@@ -689,7 +566,6 @@ export function putLot(selectedLot) {
         body: (getState) => {
             const {
                 activeForm,
-                currentUser,
             } = getState();
             const {
                 plat,
@@ -721,12 +597,7 @@ export function putLot(selectedLot) {
                 account,
                 // payment,
             } = activeForm;
-            const {
-                id,
-            } = currentUser;
             return {
-                created_by: id,
-                modified_by: id,
                 plat,
                 parcel_id,
                 lot_number,
@@ -856,7 +727,6 @@ export function postAccount() {
         body: (getState) => {
             const {
                 activeForm,
-                currentUser,
             } = getState();
             const {
                 account_name,
@@ -870,12 +740,7 @@ export function postAccount() {
                 phone,
                 email,
             } = activeForm;
-            const {
-                id,
-            } = currentUser;
             return {
-                created_by: id,
-                modified_by: id,
                 account_name,
                 contact_first_name,
                 contact_last_name,
@@ -902,7 +767,6 @@ export function putAccount(selectedAccount) {
         body: (getState) => {
             const {
                 activeForm,
-                currentUser,
             } = getState();
             const {
                 account_name,
@@ -916,12 +780,7 @@ export function putAccount(selectedAccount) {
                 phone,
                 email,
             } = activeForm;
-            const {
-                id,
-            } = currentUser;
             return {
-                created_by: id,
-                modified_by: id,
                 account_name,
                 contact_first_name,
                 contact_last_name,
@@ -991,7 +850,6 @@ export function postAgreement() {
         body: (getState) => {
             const {
                 activeForm,
-                currentUser,
             } = getState();
             const {
                 account_id,
@@ -1000,12 +858,7 @@ export function postAgreement() {
                 agreement_type,
                 date_executed,
             } = activeForm;
-            const {
-                id,
-            } = currentUser;
             return {
-                created_by: id,
-                modified_by: id,
                 account_id,
                 resolution_number,
                 expansion_area,
@@ -1025,7 +878,6 @@ export function putAgreement(selectedAgreement) {
         body: (getState) => {
             const {
                 activeForm,
-                currentUser,
             } = getState();
             const {
                 account_id,
@@ -1034,12 +886,7 @@ export function putAgreement(selectedAgreement) {
                 agreement_type,
                 date_executed,
             } = activeForm;
-            const {
-                id,
-            } = currentUser;
             return {
-                created_by: id,
-                modified_by: id,
                 account_id,
                 resolution_number,
                 expansion_area,
@@ -1119,7 +966,6 @@ export function postPayment() {
         body: (getState) => {
             const {
                 activeForm,
-                currentUser,
             } = getState();
             const {
                 lot_id,
@@ -1136,12 +982,7 @@ export function postPayment() {
                 paid_storm,
                 paid_open_space,
             } = activeForm;
-            const {
-                id,
-            } = currentUser;
             return {
-                created_by: id,
-                modified_by: id,
                 lot_id,
                 paid_by,
                 paid_by_type,
@@ -1169,7 +1010,6 @@ export function putPayment(selectedPayment) {
         body: (getState) => {
             const {
                 activeForm,
-                currentUser,
             } = getState();
             const {
                 lot_id,
@@ -1186,12 +1026,7 @@ export function putPayment(selectedPayment) {
                 paid_storm,
                 paid_open_space,
             } = activeForm;
-            const {
-                id,
-            } = currentUser;
             return {
-                created_by: id,
-                modified_by: id,
                 lot_id,
                 paid_by,
                 paid_by_type,
@@ -1262,7 +1097,6 @@ export function postProject() {
         body: (getState) => {
             const {
                 activeForm,
-                currentUser,
             } = getState();
             const {
                 agreement_id,
@@ -1275,12 +1109,7 @@ export function postProject() {
                 project_cost_estimates,
                 project_description,
             } = activeForm;
-            const {
-                id,
-            } = currentUser;
             return {
-                created_by: id,
-                modified_by: id,
                 agreement_id,
                 project_category,
                 name,
@@ -1304,7 +1133,6 @@ export function putProject(selectedProject) {
         body: (getState) => {
             const {
                 activeForm,
-                currentUser,
             } = getState();
             const {
                 agreement_id,
@@ -1317,12 +1145,7 @@ export function putProject(selectedProject) {
                 project_cost_estimates,
                 project_description,
             } = activeForm;
-            const {
-                id,
-            } = currentUser;
             return {
-                created_by: id,
-                modified_by: id,
                 agreement_id,
                 project_category,
                 name,
@@ -1389,7 +1212,6 @@ export function postProjectCost() {
         body: (getState) => {
             const {
                 activeForm,
-                currentUser,
             } = getState();
             const {
                 project_id,
@@ -1401,12 +1223,7 @@ export function postProjectCost() {
                 management_cost,
                 credits_available,
             } = activeForm;
-            const {
-                id,
-            } = currentUser;
             return {
-                created_by: id,
-                modified_by: id,
                 project_id,
                 estimate_type,
                 land_cost,
@@ -1429,7 +1246,6 @@ export function putProjectCost(selectedProjectCost) {
         body: (getState) => {
             const {
                 activeForm,
-                currentUser,
             } = getState();
             const {
                 project_id,
@@ -1441,12 +1257,7 @@ export function putProjectCost(selectedProjectCost) {
                 management_cost,
                 credits_available,
             } = activeForm;
-            const {
-                id,
-            } = currentUser;
             return {
-                created_by: id,
-                modified_by: id,
                 project_id,
                 estimate_type,
                 land_cost,
@@ -1528,7 +1339,6 @@ export function postAccountLedger() {
         body: (getState) => {
             const {
                 activeForm,
-                currentUser,
             } = getState();
             const {
                 entry_date,
@@ -1540,12 +1350,7 @@ export function postAccountLedger() {
                 non_sewer_credits,
                 sewer_credits,
             } = activeForm;
-            const {
-                id,
-            } = currentUser;
             return {
-                created_by: id,
-                modified_by: id,
                 entry_date,
                 account_from,
                 account_to,
@@ -1568,7 +1373,6 @@ export function putAccountLedger(selectedAccountLedger) {
         body: (getState) => {
             const {
                 activeForm,
-                currentUser,
             } = getState();
             const {
                 entry_date,
@@ -1580,12 +1384,7 @@ export function putAccountLedger(selectedAccountLedger) {
                 non_sewer_credits,
                 sewer_credits,
             } = activeForm;
-            const {
-                id,
-            } = currentUser;
             return {
-                created_by: id,
-                modified_by: id,
                 entry_date,
                 account_from,
                 account_to,
