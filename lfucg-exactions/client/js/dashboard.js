@@ -49,6 +49,8 @@ import AccountLedgerExisting from './components/AccountLedgerExisting';
 import AccountLedgerSummary from './components/AccountLedgerSummary';
 import AccountLedgerForm from './components/AccountLedgerForm';
 
+import RateTableForm from './components/RateTableForm';
+
 global.reduxStore = dashboardStore;
 global.BASE_STATIC_URL = (window.location.host === '52.201.224.95') ?
     //'52.201.224.95' :
@@ -116,6 +118,9 @@ ReactDOM.render(
             <Route path="account-ledger/summary/:id" component={AccountLedgerSummary} name="Account Ledger Summary" />
             <Route path="account-ledger/form" component={AccountLedgerForm} name="Account Ledger Form" />
             <Route path="account-ledger/form/:id" component={AccountLedgerForm} name="Current Account Ledger Form" />
+
+            <Route path="rate-table/form" component={RateTableForm} name="Rate Table Form" />
+            <Route path="rate-table/form/:id" component={RateTableForm} name="Rate Table Form" />
 
         </Router>
     </Provider>,
