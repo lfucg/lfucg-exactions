@@ -53,8 +53,20 @@ class RateTableViewSet(viewsets.ModelViewSet):
     queryset = RateTable.objects.all()
     permission_classes = (CanAdminister,)
 
+    def perform_create(self, serializer):
+        instance = serializer.save(modified_by=self.request.user, created_by=self.request.user)
+
+    def perform_update(self, serializer):
+        instance = serializer.save(modified_by=self.request.user)
+
 class RateViewSet(viewsets.ModelViewSet):
     serializer_class = RateSerializer
     queryset = Rate.objects.all()
     permission_classes = (CanAdminister,)
+
+    def perform_create(self, serializer):
+        instance = serializer.save(modified_by=self.request.user, created_by=self.request.user)
+
+    def perform_update(self, serializer):
+        instance = serializer.save(modified_by=self.request.user)
     

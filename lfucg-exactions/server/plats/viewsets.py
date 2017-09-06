@@ -21,6 +21,12 @@ class SubdivisionViewSet(viewsets.ModelViewSet):
 
         return queryset.order_by('name')
 
+    def perform_create(self, serializer):
+        instance = serializer.save(modified_by=self.request.user, created_by=self.request.user)
+
+    def perform_update(self, serializer):
+        instance = serializer.save(modified_by=self.request.user)
+
 class PlatViewSet(viewsets.ModelViewSet):
     serializer_class = PlatSerializer
     queryset = Plat.objects.all()
@@ -40,6 +46,12 @@ class PlatViewSet(viewsets.ModelViewSet):
                 Q(subdivision__name__icontains=query_text))
 
         return queryset.order_by('expansion_area')
+
+    def perform_create(self, serializer):
+        instance = serializer.save(modified_by=self.request.user, created_by=self.request.user)
+
+    def perform_update(self, serializer):
+        instance = serializer.save(modified_by=self.request.user)
 
 class LotViewSet(viewsets.ModelViewSet):
     serializer_class = LotSerializer
@@ -67,11 +79,22 @@ class LotViewSet(viewsets.ModelViewSet):
 
         return queryset.order_by('address_street')
 
+    def perform_create(self, serializer):
+        instance = serializer.save(modified_by=self.request.user, created_by=self.request.user)
+
+    def perform_update(self, serializer):
+        instance = serializer.save(modified_by=self.request.user)
 
 class PlatZoneViewSet(viewsets.ModelViewSet):
     serializer_class = PlatZoneSerializer
     queryset = PlatZone.objects.all()
     permission_classes = (CanAdminister,)
+
+    def perform_create(self, serializer):
+        instance = serializer.save(modified_by=self.request.user, created_by=self.request.user)
+
+    def perform_update(self, serializer):
+        instance = serializer.save(modified_by=self.request.user)
 
 class CalculationWorksheetViewSet(viewsets.ModelViewSet):
     serializer_class = CalculationWorksheetSerializer
