@@ -29,17 +29,30 @@ class RateTableForm extends React.Component {
             route,
         } = this.props;
 
-        const subdivisionsList = subdivisions.length > 0 &&
-            (map((single_subdivision) => {
+        // VALUE ORDER: RATE, ID, RATE_TABLE_ID, CATEGORY, ZONE, EXPANSION_AREA
+        const RoadEA1List = activeForm.rates.length > 0 &&
+            (map((road_ea1) => {
                 return (
-                    <option key={single_subdivision.id} value={[single_subdivision.id, single_subdivision.name]} >
-                        {single_subdivision.name}
-                    </option>
+                    <div className="row">
+                        <input
+                          type="number"
+                          step="0.01"
+                          key={road_ea1.id}
+                          value={[
+                              road_ea1.rate,
+                              road_ea1.id,
+                              road_ea1.rate_table_id,
+                              road_ea1.category,
+                              road_ea1.zone,
+                              road_ea1.expansion_area,
+                          ]}
+                        />
+                    </div>
                 );
-            })(subdivisions));
+            })(activeForm.rates));
 
         return (
-            <div className="plat-form">
+            <div className="rate-table-form">
                 <Navbar />
 
                 <div className="form-header">
@@ -48,11 +61,25 @@ class RateTableForm extends React.Component {
                     </div>
                 </div>
 
-                <Breadcrumbs route={this.props.route} parent_link={'plat'} parent_name={'Plats'} />
+                <Breadcrumbs route={this.props.route} />
 
                 <div className="inside-body">
                     <div className="container">
                         hello
+                        {RoadEA1List ? RoadEA1List : (
+                            <input
+                              type="number"
+                              step="0.01"
+                              value={[
+                                  '0',
+                                  null,
+                                  activeForm.rate_table_id,
+                                  'ROADS',
+                                  'EAR-1',
+                                  'EA-1',
+                              ]}
+                            />
+                        )}
                     </div>
                 </div>
                 <Footer />
@@ -77,7 +104,14 @@ function mapDispatchToProps(dispatch) {
     return {
         onComponentDidMount() {
             dispatch(formInit());
-            dispatch(getRates());
+            dispatch(getRates())
+            .then((data_rate) => {
+                const rate_update = {
+                    rates: data_rate.response,
+                    rate_table_id: data_rate.response.rate_table_id,
+                };
+                dispatch(formUpdate(rate_update));
+            });
         },
     };
 }
