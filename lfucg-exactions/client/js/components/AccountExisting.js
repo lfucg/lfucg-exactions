@@ -29,7 +29,9 @@ class AccountExisting extends React.Component {
             onAccountQuery,
         } = this.props;
 
-        const accounts_list = accounts.length > 0 ? (
+        console.log('hello', accounts);
+
+        const accounts_list = accounts && accounts.length > 0 ? (
             map((account) => {
                 return (
                     <div key={account.id} className="col-xs-12">
