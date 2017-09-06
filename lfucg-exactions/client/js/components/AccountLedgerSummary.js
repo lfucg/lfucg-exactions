@@ -191,7 +191,9 @@ class AccountLedgerSummary extends React.Component {
                                             </div>
                                             <div className="col-xs-12">
                                                 <p className="col-md-4 col-xs-6">Account From Name: {accountLedgers.account_from.account_name}</p>
+                                                <p className="col-md-4 col-xs-6">{accountLedgers.account_from.credit_availability}</p>
                                                 {currentUser && currentUser.username && <div>
+                                                    <p className="col-md-4 col-xs-6">Account Balance: {accountLedgers.account_from.balance}</p>
                                                     <p className="col-md-4 col-xs-6">Account From Contact Name: {accountLedgers.account_from.contact_full_name}</p>
                                                     <p className="col-md-4 col-xs-6 ">Account From Phone: {accountLedgers.account_from.phone}</p>
                                                     <p className="col-md-4 col-xs-6">Account From Email: {accountLedgers.account_from.email}</p>
@@ -255,7 +257,9 @@ class AccountLedgerSummary extends React.Component {
                                             </div>
                                             <div className="col-xs-12">
                                                 <p className="col-md-4 col-xs-6">Account To Name: {accountLedgers.account_to.account_name}</p>
+                                                <p className="col-md-4 col-xs-6">{accountLedgers.account_to.credit_availability}</p>
                                                 {currentUser && currentUser.username && <div>
+                                                    <p className="col-md-4 col-xs-6">Account Balance: {accountLedgers.account_to.balance}</p>
                                                     <p className="col-md-4 col-xs-6">Account To Contact Name: {accountLedgers.account_to.contact_full_name}</p>
                                                     <p className="col-md-4 col-xs-6 ">Account To Phone: {accountLedgers.account_to.phone}</p>
                                                     <p className="col-md-4 col-xs-6">Account To Email: {accountLedgers.account_to.email}</p>
