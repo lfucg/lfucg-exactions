@@ -2,8 +2,7 @@ from rest_framework import serializers
 
 from django.contrib.auth.models import User
 from .models import *
-from .utils import calculate_account_balance, created_by_modified_by
-
+from .utils import calculate_account_balance
 from plats.models import Plat, Lot
 from plats.serializers import PlatSerializer, LotSerializer
 
@@ -75,9 +74,6 @@ class AccountSerializer(serializers.ModelSerializer):
             'balance',
         )
 
-    def save(self, **kwargs):
-        created_by_modified_by(self, **kwargs)
-
 class AccountField(serializers.Field):
     def to_internal_value(self, data):
         try: 
@@ -117,9 +113,6 @@ class AgreementSerializer(serializers.ModelSerializer):
             'agreement_type_display',
         )
 
-    def save(self, **kwargs):
-        created_by_modified_by(self, **kwargs)
-    
 class AgreementField(serializers.Field):
     def to_internal_value(self, data):
         try: 
@@ -176,9 +169,6 @@ class ProjectSerializer(serializers.ModelSerializer):
             'status_date',
         )
 
-    def save(self, **kwargs):
-        created_by_modified_by(self, **kwargs)
-
 class ProjectField(serializers.Field):
     def to_internal_value(self, data):
         try: 
@@ -229,9 +219,6 @@ class ProjectCostEstimateSerializer(serializers.ModelSerializer):
             'total_costs',
         )
 
-    def save(self, **kwargs):
-        created_by_modified_by(self, **kwargs)
-
 class AccountLedgerSerializer(serializers.ModelSerializer):
     lot = LotField()
     agreement = AgreementField()
@@ -266,9 +253,6 @@ class AccountLedgerSerializer(serializers.ModelSerializer):
 
             'entry_type_display',
         )
-
-    def save(self, **kwargs):
-        created_by_modified_by(self, **kwargs)
 
 class PaymentSerializer(serializers.ModelSerializer):
     lot_id = LotField()
@@ -327,9 +311,6 @@ class PaymentSerializer(serializers.ModelSerializer):
             'payment_type_display',
             'paid_by_type_display',
         )
-
-    def save(self, **kwargs):
-        created_by_modified_by(self, **kwargs)
 
 class UserSerializer(serializers.ModelSerializer):
 
