@@ -35,15 +35,4 @@ def calculate_account_balance(account_id):
     current_account_balance = to_value - from_value - payment_value
 
     return current_account_balance
-
-def created_by_modified_by(self):
-    request = self.context.get('request', None)
-
-    if request is not None:
-        self.validated_data['modified_by'] = request.user
-
-        if self.instance is None:
-            self.validated_data['created_by'] = request.user
-
-    super(self.__class__, self).save(**kwargs)
         
