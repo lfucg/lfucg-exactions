@@ -689,15 +689,15 @@ export function getAccounts(accountPage) {
         return {
             type: API_CALL,
             endpoint: GET_ACCOUNTS,
-            url: `/account/?page=${accountPage}`,
-        };
-    } else {
-        return {
-            type: API_CALL,
-            endpoint: GET_ACCOUNTS,
-            url: '/account/',
+            url: `/account/?${accountPage}`,
         };
     }
+
+    return {
+        type: API_CALL,
+        endpoint: GET_ACCOUNTS,
+        url: '/account/',
+    };
 }
 
 export function getAccountID(selectedAccount) {
