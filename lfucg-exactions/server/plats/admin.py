@@ -25,8 +25,17 @@ class LotHistoryAdmin(SimpleHistoryAdmin):
         'plat',
     )
 
+class PlatZoneHistoryAdmin(SimpleHistoryAdmin):
+    list_display = (
+        'plat',
+        'zone',
+        'acres',
+        'id',
+    )
+
+
 admin.site.register(Subdivision, SimpleHistoryAdmin)
 admin.site.register(Plat, PlatHistoryAdmin)
 admin.site.register(Lot, LotHistoryAdmin)
-admin.site.register(PlatZone, SimpleHistoryAdmin)
+admin.site.register(PlatZone, PlatZoneHistoryAdmin)
 admin.site.register(CalculationWorksheet, SimpleHistoryAdmin)
