@@ -27,6 +27,7 @@ class AccountExisting extends React.Component {
             currentUser,
             accounts,
             onAccountQuery,
+            onPaginationNextPage,
         } = this.props;
 
         console.log('hello', accounts);
@@ -109,6 +110,15 @@ class AccountExisting extends React.Component {
                 <div className="inside-body">
                     <div className="container">
                         {accounts_list}
+                    <div className="row">
+                        <div className="col-xs-12 text-center">
+                            <ul className="pagination">
+                                <li className="disabled"><a >&laquo;</a></li>
+                                <li className="active"><a href="#">1</a></li>
+                                <li><a onClick={() => onPaginationNextPage(accounts.next)} id="nextPage" value={accounts.next}>&raquo;</a></li>
+                            </ul>
+                        </div>
+                    </div>
                     </div>
                 </div>
                 <Footer />
@@ -139,6 +149,10 @@ function mapDispatchToProps(dispatch) {
                 dispatch(getAccountQuery());
             };
         },
+        onPaginationNextPage(field) {
+            const nextPage = field[field.length - 1];
+            console.log(dispatch(getAccounts(nextPage)));
+        },
     };
 }
 
@@ -148,6 +162,7 @@ AccountExisting.propTypes = {
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
     onAccountQuery: PropTypes.func,
+    onPaginationNextPage: PropTypes.func,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AccountExisting);

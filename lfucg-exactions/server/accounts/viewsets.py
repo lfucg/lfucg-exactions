@@ -1,4 +1,5 @@
 from rest_framework import viewsets
+from rest_framework.pagination import PageNumberPagination
 from django.db.models import Q
 
 from django.contrib.auth.models import User
@@ -10,6 +11,7 @@ class AccountViewSet(viewsets.ModelViewSet):
     serializer_class = AccountSerializer
     queryset = Account.objects.all()
     permission_classes = (CanAdminister,)
+    pagination_class = PageNumberPagination
 
     def get_queryset(self):
         queryset = Account.objects.all()
