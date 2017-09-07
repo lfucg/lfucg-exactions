@@ -684,12 +684,20 @@ export function postNote() {
 }
 
 // ACCOUNTS
-export function getAccounts() {
-    return {
-        type: API_CALL,
-        endpoint: GET_ACCOUNTS,
-        url: '/account/',
-    };
+export function getAccounts(accountPage) {
+    if (accountPage) {
+        return {
+            type: API_CALL,
+            endpoint: GET_ACCOUNTS,
+            url: `/account/?page=${accountPage}`,
+        };
+    } else {
+        return {
+            type: API_CALL,
+            endpoint: GET_ACCOUNTS,
+            url: '/account/',
+        };
+    }
 }
 
 export function getAccountID(selectedAccount) {

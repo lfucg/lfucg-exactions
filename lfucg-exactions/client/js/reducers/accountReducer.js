@@ -18,6 +18,7 @@ const accountReducer = (state = {}, action) => {
         const response = action.response.results;
         response.next = action.response.next;
         response.prev = action.response.previous;
+        response.count = action.response.count;
         return response;
     case POST_ACCOUNT:
     case PUT_ACCOUNT:
