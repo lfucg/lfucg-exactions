@@ -27,6 +27,12 @@ class AccountViewSet(viewsets.ModelViewSet):
 
         return queryset.order_by('account_name')
 
+    def perform_create(self, serializer):
+        instance = serializer.save(modified_by=self.request.user, created_by=self.request.user)
+
+    def perform_update(self, serializer):
+        instance = serializer.save(modified_by=self.request.user)
+
 class AgreementViewSet(viewsets.ModelViewSet):
     serializer_class = AgreementSerializer
     queryset = Agreement.objects.all()
@@ -51,6 +57,12 @@ class AgreementViewSet(viewsets.ModelViewSet):
 
         return queryset.order_by('expansion_area')
 
+    def perform_create(self, serializer):
+        instance = serializer.save(modified_by=self.request.user, created_by=self.request.user)
+
+    def perform_update(self, serializer):
+        instance = serializer.save(modified_by=self.request.user)
+
 class PaymentViewSet(viewsets.ModelViewSet):
     serializer_class = PaymentSerializer
     queryset = Payment.objects.all()
@@ -73,6 +85,12 @@ class PaymentViewSet(viewsets.ModelViewSet):
 
         return queryset.order_by('-date_created')
 
+    def perform_create(self, serializer):
+        instance = serializer.save(modified_by=self.request.user, created_by=self.request.user)
+
+    def perform_update(self, serializer):
+        instance = serializer.save(modified_by=self.request.user)
+
 class ProjectViewSet(viewsets.ModelViewSet):
     serializer_class = ProjectSerializer
     queryset = Project.objects.all()
@@ -87,10 +105,22 @@ class ProjectViewSet(viewsets.ModelViewSet):
 
         return queryset
 
+    def perform_create(self, serializer):
+        instance = serializer.save(modified_by=self.request.user, created_by=self.request.user)
+
+    def perform_update(self, serializer):
+        instance = serializer.save(modified_by=self.request.user)
+
 class ProjectCostEstimateViewSet(viewsets.ModelViewSet):
     serializer_class = ProjectCostEstimateSerializer
     queryset = ProjectCostEstimate.objects.all()
     permission_classes = (CanAdminister,)
+
+    def perform_create(self, serializer):
+        instance = serializer.save(modified_by=self.request.user, created_by=self.request.user)
+
+    def perform_update(self, serializer):
+        instance = serializer.save(modified_by=self.request.user)
 
 class AccountLedgerViewSet(viewsets.ModelViewSet):
     serializer_class = AccountLedgerSerializer
@@ -113,6 +143,12 @@ class AccountLedgerViewSet(viewsets.ModelViewSet):
             queryset = queryset.filter(agreement=agreement_set)
 
         return queryset.order_by('entry_date')
+
+    def perform_create(self, serializer):
+        instance = serializer.save(modified_by=self.request.user, created_by=self.request.user)
+
+    def perform_update(self, serializer):
+        instance = serializer.save(modified_by=self.request.user)
     
 class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
