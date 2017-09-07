@@ -11,7 +11,6 @@ class AccountViewSet(viewsets.ModelViewSet):
     serializer_class = AccountSerializer
     queryset = Account.objects.all()
     permission_classes = (CanAdminister,)
-    pagination_class = PageNumberPagination
 
     def get_queryset(self):
         queryset = Account.objects.all()

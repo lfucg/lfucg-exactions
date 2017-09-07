@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
+import Pagination from './Pagination';
 
 import {
     getAccounts,
@@ -27,10 +28,8 @@ class AccountExisting extends React.Component {
             currentUser,
             accounts,
             onAccountQuery,
-            onPaginationNextPage,
+            onPaginationChangePage,
         } = this.props;
-
-        console.log('hello', accounts);
 
         const accounts_list = accounts && accounts.length > 0 ? (
             map((account) => {
@@ -110,15 +109,7 @@ class AccountExisting extends React.Component {
                 <div className="inside-body">
                     <div className="container">
                         {accounts_list}
-                    <div className="row">
-                        <div className="col-xs-12 text-center">
-                            <ul className="pagination">
-                                <li className="disabled"><a >&laquo;</a></li>
-                                <li className="active"><a href="#">1</a></li>
-                                <li><a onClick={() => onPaginationNextPage(accounts.next)} id="nextPage" value={accounts.next}>&raquo;</a></li>
-                            </ul>
-                        </div>
-                    </div>
+                        <Pagination />
                     </div>
                 </div>
                 <Footer />
@@ -149,9 +140,8 @@ function mapDispatchToProps(dispatch) {
                 dispatch(getAccountQuery());
             };
         },
-        onPaginationNextPage(field) {
-            const nextPage = field[field.length - 1];
-            console.log(dispatch(getAccounts(nextPage)));
+        onPaginationChangePage(field) {
+            dispatch(getAccounts(field));
         },
     };
 }
@@ -162,7 +152,7 @@ AccountExisting.propTypes = {
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
     onAccountQuery: PropTypes.func,
-    onPaginationNextPage: PropTypes.func,
+    onPaginationChangePage: PropTypes.func,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AccountExisting);
