@@ -64,6 +64,15 @@ class RateViewSet(viewsets.ModelViewSet):
     queryset = Rate.objects.all()
     permission_classes = (CanAdminister,)
 
+    def get_queryset(self):
+        queryset = Rate.objects.all()
+
+        category_set = self.request.query_params.get('category', None)
+        if category_set is not None:
+            queryset = queryset.filter(category=category_set)
+
+        return queryset.order_by('expansion_area')
+
     def perform_create(self, serializer):
         instance = serializer.save(modified_by=self.request.user, created_by=self.request.user)
 
