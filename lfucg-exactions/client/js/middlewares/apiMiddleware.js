@@ -19,6 +19,7 @@ export default function api({ getState, dispatch }) {
         const {
             type,
             endpoint,
+            headers,
             url,
             shouldCallAPI,
             responseValidation,
@@ -61,7 +62,7 @@ export default function api({ getState, dispatch }) {
         };
 
         return Promise.resolve(axios({
-            headers: header,
+            headers: typeof headers === 'function' ? headers(getState) : header,
             url: baseURL + (typeof url === 'function' ? url(getState) : url),
             params: typeof qs === 'function' ? qs(getState) : qs,
             data: typeof body === 'function' ? body(getState) : body,
