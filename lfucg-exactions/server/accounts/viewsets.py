@@ -7,15 +7,25 @@ from .models import *
 from .serializers import *
 from .permissions import CanAdminister
 
+
 class AccountViewSet(viewsets.ModelViewSet):
     serializer_class = AccountSerializer
     queryset = Account.objects.all()
     permission_classes = (CanAdminister,)
-
     def get_queryset(self):
+        PageNumberPagination.page_size = None
         queryset = Account.objects.all()
-
+        paginatePage = self.request.query_params.get('paginatePage', None)
         query_text = self.request.query_params.get('query', None)
+
+        if query_text == '':
+            PageNumberPagination.page_size = 1
+            pagination_class = PageNumberPagination
+
+        if paginatePage is not None:
+            PageNumberPagination.page_size = 1
+            pagination_class = PageNumberPagination
+
         if query_text is not None:
             query_text = query_text.lower()
 
@@ -25,6 +35,7 @@ class AccountViewSet(viewsets.ModelViewSet):
                 Q(address_full=query_text) |
                 Q(phone__icontains=query_text) |
                 Q(email__icontains=query_text))
+
 
         return queryset.order_by('account_name')
 

@@ -35,6 +35,7 @@ import {
     GET_ACCOUNTS,
     GET_ACCOUNT_ID,
     GET_ACCOUNT_QUERY,
+    GET_ACCOUNT_WITH_PAGINATION,
     POST_ACCOUNT,
     PUT_ACCOUNT,
 
@@ -79,6 +80,8 @@ import {
     GET_AGREEMENT_ACCOUNT_LEDGERS,
     POST_ACCOUNT_LEDGER,
     PUT_ACCOUNT_LEDGER,
+
+    GET_PAGINATION,
 
 } from '../constants/apiConstants';
 
@@ -684,15 +687,7 @@ export function postNote() {
 }
 
 // ACCOUNTS
-export function getAccounts(accountPage) {
-    if (accountPage) {
-        return {
-            type: API_CALL,
-            endpoint: GET_ACCOUNTS,
-            url: `/account/?${accountPage}`,
-        };
-    }
-
+export function getAccounts() {
     return {
         type: API_CALL,
         endpoint: GET_ACCOUNTS,
@@ -1403,5 +1398,13 @@ export function putAccountLedger(selectedAccountLedger) {
                 sewer_credits,
             };
         },
+    };
+}
+
+export function getPagination(page) {
+    return {
+        type: API_CALL,
+        endpoint: GET_PAGINATION,
+        url: `${page}`,
     };
 }

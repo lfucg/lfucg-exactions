@@ -4,6 +4,8 @@ from django.db.models import Q
 from .models import *
 from .serializers import *
 from .permissions import CanAdminister
+from rest_framework.pagination import PageNumberPagination
+
 
 class SubdivisionViewSet(viewsets.ModelViewSet):
     serializer_class = SubdivisionSerializer
@@ -58,14 +60,25 @@ class LotViewSet(viewsets.ModelViewSet):
     queryset = Lot.objects.all()
     permission_classes = (CanAdminister,)
 
+
     def get_queryset(self):
         queryset = Lot.objects.all()
+        PageNumberPagination.page_size = None
+        paginatePage = self.request.query_params.get('paginatePage', None)
+        query_text = self.request.query_params.get('query', None)
+
+        if query_text == '':
+            PageNumberPagination.page_size = 1
+            pagination_class = PageNumberPagination
+
+        if paginatePage is not None:
+            PageNumberPagination.page_size = 1
+            pagination_class = PageNumberPagination
 
         plat_set = self.request.query_params.get('plat', None)
         if plat_set is not None:
             queryset = queryset.filter(plat=plat_set)
 
-        query_text = self.request.query_params.get('query', None)
         if query_text is not None:
             query_text = query_text.lower()
 

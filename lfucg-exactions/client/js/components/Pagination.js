@@ -1,28 +1,28 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { getAccounts } from '../actions/apiActions';
+import { getPagination } from '../actions/apiActions';
+import { formUpdate } from '../actions/formActions';
 
 class Pagination extends React.Component {
-    componentDidMount() {
-        this.props.onComponentDidMount();
-    }
 
     render() {
         const {
-            accounts,
             onPaginationChangePage,
+            activeForm,
         } = this.props;
 
         return (
             <div className="row">
                 <div className="col-xs-12 text-center">
                     <ul className="pagination">
-                        <li><button className="btn btn-default" disabled={!accounts.prev} onClick={() => onPaginationChangePage(accounts.prev)}>&laquo;</button></li>
-                        <li><button className="btn btn-default">
-                            {accounts.next ? (accounts.next.charAt(accounts.next.length - 1) - 1) : (accounts.count)}
-                        </button></li>
-                        <li><button className="btn btn-default" disabled={!accounts.next} onClick={() => onPaginationChangePage(accounts.next)}>&raquo;</button></li>
+                        <li><button className="btn btn-default" disabled={!activeForm.prev || activeForm.query} onClick={() => onPaginationChangePage(activeForm.prev)}>&laquo;</button></li>
+                        <li>
+                            <button className="btn btn-default">
+                                {activeForm.next ? (activeForm.next.charAt(activeForm.next.indexOf('=') + 1) - 1) : (activeForm.count / 1) }
+                            </button>
+                        </li>
+                        <li><button className="btn btn-default" disabled={!activeForm.next || activeForm.query} onClick={() => onPaginationChangePage(activeForm.next)}>&raquo;</button></li>
                     </ul>
                 </div>
             </div>
@@ -31,24 +31,28 @@ class Pagination extends React.Component {
 }
 
 Pagination.propTypes = {
-    accounts: PropTypes.object,
-    onComponentDidMount: PropTypes.func,
     onPaginationChangePage: PropTypes.func,
+    activeForm: PropTypes.object,
 };
 
 function mapStateToProps(state) {
     return {
-        accounts: state.accounts,
+        activeForm: state.activeForm,
     };
 }
 
 function mapDispatchToProps(dispatch) {
     return {
-        onComponentDidMount() {
-            dispatch(getAccounts());
-        },
         onPaginationChangePage(field) {
-            dispatch(getAccounts(field));
+            dispatch(getPagination(field))
+            .then((data) => {
+                const update = {
+                    next: data.response.next,
+                    prev: data.response.prev,
+                    count: data.response.count,
+                };
+                dispatch(formUpdate(update));
+            });
         },
     };
 }
