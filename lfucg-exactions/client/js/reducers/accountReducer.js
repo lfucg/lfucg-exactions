@@ -21,12 +21,15 @@ const accountReducer = (state = {}, action) => {
     case PUT_ACCOUNT:
         return {};
     case GET_PAGINATION:
-        if (action.response.next) {
-            if (!action.response.next.startsWith('/account')) {
-                return {};
-            }
+        const next = action.response.next;
+        const prev = action.response.prev;
+        if (next != null && next.startsWith('/account')) {
+            return action.response;
         }
-        return action.response;
+        if (prev != null && prev.startsWith('/account')) {
+            return action.response;
+        }
+        return {};
     default:
         return state;
     }

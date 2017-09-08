@@ -108,7 +108,7 @@ class AccountExisting extends React.Component {
                 <div className="inside-body">
                     <div className="container">
                         {accounts_list}
-                        {accounts.count === 0 ? <h1>No Results Match</h1> : null}
+                        {accounts.length === 0 ? <h1>No Results Match</h1> : null}
                         <Pagination />
                     </div>
                 </div>
@@ -153,7 +153,7 @@ function mapDispatchToProps(dispatch) {
 
 AccountExisting.propTypes = {
     currentUser: PropTypes.object,
-    accounts: PropTypes.object,
+    accounts: PropTypes.array,
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
     onAccountQuery: PropTypes.func,
