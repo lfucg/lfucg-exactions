@@ -4,6 +4,7 @@ import {
     GET_ACCOUNT_QUERY,
     POST_ACCOUNT,
     PUT_ACCOUNT,
+    GET_PAGINATION,
 } from '../constants/apiConstants';
 
 
@@ -19,6 +20,13 @@ const accountReducer = (state = {}, action) => {
     case POST_ACCOUNT:
     case PUT_ACCOUNT:
         return {};
+    case GET_PAGINATION:
+        if (action.response.next) {
+            if (!action.response.next.startsWith('/account')) {
+                return {};
+            }
+        }
+        return action.response;
     default:
         return state;
     }

@@ -10,8 +10,8 @@ import Breadcrumbs from './Breadcrumbs';
 import Pagination from './Pagination';
 
 import {
-    getAccounts,
     getAccountQuery,
+    getPagination,
 } from '../actions/apiActions';
 
 import {
@@ -28,7 +28,6 @@ class AccountExisting extends React.Component {
             currentUser,
             accounts,
             onAccountQuery,
-            onPaginationChangePage,
         } = this.props;
 
         const accounts_list = accounts && accounts.length > 0 ? (
@@ -109,6 +108,7 @@ class AccountExisting extends React.Component {
                 <div className="inside-body">
                     <div className="container">
                         {accounts_list}
+                        {accounts.count === 0 ? <h1>No Results Match</h1> : null}
                         <Pagination />
                     </div>
                 </div>
@@ -128,7 +128,15 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     return {
         onComponentDidMount() {
-            dispatch(getAccounts());
+            dispatch(getPagination('/account/?paginatePage=true'))
+            .then((data) => {
+                const account_update = {
+                    next: data.response.next,
+                    prev: data.response.prev,
+                    count: data.response.count,
+                };
+                dispatch(formUpdate(account_update));
+            });
         },
         onAccountQuery(field) {
             return (e, ...args) => {
@@ -140,9 +148,6 @@ function mapDispatchToProps(dispatch) {
                 dispatch(getAccountQuery());
             };
         },
-        onPaginationChangePage(field) {
-            dispatch(getAccounts(field));
-        },
     };
 }
 
@@ -152,7 +157,6 @@ AccountExisting.propTypes = {
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
     onAccountQuery: PropTypes.func,
-    onPaginationChangePage: PropTypes.func,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AccountExisting);

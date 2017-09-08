@@ -7,9 +7,10 @@ import PropTypes from 'prop-types';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
+import Pagination from './Pagination';
 
 import {
-    getLots,
+    getPagination,
     getLotQuery,
 } from '../actions/apiActions';
 
@@ -104,6 +105,7 @@ class LotExisting extends React.Component {
                 <div className="inside-body">
                     <div className="container">
                         {lots_list}
+                        <Pagination />
                     </div>
                 </div>
                 <Footer />
@@ -114,7 +116,7 @@ class LotExisting extends React.Component {
 
 LotExisting.propTypes = {
     currentUser: PropTypes.object,
-    lots: PropTypes.object,
+    lots: PropTypes.array,
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
     onLotQuery: PropTypes.func,
@@ -130,7 +132,15 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     return {
         onComponentDidMount() {
-            dispatch(getLots());
+            dispatch(getPagination('/lot/?paginatePage=true'))
+            .then((data) => {
+                const account_update = {
+                    next: data.response.next,
+                    prev: data.response.prev,
+                    count: data.response.count,
+                };
+                dispatch(formUpdate(account_update));
+            });
         },
         onLotQuery(field) {
             return (e, ...args) => {
