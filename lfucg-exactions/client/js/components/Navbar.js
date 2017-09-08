@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 import {
     logout,
@@ -8,12 +9,6 @@ import {
 } from '../actions/apiActions';
 
 class Navbar extends React.Component {
-    static propTypes = {
-        currentUser: React.PropTypes.object,
-        onComponentDidMount: React.PropTypes.func,
-        onLogout: React.PropTypes.func,
-    }
-
     componentDidMount() {
         this.props.onComponentDidMount();
     }
@@ -73,6 +68,12 @@ class Navbar extends React.Component {
         );
     }
 }
+
+Navbar.propTypes = {
+    currentUser: PropTypes.object,
+    onComponentDidMount: PropTypes.func,
+    onLogout: PropTypes.func,
+};
 
 function mapStateToProps(state) {
     return {

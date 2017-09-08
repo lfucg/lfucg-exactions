@@ -1,8 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import {
-    hashHistory,
-} from 'react-router';
+import PropTypes from 'prop-types';
 
 import FormGroup from './FormGroup';
 
@@ -17,20 +15,6 @@ import {
 } from '../actions/apiActions';
 
 class PlatZoneForm extends React.Component {
-    static propTypes = {
-        activeForm: React.PropTypes.object,
-        plats: React.PropTypes.object,
-        plat_zone_id: React.PropTypes.string,
-        plat_zone_value: React.PropTypes.number,
-        acre_id: React.PropTypes.string,
-        acre_value: React.PropTypes.number,
-        zone_id: React.PropTypes.string,
-        zone_value: React.PropTypes.string,
-        onComponentDidMount: React.PropTypes.func,
-        formChange: React.PropTypes.func,
-        onPlatZoneSubmit: React.PropTypes.func,
-    };
-
     componentDidMount() {
         this.props.onComponentDidMount({
             plat_zone_id: this.props.plat_zone_id,
@@ -64,16 +48,8 @@ class PlatZoneForm extends React.Component {
                         <div className="row">
                             <div className="col-sm-6 form-group">
                                 <label htmlFor="plat" className="form-label" id="plat">* Plat</label>
-                                <select className="form-control" id="plat" onChange={formChange('plat')} >
-                                    {activeForm.plat ? (
-                                        <option value="choose_plat" aria-label={activeForm.plat_name}>
-                                            {activeForm.plat_name}
-                                        </option>
-                                    ) : (
-                                        <option value="choose_plat" aria-label="Select a Plat">
-                                            Visit appropriate plat entry form for other plats.
-                                        </option>
-                                    )}
+                                <select className="form-control" id="plat" onChange={formChange('plat')} value={activeForm.plat_show} >
+                                    <option value="start_plat">Plat</option>
                                 </select>
                             </div>
                         </div>
@@ -116,6 +92,20 @@ class PlatZoneForm extends React.Component {
     }
 }
 
+PlatZoneForm.propTypes = {
+    activeForm: PropTypes.object,
+    plats: PropTypes.object,
+    plat_zone_id: PropTypes.string,
+    plat_zone_value: PropTypes.number,
+    acre_id: PropTypes.string,
+    acre_value: PropTypes.number,
+    zone_id: PropTypes.string,
+    zone_value: PropTypes.string,
+    onComponentDidMount: PropTypes.func,
+    formChange: PropTypes.func,
+    onPlatZoneSubmit: PropTypes.func,
+};
+
 function mapStateToProps(state) {
     return {
         activeForm: state.activeForm,
@@ -146,10 +136,12 @@ function mapDispatchToProps(dispatch, props) {
                 const value_id = value.substring(0, comma_index);
                 const value_name = value.substring(comma_index + 1, value.length);
                 const field_name = `${[field]}_name`;
+                const field_show = `${[field]}_show`;
 
                 const update = {
                     [field]: value_id,
                     [field_name]: value_name,
+                    [field_show]: value,
                 };
                 dispatch(formUpdate(update));
             };

@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { map } from 'ramda';
+import PropTypes from 'prop-types';
 
 import FormGroup from './FormGroup';
 
@@ -14,17 +15,6 @@ import {
 } from '../actions/formActions';
 
 class Notes extends React.Component {
-    static propTypes = {
-        activeForm: React.PropTypes.object,
-        notes: React.PropTypes.object,
-        onComponentDidMount: React.PropTypes.func,
-        onSubmit: React.PropTypes.func,
-        content_type: React.PropTypes.string,
-        object_id: React.PropTypes.number,
-        parent_content_type: React.PropTypes.string,
-        parent_object_id: React.PropTypes.number,
-    };
-
     componentDidMount() {
         this.props.onComponentDidMount({
             content_type: this.props.content_type,
@@ -104,6 +94,17 @@ class Notes extends React.Component {
         );
     }
 }
+
+Notes.propTypes = {
+    activeForm: PropTypes.object,
+    notes: PropTypes.object,
+    onComponentDidMount: PropTypes.func,
+    onSubmit: PropTypes.func,
+    content_type: PropTypes.string,
+    object_id: PropTypes.number,
+    parent_content_type: PropTypes.string,
+    parent_object_id: PropTypes.number,
+};
 
 function mapStateToProps(state) {
     return {
