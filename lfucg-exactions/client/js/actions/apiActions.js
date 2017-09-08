@@ -691,20 +691,27 @@ export function getUploadContent() {
     return {
         type: API_CALL,
         endpoint: GET_UPLOAD_CONTENT,
-        url: (getState) => {
-            const {
-                activeForm,
-            } = getState();
-            const {
-                file_content_type,
-                file_object_id,
-            } = activeForm;
-            console.log('ACTION ACTIVE FORM', activeForm);
-
-            return `/upload/?file_content_type=${file_content_type}&file_object_id=${file_object_id}`;
-        },
+        url: '/upload/',
     };
 }
+// export function getUploadContent() {
+//     return {
+//         type: API_CALL,
+//         endpoint: GET_UPLOAD_CONTENT,
+//         url: (getState) => {
+//             const {
+//                 activeForm,
+//             } = getState();
+//             const {
+//                 file_content_type,
+//                 file_object_id,
+//             } = activeForm;
+//             console.log('ACTION ACTIVE FORM', activeForm);
+
+//             return `/upload/?file_content_type=${file_content_type}&file_object_id=${file_object_id}`;
+//         },
+//     };
+// }
 
 export function postUpload() {
     return {
@@ -729,10 +736,25 @@ export function postUpload() {
                 upload,
             } = activeForm;
             const upload_index = upload.lastIndexOf('\\') + 1;
+
+            let stored_token;
+            try {
+                stored_token = localStorage.getItem('Token');
+            } catch (e) {
+                const index_token = document.cookie.indexOf('Token=');
+                if (index_token) {
+                    const semicolon = index_token + 5 + document.cookie.substring(index_token).indexOf(';');
+                    stored_token = document.cookie.substring(index_token, semicolon);
+                } else {
+                    stored_token = null;
+                }
+            }
+
+            const authorization = global.Authorization ? global.Authorization : stored_token;
             return {
                 'X-CSRFToken': global.CSRFToken,
-                Authorization: `Token ${global.Authorization}`,
-                // filename: upload.slice(upload_index, upload.length),
+                Authorization: `Token ${authorization}`,
+                filename: upload.slice(upload_index, upload.length),
                 'Content-Disposition': `attachment; filename=${upload}`,
                 'Content-Type': undefined,
                 enctype: 'multipart/form-data',
