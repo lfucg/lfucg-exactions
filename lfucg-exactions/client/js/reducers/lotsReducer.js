@@ -22,12 +22,15 @@ const lotsReducer = (state = {}, action) => {
     case PUT_LOT:
         return action.response;
     case GET_PAGINATION:
-        if (action.response.next) {
-            if (!action.response.next.startsWith('/lot')) {
-                return {};
-            }
+        const next = action.response.next;
+        const prev = action.response.prev;
+        if (next != null && next.startsWith('/lot')) {
+            return action.response;
         }
-        return action.response;
+        if (prev != null && prev.startsWith('/lot')) {
+            return action.response;
+        }
+        return {};
     default:
         return state;
     }
