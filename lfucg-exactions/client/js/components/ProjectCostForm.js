@@ -4,6 +4,7 @@ import {
     hashHistory,
 } from 'react-router';
 import { map } from 'ramda';
+import PropTypes from 'prop-types';
 
 import Navbar from './Navbar';
 import Footer from './Footer';
@@ -17,25 +18,13 @@ import {
 } from '../actions/formActions';
 
 import {
-    getMe,
     getProjects,
-    getProjectID,
     getProjectCostID,
     postProjectCost,
     putProjectCost,
 } from '../actions/apiActions';
 
 class ProjectCostForm extends React.Component {
-    static propTypes = {
-        activeForm: React.PropTypes.object,
-        projects: React.PropTypes.object,
-        projectCosts: React.PropTypes.object,
-        route: React.PropTypes.object,
-        onComponentDidMount: React.PropTypes.func,
-        onSubmit: React.PropTypes.func,
-        formChange: React.PropTypes.func,
-    };
-
     componentDidMount() {
         this.props.onComponentDidMount();
     }
@@ -49,13 +38,14 @@ class ProjectCostForm extends React.Component {
             formChange,
         } = this.props;
 
-        const projectsList = projects.length > 0 ? (map((project) => {
-            return (
-                <option key={project.id} value={[project.id, project.project_description]} >
-                    {project.project_description}
-                </option>
-            );
-        })(projects)) : null;
+        const projectsList = projects.length > 0 &&
+            (map((project) => {
+                return (
+                    <option key={project.id} value={[project.id, project.name]} >
+                        {project.name}
+                    </option>
+                );
+            })(projects));
 
         return (
             <div className="project-cost-form">
@@ -78,16 +68,8 @@ class ProjectCostForm extends React.Component {
                                     <div className="row">
                                         <div className="col-sm-6 form-group">
                                             <label htmlFor="project_id" className="form-label" id="project_id" aria-label="Project">Project</label>
-                                            <select className="form-control" id="project_id" onChange={formChange('project_id')} >
-                                                {activeForm.project_name ? (
-                                                    <option value="choose_project" aria-label="Selected Project">
-                                                        {activeForm.project_name}
-                                                    </option>
-                                                ) : (
-                                                    <option value="choose_project" aria-label="Select an Project">
-                                                        Select an Project
-                                                    </option>
-                                                )}
+                                            <select className="form-control" id="project_id" onChange={formChange('project_id')} value={activeForm.project_id_show} >
+                                                <option value="start_project">Project</option>
                                                 {projectsList}
                                             </select>
                                         </div>
@@ -128,6 +110,13 @@ class ProjectCostForm extends React.Component {
                                             </FormGroup>
                                         </div>
                                         <div className="col-sm-6">
+                                            <FormGroup label="Other Costs" id="other_cost">
+                                                <input type="number" className="form-control" placeholder="Other Costs" />
+                                            </FormGroup>
+                                        </div>
+                                    </div>
+                                    <div className="row">
+                                        <div className="col-sm-6">
                                             <FormGroup label="Credits Available" id="credits_available">
                                                 <input type="number" className="form-control" placeholder="Credits Available" />
                                             </FormGroup>
@@ -146,6 +135,16 @@ class ProjectCostForm extends React.Component {
     }
 }
 
+ProjectCostForm.propTypes = {
+    activeForm: PropTypes.object,
+    projects: PropTypes.object,
+    projectCosts: PropTypes.object,
+    route: PropTypes.object,
+    onComponentDidMount: PropTypes.func,
+    onSubmit: PropTypes.func,
+    formChange: PropTypes.func,
+};
+
 function mapStateToProps(state) {
     return {
         activeForm: state.activeForm,
@@ -161,36 +160,28 @@ function mapDispatchToProps(dispatch, params) {
         onComponentDidMount() {
             dispatch(formInit());
             dispatch(getProjects());
-            dispatch(getMe())
-            .then((data_me) => {
-                if (data_me.error) {
-                    hashHistory.push('login/');
-                }
-                if (selectedProjectCost) {
-                    dispatch(getProjectCostID(selectedProjectCost))
-                    .then((data_project_cost) => {
-                        if (data_project_cost.response.project_id) {
-                            dispatch(getProjectID(data_project_cost.response.project_id))
-                            .then((data_project) => {
-                                const project_update = {
-                                    project_description: data_project.response.project_description,
-                                };
-                                dispatch(formUpdate(project_update));
-                            });
-                        }
-                        const update = {
-                            estimate_type: data_project_cost.response.estimate_type,
-                            land_cost: data_project_cost.response.land_cost,
-                            design_cost: data_project_cost.response.design_cost,
-                            construction_cost: data_project_cost.response.construction_cost,
-                            admin_cost: data_project_cost.response.admin_cost,
-                            management_cost: data_project_cost.response.management_cost,
-                            credits_available: data_project_cost.response.credits_available,
-                        };
-                        dispatch(formUpdate(update));
-                    });
-                }
-            });
+            if (selectedProjectCost) {
+                dispatch(getProjectCostID(selectedProjectCost))
+                .then((data_project_cost) => {
+                    const update = {
+                        project_id: data_project_cost.response.project_id ? data_project_cost.response.project_id.id : null,
+                        project_id_show: data_project_cost.response.project_id ? `${data_project_cost.response.project_id.id},${data_project_cost.response.project_id.name}` : '',
+                        estimate_type: data_project_cost.response.estimate_type,
+                        land_cost: data_project_cost.response.land_cost,
+                        design_cost: data_project_cost.response.design_cost,
+                        construction_cost: data_project_cost.response.construction_cost,
+                        admin_cost: data_project_cost.response.admin_cost,
+                        management_cost: data_project_cost.response.management_cost,
+                        credits_available: data_project_cost.response.credits_available,
+                    };
+                    dispatch(formUpdate(update));
+                });
+            } else {
+                const initial_constants = {
+                    project_id_show: '',
+                };
+                dispatch(formUpdate(initial_constants));
+            }
         },
         formChange(field) {
             return (e, ...args) => {
@@ -200,10 +191,12 @@ function mapDispatchToProps(dispatch, params) {
                 const value_id = value.substring(0, comma_index);
                 const value_name = value.substring(comma_index + 1, value.length);
                 const field_name = `${[field]}_name`;
+                const field_show = `${[field]}_show`;
 
                 const update = {
                     [field]: value_id,
                     [field_name]: value_name,
+                    [field_show]: value,
                 };
                 dispatch(formUpdate(update));
             };

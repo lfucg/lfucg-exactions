@@ -1,9 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import {
-    Link,
     hashHistory,
 } from 'react-router';
+import PropTypes from 'prop-types';
 
 import Navbar from './Navbar';
 import Footer from './Footer';
@@ -18,21 +18,12 @@ import {
 } from '../actions/formActions';
 
 import {
-    getMe,
     getSubdivisionID,
     postSubdivision,
     putSubdivision,
 } from '../actions/apiActions';
 
 class SubdivisionForm extends React.Component {
-    static propTypes = {
-        activeForm: React.PropTypes.object,
-        subdivisions: React.PropTypes.object,
-        route: React.PropTypes.object,
-        onComponentDidMount: React.PropTypes.func,
-        onSubmit: React.PropTypes.func,
-    };
-
     componentDidMount() {
         this.props.onComponentDidMount();
     }
@@ -102,6 +93,14 @@ class SubdivisionForm extends React.Component {
     }
 }
 
+SubdivisionForm.propTypes = {
+    activeForm: PropTypes.object,
+    subdivisions: PropTypes.object,
+    route: PropTypes.object,
+    onComponentDidMount: PropTypes.func,
+    onSubmit: PropTypes.func,
+};
+
 function mapStateToProps(state) {
     return {
         activeForm: state.activeForm,
@@ -115,30 +114,28 @@ function mapDispatchToProps(dispatch, params) {
     return {
         onComponentDidMount() {
             dispatch(formInit());
-            dispatch(getMe())
-            .then((data_me) => {
-                if (data_me.error) {
-                    hashHistory.push('login/');
-                }
-                if (selectedSubdivision) {
-                    dispatch(getSubdivisionID(selectedSubdivision))
-                    .then((data_subdivision) => {
-                        const update = {
-                            sub_id: selectedSubdivision,
-                            name: data_subdivision.response.name,
-                            gross_acreage: data_subdivision.response.cleaned_gross_acreage,
-                        };
-                        dispatch(formUpdate(update));
-                    });
-                }
-            });
+            if (selectedSubdivision) {
+                dispatch(getSubdivisionID(selectedSubdivision))
+                .then((data_subdivision) => {
+                    const update = {
+                        sub_id: selectedSubdivision,
+                        name: data_subdivision.response.name,
+                        gross_acreage: data_subdivision.response.cleaned_gross_acreage,
+                    };
+                    dispatch(formUpdate(update));
+                });
+            }
         },
         onSubmit(event) {
             event.preventDefault();
-            dispatch(postSubdivision())
-            .then(() => {
-                hashHistory.push('subdivision/');
-            });
+            if (selectedSubdivision) {
+                dispatch(putSubdivision(selectedSubdivision));
+            } else {
+                dispatch(postSubdivision())
+                .then((data_sub_post) => {
+                    hashHistory.push(`subdivision/form/${data_sub_post.response.id}`);
+                });
+            }
         },
     };
 }

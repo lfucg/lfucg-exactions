@@ -4,6 +4,7 @@ import {
     hashHistory,
 } from 'react-router';
 import { map } from 'ramda';
+import PropTypes from 'prop-types';
 
 import Navbar from './Navbar';
 import Footer from './Footer';
@@ -17,33 +18,18 @@ import {
 } from '../actions/formActions';
 
 import {
-    getMe,
     getLots,
     getLotID,
     getAccounts,
     getAccountID,
     getAccountAgreements,
     getAgreements,
-    getAgreementID,
     getPaymentID,
     postPayment,
     putPayment,
 } from '../actions/apiActions';
 
 class PaymentForm extends React.Component {
-    static propTypes = {
-        activeForm: React.PropTypes.object,
-        lots: React.PropTypes.object,
-        accounts: React.PropTypes.object,
-        agreements: React.PropTypes.object,
-        payments: React.PropTypes.object,
-        route: React.PropTypes.object,
-        onComponentDidMount: React.PropTypes.func,
-        onSubmit: React.PropTypes.func,
-        formChange: React.PropTypes.func,
-        lotChange: React.PropTypes.func,
-    };
-
     componentDidMount() {
         this.props.onComponentDidMount();
     }
@@ -60,29 +46,32 @@ class PaymentForm extends React.Component {
             lotChange,
         } = this.props;
 
-        const lotsList = lots.length > 0 ? (map((lot) => {
-            return (
-                <option key={lot.id} value={[lot.id, lot.address_full]} >
-                    {lot.address_full}
-                </option>
-            );
-        })(lots)) : null;
+        const lotsList = lots.length > 0 &&
+            (map((lot) => {
+                return (
+                    <option key={lot.id} value={[lot.id, lot.address_full]} >
+                        {lot.address_full}
+                    </option>
+                );
+            })(lots));
 
-        const accountsList = accounts.length > 0 ? (map((account) => {
-            return (
-                <option key={account.id} value={[account.id, account.account_name]} >
-                    {account.account_name}
-                </option>
-            );
-        })(accounts)) : null;
+        const accountsList = accounts.length > 0 &&
+            (map((account) => {
+                return (
+                    <option key={account.id} value={[account.id, account.account_name]} >
+                        {account.account_name}
+                    </option>
+                );
+            })(accounts));
 
-        const agreementsList = agreements.length > 0 ? (map((agreement) => {
-            return (
-                <option key={agreement.id} value={[agreement.id, agreement.resolution_number]} >
-                    {agreement.resolution_number}
-                </option>
-            );
-        })(agreements)) : null;
+        const agreementsList = agreements.length > 0 &&
+            (map((agreement) => {
+                return (
+                    <option key={agreement.id} value={[agreement.id, agreement.resolution_number]} >
+                        {agreement.resolution_number}
+                    </option>
+                );
+            })(agreements));
 
         const submitEnabled =
             activeForm.lot_id &&
@@ -114,48 +103,24 @@ class PaymentForm extends React.Component {
                                     <div className="row">
                                         <div className="col-sm-6 form-group">
                                             <label htmlFor="lot_id" className="form-label" id="lot_id" aria-label="Lot" aria-required="true">* Lot</label>
-                                            <select className="form-control" id="lot_id" onChange={lotChange('lot_id')} >
-                                                {activeForm.address_full ? (
-                                                    <option value="choose_source" aria-label="Selected Lot">
-                                                        {activeForm.address_full}
-                                                    </option>
-                                                ) : (
-                                                    <option value="choose_source" aria-label="Select an Lot">
-                                                        Select a Lot
-                                                    </option>
-                                                )}
+                                            <select className="form-control" id="lot_id" onChange={lotChange('lot_id')} value={activeForm.lot_id_show} >
+                                                <option value="start_lot">Lot</option>
                                                 {lotsList}
                                             </select>
                                         </div>
                                     </div>
                                     <div className="row">
                                         <div className="col-sm-6 form-group">
-                                            <label htmlFor="credit_account" className="form-label" id="credit_account" aria-label="Account" aria-required="true">* Account</label>
-                                            <select className="form-control" id="credit_account" onChange={formChange('credit_account')} >
-                                                {activeForm.account_name ? (
-                                                    <option value="choose_account" aria-label="Selected Account">
-                                                        {activeForm.account_name}
-                                                    </option>
-                                                ) : (
-                                                    <option value="choose_account" aria-label="Select an Account">
-                                                        Select an Account
-                                                    </option>
-                                                )}
+                                            <label htmlFor="credit_account" className="form-label" id="credit_account" aria-label="Developer Account" aria-required="true">* Developer Account</label>
+                                            <select className="form-control" id="credit_account" onChange={formChange('credit_account')} value={activeForm.credit_account_show} >
+                                                <option value="start_account">Developer Account</option>
                                                 {accountsList}
                                             </select>
                                         </div>
                                         <div className="col-sm-6 form-group">
                                             <label htmlFor="credit_source" className="form-label" id="credit_source" aria-label="Agreement">Agreement</label>
-                                            <select className="form-control" id="credit_source" onChange={formChange('credit_source')} >
-                                                {activeForm.resolution_number ? (
-                                                    <option value="choose_source" aria-label="Selected Agreement">
-                                                        {activeForm.resolution_number}
-                                                    </option>
-                                                ) : (
-                                                    <option value="choose_source" aria-label="Select an Agreement">
-                                                        Select an Agreement
-                                                    </option>
-                                                )}
+                                            <select className="form-control" id="credit_source" onChange={formChange('credit_source')} value={activeForm.credit_source_show} >
+                                                <option value="start_source">Agreement</option>
                                                 {agreementsList}
                                             </select>
                                         </div>
@@ -171,22 +136,23 @@ class PaymentForm extends React.Component {
                                         </div>
                                         <div className="col-sm-6 form-group">
                                             <label htmlFor="paid_by_type" className="form-label" id="paid_by_type" aria-label="Paid By Type" aria-required="true">* Paid By Type</label>
-                                            <select className="form-control" id="paid_by_type" onChange={formChange('paid_by_type')} >
-                                                {payments.paid_by_type ? (
-                                                    <option value="paid_by_type" aria-label={`Paid By Type ${payments.paid_by_type_display}`}>{payments.paid_by_type_display}</option>
-                                                ) : (
-                                                    <option value="choose_paid_by_type" aria-label="Choose a Paid By Type">Choose a Paid By Type</option>
-                                                )}
+                                            <select className="form-control" id="paid_by_type" onChange={formChange('paid_by_type')} value={activeForm.paid_by_type_show} >
+                                                <option value="start_paid_by_type">Paid By Type</option>
                                                 <option value={['DEVELOPER', 'Developer']}>Developer</option>
+                                                <option value={['BUILDER', 'Builder']}>Builder</option>
                                                 <option value={['OWNER', 'Home Owner']}>Home Owner</option>
                                             </select>
                                         </div>
                                     </div>
                                     <div className="row">
-                                        <div className="col-sm-6">
-                                            <FormGroup label="Payment Type" id="payment_type">
-                                                <input type="text" className="form-control" placeholder="Payment Type" />
-                                            </FormGroup>
+                                        <div className="col-sm-6 form-group">
+                                            <label htmlFor="payment_type" className="form-label" id="payment_type" aria-label="Payment Type" aria-required="true">* Payment Type</label>
+                                            <select className="form-control" id="payment_type" onChange={formChange('payment_type')} value={activeForm.payment_type_show} >
+                                                <option value="start_payment_type">Payment Type</option>
+                                                <option value={['CHECK', 'Check']}>Check</option>
+                                                <option value={['CREDIT_CARD', 'Credit Card']}>Credit Card</option>
+                                                <option value={['OTHER', 'Other']}>Other</option>
+                                            </select>
                                         </div>
                                         <div className="col-sm-6">
                                             <FormGroup label="Check Number" id="check_number">
@@ -253,6 +219,19 @@ class PaymentForm extends React.Component {
     }
 }
 
+PaymentForm.propTypes = {
+    activeForm: PropTypes.object,
+    lots: PropTypes.object,
+    accounts: PropTypes.object,
+    agreements: PropTypes.object,
+    payments: PropTypes.object,
+    route: PropTypes.object,
+    onComponentDidMount: PropTypes.func,
+    onSubmit: PropTypes.func,
+    formChange: PropTypes.func,
+    lotChange: PropTypes.func,
+};
+
 function mapStateToProps(state) {
     return {
         activeForm: state.activeForm,
@@ -272,57 +251,41 @@ function mapDispatchToProps(dispatch, params) {
             dispatch(getLots());
             dispatch(getAccounts());
             dispatch(getAgreements());
-            dispatch(getMe())
-            .then((data_me) => {
-                if (data_me.error) {
-                    hashHistory.push('login/');
-                }
-                if (selectedPayment) {
-                    dispatch(getPaymentID(selectedPayment))
-                    .then((data_payment) => {
-                        if (data_payment.response.credit_account) {
-                            dispatch(getAccountID(data_payment.response.credit_account))
-                            .then((data_account) => {
-                                const account_update = {
-                                    account_name: data_account.response.account_name,
-                                };
-                                dispatch(formUpdate(account_update));
-                            });
-                        }
-                        if (data_payment.response.credit_source) {
-                            dispatch(getAgreementID(data_payment.response.credit_source))
-                            .then((data_agreement) => {
-                                const agreement_update = {
-                                    resolution_number: data_agreement.response.resolution_number,
-                                };
-                                dispatch(formUpdate(agreement_update));
-                            });
-                        }
-                        if (data_payment.response.lot_id) {
-                            dispatch(getLotID(data_payment.response.lot_id))
-                            .then((data_lot) => {
-                                const lot_update = {
-                                    address_full: data_lot.response.address_full,
-                                };
-                                dispatch(formUpdate(lot_update));
-                            });
-                        }
-                        const update = {
-                            paid_by: data_payment.response.paid_by,
-                            paid_by_type: data_payment.response.paid_by_type_display,
-                            payment_type: data_payment.response.payment_type,
-                            check_number: data_payment.response.check_number,
-                            paid_roads: data_payment.response.paid_roads,
-                            paid_sewer_trans: data_payment.response.paid_sewer_trans,
-                            paid_sewer_cap: data_payment.response.paid_sewer_cap,
-                            paid_parks: data_payment.response.paid_parks,
-                            paid_storm: data_payment.response.paid_storm,
-                            paid_open_space: data_payment.response.paid_open_space,
-                        };
-                        dispatch(formUpdate(update));
-                    });
-                }
-            });
+            if (selectedPayment) {
+                dispatch(getPaymentID(selectedPayment))
+                .then((data_payment) => {
+                    const update = {
+                        credit_account: data_payment.response.credit_account ? data_payment.response.credit_account.id : null,
+                        credit_account_show: data_payment.response.credit_account ? `${data_payment.response.credit_account.id},${data_payment.response.credit_account.account_name}` : '',
+                        credit_source: data_payment.response.credit_source ? data_payment.response.credit_source.id : null,
+                        credit_source_show: data_payment.response.credit_source ? `${data_payment.response.credit_source.id},${data_payment.response.credit_source.resolution_number}` : '',
+                        lot_id: data_payment.response.lot_id ? data_payment.response.lot_id.id : null,
+                        lot_id_show: data_payment.response.lot_id ? `${data_payment.response.lot_id.id},${data_payment.response.lot_id.address_full}` : '',
+                        paid_by: data_payment.response.paid_by,
+                        paid_by_type: data_payment.response.paid_by_type,
+                        paid_by_type_show: `${data_payment.response.paid_by_type},${data_payment.response.paid_by_type_display}`,
+                        payment_type: data_payment.response.payment_type,
+                        payment_type_show: `${data_payment.response.payment_type},${data_payment.response.payment_type_display}`,
+                        check_number: data_payment.response.check_number,
+                        paid_roads: data_payment.response.paid_roads,
+                        paid_sewer_trans: data_payment.response.paid_sewer_trans,
+                        paid_sewer_cap: data_payment.response.paid_sewer_cap,
+                        paid_parks: data_payment.response.paid_parks,
+                        paid_storm: data_payment.response.paid_storm,
+                        paid_open_space: data_payment.response.paid_open_space,
+                    };
+                    dispatch(formUpdate(update));
+                });
+            } else {
+                const initial_constants = {
+                    credit_account_show: '',
+                    credit_source_show: '',
+                    lot_id_show: '',
+                    paid_by_type_show: '',
+                    payment_type_show: '',
+                };
+                dispatch(formUpdate(initial_constants));
+            }
         },
         lotChange() {
             return (e, ...args) => {
@@ -364,10 +327,12 @@ function mapDispatchToProps(dispatch, params) {
                 const value_id = value.substring(0, comma_index);
                 const value_name = value.substring(comma_index + 1, value.length);
                 const field_name = `${[field]}_name`;
+                const field_show = `${[field]}_show`;
 
                 const update = {
                     [field]: value_id,
                     [field_name]: value_name,
+                    [field_show]: value,
                 };
                 dispatch(formUpdate(update));
             };
