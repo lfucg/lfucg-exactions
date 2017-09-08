@@ -6,8 +6,7 @@ import PropTypes from 'prop-types';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
-
-import FormGroup from './FormGroup';
+import RateCategoryTable from './RateCategoryTable';
 
 import {
     formInit,
@@ -30,26 +29,26 @@ class RateTableForm extends React.Component {
         } = this.props;
 
         // VALUE ORDER: RATE, ID, RATE_TABLE_ID, CATEGORY, ZONE, EXPANSION_AREA
-        const RoadEA1List = activeForm.rates.length > 0 &&
-            (map((road_ea1) => {
-                return (
-                    <div className="row">
-                        <input
-                          type="number"
-                          step="0.01"
-                          key={road_ea1.id}
-                          value={[
-                              road_ea1.rate,
-                              road_ea1.id,
-                              road_ea1.rate_table_id,
-                              road_ea1.category,
-                              road_ea1.zone,
-                              road_ea1.expansion_area,
-                          ]}
-                        />
-                    </div>
-                );
-            })(activeForm.rates));
+        // const RoadEA1List = activeForm.rates.length > 0 &&
+        //     (map((road_ea1) => {
+        //         return (
+        //             <div className="row">
+        //                 <input
+        //                   type="number"
+        //                   step="0.01"
+        //                   key={road_ea1.id}
+        //                   value={[
+        //                       road_ea1.rate,
+        //                       road_ea1.id,
+        //                       road_ea1.rate_table_id,
+        //                       road_ea1.category,
+        //                       road_ea1.zone,
+        //                       road_ea1.expansion_area,
+        //                   ]}
+        //                 />
+        //             </div>
+        //         );
+        //     })(activeForm.rates));
 
         return (
             <div className="rate-table-form">
@@ -57,7 +56,7 @@ class RateTableForm extends React.Component {
 
                 <div className="form-header">
                     <div className="container">
-                        <h1>PLATS - CREATE / APPLY</h1>
+                        <h1>EXACTION RATE TABLE</h1>
                     </div>
                 </div>
 
@@ -65,21 +64,8 @@ class RateTableForm extends React.Component {
 
                 <div className="inside-body">
                     <div className="container">
+                        <RateCategoryTable />
                         hello
-                        {RoadEA1List ? RoadEA1List : (
-                            <input
-                              type="number"
-                              step="0.01"
-                              value={[
-                                  '0',
-                                  null,
-                                  activeForm.rate_table_id,
-                                  'ROADS',
-                                  'EAR-1',
-                                  'EA-1',
-                              ]}
-                            />
-                        )}
                     </div>
                 </div>
                 <Footer />
@@ -106,6 +92,8 @@ function mapDispatchToProps(dispatch) {
             dispatch(formInit());
             dispatch(getRates())
             .then((data_rate) => {
+                const all_results = data_rate.response;
+                console.log('ALL RESULTS', all_results);
                 const rate_update = {
                     rates: data_rate.response,
                     rate_table_id: data_rate.response.rate_table_id,
