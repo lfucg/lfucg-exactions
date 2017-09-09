@@ -778,21 +778,22 @@ export function postUpload() {
             const upload_file = document.getElementById('upload').files[0];
             const formData = new FormData();
             formData.append('upload', upload_file);
-            formData.append(
+            // formData.append(
                 // upload,
-                file_content_type,
-                file_object_id,
-            );
+            //     file_content_type,
+            //     file_object_id,
+            // );
             console.log('UPLOAD FILE', upload_file);
             console.log('UPLOAD', upload);
             // console.log('CONTENT TYPE', file_content_type);
             return {
                 user: id,
-                filename: upload,
-                upload: upload_file,
+                formData,
+                // filename: upload,
+                // upload: upload_file,
                 // upload: upload.slice(upload_index, upload.length),
-                file_content_type,
-                file_object_id,
+                // file_content_type,
+                // file_object_id,
                 // transformRequest: formData,
             };
         },
