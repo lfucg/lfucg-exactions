@@ -230,7 +230,6 @@ class ProjectCostEstimateViewSet(viewsets.ModelViewSet):
     queryset = ProjectCostEstimate.objects.all()
     permission_classes = (CanAdminister,)
 
-<<<<<<< HEAD
     def get_queryset(self):
         queryset = ProjectCostEstimate.objects.all()
         PageNumberPagination.page_size = None
@@ -248,7 +247,6 @@ class ProjectCostEstimateViewSet(viewsets.ModelViewSet):
     def perform_update(self, serializer):
         instance = serializer.save(modified_by=self.request.user)
 
-=======
     def create(self, request):
         data_set = request.data
 
@@ -276,7 +274,6 @@ class ProjectCostEstimateViewSet(viewsets.ModelViewSet):
         except Exception as e:
             return Response(status=status.HTTP_400_BAD_REQUEST)
             
->>>>>>> 71a6a56f02bcfb5b7f8ff038a9ae37b775174828
 class AccountLedgerViewSet(viewsets.ModelViewSet):
     serializer_class = AccountLedgerSerializer
     queryset = AccountLedger.objects.all()
