@@ -21,11 +21,11 @@ class SubdivisionViewSet(viewsets.ModelViewSet):
         paginatePage = self.request.query_params.get('paginatePage', None)
 
         if query_text == '':
-            PageNumberPagination.page_size = 1
+            PageNumberPagination.page_size = 10
             pagination_class = PageNumberPagination
 
         if paginatePage is not None:
-            PageNumberPagination.page_size = 1
+            PageNumberPagination.page_size = 10
             pagination_class = PageNumberPagination
             
         if query_text is not None:
@@ -74,11 +74,11 @@ class PlatViewSet(viewsets.ModelViewSet):
         query_text = self.request.query_params.get('query', None)
         
         if query_text == '':
-            PageNumberPagination.page_size = 1
+            PageNumberPagination.page_size = 10
             pagination_class = PageNumberPagination
 
         if paginatePage is not None:
-            PageNumberPagination.page_size = 1
+            PageNumberPagination.page_size = 10
             pagination_class = PageNumberPagination
 
         if query_text is not None:
@@ -132,11 +132,11 @@ class LotViewSet(viewsets.ModelViewSet):
         paginatePage = self.request.query_params.get('paginatePage', None)
 
         if query_text == '':
-            PageNumberPagination.page_size = 1
+            PageNumberPagination.page_size = 10
             pagination_class = PageNumberPagination
 
         if paginatePage is not None:
-            PageNumberPagination.page_size = 1
+            PageNumberPagination.page_size = 10
             pagination_class = PageNumberPagination
 
         plat_set = self.request.query_params.get('plat', None)
