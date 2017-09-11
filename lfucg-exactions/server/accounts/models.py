@@ -130,7 +130,7 @@ class Agreement(models.Model):
     history = HistoricalRecords()
 
     def __str__(self):
-        return self.account_id.account_name
+        return self.resolution_number
 
 class Payment(models.Model):
     is_approved = models.BooleanField(default=False)
