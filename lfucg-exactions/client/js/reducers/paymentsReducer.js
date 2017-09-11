@@ -7,6 +7,7 @@ import {
     GET_AGREEMENT_PAYMENTS,
     POST_PAYMENT,
     PUT_PAYMENT,
+    GET_PAGINATION,
 } from '../constants/apiConstants';
 
 
@@ -24,6 +25,16 @@ const paymentReducer = (state = {}, action) => {
         return action.response;
     case POST_PAYMENT:
     case PUT_PAYMENT:
+        return {};
+    case GET_PAGINATION:
+        const next = action.response.next;
+        const prev = action.response.prev;
+        if (next != null && next.startsWith('/payment')) {
+            return action.response;
+        }
+        if (prev != null && prev.startsWith('/payment')) {
+            return action.response;
+        }
         return {};
     default:
         return state;

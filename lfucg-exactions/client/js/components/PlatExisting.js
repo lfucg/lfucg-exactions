@@ -7,9 +7,10 @@ import PropTypes from 'prop-types';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
+import Pagination from './Pagination';
 
 import {
-    getPlats,
+    getPagination,
     getPlatQuery,
 } from '../actions/apiActions';
 
@@ -107,6 +108,7 @@ class PlatExisting extends React.Component {
                 <div className="inside-body">
                     <div className="container">
                         {plats_list}
+                        <Pagination />
                     </div>
                 </div>
                 <Footer />
@@ -133,7 +135,15 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     return {
         onComponentDidMount() {
-            dispatch(getPlats());
+            dispatch(getPagination('/plat/?paginatePage=true'))
+            .then((data) => {
+                const account_update = {
+                    next: data.response.next,
+                    prev: data.response.prev,
+                    count: data.response.count,
+                };
+                dispatch(formUpdate(account_update));
+            });
         },
         onPlatQuery(field) {
             return (e, ...args) => {

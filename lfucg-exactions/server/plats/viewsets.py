@@ -16,6 +16,17 @@ class SubdivisionViewSet(viewsets.ModelViewSet):
         queryset = Subdivision.objects.all()
 
         query_text = self.request.query_params.get('query', None)
+        PageNumberPagination.page_size = None
+        paginatePage = self.request.query_params.get('paginatePage', None)
+
+        if query_text == '':
+            PageNumberPagination.page_size = 1
+            pagination_class = PageNumberPagination
+
+        if paginatePage is not None:
+            PageNumberPagination.page_size = 1
+            pagination_class = PageNumberPagination
+            
         if query_text is not None:
             query_text = query_text.lower()
 
@@ -36,8 +47,18 @@ class PlatViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         queryset = Plat.objects.all()
-
+        PageNumberPagination.page_size = None
+        paginatePage = self.request.query_params.get('paginatePage', None)
         query_text = self.request.query_params.get('query', None)
+        
+        if query_text == '':
+            PageNumberPagination.page_size = 1
+            pagination_class = PageNumberPagination
+
+        if paginatePage is not None:
+            PageNumberPagination.page_size = 1
+            pagination_class = PageNumberPagination
+
         if query_text is not None:
             query_text = query_text.lower()
 
@@ -63,9 +84,9 @@ class LotViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         queryset = Lot.objects.all()
+        query_text = self.request.query_params.get('query', None)
         PageNumberPagination.page_size = None
         paginatePage = self.request.query_params.get('paginatePage', None)
-        query_text = self.request.query_params.get('query', None)
 
         if query_text == '':
             PageNumberPagination.page_size = 1
