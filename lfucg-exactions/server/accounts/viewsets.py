@@ -21,7 +21,7 @@ class AccountViewSet(viewsets.ModelViewSet):
 
         query_text = self.request.query_params.get('query', None)
         if query_text == '':
-            PageNumberPagination.page_size = 1
+            PageNumberPagination.page_size = 10
             pagination_class = PageNumberPagination
         if query_text is not None:
             query_text = query_text.lower()
@@ -35,7 +35,7 @@ class AccountViewSet(viewsets.ModelViewSet):
 
         paginatePage = self.request.query_params.get('paginatePage', None)
         if paginatePage is not None:
-            PageNumberPagination.page_size = 1
+            PageNumberPagination.page_size = 10
             pagination_class = PageNumberPagination
 
         return queryset.order_by('account_name')
@@ -77,7 +77,7 @@ class AgreementViewSet(viewsets.ModelViewSet):
 
         paginatePage = self.request.query_params.get('paginatePage', None)
         if paginatePage is not None:
-            PageNumberPagination.page_size = 1
+            PageNumberPagination.page_size = 10
             pagination_class = PageNumberPagination
 
         account_id_set = self.request.query_params.get('account_id', None)
@@ -95,7 +95,7 @@ class AgreementViewSet(viewsets.ModelViewSet):
                 Q(expansion_area__icontains=query_text))
 
         if query_text == '':
-            PageNumberPagination.page_size = 1
+            PageNumberPagination.page_size = 10
             pagination_class = PageNumberPagination
 
         return queryset.order_by('expansion_area')
@@ -138,7 +138,7 @@ class PaymentViewSet(viewsets.ModelViewSet):
 
         paginatePage = self.request.query_params.get('paginatePage', None)
         if paginatePage is not None:
-            PageNumberPagination.page_size = 1
+            PageNumberPagination.page_size = 10
             pagination_class = PageNumberPagination
 
         lot_id_set = self.request.query_params.get('lot_id', None)
@@ -234,7 +234,7 @@ class ProjectCostEstimateViewSet(viewsets.ModelViewSet):
 
         paginatePage = self.request.query_params.get('paginatePage', None)
         if paginatePage is not None:
-            PageNumberPagination.page_size = 1
+            PageNumberPagination.page_size = 10
             pagination_class = PageNumberPagination
 
         return queryset
