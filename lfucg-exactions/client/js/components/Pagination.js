@@ -19,7 +19,7 @@ class Pagination extends React.Component {
                         <li><button className="btn btn-default" disabled={!activeForm.prev || activeForm.query} onClick={() => onPaginationChangePage(activeForm.prev)}>&laquo;</button></li>
                         <li>
                             <button className="btn btn-default">
-                                {activeForm.next ? (activeForm.next.charAt(activeForm.next.indexOf('=') + 1) - 1) : (activeForm.count / 1) }
+                                {activeForm.next ? (activeForm.next.charAt(activeForm.next.indexOf('=') + 1) - 1) : (Math.ceil(activeForm.count / 10)) }
                             </button>
                         </li>
                         <li><button className="btn btn-default" disabled={!activeForm.next || activeForm.query} onClick={() => onPaginationChangePage(activeForm.next)}>&raquo;</button></li>

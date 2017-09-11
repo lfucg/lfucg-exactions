@@ -24,10 +24,9 @@ const lotsReducer = (state = {}, action) => {
     case GET_PAGINATION:
         const next = action.response.next;
         const prev = action.response.prev;
-        if (next != null && next.startsWith('/lot')) {
-            return action.response;
-        }
-        if (prev != null && prev.startsWith('/lot')) {
+        if ((next != null && next.startsWith('/lot')) ||
+            (prev != null && prev.startsWith('/lot')) ||
+            (window.location.hash === '#/lot')) {
             return action.response;
         }
         return {};
