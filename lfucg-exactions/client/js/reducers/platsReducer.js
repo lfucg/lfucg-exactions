@@ -25,10 +25,9 @@ const platsReducer = (state = {}, action) => {
     case GET_PAGINATION:
         const next = action.response.next;
         const prev = action.response.prev;
-        if (next != null && next.startsWith('/plat')) {
-            return action.response;
-        }
-        if (prev != null && prev.startsWith('/plat')) {
+        if ((next != null && next.startsWith('/plat')) ||
+            (prev != null && prev.startsWith('/plat')) ||
+            (window.location.hash === '#/plat')) {
             return action.response;
         }
         return {};
