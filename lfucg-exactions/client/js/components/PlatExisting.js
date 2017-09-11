@@ -39,8 +39,8 @@ class PlatExisting extends React.Component {
                             </div>
                         </div>
                         <div className="row link-row">
-                            <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
-                                <div className="col-xs-5">
+                            <div className="col-xs-12 col-sm-7 col-md-5 col-sm-offset-5 col-md-offset-7">
+                                <div className="col-xs-3">
                                     {currentUser && currentUser.permissions && currentUser.permissions.plat &&
                                         <Link to={`plat/form/${plat.id}`} aria-label="Edit">
                                             <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
@@ -50,7 +50,17 @@ class PlatExisting extends React.Component {
                                         </Link>
                                     }
                                 </div>
-                                <div className="col-xs-5 ">
+                                <div className="col-xs-4">
+                                    {currentUser && currentUser.permissions && currentUser.permissions.plat &&
+                                        <Link to={`plat/report/${plat.id}`} aria-label="Report">
+                                            <i className="fa fa-line-chart link-icon col-xs-4" aria-hidden="true" />
+                                            <div className="col-xs-7 link-label">
+                                                Report
+                                            </div>
+                                        </Link>
+                                    }
+                                </div>
+                                <div className="col-xs-4 ">
                                     <Link to={`plat/summary/${plat.id}`} aria-label="Summary">
                                         <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
                                         <div className="col-xs-7 link-label">
