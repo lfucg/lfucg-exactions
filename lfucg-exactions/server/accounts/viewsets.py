@@ -14,6 +14,7 @@ class AccountViewSet(viewsets.ModelViewSet):
     serializer_class = AccountSerializer
     queryset = Account.objects.all()
     permission_classes = (CanAdminister,)
+
     def get_queryset(self):
         PageNumberPagination.page_size = None
         queryset = Account.objects.all()
@@ -32,13 +33,10 @@ class AccountViewSet(viewsets.ModelViewSet):
                 Q(email__icontains=query_text))
 
 
-        paginatePage = self.request.query_params.get('paginatePage', True)
+        paginatePage = self.request.query_params.get('paginatePage', None)
         if paginatePage is not None:
             PageNumberPagination.page_size = 1
             pagination_class = PageNumberPagination
-
-
-
 
         return queryset.order_by('account_name')
 
@@ -240,12 +238,6 @@ class ProjectCostEstimateViewSet(viewsets.ModelViewSet):
             pagination_class = PageNumberPagination
 
         return queryset
-
-    def perform_create(self, serializer):
-        instance = serializer.save(modified_by=self.request.user, created_by=self.request.user)
-
-    def perform_update(self, serializer):
-        instance = serializer.save(modified_by=self.request.user)
 
     def create(self, request):
         data_set = request.data
