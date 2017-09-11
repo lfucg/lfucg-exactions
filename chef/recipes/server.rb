@@ -15,6 +15,7 @@ package "apache2-dev"
 
 app = node.attribute?('vagrant') ? node['vagrant']['app'] : search('aws_opsworks_app').first
 domain = app['domains'][0]
+environment = app['environment']
 
 virtualenv = "/home/ubuntu/env"
 

@@ -85,7 +85,7 @@ class AgreementViewSet(viewsets.ModelViewSet):
         data_set['created_by'] = self.request.user.id
         data_set['modified_by'] = self.request.user.id
 
-        serializer = AccountSerializer(data=data_set)
+        serializer = AgreementSerializer(data=data_set)
         if serializer.is_valid(raise_exception=True):
             self.perform_create(serializer)
             return Response(serializer.data)
@@ -134,7 +134,7 @@ class PaymentViewSet(viewsets.ModelViewSet):
         data_set['created_by'] = self.request.user.id
         data_set['modified_by'] = self.request.user.id
 
-        serializer = AccountSerializer(data=data_set)
+        serializer = PaymentSerializer(data=data_set)
         if serializer.is_valid(raise_exception=True):
             self.perform_create(serializer)
             return Response(serializer.data)
@@ -175,7 +175,7 @@ class ProjectViewSet(viewsets.ModelViewSet):
         data_set['created_by'] = self.request.user.id
         data_set['modified_by'] = self.request.user.id
 
-        serializer = AccountSerializer(data=data_set)
+        serializer = ProjectSerializer(data=data_set)
         if serializer.is_valid(raise_exception=True):
             self.perform_create(serializer)
             return Response(serializer.data)
@@ -207,7 +207,7 @@ class ProjectCostEstimateViewSet(viewsets.ModelViewSet):
         data_set['created_by'] = self.request.user.id
         data_set['modified_by'] = self.request.user.id
 
-        serializer = AccountSerializer(data=data_set)
+        serializer = ProjectCostEstimateSerializer(data=data_set)
         if serializer.is_valid(raise_exception=True):
             self.perform_create(serializer)
             return Response(serializer.data)
@@ -256,7 +256,7 @@ class AccountLedgerViewSet(viewsets.ModelViewSet):
         data_set['created_by'] = self.request.user.id
         data_set['modified_by'] = self.request.user.id
 
-        serializer = AccountSerializer(data=data_set)
+        serializer = AccountLedgerSerializer(data=data_set)
         if serializer.is_valid(raise_exception=True):
             self.perform_create(serializer)
             return Response(serializer.data)
