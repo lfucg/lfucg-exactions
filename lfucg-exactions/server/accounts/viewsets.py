@@ -1,6 +1,8 @@
-from rest_framework import viewsets
+
 from rest_framework.pagination import PageNumberPagination
+from rest_framework import viewsets, status
 from django.db.models import Q
+from rest_framework.response import Response
 
 from django.contrib.auth.models import User
 from .models import *
@@ -40,11 +42,32 @@ class AccountViewSet(viewsets.ModelViewSet):
 
         return queryset.order_by('account_name')
 
-    def perform_create(self, serializer):
-        instance = serializer.save(modified_by=self.request.user, created_by=self.request.user)
+    def create(self, request):
+        data_set = request.data
 
-    def perform_update(self, serializer):
-        instance = serializer.save(modified_by=self.request.user)
+        data_set['created_by'] = self.request.user.id
+        data_set['modified_by'] = self.request.user.id
+
+        serializer = AccountSerializer(data=data_set)
+        if serializer.is_valid(raise_exception=True):
+            self.perform_create(serializer)
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def update(self, request, pk):
+        existing_object  = self.get_object()
+        setattr(existing_object, 'modified_by', request.user)
+        for key, value in request.data.items():
+            for existing_object_key, existing_object_value in existing_object.__dict__.items():
+                if key == existing_object_key:
+                    if value != existing_object_value:
+                        setattr(existing_object, existing_object_key, value)
+        try:
+            existing_object.save()
+            return Response(status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
 class AgreementViewSet(viewsets.ModelViewSet):
     serializer_class = AgreementSerializer
@@ -79,12 +102,33 @@ class AgreementViewSet(viewsets.ModelViewSet):
 
         return queryset.order_by('expansion_area')
 
-    def perform_create(self, serializer):
-        instance = serializer.save(modified_by=self.request.user, created_by=self.request.user)
+    def create(self, request):
+        data_set = request.data
 
-    def perform_update(self, serializer):
-        instance = serializer.save(modified_by=self.request.user)
+        data_set['created_by'] = self.request.user.id
+        data_set['modified_by'] = self.request.user.id
 
+        serializer = AccountSerializer(data=data_set)
+        if serializer.is_valid(raise_exception=True):
+            self.perform_create(serializer)
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def update(self, request, pk):
+        existing_object  = self.get_object()
+        setattr(existing_object, 'modified_by', request.user)
+        for key, value in request.data.items():
+            for existing_object_key, existing_object_value in existing_object.__dict__.items():
+                if key == existing_object_key:
+                    if value != existing_object_value:
+                        setattr(existing_object, existing_object_key, value)
+        try:
+            existing_object.save()
+            return Response(status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+            
 class PaymentViewSet(viewsets.ModelViewSet):
     serializer_class = PaymentSerializer
     queryset = Payment.objects.all()
@@ -113,12 +157,33 @@ class PaymentViewSet(viewsets.ModelViewSet):
 
         return queryset.order_by('-date_created')
 
-    def perform_create(self, serializer):
-        instance = serializer.save(modified_by=self.request.user, created_by=self.request.user)
+    def create(self, request):
+        data_set = request.data
 
-    def perform_update(self, serializer):
-        instance = serializer.save(modified_by=self.request.user)
+        data_set['created_by'] = self.request.user.id
+        data_set['modified_by'] = self.request.user.id
 
+        serializer = AccountSerializer(data=data_set)
+        if serializer.is_valid(raise_exception=True):
+            self.perform_create(serializer)
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def update(self, request, pk):
+        existing_object  = self.get_object()
+        setattr(existing_object, 'modified_by', request.user)
+        for key, value in request.data.items():
+            for existing_object_key, existing_object_value in existing_object.__dict__.items():
+                if key == existing_object_key:
+                    if value != existing_object_value:
+                        setattr(existing_object, existing_object_key, value)
+        try:
+            existing_object.save()
+            return Response(status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+            
 class ProjectViewSet(viewsets.ModelViewSet):
     serializer_class = ProjectSerializer
     queryset = Project.objects.all()
@@ -133,17 +198,39 @@ class ProjectViewSet(viewsets.ModelViewSet):
 
         return queryset
 
-    def perform_create(self, serializer):
-        instance = serializer.save(modified_by=self.request.user, created_by=self.request.user)
+    def create(self, request):
+        data_set = request.data
 
-    def perform_update(self, serializer):
-        instance = serializer.save(modified_by=self.request.user)
+        data_set['created_by'] = self.request.user.id
+        data_set['modified_by'] = self.request.user.id
 
+        serializer = AccountSerializer(data=data_set)
+        if serializer.is_valid(raise_exception=True):
+            self.perform_create(serializer)
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def update(self, request, pk):
+        existing_object  = self.get_object()
+        setattr(existing_object, 'modified_by', request.user)
+        for key, value in request.data.items():
+            for existing_object_key, existing_object_value in existing_object.__dict__.items():
+                if key == existing_object_key:
+                    if value != existing_object_value:
+                        setattr(existing_object, existing_object_key, value)
+        try:
+            existing_object.save()
+            return Response(status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+            
 class ProjectCostEstimateViewSet(viewsets.ModelViewSet):
     serializer_class = ProjectCostEstimateSerializer
     queryset = ProjectCostEstimate.objects.all()
     permission_classes = (CanAdminister,)
 
+<<<<<<< HEAD
     def get_queryset(self):
         queryset = ProjectCostEstimate.objects.all()
         PageNumberPagination.page_size = None
@@ -161,6 +248,35 @@ class ProjectCostEstimateViewSet(viewsets.ModelViewSet):
     def perform_update(self, serializer):
         instance = serializer.save(modified_by=self.request.user)
 
+=======
+    def create(self, request):
+        data_set = request.data
+
+        data_set['created_by'] = self.request.user.id
+        data_set['modified_by'] = self.request.user.id
+
+        serializer = AccountSerializer(data=data_set)
+        if serializer.is_valid(raise_exception=True):
+            self.perform_create(serializer)
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def update(self, request, pk):
+        existing_object  = self.get_object()
+        setattr(existing_object, 'modified_by', request.user)
+        for key, value in request.data.items():
+            for existing_object_key, existing_object_value in existing_object.__dict__.items():
+                if key == existing_object_key:
+                    if value != existing_object_value:
+                        setattr(existing_object, existing_object_key, value)
+        try:
+            existing_object.save()
+            return Response(status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+            
+>>>>>>> 71a6a56f02bcfb5b7f8ff038a9ae37b775174828
 class AccountLedgerViewSet(viewsets.ModelViewSet):
     serializer_class = AccountLedgerSerializer
     queryset = AccountLedger.objects.all()
@@ -183,12 +299,33 @@ class AccountLedgerViewSet(viewsets.ModelViewSet):
 
         return queryset.order_by('entry_date')
 
-    def perform_create(self, serializer):
-        instance = serializer.save(modified_by=self.request.user, created_by=self.request.user)
+    def create(self, request):
+        data_set = request.data
 
-    def perform_update(self, serializer):
-        instance = serializer.save(modified_by=self.request.user)
-    
+        data_set['created_by'] = self.request.user.id
+        data_set['modified_by'] = self.request.user.id
+
+        serializer = AccountSerializer(data=data_set)
+        if serializer.is_valid(raise_exception=True):
+            self.perform_create(serializer)
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def update(self, request, pk):
+        existing_object  = self.get_object()
+        setattr(existing_object, 'modified_by', request.user)
+        for key, value in request.data.items():
+            for existing_object_key, existing_object_value in existing_object.__dict__.items():
+                if key == existing_object_key:
+                    if value != existing_object_value:
+                        setattr(existing_object, existing_object_key, value)
+        try:
+            existing_object.save()
+            return Response(status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+                
 class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
     queryset = User.objects.all()
