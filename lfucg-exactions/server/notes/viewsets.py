@@ -60,7 +60,7 @@ class RateTableViewSet(viewsets.ModelViewSet):
         data_set['created_by'] = self.request.user.id
         data_set['modified_by'] = self.request.user.id
 
-        serializer = AccountSerializer(data=data_set)
+        serializer = RateTableSerializer(data=data_set)
         if serializer.is_valid(raise_exception=True):
             self.perform_create(serializer)
             return Response(serializer.data)
@@ -92,7 +92,7 @@ class RateViewSet(viewsets.ModelViewSet):
         data_set['created_by'] = self.request.user.id
         data_set['modified_by'] = self.request.user.id
 
-        serializer = AccountSerializer(data=data_set)
+        serializer = RateSerializer(data=data_set)
         if serializer.is_valid(raise_exception=True):
             self.perform_create(serializer)
             return Response(serializer.data)
