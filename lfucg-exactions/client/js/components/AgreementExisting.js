@@ -7,9 +7,10 @@ import PropTypes from 'prop-types';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
+import Pagination from './Pagination';
 
 import {
-    getAgreements,
+    getPagination,
     getAgreementQuery,
 } from '../actions/apiActions';
 
@@ -105,6 +106,7 @@ class AgreementExisting extends React.Component {
                 <div className="inside-body">
                     <div className="container">
                         {agreements_list}
+                        {agreements_list ? <Pagination /> : null}
                     </div>
                 </div>
                 <Footer />
@@ -131,7 +133,15 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     return {
         onComponentDidMount() {
-            dispatch(getAgreements());
+            dispatch(getPagination('/agreement/?paginatePage=true'))
+            .then((data) => {
+                const account_update = {
+                    next: data.response.next,
+                    prev: data.response.prev,
+                    count: data.response.count,
+                };
+                dispatch(formUpdate(account_update));
+            });
         },
         onAgreementQuery(field) {
             return (e, ...args) => {

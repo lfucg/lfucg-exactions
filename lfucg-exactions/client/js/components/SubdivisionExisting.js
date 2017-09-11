@@ -7,9 +7,10 @@ import PropTypes from 'prop-types';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
+import Pagination from './Pagination';
 
 import {
-    getSubdivisions,
+    getPagination,
     getSubdivisionQuery,
 } from '../actions/apiActions';
 
@@ -100,6 +101,7 @@ class SubdivisionExisting extends React.Component {
                 <div className="inside-body">
                     <div className="container">
                         {subdivisions_list}
+                        {subdivisions_list ? <Pagination /> : null}
                     </div>
                 </div>
                 <Footer />
@@ -126,7 +128,15 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     return {
         onComponentDidMount() {
-            dispatch(getSubdivisions());
+            dispatch(getPagination('/subdivision/?paginatePage=true'))
+            .then((data) => {
+                const account_update = {
+                    next: data.response.next,
+                    prev: data.response.prev,
+                    count: data.response.count,
+                };
+                dispatch(formUpdate(account_update));
+            });
         },
         onSubdivisionQuery(field) {
             return (e, ...args) => {
