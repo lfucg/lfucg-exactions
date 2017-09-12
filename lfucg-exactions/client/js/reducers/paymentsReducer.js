@@ -29,10 +29,9 @@ const paymentReducer = (state = {}, action) => {
     case GET_PAGINATION:
         const next = action.response.next;
         const prev = action.response.prev;
-        if (next != null && next.startsWith('/payment')) {
-            return action.response;
-        }
-        if (prev != null && prev.startsWith('/payment')) {
+        if ((next != null && next.startsWith('/payment')) ||
+            (prev != null && prev.startsWith('/payment')) ||
+            (window.location.hash === '#/payment')) {
             return action.response;
         }
         return {};

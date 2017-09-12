@@ -25,7 +25,6 @@ class AccountViewSet(viewsets.ModelViewSet):
         query_text = self.request.query_params.get('query', None)
 
         if query_text is not None:
-            paginatePage = True
             query_text = query_text.lower()
             queryset = queryset.filter(
                 Q(account_name__icontains=query_text) |
@@ -83,7 +82,6 @@ class AgreementViewSet(viewsets.ModelViewSet):
 
         query_text = self.request.query_params.get('query', None)
         if query_text is not None:
-            paginatePage = True
             query_text = query_text.lower()
             queryset = queryset.filter(
                 Q(account_id__account_name__icontains=query_text) |
@@ -227,7 +225,7 @@ class ProjectCostEstimateViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         queryset = ProjectCostEstimate.objects.all()
-        PageNumberPagination.page_size = None
+        PageNumberPagination.page_size = 0
 
         paginatePage = self.request.query_params.get('paginatePage', None)
         if paginatePage is not None:

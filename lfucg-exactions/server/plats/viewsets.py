@@ -22,7 +22,6 @@ class SubdivisionViewSet(viewsets.ModelViewSet):
 
         query_text = self.request.query_params.get('query', None)
         if query_text is not None:
-            paginatePage = True
             query_text = query_text.lower()
             queryset = queryset.filter(name__icontains=query_text)
 
@@ -73,7 +72,6 @@ class PlatViewSet(viewsets.ModelViewSet):
         query_text = self.request.query_params.get('query', None)
         if query_text is not None:
             query_text = query_text.lower()
-            paginatePage = True
             queryset = queryset.filter(
                 Q(name__icontains=query_text) |
                 Q(expansion_area__icontains=query_text) |
@@ -131,7 +129,6 @@ class LotViewSet(viewsets.ModelViewSet):
         query_text = self.request.query_params.get('query', None)
         if query_text is not None:
             query_text = query_text.lower()
-            paginatePage = True
             queryset = queryset.filter(
                 Q(address_full__icontains=query_text) |
                 Q(lot_number__icontains=query_text) |
