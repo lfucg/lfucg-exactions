@@ -9,6 +9,8 @@ from .models import *
 from .serializers import *
 from .permissions import CanAdminister
 
+from django.conf import settings
+
 
 class AccountViewSet(viewsets.ModelViewSet):
     serializer_class = AccountSerializer
@@ -16,14 +18,14 @@ class AccountViewSet(viewsets.ModelViewSet):
     permission_classes = (CanAdminister,)
 
     def get_queryset(self):
-        PageNumberPagination.page_size = None
         queryset = Account.objects.all()
-
+        PageNumberPagination.page_size = 0
+        
+        paginatePage = self.request.query_params.get('paginatePage', None)
         query_text = self.request.query_params.get('query', None)
-        if query_text == '':
-            PageNumberPagination.page_size = 10
-            pagination_class = PageNumberPagination
+
         if query_text is not None:
+            paginatePage = True
             query_text = query_text.lower()
             queryset = queryset.filter(
                 Q(account_name__icontains=query_text) |
@@ -33,10 +35,9 @@ class AccountViewSet(viewsets.ModelViewSet):
                 Q(email__icontains=query_text))
 
 
-        paginatePage = self.request.query_params.get('paginatePage', None)
         if paginatePage is not None:
-            PageNumberPagination.page_size = 10
             pagination_class = PageNumberPagination
+            PageNumberPagination.page_size = settings.PAGINATION_SIZE
 
         return queryset.order_by('account_name')
 
@@ -74,11 +75,7 @@ class AgreementViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         queryset = Agreement.objects.all()
-
         paginatePage = self.request.query_params.get('paginatePage', None)
-        if paginatePage is not None:
-            PageNumberPagination.page_size = 10
-            pagination_class = PageNumberPagination
 
         account_id_set = self.request.query_params.get('account_id', None)
         if account_id_set is not None:
@@ -86,17 +83,17 @@ class AgreementViewSet(viewsets.ModelViewSet):
 
         query_text = self.request.query_params.get('query', None)
         if query_text is not None:
+            paginatePage = True
             query_text = query_text.lower()
-
             queryset = queryset.filter(
                 Q(account_id__account_name__icontains=query_text) |
                 Q(resolution_number__icontains=query_text) |
                 Q(agreement_type__icontains=query_text) |
                 Q(expansion_area__icontains=query_text))
-
-        if query_text == '':
-            PageNumberPagination.page_size = 10
+            
+        if paginatePage is not None:
             pagination_class = PageNumberPagination
+            PageNumberPagination.page_size = settings.PAGINATION_SIZE
 
         return queryset.order_by('expansion_area')
 
@@ -134,12 +131,12 @@ class PaymentViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         queryset = Payment.objects.all()
-        PageNumberPagination.page_size = None
+        PageNumberPagination.page_size = 0
 
         paginatePage = self.request.query_params.get('paginatePage', None)
         if paginatePage is not None:
-            PageNumberPagination.page_size = 10
             pagination_class = PageNumberPagination
+            PageNumberPagination.page_size = settings.PAGINATION_SIZE
 
         lot_id_set = self.request.query_params.get('lot_id', None)
         if lot_id_set is not None:
@@ -234,8 +231,8 @@ class ProjectCostEstimateViewSet(viewsets.ModelViewSet):
 
         paginatePage = self.request.query_params.get('paginatePage', None)
         if paginatePage is not None:
-            PageNumberPagination.page_size = 10
             pagination_class = PageNumberPagination
+            PageNumberPagination.page_size = settings.PAGINATION_SIZE
 
         return queryset
 

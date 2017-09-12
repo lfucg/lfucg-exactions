@@ -133,7 +133,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     return {
         onComponentDidMount() {
-            dispatch(getPagination('/project/?paginatePage=true'))
+            dispatch(getPagination('/project/'))
             .then((data) => {
                 const account_update = {
                     next: data.response.next,
