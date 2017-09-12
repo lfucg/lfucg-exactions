@@ -207,27 +207,29 @@ class LotForm extends React.Component {
                                             </div>
                                             <div className="row">
                                                 <div className="col-sm-6">
-                                                    <FormGroup label="Parcel ID" id="parcel_id">
-                                                        <input type="text" className="form-control" placeholder="Parcel ID" />
-                                                    </FormGroup>
-                                                </div>
-                                                <div className="col-sm-6">
-                                                    <FormGroup label="Permit ID" id="permit_id">
-                                                        <input type="text" className="form-control" placeholder="Permit ID" />
-                                                    </FormGroup>
-                                                </div>
-                                            </div>
-                                            <div className="row">
-                                                <div className="col-sm-6">
                                                     <FormGroup label="Latitude" id="latitude">
                                                         <input type="text" className="form-control" placeholder="Latitude" />
                                                     </FormGroup>
                                                 </div>
                                                 <div className="col-sm-6">
                                                     <FormGroup label="Longitude" id="longitude">
+                                                        <input type="text" className="form-control" placeholder="Longitude" />
+                                                    </FormGroup>
+                                                </div>
+                                            </div>
+                                            <div className="row">
+                                                <div className="col-sm-6">
+                                                    <FormGroup label="Parcel ID" id="parcel_id">
+                                                        <input type="text" className="form-control" placeholder="Parcel ID" />
+                                                    </FormGroup>
+                                                </div>
+                                                {lots.total_due <= 0 &&
+                                                <div className="col-sm-6">
+                                                    <FormGroup label="Permit ID" id="permit_id">
                                                         <input type="text" className="form-control" placeholder="Permit ID" />
                                                     </FormGroup>
                                                 </div>
+                                                }
                                             </div>
                                         </fieldset>
                                         <button disabled={!submitEnabled} className="btn btn-lex">Submit</button>
@@ -522,6 +524,7 @@ function mapDispatchToProps(dispatch, params) {
             if (selectedLot) {
                 dispatch(putLot(selectedLot))
                 .then((data_put_lot) => {
+                    console.log('WHAT IS HERE?: ', data_put_lot);
                     const put_update = {
                         first_section: true,
                         dues_roads_dev: data_put_lot.response.dues_roads_dev,
