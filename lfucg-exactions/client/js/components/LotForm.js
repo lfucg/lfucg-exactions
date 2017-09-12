@@ -524,7 +524,6 @@ function mapDispatchToProps(dispatch, params) {
             if (selectedLot) {
                 dispatch(putLot(selectedLot))
                 .then((data_put_lot) => {
-                    console.log('WHAT IS HERE?: ', data_put_lot);
                     const put_update = {
                         first_section: true,
                         dues_roads_dev: data_put_lot.response.dues_roads_dev,
