@@ -7,6 +7,8 @@ from .serializers import *
 from .permissions import CanAdminister
 from rest_framework.pagination import PageNumberPagination
 
+from django.conf import settings
+
 
 class SubdivisionViewSet(viewsets.ModelViewSet):
     serializer_class = SubdivisionSerializer
@@ -15,23 +17,19 @@ class SubdivisionViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         queryset = Subdivision.objects.all()
+        paginatePage = self.request.query_params.get('paginatePage', None)
+        PageNumberPagination.page_size = 0
 
         query_text = self.request.query_params.get('query', None)
-        PageNumberPagination.page_size = None
-        paginatePage = self.request.query_params.get('paginatePage', None)
-
-        if query_text == '':
-            PageNumberPagination.page_size = 10
-            pagination_class = PageNumberPagination
+        if query_text is not None:
+            paginatePage = True
+            query_text = query_text.lower()
+            queryset = queryset.filter(name__icontains=query_text)
 
         if paginatePage is not None:
-            PageNumberPagination.page_size = 10
+            PageNumberPagination.page_size = settings.PAGINATION_SIZE
             pagination_class = PageNumberPagination
             
-        if query_text is not None:
-            query_text = query_text.lower()
-
-            queryset = queryset.filter(name__icontains=query_text)
 
         return queryset.order_by('name')
 
@@ -69,26 +67,22 @@ class PlatViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         queryset = Plat.objects.all()
-        PageNumberPagination.page_size = None
+        PageNumberPagination.page_size = 0
         paginatePage = self.request.query_params.get('paginatePage', None)
+
         query_text = self.request.query_params.get('query', None)
-        
-        if query_text == '':
-            PageNumberPagination.page_size = 10
-            pagination_class = PageNumberPagination
-
-        if paginatePage is not None:
-            PageNumberPagination.page_size = 10
-            pagination_class = PageNumberPagination
-
         if query_text is not None:
             query_text = query_text.lower()
-
+            paginatePage = True
             queryset = queryset.filter(
                 Q(name__icontains=query_text) |
                 Q(expansion_area__icontains=query_text) |
                 Q(slide__icontains=query_text) |
                 Q(subdivision__name__icontains=query_text))
+
+        if paginatePage is not None:
+            PageNumberPagination.page_size = settings.PAGINATION_SIZE
+            pagination_class = PageNumberPagination
 
         return queryset.order_by('expansion_area')
 
@@ -127,25 +121,17 @@ class LotViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         queryset = Lot.objects.all()
-        query_text = self.request.query_params.get('query', None)
-        PageNumberPagination.page_size = None
+        PageNumberPagination.page_size = 0
         paginatePage = self.request.query_params.get('paginatePage', None)
-
-        if query_text == '':
-            PageNumberPagination.page_size = 10
-            pagination_class = PageNumberPagination
-
-        if paginatePage is not None:
-            PageNumberPagination.page_size = 10
-            pagination_class = PageNumberPagination
 
         plat_set = self.request.query_params.get('plat', None)
         if plat_set is not None:
             queryset = queryset.filter(plat=plat_set)
 
+        query_text = self.request.query_params.get('query', None)
         if query_text is not None:
             query_text = query_text.lower()
-
+            paginatePage = True
             queryset = queryset.filter(
                 Q(address_full__icontains=query_text) |
                 Q(lot_number__icontains=query_text) |
@@ -153,6 +139,10 @@ class LotViewSet(viewsets.ModelViewSet):
                 Q(permit_id__icontains=query_text) |
                 Q(plat__expansion_area__icontains=query_text) |
                 Q(plat__name__icontains=query_text))
+
+        if paginatePage is not None:
+            PageNumberPagination.page_size = settings.PAGINATION_SIZE
+            pagination_class = PageNumberPagination
 
         return queryset.order_by('address_street')
 

@@ -12,6 +12,9 @@ class Pagination extends React.Component {
             activeForm,
         } = this.props;
 
+        // relates to pagination size in backend
+        const paginationSize = 10;
+
         return (
             <div className="row">
                 <div className="col-xs-12 text-center">
@@ -19,7 +22,7 @@ class Pagination extends React.Component {
                         <li><button className="btn btn-default" disabled={!activeForm.prev || activeForm.query} onClick={() => onPaginationChangePage(activeForm.prev)}>&laquo;</button></li>
                         <li>
                             <button className="btn btn-default">
-                                {activeForm.next ? (activeForm.next.charAt(activeForm.next.indexOf('=') + 1) - 1) : (Math.ceil(activeForm.count / 10)) }
+                                {activeForm.next ? (activeForm.next.charAt(activeForm.next.indexOf('=') + 1) - 1) : (Math.ceil(activeForm.count / paginationSize)) }
                             </button>
                         </li>
                         <li><button className="btn btn-default" disabled={!activeForm.next || activeForm.query} onClick={() => onPaginationChangePage(activeForm.next)}>&raquo;</button></li>

@@ -141,7 +141,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     return {
         onComponentDidMount() {
-            dispatch(getPagination('/ledger/?paginatePage=true'))
+            dispatch(getPagination('/ledger/'))
             .then((data) => {
                 const account_update = {
                     next: data.response.next,
