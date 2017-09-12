@@ -141,6 +141,8 @@ class LotSerializer(serializers.ModelSerializer):
     plat = PlatField()
 
     total_due = serializers.SerializerMethodField(read_only=True)
+    total_sewer_due = serializers.SerializerMethodField(read_only=True)
+    total_non_sewer_due = serializers.SerializerMethodField(read_only=True)
 
     def get_total_due(self,obj):
         total = (
@@ -151,6 +153,29 @@ class LotSerializer(serializers.ModelSerializer):
             obj.dues_sewer_trans_own +
             obj.dues_sewer_cap_dev +
             obj.dues_sewer_cap_own +
+            obj.dues_parks_dev +
+            obj.dues_parks_own +
+            obj.dues_storm_dev +
+            obj.dues_storm_own +
+            obj.dues_open_space_dev +
+            obj.dues_open_space_own
+        )
+        return total
+
+    def get_total_sewer_due(self,obj):
+        total = (
+            obj.dues_sewer_cap_own +
+            obj.dues_sewer_trans_dev +
+            obj.dues_sewer_trans_own +
+            obj.dues_sewer_cap_dev +
+            obj.dues_sewer_cap_own
+        )
+        return total
+
+    def get_total_non_sewer_due(self,obj):
+        total = (
+            obj.dues_roads_own +
+            obj.dues_roads_dev +
             obj.dues_parks_dev +
             obj.dues_parks_own +
             obj.dues_storm_dev +
@@ -201,5 +226,8 @@ class LotSerializer(serializers.ModelSerializer):
             'dues_storm_own',
             'dues_open_space_dev',
             'dues_open_space_own',
+
             'total_due',
+            'total_sewer_due',
+            'total_non_sewer_due',
         )
