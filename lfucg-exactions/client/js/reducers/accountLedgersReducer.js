@@ -7,6 +7,7 @@ import {
     GET_AGREEMENT_ACCOUNT_LEDGERS,
     POST_ACCOUNT_LEDGER,
     PUT_ACCOUNT_LEDGER,
+    GET_PAGINATION,
 } from '../constants/apiConstants';
 
 
@@ -24,6 +25,15 @@ const accountLedgersReducer = (state = {}, action) => {
         return action.response;
     case POST_ACCOUNT_LEDGER:
     case PUT_ACCOUNT_LEDGER:
+        return {};
+    case GET_PAGINATION:
+        const next = action.response.next;
+        const prev = action.response.prev;
+        if ((next != null && next.startsWith('/ledger')) ||
+            (prev != null && prev.startsWith('/ledger')) ||
+            (window.location.hash === '#/account-ledger')) {
+            return action.response;
+        }
         return {};
     default:
         return state;
