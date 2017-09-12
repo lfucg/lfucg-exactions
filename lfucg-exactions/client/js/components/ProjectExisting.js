@@ -106,7 +106,7 @@ class ProjectExisting extends React.Component {
                 <div className="inside-body">
                     <div className="container">
                         {projects_list}
-                        {projects_list ? <Pagination /> : null}
+                        {projects_list ? <Pagination /> : <h1>No Results Found</h1>}
                     </div>
                 </div>
                 <Footer />

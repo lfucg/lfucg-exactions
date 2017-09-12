@@ -105,7 +105,7 @@ class ProjectCostExisting extends React.Component {
                 <div className="inside-body">
                     <div className="container">
                         {projectCosts_list}
-                        {projectCosts_list ? <Pagination /> : null}
+                        {projectCosts_list ? <Pagination /> : <h1>No Results Found</h1>}
                     </div>
                 </div>
                 <Footer />

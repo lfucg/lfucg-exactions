@@ -105,7 +105,7 @@ class LotExisting extends React.Component {
                 <div className="inside-body">
                     <div className="container">
                         {lots_list}
-                        <Pagination />
+                        {lots_list ? <Pagination /> : <h1>No Results Found</h1>}
                     </div>
                 </div>
                 <Footer />

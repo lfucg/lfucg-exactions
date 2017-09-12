@@ -114,7 +114,7 @@ class AccountLedgerExisting extends React.Component {
                 <div className="inside-body">
                     <div className="container">
                         {accountLedgers_list}
-                        {accountLedgers_list ? <Pagination /> : null}
+                        {accountLedgers_list ? <Pagination /> : <h1>No Results Found</h1>}
                     </div>
                 </div>
                 <Footer />
