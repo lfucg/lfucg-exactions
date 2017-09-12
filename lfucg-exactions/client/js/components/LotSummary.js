@@ -141,14 +141,14 @@ class LotSummary extends React.Component {
                                 }
                             </div>
                         </div>
-                        <div className="modal fade" id="permitModal" tabIndex="-1" role="dialog" aria-labelledby="myModalLabel">
+                        <div className="modal fade" id="permitModal" tabIndex="-1" role="dialog" aria-labelledby="modalLabel">
                             <div className="modal-dialog" role="document">
                                 <div className="modal-content">
                                     {lots.total_due && lots.total_due > 0 ? (
                                         <div>
                                             <div className="modal-header">
                                                 <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                                <h3 className="modal-title" id="myModalLabel">Exactions due on this lot.</h3>
+                                                <h3 className="modal-title" id="modalLabel">Exactions due on this lot.</h3>
                                             </div>
                                             <div className="modal-body">
                                                 <h4 className="text-center">Our records indicate an outstanding balance of <strong>${(lots.total_due).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</strong> for this lot. Please contact finance to submit payment prior to applying for a permit for:</h4>
@@ -162,11 +162,11 @@ class LotSummary extends React.Component {
                                         <div>
                                             <div className="modal-header">
                                                 <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                                <h2 className="modal-title text-center" id="myModalLabel">Permit Request: {lots.address_full}</h2>
+                                                <h2 className="modal-title text-center" id="modalLabel">Permit Request: {lots.address_full}</h2>
                                             </div>
                                             <div className="modal-body">
                                                 <FormGroup label="Permit ID" id="permit_id">
-                                                    <input type="text" className="form-control" placeholder="Permit ID" />
+                                                    <input type="text" className="form-control" placeholder="Please enter the Permit ID for this lot..." />
                                                 </FormGroup>
                                             </div>
                                             <div className="modal-footer">
