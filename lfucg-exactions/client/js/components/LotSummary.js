@@ -65,7 +65,7 @@ class LotSummary extends React.Component {
                         <div className="row">
                             <p className="col-sm-4 col-xs-6">Agreement Resolution: {payment.credit_source.resolution_number}</p>
                             <p className="col-sm-4 col-xs-6">Total Paid: {payment.total_paid}</p>
-                            <p className="col-sm-4 col-xs-6">Payment Type: {payment.payment_type}</p>
+                            <p className="col-sm-4 col-xs-6">Payment Type: ${payment.payment_type}</p>
                             <p className="col-sm-4 col-xs-6">Paid By: {payment.paid_by}</p>
                         </div>
                     </div>
@@ -165,7 +165,7 @@ class LotSummary extends React.Component {
                                         </div>
                                     </div>
                                     <div className="col-xs-12">
-                                        <h3 className="col-xs-12 ">Total Exactions: {lots.total_due}</h3>
+                                        <h3 className="col-xs-12 ">Current Exactions: {lots.lot_exactions && lots.lot_exactions.current_exactions}</h3>
                                         <p className="col-md-8 col-xs-12">Address: {lots.address_full}</p>
                                         <p className="col-md-4 col-xs-6">Lot Number: {lots.lot_number}</p>
                                         <p className="col-md-4 col-xs-6 ">Permit ID: {lots.permit_id}</p>
@@ -213,7 +213,7 @@ class LotSummary extends React.Component {
                                         </div>
                                     </div>
                                     <div className="col-xs-12">
-                                        <h3 className="col-xs-12 ">Total Exactions: {lots.total_due}</h3>
+                                        <h3 className="col-xs-12 ">Current Exactions: {lots.lot_exactions && lots.lot_exactions.current_exactions}</h3>
                                         <p className="col-sm-6">Road Developer Exactions: ${lots.dues_roads_dev}</p>
                                         <p className="col-sm-6">Road Owner Exactions: ${lots.dues_roads_own}</p>
                                         <p className="col-sm-6">Sewer Transmission Developer Exactions: ${lots.dues_sewer_trans_dev}</p>

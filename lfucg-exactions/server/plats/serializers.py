@@ -144,54 +144,64 @@ class LotSerializer(serializers.ModelSerializer):
 
     lot_exactions = serializers.SerializerMethodField(read_only=True)
 
-    total_due = serializers.SerializerMethodField(read_only=True)
-    total_sewer_due = serializers.SerializerMethodField(read_only=True)
-    total_non_sewer_due = serializers.SerializerMethodField(read_only=True)
+    # total_due = serializers.SerializerMethodField(read_only=True)
+    # total_sewer_due = serializers.SerializerMethodField(read_only=True)
+    # total_non_sewer_due = serializers.SerializerMethodField(read_only=True)
 
     def get_lot_exactions(self, obj):
         calculated_exactions = calculate_lot_balance(obj.id)
-        return calculated_exactions
 
-    def get_total_due(self,obj):
-        total = (
-            obj.dues_roads_own +
-            obj.dues_roads_dev +
-            obj.dues_sewer_cap_own +
-            obj.dues_sewer_trans_dev +
-            obj.dues_sewer_trans_own +
-            obj.dues_sewer_cap_dev +
-            obj.dues_sewer_cap_own +
-            obj.dues_parks_dev +
-            obj.dues_parks_own +
-            obj.dues_storm_dev +
-            obj.dues_storm_own +
-            obj.dues_open_space_dev +
-            obj.dues_open_space_own
-        )
-        return total
+        return {
+            'total_exactions': '${:,.2f}'.format(calculated_exactions['total_exactions']),
+            'sewer_exactions': '${:,.2f}'.format(calculated_exactions['sewer_exactions']),
+            'non_sewer_exactions': '${:,.2f}'.format(calculated_exactions['non_sewer_exactions']),
+            'sewer_payment': '${:,.2f}'.format(calculated_exactions['sewer_payment']),
+            'non_sewer_payment': '${:,.2f}'.format(calculated_exactions['non_sewer_payment']),
+            'current_exactions': '${:,.2f}'.format(calculated_exactions['current_exactions']),
+            'sewer_due': '${:,.2f}'.format(calculated_exactions['sewer_due']),
+            'non_sewer_due': '${:,.2f}'.format(calculated_exactions['non_sewer_due']),            
+        }
 
-    def get_total_sewer_due(self,obj):
-        total = (
-            obj.dues_sewer_cap_own +
-            obj.dues_sewer_trans_dev +
-            obj.dues_sewer_trans_own +
-            obj.dues_sewer_cap_dev +
-            obj.dues_sewer_cap_own
-        )
-        return total
+    # def get_total_due(self,obj):
+    #     total = (
+    #         obj.dues_roads_own +
+    #         obj.dues_roads_dev +
+    #         obj.dues_sewer_cap_own +
+    #         obj.dues_sewer_trans_dev +
+    #         obj.dues_sewer_trans_own +
+    #         obj.dues_sewer_cap_dev +
+    #         obj.dues_sewer_cap_own +
+    #         obj.dues_parks_dev +
+    #         obj.dues_parks_own +
+    #         obj.dues_storm_dev +
+    #         obj.dues_storm_own +
+    #         obj.dues_open_space_dev +
+    #         obj.dues_open_space_own
+    #     )
+    #     return total
 
-    def get_total_non_sewer_due(self,obj):
-        total = (
-            obj.dues_roads_own +
-            obj.dues_roads_dev +
-            obj.dues_parks_dev +
-            obj.dues_parks_own +
-            obj.dues_storm_dev +
-            obj.dues_storm_own +
-            obj.dues_open_space_dev +
-            obj.dues_open_space_own
-        )
-        return total
+    # def get_total_sewer_due(self,obj):
+    #     total = (
+    #         obj.dues_sewer_cap_own +
+    #         obj.dues_sewer_trans_dev +
+    #         obj.dues_sewer_trans_own +
+    #         obj.dues_sewer_cap_dev +
+    #         obj.dues_sewer_cap_own
+    #     )
+    #     return total
+
+    # def get_total_non_sewer_due(self,obj):
+    #     total = (
+    #         obj.dues_roads_own +
+    #         obj.dues_roads_dev +
+    #         obj.dues_parks_dev +
+    #         obj.dues_parks_own +
+    #         obj.dues_storm_dev +
+    #         obj.dues_storm_own +
+    #         obj.dues_open_space_dev +
+    #         obj.dues_open_space_own
+    #     )
+    #     return total
 
     class Meta:
         model = Lot
@@ -236,7 +246,7 @@ class LotSerializer(serializers.ModelSerializer):
             'dues_open_space_own',
 
             'lot_exactions',
-            'total_due',
-            'total_sewer_due',
-            'total_non_sewer_due',
+            # 'total_due',
+            # 'total_sewer_due',
+            # 'total_non_sewer_due',
         )

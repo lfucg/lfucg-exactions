@@ -32,8 +32,9 @@ class PlatReport extends React.Component {
                 <tr key={lot.id} className="report-table">
                     <td>{lot.address_full}</td>
                     <td>{lot.parcel_id}</td>
-                    <td>{lot.total_non_sewer_due}</td>
-                    <td>{lot.total_sewer_due}</td>
+                    <td>{lot.lot_exactions && lot.lot_exactions.current_exactions}</td>
+                    <td>{lot.lot_exactions && lot.lot_exactions.non_sewer_due}</td>
+                    <td>{lot.lot_exactions && lot.lot_exactions.sewer_due}</td>
                 </tr>
             );
         })(lots));
@@ -52,10 +53,7 @@ class PlatReport extends React.Component {
 
                 <div className="inside-body">
                     <div className="container">
-                        <a
-                          className="btn btn-lex col-sm-2 col-sm-offset-10"
-                          href={`../api/export_plat_csv/?plat=${plats.id}`}
-                        >Export CSV</a>
+                        <h2>Report Preview</h2>
                         <div className="clearfix" />
 
                         <table>
@@ -77,11 +75,17 @@ class PlatReport extends React.Component {
                             <tr className="report-table">
                                 <th>Lot Address</th>
                                 <th>Parcel ID</th>
-                                <th>Non-Sewer Exactions</th>
-                                <th>Sewer Exactions</th>
+                                <th>Current Exactions Due</th>
+                                <th>Non-Sewer Exactions Due</th>
+                                <th>Sewer Exactions Due</th>
                             </tr>
                             {platLots}
                         </table>
+
+                        <a
+                          className="btn btn-lex col-sm-3"
+                          href={`../api/export_plat_csv/?plat=${plats.id}`}
+                        >Export CSV</a>
                     </div>
                 </div>
                 <Footer />
