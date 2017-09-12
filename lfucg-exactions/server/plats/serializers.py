@@ -1,6 +1,8 @@
 from rest_framework import serializers
 
 from .models import *
+from .utils import calculate_lot_balance
+
 from notes.models import Note
 from notes.serializers import NoteSerializer
 
@@ -140,9 +142,15 @@ class PlatField(serializers.Field):
 class LotSerializer(serializers.ModelSerializer):
     plat = PlatField()
 
+    lot_exactions = serializers.SerializerMethodField(read_only=True)
+
     total_due = serializers.SerializerMethodField(read_only=True)
     total_sewer_due = serializers.SerializerMethodField(read_only=True)
     total_non_sewer_due = serializers.SerializerMethodField(read_only=True)
+
+    def get_lot_exactions(self, obj):
+        calculated_exactions = calculate_lot_balance(obj.id)
+        return calculated_exactions
 
     def get_total_due(self,obj):
         total = (
@@ -227,6 +235,7 @@ class LotSerializer(serializers.ModelSerializer):
             'dues_open_space_dev',
             'dues_open_space_own',
 
+            'lot_exactions',
             'total_due',
             'total_sewer_due',
             'total_non_sewer_due',
