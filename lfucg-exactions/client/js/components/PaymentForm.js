@@ -104,7 +104,10 @@ class PaymentForm extends React.Component {
                                         <div className="col-sm-6 form-group">
                                             <label htmlFor="lot_id" className="form-label" id="lot_id" aria-label="Lot" aria-required="true">* Lot</label>
                                             <select className="form-control" id="lot_id" onChange={lotChange('lot_id')} value={activeForm.lot_id_show} >
-                                                <option value="start_lot">Lot</option>
+                                                {activeForm.lot_id ?
+                                                    <option value="lot_id">{activeForm.address_full}</option> :
+                                                    <option value="start_lot">Lot</option>
+                                                }
                                                 {lotsList}
                                             </select>
                                         </div>

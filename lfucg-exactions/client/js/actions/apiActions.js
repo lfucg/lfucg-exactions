@@ -84,6 +84,8 @@ import {
     POST_RATE,
     PUT_RATE,
 
+    GET_PAGINATION,
+
 } from '../constants/apiConstants';
 
 export function getMe() {
@@ -155,7 +157,7 @@ export function getSubdivisionQuery() {
                 query,
             } = activeForm;
 
-            const query_all = `/subdivision/?query=${query}`;
+            const query_all = `/subdivision/?query=${query}&paginatePage`;
             return query_all;
         },
     };
@@ -234,7 +236,7 @@ export function getPlatQuery() {
                 query,
             } = activeForm;
 
-            const query_all = `/plat/?query=${query}`;
+            const query_all = `/plat/?query=${query}&paginatePage`;
             return query_all;
         },
     };
@@ -474,7 +476,7 @@ export function getLotQuery() {
                 query,
             } = activeForm;
 
-            const query_all = `/lot/?query=${query}`;
+            const query_all = `/lot/?query=${query}&paginatePage`;
             return query_all;
         },
     };
@@ -716,7 +718,7 @@ export function getAccountQuery() {
                 query,
             } = activeForm;
 
-            const query_all = `/account/?query=${query}`;
+            const query_all = `/account/?query=${query}&paginatePage`;
             return query_all;
         },
     };
@@ -831,7 +833,7 @@ export function getAgreementQuery() {
                 query,
             } = activeForm;
 
-            const query_all = `/agreement/?query=${query}`;
+            const query_all = `/agreement/?query=${query}&paginatePage`;
             return query_all;
         },
     };
@@ -930,7 +932,7 @@ export function getPaymentQuery() {
                 query,
             } = activeForm;
 
-            const query_all = `/payment/?query=${query}`;
+            const query_all = `/payment/?query=${query}&paginatePage`;
             return query_all;
         },
     };
@@ -1078,7 +1080,7 @@ export function getProjectQuery() {
                 query,
             } = activeForm;
 
-            const query_all = `/project/?query=${query}`;
+            const query_all = `/project/?query=${query}&paginatePage`;
             return query_all;
         },
     };
@@ -1193,7 +1195,7 @@ export function getProjectCostQuery() {
                 query,
             } = activeForm;
 
-            const query_all = `/estimate/?query=${query}`;
+            const query_all = `/estimate/?query=${query}&paginatePage`;
             return query_all;
         },
     };
@@ -1304,7 +1306,7 @@ export function getAccountLedgerQuery() {
                 query,
             } = activeForm;
 
-            const query_all = `/ledger/?query=${query}`;
+            const query_all = `/ledger/?query=${query}&paginatePage`;
             return query_all;
         },
     };
@@ -1466,3 +1468,15 @@ export function putRate(selectedRate) {
     };
 }
 
+export function getPagination(page) {
+    return {
+        type: API_CALL,
+        endpoint: GET_PAGINATION,
+        url: () => {
+            if (!page.includes('paginatePage=true')) {
+                return `${page}?paginatePage=true`;
+            }
+            return `${page}`;
+        },
+    };
+}

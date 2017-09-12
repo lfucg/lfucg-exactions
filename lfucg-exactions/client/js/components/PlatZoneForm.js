@@ -48,8 +48,8 @@ class PlatZoneForm extends React.Component {
                         <div className="row">
                             <div className="col-sm-6 form-group">
                                 <label htmlFor="plat" className="form-label" id="plat">* Plat</label>
-                                <select className="form-control" id="plat" onChange={formChange('plat')} value={activeForm.plat_show} >
-                                    <option value="start_plat">Plat</option>
+                                <select className="form-control" id="plat" onChange={formChange('plat')} value={activeForm.plat_name} >
+                                    <option value="start_plat">{activeForm.plat_name}</option>
                                 </select>
                             </div>
                         </div>
