@@ -104,7 +104,7 @@ class PaymentExisting extends React.Component {
                 <div className="inside-body">
                     <div className="container">
                         {payments_list}
-                        {payments_list ? <Pagination /> : null}
+                        {payments_list ? <Pagination /> : <h1>No Results Found</h1>}
                     </div>
                 </div>
                 <Footer />

@@ -108,8 +108,7 @@ class AccountExisting extends React.Component {
                 <div className="inside-body">
                     <div className="container">
                         {accounts_list}
-                        {accounts.length === 0 ? <h1>No Results Match</h1> : null}
-                        <Pagination />
+                        {accounts_list ? <Pagination /> : <h1>No Results Found</h1>}
                     </div>
                 </div>
                 <Footer />

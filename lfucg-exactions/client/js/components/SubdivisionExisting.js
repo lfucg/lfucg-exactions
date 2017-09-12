@@ -101,7 +101,7 @@ class SubdivisionExisting extends React.Component {
                 <div className="inside-body">
                     <div className="container">
                         {subdivisions_list}
-                        {subdivisions_list ? <Pagination /> : null}
+                        {subdivisions_list ? <Pagination /> : <h1>No Results Found</h1>}
                     </div>
                 </div>
                 <Footer />
