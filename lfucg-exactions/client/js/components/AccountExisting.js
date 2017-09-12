@@ -127,15 +127,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     return {
         onComponentDidMount() {
-            dispatch(getPagination('/account/'))
-            .then((data) => {
-                const account_update = {
-                    next: data.response.next,
-                    prev: data.response.prev,
-                    count: data.response.count,
-                };
-                dispatch(formUpdate(account_update));
-            });
+            dispatch(getPagination('/account/'));
         },
         onAccountQuery(field) {
             return (e, ...args) => {

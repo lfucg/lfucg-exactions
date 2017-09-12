@@ -47,15 +47,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     return {
         onPaginationChangePage(field) {
-            dispatch(getPagination(field))
-            .then((data) => {
-                const update = {
-                    next: data.response.next,
-                    prev: data.response.prev,
-                    count: data.response.count,
-                };
-                dispatch(formUpdate(update));
-            });
+            dispatch(getPagination(field));
         },
     };
 }

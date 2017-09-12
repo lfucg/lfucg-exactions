@@ -4,6 +4,7 @@ import {
     FORM_INIT,
     FORM_UPDATE,
     FORM_RESET,
+    API_CALL_SUCCESS,
 } from '../constants/actionTypes';
 
 export default function activeFormReducer(state = {}, action) {
@@ -11,10 +12,14 @@ export default function activeFormReducer(state = {}, action) {
     case FORM_INIT:
     case FORM_RESET:
         return {};
+    case API_CALL_SUCCESS:
+        if (action.endpoint === 'GET_PAGINATION') {
+            return merge(state, { next: action.response.next, prev: action.response.prev, count: action.response.count });
+        }
+        return state;
     case FORM_UPDATE:
         return merge(state, action.update);
     default:
     }
-
     return state;
 }

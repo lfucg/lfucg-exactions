@@ -132,15 +132,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     return {
         onComponentDidMount() {
-            dispatch(getPagination('/estimate/'))
-            .then((data) => {
-                const account_update = {
-                    next: data.response.next,
-                    prev: data.response.prev,
-                    count: data.response.count,
-                };
-                dispatch(formUpdate(account_update));
-            });
+            dispatch(getPagination('/estimate/'));
         },
         onProjectCostQuery(field) {
             return (e, ...args) => {
