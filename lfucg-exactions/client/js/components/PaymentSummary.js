@@ -194,10 +194,10 @@ class PaymentSummary extends React.Component {
                                         </div>
                                         <div className="col-xs-12">
                                             <p className="col-md-4 col-xs-6">Developer Account Name: {payments.credit_account.account_name}</p>
-                                            <p className="col-md-4 col-xs-6">{payments.credit_account.credit_availability}</p>
+                                            <p className="col-md-4 col-xs-6">{payments.credit_account.balance && payments.credit_account.balance.credit_availability}</p>
                                             {currentUser && currentUser.username &&
                                                 <div>
-                                                    <p className="col-md-4 col-xs-6">Account Balance: {payments.credit_account.balance}</p>
+                                                    <p className="col-md-4 col-xs-6">Account Balance: {payments.credit_account.balance && payments.credit_account.balance.balance}</p>
                                                     <p className="col-md-4 col-xs-6">Contact Name: {payments.credit_account.contact_full_name}</p>
                                                     <p className="col-md-4 col-xs-6 ">Phone: {payments.credit_account.phone}</p>
                                                     <p className="col-md-4 col-xs-6">Email: {payments.credit_account.email}</p>

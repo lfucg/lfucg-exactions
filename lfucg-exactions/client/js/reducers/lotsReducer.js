@@ -5,6 +5,7 @@ import {
     GET_PLAT_LOTS,
     POST_LOT,
     PUT_LOT,
+    GET_PAGINATION,
 } from '../constants/apiConstants';
 
 
@@ -20,6 +21,15 @@ const lotsReducer = (state = {}, action) => {
     case POST_LOT:
     case PUT_LOT:
         return action.response;
+    case GET_PAGINATION:
+        const next = action.response.next;
+        const prev = action.response.prev;
+        if ((next != null && next.startsWith('/lot')) ||
+            (prev != null && prev.startsWith('/lot')) ||
+            (window.location.hash === '#/lot')) {
+            return action.response;
+        }
+        return {};
     default:
         return state;
     }

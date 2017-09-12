@@ -86,3 +86,4 @@ export const GET_RATES = 'GET_RATES';
 export const POST_RATE = 'POST_RATE';
 export const PUT_RATE = 'PUT_RATE';
 
+export const GET_PAGINATION = 'GET_PAGINATION';

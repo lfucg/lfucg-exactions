@@ -7,9 +7,10 @@ import PropTypes from 'prop-types';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
+import Pagination from './Pagination';
 
 import {
-    getAgreements,
+    getPagination,
     getAgreementQuery,
 } from '../actions/apiActions';
 
@@ -105,6 +106,7 @@ class AgreementExisting extends React.Component {
                 <div className="inside-body">
                     <div className="container">
                         {agreements_list}
+                        {agreements_list ? <Pagination /> : <h1>No Results Found</h1>}
                     </div>
                 </div>
                 <Footer />
@@ -131,7 +133,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     return {
         onComponentDidMount() {
-            dispatch(getAgreements());
+            dispatch(getPagination('/agreement/'));
         },
         onAgreementQuery(field) {
             return (e, ...args) => {
