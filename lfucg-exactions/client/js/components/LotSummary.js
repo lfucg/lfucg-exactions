@@ -136,7 +136,7 @@ class LotSummary extends React.Component {
                             <div className="col-xs-10 col-xs-offset-1">
                                 {currentUser && currentUser.id && !lots.permit_id &&
                                 <button type="button" className="btn btn-lex btn-lg pull-right" data-toggle="modal" data-target="#permitModal">
-                                    <i className="fa fa-clipboard" aria-hidden="true"></i>&nbsp;Add Permit ID
+                                    <i className="fa fa-clipboard" aria-hidden="true" />&nbsp;Add Permit ID
                                 </button>
                                 }
                             </div>
