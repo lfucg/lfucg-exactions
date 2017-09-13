@@ -137,6 +137,7 @@ function mapDispatchToProps(dispatch) {
         onComponentDidMount() {
             dispatch(getPagination('/account/'));
         },
+        // modeled off mobile serve delayed API search queries.
         // self-calling anonymous function that resets timer value to recall itself each time key pressed
         delay: (function () {
             let timer = 0;
