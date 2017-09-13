@@ -6,7 +6,7 @@ import { getPagination } from '../actions/apiActions';
 class Pagination extends React.Component {
 
     render() {
-        if (window.scrollY > 200) {
+        if (window.pageYOffset > 200) {
             window.scroll(0, 0);
         }
         const {
