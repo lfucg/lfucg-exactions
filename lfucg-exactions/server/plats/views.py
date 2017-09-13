@@ -78,10 +78,9 @@ class PlatCSVExportView(View):
                 'Current  Exactions',
                 'Current Sewer Exactions',
                 'Current Non-Sewer Exactions',
-                'Payment Total',
             ])
         
-            payment_length_per_lot = 1
+            payment_length_per_lot = 0
             ledger_length_per_lot = 0
 
             for single_lot in lot_queryset:
