@@ -28,10 +28,14 @@ class PlatCSVExportView(View):
 
         plat = request.GET.get('plat')
 
-        response = HttpResponse(content_type='text')
-        response['Content-Disposition'] = 'attachment; filename="plat_report.csv"'
+        plat_queryset = Plat.objects.filter(id=plat)
+        if plat_queryset is not None:
+            plat_queryset = plat_queryset[0]
 
-        plat_queryset = Plat.objects.filter(id=plat)[0]
+        plat_filename = plat_queryset.name + '_plat_report.csv'
+
+        response = HttpResponse(content_type='text')
+        response['Content-Disposition'] = 'attachment; filename=%s'%plat_filename
 
         writer = csv.writer(response)
 
@@ -74,12 +78,23 @@ class PlatCSVExportView(View):
                 'Current  Exactions',
                 'Current Sewer Exactions',
                 'Current Non-Sewer Exactions',
-                'Payment Total - 1',
-                'Payment Total - 2',
-                'Payment Total - 3',
-                'Payment Total - 4',
-                'Payment Total - 5',
+                'Payment Total',
             ])
+        
+            payment_length_per_lot = 1
+            ledger_length_per_lot = 0
+
+            for single_lot in lot_queryset:
+                payment_queryset = Payment.objects.filter(lot_id=single_lot.id)
+                while len(payment_queryset) > payment_length_per_lot:
+                    headers.extend(['Payment Total',])
+                    payment_length_per_lot = payment_length_per_lot + 1
+
+            for single_lot in lot_queryset:
+                ledger_from_queryset = AccountLedger.objects.filter(account_from=single_lot.account)
+                while len(ledger_from_queryset) > ledger_length_per_lot:
+                    headers.extend(['Account Ledger Credits Spent'])
+                    ledger_length_per_lot = ledger_length_per_lot + 1
 
             writer.writerow(headers)
 
@@ -127,8 +142,15 @@ class PlatCSVExportView(View):
                             payment_total,
                         ])
 
+                ledger_from_queryset = AccountLedger.objects.filter(account_from=single_lot.account)
+                if ledger_from_queryset is not None:
+                    for account_from in ledger_from_queryset:
+                        ledger_from_total = account_from.non_sewer_credits + account_from.sewer_credits
+
+                        current_lot_data.extend([ledger_from_total,])
+
+
                 lot_csv_data = plat_csv_data + current_lot_data
-                print('LOT CSV DATA LOT END', lot_csv_data)
                         
                 writer.writerow(lot_csv_data)
 
