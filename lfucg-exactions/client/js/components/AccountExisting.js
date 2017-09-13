@@ -28,6 +28,7 @@ class AccountExisting extends React.Component {
             currentUser,
             accounts,
             onAccountQuery,
+            delay,
         } = this.props;
 
         const accounts_list = accounts && accounts.length > 0 ? (
@@ -89,16 +90,23 @@ class AccountExisting extends React.Component {
                 <Breadcrumbs route={this.props.route} />
 
                 <div className="row search-box">
-                    <form onChange={onAccountQuery('query')} className="col-sm-10 col-sm-offset-1" >
+                    <form className="col-sm-10 col-sm-offset-1" >
                         <fieldset>
                             <div className="col-sm-2 col-xs-12">
                                 <label htmlFor="query" className="form-label">Search</label>
                             </div>
                             <div className="col-sm-10 col-xs-12">
                                 <input
+                                  onKeyUp={() => {
+                                      delay(() => {
+                                          onAccountQuery(this.query.name, this.query.value);
+                                      }, 500);
+                                  }}
+                                  ref={(query) => { this.query = query }}
                                   type="text"
                                   className="form-control"
                                   placeholder="Search Developer Accounts"
+                                  name="query"
                                 />
                             </div>
                         </fieldset>
@@ -129,15 +137,19 @@ function mapDispatchToProps(dispatch) {
         onComponentDidMount() {
             dispatch(getPagination('/account/'));
         },
-        onAccountQuery(field) {
-            return (e, ...args) => {
-                const value = typeof e.target.value !== 'undefined' ? e.target.value : args[1];
-                const update = {
-                    [field]: value,
-                };
-                dispatch(formUpdate(update));
-                dispatch(getAccountQuery());
+        delay: (function() {
+            let timer = 0;
+            return (callback, ms) => {
+                clearTimeout(timer);
+                timer = setTimeout(callback, ms);
             };
+        })(),
+        onAccountQuery(field, value) {
+            const update = {
+                [field]: value,
+            };
+            dispatch(formUpdate(update));
+            dispatch(getAccountQuery());
         },
     };
 }
@@ -148,6 +160,7 @@ AccountExisting.propTypes = {
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
     onAccountQuery: PropTypes.func,
+    delay: PropTypes.func,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AccountExisting);
