@@ -3,32 +3,75 @@ import { connect } from 'react-redux';
 import { map } from 'ramda';
 import PropTypes from 'prop-types';
 
-import {
-    formInit,
-    formUpdate,
-} from '../actions/formActions';
+import RateZoneRow from './RateZoneRow';
 
-import {
-    getRates,
-} from '../actions/apiActions';
+// import {
+//     formInit,
+//     formUpdate,
+// } from '../actions/formActions';
+
+// import {
+//     getRates,
+// } from '../actions/apiActions';
 
 class RateCategoryTable extends React.Component {
-    componentDidMount() {
-        this.props.onComponentDidMount();
-    }
+    // componentDidMount() {
+    //     this.props.onComponentDidMount({
+    //         category: this.props.category,
+    //     });
+    // }
 
     render() {
         const {
             activeForm,
         } = this.props;
 
+        const ZONES = ['EAR-1', 'EAR1-SRA', 'EAR-2', 'EAR-3', 'CC(RES)', 'CC(NONR)', 'ED'];
+        const EXPANSION_AREAS = ['EA-1', 'EA-2A', 'EA-2B', 'EA-2C', 'EA-3'];
+
+        const zone_list = map((zone, index) => {
+            return (
+                <div key={index}>
+                    <RateZoneRow category={this.props.category} zone={zone} />
+                </div>
+            );
+        })(ZONES);
+
         return (
-            <div className="rate-table-form">
-
-
-                <div className="inside-body">
-                    <div className="container">
-                        hello
+            <div className="rate-table-category">
+                <a
+                  role="button"
+                  data-toggle="collapse"
+                  data-parent="#accordion"
+                  href={`#category${this.props.category}`}
+                  aria-expanded="true"
+                  aria-controls={`category${this.props.category}`}
+                >
+                    <div className="row rate-panel-heading" role="tab" id={`heading${this.props.category}`}>
+                        <div className="col-xs-1 caret-indicator" />
+                        <div className="col-xs-10">
+                            <h3>{this.props.category}</h3>
+                        </div>
+                    </div>
+                </a>
+                <div
+                  id={`category${this.props.category}`}
+                  className="panel-collapse collapse in row"
+                  role="tabpanel"
+                  aria-labelledby={`#heading${this.props.category}`}
+                >
+                    <div className="panel-body">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Zone</th>
+                                    <th>Expansion Area</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {zone_list && zone_list}
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -36,10 +79,10 @@ class RateCategoryTable extends React.Component {
     }
 }
 
-RateCategoryTable.propsTypes = {
+RateCategoryTable.propTypes = {
     activeForm: PropTypes.object,
-    route: PropTypes.object,
-    onComponentDidMount: PropTypes.func,
+    // onComponentDidMount: PropTypes.func,
+    category: PropTypes.string,
 };
 
 function mapStateToProps(state) {
@@ -48,32 +91,32 @@ function mapStateToProps(state) {
     };
 }
 
-function mapDispatchToProps(dispatch) {
-    return {
-        onComponentDidMount() {
-            dispatch(formInit());
-            dispatch(getRates())
-            .then((data_rate) => {
-                // const all_results = data_rate.response;
-                // console.log('ALL RESULTS', all_results);
-                const rate_update = {
-                    all_results: data_rate.response,
-                };
-                dispatch(formUpdate(rate_update));
-            });
-        },
+// function mapDispatchToProps(dispatch) {
+//     return {
+//         onComponentDidMount() {
+            // dispatch(formInit());
+            // dispatch(getRates())
+            // .then((data_rate) => {
+            //     // const all_results = data_rate.response;
+            //     // console.log('ALL RESULTS', all_results);
+            //     const rate_update = {
+            //         all_results: data_rate.response,
+            //     };
+            //     dispatch(formUpdate(rate_update));
+            // });
+        // },
 
-        onSubmit(activeForm) {
-            return (e, ...args) => {
-                const field_name = typeof e.target.id !== 'undefined' ? e.target.id : args[1];
-                const value = typeof e.target.value !== 'undefined' ? e.target.value : args[1];
-                const update = {
-                    [field_name]: value,
-                };
-                dispatch(formUpdate(update));
-            };
-        },
-    };
-}
+        // onSubmit(activeForm) {
+        //     return (e, ...args) => {
+        //         const field_name = typeof e.target.id !== 'undefined' ? e.target.id : args[1];
+        //         const value = typeof e.target.value !== 'undefined' ? e.target.value : args[1];
+        //         const update = {
+        //             [field_name]: value,
+        //         };
+        //         dispatch(formUpdate(update));
+        //     };
+        // },
+//     };
+// }
 
-export default connect(mapStateToProps, mapDispatchToProps)(RateCategoryTable);
+export default connect(mapStateToProps)(RateCategoryTable);

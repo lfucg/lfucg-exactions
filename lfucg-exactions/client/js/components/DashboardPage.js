@@ -1,13 +1,18 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import {
     Link,
 } from 'react-router';
+import PropTypes from 'prop-types';
 
 import Navbar from './Navbar';
 import Footer from './Footer';
 
 class DashboardPage extends React.Component {
     render() {
+        const {
+            currentUser,
+        } = this.props;
         return (
             <div className="dashboard">
                 <Navbar />
@@ -52,6 +57,12 @@ class DashboardPage extends React.Component {
                                 <Link to="account-ledger" role="link"><h2 className="in-page-link">Account Ledgers</h2></Link>
                                 <p>Lexington account ledgers.</p>
                             </div>
+                            {currentUser && currentUser.is_superuser &&
+                                <div className="col-md-4 col-sm-6">
+                                    <Link to="rate-table/form/" role="link"><h2 className="in-page-link">Rate Tables</h2></Link>
+                                    <p>Update or create rate tables.</p>
+                                </div>
+                            }
                         </div>
                     </div>
                 </div>
@@ -61,5 +72,15 @@ class DashboardPage extends React.Component {
     }
 }
 
-export default (DashboardPage);
+DashboardPage.propsTypes = {
+    currentUser: PropTypes.object,
+};
+
+function mapStateToProps(state) {
+    return {
+        currentUser: state.currentUser,
+    };
+}
+
+export default connect(mapStateToProps)(DashboardPage);
 
