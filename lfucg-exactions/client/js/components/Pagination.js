@@ -6,7 +6,9 @@ import { getPagination } from '../actions/apiActions';
 class Pagination extends React.Component {
 
     render() {
-        window.scroll(0, 0);
+        if (window.scrollY > 200) {
+            window.scroll(0, 0);
+        }
         const {
             onPaginationChangePage,
             activeForm,
