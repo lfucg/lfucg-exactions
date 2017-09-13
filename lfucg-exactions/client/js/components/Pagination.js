@@ -19,9 +19,9 @@ class Pagination extends React.Component {
             <div className="row">
                 <div className="col-xs-12 text-center">
                     <ul className="pagination">
-                        <li><button className="btn btn-default" disabled={!activeForm.prev || activeForm.query} onClick={() => onPaginationChangePage(activeForm.prev)}><i className="fa fa-angle-double-left" aria-hidden="true" /></button></li>
+                        <li><button aria-label="previous" className="btn btn-default" disabled={!activeForm.prev || activeForm.query} onClick={() => onPaginationChangePage(activeForm.prev)}><i className="fa fa-angle-double-left" aria-hidden="true" /></button></li>
                         <li>&nbsp;Page {activeForm.next ? (activeForm.next.charAt(activeForm.next.indexOf('=') + 1) - 1) : (Math.ceil(activeForm.count / paginationSize)) }&nbsp;</li>
-                        <li><button className="btn btn-default" disabled={!activeForm.next || activeForm.query} onClick={() => onPaginationChangePage(activeForm.next)}><i className="fa fa-angle-double-right" aria-hidden="true" /></button></li>
+                        <li><button aria-label="next" className="btn btn-default" disabled={!activeForm.next || activeForm.query} onClick={() => onPaginationChangePage(activeForm.next)}><i className="fa fa-angle-double-right" aria-hidden="true" /></button></li>
                     </ul>
                 </div>
             </div>
