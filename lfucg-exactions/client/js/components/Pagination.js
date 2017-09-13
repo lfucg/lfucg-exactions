@@ -2,11 +2,11 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { getPagination } from '../actions/apiActions';
-import { formUpdate } from '../actions/formActions';
 
 class Pagination extends React.Component {
 
     render() {
+        window.scroll(0, 0);
         const {
             onPaginationChangePage,
             activeForm,
@@ -19,13 +19,9 @@ class Pagination extends React.Component {
             <div className="row">
                 <div className="col-xs-12 text-center">
                     <ul className="pagination">
-                        <li><button className="btn btn-default" disabled={!activeForm.prev || activeForm.query} onClick={() => onPaginationChangePage(activeForm.prev)}>&laquo;</button></li>
-                        <li>
-                            <button className="btn btn-default">
-                                {activeForm.next ? (activeForm.next.charAt(activeForm.next.indexOf('=') + 1) - 1) : (Math.ceil(activeForm.count / paginationSize)) }
-                            </button>
-                        </li>
-                        <li><button className="btn btn-default" disabled={!activeForm.next || activeForm.query} onClick={() => onPaginationChangePage(activeForm.next)}>&raquo;</button></li>
+                        <li><button aria-label="previous" className="btn btn-default" disabled={!activeForm.prev || activeForm.query} onClick={() => onPaginationChangePage(activeForm.prev)}><i className="fa fa-angle-double-left" aria-hidden="true" /></button></li>
+                        <li>&nbsp;Page {activeForm.next ? (activeForm.next.charAt(activeForm.next.indexOf('=') + 1) - 1) : (Math.ceil(activeForm.count / paginationSize)) }&nbsp;</li>
+                        <li><button aria-label="next" className="btn btn-default" disabled={!activeForm.next || activeForm.query} onClick={() => onPaginationChangePage(activeForm.next)}><i className="fa fa-angle-double-right" aria-hidden="true" /></button></li>
                     </ul>
                 </div>
             </div>
