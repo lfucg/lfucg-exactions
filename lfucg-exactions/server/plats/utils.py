@@ -9,20 +9,6 @@ def calculate_lot_balance(lot_id):
     sewer_payment = 0
     non_sewer_payment = 0
 
-    total_exactions = (lot.dues_roads_own +
-        lot.dues_roads_dev +
-        lot.dues_sewer_cap_own +
-        lot.dues_sewer_trans_dev +
-        lot.dues_sewer_trans_own +
-        lot.dues_sewer_cap_dev +
-        lot.dues_sewer_cap_own +
-        lot.dues_parks_dev +
-        lot.dues_parks_own +
-        lot.dues_storm_dev +
-        lot.dues_storm_own +
-        lot.dues_open_space_dev +
-        lot.dues_open_space_own)
-
     sewer_exactions = (lot.dues_sewer_cap_own +
         lot.dues_sewer_trans_dev +
         lot.dues_sewer_trans_own +
@@ -37,6 +23,8 @@ def calculate_lot_balance(lot_id):
         lot.dues_storm_own +
         lot.dues_open_space_dev +
         lot.dues_open_space_own)
+
+    total_exactions = sewer_exactions + non_sewer_exactions
 
     if payments is not None:
         for payment in payments:
