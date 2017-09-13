@@ -28,6 +28,16 @@ class RateTableForm extends React.Component {
             route,
         } = this.props;
 
+        const CATEGORIES = ['ROADS', 'OPEN_SPACE', 'SEWER_CAP', 'SEWER_TRANS', 'PARK', 'STORM_WATER'];
+
+        const category_chart = map((category, index) => {
+            return (
+                <div key={index}>
+                    <RateCategoryTable category={category} />
+                </div>
+            );
+        })(CATEGORIES);
+
         // VALUE ORDER: RATE, ID, RATE_TABLE_ID, CATEGORY, ZONE, EXPANSION_AREA
         // const RoadEA1List = activeForm.rates.length > 0 &&
         //     (map((road_ea1) => {
@@ -64,8 +74,12 @@ class RateTableForm extends React.Component {
 
                 <div className="inside-body">
                     <div className="container">
-                        <RateCategoryTable />
-                        hello
+                        {
+                            // Create a new rate table
+                        }
+                        <div className="col-md-offset-1 col-md-10 rate-panel-group" id="accordion" role="tablist" aria-multiselectable="false">
+                            {category_chart && category_chart}
+                        </div>
                     </div>
                 </div>
                 <Footer />
@@ -74,7 +88,7 @@ class RateTableForm extends React.Component {
     }
 }
 
-RateTableForm.propsTypes = {
+RateTableForm.propTypes = {
     activeForm: PropTypes.object,
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
@@ -90,16 +104,16 @@ function mapDispatchToProps(dispatch) {
     return {
         onComponentDidMount() {
             dispatch(formInit());
-            dispatch(getRates())
-            .then((data_rate) => {
-                const all_results = data_rate.response;
-                console.log('ALL RESULTS', all_results);
-                const rate_update = {
-                    rates: data_rate.response,
-                    rate_table_id: data_rate.response.rate_table_id,
-                };
-                dispatch(formUpdate(rate_update));
-            });
+            dispatch(getRates());
+            // .then((data_rate) => {
+            //     const all_results = data_rate.response;
+            //     console.log('ALL RESULTS', all_results);
+            //     const rate_update = {
+            //         rates: data_rate.response,
+            //         rate_table_id: data_rate.response.rate_table_id,
+            //     };
+            //     dispatch(formUpdate(rate_update));
+            // });
         },
     };
 }
