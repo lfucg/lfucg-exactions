@@ -33,6 +33,7 @@ export const GET_LOT_QUERY = 'GET_LOT_QUERY';
 export const GET_PLAT_LOTS = 'GET_PLAT_LOTS';
 export const POST_LOT = 'POST_LOT';
 export const PUT_LOT = 'PUT_LOT';
+export const PUT_PERMIT_ID_ON_LOT = 'PUT_PERMIT_ID_ON_LOT';
 
 export const GET_ACCOUNTS = 'GET_ACCOUNTS';
 export const GET_ACCOUNT_ID = 'GET_ACCOUNT_ID';

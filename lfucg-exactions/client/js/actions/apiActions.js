@@ -31,6 +31,7 @@ import {
     GET_PLAT_LOTS,
     POST_LOT,
     PUT_LOT,
+    PUT_PERMIT_ID_ON_LOT,
 
     GET_ACCOUNTS,
     GET_ACCOUNT_ID,
@@ -629,6 +630,26 @@ export function putLot(selectedLot) {
                 dues_open_space_own,
                 account,
                 // payment,
+            };
+        },
+    };
+}
+
+export function putPermitIdOnLot(selectedLot) {
+    return {
+        type: API_CALL,
+        endpoint: PUT_PERMIT_ID_ON_LOT,
+        url: `/lot/${selectedLot}/`,
+        method: 'PUT',
+        body: (getState) => {
+            const {
+                activeForm,
+            } = getState();
+            const {
+                permit_id,
+            } = activeForm;
+            return {
+                permit_id,
             };
         },
     };
