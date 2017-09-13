@@ -102,7 +102,7 @@ class AccountExisting extends React.Component {
                                           onAccountQuery(this.query.name, this.query.value);
                                       }, 500);
                                   }}
-                                  ref={(query) => { this.query = query }}
+                                  ref={(query) => { this.query = query; }}
                                   type="text"
                                   className="form-control"
                                   placeholder="Search Developer Accounts"
@@ -137,7 +137,8 @@ function mapDispatchToProps(dispatch) {
         onComponentDidMount() {
             dispatch(getPagination('/account/'));
         },
-        delay: (function() {
+        // self-calling anonymous function that resets timer value to recall itself each time key pressed
+        delay: (function () {
             let timer = 0;
             return (callback, ms) => {
                 clearTimeout(timer);
