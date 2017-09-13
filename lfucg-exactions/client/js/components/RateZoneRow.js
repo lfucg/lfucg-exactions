@@ -3,14 +3,16 @@ import { connect } from 'react-redux';
 import { map } from 'ramda';
 import PropTypes from 'prop-types';
 
-// import {
-//     formInit,
-//     formUpdate,
-// } from '../actions/formActions';
+import {
+    formInit,
+    formUpdate,
+} from '../actions/formActions';
 
 // import {
 //     getRates,
 // } from '../actions/apiActions';
+
+import RateFormGroup from './RateFormGroup';
 
 class RateZoneRow extends React.Component {
     // componentDidMount() {
@@ -23,31 +25,54 @@ class RateZoneRow extends React.Component {
     render() {
         const {
             activeForm,
-            onRateChange,
+            // onRateChange,
         } = this.props;
 
         const EXPANSION_AREAS = ['EA-1', 'EA-2A', 'EA-2B', 'EA-2C', 'EA-3'];
 
         const expansion_area_list = map((expansion, index) => {
             return (
-                <td key={index}>
-                    <input
-                      type="number"
-                      step="2"
-                      className="form-control"
-                      value={[this.props.category, this.props.zone, expansion]}
-                      onBlur={onRateChange}
-                    />
-                </td>
+                <div className="col-sm-2" key={index}>
+                    <RateFormGroup
+                      // id="rate"
+                      // id={{
+                      //     category: this.props.category,
+                      //     zone: this.props.zone,
+                      //     expansion,
+                      //     rate: <input type="number" step="2" className="form-control" />,
+                      // }}
+                      // id={(rate = 'rate') =>
+                      //     // category + zone + expansion + rate
+                      //     [this.props.category, this.props.zone, expansion, rate]
+                      // }
+                      // id={[this.props.category, this.props.zone, expansion, 'rate']}
+                      id={`${this.props.category}, ${this.props.zone}, ${expansion}`}
+                      category={this.props.category}
+                      zone={this.props.zone}
+                      expansion={expansion}
+                      value="rate"
+                    >
+                        <input
+                          type="number"
+                          step="2"
+                          className="form-control"
+                          // id="rate"
+                          // onBlur={onRateChange()}
+                          // value="rate"
+                        />
+                    </RateFormGroup>
+                </div>
             );
         })(EXPANSION_AREAS);
 
         return (
             <div className="rate-zone">
-                <tr>
-                    <th scope="row">{this.props.zone}</th>
-                    {expansion_area_list && expansion_area_list}
-                </tr>
+                <div className="row">
+                    <h4 className="col-sm-2">{this.props.zone}</h4>
+                    <div className="col-sm-10">
+                        {expansion_area_list && expansion_area_list}
+                    </div>
+                </div>
             </div>
         );
     }
@@ -56,7 +81,7 @@ class RateZoneRow extends React.Component {
 RateZoneRow.propTypes = {
     activeForm: PropTypes.object,
     // onComponentDidMount: PropTypes.func,
-    onRateChange: PropTypes.func,
+    // onRateChange: PropTypes.func,
     category: PropTypes.string,
     zone: PropTypes.string,
 };
@@ -69,8 +94,18 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        onRateChange() {
+        onRateChange(field) {
             console.log('INSIDE RATE CHANGE');
+            console.log('FIELD TOP');
+            return (e, ...args) => {
+                console.log('FIELD', field);
+                const value = typeof e.target.value !== 'undefined' ? e.target.value : args[1];
+                const update = {
+                    [field]: value,
+                };
+                console.log('VALUE', value);
+                dispatch(formUpdate(update));
+            };
         },
 //         onComponentDidMount() {
             // dispatch(formInit());

@@ -61,17 +61,11 @@ class RateCategoryTable extends React.Component {
                   aria-labelledby={`#heading${this.props.category}`}
                 >
                     <div className="panel-body">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Zone</th>
-                                    <th>Expansion Area</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {zone_list && zone_list}
-                            </tbody>
-                        </table>
+                        <div className="row">
+                            <h4 className="col-sm-2">Zone</h4>
+                            <h4 className="col-sm-4 col-sm-offset-2">Expansion Area</h4>
+                        </div>
+                        {zone_list && zone_list}
                     </div>
                 </div>
             </div>
