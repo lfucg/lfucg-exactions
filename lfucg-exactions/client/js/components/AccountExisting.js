@@ -18,6 +18,8 @@ import {
     formUpdate,
 } from '../actions/formActions';
 
+import { delayApi } from '../actions/delayActions';
+
 class AccountExisting extends React.Component {
     componentDidMount() {
         this.props.onComponentDidMount();
@@ -28,7 +30,6 @@ class AccountExisting extends React.Component {
             currentUser,
             accounts,
             onAccountQuery,
-            delay,
         } = this.props;
 
         const accounts_list = accounts && accounts.length > 0 ? (
@@ -97,11 +98,7 @@ class AccountExisting extends React.Component {
                             </div>
                             <div className="col-sm-10 col-xs-12">
                                 <input
-                                  onKeyUp={() => {
-                                      delay(() => {
-                                          onAccountQuery(this.query.name, this.query.value);
-                                      }, 500);
-                                  }}
+                                  onKeyUp={onAccountQuery}
                                   ref={(query) => { this.query = query; }}
                                   type="text"
                                   className="form-control"
@@ -137,21 +134,9 @@ function mapDispatchToProps(dispatch) {
         onComponentDidMount() {
             dispatch(getPagination('/account/'));
         },
-        // modeled off mobile serve delayed API search queries.
-        // self-calling anonymous function that resets timer value to recall itself each time key pressed
-        delay: (function () {
-            let timer = 0;
-            return (callback, ms) => {
-                clearTimeout(timer);
-                timer = setTimeout(callback, ms);
-            };
-        })(),
-        onAccountQuery(field, value) {
-            const update = {
-                [field]: value,
-            };
-            dispatch(formUpdate(update));
-            dispatch(getAccountQuery());
+        onAccountQuery() {
+            dispatch(delayApi());
+            // dispatch(getAccountQuery());
         },
     };
 }
@@ -162,7 +147,6 @@ AccountExisting.propTypes = {
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
     onAccountQuery: PropTypes.func,
-    delay: PropTypes.func,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AccountExisting);
