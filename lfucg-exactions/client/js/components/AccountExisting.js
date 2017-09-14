@@ -18,7 +18,6 @@ import {
     formUpdate,
 } from '../actions/formActions';
 
-
 class AccountExisting extends React.Component {
     componentDidMount() {
         this.props.onComponentDidMount();
@@ -90,7 +89,7 @@ class AccountExisting extends React.Component {
                 <Breadcrumbs route={this.props.route} />
 
                 <div className="row search-box">
-                    <form className="col-sm-10 col-sm-offset-1" onChange={onAccountQuery('query')} >
+                    <form onChange={onAccountQuery('query')} className="col-sm-10 col-sm-offset-1" >
                         <fieldset>
                             <div className="col-sm-2 col-xs-12">
                                 <label htmlFor="query" className="form-label">Search</label>
@@ -100,7 +99,6 @@ class AccountExisting extends React.Component {
                                   type="text"
                                   className="form-control"
                                   placeholder="Search Developer Accounts"
-                                  name="query"
                                 />
                             </div>
                         </fieldset>
