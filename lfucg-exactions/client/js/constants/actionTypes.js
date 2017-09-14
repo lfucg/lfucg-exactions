@@ -4,9 +4,6 @@ export const API_CALL_SUCCESS = 'API_CALL_SUCCESS';
 export const API_CALL_ERROR = 'API_CALL_ERROR';
 export const API_CALL_VALIDATION_ERROR = 'API_CALL_VALIDATION_ERROR';
 
-// Debounce Calls
-export const DELAY_API_CALL = 'DELAY_API_CALL';
-
 // Form actions
 export const FORM_INIT = 'FORM_INIT';
 export const FORM_UPDATE = 'FORM_UPDATE';
@@ -24,4 +21,3 @@ export const PROCESS_QUEUE_ERROR = 'PROCESS_QUEUE_ERROR';
 export const PROCESS_QUEUE_CLEAR_ERROR = 'PROCESS_QUEUE_CLEAR_ERROR';
 
 export const CLEAR_API_DATA = 'CLEAR_API_DATA';
-
