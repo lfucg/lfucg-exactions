@@ -54,7 +54,7 @@ class RateZoneRow extends React.Component {
                     >
                         <input
                           type="number"
-                          step="2"
+                          // step="2"
                           className="form-control"
                           // id="rate"
                           // onBlur={onRateChange()}

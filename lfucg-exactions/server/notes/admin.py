@@ -13,6 +13,17 @@ class NoteHistoryAdmin(SimpleHistoryAdmin):
         'date',
     )
 
+class RateHistoryAdmin(SimpleHistoryAdmin):
+    list_display = (
+        'category',
+        'zone',
+        'expansion_area',
+        'rate',
+        'rate_table_id',
+        'id',
+    )
+        
+
 admin.site.register(Note, NoteHistoryAdmin)
 admin.site.register(RateTable, SimpleHistoryAdmin)
-admin.site.register(Rate, SimpleHistoryAdmin)
+admin.site.register(Rate, RateHistoryAdmin)
