@@ -69,17 +69,22 @@ const mapDispatch = (dispatch) => {
         },
         rateChangeSubmit(field) {
             return (e, ...args) => {
-                const rate_table_id = 2;
-                console.log('INSIDE FORM CHANGE', field);
                 const split_field = field.split(', ');
-                console.log('FIELD OF 0', split_field);
+
+                const rate_table_id = 2;
+
                 const category = split_field[0];
                 const zone = split_field[1];
                 const expansion_area = split_field[2];
 
                 const rate = typeof e.target.value !== 'undefined' ? e.target.value : args[1];
-                // console.log('INSIDE RETURN', value);
-                dispatch(postRate(rate_table_id, category, zone, expansion_area, rate));
+                console.log('INSIDE RETURN', typeof rate);
+                console.log('INSIDE RETURN', e.target);
+                console.log('INSIDE RETURN', rate.length);
+
+                if (rate.length > 0) {
+                    dispatch(postRate(rate_table_id, category, zone, expansion_area, rate));
+                }
             };
         },
     };
