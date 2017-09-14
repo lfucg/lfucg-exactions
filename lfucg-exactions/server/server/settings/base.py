@@ -107,7 +107,6 @@ STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
 STATIC_URL = '/static/'
 
 
-
 # Additional locations of static files
 STATICFILES_DIRS = (
     DIST_DIR,
@@ -314,3 +313,4 @@ LOGGING = {
 #CEF_VENDOR = 'Your Company'
 #CEF_VERSION = '0'
 #CEF_DEVICE_VERSION = '0'
+PAGINATION_SIZE = 10

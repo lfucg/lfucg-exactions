@@ -7,9 +7,10 @@ import PropTypes from 'prop-types';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
+import Pagination from './Pagination';
 
 import {
-    getProjects,
+    getPagination,
     getProjectQuery,
 } from '../actions/apiActions';
 
@@ -105,6 +106,7 @@ class ProjectExisting extends React.Component {
                 <div className="inside-body">
                     <div className="container">
                         {projects_list}
+                        {projects_list ? <Pagination /> : <h1>No Results Found</h1>}
                     </div>
                 </div>
                 <Footer />
@@ -131,7 +133,15 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     return {
         onComponentDidMount() {
-            dispatch(getProjects());
+            dispatch(getPagination('/project/'))
+            .then((data) => {
+                const account_update = {
+                    next: data.response.next,
+                    prev: data.response.prev,
+                    count: data.response.count,
+                };
+                dispatch(formUpdate(account_update));
+            });
         },
         onProjectQuery(field) {
             return (e, ...args) => {

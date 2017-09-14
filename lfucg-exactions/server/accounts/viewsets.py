@@ -1,3 +1,5 @@
+
+from rest_framework.pagination import PageNumberPagination
 from rest_framework import viewsets, status
 from django.db.models import Q
 from rest_framework.response import Response
@@ -7,6 +9,9 @@ from .models import *
 from .serializers import *
 from .permissions import CanAdminister
 
+from django.conf import settings
+
+
 class AccountViewSet(viewsets.ModelViewSet):
     serializer_class = AccountSerializer
     queryset = Account.objects.all()
@@ -14,17 +19,24 @@ class AccountViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         queryset = Account.objects.all()
-
+        PageNumberPagination.page_size = 0
+        
+        paginatePage = self.request.query_params.get('paginatePage', None)
         query_text = self.request.query_params.get('query', None)
+
         if query_text is not None:
             query_text = query_text.lower()
-
             queryset = queryset.filter(
                 Q(account_name__icontains=query_text) |
                 Q(contact_full_name__icontains=query_text) |
                 Q(address_full=query_text) |
                 Q(phone__icontains=query_text) |
                 Q(email__icontains=query_text))
+
+
+        if paginatePage is not None:
+            pagination_class = PageNumberPagination
+            PageNumberPagination.page_size = settings.PAGINATION_SIZE
 
         return queryset.order_by('account_name')
 
@@ -62,6 +74,7 @@ class AgreementViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         queryset = Agreement.objects.all()
+        paginatePage = self.request.query_params.get('paginatePage', None)
 
         account_id_set = self.request.query_params.get('account_id', None)
         if account_id_set is not None:
@@ -70,12 +83,15 @@ class AgreementViewSet(viewsets.ModelViewSet):
         query_text = self.request.query_params.get('query', None)
         if query_text is not None:
             query_text = query_text.lower()
-
             queryset = queryset.filter(
                 Q(account_id__account_name__icontains=query_text) |
                 Q(resolution_number__icontains=query_text) |
                 Q(agreement_type__icontains=query_text) |
                 Q(expansion_area__icontains=query_text))
+            
+        if paginatePage is not None:
+            pagination_class = PageNumberPagination
+            PageNumberPagination.page_size = settings.PAGINATION_SIZE
 
         return queryset.order_by('expansion_area')
 
@@ -85,7 +101,7 @@ class AgreementViewSet(viewsets.ModelViewSet):
         data_set['created_by'] = self.request.user.id
         data_set['modified_by'] = self.request.user.id
 
-        serializer = AccountSerializer(data=data_set)
+        serializer = AgreementSerializer(data=data_set)
         if serializer.is_valid(raise_exception=True):
             self.perform_create(serializer)
             return Response(serializer.data)
@@ -113,6 +129,12 @@ class PaymentViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         queryset = Payment.objects.all()
+        PageNumberPagination.page_size = 0
+
+        paginatePage = self.request.query_params.get('paginatePage', None)
+        if paginatePage is not None:
+            pagination_class = PageNumberPagination
+            PageNumberPagination.page_size = settings.PAGINATION_SIZE
 
         lot_id_set = self.request.query_params.get('lot_id', None)
         if lot_id_set is not None:
@@ -134,7 +156,7 @@ class PaymentViewSet(viewsets.ModelViewSet):
         data_set['created_by'] = self.request.user.id
         data_set['modified_by'] = self.request.user.id
 
-        serializer = AccountSerializer(data=data_set)
+        serializer = PaymentSerializer(data=data_set)
         if serializer.is_valid(raise_exception=True):
             self.perform_create(serializer)
             return Response(serializer.data)
@@ -175,7 +197,7 @@ class ProjectViewSet(viewsets.ModelViewSet):
         data_set['created_by'] = self.request.user.id
         data_set['modified_by'] = self.request.user.id
 
-        serializer = AccountSerializer(data=data_set)
+        serializer = ProjectSerializer(data=data_set)
         if serializer.is_valid(raise_exception=True):
             self.perform_create(serializer)
             return Response(serializer.data)
@@ -201,13 +223,24 @@ class ProjectCostEstimateViewSet(viewsets.ModelViewSet):
     queryset = ProjectCostEstimate.objects.all()
     permission_classes = (CanAdminister,)
 
+    def get_queryset(self):
+        queryset = ProjectCostEstimate.objects.all()
+        PageNumberPagination.page_size = 0
+
+        paginatePage = self.request.query_params.get('paginatePage', None)
+        if paginatePage is not None:
+            pagination_class = PageNumberPagination
+            PageNumberPagination.page_size = settings.PAGINATION_SIZE
+
+        return queryset
+
     def create(self, request):
         data_set = request.data
 
         data_set['created_by'] = self.request.user.id
         data_set['modified_by'] = self.request.user.id
 
-        serializer = AccountSerializer(data=data_set)
+        serializer = ProjectCostEstimateSerializer(data=data_set)
         if serializer.is_valid(raise_exception=True):
             self.perform_create(serializer)
             return Response(serializer.data)
@@ -256,7 +289,7 @@ class AccountLedgerViewSet(viewsets.ModelViewSet):
         data_set['created_by'] = self.request.user.id
         data_set['modified_by'] = self.request.user.id
 
-        serializer = AccountSerializer(data=data_set)
+        serializer = AccountLedgerSerializer(data=data_set)
         if serializer.is_valid(raise_exception=True):
             self.perform_create(serializer)
             return Response(serializer.data)
