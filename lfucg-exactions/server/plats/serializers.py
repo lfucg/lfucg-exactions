@@ -152,6 +152,8 @@ class LotSerializer(serializers.ModelSerializer):
             'non_sewer_exactions': '${:,.2f}'.format(calculated_exactions['non_sewer_exactions']),
             'sewer_payment': '${:,.2f}'.format(calculated_exactions['sewer_payment']),
             'non_sewer_payment': '${:,.2f}'.format(calculated_exactions['non_sewer_payment']),
+            'sewer_credits_applied': '${:,.2f}'.format(calculated_exactions['sewer_credits_applied']),
+            'non_sewer_credits_applied': '${:,.2f}'.format(calculated_exactions['non_sewer_credits_applied']),
             'current_exactions': '${:,.2f}'.format(calculated_exactions['current_exactions']),
             'sewer_due': '${:,.2f}'.format(calculated_exactions['sewer_due']),
             'non_sewer_due': '${:,.2f}'.format(calculated_exactions['non_sewer_due']),            

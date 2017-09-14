@@ -4,6 +4,7 @@ from accounts.models import *
 def calculate_lot_balance(lot_id):
     lot = Lot.objects.filter(id=lot_id)[0]
 
+    # PAYMENTS
     payments = Payment.objects.filter(lot_id=lot_id)
 
     sewer_payment = 0
@@ -42,6 +43,18 @@ def calculate_lot_balance(lot_id):
             sewer_payment += sewer_payment_paid
             non_sewer_payment += non_sewer_payment_paid
 
+    # ACCOUNT LEDGERS
+    account_ledgers = AccountLedger.objects.filter(lot=lot_id)
+
+    sewer_credits_applied = 0
+    non_sewer_credits_applied = 0
+
+    if account_ledgers is not None:
+        for ledger in account_ledgers:
+            sewer_credits_applied += ledger.sewer_credits
+            non_sewer_credits_applied += ledger.non_sewer_credits
+
+
     all_exactions = {
         'total_exactions': total_exactions,
         'sewer_exactions': sewer_exactions,
@@ -50,9 +63,12 @@ def calculate_lot_balance(lot_id):
         'sewer_payment': sewer_payment,
         'non_sewer_payment': non_sewer_payment,
 
-        'current_exactions': total_exactions - sewer_payment - non_sewer_payment,
-        'sewer_due': sewer_exactions - sewer_payment,
-        'non_sewer_due': non_sewer_exactions - non_sewer_payment,
+        'sewer_credits_applied': sewer_credits_applied,
+        'non_sewer_credits_applied': non_sewer_credits_applied,
+
+        'current_exactions': total_exactions - sewer_payment - non_sewer_payment - sewer_credits_applied - non_sewer_credits_applied,
+        'sewer_due': sewer_exactions - sewer_payment - sewer_credits_applied,
+        'non_sewer_due': non_sewer_exactions - non_sewer_payment - non_sewer_credits_applied,
     }
 
     return all_exactions
