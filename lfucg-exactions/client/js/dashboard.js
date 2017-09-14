@@ -20,6 +20,7 @@ import SubdivisionSummary from './components/SubdivisionSummary';
 import PlatExisting from './components/PlatExisting';
 import PlatForm from './components/PlatForm';
 import PlatSummary from './components/PlatSummary';
+import PlatReport from './components/PlatReport';
 
 import LotExisting from './components/LotExisting';
 import LotForm from './components/LotForm';
@@ -82,6 +83,7 @@ ReactDOM.render(
             <Route path="plat/summary/:id" component={PlatSummary} name="Plat Summary" />
             <Route path="plat/form" component={PlatForm} name="Plat Form" />
             <Route path="plat/form/:id" component={PlatForm} name="Current Plat Form" />
+            <Route path="plat/report/:id" component={PlatReport} name="Plat Report" />
 
             <Route path="lot" component={LotExisting} name="Existing Lots" />
             <Route path="lot/summary/:id" component={LotSummary} name="Lot Summary" />

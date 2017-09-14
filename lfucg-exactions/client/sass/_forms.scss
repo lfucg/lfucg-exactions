@@ -170,3 +170,16 @@
         font-size: 1.4em;
     }
 }
+
+.report-table {
+    border: 1px solid black;
+    padding: 5px;
+    th {
+        border: 1px solid black;
+        padding: 5px;
+    }
+    td {
+        border: 1px solid black;
+        padding: 5px;
+    }
+}

@@ -130,7 +130,7 @@ class AccountLedgerSummary extends React.Component {
                                             </div>
                                             <div className="col-xs-12">
                                                 <p className="col-xs-12">Lot Address: {accountLedgers.lot.address_full}</p>
-                                                <p className="col-md-4 col-xs-6">Total Exactions: ${accountLedgers.lot.total_due}</p>
+                                                <p className="col-md-4 col-xs-6">Current Exactions: {accountLedgers.lot && accountLedgers.lot.lot_exactions && accountLedgers.lot.lot_exactions.current_exactions}</p>
                                                 <p className="col-md-4 col-xs-6 ">Lot Number: {accountLedgers.lot.lot_number}</p>
                                                 <p className="col-md-4 col-xs-6">Permit ID: {accountLedgers.lot.permit_id}</p>
                                             </div>
