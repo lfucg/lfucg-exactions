@@ -1,6 +1,8 @@
 from rest_framework import serializers
 
 from .models import *
+from .utils import calculate_lot_balance
+
 from notes.models import Note
 from notes.serializers import NoteSerializer
 
@@ -79,7 +81,6 @@ class SubdivisionField(serializers.Field):
 
 class PlatSerializer(serializers.ModelSerializer):
     plat_zone = PlatZoneSerializer(many=True, read_only=True)
-    subdivision = SubdivisionSerializer(read_only=True)
     cleaned_total_acreage = serializers.SerializerMethodField(read_only=True)
     subdivision = SubdivisionField(required=False)
     plat_type_display = serializers.SerializerMethodField(read_only=True)
@@ -140,25 +141,23 @@ class PlatField(serializers.Field):
 class LotSerializer(serializers.ModelSerializer):
     plat = PlatField()
 
-    total_due = serializers.SerializerMethodField(read_only=True)
+    lot_exactions = serializers.SerializerMethodField(read_only=True)
 
-    def get_total_due(self,obj):
-        total = (
-            obj.dues_roads_own +
-            obj.dues_roads_dev +
-            obj.dues_sewer_cap_own +
-            obj.dues_sewer_trans_dev +
-            obj.dues_sewer_trans_own +
-            obj.dues_sewer_cap_dev +
-            obj.dues_sewer_cap_own +
-            obj.dues_parks_dev +
-            obj.dues_parks_own +
-            obj.dues_storm_dev +
-            obj.dues_storm_own +
-            obj.dues_open_space_dev +
-            obj.dues_open_space_own
-        )
-        return total
+    def get_lot_exactions(self, obj):
+        calculated_exactions = calculate_lot_balance(obj.id)
+
+        return {
+            'total_exactions': '${:,.2f}'.format(calculated_exactions['total_exactions']),
+            'sewer_exactions': '${:,.2f}'.format(calculated_exactions['sewer_exactions']),
+            'non_sewer_exactions': '${:,.2f}'.format(calculated_exactions['non_sewer_exactions']),
+            'sewer_payment': '${:,.2f}'.format(calculated_exactions['sewer_payment']),
+            'non_sewer_payment': '${:,.2f}'.format(calculated_exactions['non_sewer_payment']),
+            'sewer_credits_applied': '${:,.2f}'.format(calculated_exactions['sewer_credits_applied']),
+            'non_sewer_credits_applied': '${:,.2f}'.format(calculated_exactions['non_sewer_credits_applied']),
+            'current_exactions': '${:,.2f}'.format(calculated_exactions['current_exactions']),
+            'sewer_due': '${:,.2f}'.format(calculated_exactions['sewer_due']),
+            'non_sewer_due': '${:,.2f}'.format(calculated_exactions['non_sewer_due']),            
+        }
 
     class Meta:
         model = Lot
@@ -201,5 +200,6 @@ class LotSerializer(serializers.ModelSerializer):
             'dues_storm_own',
             'dues_open_space_dev',
             'dues_open_space_own',
-            'total_due',
+
+            'lot_exactions',
         )
