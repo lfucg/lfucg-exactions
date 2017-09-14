@@ -76,8 +76,8 @@ class AccountLedgerSummary extends React.Component {
                                     </div>
                                     <div className="col-xs-12">
                                         <p className="col-md-4 col-xs-6">Entry Type: {accountLedgers.entry_type_display}</p>
-                                        <p className="col-md-4 col-xs-6">Sewer Credits: {accountLedgers.sewer_credits}</p>
-                                        <p className="col-md-4 col-xs-6">Non-Sewer Credits: {accountLedgers.non_sewer_credits}</p>
+                                        <p className="col-md-4 col-xs-6">Sewer Credits: ${accountLedgers.sewer_credits}</p>
+                                        <p className="col-md-4 col-xs-6">Non-Sewer Credits: ${accountLedgers.non_sewer_credits}</p>
                                     </div>
                                 </div>
                             </div>
@@ -130,7 +130,7 @@ class AccountLedgerSummary extends React.Component {
                                             </div>
                                             <div className="col-xs-12">
                                                 <p className="col-xs-12">Lot Address: {accountLedgers.lot.address_full}</p>
-                                                <p className="col-md-4 col-xs-6">Total Exactions: {accountLedgers.lot.total_due}</p>
+                                                <p className="col-md-4 col-xs-6">Total Exactions: ${accountLedgers.lot.total_due}</p>
                                                 <p className="col-md-4 col-xs-6 ">Lot Number: {accountLedgers.lot.lot_number}</p>
                                                 <p className="col-md-4 col-xs-6">Permit ID: {accountLedgers.lot.permit_id}</p>
                                             </div>
@@ -191,9 +191,9 @@ class AccountLedgerSummary extends React.Component {
                                             </div>
                                             <div className="col-xs-12">
                                                 <p className="col-md-4 col-xs-6">Account From Name: {accountLedgers.account_from.account_name}</p>
-                                                <p className="col-md-4 col-xs-6">{accountLedgers.account_from.credit_availability}</p>
+                                                <p className="col-md-4 col-xs-6">{accountLedgers.account_from.balance && accountLedgers.account_from.balance.credit_availability}</p>
                                                 {currentUser && currentUser.username && <div>
-                                                    <p className="col-md-4 col-xs-6">Account Balance: {accountLedgers.account_from.balance}</p>
+                                                    <p className="col-md-4 col-xs-6">Account Balance: {accountLedgers.account_from.balance && accountLedgers.account_from.balance.balance}</p>
                                                     <p className="col-md-4 col-xs-6">Account From Contact Name: {accountLedgers.account_from.contact_full_name}</p>
                                                     <p className="col-md-4 col-xs-6 ">Account From Phone: {accountLedgers.account_from.phone}</p>
                                                     <p className="col-md-4 col-xs-6">Account From Email: {accountLedgers.account_from.email}</p>
@@ -257,9 +257,9 @@ class AccountLedgerSummary extends React.Component {
                                             </div>
                                             <div className="col-xs-12">
                                                 <p className="col-md-4 col-xs-6">Account To Name: {accountLedgers.account_to.account_name}</p>
-                                                <p className="col-md-4 col-xs-6">{accountLedgers.account_to.credit_availability}</p>
+                                                <p className="col-md-4 col-xs-6">{accountLedgers.account_to.balance && accountLedgers.account_to.balance.credit_availability}</p>
                                                 {currentUser && currentUser.username && <div>
-                                                    <p className="col-md-4 col-xs-6">Account Balance: {accountLedgers.account_to.balance}</p>
+                                                    <p className="col-md-4 col-xs-6">Account Balance: {accountLedgers.account_to.balance && accountLedgers.account_to.balance.balance}</p>
                                                     <p className="col-md-4 col-xs-6">Account To Contact Name: {accountLedgers.account_to.contact_full_name}</p>
                                                     <p className="col-md-4 col-xs-6 ">Account To Phone: {accountLedgers.account_to.phone}</p>
                                                     <p className="col-md-4 col-xs-6">Account To Email: {accountLedgers.account_to.email}</p>

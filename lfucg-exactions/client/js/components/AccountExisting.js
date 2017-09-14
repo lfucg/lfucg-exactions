@@ -7,10 +7,11 @@ import PropTypes from 'prop-types';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
+import Pagination from './Pagination';
 
 import {
-    getAccounts,
     getAccountQuery,
+    getPagination,
 } from '../actions/apiActions';
 
 import {
@@ -29,7 +30,7 @@ class AccountExisting extends React.Component {
             onAccountQuery,
         } = this.props;
 
-        const accounts_list = accounts.length > 0 ? (
+        const accounts_list = accounts && accounts.length > 0 ? (
             map((account) => {
                 return (
                     <div key={account.id} className="col-xs-12">
@@ -107,6 +108,7 @@ class AccountExisting extends React.Component {
                 <div className="inside-body">
                     <div className="container">
                         {accounts_list}
+                        {accounts_list ? <Pagination /> : <h1>No Results Found</h1>}
                     </div>
                 </div>
                 <Footer />
@@ -125,7 +127,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     return {
         onComponentDidMount() {
-            dispatch(getAccounts());
+            dispatch(getPagination('/account/'));
         },
         onAccountQuery(field) {
             return (e, ...args) => {
@@ -142,7 +144,7 @@ function mapDispatchToProps(dispatch) {
 
 AccountExisting.propTypes = {
     currentUser: PropTypes.object,
-    accounts: PropTypes.object,
+    accounts: PropTypes.array,
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
     onAccountQuery: PropTypes.func,

@@ -7,9 +7,10 @@ import PropTypes from 'prop-types';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
+import Pagination from './Pagination';
 
 import {
-    getAccountLedgers,
+    getPagination,
     getAccountLedgerQuery,
 } from '../actions/apiActions';
 
@@ -113,6 +114,7 @@ class AccountLedgerExisting extends React.Component {
                 <div className="inside-body">
                     <div className="container">
                         {accountLedgers_list}
+                        {accountLedgers_list ? <Pagination /> : <h1>No Results Found</h1>}
                     </div>
                 </div>
                 <Footer />
@@ -139,7 +141,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     return {
         onComponentDidMount() {
-            dispatch(getAccountLedgers());
+            dispatch(getPagination('/ledger/'));
         },
         onAccountLedgerQuery(field) {
             return (e, ...args) => {

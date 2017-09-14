@@ -9,12 +9,16 @@ import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
 import Notes from './Notes';
 
+import FormGroup from './FormGroup';
+
+
 import {
     getPlatID,
     getLotID,
     getAccountID,
     getLotPayments,
     getLotAccountLedgers,
+    putPermitIdOnLot,
 } from '../actions/apiActions';
 
 class LotSummary extends React.Component {
@@ -31,6 +35,7 @@ class LotSummary extends React.Component {
             accounts,
             payments,
             accountLedgers,
+            addPermitToLot,
         } = this.props;
 
         const payments_list = payments && payments.length > 0 &&
@@ -127,6 +132,53 @@ class LotSummary extends React.Component {
 
                 <div className="inside-body">
                     <div className="container">
+                        <div className="row">
+                            <div className="col-xs-10 col-xs-offset-1">
+                                {currentUser && currentUser.id && !lots.permit_id &&
+                                <button type="button" className="btn btn-lex btn-lg pull-right" data-toggle="modal" data-target="#permitModal">
+                                    <i className="fa fa-clipboard" aria-hidden="true" />&nbsp;Add Permit ID
+                                </button>
+                                }
+                            </div>
+                        </div>
+                        <div className="modal fade" id="permitModal" tabIndex="-1" role="dialog" aria-labelledby="modalLabel">
+                            <div className="modal-dialog" role="document">
+                                <div className="modal-content">
+                                    {lots.total_due && lots.total_due > 0 ? (
+                                        <div>
+                                            <div className="modal-header">
+                                                <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                <h3 className="modal-title" id="modalLabel">Exactions due on this lot.</h3>
+                                            </div>
+                                            <div className="modal-body">
+                                                <h4 className="text-center">Our records indicate an outstanding balance of <strong>${(lots.total_due).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</strong> for this lot. Please contact finance to submit payment prior to applying for a permit for:</h4>
+                                                <h4 className="text-center">{lots.address_full}</h4>
+                                            </div>
+                                            <div className="modal-footer">
+                                                <button type="button" className="btn btn-default" data-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+                                        ) : (
+                                        <div>
+                                            <div className="modal-header">
+                                                <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                <h2 className="modal-title text-center" id="modalLabel">Permit Request: {lots.address_full}</h2>
+                                            </div>
+                                            <div className="modal-body">
+                                                <FormGroup label="Permit ID" id="permit_id">
+                                                    <input type="text" className="form-control" placeholder="Please enter the Permit ID for this lot..." />
+                                                </FormGroup>
+                                            </div>
+                                            <div className="modal-footer">
+                                                <button type="button" className="btn btn-primary" onClick={addPermitToLot} data-dismiss="modal">Save</button>
+                                                <button type="button" className="btn btn-default" data-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+                                        )
+                                    }
+                                </div>
+                            </div>
+                        </div>
                         <div className="col-md-offset-1 col-md-10 panel-group" id="accordion" role="tablist" aria-multiselectable="false">
                             <a
                               role="button"
@@ -368,10 +420,10 @@ class LotSummary extends React.Component {
                                             </div>
                                             <div className="col-xs-12">
                                                 <p>Developer Account Name: {accounts.account_name}</p>
-                                                <p className="col-md-4 col-xs-6">{accounts.credit_availability}</p>
+                                                <p className="col-md-4 col-xs-6">{accounts.balance && accounts.balance.credit_availability}</p>
                                                 {currentUser && currentUser.username &&
                                                     <div className="col-sm-6">
-                                                        <p className="col-md-4 col-xs-6">Account Balance: {accounts.balance}</p>
+                                                        <p className="col-md-4 col-xs-6">Account Balance: {accounts.balance && accounts.balance.balance}</p>
                                                         <p className="col-md-4 col-xs-6">Contact Name: {accounts.contact_full_name}</p>
                                                     </div>
                                                 }
@@ -472,6 +524,7 @@ LotSummary.propTypes = {
     accountLedgers: PropTypes.object,
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
+    addPermitToLot: PropTypes.func,
 };
 
 function mapStateToProps(state) {
@@ -498,6 +551,15 @@ function mapDispatchToProps(dispatch, params) {
                     dispatch(getAccountID(lot_data.response.account));
                 }
             });
+        },
+        addPermitToLot(event) {
+            event.preventDefault();
+            if (selectedLot) {
+                dispatch(putPermitIdOnLot(selectedLot))
+                .then(() => {
+                    dispatch(getLotID(selectedLot));
+                });
+            }
         },
     };
 }

@@ -79,6 +79,19 @@ export default function api({ getState, dispatch }) {
                 });
                 return Promise.reject(error);
             }
+
+            if (response.data.results) {
+                const adjustedResponse = response.data.results;
+                adjustedResponse.next = response.data.next ? response.data.next.slice(response.data.next.indexOf('api') + 3, response.data.next.length) : null;
+                adjustedResponse.prev = response.data.previous ? response.data.previous.slice(response.data.previous.indexOf('api') + 3, response.data.previous.length) : null;
+                adjustedResponse.count = response.data.count;
+                return dispatch({
+                    type: API_CALL_SUCCESS,
+                    response: adjustedResponse,
+                    endpoint,
+                });
+            }
+
             return dispatch({
                 type: API_CALL_SUCCESS,
                 response: response.data,
