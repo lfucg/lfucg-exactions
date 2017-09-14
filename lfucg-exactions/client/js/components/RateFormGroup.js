@@ -78,9 +78,6 @@ const mapDispatch = (dispatch) => {
                 const expansion_area = split_field[2];
 
                 const rate = typeof e.target.value !== 'undefined' ? e.target.value : args[1];
-                console.log('INSIDE RETURN', typeof rate);
-                console.log('INSIDE RETURN', e.target);
-                console.log('INSIDE RETURN', rate.length);
 
                 if (rate.length > 0) {
                     dispatch(postRate(rate_table_id, category, zone, expansion_area, rate));

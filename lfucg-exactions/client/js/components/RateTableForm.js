@@ -104,7 +104,17 @@ function mapDispatchToProps(dispatch) {
     return {
         onComponentDidMount() {
             dispatch(formInit());
-            dispatch(getRates());
+            dispatch(getRates())
+            .then((data_rate) => {
+                // console.log('DATA RATE', data_rate);
+                const data_rate_updates = map((rate_set) => {
+                    return (
+                        { id: `${rate_set.category}, ${rate_set.zone}, ${rate_set.expansion_area}`, value: rate_set.rate }
+                    );
+                })(data_rate.response);
+                console.log('DATA RATE UPDATES', data_rate_updates);
+                dispatch(formUpdate(data_rate_updates));
+            });
             // .then((data_rate) => {
             //     const all_results = data_rate.response;
             //     console.log('ALL RESULTS', all_results);

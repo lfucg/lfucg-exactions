@@ -72,7 +72,7 @@ class DashboardPage extends React.Component {
     }
 }
 
-DashboardPage.propsTypes = {
+DashboardPage.propTypes = {
     currentUser: PropTypes.object,
 };
 
