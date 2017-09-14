@@ -18,7 +18,6 @@ import {
     formUpdate,
 } from '../actions/formActions';
 
-import { delayApi } from '../actions/delayActions';
 
 class AccountExisting extends React.Component {
     componentDidMount() {
@@ -91,15 +90,13 @@ class AccountExisting extends React.Component {
                 <Breadcrumbs route={this.props.route} />
 
                 <div className="row search-box">
-                    <form className="col-sm-10 col-sm-offset-1" >
+                    <form className="col-sm-10 col-sm-offset-1" onChange={onAccountQuery('query')} >
                         <fieldset>
                             <div className="col-sm-2 col-xs-12">
                                 <label htmlFor="query" className="form-label">Search</label>
                             </div>
                             <div className="col-sm-10 col-xs-12">
                                 <input
-                                  onKeyUp={onAccountQuery}
-                                  ref={(query) => { this.query = query; }}
                                   type="text"
                                   className="form-control"
                                   placeholder="Search Developer Accounts"
@@ -134,9 +131,15 @@ function mapDispatchToProps(dispatch) {
         onComponentDidMount() {
             dispatch(getPagination('/account/'));
         },
-        onAccountQuery() {
-            dispatch(delayApi());
-            // dispatch(getAccountQuery());
+        onAccountQuery(field) {
+            return (e, ...args) => {
+                const value = typeof e.target.value !== 'undefined' ? e.target.value : args[1];
+                const update = {
+                    [field]: value,
+                };
+                dispatch(formUpdate(update));
+                dispatch(getAccountQuery());
+            };
         },
     };
 }
