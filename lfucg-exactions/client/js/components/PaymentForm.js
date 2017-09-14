@@ -68,7 +68,7 @@ class PaymentForm extends React.Component {
             (map((agreement) => {
                 return (
                     <option key={agreement.id} value={[agreement.id, agreement.resolution_number]} >
-                        {agreement.resolution_number}
+                        Resolution: {agreement.resolution_number}
                     </option>
                 );
             })(agreements));
@@ -116,14 +116,20 @@ class PaymentForm extends React.Component {
                                         <div className="col-sm-6 form-group">
                                             <label htmlFor="credit_account" className="form-label" id="credit_account" aria-label="Developer Account" aria-required="true">* Developer Account</label>
                                             <select className="form-control" id="credit_account" onChange={formChange('credit_account')} value={activeForm.credit_account_show} >
-                                                <option value="start_account">Developer Account</option>
+                                                {activeForm.credit_account_show ?
+                                                    <option value="credit_account">{activeForm.credit_account_show}</option> :
+                                                    <option value="start_account">Developer Account</option>
+                                                }
                                                 {accountsList}
                                             </select>
                                         </div>
                                         <div className="col-sm-6 form-group">
                                             <label htmlFor="credit_source" className="form-label" id="credit_source" aria-label="Agreement">Agreement</label>
                                             <select className="form-control" id="credit_source" onChange={formChange('credit_source')} value={activeForm.credit_source_show} >
-                                                <option value="start_source">Agreement</option>
+                                                {activeForm.credit_source_show ?
+                                                    <option value="credit_source">Resolution: {activeForm.credit_source_show}</option> :
+                                                    <option value="start_source">Agreement</option>
+                                                }
                                                 {agreementsList}
                                             </select>
                                         </div>
@@ -305,6 +311,8 @@ function mapDispatchToProps(dispatch, params) {
                         .then((account) => {
                             console.log('ACCOUNT NUMBER', lot_id.response.account);
                             const update = {
+                                credit_account_show: account.response.account_name,
+                                credit_account: lot_id.response.account,
                                 account_name: account.response.account_name,
                                 lot_id: value_id,
                                 address_full: value_name,

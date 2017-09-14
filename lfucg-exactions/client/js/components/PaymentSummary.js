@@ -136,7 +136,7 @@ class PaymentSummary extends React.Component {
                                         </div>
                                         <div className="col-xs-12">
                                             <p className="col-xs-12">Lot Address: {payments.lot_id.address_full}</p>
-                                            <p className="col-md-4 col-xs-6">Total Exactions: {payments.lot_id.total_due}</p>
+                                            <p className="col-md-4 col-xs-6">Current Exactions: {payments.lot_id && payments.lot_id.lot_exactions && payments.lot_id.lot_exactions.current_exactions}</p>
                                             <p className="col-md-4 col-xs-6">Plat: {payments.lot_id.plat.name}</p>
                                             <p className="col-md-4 col-xs-6 ">Lot Number: {payments.lot_id.lot_number}</p>
                                             <p className="col-md-4 col-xs-6">Permit ID: {payments.lot_id.permit_id}</p>

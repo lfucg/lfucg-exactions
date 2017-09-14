@@ -274,6 +274,8 @@ class PaymentSerializer(serializers.ModelSerializer):
             obj.paid_storm +
             obj.paid_open_space
         )
+        return total
+
     def get_payment_type_display(self, obj):
         return obj.get_payment_type_display()
 
