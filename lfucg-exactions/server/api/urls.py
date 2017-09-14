@@ -3,6 +3,7 @@ from rest_framework import routers
 
 from accounts.auth import *
 from plats.viewsets import *
+from plats.views import PlatCSVExportView
 from notes.viewsets import *
 from accounts.viewsets import *
 from .views import CurrentUserDetails
@@ -39,6 +40,7 @@ urlpatterns = [
     url(r'^forgot-username/$', forgot_username),
     url(r'^delete_token/', Logout.as_view()),
     url(r'^upload/(?P<filename>[^/]+)$', FileUploadView.as_view()),
+    url(r'^export_plat_csv/$', PlatCSVExportView.as_view()),
 
     url(r'^', include(router.urls)),
 ]
