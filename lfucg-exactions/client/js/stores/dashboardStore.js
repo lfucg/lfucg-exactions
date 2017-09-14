@@ -5,7 +5,6 @@ import logMiddleware from '../middlewares/logMiddleware';
 import apiMiddleware from '../middlewares/apiMiddleware';
 import dashboardReducer from '../reducers/dashboardReducer';
 
-
 const enhancer = compose(
     applyMiddleware(
         createDebounce(),
