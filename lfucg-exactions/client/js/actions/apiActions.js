@@ -1433,30 +1433,33 @@ export function getRates() {
     };
 }
 
-export function postRate() {
+export function postRate(rate_table_id, category, zone, expansion_area, rate) {
+    console.log('RATE TABLE ID', rate_table_id);
+    console.log('RATE VALUE', rate);
     return {
         type: API_CALL,
         endpoint: POST_RATE,
-        url: '/rate',
+        url: '/rate/',
         method: 'POST',
-        body: (getState) => {
-            const {
-                activeForm,
-            } = getState();
-            const {
-                rate_table_id,
-                expansion_area,
-                zone,
-                category,
-                rate,
-            } = activeForm;
-            return {
-                rate_table_id,
-                expansion_area,
-                zone,
-                category,
-                rate,
-            };
+        body: {
+        // (getState) => {
+            // const {
+            //     activeForm,
+            // } = getState();
+            // const {
+            //     rate_table_id,
+            //     category,
+            //     zone,
+            //     expansion_area,
+            //     rate,
+            // } = activeForm;
+            // return {
+            rate_table_id,
+            category,
+            zone,
+            expansion_area,
+            rate,
+            // };
         },
     };
 }
@@ -1465,7 +1468,7 @@ export function putRate(selectedRate) {
     return {
         type: API_CALL,
         endpoint: PUT_RATE,
-        url: `/rate/${selectedRate}`,
+        url: `/rate/${selectedRate}/`,
         method: 'PUT',
         body: (getState) => {
             const {

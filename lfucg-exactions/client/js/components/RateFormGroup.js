@@ -4,11 +4,20 @@ import PropTypes from 'prop-types';
 
 import { formUpdate } from '../actions/formActions';
 
+import {
+    postRate,
+    putRate,
+} from '../actions/apiActions';
+
 const RateFormGroup = ({
     children,
-    id,
     activeForm,
+    id,
+    category,
+    zone,
+    expansion,
     formChange,
+    rateChangeSubmit,
 }) => {
     return (
         <div className="form-group">
@@ -17,11 +26,12 @@ const RateFormGroup = ({
                     children,
                     {
                         id,
-                        // this.props.category,
-                        // this.props.zone,
-                        // this.props.expansion,
+                        category,
+                        zone,
+                        expansion,
                         value: activeForm[id] || '',
                         onChange: formChange(id),
+                        onBlur: rateChangeSubmit(id),
                     },
                 )
             }
@@ -31,13 +41,13 @@ const RateFormGroup = ({
 
 RateFormGroup.propTypes = {
     children: PropTypes.element.isRequired,
-    // label: PropTypes.string.isRequired,
-    id: PropTypes.string.isRequired,
     activeForm: PropTypes.object.isRequired,
-    formChange: PropTypes.func.isRequired,
+    id: PropTypes.string.isRequired,
     category: PropTypes.string,
     zone: PropTypes.string,
     expansion: PropTypes.string,
+    formChange: PropTypes.func.isRequired,
+    rateChangeSubmit: PropTypes.func,
 };
 
 const mapState = ({ activeForm }) => {
@@ -50,14 +60,26 @@ const mapDispatch = (dispatch) => {
     return {
         formChange(field) {
             return (e, ...args) => {
-                console.log('INSIDE FORM CHANGE', field);
-                console.log('E TARGET', e.target);
                 const value = typeof e.target.value !== 'undefined' ? e.target.value : args[1];
                 const update = {
                     [field]: value,
                 };
-                console.log('INSIDE RETURN', value);
                 dispatch(formUpdate(update));
+            };
+        },
+        rateChangeSubmit(field) {
+            return (e, ...args) => {
+                const rate_table_id = 2;
+                console.log('INSIDE FORM CHANGE', field);
+                const split_field = field.split(', ');
+                console.log('FIELD OF 0', split_field);
+                const category = split_field[0];
+                const zone = split_field[1];
+                const expansion_area = split_field[2];
+
+                const rate = typeof e.target.value !== 'undefined' ? e.target.value : args[1];
+                // console.log('INSIDE RETURN', value);
+                dispatch(postRate(rate_table_id, category, zone, expansion_area, rate));
             };
         },
     };
