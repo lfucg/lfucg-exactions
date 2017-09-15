@@ -14,6 +14,7 @@ import {
 } from '../actions/formActions';
 
 import {
+    getRateTables,
     getRates,
 } from '../actions/apiActions';
 
@@ -100,20 +101,25 @@ function mapStateToProps(state) {
     };
 }
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch, params) {
+    const selectedRateTable = params.params.id;
     return {
         onComponentDidMount() {
             dispatch(formInit());
+            // dispatch(getRateTables());
             dispatch(getRates())
             .then((data_rate) => {
                 // console.log('DATA RATE', data_rate);
+                const rate_ids = {};
                 const data_rate_updates = map((rate_set) => {
                     return (
-                        { id: `${rate_set.category}, ${rate_set.zone}, ${rate_set.expansion_area}`, value: rate_set.rate }
+                        // { id: `${rate_set.category}, ${rate_set.zone}, ${rate_set.expansion_area}`, value: rate_set.rate }
+                        rate_ids[`${rate_set.category}, ${rate_set.zone}, ${rate_set.expansion_area}`] = rate_set.rate
                     );
                 })(data_rate.response);
                 console.log('DATA RATE UPDATES', data_rate_updates);
-                dispatch(formUpdate(data_rate_updates));
+                console.log('RATE IDS', rate_ids);
+                dispatch(formUpdate(rate_ids));
             });
             // .then((data_rate) => {
             //     const all_results = data_rate.response;

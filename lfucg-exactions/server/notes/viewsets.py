@@ -89,6 +89,10 @@ class RateViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         queryset = Rate.objects.all()
 
+        rate_table = self.request.query_params.get('rate_table_id', None)
+        if rate_table is not None:
+            queryset = queryset.filter(rate_table_id=rate_table)
+
         category_set = self.request.query_params.get('category', None)
         if category_set is not None:
             queryset = queryset.filter(category=category_set)

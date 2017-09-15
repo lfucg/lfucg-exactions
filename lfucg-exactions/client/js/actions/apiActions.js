@@ -81,6 +81,11 @@ import {
     POST_ACCOUNT_LEDGER,
     PUT_ACCOUNT_LEDGER,
 
+    GET_RATE_TABLES,
+    GET_RATE_TABLE_ID,
+    POST_RATE_TABLE,
+    PUT_RATE_TABLE,
+
     GET_RATES,
     POST_RATE,
     PUT_RATE,
@@ -1425,11 +1430,20 @@ export function putAccountLedger(selectedAccountLedger) {
     };
 }
 
+export function getRateTables() {
+    return {
+        type: API_CALL,
+        endpoint: GET_RATE_TABLES,
+        url: '/rateTable/',
+    };
+}
+
+
 export function getRates() {
     return {
         type: API_CALL,
         endpoint: GET_RATES,
-        url: '/rate',
+        url: '/rate/',
     };
 }
 
