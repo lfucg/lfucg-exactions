@@ -8,10 +8,6 @@ import {
   ACCELA_API_CALL_VALIDATION_ERROR,
 } from '../constants/accelaConstants';
 
-import {
-    BASE_URL,
-} from '../constants/apiConstants';
-
 export default function accelaApi({ getState, dispatch }) {
     return next => (action) => {
         const {
@@ -21,7 +17,6 @@ export default function accelaApi({ getState, dispatch }) {
             responseValidation,
             qs,
             body,
-            baseURL = BASE_URL,
             method = 'GET',
             ACCELA_APP_ID,
             ACCELA_ENVIRONMENT,
@@ -44,12 +39,15 @@ export default function accelaApi({ getState, dispatch }) {
 
         return Promise.resolve(axios({
             headers: header,
-            url: baseURL + (typeof url === 'function' ? url(getState) : url),
+            url: typeof url === 'function' ? url(getState) : url,
             params: typeof qs === 'function' ? qs(getState) : qs,
             data: typeof body === 'function' ? body(getState) : body,
             method,
         }))
         .then((response) => {
+            console.log('INSIDE RESPONSE');
+            console.log('ACCELA MIDDLEWARE RESPONSE', response);
+
             const error = responseValidation ?
             responseValidation(response.data, { getState, dispatch }) :
             null;
