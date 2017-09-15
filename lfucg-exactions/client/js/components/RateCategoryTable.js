@@ -63,7 +63,7 @@ class RateCategoryTable extends React.Component {
                     <div className="panel-body">
                         <div className="row">
                             <h4 className="col-sm-2">Zone</h4>
-                            <h4 className="col-sm-4 col-sm-offset-2">Expansion Area</h4>
+                            <h4 className="col-sm-10">Expansion Area</h4>
                         </div>
                         {zone_list && zone_list}
                     </div>
