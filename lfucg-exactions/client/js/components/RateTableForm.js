@@ -39,28 +39,6 @@ class RateTableForm extends React.Component {
             );
         })(CATEGORIES);
 
-        // VALUE ORDER: RATE, ID, RATE_TABLE_ID, CATEGORY, ZONE, EXPANSION_AREA
-        // const RoadEA1List = activeForm.rates.length > 0 &&
-        //     (map((road_ea1) => {
-        //         return (
-        //             <div className="row">
-        //                 <input
-        //                   type="number"
-        //                   step="0.01"
-        //                   key={road_ea1.id}
-        //                   value={[
-        //                       road_ea1.rate,
-        //                       road_ea1.id,
-        //                       road_ea1.rate_table_id,
-        //                       road_ea1.category,
-        //                       road_ea1.zone,
-        //                       road_ea1.expansion_area,
-        //                   ]}
-        //                 />
-        //             </div>
-        //         );
-        //     })(activeForm.rates));
-
         return (
             <div className="rate-table-form">
                 <Navbar />
