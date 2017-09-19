@@ -2,6 +2,8 @@ import {
   API_CALL,
 } from '../constants/actionTypes';
 
+import { map } from 'ramda';
+
 import {
     ME,
 
@@ -746,11 +748,16 @@ export function getAccountQuery() {
             const {
                 activeForm,
             } = getState();
-            const {
-                query,
-            } = activeForm;
 
-            const query_all = `/account/?query=${query}&paginatePage`;
+            let query_all = '/account/?paginatePage';
+
+            map((a) => {
+                if (a[1] && a[0].startsWith('filter_')) {
+                    const field = a[0].slice(7, a[0].length);
+                    query_all += `&${field}=${a[1]}`;
+                }
+            })(Object.entries(activeForm));
+            console.log('QUERY STRING: ', query_all);
             return query_all;
         },
         meta: {

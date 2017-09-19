@@ -28,6 +28,7 @@ class AccountExisting extends React.Component {
             currentUser,
             accounts,
             onAccountQuery,
+            onAccountFilter,
         } = this.props;
 
         const accounts_list = accounts && accounts.length > 0 ? (
@@ -104,7 +105,29 @@ class AccountExisting extends React.Component {
                         </fieldset>
                     </form>
                 </div>
-
+                <div className="row">
+                    <div className="col-sm-6 form-group">
+                        <label htmlFor="plat_account__name" className="form-label" id="account">
+                            Plat
+                        </label>
+                        <select
+                          className="form-control"
+                          id="account"
+                          onChange={() => onAccountFilter(this.value)}
+                          ref={(value) => { this.value = value; }}
+                          name="filter_plat_account__name"
+                        >
+                            <option>
+                                Select Account
+                            </option>
+                            <option
+                              value="Hedwig Valenciaa"
+                            >
+                                Hedwig Valenciaa
+                            </option>
+                        </select>
+                    </div>
+                </div>
                 <div className="inside-body">
                     <div className="container">
                         {accounts_list}
@@ -129,15 +152,22 @@ function mapDispatchToProps(dispatch) {
         onComponentDidMount() {
             dispatch(getPagination('/account/'));
         },
-        onAccountQuery(field) {
+        onAccountQuery() {
             return (e, ...args) => {
                 const value = typeof e.target.value !== 'undefined' ? e.target.value : args[1];
                 const update = {
-                    [field]: value,
+                    filter_search: value,
                 };
                 dispatch(formUpdate(update));
                 dispatch(getAccountQuery());
             };
+        },
+        onAccountFilter(field) {
+            const platName = field.value;
+            const fieldName = field.name;
+            const update = { [fieldName]: platName };
+            dispatch(formUpdate(update));
+            dispatch(getAccountQuery());
         },
     };
 }
