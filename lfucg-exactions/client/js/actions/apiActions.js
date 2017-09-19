@@ -1478,8 +1478,8 @@ export function getPagination(page) {
         type: API_CALL,
         endpoint: GET_PAGINATION,
         url: () => {
-            if (!page.includes('paginatePage=true')) {
-                return `${page}?paginatePage=true`;
+            if (!page.includes('paginatePage')) {
+                return `${page}?paginatePage`;
             }
             return `${page}`;
         },
