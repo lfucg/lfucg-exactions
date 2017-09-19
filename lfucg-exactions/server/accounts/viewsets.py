@@ -1,6 +1,6 @@
 
 from rest_framework.pagination import PageNumberPagination
-from rest_framework import viewsets, status
+from rest_framework import viewsets, status, filters
 from django.db.models import Q
 from rest_framework.response import Response
 
@@ -11,27 +11,32 @@ from .permissions import CanAdminister
 
 from django.conf import settings
 
+from django_filters.rest_framework import DjangoFilterBackend
+
 
 class AccountViewSet(viewsets.ModelViewSet):
     serializer_class = AccountSerializer
     queryset = Account.objects.all()
     permission_classes = (CanAdminister,)
+    filter_backends = (DjangoFilterBackend, filters.SearchFilter,)
+    filter_fields = ('plat_account__name',)
+    search_fields = ('account_name', 'contact_full_name', 'address_full', 'phone', 'email',)
 
     def get_queryset(self):
         queryset = Account.objects.all()
         PageNumberPagination.page_size = 0
         
         paginatePage = self.request.query_params.get('paginatePage', None)
-        query_text = self.request.query_params.get('query', None)
+        # query_text = self.request.query_params.get('query', None)
 
-        if query_text is not None:
-            query_text = query_text.lower()
-            queryset = queryset.filter(
-                Q(account_name__icontains=query_text) |
-                Q(contact_full_name__icontains=query_text) |
-                Q(address_full=query_text) |
-                Q(phone__icontains=query_text) |
-                Q(email__icontains=query_text))
+        # if query_text is not None:
+        #     query_text = query_text.lower()
+        #     queryset = queryset.filter(
+        #         Q(account_name__icontains=query_text) |
+        #         Q(contact_full_name__icontains=query_text) |
+        #         Q(address_full=query_text) |
+        #         Q(phone__icontains=query_text) |
+        #         Q(email__icontains=query_text))
 
 
         if paginatePage is not None:
