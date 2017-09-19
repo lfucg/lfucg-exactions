@@ -13,7 +13,7 @@ export default function activeFormReducer(state = {}, action) {
     case FORM_RESET:
         return {};
     case API_CALL_SUCCESS:
-        if (action.endpoint === 'GET_PAGINATION') {
+        if (action.endpoint === 'GET_PAGINATION' || action.endpoint.includes('QUERY')) {
             return merge(state, { next: action.response.next, prev: action.response.prev, count: action.response.count });
         }
         return state;

@@ -107,7 +107,7 @@ class AccountExisting extends React.Component {
                 </div>
                 <div className="row">
                     <div className="col-sm-6 form-group">
-                        <label htmlFor="plat_account__name" className="form-label" id="account">
+                        <label htmlFor="filter_plat_account__name" className="form-label" id="account">
                             Plat
                         </label>
                         <select
@@ -117,7 +117,7 @@ class AccountExisting extends React.Component {
                           ref={(value) => { this.value = value; }}
                           name="filter_plat_account__name"
                         >
-                            <option>
+                            <option value="">
                                 Select Account
                             </option>
                             <option
