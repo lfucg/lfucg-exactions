@@ -29,7 +29,7 @@ const accountReducer = (state = {}, action) => {
             (window.location.hash === '#/account')) {
             return action.response;
         }
-        return;
+        return state;
     default:
         return state;
     }
