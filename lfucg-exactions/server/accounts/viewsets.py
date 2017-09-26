@@ -291,20 +291,23 @@ class AccountLedgerViewSet(viewsets.ModelViewSet):
         data_set['created_by'] = self.request.user.id
         data_set['modified_by'] = self.request.user.id
 
-        print('DATA SET', data_set)
+        # print('DATA SET', data_set)
         # print('DATA SET PLAT', data_set['plat'])
 
         chosen_plat = (data_set['plat'], None)
         if chosen_plat is not None:
             chosen_lots = Lot.objects.filter(plat=chosen_plat)
-            print('IF PLAT')
+            # print('IF PLAT')
             for lot in chosen_lots:
                 data_set['lot'] = lot.id
                 print('FOR LOT IN PLAT')
                 serializer = AccountLedgerSerializer(data=data_set)
+                print('SERIALIZER', serializer)
                 if serializer.is_valid(raise_exception=True):
+                    print('IS VALID')
                     self.perform_create(serializer)
-                    return Response(serializer.data)
+                    # return Response(serializer.data)
+            return Response('Success')
 
         elif data_set['lot'] is not None:
             print('ELIF LOT')
