@@ -12,6 +12,7 @@ from .permissions import CanAdminister
 from django.conf import settings
 
 from django_filters.rest_framework import DjangoFilterBackend
+from plats.models import Plat, Lot
 
 
 class AccountViewSet(viewsets.ModelViewSet):
@@ -289,10 +290,39 @@ class AccountLedgerViewSet(viewsets.ModelViewSet):
         data_set['created_by'] = self.request.user.id
         data_set['modified_by'] = self.request.user.id
 
-        serializer = AccountLedgerSerializer(data=data_set)
-        if serializer.is_valid(raise_exception=True):
-            self.perform_create(serializer)
-            return Response(serializer.data)
+        if 'plat' in self.request.data:
+            chosen_plat = self.request.data['plat']
+            plat_set = Plat.objects.filter(id=chosen_plat)
+            
+            non_sewer_credits_per_lot = 0
+            sewer_credits_per_lot = 0
+
+            if plat_set.exists():
+                buildable_lots = plat_set[0].buildable_lots
+
+                try:
+                    non_sewer_credits_per_lot = round((int(data_set['non_sewer_credits']) / buildable_lots), 2)
+                    sewer_credits_per_lot = round((int(data_set['sewer_credits']) / buildable_lots), 2)
+                except Exception as exc:
+                    return Response('Invalid credit entry', status=status.HTTP_400_BAD_REQUEST)
+
+            chosen_lots = Lot.objects.filter(plat=chosen_plat)
+            for lot in chosen_lots:
+                data_set['lot'] = lot.id
+                data_set['non_sewer_credits'] = non_sewer_credits_per_lot
+                data_set['sewer_credits'] = sewer_credits_per_lot
+
+                serializer = AccountLedgerSerializer(data=data_set)
+                if serializer.is_valid(raise_exception=True):
+                    self.perform_create(serializer)
+            return Response('Success')
+
+        elif 'lot' in self.request.data:
+            chosen_lot = self.request.data['lot']
+            serializer = AccountLedgerSerializer(data=data_set)
+            if serializer.is_valid(raise_exception=True):
+                self.perform_create(serializer)
+                return Response(serializer.data)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
