@@ -1485,8 +1485,8 @@ export function getPagination(page) {
                 currentPage,
                 filter_size,
             } = activeForm;
+           
             if (!page) {
-                console.log(`${currentPage}?paginatePage&pageSize=${filter_size}`);
                 return `${currentPage}?paginatePage&pageSize=${filter_size}`;
             }
             if (!page.includes('paginatePage')) {

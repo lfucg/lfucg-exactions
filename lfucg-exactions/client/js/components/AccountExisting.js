@@ -230,7 +230,6 @@ function mapDispatchToProps(dispatch) {
     return {
         onComponentDidMount() {
             dispatch(getPagination('/account/'));
-            dispatch(formUpdate({ currentPage: '/account/' }));
         },
         onAccountQuery(field) {
             return (e, ...args) => {

@@ -27,10 +27,11 @@ class AccountViewSet(viewsets.ModelViewSet):
         PageNumberPagination.page_size = 0
         
         paginatePage = self.request.query_params.get('paginatePage', None)
+        pageSize = self.request.query_params.get('pageSize', settings.PAGINATION_SIZE)
 
         if paginatePage is not None:
             pagination_class = PageNumberPagination
-            PageNumberPagination.page_size = settings.PAGINATION_SIZE
+            PageNumberPagination.page_size = pageSize
 
         return queryset.order_by('account_name')
 
@@ -69,6 +70,7 @@ class AgreementViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         queryset = Agreement.objects.all()
         paginatePage = self.request.query_params.get('paginatePage', None)
+        pageSize = self.request.query_params.get('pageSize', settings.PAGINATION_SIZE)
 
         account_id_set = self.request.query_params.get('account_id', None)
         if account_id_set is not None:
@@ -85,7 +87,7 @@ class AgreementViewSet(viewsets.ModelViewSet):
             
         if paginatePage is not None:
             pagination_class = PageNumberPagination
-            PageNumberPagination.page_size = settings.PAGINATION_SIZE
+            PageNumberPagination.page_size = pageSize
 
         return queryset.order_by('expansion_area')
 
@@ -126,9 +128,11 @@ class PaymentViewSet(viewsets.ModelViewSet):
         PageNumberPagination.page_size = 0
 
         paginatePage = self.request.query_params.get('paginatePage', None)
+        pageSize = self.request.query_params.get('pageSize', settings.PAGINATION_SIZE)
+
         if paginatePage is not None:
             pagination_class = PageNumberPagination
-            PageNumberPagination.page_size = settings.PAGINATION_SIZE
+            PageNumberPagination.page_size = pageSize
 
         lot_id_set = self.request.query_params.get('lot_id', None)
         if lot_id_set is not None:
@@ -222,9 +226,11 @@ class ProjectCostEstimateViewSet(viewsets.ModelViewSet):
         PageNumberPagination.page_size = 0
 
         paginatePage = self.request.query_params.get('paginatePage', None)
+        pageSize = self.request.query_params.get('pageSize', settings.PAGINATION_SIZE)
+        
         if paginatePage is not None:
             pagination_class = PageNumberPagination
-            PageNumberPagination.page_size = settings.PAGINATION_SIZE
+            PageNumberPagination.page_size = pageSize
 
         return queryset
 
