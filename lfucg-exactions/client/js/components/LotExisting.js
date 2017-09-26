@@ -133,6 +133,7 @@ function mapDispatchToProps(dispatch) {
     return {
         onComponentDidMount() {
             dispatch(getPagination('/lot/'));
+            dispatch(formUpdate({ currentPage: '/lot/' }));
         },
         onLotQuery(field) {
             return (e, ...args) => {

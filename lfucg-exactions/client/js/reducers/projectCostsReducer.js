@@ -28,7 +28,7 @@ const projectCostsReducer = (state = {}, action) => {
             (window.location.hash === '#/project-cost')) {
             return action.response;
         }
-        return {};
+        return state;
     default:
         return state;
     }

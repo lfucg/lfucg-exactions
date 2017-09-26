@@ -21,7 +21,6 @@ const accountReducer = (state = {}, action) => {
         return {};
     case GET_ACCOUNT_QUERY:
     case GET_PAGINATION:
-        console.log('STATE: ', state);
         const next = action.response.next;
         const prev = action.response.prev;
         if ((next != null && next.startsWith('/account')) ||

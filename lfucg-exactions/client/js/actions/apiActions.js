@@ -1477,7 +1477,18 @@ export function getPagination(page) {
     return {
         type: API_CALL,
         endpoint: GET_PAGINATION,
-        url: () => {
+        url: (getState) => {
+            const {
+                activeForm,
+            } = getState();
+            const {
+                currentPage,
+                filter_size,
+            } = activeForm;
+            if (!page) {
+                console.log(`${currentPage}?paginatePage&pageSize=${filter_size}`);
+                return `${currentPage}?paginatePage&pageSize=${filter_size}`;
+            }
             if (!page.includes('paginatePage')) {
                 return `${page}?paginatePage`;
             }
