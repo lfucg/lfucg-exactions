@@ -298,14 +298,14 @@ class AccountLedgerViewSet(viewsets.ModelViewSet):
             non_sewer_credits_per_lot = 0
             sewer_credits_per_lot = 0
 
-            if plat_set is not None:
+            if plat_set.exists():
                 buildable_lots = plat_set[0].buildable_lots
 
-                non_sewer_credits = self.request.query_params.get('non_sewer_credits', None)
-                sewer_credits = self.request.query_params.get('sewer_credits', None)
-
-                non_sewer_credits_per_lot = round((int(data_set['non_sewer_credits']) / buildable_lots), 2)
-                sewer_credits_per_lot = round((int(data_set['sewer_credits']) / buildable_lots), 2)
+                try:
+                    non_sewer_credits_per_lot = round((int(data_set['non_sewer_credits']) / buildable_lots), 2)
+                    sewer_credits_per_lot = round((int(data_set['sewer_credits']) / buildable_lots), 2)
+                except Exception as exc:
+                    return Response('Invalid credit entry', status=status.HTTP_400_BAD_REQUEST)
 
             chosen_lots = Lot.objects.filter(plat=chosen_plat)
             for lot in chosen_lots:
