@@ -7,9 +7,10 @@ import { formUpdate } from '../actions/formActions';
 class Pagination extends React.Component {
 
     render() {
-        if (window.pageYOffset > 200) {
+        if (window.pageYOffset > 250) {
             window.scroll(0, 0);
         }
+       
         const {
             onPaginationChangePage,
             activeForm,
@@ -17,7 +18,7 @@ class Pagination extends React.Component {
         } = this.props;
 
         // relates to pagination size in backend
-        const paginationSize = 10;
+        const paginationSize = activeForm.filter_size || 10;
 
         return (
             <div className="container-fluid">
@@ -31,41 +32,42 @@ class Pagination extends React.Component {
                     </div>
                 </div>
                 <div className="row">
-                    <div className="col-xs-4 col-xs-offset-4 text-center">
-                        <div className="col-xs-3 text-center">
+                    <div className="col-xs-4">
+                        <div className="col-xs-4 text-center inline-block">Results per page</div>
+                        <div className="col-xs-2 text-center">
                             <button
                               aria-label="changePageSize"
-                              className="btn btn-default"
-                              value="1"
+                              className="btn btn-link"
+                              value="10"
                               onClick={changePageSize}
                             >
                             10
                             </button>
                         </div>
-                        <div className="col-xs-3 text-center">
+                        <div className="col-xs-2 text-center">
                             <button
                               aria-label="changePageSize"
-                              className="btn btn-default"
-                              value="2"
+                              className="btn btn-link"
+                              value="25"
                               onClick={changePageSize}
                             >
                             25
                             </button>
                         </div>
-                        <div className="col-xs-3 text-center">
+                        <div className="col-xs-2 text-center">
                             <button
                               aria-label="changePageSize"
-                              className="btn btn-default"
-                              value="4"
+                              className="btn btn-link"
+                              value="50"
                               onClick={changePageSize}
                             >
                             50
                             </button>
                         </div>
-                        <div className="col-xs-3 text-center">
+                        <div className="col-xs-2 text-center">
                             <button
                               aria-label="changePageSize"
-                              className="btn btn-default"
+                              className="btn btn-link"
                               value="9999"
                               onClick={changePageSize}
                             >
