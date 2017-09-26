@@ -1423,7 +1423,7 @@ export function postAccountLedger() {
                 entry_date,
                 account_from,
                 account_to,
-                plat: 5,
+                plat,
                 lot,
                 agreement,
                 entry_type,
