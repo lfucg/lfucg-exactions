@@ -35,6 +35,7 @@ import {
 
     GET_ACCOUNTS,
     GET_ACCOUNT_ID,
+    GET_LFUCG_ACCOUNT,
     GET_ACCOUNT_QUERY,
     POST_ACCOUNT,
     PUT_ACCOUNT,
@@ -735,6 +736,14 @@ export function getAccountID(selectedAccount) {
         type: API_CALL,
         endpoint: GET_ACCOUNT_ID,
         url: `/account/${selectedAccount}`,
+    };
+}
+
+export function getLFUCGAccount() {
+    return {
+        type: API_CALL,
+        endpoint: GET_LFUCG_ACCOUNT,
+        url: '/account/?search=LFUCG',
     };
 }
 
