@@ -34,11 +34,15 @@ class DashboardPage extends React.Component {
                             </div>
                             <div className="col-md-4 col-sm-6">
                                 <Link to="agreement" role="link"><h2 className="in-page-link">Agreements</h2></Link>
-                                <p>Lexington agreements.</p>
+                                <p>Lexington agreements with based on resolution number or memos.</p>
+                            </div>
+                            <div className="col-md-4 col-sm-6">
+                                <Link to="account-ledger" role="link"><h2 className="in-page-link">Credit Transfers</h2></Link>
+                                <p>Lexington account ledgers.  Credit transfers, new credit awards, and credit payments.</p>
                             </div>
                             <div className="col-md-4 col-sm-6">
                                 <Link to="payment" role="link"><h2 className="in-page-link">Payments</h2></Link>
-                                <p>Lexington payments.</p>
+                                <p>Payments by Cash, Check, or Credit Card.</p>
                             </div>
                             <div className="col-md-4 col-sm-6">
                                 <Link to="project" role="link"><h2 className="in-page-link">Projects</h2></Link>
@@ -47,10 +51,6 @@ class DashboardPage extends React.Component {
                             <div className="col-md-4 col-sm-6">
                                 <Link to="project-cost" role="link"><h2 className="in-page-link">Project Costs</h2></Link>
                                 <p>Lexington project costs.</p>
-                            </div>
-                            <div className="col-md-4 col-sm-6">
-                                <Link to="account-ledger" role="link"><h2 className="in-page-link">Account Ledgers</h2></Link>
-                                <p>Lexington account ledgers.</p>
                             </div>
                         </div>
                     </div>
