@@ -30,7 +30,7 @@ const projectsReducer = (state = {}, action) => {
             (window.location.hash === '#/project')) {
             return action.response;
         }
-        return {};
+        return state;
     default:
         return state;
     }

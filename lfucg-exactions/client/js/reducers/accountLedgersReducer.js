@@ -34,7 +34,7 @@ const accountLedgersReducer = (state = {}, action) => {
             (window.location.hash === '#/account-ledger')) {
             return action.response;
         }
-        return {};
+        return state;
     default:
         return state;
     }

@@ -30,7 +30,7 @@ const agreementsReducer = (state = {}, action) => {
             (window.location.hash === '#/agreement')) {
             return action.response;
         }
-        return {};
+        return state;
     default:
         return state;
     }

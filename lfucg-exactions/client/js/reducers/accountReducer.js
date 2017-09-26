@@ -15,11 +15,11 @@ const accountReducer = (state = {}, action) => {
     switch (endpoint) {
     case GET_ACCOUNT_ID:
     case GET_ACCOUNTS:
-    case GET_ACCOUNT_QUERY:
         return action.response;
     case POST_ACCOUNT:
     case PUT_ACCOUNT:
         return {};
+    case GET_ACCOUNT_QUERY:
     case GET_PAGINATION:
         const next = action.response.next;
         const prev = action.response.prev;
@@ -28,7 +28,7 @@ const accountReducer = (state = {}, action) => {
             (window.location.hash === '#/account')) {
             return action.response;
         }
-        return {};
+        return state;
     default:
         return state;
     }

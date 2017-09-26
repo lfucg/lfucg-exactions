@@ -2,6 +2,8 @@ import {
   API_CALL,
 } from '../constants/actionTypes';
 
+import { map } from 'ramda';
+
 import {
     ME,
 
@@ -746,11 +748,16 @@ export function getAccountQuery() {
             const {
                 activeForm,
             } = getState();
-            const {
-                query,
-            } = activeForm;
 
-            const query_all = `/account/?query=${query}&paginatePage`;
+            let query_all = '/account/?paginatePage';
+
+            map((a) => {
+                if (a[1] && a[0].startsWith('filter_')) {
+                    const field = a[0].slice(7, a[0].length);
+                    query_all += `&${field}=${a[1]}`;
+                }
+            })(Object.entries(activeForm));
+            console.log('QUERY STRING: ', query_all);
             return query_all;
         },
         meta: {
@@ -1412,7 +1419,6 @@ export function postAccountLedger() {
                 entry_date,
                 account_from,
                 account_to,
-                plat,
                 lot,
                 agreement,
                 entry_type,
@@ -1423,7 +1429,6 @@ export function postAccountLedger() {
                 entry_date,
                 account_from,
                 account_to,
-                plat,
                 lot,
                 agreement,
                 entry_type,
@@ -1448,7 +1453,6 @@ export function putAccountLedger(selectedAccountLedger) {
                 entry_date,
                 account_from,
                 account_to,
-                plat,
                 lot,
                 agreement,
                 entry_type,
@@ -1459,7 +1463,6 @@ export function putAccountLedger(selectedAccountLedger) {
                 entry_date,
                 account_from,
                 account_to,
-                plat,
                 lot,
                 agreement,
                 entry_type,
@@ -1474,9 +1477,20 @@ export function getPagination(page) {
     return {
         type: API_CALL,
         endpoint: GET_PAGINATION,
-        url: () => {
-            if (!page.includes('paginatePage=true')) {
-                return `${page}?paginatePage=true`;
+        url: (getState) => {
+            const {
+                activeForm,
+            } = getState();
+            const {
+                currentPage,
+                filter_size,
+            } = activeForm;
+            
+            if (!page) {
+                return `${currentPage}?paginatePage&pageSize=${filter_size}`;
+            }
+            if (!page.includes('paginatePage')) {
+                return `${page}?paginatePage`;
             }
             return `${page}`;
         },
