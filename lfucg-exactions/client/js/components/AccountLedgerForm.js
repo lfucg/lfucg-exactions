@@ -21,6 +21,7 @@ import {
     getPlats,
     getLots,
     getAccounts,
+    getLFUCGAccount,
     getAgreements,
     getAccountLedgerID,
     postAccountLedger,
@@ -119,7 +120,7 @@ class AccountLedgerForm extends React.Component {
                                         </div>
                                         <div className="col-sm-6 form-group">
                                             <label htmlFor="plat_lot" className="form-label" id="plat_lot" aria-label="Apply By Plat or Lot">Apply By Plat or Lot</label>
-                                            <select className="form-control" id="plat_lot" onChange={formChange('plat_lot')} value={activeForm.plat_lot} >
+                                            <select className="form-control" id="plat_lot" onChange={formChange('plat_lot')} value={activeForm.plat_lot_show} >
                                                 <option value="start_entry">Plat or Lot Credit Level</option>
                                                 <option value={['plat', 'plat']}>Plat</option>
                                                 <option value={['lot', 'lot']}>Lot</option>
@@ -145,14 +146,14 @@ class AccountLedgerForm extends React.Component {
                                     <div className="row">
                                         <div className="col-sm-6 form-group">
                                             <label htmlFor="account_from" className="form-label" id="account_from" aria-label="Account From" aria-required="true">* Account From</label>
-                                            <select className="form-control" id="account_from" onChange={formChange('account_from')} value={activeForm.account_from_show} disabled={!openForm}>
+                                            <select className="form-control" id="account_from" onChange={formChange('account_from')} value={activeForm.account_from_show} disabled={!openForm || activeForm.entry_type === 'NEW'}>
                                                 <option value="start_account_from">Account From</option>
                                                 {accountsList}
                                             </select>
                                         </div>
                                         <div className="col-sm-6 form-group">
                                             <label htmlFor="account_to" className="form-label" id="account_to" aria-label="Account To" aria-required="true">* Account To</label>
-                                            <select className="form-control" id="account_to" onChange={formChange('account_to')} value={activeForm.account_to_show} disabled={!openForm}>
+                                            <select className="form-control" id="account_to" onChange={formChange('account_to')} value={activeForm.account_to_show} disabled={!openForm || activeForm.entry_type === 'SELL'}>
                                                 <option value="start_account_to">Account To</option>
                                                 {accountsList}
                                             </select>
@@ -167,20 +168,20 @@ class AccountLedgerForm extends React.Component {
                                             </select>
                                         </div>
                                         <div className="col-sm-6">
-                                            <FormGroup label="* Entry Date" id="entry_date" aria-required="true" disabled={!openForm}>
-                                                <input type="date" className="form-control" placeholder="Entry Date" />
+                                            <FormGroup label="* Entry Date" id="entry_date" aria-required="true" >
+                                                <input type="date" className="form-control" placeholder="Entry Date" disabled={!openForm} />
                                             </FormGroup>
                                         </div>
                                     </div>
                                     <div className="row">
                                         <div className="col-sm-6">
-                                            <FormGroup label="* Non-Sewer Credits" id="non_sewer_credits" aria-required="true" disabled={!openForm}>
-                                                <input type="number" className="form-control" placeholder="Non-Sewer Credits" />
+                                            <FormGroup label="* Non-Sewer Credits" id="non_sewer_credits" aria-required="true" >
+                                                <input type="number" className="form-control" placeholder="Non-Sewer Credits" disabled={!openForm} />
                                             </FormGroup>
                                         </div>
                                         <div className="col-sm-6">
-                                            <FormGroup label="* Sewer Credits" id="sewer_credits" aria-required="true" disabled={!openForm}>
-                                                <input type="number" className="form-control" placeholder="Sewer Credits" />
+                                            <FormGroup label="* Sewer Credits" id="sewer_credits" aria-required="true" >
+                                                <input type="number" className="form-control" placeholder="Sewer Credits" disabled={!openForm} />
                                             </FormGroup>
                                         </div>
                                     </div>
@@ -284,7 +285,26 @@ function mapDispatchToProps(dispatch, params) {
                     [field_name]: value_name,
                     [field_show]: value,
                 };
+
                 dispatch(formUpdate(update));
+                if (field === 'entry_type') {
+                    dispatch(getLFUCGAccount())
+                    .then((data_lfucg) => {
+                        if (value_id === 'NEW') {
+                            const lfucg_from_update = {
+                                account_from: data_lfucg.response[0].id,
+                                account_from_show: `${data_lfucg.response[0].id},${data_lfucg.response[0].account_name}`,
+                            };
+                            dispatch(formUpdate(lfucg_from_update));
+                        } else if (value_id === 'SELL') {
+                            const lfucg_to_update = {
+                                account_to: data_lfucg.response[0].id,
+                                account_to_show: `${data_lfucg.response[0].id},${data_lfucg.response[0].account_name}`,
+                            };
+                            dispatch(formUpdate(lfucg_to_update));
+                        }
+                    });
+                }
             };
         },
         onSubmit(event) {
