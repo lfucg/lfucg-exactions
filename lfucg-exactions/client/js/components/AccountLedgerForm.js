@@ -18,6 +18,7 @@ import {
 } from '../actions/formActions';
 
 import {
+    getPlats,
     getLots,
     getAccounts,
     getAgreements,
@@ -34,6 +35,7 @@ class AccountLedgerForm extends React.Component {
     render() {
         const {
             activeForm,
+            plats,
             lots,
             accounts,
             agreements,
@@ -42,34 +44,45 @@ class AccountLedgerForm extends React.Component {
             formChange,
         } = this.props;
 
-        const lotsList = lots.length > 0 ? (map((lot) => {
+        const platsList = plats.length > 0 && (map((plat) => {
+            return (
+                <option key={plat.id} value={[plat.id, plat.address_full]} >
+                    {plat.address_full}
+                </option>
+            );
+        })(plats));
+
+        const lotsList = lots.length > 0 && (map((lot) => {
             return (
                 <option key={lot.id} value={[lot.id, lot.address_full]} >
                     {lot.address_full}
                 </option>
             );
-        })(lots)) : null;
+        })(lots));
 
-        const accountsList = accounts.length > 0 ? (map((account) => {
+        const accountsList = accounts.length > 0 && (map((account) => {
             return (
                 <option key={account.id} value={[account.id, account.account_name]} >
                     {account.account_name}
                 </option>
             );
-        })(accounts)) : null;
+        })(accounts));
 
-        const agreementsList = agreements.length > 0 ? (map((agreement) => {
+        const agreementsList = agreements.length > 0 && (map((agreement) => {
             return (
                 <option key={agreement.id} value={[agreement.id, agreement.resolution_number]} >
                     Resolution: {agreement.resolution_number}
                 </option>
             );
-        })(agreements)) : null;
+        })(agreements));
+
+        const openForm =
+            activeForm.entry_type &&
+            activeForm.plat_lot;
 
         const submitEnabled =
             activeForm.account_from &&
             activeForm.account_to &&
-            activeForm.lot &&
             activeForm.agreement &&
             activeForm.entry_type &&
             activeForm.non_sewer_credits &&
@@ -96,43 +109,6 @@ class AccountLedgerForm extends React.Component {
                                 <fieldset>
                                     <div className="row">
                                         <div className="col-sm-6 form-group">
-                                            <label htmlFor="lot" className="form-label" id="lot" aria-label="Lot" aria-required="true">* Lot</label>
-                                            <select className="form-control" id="lot" onChange={formChange('lot')} value={activeForm.lot_show} >
-                                                <option value="start_lot">Lot</option>
-                                                {lotsList}
-                                            </select>
-                                        </div>
-                                        <div className="col-sm-6 form-group">
-                                            <label htmlFor="agreement" className="form-label" id="agreement" aria-label="Agreement" aria-required="true">* Agreement</label>
-                                            <select className="form-control" id="agreement" onChange={formChange('agreement')} value={activeForm.agreement_show} >
-                                                <option value="start_agreement">Agreement Resolution</option>
-                                                {agreementsList}
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div className="row">
-                                        <div className="col-sm-6 form-group">
-                                            <label htmlFor="account_from" className="form-label" id="account_from" aria-label="Account From" aria-required="true">* Account From</label>
-                                            <select className="form-control" id="account_from" onChange={formChange('account_from')} value={activeForm.account_from_show} >
-                                                <option value="start_account_from">Account From</option>
-                                                {accountsList}
-                                            </select>
-                                        </div>
-                                        <div className="col-sm-6 form-group">
-                                            <label htmlFor="account_to" className="form-label" id="account_to" aria-label="Account To" aria-required="true">* Account To</label>
-                                            <select className="form-control" id="account_to" onChange={formChange('account_to')} value={activeForm.account_to_show} >
-                                                <option value="start_account_to">Account To</option>
-                                                {accountsList}
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div className="row">
-                                        <div className="col-sm-6">
-                                            <FormGroup label="* Entry Date" id="entry_date" aria-required="true">
-                                                <input type="date" className="form-control" placeholder="Entry Date" />
-                                            </FormGroup>
-                                        </div>
-                                        <div className="col-sm-6 form-group">
                                             <label htmlFor="entry_type" className="form-label" id="entry_type" aria-label="Entry Type">Entry Type</label>
                                             <select className="form-control" id="entry_type" onChange={formChange('entry_type')} value={activeForm.entry_type_show} >
                                                 <option value="start_entry">Entry Type</option>
@@ -141,15 +117,69 @@ class AccountLedgerForm extends React.Component {
                                                 <option value={['TRANSFER', 'Transfer']}>Transfer</option>
                                             </select>
                                         </div>
+                                        <div className="col-sm-6 form-group">
+                                            <label htmlFor="plat_lot" className="form-label" id="plat_lot" aria-label="Apply By Plat or Lot">Apply By Plat or Lot</label>
+                                            <select className="form-control" id="plat_lot" onChange={formChange('plat_lot')} value={activeForm.plat_lot} >
+                                                <option value="start_entry">Plat or Lot Credit Level</option>
+                                                <option value={['plat', 'plat']}>Plat</option>
+                                                <option value={['lot', 'lot']}>Lot</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div className="row">
+                                        <div className="col-sm-6 form-group">
+                                            <label htmlFor="plat" className="form-label" id="plat" aria-label="Plat" > Plat</label>
+                                            <select className="form-control" id="plat" onChange={formChange('plat')} value={activeForm.plat_show} disabled={!openForm || activeForm.plat_lot === 'lot'}>
+                                                <option value="start_plat">Plat</option>
+                                                {platsList}
+                                            </select>
+                                        </div>
+                                        <div className="col-sm-6 form-group">
+                                            <label htmlFor="lot" className="form-label" id="lot" aria-label="Lot" > Lot</label>
+                                            <select className="form-control" id="lot" onChange={formChange('lot')} value={activeForm.lot_show} disabled={!openForm || activeForm.plat_lot === 'plat'}>
+                                                <option value="start_lot">Lot</option>
+                                                {lotsList}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div className="row">
+                                        <div className="col-sm-6 form-group">
+                                            <label htmlFor="account_from" className="form-label" id="account_from" aria-label="Account From" aria-required="true">* Account From</label>
+                                            <select className="form-control" id="account_from" onChange={formChange('account_from')} value={activeForm.account_from_show} disabled={!openForm}>
+                                                <option value="start_account_from">Account From</option>
+                                                {accountsList}
+                                            </select>
+                                        </div>
+                                        <div className="col-sm-6 form-group">
+                                            <label htmlFor="account_to" className="form-label" id="account_to" aria-label="Account To" aria-required="true">* Account To</label>
+                                            <select className="form-control" id="account_to" onChange={formChange('account_to')} value={activeForm.account_to_show} disabled={!openForm}>
+                                                <option value="start_account_to">Account To</option>
+                                                {accountsList}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div className="row">
+                                        <div className="col-sm-6 form-group">
+                                            <label htmlFor="agreement" className="form-label" id="agreement" aria-label="Agreement" aria-required="true">* Agreement</label>
+                                            <select className="form-control" id="agreement" onChange={formChange('agreement')} value={activeForm.agreement_show} disabled={!openForm}>
+                                                <option value="start_agreement">Agreement Resolution</option>
+                                                {agreementsList}
+                                            </select>
+                                        </div>
+                                        <div className="col-sm-6">
+                                            <FormGroup label="* Entry Date" id="entry_date" aria-required="true" disabled={!openForm}>
+                                                <input type="date" className="form-control" placeholder="Entry Date" />
+                                            </FormGroup>
+                                        </div>
                                     </div>
                                     <div className="row">
                                         <div className="col-sm-6">
-                                            <FormGroup label="* Non-Sewer Credits" id="non_sewer_credits" aria-required="true">
+                                            <FormGroup label="* Non-Sewer Credits" id="non_sewer_credits" aria-required="true" disabled={!openForm}>
                                                 <input type="number" className="form-control" placeholder="Non-Sewer Credits" />
                                             </FormGroup>
                                         </div>
                                         <div className="col-sm-6">
-                                            <FormGroup label="* Sewer Credits" id="sewer_credits" aria-required="true">
+                                            <FormGroup label="* Sewer Credits" id="sewer_credits" aria-required="true" disabled={!openForm}>
                                                 <input type="number" className="form-control" placeholder="Sewer Credits" />
                                             </FormGroup>
                                         </div>
@@ -176,6 +206,7 @@ class AccountLedgerForm extends React.Component {
 
 AccountLedgerForm.propTypes = {
     activeForm: PropTypes.object,
+    plats: PropTypes.array,
     lots: PropTypes.object,
     accounts: PropTypes.object,
     agreements: PropTypes.object,
@@ -189,6 +220,7 @@ AccountLedgerForm.propTypes = {
 function mapStateToProps(state) {
     return {
         activeForm: state.activeForm,
+        plats: state.plats,
         lots: state.lots,
         accounts: state.accounts,
         agreements: state.agreements,
@@ -202,6 +234,7 @@ function mapDispatchToProps(dispatch, params) {
     return {
         onComponentDidMount() {
             dispatch(formInit());
+            dispatch(getPlats());
             dispatch(getLots());
             dispatch(getAccounts());
             dispatch(getAgreements());
