@@ -34,7 +34,7 @@ const paymentReducer = (state = {}, action) => {
             (window.location.hash === '#/payment')) {
             return action.response;
         }
-        return {};
+        return state;
     default:
         return state;
     }

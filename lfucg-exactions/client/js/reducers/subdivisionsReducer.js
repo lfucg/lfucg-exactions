@@ -28,7 +28,7 @@ const subdivisionsReducer = (state = {}, action) => {
             (window.location.hash === '#/subdivision')) {
             return action.response;
         }
-        return {};
+        return state;
     default:
         return state;
     }

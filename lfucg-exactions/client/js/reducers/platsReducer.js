@@ -30,7 +30,7 @@ const platsReducer = (state = {}, action) => {
             (window.location.hash === '#/plat')) {
             return action.response;
         }
-        return {};
+        return state;
     default:
         return state;
     }
