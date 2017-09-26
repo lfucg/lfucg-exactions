@@ -11,7 +11,7 @@ from .permissions import CanAdminister
 
 from django.conf import settings
 
-from plats.models import Lot
+from plats.models import Plat, Lot
 
 
 class AccountViewSet(viewsets.ModelViewSet):
@@ -291,32 +291,40 @@ class AccountLedgerViewSet(viewsets.ModelViewSet):
         data_set['created_by'] = self.request.user.id
         data_set['modified_by'] = self.request.user.id
 
-        # print('DATA SET', data_set)
-        # print('DATA SET PLAT', data_set['plat'])
+        if 'plat' in self.request.data:
+            chosen_plat = self.request.data['plat']
+            plat_set = Plat.objects.filter(id=chosen_plat)
+            
+            non_sewer_credits_per_lot = 0
+            sewer_credits_per_lot = 0
 
-        chosen_plat = (data_set['plat'], None)
-        if chosen_plat is not None:
+            if plat_set is not None:
+                buildable_lots = plat_set[0].buildable_lots
+
+                non_sewer_credits = self.request.query_params.get('non_sewer_credits', None)
+                sewer_credits = self.request.query_params.get('sewer_credits', None)
+
+                non_sewer_credits_per_lot = round((int(data_set['non_sewer_credits']) / buildable_lots), 2)
+                sewer_credits_per_lot = round((int(data_set['sewer_credits']) / buildable_lots), 2)
+
             chosen_lots = Lot.objects.filter(plat=chosen_plat)
-            # print('IF PLAT')
             for lot in chosen_lots:
                 data_set['lot'] = lot.id
-                print('FOR LOT IN PLAT')
+                data_set['non_sewer_credits'] = non_sewer_credits_per_lot
+                data_set['sewer_credits'] = sewer_credits_per_lot
+
                 serializer = AccountLedgerSerializer(data=data_set)
-                print('SERIALIZER', serializer)
                 if serializer.is_valid(raise_exception=True):
-                    print('IS VALID')
                     self.perform_create(serializer)
-                    # return Response(serializer.data)
             return Response('Success')
 
-        elif data_set['lot'] is not None:
-            print('ELIF LOT')
+        elif 'lot' in self.request.data:
+            chosen_lot = self.request.data['lot']
             serializer = AccountLedgerSerializer(data=data_set)
             if serializer.is_valid(raise_exception=True):
                 self.perform_create(serializer)
                 return Response(serializer.data)
         else:
-            print('ERRORS')
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def update(self, request, pk):
