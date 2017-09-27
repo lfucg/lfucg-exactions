@@ -108,7 +108,7 @@ class AccountLedgerForm extends React.Component {
                 <div className="inside-body">
                     <div className="container">
                         <div className="col-sm-offset-1 col-sm-10">
-                            <form onSubmit={onSubmit} >
+                            <form onSubmit={() => onSubmit(activeForm.plat_lot)} >
 
                                 <fieldset>
                                     <div className="row">
@@ -436,7 +436,6 @@ function mapDispatchToProps(dispatch, params) {
             };
         },
         onSubmit(event) {
-            event.preventDefault();
             if (selectedAccountLedger) {
                 dispatch(putAccountLedger(selectedAccountLedger))
                 .then(() => {
@@ -445,7 +444,11 @@ function mapDispatchToProps(dispatch, params) {
             } else {
                 dispatch(postAccountLedger())
                 .then((data_post) => {
-                    hashHistory.push(`account-ledger/summary/${data_post.response.id}`);
+                    if (event === 'lot') {
+                        hashHistory.push(`account-ledger/summary/${data_post.response.id}`);
+                    } else if (event === 'plat') {
+                        hashHistory.push('account-ledger');
+                    }
                 });
             }
         },
