@@ -43,19 +43,22 @@ class AccountLedgerForm extends React.Component {
             accountLedgers,
             onSubmit,
             formChange,
+            platFormChange,
+            lotFormChange,
+            accountFormChange,
         } = this.props;
 
         const platsList = plats.length > 0 && (map((plat) => {
             return (
-                <option key={plat.id} value={[plat.id, plat.address_full]} >
-                    {plat.address_full}
+                <option key={plat.id} value={[plat.id, plat.name, plat.plat_exactions.plat_non_sewer_due, plat.plat_exactions.plat_sewer_due]} >
+                    {plat.name}
                 </option>
             );
         })(plats));
 
         const lotsList = lots.length > 0 && (map((lot) => {
             return (
-                <option key={lot.id} value={[lot.id, lot.address_full]} >
+                <option key={lot.id} value={[lot.id, lot.address_full, lot.lot_exactions.non_sewer_due, lot.lot_exactions.sewer_due]} >
                     {lot.address_full}
                 </option>
             );
@@ -63,7 +66,7 @@ class AccountLedgerForm extends React.Component {
 
         const accountsList = accounts.length > 0 && (map((account) => {
             return (
-                <option key={account.id} value={[account.id, account.account_name]} >
+                <option key={account.id} value={[account.id, account.account_name, account.balance.balance]} >
                     {account.account_name}
                 </option>
             );
@@ -110,6 +113,14 @@ class AccountLedgerForm extends React.Component {
                                 <fieldset>
                                     <div className="row">
                                         <div className="col-sm-6 form-group">
+                                            <label htmlFor="plat_lot" className="form-label" id="plat_lot" aria-label="Apply By Plat or Lot">Apply By Plat or Lot</label>
+                                            <select className="form-control" id="plat_lot" onChange={formChange('plat_lot')} value={activeForm.plat_lot_show} >
+                                                <option value="start_entry">Plat or Lot Credit Level</option>
+                                                <option value={['plat', 'plat']}>Plat</option>
+                                                <option value={['lot', 'lot']}>Lot</option>
+                                            </select>
+                                        </div>
+                                        <div className="col-sm-6 form-group">
                                             <label htmlFor="entry_type" className="form-label" id="entry_type" aria-label="Entry Type">Entry Type</label>
                                             <select className="form-control" id="entry_type" onChange={formChange('entry_type')} value={activeForm.entry_type_show} >
                                                 <option value="start_entry">Entry Type</option>
@@ -118,44 +129,36 @@ class AccountLedgerForm extends React.Component {
                                                 <option value={['TRANSFER', 'Transfer']}>Transfer</option>
                                             </select>
                                         </div>
-                                        <div className="col-sm-6 form-group">
-                                            <label htmlFor="plat_lot" className="form-label" id="plat_lot" aria-label="Apply By Plat or Lot">Apply By Plat or Lot</label>
-                                            <select className="form-control" id="plat_lot" onChange={formChange('plat_lot')} value={activeForm.plat_lot_show} >
-                                                <option value="start_entry">Plat or Lot Credit Level</option>
-                                                <option value={['plat', 'plat']}>Plat</option>
-                                                <option value={['lot', 'lot']}>Lot</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div className="row">
-                                        <div className="col-sm-6 form-group">
-                                            <label htmlFor="plat" className="form-label" id="plat" aria-label="Plat" > Plat</label>
-                                            <select className="form-control" id="plat" onChange={formChange('plat')} value={activeForm.plat_show} disabled={!openForm || activeForm.plat_lot === 'lot'}>
-                                                <option value="start_plat">Plat</option>
-                                                {platsList}
-                                            </select>
-                                        </div>
-                                        <div className="col-sm-6 form-group">
-                                            <label htmlFor="lot" className="form-label" id="lot" aria-label="Lot" > Lot</label>
-                                            <select className="form-control" id="lot" onChange={formChange('lot')} value={activeForm.lot_show} disabled={!openForm || activeForm.plat_lot === 'plat'}>
-                                                <option value="start_lot">Lot</option>
-                                                {lotsList}
-                                            </select>
-                                        </div>
                                     </div>
                                     <div className="row">
                                         <div className="col-sm-6 form-group">
                                             <label htmlFor="account_from" className="form-label" id="account_from" aria-label="Account From" aria-required="true">* Account From</label>
-                                            <select className="form-control" id="account_from" onChange={formChange('account_from')} value={activeForm.account_from_show} disabled={!openForm || activeForm.entry_type === 'NEW'}>
+                                            <select className="form-control" id="account_from" onChange={accountFormChange('account_from')} value={activeForm.account_from_show} disabled={!openForm || activeForm.entry_type === 'NEW'}>
                                                 <option value="start_account_from">Account From</option>
                                                 {accountsList}
                                             </select>
                                         </div>
                                         <div className="col-sm-6 form-group">
                                             <label htmlFor="account_to" className="form-label" id="account_to" aria-label="Account To" aria-required="true">* Account To</label>
-                                            <select className="form-control" id="account_to" onChange={formChange('account_to')} value={activeForm.account_to_show} disabled={!openForm || activeForm.entry_type === 'SELL'}>
+                                            <select className="form-control" id="account_to" onChange={accountFormChange('account_to')} value={activeForm.account_to_show} disabled={!openForm || activeForm.entry_type === 'SELL'}>
                                                 <option value="start_account_to">Account To</option>
                                                 {accountsList}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div className="row">
+                                        <div className="col-sm-6 form-group">
+                                            <label htmlFor="plat" className="form-label" id="plat" aria-label="Plat" >Plat</label>
+                                            <select className="form-control" id="plat" onChange={platFormChange('plat')} value={activeForm.plat_show} disabled={!openForm || activeForm.plat_lot === 'lot'}>
+                                                <option value="start_plat">Plat</option>
+                                                {platsList}
+                                            </select>
+                                        </div>
+                                        <div className="col-sm-6 form-group">
+                                            <label htmlFor="lot" className="form-label" id="lot" aria-label="Lot" >Lot</label>
+                                            <select className="form-control" id="lot" onChange={lotFormChange('lot')} value={activeForm.lot_show} disabled={!openForm || activeForm.plat_lot === 'plat'}>
+                                                <option value="start_lot">Lot</option>
+                                                {lotsList}
                                             </select>
                                         </div>
                                     </div>
@@ -173,6 +176,31 @@ class AccountLedgerForm extends React.Component {
                                             </FormGroup>
                                         </div>
                                     </div>
+                                    {activeForm.balance || activeForm.sewer_exactions || activeForm.non_sewer_exactions ?
+                                        <div className="white-box">
+                                            {activeForm.balance &&
+                                                <div className="row text-center">
+                                                    <h4>Credits Available:</h4>
+                                                    <h5>{activeForm.balance}</h5>
+                                                </div>
+                                            }
+                                            {activeForm.sewer_exactions || activeForm.non_sewer_exactions ?
+                                                <div className="text-center">
+                                                    <div className="row">
+                                                        <h4>Exactions Due</h4>
+                                                    </div>
+                                                    <div className="row">
+                                                        <div className="col-sm-6">
+                                                            <h5>{activeForm.non_sewer_exactions}</h5>
+                                                        </div>
+                                                        <div className="col-sm-6">
+                                                            <h5>{activeForm.sewer_exactions}</h5>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            : null}
+                                        </div>
+                                    : null}
                                     <div className="row">
                                         <div className="col-sm-6">
                                             <FormGroup label="* Non-Sewer Credits" id="non_sewer_credits" aria-required="true" >
@@ -216,6 +244,9 @@ AccountLedgerForm.propTypes = {
     onComponentDidMount: PropTypes.func,
     onSubmit: PropTypes.func,
     formChange: PropTypes.func,
+    platFormChange: PropTypes.func,
+    lotFormChange: PropTypes.func,
+    accountFormChange: PropTypes.func,
 };
 
 function mapStateToProps(state) {
@@ -235,8 +266,6 @@ function mapDispatchToProps(dispatch, params) {
     return {
         onComponentDidMount() {
             dispatch(formInit());
-            dispatch(getPlats());
-            dispatch(getLots());
             dispatch(getAccounts());
             dispatch(getAgreements());
             if (selectedAccountLedger) {
@@ -244,11 +273,11 @@ function mapDispatchToProps(dispatch, params) {
                 .then((data_account_ledger) => {
                     const update = {
                         lot: data_account_ledger.response.lot ? data_account_ledger.response.lot.id : null,
-                        lot_show: data_account_ledger.response.lot ? `${data_account_ledger.response.lot.id},${data_account_ledger.response.lot.address_full}` : '',
+                        lot_show: data_account_ledger.response.lot ? `${data_account_ledger.response.lot.id},${data_account_ledger.response.lot.address_full},${data_account_ledger.response.lot.lot_exactions.non_sewer_due},${data_account_ledger.response.lot.lot_exactions.sewer_due}` : '',
                         account_from: data_account_ledger.response.account_from ? data_account_ledger.response.account_from.id : null,
-                        account_from_show: data_account_ledger.response.account_from ? `${data_account_ledger.response.account_from.id},${data_account_ledger.response.account_from.account_name}` : '',
+                        account_from_show: data_account_ledger.response.account_from ? `${data_account_ledger.response.account_from.id},${data_account_ledger.response.account_from.account_name},${data_account_ledger.response.account_from.balance.balance}` : '',
                         account_to: data_account_ledger.response.account_to ? data_account_ledger.response.account_to.id : null,
-                        account_to_show: data_account_ledger.response.account_to ? `${data_account_ledger.response.account_to.id},${data_account_ledger.response.account_to.account_name}` : '',
+                        account_to_show: data_account_ledger.response.account_to ? `${data_account_ledger.response.account_to.id},${data_account_ledger.response.account_to.account_name},${data_account_ledger.response.account_to.balance.balance}` : '',
                         agreement: data_account_ledger.response.agreement ? data_account_ledger.response.agreement.id : null,
                         agreement_show: data_account_ledger.response.agreement ? `${data_account_ledger.response.agreement.id},${data_account_ledger.response.agreement.resolution_number}` : '',
                         entry_date: data_account_ledger.response.entry_date,
@@ -256,6 +285,8 @@ function mapDispatchToProps(dispatch, params) {
                         entry_type_show: `${data_account_ledger.response.entry_type},${data_account_ledger.response.entry_type_display}`,
                         non_sewer_credits: data_account_ledger.response.non_sewer_credits,
                         sewer_credits: data_account_ledger.response.sewer_credits,
+                        plat_lot: 'lot',
+                        plat_lot_show: 'lot,lot',
                     };
                     dispatch(formUpdate(update));
                 });
@@ -287,23 +318,120 @@ function mapDispatchToProps(dispatch, params) {
                 };
 
                 dispatch(formUpdate(update));
+
                 if (field === 'entry_type') {
                     dispatch(getLFUCGAccount())
                     .then((data_lfucg) => {
                         if (value_id === 'NEW') {
                             const lfucg_from_update = {
                                 account_from: data_lfucg.response[0].id,
-                                account_from_show: `${data_lfucg.response[0].id},${data_lfucg.response[0].account_name}`,
+                                account_from_show: `${data_lfucg.response[0].id},${data_lfucg.response[0].account_name},${data_lfucg.response[0].balance.balance}`,
                             };
                             dispatch(formUpdate(lfucg_from_update));
                         } else if (value_id === 'SELL') {
                             const lfucg_to_update = {
                                 account_to: data_lfucg.response[0].id,
-                                account_to_show: `${data_lfucg.response[0].id},${data_lfucg.response[0].account_name}`,
+                                account_to_show: `${data_lfucg.response[0].id},${data_lfucg.response[0].account_name},${data_lfucg.response[0].balance.balance}`,
+                            };
+                            dispatch(formUpdate(lfucg_to_update));
+                        } else if (value_id === 'TRANSFER') {
+                            const lfucg_to_update = {
+                                account_from_show: '',
+                                account_to_show: '',
                             };
                             dispatch(formUpdate(lfucg_to_update));
                         }
                     });
+                }
+
+                if (field === 'plat_lot') {
+                    if (value_id === 'plat') {
+                        dispatch(getPlats());
+                    } else if (value_id === 'lot') {
+                        dispatch(getLots());
+                    }
+                }
+            };
+        },
+        platFormChange(field) {
+            return (e, ...args) => {
+                const value = typeof e.target.value !== 'undefined' ? e.target.value : args[1];
+
+                const comma_index = value.indexOf(',');
+                const dollar_index = value.indexOf('$');
+                const second_dollar_index = value.indexOf(',$', dollar_index + 1);
+
+                const value_id = value.substring(0, comma_index);
+                const value_name = value.substring(comma_index + 1, dollar_index);
+                const value_non_sewer = value.substring(dollar_index, second_dollar_index);
+                const value_sewer = value.substring(second_dollar_index + 1, value.length);
+
+                const field_name = `${[field]}_name`;
+                const field_show = `${[field]}_show`;
+
+                const plat_update = {
+                    [field]: value_id,
+                    [field_name]: value_name,
+                    [field_show]: value,
+                    non_sewer_exactions: value_non_sewer,
+                    sewer_exactions: value_sewer,
+                };
+
+                dispatch(formUpdate(plat_update));
+            };
+        },
+        lotFormChange(field) {
+            return (e, ...args) => {
+                const value = typeof e.target.value !== 'undefined' ? e.target.value : args[1];
+
+                const comma_index = value.indexOf(',');
+                const dollar_index = value.indexOf('$');
+                const second_dollar_index = value.indexOf(',$', dollar_index + 1);
+
+                const value_id = value.substring(0, comma_index);
+                const value_name = value.substring(comma_index + 1, dollar_index);
+                const value_non_sewer = value.substring(dollar_index, second_dollar_index);
+                const value_sewer = value.substring(second_dollar_index + 1, value.length);
+
+                const field_name = `${[field]}_name`;
+                const field_show = `${[field]}_show`;
+
+                const lot_update = {
+                    [field]: value_id,
+                    [field_name]: value_name,
+                    [field_show]: value,
+                    non_sewer_exactions: value_non_sewer,
+                    sewer_exactions: value_sewer,
+                };
+
+                dispatch(formUpdate(lot_update));
+            };
+        },
+        accountFormChange(field) {
+            return (e, ...args) => {
+                const value = typeof e.target.value !== 'undefined' ? e.target.value : args[1];
+
+                const comma_index = value.indexOf(',');
+                const dollar_index = value.indexOf('$');
+
+                const value_id = value.substring(0, comma_index);
+                const value_name = value.substring(comma_index + 1, dollar_index);
+                const value_balance = value.substring(dollar_index, value.length);
+
+                const field_name = `${[field]}_name`;
+                const field_show = `${[field]}_show`;
+
+                const account_update = {
+                    [field]: value_id,
+                    [field_name]: value_name,
+                    [field_show]: value,
+                };
+                dispatch(formUpdate(account_update));
+                if (field === 'account_from' && !value_name.includes('LFUCG')) {
+                    const balance_update = {
+                        balance: value_balance,
+                    };
+                    dispatch(formUpdate(balance_update));
                 }
             };
         },

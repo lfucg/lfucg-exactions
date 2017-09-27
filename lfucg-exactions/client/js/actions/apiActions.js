@@ -995,7 +995,6 @@ export function getPaymentQuery() {
 }
 
 export function getLotPayments(selectedLot) {
-    console.log('SELECTED LOT', selectedLot);
     return {
         type: API_CALL,
         endpoint: GET_LOT_PAYMENTS,
