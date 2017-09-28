@@ -12,6 +12,8 @@ import SearchBar from './SearchBar';
 
 import {
     getPagination,
+    getPlats,
+    getLots,
 } from '../actions/apiActions';
 
 
@@ -84,7 +86,14 @@ class AccountExisting extends React.Component {
 
                 <Breadcrumbs route={this.props.route} />
 
-                <SearchBar />
+                <SearchBar
+                  apiField1DisplayName={'Plat'}
+                  apiField2DisplayName={'Lot'}
+                  filterField1={'filter_plat_account__id'}
+                  filterField2={'filter_lot_account__id'}
+                  apiCall1={getPlats}
+                  apiCall2={getLots}
+                />
 
                 <div className="inside-body">
                     <div className="container">

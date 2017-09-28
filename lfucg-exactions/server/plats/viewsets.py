@@ -10,24 +10,18 @@ from django_filters.rest_framework import DjangoFilterBackend
 
 from django.conf import settings
 
-from pprint import pprint
-
-
 class SubdivisionViewSet(viewsets.ModelViewSet):
     serializer_class = SubdivisionSerializer
     queryset = Subdivision.objects.all()
     permission_classes = (CanAdminister,)
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('name',)
 
     def get_queryset(self):
         queryset = Subdivision.objects.all()
         paginatePage = self.request.query_params.get('paginatePage', None)
         pageSize = self.request.query_params.get('pageSize', settings.PAGINATION_SIZE)
         PageNumberPagination.page_size = 0
-
-        query_text = self.request.query_params.get('query', None)
-        if query_text is not None:
-            query_text = query_text.lower()
-            queryset = queryset.filter(name__icontains=query_text)
 
         if paginatePage is not None:
             PageNumberPagination.page_size = pageSize
@@ -67,21 +61,14 @@ class PlatViewSet(viewsets.ModelViewSet):
     serializer_class = PlatSerializer
     queryset = Plat.objects.all()
     permission_classes = (CanAdminister,)
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('name', 'expansion_area', 'slide', 'subdivision__name')
 
     def get_queryset(self):
         queryset = Plat.objects.all()
         PageNumberPagination.page_size = 0
         paginatePage = self.request.query_params.get('paginatePage', None)
         pageSize = self.request.query_params.get('pageSize', settings.PAGINATION_SIZE)
-
-        query_text = self.request.query_params.get('query', None)
-        if query_text is not None:
-            query_text = query_text.lower()
-            queryset = queryset.filter(
-                Q(name__icontains=query_text) |
-                Q(expansion_area__icontains=query_text) |
-                Q(slide__icontains=query_text) |
-                Q(subdivision__name__icontains=query_text))
 
         if paginatePage is not None:
             PageNumberPagination.page_size = pageSize
@@ -156,7 +143,6 @@ class LotViewSet(viewsets.ModelViewSet):
 
     def update(self, request, pk):
         existing_object  = self.get_object()
-        pprint(vars(existing_object))
         setattr(existing_object, 'modified_by', request.user)
         for key, value in request.data.items():
             for existing_object_key, existing_object_value in existing_object.__dict__.items():
@@ -164,8 +150,6 @@ class LotViewSet(viewsets.ModelViewSet):
                     if value != existing_object_value:
                         setattr(existing_object, existing_object_key, value)
         try:
-            pprint('=============================')
-            pprint(vars(existing_object))
             existing_object.save()
             return Response(status=status.HTTP_200_OK)
         except Exception as e:

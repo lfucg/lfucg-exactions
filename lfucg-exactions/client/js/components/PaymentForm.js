@@ -309,7 +309,6 @@ function mapDispatchToProps(dispatch, params) {
                     if (lot_id.response.account) {
                         dispatch(getAccountID(lot_id.response.account))
                         .then((account) => {
-                            console.log('ACCOUNT NUMBER', lot_id.response.account);
                             const update = {
                                 credit_account_show: account.response.account_name,
                                 credit_account: lot_id.response.account,
