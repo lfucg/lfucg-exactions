@@ -361,23 +361,25 @@ function mapDispatchToProps(dispatch, params) {
                 const dollar_index = value.indexOf('$');
                 const second_dollar_index = value.indexOf(',$', dollar_index + 1);
 
-                const value_id = value.substring(0, comma_index);
-                const value_name = value.substring(comma_index + 1, dollar_index);
-                const value_non_sewer = value.substring(dollar_index, second_dollar_index);
-                const value_sewer = value.substring(second_dollar_index + 1, value.length);
+                if (comma_index !== -1 && dollar_index !== -1 && second_dollar_index !== -1) {
+                    const value_id = value.substring(0, comma_index);
+                    const value_name = value.substring(comma_index + 1, dollar_index);
+                    const value_non_sewer = value.substring(dollar_index, second_dollar_index);
+                    const value_sewer = value.substring(second_dollar_index + 1, value.length);
 
-                const field_name = `${[field]}_name`;
-                const field_show = `${[field]}_show`;
+                    const field_name = `${[field]}_name`;
+                    const field_show = `${[field]}_show`;
 
-                const plat_update = {
-                    [field]: value_id,
-                    [field_name]: value_name,
-                    [field_show]: value,
-                    non_sewer_exactions: value_non_sewer,
-                    sewer_exactions: value_sewer,
-                };
+                    const plat_update = {
+                        [field]: value_id,
+                        [field_name]: value_name,
+                        [field_show]: value,
+                        non_sewer_exactions: value_non_sewer,
+                        sewer_exactions: value_sewer,
+                    };
 
-                dispatch(formUpdate(plat_update));
+                    dispatch(formUpdate(plat_update));
+                }
             };
         },
         lotFormChange(field) {
@@ -388,23 +390,25 @@ function mapDispatchToProps(dispatch, params) {
                 const dollar_index = value.indexOf('$');
                 const second_dollar_index = value.indexOf(',$', dollar_index + 1);
 
-                const value_id = value.substring(0, comma_index);
-                const value_name = value.substring(comma_index + 1, dollar_index);
-                const value_non_sewer = value.substring(dollar_index, second_dollar_index);
-                const value_sewer = value.substring(second_dollar_index + 1, value.length);
+                if (comma_index !== -1 && dollar_index !== -1 && second_dollar_index !== -1) {
+                    const value_id = value.substring(0, comma_index);
+                    const value_name = value.substring(comma_index + 1, dollar_index);
+                    const value_non_sewer = value.substring(dollar_index, second_dollar_index);
+                    const value_sewer = value.substring(second_dollar_index + 1, value.length);
 
-                const field_name = `${[field]}_name`;
-                const field_show = `${[field]}_show`;
+                    const field_name = `${[field]}_name`;
+                    const field_show = `${[field]}_show`;
 
-                const lot_update = {
-                    [field]: value_id,
-                    [field_name]: value_name,
-                    [field_show]: value,
-                    non_sewer_exactions: value_non_sewer,
-                    sewer_exactions: value_sewer,
-                };
+                    const lot_update = {
+                        [field]: value_id,
+                        [field_name]: value_name,
+                        [field_show]: value,
+                        non_sewer_exactions: value_non_sewer,
+                        sewer_exactions: value_sewer,
+                    };
 
-                dispatch(formUpdate(lot_update));
+                    dispatch(formUpdate(lot_update));
+                }
             };
         },
         accountFormChange(field) {
@@ -414,24 +418,26 @@ function mapDispatchToProps(dispatch, params) {
                 const comma_index = value.indexOf(',');
                 const dollar_index = value.indexOf('$');
 
-                const value_id = value.substring(0, comma_index);
-                const value_name = value.substring(comma_index + 1, dollar_index);
-                const value_balance = value.substring(dollar_index, value.length);
+                if (comma_index !== -1 && dollar_index !== -1) {
+                    const value_id = value.substring(0, comma_index);
+                    const value_name = value.substring(comma_index + 1, dollar_index);
+                    const value_balance = value.substring(dollar_index, value.length);
 
-                const field_name = `${[field]}_name`;
-                const field_show = `${[field]}_show`;
+                    const field_name = `${[field]}_name`;
+                    const field_show = `${[field]}_show`;
 
-                const account_update = {
-                    [field]: value_id,
-                    [field_name]: value_name,
-                    [field_show]: value,
-                };
-                dispatch(formUpdate(account_update));
-                if (field === 'account_from' && !value_name.includes('LFUCG')) {
-                    const balance_update = {
-                        balance: value_balance,
+                    const account_update = {
+                        [field]: value_id,
+                        [field_name]: value_name,
+                        [field_show]: value,
                     };
-                    dispatch(formUpdate(balance_update));
+                    dispatch(formUpdate(account_update));
+                    if (field === 'account_from' && !value_name.includes('LFUCG')) {
+                        const balance_update = {
+                            balance: value_balance,
+                        };
+                        dispatch(formUpdate(balance_update));
+                    }
                 }
             };
         },
