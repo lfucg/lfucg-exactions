@@ -8,10 +8,10 @@ import Navbar from './Navbar';
 import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
 import Pagination from './Pagination';
+import SearchBar from './SearchBar';
 
 import {
     getPagination,
-    getLotQuery,
 } from '../actions/apiActions';
 
 import {
@@ -28,7 +28,6 @@ class LotExisting extends React.Component {
         const {
             currentUser,
             lots,
-            onLotQuery,
         } = this.props;
 
         const lots_list = lots.length > 0 ? (
@@ -85,22 +84,7 @@ class LotExisting extends React.Component {
 
                 <Breadcrumbs route={this.props.route} />
 
-                <div className="row search-box">
-                    <form onChange={onLotQuery('query')} className="col-sm-10 col-sm-offset-1" >
-                        <fieldset>
-                            <div className="col-sm-2 col-xs-12">
-                                <label htmlFor="query" className="form-label">Search</label>
-                            </div>
-                            <div className="col-sm-10 col-xs-12">
-                                <input
-                                  type="text"
-                                  className="form-control"
-                                  placeholder="Search Lots"
-                                />
-                            </div>
-                        </fieldset>
-                    </form>
-                </div>
+                <SearchBar />
 
                 <div className="inside-body">
                     <div className="container">
@@ -119,7 +103,6 @@ LotExisting.propTypes = {
     lots: PropTypes.array,
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
-    onLotQuery: PropTypes.func,
 };
 
 function mapStateToProps(state) {
@@ -133,16 +116,6 @@ function mapDispatchToProps(dispatch) {
     return {
         onComponentDidMount() {
             dispatch(getPagination('/lot/'));
-        },
-        onLotQuery(field) {
-            return (e, ...args) => {
-                const value = typeof e.target.value !== 'undefined' ? e.target.value : args[1];
-                const update = {
-                    [field]: value,
-                };
-                dispatch(formUpdate(update));
-                dispatch(getLotQuery());
-            };
         },
     };
 }

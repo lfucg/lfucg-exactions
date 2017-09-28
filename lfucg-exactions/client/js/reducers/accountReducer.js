@@ -1,10 +1,10 @@
 import {
     GET_ACCOUNTS,
     GET_ACCOUNT_ID,
-    GET_ACCOUNT_QUERY,
     POST_ACCOUNT,
     PUT_ACCOUNT,
     GET_PAGINATION,
+    SEARCH_QUERY,
 } from '../constants/apiConstants';
 
 
@@ -19,7 +19,7 @@ const accountReducer = (state = {}, action) => {
     case POST_ACCOUNT:
     case PUT_ACCOUNT:
         return {};
-    case GET_ACCOUNT_QUERY:
+    case SEARCH_QUERY:
     case GET_PAGINATION:
         const next = action.response.next;
         const prev = action.response.prev;

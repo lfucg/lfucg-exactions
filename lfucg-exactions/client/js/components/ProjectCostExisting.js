@@ -8,14 +8,13 @@ import Navbar from './Navbar';
 import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
 import Pagination from './Pagination';
+import SearchBar from './SearchBar';
 
 import {
     getPagination,
-    getProjectCostQuery,
 } from '../actions/apiActions';
 
 import {
-    formUpdate,
 } from '../actions/formActions';
 
 class ProjectCostExisting extends React.Component {
@@ -27,7 +26,6 @@ class ProjectCostExisting extends React.Component {
         const {
             currentUser,
             projectCosts,
-            onProjectCostQuery,
         } = this.props;
 
         const projectCosts_list = projectCosts.length > 0 ? (
@@ -85,22 +83,7 @@ class ProjectCostExisting extends React.Component {
 
                 <Breadcrumbs route={this.props.route} />
 
-                <div className="row search-box">
-                    <form onChange={onProjectCostQuery('query')} className="col-sm-10 col-sm-offset-1" >
-                        <fieldset>
-                            <div className="col-sm-2 col-xs-12">
-                                <label htmlFor="query" className="form-label">Search</label>
-                            </div>
-                            <div className="col-sm-10 col-xs-12">
-                                <input
-                                  type="text"
-                                  className="form-control"
-                                  placeholder="Search ProjectCosts"
-                                />
-                            </div>
-                        </fieldset>
-                    </form>
-                </div>
+                <SearchBar />
 
                 <div className="inside-body">
                     <div className="container">
@@ -133,16 +116,6 @@ function mapDispatchToProps(dispatch) {
     return {
         onComponentDidMount() {
             dispatch(getPagination('/estimate/'));
-        },
-        onProjectCostQuery(field) {
-            return (e, ...args) => {
-                const value = typeof e.target.value !== 'undefined' ? e.target.value : args[1];
-                const update = {
-                    [field]: value,
-                };
-                dispatch(formUpdate(update));
-                dispatch(getProjectCostQuery());
-            };
         },
     };
 }

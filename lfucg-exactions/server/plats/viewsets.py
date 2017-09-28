@@ -1,4 +1,4 @@
-from rest_framework import viewsets, status
+from rest_framework import viewsets, status, filters
 from django.db.models import Q
 from rest_framework.response import Response
 
@@ -6,8 +6,11 @@ from .models import *
 from .serializers import *
 from .permissions import CanAdminister
 from rest_framework.pagination import PageNumberPagination
+from django_filters.rest_framework import DjangoFilterBackend
 
 from django.conf import settings
+
+from pprint import pprint
 
 
 class SubdivisionViewSet(viewsets.ModelViewSet):
@@ -117,6 +120,9 @@ class LotViewSet(viewsets.ModelViewSet):
     serializer_class = LotSerializer
     queryset = Lot.objects.all()
     permission_classes = (CanAdminister,)
+    filter_backends = (DjangoFilterBackend, filters.SearchFilter,)
+    filter_fields = ()
+    search_fields = ('address_full', 'lot_number', 'parcel_id', 'permit_id', 'plat__expansion_area', 'plat__name',)
 
 
     def get_queryset(self):
@@ -128,17 +134,6 @@ class LotViewSet(viewsets.ModelViewSet):
         plat_set = self.request.query_params.get('plat', None)
         if plat_set is not None:
             queryset = queryset.filter(plat=plat_set)
-
-        query_text = self.request.query_params.get('query', None)
-        if query_text is not None:
-            query_text = query_text.lower()
-            queryset = queryset.filter(
-                Q(address_full__icontains=query_text) |
-                Q(lot_number__icontains=query_text) |
-                Q(parcel_id__icontains=query_text) |
-                Q(permit_id__icontains=query_text) |
-                Q(plat__expansion_area__icontains=query_text) |
-                Q(plat__name__icontains=query_text))
 
         if paginatePage is not None:
             PageNumberPagination.page_size = pageSize
@@ -161,6 +156,7 @@ class LotViewSet(viewsets.ModelViewSet):
 
     def update(self, request, pk):
         existing_object  = self.get_object()
+        pprint(vars(existing_object))
         setattr(existing_object, 'modified_by', request.user)
         for key, value in request.data.items():
             for existing_object_key, existing_object_value in existing_object.__dict__.items():
@@ -168,6 +164,8 @@ class LotViewSet(viewsets.ModelViewSet):
                     if value != existing_object_value:
                         setattr(existing_object, existing_object_key, value)
         try:
+            pprint('=============================')
+            pprint(vars(existing_object))
             existing_object.save()
             return Response(status=status.HTTP_200_OK)
         except Exception as e:
