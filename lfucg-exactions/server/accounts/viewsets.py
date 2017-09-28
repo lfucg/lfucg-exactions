@@ -14,15 +14,13 @@ from django.conf import settings
 from django_filters.rest_framework import DjangoFilterBackend
 from plats.models import Plat, Lot
 
-
-
 class AccountViewSet(viewsets.ModelViewSet):
     serializer_class = AccountSerializer
     queryset = Account.objects.all()
     permission_classes = (CanAdminister,)
     filter_backends = (DjangoFilterBackend, filters.SearchFilter,)
-    filter_fields = ('plat_account__id', 'lot_account__id')
     search_fields = ('account_name', 'contact_full_name', 'address_full', 'phone', 'email',)
+    filter_fields = ('plat_account__id', 'lot_account__id')
 
     def get_queryset(self):
         queryset = Account.objects.all()
@@ -68,6 +66,8 @@ class AgreementViewSet(viewsets.ModelViewSet):
     serializer_class = AgreementSerializer
     queryset = Agreement.objects.all()
     permission_classes = (CanAdminister,)
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('resolution_number', 'account_id__account_name', 'agreement_type', 'expansion_area',)
 
     def get_queryset(self):
         queryset = Agreement.objects.all()
@@ -77,15 +77,6 @@ class AgreementViewSet(viewsets.ModelViewSet):
         account_id_set = self.request.query_params.get('account_id', None)
         if account_id_set is not None:
             queryset = queryset.filter(account_id=account_id_set)
-
-        query_text = self.request.query_params.get('query', None)
-        if query_text is not None:
-            query_text = query_text.lower()
-            queryset = queryset.filter(
-                Q(account_id__account_name__icontains=query_text) |
-                Q(resolution_number__icontains=query_text) |
-                Q(agreement_type__icontains=query_text) |
-                Q(expansion_area__icontains=query_text))
             
         if paginatePage is not None:
             pagination_class = PageNumberPagination
@@ -124,6 +115,8 @@ class PaymentViewSet(viewsets.ModelViewSet):
     serializer_class = PaymentSerializer
     queryset = Payment.objects.all()
     permission_classes = (CanAdminister,)
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('lot_id__address_street', 'payment_type', 'check_number', 'credit_account__account_name')
 
     def get_queryset(self):
         queryset = Payment.objects.all()

@@ -1043,6 +1043,7 @@ export function postPayment() {
                 paid_storm,
                 paid_open_space,
             } = activeForm;
+            console.log('HEY FROM API ACTIONS: ', activeForm);
             return {
                 lot_id,
                 paid_by,

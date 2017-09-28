@@ -16,7 +16,14 @@ import {
 
 class SearchBar extends React.Component {
     componentDidount() {
-        this.props.onComponentDidMount();
+        this.props.onComponentDidMount({
+            apiField1DisplayName: this.props.apiField1DisplayName,
+            apiField2DisplayName: this.props.apiField2DisplayName,
+            apiCall1: this.props.apiCall1,
+            apiCall2: this.props.apiCall2,
+            filterField1: this.props.filterField1,
+            filterField2: this.props.filterField2,
+        });
     }
 
     render() {
@@ -25,7 +32,7 @@ class SearchBar extends React.Component {
             activeForm,
             plats,
             lots,
-            onAccountFilter,
+            onFilter,
             advancedSearchPopulation,
             clearFilters,
         } = this.props;
@@ -78,17 +85,17 @@ class SearchBar extends React.Component {
                       id="searchAccordionControl"
                     >
                         {activeForm.filterToggle ? (
-                            <div className="row" role="tab" id="headingAdvancedSearch" onClick={clearFilters}>
+                            <div className="row" role="tab" id="headingAdvancedSearch" >
                                 <div className="col-xs-10 col-xs-offset-1 text-center">
-                                    <h5>Clear All Search Filters</h5>
+                                    <button className="btn btn-link" onClick={clearFilters}>Clear All Search Filters</button>
                                 </div>
                             </div>
                             ) : (
-                            <div className="row" role="tab" id="headingAdvancedSearch" onClick={advancedSearchPopulation}>
-                                <div className="col-xs-10 col-xs-offset-1 text-center">
-                                    <h5>Advanced Search</h5>
+                                <div className="row" role="tab" id="headingAdvancedSearch" >
+                                    <div className="col-xs-10 col-xs-offset-1 text-center">
+                                        <button className="btn btn-link" onClick={advancedSearchPopulation}>Advanced Search</button>
+                                    </div>
                                 </div>
-                            </div>
                             )
                         }
                     </a>
@@ -101,17 +108,17 @@ class SearchBar extends React.Component {
                             <div className="row">
                                 <div className="col-sm-6 form-group">
                                     <div className="col-sm-2 col-xs-12">
-                                        <label htmlFor="filter_plat_account__id" className="form-label">Plat</label>
+                                        <label htmlFor={this.props.filterField1} className="form-label">{this.props.apiField1DisplayName}</label>
                                     </div>
                                     <div className="col-sm-10 col-xs-12">
                                         <select
                                           className="form-control"
-                                          onChange={() => onAccountFilter(this.plat_account)}
-                                          ref={(input) => { this.plat_account = input; }}
-                                          name="filter_plat_account__id"
+                                          onChange={() => onFilter(this.field_one)}
+                                          ref={(input) => { this.field_one = input; }}
+                                          name={this.props.filterField1}
                                         >
                                             <option value="">
-                                                Select Plat
+                                                Select {this.props.apiField1DisplayName}
                                             </option>
                                             {platsList}
                                         </select>
@@ -119,17 +126,17 @@ class SearchBar extends React.Component {
                                 </div>
                                 <div className="col-sm-6 form-group">
                                     <div className="col-sm-2 col-xs-12">
-                                        <label htmlFor="filter_lot_account__id" className="form-label">Lot</label>
+                                        <label htmlFor={this.props.filterField2} className="form-label">{this.props.apiField2DisplayName}</label>
                                     </div>
                                     <div className="col-sm-10 col-xs-12">
                                         <select
                                           className="form-control"
-                                          onChange={() => onAccountFilter(this.lot_account)}
-                                          ref={(input) => { this.lot_account = input; }}
-                                          name="filter_lot_account__id"
+                                          onChange={() => onFilter(this.field_two)}
+                                          ref={(input) => { this.field_two = input; }}
+                                          name={this.props.filterField2}
                                         >
                                             <option value="">
-                                                Select Lot
+                                                Select {this.props.apiField2DisplayName}
                                             </option>
                                             {lotsList}
                                         </select>
@@ -150,9 +157,15 @@ SearchBar.propTypes = {
     activeForm: PropTypes.object,
     plats: PropTypes.array,
     lots: PropTypes.array,
-    onAccountFilter: PropTypes.func,
+    onFilter: PropTypes.func,
     clearFilters: PropTypes.func,
     advancedSearchPopulation: PropTypes.func,
+    filterField1: PropTypes.string,
+    filterField2: PropTypes.string,
+    apiField1DisplayName: PropTypes.string,
+    apiField2DisplayName: PropTypes.string,
+    apiCall1: PropTypes.func,
+    apiCall2: PropTypes.func,
 };
 
 function mapStateToProps(state) {
@@ -163,7 +176,7 @@ function mapStateToProps(state) {
     };
 }
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch, props) {
     return {
         onComponentDidMount() {
             dispatch(formUpdate({ filterToggle: true }));
@@ -178,7 +191,7 @@ function mapDispatchToProps(dispatch) {
                 dispatch(searchQuery());
             };
         },
-        onAccountFilter(field) {
+        onFilter(field) {
             const update = {
                 [field.name]: field.value,
             };
@@ -187,8 +200,8 @@ function mapDispatchToProps(dispatch) {
         },
         advancedSearchPopulation() {
             dispatch(formUpdate({ filterToggle: true }));
-            dispatch(getPlats());
-            // dispatch(getLots());
+            dispatch(props.apiCall1());
+            dispatch(props.apiCall2());
         },
         clearFilters() {
             dispatch(formUpdate({ filterToggle: false }));
