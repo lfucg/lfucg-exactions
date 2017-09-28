@@ -257,7 +257,7 @@ class AccountLedgerSerializer(serializers.ModelSerializer):
 class PaymentSerializer(serializers.ModelSerializer):
     lot_id = LotField()
     credit_account = AccountField()
-    credit_source = AgreementField()
+    credit_source = AgreementField(read_only=True)
 
     total_paid = serializers.SerializerMethodField(read_only=True)
     payment_type_display = serializers.SerializerMethodField(read_only=True)
