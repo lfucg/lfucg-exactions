@@ -1043,7 +1043,6 @@ export function postPayment() {
                 paid_storm,
                 paid_open_space,
             } = activeForm;
-            console.log('HEY FROM API ACTIONS: ', activeForm);
             return {
                 lot_id,
                 paid_by,
@@ -1489,6 +1488,14 @@ export function getPagination(page) {
             } = activeForm;
             
             if (!page) {
+                if (currentPage === '/account-ledger/') {
+                    return '/ledger/?paginatePage';
+                }
+
+                if (currentPage === '/project-cost/') {
+                    return '/estimate/?paginatePage';
+                }
+
                 if (page_size) {
                     return `${currentPage}?paginatePage&pageSize=${page_size}`;
                 }
