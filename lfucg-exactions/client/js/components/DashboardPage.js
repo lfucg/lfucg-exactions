@@ -34,7 +34,7 @@ class DashboardPage extends React.Component {
                             </div>
                             <div className="col-md-4 col-sm-6">
                                 <Link to="agreement" role="link"><h2 className="in-page-link">Agreements</h2></Link>
-                                <p>Lexington agreements with based on resolution number or memos.</p>
+                                <p>Lexington agreements based on resolution numbers or memos.</p>
                             </div>
                             <div className="col-md-4 col-sm-6">
                                 <Link to="account-ledger" role="link"><h2 className="in-page-link">Credit Transfers</h2></Link>
