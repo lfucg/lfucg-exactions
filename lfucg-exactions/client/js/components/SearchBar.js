@@ -5,8 +5,6 @@ import { map } from 'ramda';
 import {
     searchQuery,
     getPagination,
-    getPlats,
-    getLots,
 } from '../actions/apiActions';
 
 import {
@@ -17,10 +15,9 @@ import {
 class SearchBar extends React.Component {
     componentDidount() {
         this.props.onComponentDidMount({
-            apiField1DisplayName: this.props.apiField1DisplayName,
-            apiField2DisplayName: this.props.apiField2DisplayName,
-            apiCall1: this.props.apiCall1,
-            apiCall2: this.props.apiCall2,
+            filterField1DisplayName: this.props.filterField1DisplayName,
+            filterField2DisplayName: this.props.filterField2DisplayName,
+            apiCalls: this.props.apiCalls,
             filterField1: this.props.filterField1,
             filterField2: this.props.filterField2,
         });
@@ -108,7 +105,7 @@ class SearchBar extends React.Component {
                             <div className="row">
                                 <div className="col-sm-6 form-group">
                                     <div className="col-sm-2 col-xs-12">
-                                        <label htmlFor={this.props.filterField1} className="form-label">{this.props.apiField1DisplayName}</label>
+                                        <label htmlFor={this.props.filterField1} className="form-label">{this.props.filterField1DisplayName}</label>
                                     </div>
                                     <div className="col-sm-10 col-xs-12">
                                         <select
@@ -118,7 +115,7 @@ class SearchBar extends React.Component {
                                           name={this.props.filterField1}
                                         >
                                             <option value="">
-                                                Select {this.props.apiField1DisplayName}
+                                                Select {this.props.filterField1DisplayName}
                                             </option>
                                             {platsList}
                                         </select>
@@ -126,7 +123,7 @@ class SearchBar extends React.Component {
                                 </div>
                                 <div className="col-sm-6 form-group">
                                     <div className="col-sm-2 col-xs-12">
-                                        <label htmlFor={this.props.filterField2} className="form-label">{this.props.apiField2DisplayName}</label>
+                                        <label htmlFor={this.props.filterField2} className="form-label">{this.props.filterField2DisplayName}</label>
                                     </div>
                                     <div className="col-sm-10 col-xs-12">
                                         <select
@@ -136,7 +133,7 @@ class SearchBar extends React.Component {
                                           name={this.props.filterField2}
                                         >
                                             <option value="">
-                                                Select {this.props.apiField2DisplayName}
+                                                Select {this.props.filterField2DisplayName}
                                             </option>
                                             {lotsList}
                                         </select>
@@ -162,10 +159,9 @@ SearchBar.propTypes = {
     advancedSearchPopulation: PropTypes.func,
     filterField1: PropTypes.string,
     filterField2: PropTypes.string,
-    apiField1DisplayName: PropTypes.string,
-    apiField2DisplayName: PropTypes.string,
-    apiCall1: PropTypes.func,
-    apiCall2: PropTypes.func,
+    filterField1DisplayName: PropTypes.string,
+    filterField2DisplayName: PropTypes.string,
+    apiCalls: PropTypes.object,
 };
 
 function mapStateToProps(state) {
@@ -200,8 +196,9 @@ function mapDispatchToProps(dispatch, props) {
         },
         advancedSearchPopulation() {
             dispatch(formUpdate({ filterToggle: true }));
-            dispatch(props.apiCall1());
-            dispatch(props.apiCall2());
+            (map((apiFunction) => {
+                dispatch(apiFunction());
+            })(props.apiCalls));
         },
         clearFilters() {
             dispatch(formUpdate({ filterToggle: false }));
