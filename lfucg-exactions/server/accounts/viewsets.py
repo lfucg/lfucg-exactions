@@ -15,6 +15,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from plats.models import Plat, Lot
 
 
+
 class AccountViewSet(viewsets.ModelViewSet):
     serializer_class = AccountSerializer
     queryset = Account.objects.all()

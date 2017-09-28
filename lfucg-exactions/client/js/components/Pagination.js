@@ -10,7 +10,7 @@ class Pagination extends React.Component {
         if (window.pageYOffset > 250) {
             window.scroll(0, 0);
         }
-       
+        
         const {
             onPaginationChangePage,
             activeForm,
@@ -18,7 +18,7 @@ class Pagination extends React.Component {
         } = this.props;
 
         // relates to pagination size in backend
-        const paginationSize = activeForm.filter_size || 10;
+        const paginationSize = activeForm.page_size || 10;
 
         return (
             <div className="container-fluid">
@@ -100,7 +100,7 @@ function mapDispatchToProps(dispatch) {
         },
         changePageSize(e) {
             const value = e.target.value;
-            dispatch(formUpdate({ filter_size: value }));
+            dispatch(formUpdate({ page_size: value }));
             dispatch(getPagination());
         },
     };

@@ -8,10 +8,10 @@ import Navbar from './Navbar';
 import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
 import Pagination from './Pagination';
+import SearchBar from './SearchBar';
 
 import {
     getPagination,
-    getAccountLedgerQuery,
 } from '../actions/apiActions';
 
 import {
@@ -27,7 +27,6 @@ class AccountLedgerExisting extends React.Component {
         const {
             currentUser,
             accountLedgers,
-            onAccountLedgerQuery,
         } = this.props;
 
         const accountLedgers_list = accountLedgers.length > 0 ? (
@@ -94,22 +93,7 @@ class AccountLedgerExisting extends React.Component {
 
                 <Breadcrumbs route={this.props.route} />
 
-                <div className="row search-box">
-                    <form onChange={onAccountLedgerQuery('query')} className="col-sm-10 col-sm-offset-1" >
-                        <fieldset>
-                            <div className="col-sm-2 col-xs-12">
-                                <label htmlFor="query" className="form-label">Search</label>
-                            </div>
-                            <div className="col-sm-10 col-xs-12">
-                                <input
-                                  type="text"
-                                  className="form-control"
-                                  placeholder="Search Account Ledgers"
-                                />
-                            </div>
-                        </fieldset>
-                    </form>
-                </div>
+                <SearchBar />
 
                 <div className="inside-body">
                     <div className="container">
@@ -128,7 +112,6 @@ AccountLedgerExisting.propTypes = {
     accountLedgers: PropTypes.object,
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
-    onAccountLedgerQuery: PropTypes.func,
 };
 
 function mapStateToProps(state) {
@@ -142,16 +125,6 @@ function mapDispatchToProps(dispatch) {
     return {
         onComponentDidMount() {
             dispatch(getPagination('/ledger/'));
-        },
-        onAccountLedgerQuery(field) {
-            return (e, ...args) => {
-                const value = typeof e.target.value !== 'undefined' ? e.target.value : args[1];
-                const update = {
-                    [field]: value,
-                };
-                dispatch(formUpdate(update));
-                dispatch(getAccountLedgerQuery());
-            };
         },
     };
 }

@@ -84,6 +84,7 @@ import {
     PUT_ACCOUNT_LEDGER,
 
     GET_PAGINATION,
+    SEARCH_QUERY,
 
 } from '../constants/apiConstants';
 
@@ -645,7 +646,7 @@ export function putLot(selectedLot) {
                 dues_storm_own,
                 dues_open_space_dev,
                 dues_open_space_own,
-                account,
+                account_id: account,
                 // payment,
             };
         },
@@ -1483,16 +1484,56 @@ export function getPagination(page) {
             } = getState();
             const {
                 currentPage,
-                filter_size,
+                page_size,
             } = activeForm;
             
             if (!page) {
-                return `${currentPage}?paginatePage&pageSize=${filter_size}`;
+                if (page_size) {
+                    return `${currentPage}?paginatePage&pageSize=${page_size}`;
+                }
+                return `${currentPage}?paginatePage`;
             }
             if (!page.includes('paginatePage')) {
                 return `${page}?paginatePage`;
             }
             return `${page}`;
+        },
+    };
+}
+
+export function searchQuery() {
+    return {
+        type: API_CALL,
+        endpoint: SEARCH_QUERY,
+        url: (getState) => {
+            const {
+                activeForm,
+            } = getState();
+
+
+            let query_all = `${activeForm.currentPage}?paginatePage`;
+
+            if (activeForm.currentPage === '/account-ledger/') {
+                query_all = '/ledger/?paginatePage';
+            }
+
+            if (activeForm.currentPage === '/project-cost/') {
+                query_all = '/estimate/?paginatePage';
+            }
+
+            map((a) => {
+                if (a[1] && a[0].startsWith('filter_')) {
+                    const field = a[0].slice(7, a[0].length);
+                    query_all += `&${field}=${a[1]}`;
+                }
+            })(Object.entries(activeForm));
+            console.log('QUERY STRING: ', query_all);
+            return query_all;
+        },
+        meta: {
+            debounce: {
+                time: 300,
+            },
         },
     };
 }

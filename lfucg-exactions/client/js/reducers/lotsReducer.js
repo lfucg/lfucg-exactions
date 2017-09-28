@@ -1,7 +1,7 @@
 import {
     GET_LOTS,
     GET_LOT_ID,
-    GET_LOT_QUERY,
+    SEARCH_QUERY,
     GET_PLAT_LOTS,
     POST_LOT,
     PUT_LOT,
@@ -17,12 +17,12 @@ const lotsReducer = (state = {}, action) => {
     switch (endpoint) {
     case GET_LOT_ID:
     case GET_LOTS:
-    case GET_LOT_QUERY:
     case GET_PLAT_LOTS:
     case POST_LOT:
     case PUT_LOT:
     case PUT_PERMIT_ID_ON_LOT:
         return action.response;
+    case SEARCH_QUERY:
     case GET_PAGINATION:
         const next = action.response.next;
         const prev = action.response.prev;
