@@ -15,11 +15,8 @@ import {
 class SearchBar extends React.Component {
     componentDidount() {
         this.props.onComponentDidMount({
-            filterField1DisplayName: this.props.filterField1DisplayName,
-            filterField2DisplayName: this.props.filterField2DisplayName,
             apiCalls: this.props.apiCalls,
-            filterField1: this.props.filterField1,
-            filterField2: this.props.filterField2,
+            advancedSearch: this.props.advancedSearch,
         });
     }
 
@@ -51,6 +48,31 @@ class SearchBar extends React.Component {
                     </option>
                 );
             })(lots));
+
+        const advancedSearchDropdowns = this.props &&
+            (map((field) => {
+                return (
+                    <div className="col-sm-6 form-group" key={field.filterField}>
+                        <div className="col-sm-2 col-xs-12">
+                            <label htmlFor={field.filterField} className="form-label">{field.displayName}</label>
+                        </div>
+                        <div className="col-sm-10 col-xs-12">
+                            <select
+                              className="form-control"
+                              onChange={() => onFilter(this[field.displayName])}
+                              ref={(input) => { this[field.displayName] = input; }}
+                              name={field.filterField}
+                            >
+                                <option value="">
+                                    Select {field.displayName}
+                                </option>
+                                {field.displayName === 'Plat' ? platsList : null}
+                                {field.displayName === 'Lot' ? lotsList : null}
+                            </select>
+                        </div>
+                    </div>
+                );
+            })(this.props.advancedSearch));
 
         return (
             <div>
@@ -103,42 +125,7 @@ class SearchBar extends React.Component {
                     >
                         <div className="col-xs-12 text-center">
                             <div className="row">
-                                <div className="col-sm-6 form-group">
-                                    <div className="col-sm-2 col-xs-12">
-                                        <label htmlFor={this.props.filterField1} className="form-label">{this.props.filterField1DisplayName}</label>
-                                    </div>
-                                    <div className="col-sm-10 col-xs-12">
-                                        <select
-                                          className="form-control"
-                                          onChange={() => onFilter(this.field_one)}
-                                          ref={(input) => { this.field_one = input; }}
-                                          name={this.props.filterField1}
-                                        >
-                                            <option value="">
-                                                Select {this.props.filterField1DisplayName}
-                                            </option>
-                                            {platsList}
-                                        </select>
-                                    </div>
-                                </div>
-                                <div className="col-sm-6 form-group">
-                                    <div className="col-sm-2 col-xs-12">
-                                        <label htmlFor={this.props.filterField2} className="form-label">{this.props.filterField2DisplayName}</label>
-                                    </div>
-                                    <div className="col-sm-10 col-xs-12">
-                                        <select
-                                          className="form-control"
-                                          onChange={() => onFilter(this.field_two)}
-                                          ref={(input) => { this.field_two = input; }}
-                                          name={this.props.filterField2}
-                                        >
-                                            <option value="">
-                                                Select {this.props.filterField2DisplayName}
-                                            </option>
-                                            {lotsList}
-                                        </select>
-                                    </div>
-                                </div>
+                                {advancedSearchDropdowns}
                             </div>
                         </div>
                     </div>
@@ -157,11 +144,8 @@ SearchBar.propTypes = {
     onFilter: PropTypes.func,
     clearFilters: PropTypes.func,
     advancedSearchPopulation: PropTypes.func,
-    filterField1: PropTypes.string,
-    filterField2: PropTypes.string,
-    filterField1DisplayName: PropTypes.string,
-    filterField2DisplayName: PropTypes.string,
-    apiCalls: PropTypes.object,
+    apiCalls: PropTypes.array,
+    advancedSearch: PropTypes.array,
 };
 
 function mapStateToProps(state) {
