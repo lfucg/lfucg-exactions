@@ -24,30 +24,10 @@ class SearchBar extends React.Component {
         const {
             onQuery,
             activeForm,
-            plats,
-            lots,
             onFilter,
             advancedSearchPopulation,
             clearFilters,
         } = this.props;
-
-        const platsList = plats && plats.length > 0 &&
-            (map((single_plat) => {
-                return (
-                    <option key={single_plat.id} value={single_plat.id} >
-                        {single_plat.name}
-                    </option>
-                );
-            })(plats));
-
-        const lotsList = lots && lots.length > 0 &&
-            (map((single_lot) => {
-                return (
-                    <option key={single_lot.id} value={single_lot.id} >
-                        {single_lot.address_full}
-                    </option>
-                );
-            })(lots));
 
         const advancedSearchDropdowns = this.props &&
             (map((field) => {
@@ -66,8 +46,7 @@ class SearchBar extends React.Component {
                                 <option value="">
                                     Select {field.displayName}
                                 </option>
-                                {field.displayName === 'Plat' ? platsList : null}
-                                {field.displayName === 'Lot' ? lotsList : null}
+                                {field.list}
                             </select>
                         </div>
                     </div>
