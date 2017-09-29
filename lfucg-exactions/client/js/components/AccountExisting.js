@@ -87,13 +87,11 @@ class AccountExisting extends React.Component {
                 <Breadcrumbs route={this.props.route} />
 
                 <SearchBar
-                  filterField1DisplayName={'Plat'}
-                  filterField2DisplayName={'Lot'}
-                  filterField1={'filter_plat_account__id'}
-                  filterField2={'filter_lot_account__id'}
-                  apiCall1={getPlats}
-                  apiCall2={getLots}
-                  apiCalls={[ getPlats, getLots ]}
+                  apiCalls={[getPlats, getLots]}
+                  advancedSearch={[
+                    { filterField: 'filter_plat_account__id', displayName: 'Plat' },
+                    { filterField: 'filter_lot_account__id', displayName: 'Lot' },
+                  ]}
                 />
 
                 <div className="inside-body">
