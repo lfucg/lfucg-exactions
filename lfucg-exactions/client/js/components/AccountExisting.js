@@ -26,7 +26,27 @@ class AccountExisting extends React.Component {
         const {
             currentUser,
             accounts,
+            plats,
+            lots,
         } = this.props;
+
+        const platsList = plats && plats.length > 0 &&
+            (map((single_plat) => {
+                return (
+                    <option key={single_plat.id} value={single_plat.id} >
+                        {single_plat.name}
+                    </option>
+                );
+            })(plats));
+
+        const lotsList = lots && lots.length > 0 &&
+            (map((single_lot) => {
+                return (
+                    <option key={single_lot.id} value={single_lot.id} >
+                        {single_lot.address_full}
+                    </option>
+                );
+            })(lots));
 
         const accounts_list = accounts && accounts.length > 0 ? (
             map((account) => {
@@ -89,8 +109,8 @@ class AccountExisting extends React.Component {
                 <SearchBar
                   apiCalls={[getPlats, getLots]}
                   advancedSearch={[
-                    { filterField: 'filter_plat_account__id', displayName: 'Plat' },
-                    { filterField: 'filter_lot_account__id', displayName: 'Lot' },
+                    { filterField: 'filter_plat_account__id', displayName: 'Plat', list: platsList },
+                    { filterField: 'filter_lot_account__id', displayName: 'Lot', list: lotsList },
                   ]}
                 />
 
@@ -110,6 +130,8 @@ function mapStateToProps(state) {
     return {
         currentUser: state.currentUser,
         accounts: state.accounts,
+        plats: state.plats,
+        lots: state.lots,
     };
 }
 
@@ -124,6 +146,8 @@ function mapDispatchToProps(dispatch) {
 AccountExisting.propTypes = {
     currentUser: PropTypes.object,
     accounts: PropTypes.array,
+    plats: PropTypes.array,
+    lots: PropTypes.array,
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
 };
