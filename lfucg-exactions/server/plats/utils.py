@@ -73,3 +73,27 @@ def calculate_lot_balance(lot_id):
 
     return all_exactions
 
+def calculate_plat_balance(plat_id):
+    plat_object = Plat.objects.filter(id=plat_id)
+    if plat_object.exists():
+        plat = plat_object[0]
+
+    lots_on_plat = Lot.objects.filter(plat=plat_id)
+
+    lots_sewer_paid = 0
+    lots_non_sewer_paid = 0
+
+    if lots_on_plat.exists():
+        for lot in lots_on_plat:
+            calculated_lot = calculate_lot_balance(lot.id)
+
+            lots_non_sewer_paid += calculated_lot['non_sewer_payment'] + calculated_lot['non_sewer_credits_applied']
+            lots_sewer_paid += calculated_lot['sewer_payment'] + calculated_lot['sewer_credits_applied']
+
+    plat_exactions = {
+        'plat_sewer_due': plat.sewer_due - lots_sewer_paid,
+        'plat_non_sewer_due': plat.non_sewer_due - lots_non_sewer_paid,
+    }
+
+    return plat_exactions
+

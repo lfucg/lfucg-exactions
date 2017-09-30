@@ -1,6 +1,6 @@
 
 from rest_framework.pagination import PageNumberPagination
-from rest_framework import viewsets, status
+from rest_framework import viewsets, status, filters
 from django.db.models import Q
 from rest_framework.response import Response
 
@@ -11,6 +11,8 @@ from .permissions import CanAdminister
 
 from django.conf import settings
 
+from django_filters.rest_framework import DjangoFilterBackend
+
 from plats.models import Plat, Lot
 
 
@@ -18,6 +20,9 @@ class AccountViewSet(viewsets.ModelViewSet):
     serializer_class = AccountSerializer
     queryset = Account.objects.all()
     permission_classes = (CanAdminister,)
+    filter_backends = (DjangoFilterBackend, filters.SearchFilter,)
+    filter_fields = ('plat_account__id', 'lot_account__id')
+    search_fields = ('account_name', 'contact_full_name', 'address_full', 'phone', 'email',)
 
     def get_queryset(self):
         queryset = Account.objects.all()
