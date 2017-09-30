@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from .models import *
-from .utils import calculate_lot_balance
+from .utils import calculate_lot_balance, calculate_plat_balance
 
 from notes.models import Note
 from notes.serializers import NoteSerializer
@@ -84,6 +84,7 @@ class PlatSerializer(serializers.ModelSerializer):
     cleaned_total_acreage = serializers.SerializerMethodField(read_only=True)
     subdivision = SubdivisionField(required=False)
     plat_type_display = serializers.SerializerMethodField(read_only=True)
+    plat_exactions = serializers.SerializerMethodField(read_only=True)
 
     def get_cleaned_total_acreage(self, obj):
         set_acreage = str(obj.total_acreage).rstrip('0').rstrip('.')
@@ -91,6 +92,14 @@ class PlatSerializer(serializers.ModelSerializer):
 
     def get_plat_type_display(self, obj):
         return obj.get_plat_type_display()
+
+    def get_plat_exactions(self, obj):
+        calculated_exactions = calculate_plat_balance(obj.id)
+
+        return {
+            'plat_sewer_due': '${:,.2f}'.format(calculated_exactions['plat_sewer_due']),
+            'plat_non_sewer_due': '${:,.2f}'.format(calculated_exactions['plat_non_sewer_due']),
+        }
 
     class Meta:
         model = Plat 
@@ -126,6 +135,8 @@ class PlatSerializer(serializers.ModelSerializer):
             'non_sewer_due',
             'plat_zone',
             'plat_type_display',
+
+            'plat_exactions',
         )
 
 class PlatField(serializers.Field):

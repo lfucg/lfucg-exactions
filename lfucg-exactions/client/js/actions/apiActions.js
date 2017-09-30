@@ -35,6 +35,7 @@ import {
 
     GET_ACCOUNTS,
     GET_ACCOUNT_ID,
+    GET_LFUCG_ACCOUNT,
     GET_ACCOUNT_QUERY,
     POST_ACCOUNT,
     PUT_ACCOUNT,
@@ -738,6 +739,14 @@ export function getAccountID(selectedAccount) {
     };
 }
 
+export function getLFUCGAccount() {
+    return {
+        type: API_CALL,
+        endpoint: GET_LFUCG_ACCOUNT,
+        url: '/account/?search=LFUCG',
+    };
+}
+
 export function getAccountQuery() {
     return {
         type: API_CALL,
@@ -986,7 +995,6 @@ export function getPaymentQuery() {
 }
 
 export function getLotPayments(selectedLot) {
-    console.log('SELECTED LOT', selectedLot);
     return {
         type: API_CALL,
         endpoint: GET_LOT_PAYMENTS,
