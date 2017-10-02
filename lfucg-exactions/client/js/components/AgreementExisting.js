@@ -30,7 +30,7 @@ class AgreementExisting extends React.Component {
         const agreement_types = [
             { id: 'MEMO', name: 'Memo' },
             { id: 'RESOLUTION', name: 'Resolution' },
-            { id: 'OTheR', name: 'Other' },
+            { id: 'OTHER', name: 'Other' },
         ];
 
         const accountsList = accounts && accounts.length > 0 &&

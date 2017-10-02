@@ -100,7 +100,7 @@ class AccountSummary extends React.Component {
                             </div>
                         </div>
                         <div className="row">
-                            <p className="col-sm-4 col-xs-6">Total Exactions: ${lot.total_due}</p>
+                            <p className="col-sm-4 col-xs-6">Current Exactions: ${lot.lot_exactions && lot.lot_exactions.current_exactions}</p>
                             <p className="col-sm-4 col-xs-6">Approval: {lot.is_approved ? 'Approved' : 'Not Approved'}</p>
                             <p className="col-sm-4 col-xs-6">Lot Number: {lot.lot_number}</p>
                             <p className="col-sm-4 col-xs-6">Parcel ID: {lot.parcel_id}</p>

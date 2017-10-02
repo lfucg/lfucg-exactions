@@ -39,7 +39,7 @@ class Pagination extends React.Component {
                         <div className="row">
                             <div className="col-xs-12 col-sm-4 col-sm-offset-4 text-center">
                                 <button
-                                  aria-label="changePageSize"
+                                  aria-label="Change Page Size"
                                   className="btn btn-link"
                                   value="10"
                                   onClick={changePageSize}
@@ -47,7 +47,7 @@ class Pagination extends React.Component {
                                 10
                                 </button>
                                 <button
-                                  aria-label="changePageSize"
+                                  aria-label="Change Page Size"
                                   className="btn btn-link"
                                   value="25"
                                   onClick={changePageSize}
@@ -55,7 +55,7 @@ class Pagination extends React.Component {
                                 25
                                 </button>
                                 <button
-                                  aria-label="changePageSize"
+                                  aria-label="Change Page Size"
                                   className="btn btn-link"
                                   value="50"
                                   onClick={changePageSize}
@@ -63,7 +63,7 @@ class Pagination extends React.Component {
                                 50
                                 </button>
                                 <button
-                                  aria-label="changePageSize"
+                                  aria-label="Change Page Size"
                                   className="btn btn-link"
                                   value="9999"
                                   onClick={changePageSize}
