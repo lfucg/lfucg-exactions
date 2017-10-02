@@ -31,7 +31,7 @@ class Pagination extends React.Component {
                         </ul>
                     </div>
                 </div>
-                {activeForm.count > paginationSize &&
+                {activeForm.count > 10 &&
                     <div>
                         <div className="row">
                             <div className="col-xs-12 col-sm-4 col-sm-offset-4 text-center">Results per page</div>
