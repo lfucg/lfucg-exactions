@@ -161,10 +161,10 @@ class PlatExisting extends React.Component {
 
 PlatExisting.propTypes = {
     currentUser: PropTypes.object,
-    plats: PropTypes.object,
-    accounts: PropTypes.object,
-    subdivisions: PropTypes.object,
-    lots: PropTypes.object,
+    plats: PropTypes.array,
+    accounts: PropTypes.array,
+    subdivisions: PropTypes.array,
+    lots: PropTypes.array,
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
 };

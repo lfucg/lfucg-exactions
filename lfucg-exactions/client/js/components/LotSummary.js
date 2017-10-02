@@ -517,11 +517,11 @@ class LotSummary extends React.Component {
 
 LotSummary.propTypes = {
     currentUser: PropTypes.object,
-    plats: PropTypes.object,
-    lots: PropTypes.object,
-    accounts: PropTypes.object,
-    payments: PropTypes.object,
-    accountLedgers: PropTypes.object,
+    plats: PropTypes.array,
+    lots: PropTypes.array,
+    accounts: PropTypes.array,
+    payments: PropTypes.array,
+    accountLedgers: PropTypes.array,
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
     addPermitToLot: PropTypes.func,

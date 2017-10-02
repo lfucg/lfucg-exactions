@@ -9,7 +9,7 @@ import {
 } from '../constants/apiConstants';
 
 
-const agreementsReducer = (state = {}, action) => {
+const agreementsReducer = (state = [], action) => {
     const {
         endpoint,
     } = action;

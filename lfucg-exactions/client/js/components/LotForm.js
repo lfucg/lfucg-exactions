@@ -393,7 +393,7 @@ class LotForm extends React.Component {
 LotForm.propTypes = {
     activeForm: PropTypes.object,
     plats: PropTypes.array,
-    lots: PropTypes.object,
+    lots: PropTypes.array,
     accounts: PropTypes.array,
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,

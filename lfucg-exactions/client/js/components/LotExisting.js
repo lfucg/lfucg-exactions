@@ -16,15 +16,10 @@ import {
     getAccounts,
 } from '../actions/apiActions';
 
-import {
-    formUpdate,
-} from '../actions/formActions';
-
 class LotExisting extends React.Component {
     componentDidMount() {
         this.props.onComponentDidMount();
     }
-
 
     render() {
         const {

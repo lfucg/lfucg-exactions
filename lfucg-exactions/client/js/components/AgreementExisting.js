@@ -128,8 +128,8 @@ class AgreementExisting extends React.Component {
 
 AgreementExisting.propTypes = {
     currentUser: PropTypes.object,
-    agreements: PropTypes.object,
-    accounts: PropTypes.object,
+    agreements: PropTypes.array,
+    accounts: PropTypes.array,
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
 };

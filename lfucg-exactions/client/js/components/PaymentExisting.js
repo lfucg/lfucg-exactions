@@ -146,7 +146,7 @@ class PaymentExisting extends React.Component {
 
 PaymentExisting.propTypes = {
     currentUser: PropTypes.object,
-    payments: PropTypes.object,
+    payments: PropTypes.array,
     route: PropTypes.object,
     accounts: PropTypes.array,
     lots: PropTypes.array,

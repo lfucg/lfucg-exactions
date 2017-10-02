@@ -9,7 +9,7 @@ import {
 } from '../constants/apiConstants';
 
 
-const platsReducer = (state = {}, action) => {
+const platsReducer = (state = [], action) => {
     const {
         endpoint,
     } = action;

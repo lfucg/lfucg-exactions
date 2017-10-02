@@ -150,7 +150,7 @@ class ProjectExisting extends React.Component {
 
 ProjectExisting.propTypes = {
     currentUser: PropTypes.object,
-    projects: PropTypes.object,
+    projects: PropTypes.array,
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
     agreements: PropTypes.array,

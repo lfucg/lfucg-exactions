@@ -10,7 +10,7 @@ import {
 } from '../constants/apiConstants';
 
 
-const lotsReducer = (state = {}, action) => {
+const lotsReducer = (state = [], action) => {
     const {
         endpoint,
     } = action;

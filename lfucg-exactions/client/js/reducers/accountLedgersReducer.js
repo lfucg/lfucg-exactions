@@ -11,7 +11,7 @@ import {
 } from '../constants/apiConstants';
 
 
-const accountLedgersReducer = (state = {}, action) => {
+const accountLedgersReducer = (state = [], action) => {
     const {
         endpoint,
     } = action;

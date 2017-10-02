@@ -11,7 +11,7 @@ import {
 } from '../constants/apiConstants';
 
 
-const paymentReducer = (state = {}, action) => {
+const paymentReducer = (state = [], action) => {
     const {
         endpoint,
     } = action;
@@ -24,7 +24,6 @@ const paymentReducer = (state = {}, action) => {
         return action.response;
     case POST_PAYMENT:
     case PUT_PAYMENT:
-        console.log('HEY FROM THE PAYMENTS REDUCER');
         return {};
     case GET_PAGINATION:
     case SEARCH_QUERY:
