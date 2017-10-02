@@ -245,7 +245,7 @@ class ProjectCostEstimateViewSet(viewsets.ModelViewSet):
             pagination_class = PageNumberPagination
             PageNumberPagination.page_size = pageSize
 
-        return queryset
+        return queryset.order_by('-date_modified')
 
     def create(self, request):
         data_set = request.data
