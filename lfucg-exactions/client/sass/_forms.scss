@@ -138,14 +138,35 @@
 }
 
 .report-table {
-    border: 1px solid black;
-    padding: 5px;
-    th {
-        border: 1px solid black;
-        padding: 5px;
+    border-collapse: collapse;
+    .report-header {
+        h5 {
+            line-height: 60px;
+            height: 60px;
+            margin-bottom: 0px;
+            border-top: 1px solid black;
+            border-bottom: 1px solid black;
+            border-left: 1px solid black;
+        }
     }
-    td {
-        border: 1px solid black;
-        padding: 5px;
+    .col-sm-7 {
+        padding: 0px;
+        h5 {
+            .report-wrap-header {
+                line-height: 20px;
+                height: 60px;
+                margin-bottom: 0px;
+                border-left: 1px solid black;
+            }
+        }
+    }
+    .report-data {
+        padding-top: 10px;
+        height: 36px;
+        border-bottom: 1px solid black;
+        border-left: 1px solid black;
+    }
+    .right-border {
+        border-right: 1px solid black;
     }
 }
