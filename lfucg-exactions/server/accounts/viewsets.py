@@ -118,7 +118,7 @@ class PaymentViewSet(viewsets.ModelViewSet):
     queryset = Payment.objects.all()
     permission_classes = (CanAdminister,)
     filter_backends = (DjangoFilterBackend, filters.SearchFilter,)
-    search_fields = ('lot_id__address_full', 'lot_id__address_number', 'payment_type', 'check_number', 'credit_account__account_name', 'paid_by', 'credit_source__resolution_number')
+    search_fields = ('lot_id__address_full', 'payment_type', 'check_number', 'credit_account__account_name', 'paid_by', 'credit_source__resolution_number')
     filter_fields = ('payment_type', 'paid_by_type', 'credit_account', 'lot_id', 'credit_source')
 
     def get_queryset(self):
