@@ -1,13 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router';
 import { map } from 'ramda';
 import PropTypes from 'prop-types';
 
 import Navbar from './Navbar';
 import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
-import Notes from './Notes';
 
 import {
     getPlatID,
@@ -25,6 +23,7 @@ class PlatReport extends React.Component {
         const {
             plats,
             lots,
+            accounts,
         } = this.props;
 
         const platLots = lots && lots.length > 0 && (map((lot) => {
@@ -38,6 +37,15 @@ class PlatReport extends React.Component {
                 </tr>
             );
         })(lots));
+
+        const platZones = plats && plats.plat_zone && plats.plat_zone.length > 0 && (map((zone) => {
+            return (
+                <tr key={zone.id} className="report-table">
+                    <td>{zone.zone}</td>
+                    <td>{zone.cleaned_acres}</td>
+                </tr>
+            );
+        })(plats.plat_zone));
 
         return (
             <div className="plat-report">
@@ -71,6 +79,21 @@ class PlatReport extends React.Component {
                                 <td>{plats.non_buildable_lots}</td>
                             </tr>
                             <tr />
+                            <h3>Developer Account</h3>
+                            <tr className="report-table">
+                                <th>Developer Name</th>
+                            </tr>
+                            <tr className="report-table">
+                                <td>{accounts.id && accounts.account_name}</td>
+                            </tr>
+                            <tr />
+                            <h3>Plat Zones</h3>
+                            <tr className="report-table">
+                                <th>Zone</th>
+                                <th>Acres</th>
+                            </tr>
+                            {platZones}
+                            <tr />
                             <h3>Lots</h3>
                             <tr className="report-table">
                                 <th>Lot Address</th>
@@ -97,6 +120,7 @@ class PlatReport extends React.Component {
 PlatReport.propTypes = {
     plats: PropTypes.object,
     lots: PropTypes.object,
+    accounts: PropTypes.object,
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
 };
@@ -105,6 +129,7 @@ function mapStateToProps(state) {
     return {
         plats: state.plats,
         lots: state.lots,
+        accounts: state.accounts,
     };
 }
 
