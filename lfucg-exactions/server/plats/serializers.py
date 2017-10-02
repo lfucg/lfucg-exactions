@@ -99,6 +99,7 @@ class PlatSerializer(serializers.ModelSerializer):
         return {
             'plat_sewer_due': '${:,.2f}'.format(calculated_exactions['plat_sewer_due']),
             'plat_non_sewer_due': '${:,.2f}'.format(calculated_exactions['plat_non_sewer_due']),
+            'remaining_lots': calculated_exactions['remaining_lots'],
         }
 
     class Meta:
