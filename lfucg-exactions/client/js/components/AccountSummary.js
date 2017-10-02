@@ -480,10 +480,10 @@ class AccountSummary extends React.Component {
 
 AccountSummary.propTypes = {
     currentUser: PropTypes.object,
-    accounts: PropTypes.object,
-    agreements: PropTypes.object,
-    payments: PropTypes.object,
-    accountLedgers: PropTypes.object,
+    accounts: PropTypes.array,
+    agreements: PropTypes.array,
+    payments: PropTypes.array,
+    accountLedgers: PropTypes.array,
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
 };

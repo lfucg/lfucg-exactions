@@ -95,8 +95,8 @@ class PlatReport extends React.Component {
 }
 
 PlatReport.propTypes = {
-    plats: PropTypes.object,
-    lots: PropTypes.object,
+    plats: PropTypes.array,
+    lots: PropTypes.array,
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
 };

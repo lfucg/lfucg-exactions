@@ -17,10 +17,6 @@ import {
     getAccounts,
 } from '../actions/apiActions';
 
-import {
-    formUpdate,
-} from '../actions/formActions';
-
 class AccountLedgerExisting extends React.Component {
     componentDidMount() {
         this.props.onComponentDidMount();
@@ -154,7 +150,7 @@ class AccountLedgerExisting extends React.Component {
 
 AccountLedgerExisting.propTypes = {
     currentUser: PropTypes.object,
-    accountLedgers: PropTypes.object,
+    accountLedgers: PropTypes.array,
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
     agreements: PropTypes.array,

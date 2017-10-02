@@ -176,10 +176,10 @@ class AccountLedgerForm extends React.Component {
 
 AccountLedgerForm.propTypes = {
     activeForm: PropTypes.object,
-    lots: PropTypes.object,
-    accounts: PropTypes.object,
-    agreements: PropTypes.object,
-    accountLedgers: PropTypes.object,
+    lots: PropTypes.array,
+    accounts: PropTypes.array,
+    agreements: PropTypes.array,
+    accountLedgers: PropTypes.array,
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
     onSubmit: PropTypes.func,
