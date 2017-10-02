@@ -31,51 +31,49 @@ class Pagination extends React.Component {
                         </ul>
                     </div>
                 </div>
-                <div className="row">
-                    <div className="col-xs-4">
-                        <div className="col-xs-4 text-center inline-block">Results per page</div>
-                        <div className="col-xs-2 text-center">
-                            <button
-                              aria-label="changePageSize"
-                              className="btn btn-link"
-                              value="10"
-                              onClick={changePageSize}
-                            >
-                            10
-                            </button>
+                {activeForm.count > paginationSize &&
+                    <div>
+                        <div className="row">
+                            <div className="col-xs-12 col-sm-4 col-sm-offset-4 text-center">Results per page</div>
                         </div>
-                        <div className="col-xs-2 text-center">
-                            <button
-                              aria-label="changePageSize"
-                              className="btn btn-link"
-                              value="25"
-                              onClick={changePageSize}
-                            >
-                            25
-                            </button>
-                        </div>
-                        <div className="col-xs-2 text-center">
-                            <button
-                              aria-label="changePageSize"
-                              className="btn btn-link"
-                              value="50"
-                              onClick={changePageSize}
-                            >
-                            50
-                            </button>
-                        </div>
-                        <div className="col-xs-2 text-center">
-                            <button
-                              aria-label="changePageSize"
-                              className="btn btn-link"
-                              value="9999"
-                              onClick={changePageSize}
-                            >
-                            All
-                            </button>
+                        <div className="row">
+                            <div className="col-xs-12 col-sm-4 col-sm-offset-4 text-center">
+                                <button
+                                  aria-label="changePageSize"
+                                  className="btn btn-link"
+                                  value="10"
+                                  onClick={changePageSize}
+                                >
+                                10
+                                </button>
+                                <button
+                                  aria-label="changePageSize"
+                                  className="btn btn-link"
+                                  value="25"
+                                  onClick={changePageSize}
+                                >
+                                25
+                                </button>
+                                <button
+                                  aria-label="changePageSize"
+                                  className="btn btn-link"
+                                  value="50"
+                                  onClick={changePageSize}
+                                >
+                                50
+                                </button>
+                                <button
+                                  aria-label="changePageSize"
+                                  className="btn btn-link"
+                                  value="9999"
+                                  onClick={changePageSize}
+                                >
+                                All
+                                </button>
+                            </div>
                         </div>
                     </div>
-                </div>
+                }
             </div>
         );
     }

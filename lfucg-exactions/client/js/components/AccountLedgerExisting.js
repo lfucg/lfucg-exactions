@@ -12,6 +12,9 @@ import SearchBar from './SearchBar';
 
 import {
     getPagination,
+    getAgreements,
+    getLots,
+    getAccounts,
 } from '../actions/apiActions';
 
 import {
@@ -27,7 +30,40 @@ class AccountLedgerExisting extends React.Component {
         const {
             currentUser,
             accountLedgers,
+            lots,
+            agreements,
+            accounts,
         } = this.props;
+
+        const entry_types = [
+            { id: 'NEW', name: 'New' },
+            { id: 'SELL', name: 'Sell' },
+            { id: 'TRANSFER', name: 'Transfer' },
+        ];
+
+        const agreementsList = agreements && agreements.length > 0 &&
+            (map((single_agreement) => {
+                return {
+                    id: single_agreement.id,
+                    name: single_agreement.resolution_number,
+                };
+            })(agreements));
+
+        const lotsList = lots && lots.length > 0 &&
+            (map((single_lot) => {
+                return {
+                    id: single_lot.id,
+                    name: single_lot.address_full,
+                };
+            })(lots));
+
+        const accountsList = accounts && accounts.length > 0 &&
+            (map((single_account) => {
+                return {
+                    id: single_account.id,
+                    name: single_account.account_name,
+                };
+            })(accounts));
 
         const accountLedgers_list = accountLedgers.length > 0 ? (
             map((accountLedger) => {
@@ -93,7 +129,16 @@ class AccountLedgerExisting extends React.Component {
 
                 <Breadcrumbs route={this.props.route} />
 
-                <SearchBar />
+                <SearchBar
+                  apiCalls={[getAgreements, getLots, getAccounts]}
+                  advancedSearch={[
+                    { filterField: 'filter_entry_type', displayName: 'Type', list: entry_types },
+                    { filterField: 'filter_agreement', displayName: 'Agreement', list: agreementsList },
+                    { filterField: 'filter_account_to', displayName: 'Account To', list: accountsList },
+                    { filterField: 'filter_account_from', displayName: 'Account From', list: accountsList },
+                    { filterField: 'filter_lot', displayName: 'Lots', list: lotsList },
+                  ]}
+                />
 
                 <div className="inside-body">
                     <div className="container">
@@ -112,12 +157,18 @@ AccountLedgerExisting.propTypes = {
     accountLedgers: PropTypes.object,
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
+    agreements: PropTypes.array,
+    lots: PropTypes.array,
+    accounts: PropTypes.array,
 };
 
 function mapStateToProps(state) {
     return {
         currentUser: state.currentUser,
         accountLedgers: state.accountLedgers,
+        agreements: state.agreements,
+        lots: state.lots,
+        accounts: state.accounts,
     };
 }
 

@@ -13,7 +13,7 @@ import {
 } from '../actions/formActions';
 
 class SearchBar extends React.Component {
-    componentDidount() {
+    componentDidMount() {
         this.props.onComponentDidMount({
             apiCalls: this.props.apiCalls,
             advancedSearch: this.props.advancedSearch,
@@ -29,16 +29,16 @@ class SearchBar extends React.Component {
             clearFilters,
         } = this.props;
 
-        const advancedSearchDropdowns = this.props &&
+        const advancedSearchDropdowns = this.props && this.props.advancedSearch &&
             (map((field) => {
                 return (
                     <div className="col-sm-6 form-group" key={field.filterField}>
-                        <div className="col-sm-2 col-xs-12">
+                        <div className="col-sm-4 col-xs-12">
                             <label htmlFor={field.filterField} className="form-label">{field.displayName}</label>
                         </div>
-                        <div className="col-sm-10 col-xs-12">
+                        <div className="col-sm-8 col-xs-12">
                             <select
-                              className="form-control"
+                              className="form-control dropdownFilters"
                               onChange={() => onFilter(this[field.displayName])}
                               ref={(input) => { this[field.displayName] = input; }}
                               name={field.filterField}
@@ -46,7 +46,13 @@ class SearchBar extends React.Component {
                                 <option value="">
                                     Select {field.displayName}
                                 </option>
-                                {field.list}
+                                {map((option_item) => {
+                                    return (
+                                        <option key={`${option_item.id}_${option_item.name}`} value={option_item.id} >
+                                            {option_item.name}
+                                        </option>
+                                    );
+                                })(field.list)}
                             </select>
                         </div>
                     </div>
@@ -118,8 +124,6 @@ SearchBar.propTypes = {
     onComponentDidMount: PropTypes.func,
     onQuery: PropTypes.func,
     activeForm: PropTypes.object,
-    plats: PropTypes.array,
-    lots: PropTypes.array,
     onFilter: PropTypes.func,
     clearFilters: PropTypes.func,
     advancedSearchPopulation: PropTypes.func,
@@ -130,15 +134,13 @@ SearchBar.propTypes = {
 function mapStateToProps(state) {
     return {
         activeForm: state.activeForm,
-        plats: state.plats,
-        lots: state.lots,
     };
 }
 
 function mapDispatchToProps(dispatch, props) {
     return {
         onComponentDidMount() {
-            dispatch(formUpdate({ filterToggle: true }));
+            dispatch(formUpdate({ filterToggle: false }));
         },
         onQuery(field) {
             return (e, ...args) => {
@@ -164,10 +166,14 @@ function mapDispatchToProps(dispatch, props) {
             })(props.apiCalls));
         },
         clearFilters() {
-            dispatch(formUpdate({ filterToggle: false }));
             dispatch(formReset());
-            document.getElementById('query').value = '';
+            dispatch(formUpdate({ filterToggle: false }));
             dispatch(getPagination());
+            document.getElementById('query').value = '';
+            const dropdowns = document.getElementsByClassName('dropdownFilters');
+            (map((dropdown) => {
+                dropdown.selectedIndex = 0;
+            })(dropdowns));
         },
     };
 }

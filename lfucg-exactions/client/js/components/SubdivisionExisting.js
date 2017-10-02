@@ -12,11 +12,9 @@ import SearchBar from './SearchBar';
 
 import {
     getPagination,
+    getPlats,
 } from '../actions/apiActions';
 
-import {
-    formUpdate,
-} from '../actions/formActions';
 
 class SubdivisionExisting extends React.Component {
     componentDidMount() {
@@ -28,7 +26,16 @@ class SubdivisionExisting extends React.Component {
         const {
             currentUser,
             subdivisions,
+            plats,
         } = this.props;
+
+        const platsList = plats && plats.length > 0 &&
+            (map((single_plat) => {
+                return {
+                    id: single_plat.id,
+                    name: single_plat.name,
+                };
+            })(plats));
 
         const subdivisions_list = subdivisions && subdivisions.length > 0 &&
             map((subdivision) => {
@@ -80,7 +87,12 @@ class SubdivisionExisting extends React.Component {
 
                 <Breadcrumbs route={this.props.route} />
 
-                <SearchBar />
+                <SearchBar
+                  apiCalls={[getPlats]}
+                  advancedSearch={[
+                    { filterField: 'filter_plat__id', displayName: 'Plat', list: platsList },
+                  ]}
+                />
 
                 <div className="inside-body">
                     <div className="container">
@@ -96,7 +108,8 @@ class SubdivisionExisting extends React.Component {
 
 SubdivisionExisting.propTypes = {
     currentUser: PropTypes.object,
-    subdivisions: PropTypes.object,
+    subdivisions: PropTypes.array,
+    plats: PropTypes.array,
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
 };
@@ -105,6 +118,7 @@ function mapStateToProps(state) {
     return {
         currentUser: state.currentUser,
         subdivisions: state.subdivisions,
+        plats: state.plats,
     };
 }
 

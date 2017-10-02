@@ -12,10 +12,9 @@ import SearchBar from './SearchBar';
 
 import {
     getPagination,
+    getProjects,
 } from '../actions/apiActions';
 
-import {
-} from '../actions/formActions';
 
 class ProjectCostExisting extends React.Component {
     componentDidMount() {
@@ -26,7 +25,16 @@ class ProjectCostExisting extends React.Component {
         const {
             currentUser,
             projectCosts,
+            projects,
         } = this.props;
+
+        const projectsList = projects && projects.length > 0 &&
+            (map((single_project) => {
+                return {
+                    id: single_project.id,
+                    name: single_project.name,
+                };
+            })(projects));
 
         const projectCosts_list = projectCosts.length > 0 ? (
             map((projectCost) => {
@@ -83,7 +91,12 @@ class ProjectCostExisting extends React.Component {
 
                 <Breadcrumbs route={this.props.route} />
 
-                <SearchBar />
+                <SearchBar
+                  apiCalls={[getProjects]}
+                  advancedSearch={[
+                    { filterField: 'filter_project_id', displayName: 'Project', list: projectsList },
+                  ]}
+                />
 
                 <div className="inside-body">
                     <div className="container">
@@ -102,13 +115,14 @@ ProjectCostExisting.propTypes = {
     projectCosts: PropTypes.object,
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
-    onProjectCostQuery: PropTypes.func,
+    projects: PropTypes.array,
 };
 
 function mapStateToProps(state) {
     return {
         currentUser: state.currentUser,
         projectCosts: state.projectCosts,
+        projects: state.projects,
     };
 }
 

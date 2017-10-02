@@ -32,20 +32,18 @@ class AccountExisting extends React.Component {
 
         const platsList = plats && plats.length > 0 &&
             (map((single_plat) => {
-                return (
-                    <option key={single_plat.id} value={single_plat.id} >
-                        {single_plat.name}
-                    </option>
-                );
+                return {
+                    id: single_plat.id,
+                    name: single_plat.name,
+                };
             })(plats));
 
         const lotsList = lots && lots.length > 0 &&
             (map((single_lot) => {
-                return (
-                    <option key={single_lot.id} value={single_lot.id} >
-                        {single_lot.address_full}
-                    </option>
-                );
+                return {
+                    id: single_lot.id,
+                    name: single_lot.address_full,
+                };
             })(lots));
 
         const accounts_list = accounts && accounts.length > 0 ? (

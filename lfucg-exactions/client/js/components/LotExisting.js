@@ -12,6 +12,8 @@ import SearchBar from './SearchBar';
 
 import {
     getPagination,
+    getPlats,
+    getAccounts,
 } from '../actions/apiActions';
 
 import {
@@ -28,7 +30,25 @@ class LotExisting extends React.Component {
         const {
             currentUser,
             lots,
+            plats,
+            accounts,
         } = this.props;
+
+        const platsList = plats && plats.length > 0 &&
+            (map((single_plat) => {
+                return {
+                    id: single_plat.id,
+                    name: single_plat.name,
+                };
+            })(plats));
+
+        const accountsList = accounts && accounts.length > 0 &&
+            (map((single_account) => {
+                return {
+                    id: single_account.id,
+                    name: single_account.account_name,
+                };
+            })(accounts));
 
         const lots_list = lots.length > 0 ? (
             map((lot) => {
@@ -84,7 +104,13 @@ class LotExisting extends React.Component {
 
                 <Breadcrumbs route={this.props.route} />
 
-                <SearchBar />
+                <SearchBar
+                  apiCalls={[getPlats, getAccounts]}
+                  advancedSearch={[
+                    { filterField: 'filter_plat', displayName: 'Plat', list: platsList },
+                    { filterField: 'filter_account', displayName: 'Developer', list: accountsList },
+                  ]}
+                />
 
                 <div className="inside-body">
                     <div className="container">
@@ -101,6 +127,8 @@ class LotExisting extends React.Component {
 LotExisting.propTypes = {
     currentUser: PropTypes.object,
     lots: PropTypes.array,
+    plats: PropTypes.array,
+    accounts: PropTypes.array,
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
 };
@@ -109,6 +137,8 @@ function mapStateToProps(state) {
     return {
         currentUser: state.currentUser,
         lots: state.lots,
+        plats: state.plats,
+        accounts: state.accounts,
     };
 }
 

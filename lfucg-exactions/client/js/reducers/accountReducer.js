@@ -8,7 +8,7 @@ import {
 } from '../constants/apiConstants';
 
 
-const accountReducer = (state = {}, action) => {
+const accountReducer = (state = [], action) => {
     const {
         endpoint,
     } = action;
