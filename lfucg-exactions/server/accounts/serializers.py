@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 from django.contrib.auth.models import User
 from .models import *
-from .utils import calculate_account_balance
+from .utils import calculate_account_balance, calculate_agreement_balance
 from plats.models import Plat, Lot
 from plats.serializers import PlatSerializer, LotSerializer
 
@@ -88,9 +88,18 @@ class AgreementSerializer(serializers.ModelSerializer):
     account_id = AccountField()
 
     agreement_type_display = serializers.SerializerMethodField(read_only=True)
+    agreement_balance = serializers.SerializerMethodField(read_only=True)
 
     def get_agreement_type_display(self, obj):
         return obj.get_agreement_type_display()
+
+    def get_agreement_balance(self, obj):
+        calculated_balance = calculate_agreement_balance(obj.id)
+
+        # return 'new'
+        return {
+            'total': '${:,.2f}'.format(calculated_balance),
+        }
 
     class Meta:
         model = Agreement
@@ -111,6 +120,7 @@ class AgreementSerializer(serializers.ModelSerializer):
             'agreement_type',
 
             'agreement_type_display',
+            'agreement_balance',
         )
 
 class AgreementField(serializers.Field):
