@@ -10,7 +10,7 @@ class Pagination extends React.Component {
         if (window.pageYOffset > 250) {
             window.scroll(0, 0);
         }
-        
+  
         const {
             onPaginationChangePage,
             activeForm,
