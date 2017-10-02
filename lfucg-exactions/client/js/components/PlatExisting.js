@@ -12,6 +12,9 @@ import SearchBar from './SearchBar';
 
 import {
     getPagination,
+    getAccounts,
+    getSubdivisions,
+    getLots,
 } from '../actions/apiActions';
 
 class PlatExisting extends React.Component {
@@ -23,9 +26,49 @@ class PlatExisting extends React.Component {
         const {
             currentUser,
             plats,
+            accounts,
+            subdivisions,
+            lots,
         } = this.props;
 
-        const plats_list = plats.length > 0 ? (
+        const expansion_areas = [
+            { id: 'EA-1', name: 'EA-1' },
+            { id: 'EA-2A', name: 'EA-2A' },
+            { id: 'EA-2B', name: 'EA-2B' },
+            { id: 'EA-2C', name: 'EA-2C' },
+            { id: 'EA-3', name: 'EA-3' },
+        ];
+
+        const plat_types = [
+            { id: 'PLAT', name: 'Final Record Plat' },
+            { id: 'DEVELOPMENT_PLAN', name: 'Final Development Plan' },
+        ];
+
+        const lotsList = lots && lots.length > 0 &&
+            (map((single_lot) => {
+                return {
+                    id: single_lot.id,
+                    name: single_lot.address_full,
+                };
+            })(lots));
+
+        const accountsList = accounts && accounts.length > 0 &&
+            (map((single_account) => {
+                return {
+                    id: single_account.id,
+                    name: single_account.account_name,
+                };
+            })(accounts));
+
+        const subdivisionsList = subdivisions && subdivisions.length > 0 &&
+            (map((single_subdivision) => {
+                return {
+                    id: single_subdivision.id,
+                    name: single_subdivision.name,
+                };
+            })(subdivisions));
+
+        const plats_list = plats && plats.length > 0 ? (
             map((plat) => {
                 return (
                     <div key={plat.id} className="col-xs-12">
@@ -93,7 +136,16 @@ class PlatExisting extends React.Component {
 
                 <Breadcrumbs route={this.props.route} />
 
-                <SearchBar />
+                <SearchBar
+                  apiCalls={[getAccounts, getSubdivisions, getLots]}
+                  advancedSearch={[
+                    { filterField: 'filter_expansion_area', displayName: 'EA', list: expansion_areas },
+                    { filterField: 'filter_account', displayName: 'Developer', list: accountsList },
+                    { filterField: 'filter_subdivision', displayName: 'Subdivision', list: subdivisionsList },
+                    { filterField: 'filter_plat_type', displayName: 'Type', list: plat_types },
+                    { filterField: 'filter_lot__id', displayName: 'Lot', list: lotsList },
+                  ]}
+                />
 
                 <div className="inside-body">
                     <div className="container">
@@ -110,6 +162,9 @@ class PlatExisting extends React.Component {
 PlatExisting.propTypes = {
     currentUser: PropTypes.object,
     plats: PropTypes.object,
+    accounts: PropTypes.object,
+    subdivisions: PropTypes.object,
+    lots: PropTypes.object,
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
 };
@@ -118,6 +173,9 @@ function mapStateToProps(state) {
     return {
         currentUser: state.currentUser,
         plats: state.plats,
+        accounts: state.accounts,
+        subdivisions: state.subdivisions,
+        lots: state.lots,
     };
 }
 

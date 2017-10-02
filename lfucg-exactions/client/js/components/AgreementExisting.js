@@ -12,11 +12,8 @@ import SearchBar from './SearchBar';
 
 import {
     getPagination,
+    getAccounts,
 } from '../actions/apiActions';
-
-import {
-    formUpdate,
-} from '../actions/formActions';
 
 class AgreementExisting extends React.Component {
     componentDidMount() {
@@ -27,7 +24,30 @@ class AgreementExisting extends React.Component {
         const {
             currentUser,
             agreements,
+            accounts,
         } = this.props;
+
+        const agreement_types = [
+            { id: 'MEMO', name: 'Memo' },
+            { id: 'RESOLUTION', name: 'Resolution' },
+            { id: 'OTheR', name: 'Other' },
+        ];
+
+        const accountsList = accounts && accounts.length > 0 &&
+            (map((single_account) => {
+                return {
+                    id: single_account.id,
+                    name: single_account.account_name,
+                };
+            })(accounts));
+
+        const expansion_areas = [
+            { id: 'EA-1', name: 'EA-1' },
+            { id: 'EA-2A', name: 'EA-2A' },
+            { id: 'EA-2B', name: 'EA-2B' },
+            { id: 'EA-2C', name: 'EA-2C' },
+            { id: 'EA-3', name: 'EA-3' },
+        ];
 
         const agreements_list = agreements.length > 0 ? (
             map((agreement) => {
@@ -85,7 +105,14 @@ class AgreementExisting extends React.Component {
 
                 <Breadcrumbs route={this.props.route} />
 
-                <SearchBar />
+                <SearchBar
+                  apiCalls={[getAccounts]}
+                  advancedSearch={[
+                    { filterField: 'filter_agreement_type', displayName: 'Type', list: agreement_types },
+                    { filterField: 'filter_account_id', displayName: 'Developer', list: accountsList },
+                    { filterField: 'filter_expansion_area', displayName: 'EA', list: expansion_areas },
+                  ]}
+                />
 
                 <div className="inside-body">
                     <div className="container">
@@ -102,6 +129,7 @@ class AgreementExisting extends React.Component {
 AgreementExisting.propTypes = {
     currentUser: PropTypes.object,
     agreements: PropTypes.object,
+    accounts: PropTypes.object,
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
 };
@@ -110,6 +138,7 @@ function mapStateToProps(state) {
     return {
         currentUser: state.currentUser,
         agreements: state.agreements,
+        accounts: state.accounts,
     };
 }
 

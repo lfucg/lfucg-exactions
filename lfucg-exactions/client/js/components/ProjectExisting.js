@@ -12,11 +12,8 @@ import SearchBar from './SearchBar';
 
 import {
     getPagination,
+    getAgreements,
 } from '../actions/apiActions';
-
-import {
-    formUpdate,
-} from '../actions/formActions';
 
 class ProjectExisting extends React.Component {
     componentDidMount() {
@@ -27,7 +24,50 @@ class ProjectExisting extends React.Component {
         const {
             currentUser,
             projects,
+            agreements,
         } = this.props;
+
+        const project_statuses = [
+            { id: 'IN_PROGRESS', name: 'In Progress' },
+            { id: 'COMPLETE', name: 'Complete' },
+            { id: 'CLOSED', name: 'Closed Out' },
+        ];
+
+        const project_types = [
+            { id: 'BOULEVARD', name: 'Boulevard' },
+            { id: 'PARKWAY', name: 'Parkway' },
+            { id: 'TWO_LANE_BOULEVARD', name: 'Two-Lane Boulevard' },
+            { id: 'TWO_LANE_PARKWAY', name: 'Two-Lane Parkway' },
+            { id: 'SEWER_TRANSMISSION', name: 'Sanitary Sewer Transmission' },
+            { id: 'SEWER_OTHER', name: 'Other Sewer' },
+            { id: 'STORMWATER', name: 'Storm Water' },
+            { id: 'LAND_AQUISITION', name: 'Land Aquisition' },
+            { id: 'PARKS_AQUISITION', name: 'Parks Aquisition' },
+            { id: 'OTHER_NON_SEWER', name: 'Other Non-Sewer' },
+        ];
+
+        const project_categories = [
+            { id: 'ROADS', name: 'Roads' },
+            { id: 'SEWER', name: 'Sanitary Sewer' },
+            { id: 'PARK', name: 'Park' },
+            { id: 'STORM_WATER', name: 'Storm Water' },
+        ];
+
+        const expansion_areas = [
+            { id: 'EA-1', name: 'EA-1' },
+            { id: 'EA-2A', name: 'EA-2A' },
+            { id: 'EA-2B', name: 'EA-2B' },
+            { id: 'EA-2C', name: 'EA-2C' },
+            { id: 'EA-3', name: 'EA-3' },
+        ];
+
+        const agreementsList = agreements && agreements.length > 0 &&
+            (map((single_agreement) => {
+                return {
+                    id: single_agreement.id,
+                    name: single_agreement.resolution_number,
+                };
+            })(agreements));
 
         const projects_list = projects.length > 0 &&
             map((project) => {
@@ -85,7 +125,16 @@ class ProjectExisting extends React.Component {
 
                 <Breadcrumbs route={this.props.route} />
 
-                <SearchBar />
+                <SearchBar
+                  apiCalls={[getAgreements]}
+                  advancedSearch={[
+                    { filterField: 'filter_project_status', displayName: 'Status', list: project_statuses },
+                    { filterField: 'filter_project_category', displayName: 'Category', list: project_categories },
+                    { filterField: 'filter_project_type', displayName: 'Type', list: project_types },
+                    { filterField: 'filter_agreement_id', displayName: 'Agreement', list: agreementsList },
+                    { filterField: 'filter_expansion_area', displayName: 'EA', list: expansion_areas },
+                  ]}
+                />
 
                 <div className="inside-body">
                     <div className="container">
@@ -104,12 +153,14 @@ ProjectExisting.propTypes = {
     projects: PropTypes.object,
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
+    agreements: PropTypes.array,
 };
 
 function mapStateToProps(state) {
     return {
         currentUser: state.currentUser,
         projects: state.projects,
+        agreements: state.agreements,
     };
 }
 
