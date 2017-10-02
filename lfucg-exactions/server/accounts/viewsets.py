@@ -66,8 +66,9 @@ class AgreementViewSet(viewsets.ModelViewSet):
     serializer_class = AgreementSerializer
     queryset = Agreement.objects.all()
     permission_classes = (CanAdminister,)
-    filter_backends = (filters.SearchFilter,)
+    filter_backends = (DjangoFilterBackend, filters.SearchFilter,)
     search_fields = ('resolution_number', 'account_id__account_name', 'agreement_type', 'expansion_area',)
+    filter_fields = ('agreement_type', 'account_id', 'expansion_area',)
 
     def get_queryset(self):
         queryset = Agreement.objects.all()
@@ -115,8 +116,9 @@ class PaymentViewSet(viewsets.ModelViewSet):
     serializer_class = PaymentSerializer
     queryset = Payment.objects.all()
     permission_classes = (CanAdminister,)
-    filter_backends = (filters.SearchFilter,)
-    search_fields = ('lot_id__address_street', 'payment_type', 'check_number', 'credit_account__account_name')
+    filter_backends = (DjangoFilterBackend, filters.SearchFilter,)
+    search_fields = ('lot_id__address_street', 'lot_id__address_number', 'payment_type', 'check_number', 'credit_account__account_name', 'paid_by', 'credit_source__resolution_number')
+    filter_fields = ('payment_type', 'paid_by_type', 'credit_account', 'lot_id', 'credit_source')
 
     def get_queryset(self):
         queryset = Payment.objects.all()
@@ -174,15 +176,26 @@ class ProjectViewSet(viewsets.ModelViewSet):
     serializer_class = ProjectSerializer
     queryset = Project.objects.all()
     permission_classes = (CanAdminister,)
+    filter_backends = (DjangoFilterBackend, filters.SearchFilter,)
+    search_fields = ('agreement_id__resolution_number', 'name', 'project_category', 'project_description',)
+    filter_fields = ('project_category', 'project_status', 'agreement_id', 'project_type', 'expansion_area',)
 
     def get_queryset(self):
         queryset = Project.objects.all()
+        PageNumberPagination.page_size = 0
+
+        paginatePage = self.request.query_params.get('paginatePage', None)
+        pageSize = self.request.query_params.get('pageSize', settings.PAGINATION_SIZE)
+
+        if paginatePage is not None:
+            pagination_class = PageNumberPagination
+            PageNumberPagination.page_size = pageSize
 
         agreement_id_set = self.request.query_params.get('agreement_id', None)
         if agreement_id_set is not None:
             queryset = queryset.filter(agreement_id=agreement_id_set)
 
-        return queryset
+        return queryset.order_by('-date_modified')
 
     def create(self, request):
         data_set = request.data
@@ -215,6 +228,10 @@ class ProjectCostEstimateViewSet(viewsets.ModelViewSet):
     serializer_class = ProjectCostEstimateSerializer
     queryset = ProjectCostEstimate.objects.all()
     permission_classes = (CanAdminister,)
+    filter_backends = (DjangoFilterBackend, filters.SearchFilter,)
+    search_fields = ('project_id__name', 'estimate_type',)
+    filter_fields = ('project_id',)
+
 
     def get_queryset(self):
         queryset = ProjectCostEstimate.objects.all()
@@ -260,9 +277,20 @@ class AccountLedgerViewSet(viewsets.ModelViewSet):
     serializer_class = AccountLedgerSerializer
     queryset = AccountLedger.objects.all()
     permission_classes = (CanAdminister,)
+    filter_backends = (DjangoFilterBackend, filters.SearchFilter,)
+    search_fields = ('entry_type', 'agreement__resolution_number', 'lot__address_full', 'account_to__account_name', 'account_from__account_name',)
+    filter_fields = ('entry_type', 'agreement', 'lot', 'account_to', 'account_from',)
 
     def get_queryset(self):
         queryset = AccountLedger.objects.all()
+        PageNumberPagination.page_size = 0
+
+        paginatePage = self.request.query_params.get('paginatePage', None)
+        pageSize = self.request.query_params.get('pageSize', settings.PAGINATION_SIZE)
+        
+        if paginatePage is not None:
+            pagination_class = PageNumberPagination
+            PageNumberPagination.page_size = pageSize
 
         lot_set = self.request.query_params.get('lot', None)
         if lot_set is not None:
