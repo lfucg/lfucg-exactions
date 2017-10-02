@@ -12,6 +12,7 @@ from .permissions import CanAdminister
 from django.conf import settings
 
 from django_filters.rest_framework import DjangoFilterBackend
+
 from plats.models import Plat, Lot
 
 class AccountViewSet(viewsets.ModelViewSet):
