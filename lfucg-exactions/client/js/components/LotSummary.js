@@ -68,7 +68,7 @@ class LotSummary extends React.Component {
                             </div>
                         </div>
                         <div className="row">
-                            <p className="col-sm-4 col-xs-6">Agreement Resolution: {payment.credit_source.resolution_number}</p>
+                            <p className="col-sm-4 col-xs-6">Agreement Resolution: {payment.credit_source && payment.credit_source.resolution_number}</p>
                             <p className="col-sm-4 col-xs-6">Total Paid: {payment.total_paid}</p>
                             <p className="col-sm-4 col-xs-6">Payment Type: ${payment.payment_type}</p>
                             <p className="col-sm-4 col-xs-6">Paid By: {payment.paid_by}</p>

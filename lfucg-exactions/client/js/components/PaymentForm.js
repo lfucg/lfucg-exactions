@@ -46,7 +46,7 @@ class PaymentForm extends React.Component {
             lotChange,
         } = this.props;
 
-        const lotsList = lots.length > 0 &&
+        const lotsList = lots && lots.length > 0 &&
             (map((lot) => {
                 return (
                     <option key={lot.id} value={[lot.id, lot.address_full]} >
