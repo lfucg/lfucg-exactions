@@ -43,7 +43,6 @@ class PlatExisting extends React.Component {
 
         const accountsList = accounts && accounts.length > 0 &&
             (map((single_account) => {
-                console.log('ACCOUNT: ', single_account);
                 return {
                     id: single_account.id,
                     name: single_account.account_name,
