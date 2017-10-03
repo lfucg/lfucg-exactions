@@ -523,6 +523,7 @@ function mapDispatchToProps(dispatch, params) {
             event.preventDefault();
             if (selectedLot) {
                 dispatch(putLot(selectedLot));
+                hashHistory.push(`lot/form/${selectedLot}`);
             } else {
                 dispatch(postLot())
                 .then((data_post) => {
