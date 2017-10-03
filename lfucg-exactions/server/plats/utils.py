@@ -93,6 +93,7 @@ def calculate_plat_balance(plat_id):
     plat_exactions = {
         'plat_sewer_due': plat.sewer_due - lots_sewer_paid,
         'plat_non_sewer_due': plat.non_sewer_due - lots_non_sewer_paid,
+        'remaining_lots': plat.buildable_lots - len(lots_on_plat),
     }
 
     return plat_exactions
