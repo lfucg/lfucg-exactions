@@ -2,7 +2,7 @@ import {
   API_CALL,
 } from '../constants/actionTypes';
 
-import { map } from 'ramda';
+import { map, reduce, filter, compose } from 'ramda';
 
 import {
     ME,
@@ -1316,14 +1316,16 @@ export function searchQuery() {
                 query_all = '/estimate/?paginatePage';
             }
 
-            map((a) => {
-                if (a[1] && a[0].startsWith('filter_')) {
+            const queryString = compose(
+                reduce((acc, value) => acc + value, query_all),
+                map((a) => {
                     const field = a[0].slice(7, a[0].length);
-                    query_all += `&${field}=${a[1]}`;
-                }
-            })(Object.entries(activeForm));
+                    return `&${field}=${a[1]}`;
+                }),
+                filter(a => a[1] && a[0].startsWith('filter_')),
+            )(Object.entries(activeForm));
 
-            return query_all;
+            return queryString;
         },
         meta: {
             debounce: {

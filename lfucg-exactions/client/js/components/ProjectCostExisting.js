@@ -25,10 +25,10 @@ class ProjectCostExisting extends React.Component {
         const {
             currentUser,
             projectCosts,
-            projects,
+            projects = [],
         } = this.props;
 
-        const projectsList = projects && projects.length > 0 &&
+        const projectsList =
             (map((single_project) => {
                 return {
                     id: single_project.id,

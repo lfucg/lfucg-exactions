@@ -10,6 +10,8 @@ import Breadcrumbs from './Breadcrumbs';
 import Pagination from './Pagination';
 import SearchBar from './SearchBar';
 
+import { project_statuses, project_types, project_categories, expansion_areas } from '../constants/searchBarConstants';
+
 import {
     getPagination,
     getAgreements,
@@ -26,40 +28,6 @@ class ProjectExisting extends React.Component {
             projects,
             agreements,
         } = this.props;
-
-        const project_statuses = [
-            { id: 'IN_PROGRESS', name: 'In Progress' },
-            { id: 'COMPLETE', name: 'Complete' },
-            { id: 'CLOSED', name: 'Closed Out' },
-        ];
-
-        const project_types = [
-            { id: 'BOULEVARD', name: 'Boulevard' },
-            { id: 'PARKWAY', name: 'Parkway' },
-            { id: 'TWO_LANE_BOULEVARD', name: 'Two-Lane Boulevard' },
-            { id: 'TWO_LANE_PARKWAY', name: 'Two-Lane Parkway' },
-            { id: 'SEWER_TRANSMISSION', name: 'Sanitary Sewer Transmission' },
-            { id: 'SEWER_OTHER', name: 'Other Sewer' },
-            { id: 'STORMWATER', name: 'Storm Water' },
-            { id: 'LAND_AQUISITION', name: 'Land Aquisition' },
-            { id: 'PARKS_AQUISITION', name: 'Parks Aquisition' },
-            { id: 'OTHER_NON_SEWER', name: 'Other Non-Sewer' },
-        ];
-
-        const project_categories = [
-            { id: 'ROADS', name: 'Roads' },
-            { id: 'SEWER', name: 'Sanitary Sewer' },
-            { id: 'PARK', name: 'Park' },
-            { id: 'STORM_WATER', name: 'Storm Water' },
-        ];
-
-        const expansion_areas = [
-            { id: 'EA-1', name: 'EA-1' },
-            { id: 'EA-2A', name: 'EA-2A' },
-            { id: 'EA-2B', name: 'EA-2B' },
-            { id: 'EA-2C', name: 'EA-2C' },
-            { id: 'EA-3', name: 'EA-3' },
-        ];
 
         const agreementsList = agreements && agreements.length > 0 &&
             (map((single_agreement) => {

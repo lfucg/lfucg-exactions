@@ -17,6 +17,8 @@ import {
     getLots,
 } from '../actions/apiActions';
 
+import { expansion_areas, plat_types } from '../constants/searchBarConstants';
+
 class PlatExisting extends React.Component {
     componentDidMount() {
         this.props.onComponentDidMount();
@@ -31,19 +33,6 @@ class PlatExisting extends React.Component {
             lots,
         } = this.props;
 
-        const expansion_areas = [
-            { id: 'EA-1', name: 'EA-1' },
-            { id: 'EA-2A', name: 'EA-2A' },
-            { id: 'EA-2B', name: 'EA-2B' },
-            { id: 'EA-2C', name: 'EA-2C' },
-            { id: 'EA-3', name: 'EA-3' },
-        ];
-
-        const plat_types = [
-            { id: 'PLAT', name: 'Final Record Plat' },
-            { id: 'DEVELOPMENT_PLAN', name: 'Final Development Plan' },
-        ];
-
         const lotsList = lots && lots.length > 0 &&
             (map((single_lot) => {
                 return {
@@ -54,6 +43,7 @@ class PlatExisting extends React.Component {
 
         const accountsList = accounts && accounts.length > 0 &&
             (map((single_account) => {
+                console.log('ACCOUNT: ', single_account);
                 return {
                     id: single_account.id,
                     name: single_account.account_name,
