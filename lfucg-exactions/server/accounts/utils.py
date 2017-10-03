@@ -39,35 +39,26 @@ def calculate_account_balance(account_id):
 def calculate_agreement_balance(agreement_id):
     agreement = Agreement.objects.filter(id=agreement_id)
 
+    ledger_from_value = 0
+    ledger_to_value = 0
+    
     related_account_id = agreement[0].account_id.id
-    related_account = Account.objects.filter(id=related_account_id)
 
-    # account_ledgers_from = AccountLedger.objects.filter(account_from=agreement_id__account_from__id)
-    # account_ledgers_to = AccountLedger.objects.filter(account_to=agreement_id__account_to__id)
-    account_ledger = AccountLedger.objects.filter(agreement=agreement_id)
-    # print('ACCOUNT LEDGER FROM', account_ledgers_from)
-    # print('ACCOUNT LEDGER TO', account_ledgers_to)
-    payments = Payment.objects.filter(credit_source=agreement_id)
+    account_ledger_agreements_from = AccountLedger.objects.filter(agreement=agreement_id, account_from=related_account_id)
+    account_ledger_agreements_to = AccountLedger.objects.filter(agreement=agreement_id, account_to=related_account_id)
 
-    ledger_value = 0
-    # from_value = 0
-    # to_value = 0
+    if account_ledger_agreements_from.exists():
+        for ledger_from in account_ledger_agreements_from:
+            ledger_from_credits = ledger_from.non_sewer_credits + ledger_from.sewer_credits
+            ledger_from_value += ledger_from_credits
+
+    if account_ledger_agreements_to.exists():
+        for ledger_to in account_ledger_agreements_to:
+            ledger_to_credits = ledger_to.non_sewer_credits + ledger_to.sewer_credits
+            ledger_to_value += ledger_to_credits            
+
     payment_value = 0
-
-    if account_ledger.exists():
-        for ledger in account_ledger:
-            ledger_credits = ledger.non_sewer_credits + ledger.sewer_credits
-            ledger_value += ledger_credits
-
-    # if account_ledgers_from is not None:
-    #     for ledger in account_ledgers_from:
-    #         ledger_credits = ledger.non_sewer_credits + ledger.sewer_credits
-    #         from_value += ledger_credits
-
-    # if account_ledgers_to is not None:
-    #     for ledger in account_ledgers_to:
-    #         ledger_credits = ledger.non_sewer_credits + ledger.sewer_credits
-    #         to_value += ledger_credits
+    payments = Payment.objects.filter(credit_source=agreement_id)
 
     if payments.exists():
         for payment in payments:
@@ -80,10 +71,8 @@ def calculate_agreement_balance(agreement_id):
                 payment.paid_open_space
             )
             payment_value += payment_paid
-
-    print('PAYMENT', payment_value)
     
-    current_agreement_balance = ledger_value + payment_value
+    current_agreement_total = ledger_to_value - ledger_from_value - payment_value
 
-    return current_agreement_balance
+    return current_agreement_total
         
