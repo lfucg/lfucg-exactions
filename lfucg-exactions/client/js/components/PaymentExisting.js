@@ -10,6 +10,8 @@ import Breadcrumbs from './Breadcrumbs';
 import Pagination from './Pagination';
 import SearchBar from './SearchBar';
 
+import { payment_types, paid_by_types } from '../constants/searchBarConstants';
+
 import {
     getPagination,
     getAccounts,
@@ -30,18 +32,6 @@ class PaymentExisting extends React.Component {
             lots,
             agreements,
         } = this.props;
-
-        const payment_types = [
-            { id: 'CHECK', name: 'Check' },
-            { id: 'CREDIT_CARD', name: 'Credit Card' },
-            { id: 'OTHER', name: 'Other' },
-        ];
-
-        const paid_by_types = [
-            { id: 'BUILDER', name: 'Builder' },
-            { id: 'DEVELOPER', name: 'Developer' },
-            { id: 'OWNER', name: 'Home Owner' },
-        ];
 
         const accountsList = accounts && accounts.length > 0 &&
             (map((single_account) => {
@@ -67,7 +57,7 @@ class PaymentExisting extends React.Component {
                 };
             })(agreements));
 
-        const payments_list = payments.length > 0 &&
+        const payments_list = payments && payments.length > 0 &&
             map((payment) => {
                 return (
                     <div key={payment.id} className="col-xs-12">

@@ -10,6 +10,8 @@ import Breadcrumbs from './Breadcrumbs';
 import Pagination from './Pagination';
 import SearchBar from './SearchBar';
 
+import { entry_types } from '../constants/searchBarConstants';
+
 import {
     getPagination,
     getAgreements,
@@ -30,12 +32,6 @@ class AccountLedgerExisting extends React.Component {
             agreements,
             accounts,
         } = this.props;
-
-        const entry_types = [
-            { id: 'NEW', name: 'New' },
-            { id: 'SELL', name: 'Sell' },
-            { id: 'TRANSFER', name: 'Transfer' },
-        ];
 
         const agreementsList = agreements && agreements.length > 0 &&
             (map((single_agreement) => {

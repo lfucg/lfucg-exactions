@@ -10,6 +10,8 @@ import Breadcrumbs from './Breadcrumbs';
 import Pagination from './Pagination';
 import SearchBar from './SearchBar';
 
+import { expansion_areas, agreement_types } from '../constants/searchBarConstants';
+
 import {
     getPagination,
     getAccounts,
@@ -27,12 +29,6 @@ class AgreementExisting extends React.Component {
             accounts,
         } = this.props;
 
-        const agreement_types = [
-            { id: 'MEMO', name: 'Memo' },
-            { id: 'RESOLUTION', name: 'Resolution' },
-            { id: 'OTHER', name: 'Other' },
-        ];
-
         const accountsList = accounts && accounts.length > 0 &&
             (map((single_account) => {
                 return {
@@ -40,14 +36,6 @@ class AgreementExisting extends React.Component {
                     name: single_account.account_name,
                 };
             })(accounts));
-
-        const expansion_areas = [
-            { id: 'EA-1', name: 'EA-1' },
-            { id: 'EA-2A', name: 'EA-2A' },
-            { id: 'EA-2B', name: 'EA-2B' },
-            { id: 'EA-2C', name: 'EA-2C' },
-            { id: 'EA-3', name: 'EA-3' },
-        ];
 
         const agreements_list = agreements.length > 0 ? (
             map((agreement) => {
