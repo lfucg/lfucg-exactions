@@ -655,14 +655,7 @@ function mapDispatchToProps(dispatch, params) {
         onPlatSubmit(event) {
             event.preventDefault();
             if (selectedPlat) {
-                dispatch(putPlat(selectedPlat))
-                .then((data_plat_put) => {
-                    const put_update = {
-                        first_section: true,
-                        plat_show: `${data_plat_put.response.id},${data_plat_put.response.name}`,
-                    };
-                    dispatch(formUpdate(put_update));
-                });
+                dispatch(putPlat(selectedPlat));
             } else {
                 dispatch(postPlat())
                 .then((data_post) => {

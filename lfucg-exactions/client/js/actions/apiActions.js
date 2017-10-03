@@ -35,6 +35,7 @@ import {
 
     GET_ACCOUNTS,
     GET_ACCOUNT_ID,
+    GET_LFUCG_ACCOUNT,
     GET_ACCOUNT_QUERY,
     POST_ACCOUNT,
     PUT_ACCOUNT,
@@ -160,6 +161,11 @@ export function getSubdivisionQuery() {
             const query_all = `/subdivision/?query=${query}&paginatePage`;
             return query_all;
         },
+        meta: {
+            debounce: {
+                time: 300,
+            },
+        },
     };
 }
 
@@ -238,6 +244,11 @@ export function getPlatQuery() {
 
             const query_all = `/plat/?query=${query}&paginatePage`;
             return query_all;
+        },
+        meta: {
+            debounce: {
+                time: 300,
+            },
         },
     };
 }
@@ -478,6 +489,11 @@ export function getLotQuery() {
 
             const query_all = `/lot/?query=${query}&paginatePage`;
             return query_all;
+        },
+        meta: {
+            debounce: {
+                time: 300,
+            },
         },
     };
 }
@@ -840,6 +856,14 @@ export function getAccountID(selectedAccount) {
     };
 }
 
+export function getLFUCGAccount() {
+    return {
+        type: API_CALL,
+        endpoint: GET_LFUCG_ACCOUNT,
+        url: '/account/?search=LFUCG',
+    };
+}
+
 export function getAccountQuery() {
     return {
         type: API_CALL,
@@ -854,6 +878,11 @@ export function getAccountQuery() {
 
             const query_all = `/account/?query=${query}&paginatePage`;
             return query_all;
+        },
+        meta: {
+            debounce: {
+                time: 300,
+            },
         },
     };
 }
@@ -970,6 +999,11 @@ export function getAgreementQuery() {
             const query_all = `/agreement/?query=${query}&paginatePage`;
             return query_all;
         },
+        meta: {
+            debounce: {
+                time: 300,
+            },
+        },
     };
 }
 
@@ -1069,11 +1103,15 @@ export function getPaymentQuery() {
             const query_all = `/payment/?query=${query}&paginatePage`;
             return query_all;
         },
+        meta: {
+            debounce: {
+                time: 300,
+            },
+        },
     };
 }
 
 export function getLotPayments(selectedLot) {
-    console.log('SELECTED LOT', selectedLot);
     return {
         type: API_CALL,
         endpoint: GET_LOT_PAYMENTS,
@@ -1217,6 +1255,11 @@ export function getProjectQuery() {
             const query_all = `/project/?query=${query}&paginatePage`;
             return query_all;
         },
+        meta: {
+            debounce: {
+                time: 300,
+            },
+        },
     };
 }
 
@@ -1332,6 +1375,11 @@ export function getProjectCostQuery() {
             const query_all = `/estimate/?query=${query}&paginatePage`;
             return query_all;
         },
+        meta: {
+            debounce: {
+                time: 300,
+            },
+        },
     };
 }
 
@@ -1443,6 +1491,11 @@ export function getAccountLedgerQuery() {
             const query_all = `/ledger/?query=${query}&paginatePage`;
             return query_all;
         },
+        meta: {
+            debounce: {
+                time: 300,
+            },
+        },
     };
 }
 
@@ -1484,6 +1537,7 @@ export function postAccountLedger() {
                 entry_date,
                 account_from,
                 account_to,
+                plat,
                 lot,
                 agreement,
                 entry_type,
@@ -1494,6 +1548,7 @@ export function postAccountLedger() {
                 entry_date,
                 account_from,
                 account_to,
+                plat,
                 lot,
                 agreement,
                 entry_type,
@@ -1518,6 +1573,7 @@ export function putAccountLedger(selectedAccountLedger) {
                 entry_date,
                 account_from,
                 account_to,
+                plat,
                 lot,
                 agreement,
                 entry_type,
@@ -1528,6 +1584,7 @@ export function putAccountLedger(selectedAccountLedger) {
                 entry_date,
                 account_from,
                 account_to,
+                plat,
                 lot,
                 agreement,
                 entry_type,

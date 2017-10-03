@@ -522,25 +522,7 @@ function mapDispatchToProps(dispatch, params) {
         onLotSubmit(event) {
             event.preventDefault();
             if (selectedLot) {
-                dispatch(putLot(selectedLot))
-                .then((data_put_lot) => {
-                    const put_update = {
-                        first_section: true,
-                        dues_roads_dev: data_put_lot.response.dues_roads_dev,
-                        dues_roads_own: data_put_lot.response.dues_roads_own,
-                        dues_sewer_trans_dev: data_put_lot.response.dues_sewer_trans_dev,
-                        dues_sewer_trans_own: data_put_lot.response.dues_sewer_trans_own,
-                        dues_sewer_cap_dev: data_put_lot.response.dues_sewer_cap_dev,
-                        dues_sewer_cap_own: data_put_lot.response.dues_sewer_cap_own,
-                        dues_parks_dev: data_put_lot.response.dues_parks_dev,
-                        dues_parks_own: data_put_lot.response.dues_parks_own,
-                        dues_storm_dev: data_put_lot.response.dues_storm_dev,
-                        dues_storm_own: data_put_lot.response.dues_storm_own,
-                        dues_open_space_dev: data_put_lot.response.dues_open_space_dev,
-                        dues_open_space_own: data_put_lot.response.dues_open_space_own,
-                    };
-                    dispatch(formUpdate(put_update));
-                });
+                dispatch(putLot(selectedLot));
             } else {
                 dispatch(postLot())
                 .then((data_post) => {
