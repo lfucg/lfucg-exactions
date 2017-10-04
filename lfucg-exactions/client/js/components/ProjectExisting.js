@@ -8,15 +8,14 @@ import Navbar from './Navbar';
 import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
 import Pagination from './Pagination';
+import SearchBar from './SearchBar';
+
+import { project_statuses, project_types, project_categories, expansion_areas } from '../constants/searchBarConstants';
 
 import {
     getPagination,
-    getProjectQuery,
+    getAgreements,
 } from '../actions/apiActions';
-
-import {
-    formUpdate,
-} from '../actions/formActions';
 
 class ProjectExisting extends React.Component {
     componentDidMount() {
@@ -27,8 +26,16 @@ class ProjectExisting extends React.Component {
         const {
             currentUser,
             projects,
-            onProjectQuery,
+            agreements,
         } = this.props;
+
+        const agreementsList = agreements && agreements.length > 0 &&
+            (map((single_agreement) => {
+                return {
+                    id: single_agreement.id,
+                    name: single_agreement.resolution_number,
+                };
+            })(agreements));
 
         const projects_list = projects.length > 0 &&
             map((project) => {
@@ -86,22 +93,16 @@ class ProjectExisting extends React.Component {
 
                 <Breadcrumbs route={this.props.route} />
 
-                <div className="row search-box">
-                    <form onChange={onProjectQuery('query')} className="col-sm-10 col-sm-offset-1" >
-                        <fieldset>
-                            <div className="col-sm-2 col-xs-12">
-                                <label htmlFor="query" className="form-label">Search</label>
-                            </div>
-                            <div className="col-sm-10 col-xs-12">
-                                <input
-                                  type="text"
-                                  className="form-control"
-                                  placeholder="Search Projects"
-                                />
-                            </div>
-                        </fieldset>
-                    </form>
-                </div>
+                <SearchBar
+                  apiCalls={[getAgreements]}
+                  advancedSearch={[
+                    { filterField: 'filter_project_status', displayName: 'Status', list: project_statuses },
+                    { filterField: 'filter_project_category', displayName: 'Category', list: project_categories },
+                    { filterField: 'filter_project_type', displayName: 'Type', list: project_types },
+                    { filterField: 'filter_agreement_id', displayName: 'Agreement', list: agreementsList },
+                    { filterField: 'filter_expansion_area', displayName: 'EA', list: expansion_areas },
+                  ]}
+                />
 
                 <div className="inside-body">
                     <div className="container">
@@ -117,41 +118,24 @@ class ProjectExisting extends React.Component {
 
 ProjectExisting.propTypes = {
     currentUser: PropTypes.object,
-    projects: PropTypes.object,
+    projects: PropTypes.array,
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
-    onProjectQuery: PropTypes.func,
+    agreements: PropTypes.array,
 };
 
 function mapStateToProps(state) {
     return {
         currentUser: state.currentUser,
         projects: state.projects,
+        agreements: state.agreements,
     };
 }
 
 function mapDispatchToProps(dispatch) {
     return {
         onComponentDidMount() {
-            dispatch(getPagination('/project/'))
-            .then((data) => {
-                const account_update = {
-                    next: data.response.next,
-                    prev: data.response.prev,
-                    count: data.response.count,
-                };
-                dispatch(formUpdate(account_update));
-            });
-        },
-        onProjectQuery(field) {
-            return (e, ...args) => {
-                const value = typeof e.target.value !== 'undefined' ? e.target.value : args[1];
-                const update = {
-                    [field]: value,
-                };
-                dispatch(formUpdate(update));
-                dispatch(getProjectQuery());
-            };
+            dispatch(getPagination('/project/'));
         },
     };
 }

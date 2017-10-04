@@ -68,7 +68,7 @@ class LotSummary extends React.Component {
                             </div>
                         </div>
                         <div className="row">
-                            <p className="col-sm-4 col-xs-6">Agreement Resolution: {payment.credit_source.resolution_number}</p>
+                            <p className="col-sm-4 col-xs-6">Agreement Resolution: {payment.credit_source && payment.credit_source.resolution_number}</p>
                             <p className="col-sm-4 col-xs-6">Total Paid: {payment.total_paid}</p>
                             <p className="col-sm-4 col-xs-6">Payment Type: ${payment.payment_type}</p>
                             <p className="col-sm-4 col-xs-6">Paid By: {payment.paid_by}</p>
@@ -517,11 +517,11 @@ class LotSummary extends React.Component {
 
 LotSummary.propTypes = {
     currentUser: PropTypes.object,
-    plats: PropTypes.object,
-    lots: PropTypes.object,
-    accounts: PropTypes.object,
-    payments: PropTypes.object,
-    accountLedgers: PropTypes.object,
+    plats: PropTypes.array,
+    lots: PropTypes.array,
+    accounts: PropTypes.array,
+    payments: PropTypes.array,
+    accountLedgers: PropTypes.array,
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
     addPermitToLot: PropTypes.func,

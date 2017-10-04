@@ -8,15 +8,13 @@ import Navbar from './Navbar';
 import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
 import Pagination from './Pagination';
+import SearchBar from './SearchBar';
 
 import {
     getPagination,
-    getProjectCostQuery,
+    getProjects,
 } from '../actions/apiActions';
 
-import {
-    formUpdate,
-} from '../actions/formActions';
 
 class ProjectCostExisting extends React.Component {
     componentDidMount() {
@@ -27,8 +25,16 @@ class ProjectCostExisting extends React.Component {
         const {
             currentUser,
             projectCosts,
-            onProjectCostQuery,
+            projects,
         } = this.props;
+
+        const projectsList = projects && projects.length > 0 &&
+            (map((single_project) => {
+                return {
+                    id: single_project.id,
+                    name: single_project.name,
+                };
+            })(projects));
 
         const projectCosts_list = projectCosts.length > 0 ? (
             map((projectCost) => {
@@ -85,22 +91,12 @@ class ProjectCostExisting extends React.Component {
 
                 <Breadcrumbs route={this.props.route} />
 
-                <div className="row search-box">
-                    <form onChange={onProjectCostQuery('query')} className="col-sm-10 col-sm-offset-1" >
-                        <fieldset>
-                            <div className="col-sm-2 col-xs-12">
-                                <label htmlFor="query" className="form-label">Search</label>
-                            </div>
-                            <div className="col-sm-10 col-xs-12">
-                                <input
-                                  type="text"
-                                  className="form-control"
-                                  placeholder="Search ProjectCosts"
-                                />
-                            </div>
-                        </fieldset>
-                    </form>
-                </div>
+                <SearchBar
+                  apiCalls={[getProjects]}
+                  advancedSearch={[
+                    { filterField: 'filter_project_id', displayName: 'Project', list: projectsList },
+                  ]}
+                />
 
                 <div className="inside-body">
                     <div className="container">
@@ -116,16 +112,17 @@ class ProjectCostExisting extends React.Component {
 
 ProjectCostExisting.propTypes = {
     currentUser: PropTypes.object,
-    projectCosts: PropTypes.object,
+    projectCosts: PropTypes.array,
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
-    onProjectCostQuery: PropTypes.func,
+    projects: PropTypes.array,
 };
 
 function mapStateToProps(state) {
     return {
         currentUser: state.currentUser,
         projectCosts: state.projectCosts,
+        projects: state.projects,
     };
 }
 
@@ -133,16 +130,6 @@ function mapDispatchToProps(dispatch) {
     return {
         onComponentDidMount() {
             dispatch(getPagination('/estimate/'));
-        },
-        onProjectCostQuery(field) {
-            return (e, ...args) => {
-                const value = typeof e.target.value !== 'undefined' ? e.target.value : args[1];
-                const update = {
-                    [field]: value,
-                };
-                dispatch(formUpdate(update));
-                dispatch(getProjectCostQuery());
-            };
         },
     };
 }

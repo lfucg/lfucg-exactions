@@ -491,9 +491,9 @@ class PlatForm extends React.Component {
 
 PlatForm.propTypes = {
     activeForm: PropTypes.object,
-    subdivisions: PropTypes.object,
-    plats: PropTypes.object,
-    accounts: PropTypes.object,
+    subdivisions: PropTypes.array,
+    plats: PropTypes.array,
+    accounts: PropTypes.array,
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
     formChange: PropTypes.func,

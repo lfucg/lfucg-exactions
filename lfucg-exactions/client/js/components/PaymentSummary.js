@@ -279,7 +279,7 @@ class PaymentSummary extends React.Component {
 
 PaymentSummary.propTypes = {
     currentUser: PropTypes.object,
-    payments: PropTypes.object,
+    payments: PropTypes.array,
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
 };
