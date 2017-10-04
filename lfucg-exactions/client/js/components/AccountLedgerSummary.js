@@ -347,7 +347,7 @@ class AccountLedgerSummary extends React.Component {
 
 AccountLedgerSummary.propTypes = {
     currentUser: PropTypes.object,
-    accountLedgers: PropTypes.object,
+    accountLedgers: PropTypes.array,
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
 };
