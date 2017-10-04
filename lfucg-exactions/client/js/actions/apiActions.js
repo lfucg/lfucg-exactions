@@ -733,49 +733,13 @@ export function getUploadContent() {
         url: '/upload/',
     };
 }
-// export function getUploadContent() {
-//     return {
-//         type: API_CALL,
-//         endpoint: GET_UPLOAD_CONTENT,
-//         url: (getState) => {
-//             const {
-//                 activeForm,
-//             } = getState();
-//             const {
-//                 file_content_type,
-//                 file_object_id,
-//             } = activeForm;
-//             console.log('ACTION ACTIVE FORM', activeForm);
 
-//             return `/upload/?file_content_type=${file_content_type}&file_object_id=${file_object_id}`;
-//         },
-//     };
-// }
-
-export function postUpload() {
+export function postUpload(files) {
     return {
         type: API_CALL,
         endpoint: POST_UPLOAD,
-        // url: '/upload/',
-        url: (getState) => {
-            const {
-                activeForm,
-            } = getState();
-            const {
-                upload,
-            } = activeForm;
-            const upload_index = upload.lastIndexOf('\\') + 1;
-            return `/upload/${upload.slice(upload_index, upload.length)}`;
-        },
-        headers: (getState) => {
-            const {
-                activeForm,
-            } = getState();
-            const {
-                upload,
-            } = activeForm;
-            const upload_index = upload.lastIndexOf('\\') + 1;
-
+        url: '/upload/create/',
+        headers: () => {
             let stored_token;
             try {
                 stored_token = localStorage.getItem('Token');
@@ -793,10 +757,6 @@ export function postUpload() {
             return {
                 'X-CSRFToken': global.CSRFToken,
                 Authorization: `Token ${authorization}`,
-                filename: upload.slice(upload_index, upload.length),
-                'Content-Disposition': `attachment; filename=${upload}`,
-                'Content-Type': undefined,
-                enctype: 'multipart/form-data',
             };
         },
         method: 'POST',
@@ -805,36 +765,14 @@ export function postUpload() {
                 activeForm,
                 currentUser,
             } = getState();
-            const {
-                upload,
-                file_content_type,
-                file_object_id,
-            } = activeForm;
-            const {
-                id,
-            } = currentUser;
-            const upload_index = upload.lastIndexOf('\\') + 1;
-            const upload_file = document.getElementById('upload').files[0];
             const formData = new FormData();
-            formData.append('upload', upload_file);
-            // formData.append(
-                // upload,
-            //     file_content_type,
-            //     file_object_id,
-            // );
-            console.log('UPLOAD FILE', upload_file);
-            console.log('UPLOAD', upload);
-            // console.log('CONTENT TYPE', file_content_type);
-            return {
-                user: id,
-                formData,
-                // filename: upload,
-                // upload: upload_file,
-                // upload: upload.slice(upload_index, upload.length),
-                // file_content_type,
-                // file_object_id,
-                // transformRequest: formData,
-            };
+
+            formData.append('upload', files[0]);
+            formData.append('file_content_type', activeForm.file_content_type);
+            formData.append('file_object_id', activeForm.file_object_id);
+            formData.append('user', currentUser.id);
+
+            return formData;
         },
     };
 }

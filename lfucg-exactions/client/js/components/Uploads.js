@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { map } from 'ramda';
-
-import FormGroup from './FormGroup';
+import PropTypes from 'prop-types';
+import Dropzone from 'react-dropzone';
 
 import {
     getUploadContent,
@@ -14,15 +14,6 @@ import {
 } from '../actions/formActions';
 
 class Uploads extends React.Component {
-    static propTypes = {
-        activeForm: React.PropTypes.object,
-        uploads: React.PropTypes.object,
-        onComponentDidMount: React.PropTypes.func,
-        onSubmit: React.PropTypes.func,
-        file_content_type: React.PropTypes.string,
-        file_object_id: React.PropTypes.number,
-    };
-
     componentDidMount() {
         this.props.onComponentDidMount({
             file_content_type: this.props.file_content_type,
@@ -35,7 +26,7 @@ class Uploads extends React.Component {
         const {
             activeForm,
             uploads,
-            onSubmit,
+            fileUploading,
         } = this.props;
 
         const uploadsList = uploads.length > 0 && (map((single_upload) => {
@@ -65,36 +56,29 @@ class Uploads extends React.Component {
                 </div>
                 <div className="row">
                     <h4>
-                        <div className="col-sm-3">Information</div>
+                        <div className="col-sm-3">Date</div>
                         <div className="col-sm-8">Uploads</div>
                     </h4>
                 </div>
                 <div className="row existing-uploads">
                     {uploadsList}
                 </div>
-                <form onSubmit={onSubmit} >
-                    <fieldset>
-                        <div className="row">
-                            <FormGroup label="Add Uploads" id="upload">
-                                <input
-                                  type="file"
-                                  accept="file_extention|image/*"
-                                  className="form-control"
-                                  placeholder="Upload files"
-                                />
-                            </FormGroup>
-                        </div>
-                        <div className="col-sm-3">
-                            <button className="btn btn-lex" Upload >
-                                Upload
-                            </button>
-                        </div>
-                    </fieldset>
-                </form>
+                <Dropzone onDrop={fileUploading} style={{}} >
+                    <button className="btn btn-lex">Add File</button>
+                </Dropzone>
             </div>
         );
     }
 }
+
+Uploads.propTypes = {
+    activeForm: PropTypes.object,
+    uploads: PropTypes.object,
+    onComponentDidMount: PropTypes.func,
+    file_content_type: PropTypes.string,
+    file_object_id: PropTypes.number,
+    fileUploading: PropTypes.func,
+};
 
 function mapStateToProps(state) {
     return {
@@ -116,12 +100,8 @@ function mapDispatchToProps(dispatch) {
                 dispatch(getUploadContent());
             }
         },
-        onSubmit() {
-            dispatch(postUpload())
-            .then(() => {
-                console.log('UPLOADED');
-                // dispatch(getUploadContent());
-            });
+        fileUploading(files) {
+            return dispatch(postUpload(files));
         },
     };
 }

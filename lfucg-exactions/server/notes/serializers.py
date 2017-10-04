@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
 
 from .models import *
-from plats.models import Plat, Lot
+from plats.models import Plat, Lot, Subdivision
 
 class UserNameField(serializers.Field):
     def to_internal_value(self, data):
@@ -15,10 +15,10 @@ class UserNameField(serializers.Field):
 
 class ContentTypeField(serializers.Field):
     def to_internal_value(self, data):
-        if data == 'Plat':
-            return ContentType.objects.get_for_model(Plat)
-        elif data == 'Lot':
-            return ContentType.objects.get_for_model(Lot)
+        content_type_app_label = data.split(',')[0]
+        content_type_model = data.split(',')[1]
+
+        return ContentType.objects.get(app_label=content_type_app_label, model=content_type_model)
 
     def to_representation(self, obj):
         if obj.model == 'plat':
@@ -96,5 +96,25 @@ class FileUploadSerializer(serializers.ModelSerializer):
             'date',
             'file_content_type',
             'file_object_id',
-            # 'file_content_object',
         )
+
+        read_only = (
+            'upload',
+            'file_content_type',
+            'file_object_id',
+        )
+
+class FileUploadCreateSerializer(serializers.ModelSerializer):
+    file_content_type = ContentTypeField()
+    date = CleanedDateField(read_only=True)
+
+    class Meta:
+        model = FileUpload
+        fields = (
+            'id',
+            'upload',
+            'date',
+            'file_content_type',
+            'file_object_id',
+        )
+

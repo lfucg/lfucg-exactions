@@ -7,7 +7,6 @@ from plats.views import PlatCSVExportView
 from notes.viewsets import *
 from accounts.viewsets import *
 from .views import CurrentUserDetails
-from notes.views import FileUploadView
 
 router = routers.DefaultRouter()
 
@@ -39,7 +38,7 @@ urlpatterns = [
     url(r'^forgot-password/$', forgot_password),
     url(r'^forgot-username/$', forgot_username),
     url(r'^delete_token/', Logout.as_view()),
-    url(r'^upload/(?P<filename>[^/]+)$', FileUploadView.as_view()),
+    url(r'^upload/create/$', FileUploadCreate.as_view(), name="document-upload"),
     url(r'^export_plat_csv/$', PlatCSVExportView.as_view()),
 
     url(r'^', include(router.urls)),
