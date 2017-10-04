@@ -655,7 +655,16 @@ export function getUploadContent() {
     return {
         type: API_CALL,
         endpoint: GET_UPLOAD_CONTENT,
-        url: '/upload/',
+        url: (getState) => {
+            const {
+                activeForm,
+            } = getState();
+            const {
+                file_content_type,
+                file_object_id,
+            } = activeForm;
+            return `/upload/?file_content_type=${file_content_type}&file_object_id=${file_object_id}`;
+        },
     };
 }
 
