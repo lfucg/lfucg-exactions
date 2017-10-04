@@ -131,14 +131,6 @@ class FileUploadViewSet(viewsets.ModelViewSet):
 
             file_content_type = ContentType.objects.get(app_label=content_type_app_label, model=content_type_model)
 
-        #     if file_content_type_string == 'plats,plat':
-        #         file_content_type = ContentType.objects.get_for_model(Plat)
-        #     elif file_content_type_string == 'plats,lot':
-        #         file_content_type = ContentType.objects.get_for_model(Lot)
-        #     elif file_content_type_string == 'plats,subdivision':
-        #         file_content_type = ContentType.objects.get_for_model(Subdivision)
-
-
             query_list = queryset.filter(
                 Q(file_content_type=file_content_type, file_object_id=file_object_id))
 
