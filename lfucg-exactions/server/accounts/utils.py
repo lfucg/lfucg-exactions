@@ -12,17 +12,15 @@ def calculate_account_balance(account_id):
 
     if account_ledgers_from.exists():
         for ledger in account_ledgers_from:
-            ledger_credits = ledger.non_sewer_credits + ledger.sewer_credits
-            from_value += ledger_credits
+            from_value += ledger.non_sewer_credits + ledger.sewer_credits
 
     if account_ledgers_to.exists():
         for ledger in account_ledgers_to:
-            ledger_credits = ledger.non_sewer_credits + ledger.sewer_credits
-            to_value += ledger_credits
+            to_value += ledger.non_sewer_credits + ledger.sewer_credits
 
     if payments.exists():
         for payment in payments:
-            payment_paid = (
+            payment_value += (
                 payment.paid_roads +
                 payment.paid_sewer_trans +
                 payment.paid_sewer_cap +
@@ -30,7 +28,6 @@ def calculate_account_balance(account_id):
                 payment.paid_storm +
                 payment.paid_open_space
             )
-            payment_value += payment_paid
     
     current_account_balance = to_value - from_value - payment_value
 
