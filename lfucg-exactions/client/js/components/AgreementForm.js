@@ -123,8 +123,8 @@ class AgreementForm extends React.Component {
 
 AgreementForm.propTypes = {
     activeForm: PropTypes.object,
-    accounts: PropTypes.object,
-    agreements: PropTypes.object,
+    accounts: PropTypes.array,
+    agreements: PropTypes.array,
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
     onSubmit: PropTypes.func,

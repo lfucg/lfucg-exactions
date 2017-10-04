@@ -8,28 +8,42 @@ import Navbar from './Navbar';
 import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
 import Pagination from './Pagination';
+import SearchBar from './SearchBar';
 
 import {
     getPagination,
-    getLotQuery,
+    getPlats,
+    getAccounts,
 } from '../actions/apiActions';
-
-import {
-    formUpdate,
-} from '../actions/formActions';
 
 class LotExisting extends React.Component {
     componentDidMount() {
         this.props.onComponentDidMount();
     }
 
-
     render() {
         const {
             currentUser,
             lots,
-            onLotQuery,
+            plats,
+            accounts,
         } = this.props;
+
+        const platsList = plats && plats.length > 0 &&
+            (map((single_plat) => {
+                return {
+                    id: single_plat.id,
+                    name: single_plat.name,
+                };
+            })(plats));
+
+        const accountsList = accounts && accounts.length > 0 &&
+            (map((single_account) => {
+                return {
+                    id: single_account.id,
+                    name: single_account.account_name,
+                };
+            })(accounts));
 
         const lots_list = lots.length > 0 ? (
             map((lot) => {
@@ -85,22 +99,13 @@ class LotExisting extends React.Component {
 
                 <Breadcrumbs route={this.props.route} />
 
-                <div className="row search-box">
-                    <form onChange={onLotQuery('query')} className="col-sm-10 col-sm-offset-1" >
-                        <fieldset>
-                            <div className="col-sm-2 col-xs-12">
-                                <label htmlFor="query" className="form-label">Search</label>
-                            </div>
-                            <div className="col-sm-10 col-xs-12">
-                                <input
-                                  type="text"
-                                  className="form-control"
-                                  placeholder="Search Lots"
-                                />
-                            </div>
-                        </fieldset>
-                    </form>
-                </div>
+                <SearchBar
+                  apiCalls={[getPlats, getAccounts]}
+                  advancedSearch={[
+                    { filterField: 'filter_plat', displayName: 'Plat', list: platsList },
+                    { filterField: 'filter_account', displayName: 'Developer', list: accountsList },
+                  ]}
+                />
 
                 <div className="inside-body">
                     <div className="container">
@@ -117,15 +122,18 @@ class LotExisting extends React.Component {
 LotExisting.propTypes = {
     currentUser: PropTypes.object,
     lots: PropTypes.array,
+    plats: PropTypes.array,
+    accounts: PropTypes.array,
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
-    onLotQuery: PropTypes.func,
 };
 
 function mapStateToProps(state) {
     return {
         currentUser: state.currentUser,
         lots: state.lots,
+        plats: state.plats,
+        accounts: state.accounts,
     };
 }
 
@@ -133,16 +141,6 @@ function mapDispatchToProps(dispatch) {
     return {
         onComponentDidMount() {
             dispatch(getPagination('/lot/'));
-        },
-        onLotQuery(field) {
-            return (e, ...args) => {
-                const value = typeof e.target.value !== 'undefined' ? e.target.value : args[1];
-                const update = {
-                    [field]: value,
-                };
-                dispatch(formUpdate(update));
-                dispatch(getLotQuery());
-            };
         },
     };
 }
