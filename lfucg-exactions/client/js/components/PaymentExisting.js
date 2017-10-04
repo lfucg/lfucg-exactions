@@ -8,15 +8,16 @@ import Navbar from './Navbar';
 import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
 import Pagination from './Pagination';
+import SearchBar from './SearchBar';
+
+import { payment_types, paid_by_types } from '../constants/searchBarConstants';
 
 import {
     getPagination,
-    getPaymentQuery,
+    getAccounts,
+    getLots,
+    getAgreements,
 } from '../actions/apiActions';
-
-import {
-    formUpdate,
-} from '../actions/formActions';
 
 class PaymentExisting extends React.Component {
     componentDidMount() {
@@ -27,10 +28,36 @@ class PaymentExisting extends React.Component {
         const {
             currentUser,
             payments,
-            onPaymentQuery,
+            accounts,
+            lots,
+            agreements,
         } = this.props;
 
-        const payments_list = payments.length > 0 &&
+        const accountsList = accounts && accounts.length > 0 &&
+            (map((single_account) => {
+                return {
+                    id: single_account.id,
+                    name: single_account.account_name,
+                };
+            })(accounts));
+
+        const lotsList = lots && lots.length > 0 &&
+            (map((single_lot) => {
+                return {
+                    id: single_lot.id,
+                    name: single_lot.address_full,
+                };
+            })(lots));
+
+        const agreementsList = agreements && agreements.length > 0 &&
+            (map((single_agreement) => {
+                return {
+                    id: single_agreement.id,
+                    name: single_agreement.resolution_number,
+                };
+            })(agreements));
+
+        const payments_list = payments && payments.length > 0 &&
             map((payment) => {
                 return (
                     <div key={payment.id} className="col-xs-12">
@@ -63,7 +90,7 @@ class PaymentExisting extends React.Component {
                         </div>
                         <div className="row">
                             <div className="col-sm-offset-1">
-                                <p className="col-md-4 col-xs-6">Agreement Resolution: {payment.credit_source.resolution_number}</p>
+                                <p className="col-md-4 col-xs-6">Agreement Resolution: {payment.credit_source && payment.credit_source.resolution_number}</p>
                                 <p className="col-md-4 col-xs-6">Payment Type: {payment.payment_type}</p>
                                 <p className="col-xs-12">Lot: {payment.lot_id.address_full}</p>
                             </div>
@@ -84,22 +111,16 @@ class PaymentExisting extends React.Component {
 
                 <Breadcrumbs route={this.props.route} />
 
-                <div className="row search-box">
-                    <form onChange={onPaymentQuery('query')} className="col-sm-10 col-sm-offset-1" >
-                        <fieldset>
-                            <div className="col-sm-2 col-xs-12">
-                                <label htmlFor="query" className="form-label">Search</label>
-                            </div>
-                            <div className="col-sm-10 col-xs-12">
-                                <input
-                                  type="text"
-                                  className="form-control"
-                                  placeholder="Search Payments"
-                                />
-                            </div>
-                        </fieldset>
-                    </form>
-                </div>
+                <SearchBar
+                  apiCalls={[getAccounts, getLots, getAgreements]}
+                  advancedSearch={[
+                    { filterField: 'filter_paid_by_type', displayName: 'Paid By', list: paid_by_types },
+                    { filterField: 'filter_payment_type', displayName: 'Payment Type', list: payment_types },
+                    { filterField: 'filter_credit_account', displayName: 'Developer', list: accountsList },
+                    { filterField: 'filter_lot_id', displayName: 'Lot', list: lotsList },
+                    { filterField: 'filter_credit_source', displayName: 'Agreement', list: agreementsList },
+                  ]}
+                />
 
                 <div className="inside-body">
                     <div className="container">
@@ -115,16 +136,21 @@ class PaymentExisting extends React.Component {
 
 PaymentExisting.propTypes = {
     currentUser: PropTypes.object,
-    payments: PropTypes.object,
+    payments: PropTypes.array,
     route: PropTypes.object,
+    accounts: PropTypes.array,
+    lots: PropTypes.array,
+    agreements: PropTypes.array,
     onComponentDidMount: PropTypes.func,
-    onPaymentQuery: PropTypes.func,
 };
 
 function mapStateToProps(state) {
     return {
         currentUser: state.currentUser,
         payments: state.payments,
+        accounts: state.accounts,
+        lots: state.lots,
+        agreements: state.agreements,
     };
 }
 
@@ -132,16 +158,6 @@ function mapDispatchToProps(dispatch) {
     return {
         onComponentDidMount() {
             dispatch(getPagination('/payment/'));
-        },
-        onPaymentQuery(field) {
-            return (e, ...args) => {
-                const value = typeof e.target.value !== 'undefined' ? e.target.value : args[1];
-                const update = {
-                    [field]: value,
-                };
-                dispatch(formUpdate(update));
-                dispatch(getPaymentQuery());
-            };
         },
     };
 }

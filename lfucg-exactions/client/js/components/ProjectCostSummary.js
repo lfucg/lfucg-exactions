@@ -157,7 +157,7 @@ class ProjectCostSummary extends React.Component {
 
 ProjectCostSummary.propTypes = {
     currentUser: PropTypes.object,
-    projectCosts: PropTypes.object,
+    projectCosts: PropTypes.array,
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
 };

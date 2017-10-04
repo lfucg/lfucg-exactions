@@ -95,7 +95,7 @@ class SubdivisionForm extends React.Component {
 
 SubdivisionForm.propTypes = {
     activeForm: PropTypes.object,
-    subdivisions: PropTypes.object,
+    subdivisions: PropTypes.array,
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
     onSubmit: PropTypes.func,

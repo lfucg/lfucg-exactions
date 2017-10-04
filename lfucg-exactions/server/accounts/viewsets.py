@@ -15,35 +15,24 @@ from django_filters.rest_framework import DjangoFilterBackend
 
 from plats.models import Plat, Lot
 
-
 class AccountViewSet(viewsets.ModelViewSet):
     serializer_class = AccountSerializer
     queryset = Account.objects.all()
     permission_classes = (CanAdminister,)
     filter_backends = (DjangoFilterBackend, filters.SearchFilter,)
-    filter_fields = ('plat_account__id', 'lot_account__id')
     search_fields = ('account_name', 'contact_full_name', 'address_full', 'phone', 'email',)
+    filter_fields = ('plat_account__id', 'lot_account__id')
 
     def get_queryset(self):
         queryset = Account.objects.all()
         PageNumberPagination.page_size = 0
         
         paginatePage = self.request.query_params.get('paginatePage', None)
-        query_text = self.request.query_params.get('query', None)
-
-        if query_text is not None:
-            query_text = query_text.lower()
-            queryset = queryset.filter(
-                Q(account_name__icontains=query_text) |
-                Q(contact_full_name__icontains=query_text) |
-                Q(address_full=query_text) |
-                Q(phone__icontains=query_text) |
-                Q(email__icontains=query_text))
-
+        pageSize = self.request.query_params.get('pageSize', settings.PAGINATION_SIZE)
 
         if paginatePage is not None:
             pagination_class = PageNumberPagination
-            PageNumberPagination.page_size = settings.PAGINATION_SIZE
+            PageNumberPagination.page_size = pageSize
 
         return queryset.order_by('account_name')
 
@@ -78,27 +67,22 @@ class AgreementViewSet(viewsets.ModelViewSet):
     serializer_class = AgreementSerializer
     queryset = Agreement.objects.all()
     permission_classes = (CanAdminister,)
+    filter_backends = (DjangoFilterBackend, filters.SearchFilter,)
+    search_fields = ('resolution_number', 'account_id__account_name', 'agreement_type', 'expansion_area',)
+    filter_fields = ('agreement_type', 'account_id', 'expansion_area',)
 
     def get_queryset(self):
         queryset = Agreement.objects.all()
         paginatePage = self.request.query_params.get('paginatePage', None)
+        pageSize = self.request.query_params.get('pageSize', settings.PAGINATION_SIZE)
 
         account_id_set = self.request.query_params.get('account_id', None)
         if account_id_set is not None:
             queryset = queryset.filter(account_id=account_id_set)
-
-        query_text = self.request.query_params.get('query', None)
-        if query_text is not None:
-            query_text = query_text.lower()
-            queryset = queryset.filter(
-                Q(account_id__account_name__icontains=query_text) |
-                Q(resolution_number__icontains=query_text) |
-                Q(agreement_type__icontains=query_text) |
-                Q(expansion_area__icontains=query_text))
             
         if paginatePage is not None:
             pagination_class = PageNumberPagination
-            PageNumberPagination.page_size = settings.PAGINATION_SIZE
+            PageNumberPagination.page_size = pageSize
 
         return queryset.order_by('expansion_area')
 
@@ -133,15 +117,20 @@ class PaymentViewSet(viewsets.ModelViewSet):
     serializer_class = PaymentSerializer
     queryset = Payment.objects.all()
     permission_classes = (CanAdminister,)
+    filter_backends = (DjangoFilterBackend, filters.SearchFilter,)
+    search_fields = ('lot_id__address_full', 'payment_type', 'check_number', 'credit_account__account_name', 'paid_by', 'credit_source__resolution_number')
+    filter_fields = ('payment_type', 'paid_by_type', 'credit_account', 'lot_id', 'credit_source')
 
     def get_queryset(self):
         queryset = Payment.objects.all()
         PageNumberPagination.page_size = 0
 
         paginatePage = self.request.query_params.get('paginatePage', None)
+        pageSize = self.request.query_params.get('pageSize', settings.PAGINATION_SIZE)
+
         if paginatePage is not None:
             pagination_class = PageNumberPagination
-            PageNumberPagination.page_size = settings.PAGINATION_SIZE
+            PageNumberPagination.page_size = pageSize
 
         lot_id_set = self.request.query_params.get('lot_id', None)
         if lot_id_set is not None:
@@ -188,15 +177,26 @@ class ProjectViewSet(viewsets.ModelViewSet):
     serializer_class = ProjectSerializer
     queryset = Project.objects.all()
     permission_classes = (CanAdminister,)
+    filter_backends = (DjangoFilterBackend, filters.SearchFilter,)
+    search_fields = ('agreement_id__resolution_number', 'name', 'project_category', 'project_description',)
+    filter_fields = ('project_category', 'project_status', 'agreement_id', 'project_type', 'expansion_area',)
 
     def get_queryset(self):
         queryset = Project.objects.all()
+        PageNumberPagination.page_size = 0
+
+        paginatePage = self.request.query_params.get('paginatePage', None)
+        pageSize = self.request.query_params.get('pageSize', settings.PAGINATION_SIZE)
+
+        if paginatePage is not None:
+            pagination_class = PageNumberPagination
+            PageNumberPagination.page_size = pageSize
 
         agreement_id_set = self.request.query_params.get('agreement_id', None)
         if agreement_id_set is not None:
             queryset = queryset.filter(agreement_id=agreement_id_set)
 
-        return queryset
+        return queryset.order_by('-date_modified')
 
     def create(self, request):
         data_set = request.data
@@ -229,17 +229,23 @@ class ProjectCostEstimateViewSet(viewsets.ModelViewSet):
     serializer_class = ProjectCostEstimateSerializer
     queryset = ProjectCostEstimate.objects.all()
     permission_classes = (CanAdminister,)
+    filter_backends = (DjangoFilterBackend, filters.SearchFilter,)
+    search_fields = ('project_id__name', 'estimate_type',)
+    filter_fields = ('project_id',)
+
 
     def get_queryset(self):
         queryset = ProjectCostEstimate.objects.all()
         PageNumberPagination.page_size = 0
 
         paginatePage = self.request.query_params.get('paginatePage', None)
+        pageSize = self.request.query_params.get('pageSize', settings.PAGINATION_SIZE)
+        
         if paginatePage is not None:
             pagination_class = PageNumberPagination
-            PageNumberPagination.page_size = settings.PAGINATION_SIZE
+            PageNumberPagination.page_size = pageSize
 
-        return queryset
+        return queryset.order_by('-date_modified')
 
     def create(self, request):
         data_set = request.data
@@ -272,9 +278,20 @@ class AccountLedgerViewSet(viewsets.ModelViewSet):
     serializer_class = AccountLedgerSerializer
     queryset = AccountLedger.objects.all()
     permission_classes = (CanAdminister,)
+    filter_backends = (DjangoFilterBackend, filters.SearchFilter,)
+    search_fields = ('entry_type', 'agreement__resolution_number', 'lot__address_full', 'account_to__account_name', 'account_from__account_name',)
+    filter_fields = ('entry_type', 'agreement', 'lot', 'account_to', 'account_from',)
 
     def get_queryset(self):
         queryset = AccountLedger.objects.all()
+        PageNumberPagination.page_size = 0
+
+        paginatePage = self.request.query_params.get('paginatePage', None)
+        pageSize = self.request.query_params.get('pageSize', settings.PAGINATION_SIZE)
+        
+        if paginatePage is not None:
+            pagination_class = PageNumberPagination
+            PageNumberPagination.page_size = pageSize
 
         lot_set = self.request.query_params.get('lot', None)
         if lot_set is not None:

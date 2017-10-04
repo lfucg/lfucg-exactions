@@ -210,8 +210,8 @@ class ProjectForm extends React.Component {
 
 ProjectForm.propTypes = {
     activeForm: PropTypes.object,
-    projects: PropTypes.object,
-    agreements: PropTypes.object,
+    projects: PropTypes.array,
+    agreements: PropTypes.array,
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
     onSubmit: PropTypes.func,

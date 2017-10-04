@@ -137,8 +137,8 @@ class ProjectCostForm extends React.Component {
 
 ProjectCostForm.propTypes = {
     activeForm: PropTypes.object,
-    projects: PropTypes.object,
-    projectCosts: PropTypes.object,
+    projects: PropTypes.array,
+    projectCosts: PropTypes.array,
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
     onSubmit: PropTypes.func,
