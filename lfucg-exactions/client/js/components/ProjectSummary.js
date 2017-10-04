@@ -211,8 +211,9 @@ class ProjectSummary extends React.Component {
                                         </div>
                                         <div className="col-xs-12">
                                             <p className="col-md-4 col-xs-6">Resolution Number: {projects.agreement_id.resolution_number}</p>
+                                            <p className="col-md-4 col-xs-6">Current Balance: {projects.agreement_id.agreement_balance && projects.agreement_id.agreement_balance.total}</p>
                                             {projects.agreement_id.account_id &&
-                                                <p className="col-md-4 col-xs-6">Account: {projects.agreement_id.account_id.account_name}</p>
+                                                <p className="col-md-4 col-xs-6">Account: {projects.agreement_id.account_id && projects.agreement_id.account_id.account_name}</p>
                                             }
                                             <p className="col-md-4 col-xs-6">Expansion Area: {projects.agreement_id.expansion_area}</p>
                                             <p className="col-md-4 col-xs-6">Agreement Type: {projects.agreement_id.agreement_type_display}</p>
