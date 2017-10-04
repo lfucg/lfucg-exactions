@@ -8,15 +8,14 @@ import Navbar from './Navbar';
 import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
 import Pagination from './Pagination';
+import SearchBar from './SearchBar';
+
+import { expansion_areas, agreement_types } from '../constants/searchBarConstants';
 
 import {
     getPagination,
-    getAgreementQuery,
+    getAccounts,
 } from '../actions/apiActions';
-
-import {
-    formUpdate,
-} from '../actions/formActions';
 
 class AgreementExisting extends React.Component {
     componentDidMount() {
@@ -27,8 +26,16 @@ class AgreementExisting extends React.Component {
         const {
             currentUser,
             agreements,
-            onAgreementQuery,
+            accounts,
         } = this.props;
+
+        const accountsList = accounts && accounts.length > 0 &&
+            (map((single_account) => {
+                return {
+                    id: single_account.id,
+                    name: single_account.account_name,
+                };
+            })(accounts));
 
         const agreements_list = agreements.length > 0 ? (
             map((agreement) => {
@@ -86,22 +93,14 @@ class AgreementExisting extends React.Component {
 
                 <Breadcrumbs route={this.props.route} />
 
-                <div className="row search-box">
-                    <form onChange={onAgreementQuery('query')} className="col-sm-10 col-sm-offset-1" >
-                        <fieldset>
-                            <div className="col-sm-2 col-xs-12">
-                                <label htmlFor="query" className="form-label">Search</label>
-                            </div>
-                            <div className="col-sm-10 col-xs-12">
-                                <input
-                                  type="text"
-                                  className="form-control"
-                                  placeholder="Search Agreements"
-                                />
-                            </div>
-                        </fieldset>
-                    </form>
-                </div>
+                <SearchBar
+                  apiCalls={[getAccounts]}
+                  advancedSearch={[
+                    { filterField: 'filter_agreement_type', displayName: 'Type', list: agreement_types },
+                    { filterField: 'filter_account_id', displayName: 'Developer', list: accountsList },
+                    { filterField: 'filter_expansion_area', displayName: 'EA', list: expansion_areas },
+                  ]}
+                />
 
                 <div className="inside-body">
                     <div className="container">
@@ -117,16 +116,17 @@ class AgreementExisting extends React.Component {
 
 AgreementExisting.propTypes = {
     currentUser: PropTypes.object,
-    agreements: PropTypes.object,
+    agreements: PropTypes.array,
+    accounts: PropTypes.array,
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
-    onAgreementQuery: PropTypes.func,
 };
 
 function mapStateToProps(state) {
     return {
         currentUser: state.currentUser,
         agreements: state.agreements,
+        accounts: state.accounts,
     };
 }
 
@@ -134,16 +134,6 @@ function mapDispatchToProps(dispatch) {
     return {
         onComponentDidMount() {
             dispatch(getPagination('/agreement/'));
-        },
-        onAgreementQuery(field) {
-            return (e, ...args) => {
-                const value = typeof e.target.value !== 'undefined' ? e.target.value : args[1];
-                const update = {
-                    [field]: value,
-                };
-                dispatch(formUpdate(update));
-                dispatch(getAgreementQuery());
-            };
         },
     };
 }
