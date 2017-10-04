@@ -258,6 +258,7 @@ class PaymentSummary extends React.Component {
                                         </div>
                                         <div className="col-xs-12">
                                             <p className="col-md-4 col-xs-6">Resolution Number: {payments.credit_source.resolution_number}</p>
+                                            <p className="col-md-4 col-xs-6">Current Balance: {payments.credit_source.agreement_balance && payments.credit_source.agreement_balance.total}</p>
                                             <p className="col-md-4 col-xs-6">Account: {payments.credit_source.account_id.account_name}</p>
                                             <p className="col-md-4 col-xs-6">Expansion Area: {payments.credit_source.expansion_area}</p>
                                             <p className="col-md-4 col-xs-6">Agreement Type: {payments.credit_source.agreement_type_display}</p>
@@ -279,7 +280,7 @@ class PaymentSummary extends React.Component {
 
 PaymentSummary.propTypes = {
     currentUser: PropTypes.object,
-    payments: PropTypes.object,
+    payments: PropTypes.array,
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
 };

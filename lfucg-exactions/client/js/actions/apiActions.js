@@ -2,6 +2,8 @@ import {
   API_CALL,
 } from '../constants/actionTypes';
 
+import { map, reduce, filter, compose } from 'ramda';
+
 import {
     ME,
 
@@ -10,13 +12,11 @@ import {
 
     GET_SUBDIVISIONS,
     GET_SUBDIVISION_ID,
-    GET_SUBDIVISION_QUERY,
     POST_SUBDIVISION,
     PUT_SUBDIVISION,
 
     GET_PLATS,
     GET_PLAT_ID,
-    GET_PLAT_QUERY,
     GET_SUBDIVISION_PLATS,
     POST_PLAT,
     PUT_PLAT,
@@ -27,7 +27,6 @@ import {
 
     GET_LOTS,
     GET_LOT_ID,
-    GET_LOT_QUERY,
     GET_PLAT_LOTS,
     POST_LOT,
     PUT_LOT,
@@ -36,7 +35,6 @@ import {
     GET_ACCOUNTS,
     GET_ACCOUNT_ID,
     GET_LFUCG_ACCOUNT,
-    GET_ACCOUNT_QUERY,
     POST_ACCOUNT,
     PUT_ACCOUNT,
 
@@ -48,14 +46,12 @@ import {
 
     GET_AGREEMENTS,
     GET_AGREEMENT_ID,
-    GET_AGREEMENT_QUERY,
     GET_ACCOUNT_AGREEMENTS,
     POST_AGREEMENT,
     PUT_AGREEMENT,
 
     GET_PAYMENTS,
     GET_PAYMENT_ID,
-    GET_PAYMENT_QUERY,
     GET_LOT_PAYMENTS,
     GET_ACCOUNT_PAYMENTS,
     GET_AGREEMENT_PAYMENTS,
@@ -64,21 +60,18 @@ import {
 
     GET_PROJECTS,
     GET_PROJECT_ID,
-    GET_PROJECT_QUERY,
     GET_AGREEMENT_PROJECTS,
     POST_PROJECT,
     PUT_PROJECT,
 
     GET_PROJECT_COSTS,
     GET_PROJECT_COST_ID,
-    GET_PROJECT_COST_QUERY,
     GET_PROJECT_PROJECT_COSTS,
     POST_PROJECT_COST,
     PUT_PROJECT_COST,
 
     GET_ACCOUNT_LEDGERS,
     GET_ACCOUNT_LEDGER_ID,
-    GET_ACCOUNT_LEDGER_QUERY,
     GET_LOT_ACCOUNT_LEDGERS,
     GET_ACCOUNT_ACCOUNT_LEDGERS,
     GET_AGREEMENT_ACCOUNT_LEDGERS,
@@ -86,6 +79,7 @@ import {
     PUT_ACCOUNT_LEDGER,
 
     GET_PAGINATION,
+    SEARCH_QUERY,
 
 } from '../constants/apiConstants';
 
@@ -143,29 +137,6 @@ export function getSubdivisionID(selectedSubdivision) {
         type: API_CALL,
         endpoint: GET_SUBDIVISION_ID,
         url: `/subdivision/${selectedSubdivision}`,
-    };
-}
-
-export function getSubdivisionQuery() {
-    return {
-        type: API_CALL,
-        endpoint: GET_SUBDIVISION_QUERY,
-        url: (getState) => {
-            const {
-                activeForm,
-            } = getState();
-            const {
-                query,
-            } = activeForm;
-
-            const query_all = `/subdivision/?query=${query}&paginatePage`;
-            return query_all;
-        },
-        meta: {
-            debounce: {
-                time: 300,
-            },
-        },
     };
 }
 
@@ -227,29 +198,6 @@ export function getPlatID(selectedPlat) {
         type: API_CALL,
         endpoint: GET_PLAT_ID,
         url: `/plat/${selectedPlat}`,
-    };
-}
-
-export function getPlatQuery() {
-    return {
-        type: API_CALL,
-        endpoint: GET_PLAT_QUERY,
-        url: (getState) => {
-            const {
-                activeForm,
-            } = getState();
-            const {
-                query,
-            } = activeForm;
-
-            const query_all = `/plat/?query=${query}&paginatePage`;
-            return query_all;
-        },
-        meta: {
-            debounce: {
-                time: 300,
-            },
-        },
     };
 }
 
@@ -475,29 +423,6 @@ export function getLotID(selectedLot) {
     };
 }
 
-export function getLotQuery() {
-    return {
-        type: API_CALL,
-        endpoint: GET_LOT_QUERY,
-        url: (getState) => {
-            const {
-                activeForm,
-            } = getState();
-            const {
-                query,
-            } = activeForm;
-
-            const query_all = `/lot/?query=${query}&paginatePage`;
-            return query_all;
-        },
-        meta: {
-            debounce: {
-                time: 300,
-            },
-        },
-    };
-}
-
 export function getPlatLots(selectedPlat) {
     return {
         type: API_CALL,
@@ -647,7 +572,7 @@ export function putLot(selectedLot) {
                 dues_storm_own,
                 dues_open_space_dev,
                 dues_open_space_own,
-                account,
+                account_id: account,
                 // payment,
             };
         },
@@ -802,29 +727,6 @@ export function getLFUCGAccount() {
     };
 }
 
-export function getAccountQuery() {
-    return {
-        type: API_CALL,
-        endpoint: GET_ACCOUNT_QUERY,
-        url: (getState) => {
-            const {
-                activeForm,
-            } = getState();
-            const {
-                query,
-            } = activeForm;
-
-            const query_all = `/account/?query=${query}&paginatePage`;
-            return query_all;
-        },
-        meta: {
-            debounce: {
-                time: 300,
-            },
-        },
-    };
-}
-
 export function postAccount() {
     return {
         type: API_CALL,
@@ -922,29 +824,6 @@ export function getAgreementID(selectedAgreement) {
     };
 }
 
-export function getAgreementQuery() {
-    return {
-        type: API_CALL,
-        endpoint: GET_AGREEMENT_QUERY,
-        url: (getState) => {
-            const {
-                activeForm,
-            } = getState();
-            const {
-                query,
-            } = activeForm;
-
-            const query_all = `/agreement/?query=${query}&paginatePage`;
-            return query_all;
-        },
-        meta: {
-            debounce: {
-                time: 300,
-            },
-        },
-    };
-}
-
 export function getAccountAgreements(selectedAccount) {
     return {
         type: API_CALL,
@@ -1023,29 +902,6 @@ export function getPaymentID(selectedPayment) {
         type: API_CALL,
         endpoint: GET_PAYMENT_ID,
         url: `/payment/${selectedPayment}`,
-    };
-}
-
-export function getPaymentQuery() {
-    return {
-        type: API_CALL,
-        endpoint: GET_PAYMENT_QUERY,
-        url: (getState) => {
-            const {
-                activeForm,
-            } = getState();
-            const {
-                query,
-            } = activeForm;
-
-            const query_all = `/payment/?query=${query}&paginatePage`;
-            return query_all;
-        },
-        meta: {
-            debounce: {
-                time: 300,
-            },
-        },
     };
 }
 
@@ -1178,29 +1034,6 @@ export function getProjectID(selectedProject) {
     };
 }
 
-export function getProjectQuery() {
-    return {
-        type: API_CALL,
-        endpoint: GET_PROJECT_QUERY,
-        url: (getState) => {
-            const {
-                activeForm,
-            } = getState();
-            const {
-                query,
-            } = activeForm;
-
-            const query_all = `/project/?query=${query}&paginatePage`;
-            return query_all;
-        },
-        meta: {
-            debounce: {
-                time: 300,
-            },
-        },
-    };
-}
-
 export function getAgreementProjects(selectedAgreement) {
     return {
         type: API_CALL,
@@ -1298,29 +1131,6 @@ export function getProjectCostID(selectedProjectCost) {
     };
 }
 
-export function getProjectCostQuery() {
-    return {
-        type: API_CALL,
-        endpoint: GET_PROJECT_COST_QUERY,
-        url: (getState) => {
-            const {
-                activeForm,
-            } = getState();
-            const {
-                query,
-            } = activeForm;
-
-            const query_all = `/estimate/?query=${query}&paginatePage`;
-            return query_all;
-        },
-        meta: {
-            debounce: {
-                time: 300,
-            },
-        },
-    };
-}
-
 export function getProjectProjectCosts(selectedProject) {
     return {
         type: API_CALL,
@@ -1414,29 +1224,6 @@ export function getAccountLedgerID(selectedAccountLedger) {
     };
 }
 
-export function getAccountLedgerQuery() {
-    return {
-        type: API_CALL,
-        endpoint: GET_ACCOUNT_LEDGER_QUERY,
-        url: (getState) => {
-            const {
-                activeForm,
-            } = getState();
-            const {
-                query,
-            } = activeForm;
-
-            const query_all = `/ledger/?query=${query}&paginatePage`;
-            return query_all;
-        },
-        meta: {
-            debounce: {
-                time: 300,
-            },
-        },
-    };
-}
-
 export function getLotAccountLedgers(selectedLot) {
     return {
         type: API_CALL,
@@ -1475,7 +1262,6 @@ export function postAccountLedger() {
                 entry_date,
                 account_from,
                 account_to,
-                plat,
                 lot,
                 agreement,
                 entry_type,
@@ -1486,7 +1272,6 @@ export function postAccountLedger() {
                 entry_date,
                 account_from,
                 account_to,
-                plat,
                 lot,
                 agreement,
                 entry_type,
@@ -1511,7 +1296,6 @@ export function putAccountLedger(selectedAccountLedger) {
                 entry_date,
                 account_from,
                 account_to,
-                plat,
                 lot,
                 agreement,
                 entry_type,
@@ -1522,7 +1306,6 @@ export function putAccountLedger(selectedAccountLedger) {
                 entry_date,
                 account_from,
                 account_to,
-                plat,
                 lot,
                 agreement,
                 entry_type,
@@ -1537,11 +1320,72 @@ export function getPagination(page) {
     return {
         type: API_CALL,
         endpoint: GET_PAGINATION,
-        url: () => {
-            if (!page.includes('paginatePage=true')) {
-                return `${page}?paginatePage=true`;
+        url: (getState) => {
+            const {
+                activeForm,
+            } = getState();
+            const {
+                currentPage,
+                page_size,
+            } = activeForm;
+            
+            if (!page) {
+                if (currentPage === '/account-ledger/') {
+                    return '/ledger/?paginatePage';
+                }
+
+                if (currentPage === '/project-cost/') {
+                    return '/estimate/?paginatePage';
+                }
+
+                if (page_size) {
+                    return `${currentPage}?paginatePage&pageSize=${page_size}`;
+                }
+                return `${currentPage}?paginatePage`;
+            }
+            if (!page.includes('paginatePage')) {
+                return `${page}?paginatePage`;
             }
             return `${page}`;
+        },
+    };
+}
+
+export function searchQuery() {
+    return {
+        type: API_CALL,
+        endpoint: SEARCH_QUERY,
+        url: (getState) => {
+            const {
+                activeForm,
+            } = getState();
+
+
+            let query_all = `${activeForm.currentPage}?paginatePage`;
+
+            if (activeForm.currentPage === '/account-ledger/') {
+                query_all = '/ledger/?paginatePage';
+            }
+
+            if (activeForm.currentPage === '/project-cost/') {
+                query_all = '/estimate/?paginatePage';
+            }
+
+            const queryString = compose(
+                reduce((acc, value) => acc + value, query_all),
+                map((a) => {
+                    const field = a[0].slice(7, a[0].length);
+                    return `&${field}=${a[1]}`;
+                }),
+                filter(a => a[1] && a[0].startsWith('filter_')),
+            )(Object.entries(activeForm));
+
+            return queryString;
+        },
+        meta: {
+            debounce: {
+                time: 300,
+            },
         },
     };
 }

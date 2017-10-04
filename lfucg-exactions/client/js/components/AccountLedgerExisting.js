@@ -8,15 +8,16 @@ import Navbar from './Navbar';
 import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
 import Pagination from './Pagination';
+import SearchBar from './SearchBar';
+
+import { entry_types } from '../constants/searchBarConstants';
 
 import {
     getPagination,
-    getAccountLedgerQuery,
+    getAgreements,
+    getLots,
+    getAccounts,
 } from '../actions/apiActions';
-
-import {
-    formUpdate,
-} from '../actions/formActions';
 
 class AccountLedgerExisting extends React.Component {
     componentDidMount() {
@@ -27,8 +28,34 @@ class AccountLedgerExisting extends React.Component {
         const {
             currentUser,
             accountLedgers,
-            onAccountLedgerQuery,
+            lots,
+            agreements,
+            accounts,
         } = this.props;
+
+        const agreementsList = agreements && agreements.length > 0 &&
+            (map((single_agreement) => {
+                return {
+                    id: single_agreement.id,
+                    name: single_agreement.resolution_number,
+                };
+            })(agreements));
+
+        const lotsList = lots && lots.length > 0 &&
+            (map((single_lot) => {
+                return {
+                    id: single_lot.id,
+                    name: single_lot.address_full,
+                };
+            })(lots));
+
+        const accountsList = accounts && accounts.length > 0 &&
+            (map((single_account) => {
+                return {
+                    id: single_account.id,
+                    name: single_account.account_name,
+                };
+            })(accounts));
 
         const accountLedgers_list = accountLedgers.length > 0 ? (
             map((accountLedger) => {
@@ -94,22 +121,16 @@ class AccountLedgerExisting extends React.Component {
 
                 <Breadcrumbs route={this.props.route} />
 
-                <div className="row search-box">
-                    <form onChange={onAccountLedgerQuery('query')} className="col-sm-10 col-sm-offset-1" >
-                        <fieldset>
-                            <div className="col-sm-2 col-xs-12">
-                                <label htmlFor="query" className="form-label">Search</label>
-                            </div>
-                            <div className="col-sm-10 col-xs-12">
-                                <input
-                                  type="text"
-                                  className="form-control"
-                                  placeholder="Search Account Ledgers"
-                                />
-                            </div>
-                        </fieldset>
-                    </form>
-                </div>
+                <SearchBar
+                  apiCalls={[getAgreements, getLots, getAccounts]}
+                  advancedSearch={[
+                    { filterField: 'filter_entry_type', displayName: 'Type', list: entry_types },
+                    { filterField: 'filter_agreement', displayName: 'Agreement', list: agreementsList },
+                    { filterField: 'filter_account_to', displayName: 'Account To', list: accountsList },
+                    { filterField: 'filter_account_from', displayName: 'Account From', list: accountsList },
+                    { filterField: 'filter_lot', displayName: 'Lots', list: lotsList },
+                  ]}
+                />
 
                 <div className="inside-body">
                     <div className="container">
@@ -125,16 +146,21 @@ class AccountLedgerExisting extends React.Component {
 
 AccountLedgerExisting.propTypes = {
     currentUser: PropTypes.object,
-    accountLedgers: PropTypes.object,
+    accountLedgers: PropTypes.array,
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
-    onAccountLedgerQuery: PropTypes.func,
+    agreements: PropTypes.array,
+    lots: PropTypes.array,
+    accounts: PropTypes.array,
 };
 
 function mapStateToProps(state) {
     return {
         currentUser: state.currentUser,
         accountLedgers: state.accountLedgers,
+        agreements: state.agreements,
+        lots: state.lots,
+        accounts: state.accounts,
     };
 }
 
@@ -142,16 +168,6 @@ function mapDispatchToProps(dispatch) {
     return {
         onComponentDidMount() {
             dispatch(getPagination('/ledger/'));
-        },
-        onAccountLedgerQuery(field) {
-            return (e, ...args) => {
-                const value = typeof e.target.value !== 'undefined' ? e.target.value : args[1];
-                const update = {
-                    [field]: value,
-                };
-                dispatch(formUpdate(update));
-                dispatch(getAccountLedgerQuery());
-            };
         },
     };
 }

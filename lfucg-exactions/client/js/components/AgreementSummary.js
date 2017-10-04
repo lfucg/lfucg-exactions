@@ -208,6 +208,7 @@ class AgreementSummary extends React.Component {
                                         </div>
                                     </div>
                                     <div className="col-xs-12">
+                                        <p className="col-md-4 col-xs-6">Current Balance: {agreements.agreement_balance && agreements.agreement_balance.total}</p>
                                         <p className="col-md-4 col-xs-6">Resolution Number: {agreements.resolution_number}</p>
                                         <p className="col-md-4 col-xs-6">Expansion Area: {agreements.expansion_area}</p>
                                         <p className="col-md-4 col-xs-6">Agreement Type: {agreements.agreement_type_display}</p>
@@ -400,10 +401,10 @@ class AgreementSummary extends React.Component {
 
 AgreementSummary.propTypes = {
     currentUser: PropTypes.object,
-    agreements: PropTypes.object,
-    payments: PropTypes.object,
-    projects: PropTypes.object,
-    accountLedgers: PropTypes.object,
+    agreements: PropTypes.array,
+    payments: PropTypes.array,
+    projects: PropTypes.array,
+    accountLedgers: PropTypes.array,
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
 };

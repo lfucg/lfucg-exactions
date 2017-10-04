@@ -130,7 +130,7 @@ class AccountLedgerSummary extends React.Component {
                                             </div>
                                             <div className="col-xs-12">
                                                 <p className="col-xs-12">Lot Address: {accountLedgers.lot.address_full}</p>
-                                                <p className="col-md-4 col-xs-6">Current Exactions: {accountLedgers.lot && accountLedgers.lot.lot_exactions && accountLedgers.lot.lot_exactions.current_exactions}</p>
+                                                <p className="col-md-4 col-xs-6">Current Exactions: {accountLedgers.lot.lot_exactions && accountLedgers.lot.lot_exactions.current_exactions}</p>
                                                 <p className="col-md-4 col-xs-6 ">Lot Number: {accountLedgers.lot.lot_number}</p>
                                                 <p className="col-md-4 col-xs-6">Permit ID: {accountLedgers.lot.permit_id}</p>
                                             </div>
@@ -322,6 +322,7 @@ class AccountLedgerSummary extends React.Component {
                                                 </div>
                                             </div>
                                             <div className="col-xs-12">
+                                                <p className="col-md-4 col-xs-6">Current Balance: {accountLedgers.agreement.agreement_balance && accountLedgers.agreement.agreement_balance.total}</p>
                                                 <p className="col-md-4 col-xs-6">Resolution Number: {accountLedgers.agreement.resolution_number}</p>
                                                 <p className="col-md-4 col-xs-6">Expansion Area: {accountLedgers.agreement.expansion_area}</p>
                                                 <p className="col-md-4 col-xs-6">Agreement Type: {accountLedgers.agreement.agreement_type_display}</p>
@@ -347,7 +348,7 @@ class AccountLedgerSummary extends React.Component {
 
 AccountLedgerSummary.propTypes = {
     currentUser: PropTypes.object,
-    accountLedgers: PropTypes.object,
+    accountLedgers: PropTypes.array,
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
 };

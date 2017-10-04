@@ -173,8 +173,8 @@ class SubdivisionSummary extends React.Component {
 
 SubdivisionSummary.propTypes = {
     currentUser: PropTypes.object,
-    subdivisions: PropTypes.object,
-    plats: PropTypes.object,
+    subdivisions: PropTypes.array,
+    plats: PropTypes.array,
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
 };
