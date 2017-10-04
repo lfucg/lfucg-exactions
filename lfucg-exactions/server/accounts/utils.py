@@ -42,27 +42,26 @@ def calculate_agreement_balance(agreement_id):
     ledger_from_value = 0
     ledger_to_value = 0
     
-    related_account_id = agreement[0].account_id.id
+    if agreement.exists():
+        related_account_id = agreement[0].account_id.id
 
-    account_ledger_agreements_from = AccountLedger.objects.filter(agreement=agreement_id, account_from=related_account_id)
-    account_ledger_agreements_to = AccountLedger.objects.filter(agreement=agreement_id, account_to=related_account_id)
+        account_ledger_agreements_from = AccountLedger.objects.filter(agreement=agreement_id, account_from=related_account_id)
+        account_ledger_agreements_to = AccountLedger.objects.filter(agreement=agreement_id, account_to=related_account_id)
 
-    if account_ledger_agreements_from.exists():
-        for ledger_from in account_ledger_agreements_from:
-            ledger_from_credits = ledger_from.non_sewer_credits + ledger_from.sewer_credits
-            ledger_from_value += ledger_from_credits
+        if account_ledger_agreements_from.exists():
+            for ledger_from in account_ledger_agreements_from:
+                ledger_from_value += ledger_from.non_sewer_credits + ledger_from.sewer_credits
 
-    if account_ledger_agreements_to.exists():
-        for ledger_to in account_ledger_agreements_to:
-            ledger_to_credits = ledger_to.non_sewer_credits + ledger_to.sewer_credits
-            ledger_to_value += ledger_to_credits            
+        if account_ledger_agreements_to.exists():
+            for ledger_to in account_ledger_agreements_to:
+                ledger_to_value += ledger_to.non_sewer_credits + ledger_to.sewer_credits
 
     payment_value = 0
     payments = Payment.objects.filter(credit_source=agreement_id)
 
     if payments.exists():
         for payment in payments:
-            payment_paid = (
+            payment_value += (
                 payment.paid_roads +
                 payment.paid_sewer_trans +
                 payment.paid_sewer_cap +
@@ -70,7 +69,6 @@ def calculate_agreement_balance(agreement_id):
                 payment.paid_storm +
                 payment.paid_open_space
             )
-            payment_value += payment_paid
     
     current_agreement_total = ledger_to_value - ledger_from_value - payment_value
 

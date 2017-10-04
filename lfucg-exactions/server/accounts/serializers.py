@@ -94,10 +94,8 @@ class AgreementSerializer(serializers.ModelSerializer):
         return obj.get_agreement_type_display()
 
     def get_agreement_balance(self, obj):
-        calculated_balance = calculate_agreement_balance(obj.id)
-
         return {
-            'total': '${:,.2f}'.format(calculated_balance),
+            'total': '${:,.2f}'.format(calculate_agreement_balance(obj.id)),
         }
 
     class Meta:
