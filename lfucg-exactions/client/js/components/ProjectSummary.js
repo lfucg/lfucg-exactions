@@ -235,8 +235,8 @@ class ProjectSummary extends React.Component {
 
 ProjectSummary.propTypes = {
     currentUser: PropTypes.object,
-    projects: PropTypes.object,
-    projectCosts: PropTypes.object,
+    projects: PropTypes.array,
+    projectCosts: PropTypes.array,
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
 };

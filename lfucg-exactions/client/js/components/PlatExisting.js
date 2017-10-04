@@ -8,15 +8,16 @@ import Navbar from './Navbar';
 import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
 import Pagination from './Pagination';
+import SearchBar from './SearchBar';
 
 import {
     getPagination,
-    getPlatQuery,
+    getAccounts,
+    getSubdivisions,
+    getLots,
 } from '../actions/apiActions';
 
-import {
-    formUpdate,
-} from '../actions/formActions';
+import { expansion_areas, plat_types } from '../constants/searchBarConstants';
 
 class PlatExisting extends React.Component {
     componentDidMount() {
@@ -27,10 +28,36 @@ class PlatExisting extends React.Component {
         const {
             currentUser,
             plats,
-            onPlatQuery,
+            accounts,
+            subdivisions,
+            lots,
         } = this.props;
 
-        const plats_list = plats.length > 0 ? (
+        const lotsList = lots && lots.length > 0 &&
+            (map((single_lot) => {
+                return {
+                    id: single_lot.id,
+                    name: single_lot.address_full,
+                };
+            })(lots));
+
+        const accountsList = accounts && accounts.length > 0 &&
+            (map((single_account) => {
+                return {
+                    id: single_account.id,
+                    name: single_account.account_name,
+                };
+            })(accounts));
+
+        const subdivisionsList = subdivisions && subdivisions.length > 0 &&
+            (map((single_subdivision) => {
+                return {
+                    id: single_subdivision.id,
+                    name: single_subdivision.name,
+                };
+            })(subdivisions));
+
+        const plats_list = plats && plats.length > 0 ? (
             map((plat) => {
                 return (
                     <div key={plat.id} className="col-xs-12">
@@ -98,22 +125,16 @@ class PlatExisting extends React.Component {
 
                 <Breadcrumbs route={this.props.route} />
 
-                <div className="row search-box">
-                    <form onChange={onPlatQuery('query')} className="col-sm-10 col-sm-offset-1" >
-                        <fieldset>
-                            <div className="col-sm-2 col-xs-12">
-                                <label htmlFor="query" className="form-label">Search</label>
-                            </div>
-                            <div className="col-sm-10 col-xs-12">
-                                <input
-                                  type="text"
-                                  className="form-control"
-                                  placeholder="Search Plats"
-                                />
-                            </div>
-                        </fieldset>
-                    </form>
-                </div>
+                <SearchBar
+                  apiCalls={[getAccounts, getSubdivisions, getLots]}
+                  advancedSearch={[
+                    { filterField: 'filter_expansion_area', displayName: 'EA', list: expansion_areas },
+                    { filterField: 'filter_account', displayName: 'Developer', list: accountsList },
+                    { filterField: 'filter_subdivision', displayName: 'Subdivision', list: subdivisionsList },
+                    { filterField: 'filter_plat_type', displayName: 'Type', list: plat_types },
+                    { filterField: 'filter_lot__id', displayName: 'Lot', list: lotsList },
+                  ]}
+                />
 
                 <div className="inside-body">
                     <div className="container">
@@ -129,16 +150,21 @@ class PlatExisting extends React.Component {
 
 PlatExisting.propTypes = {
     currentUser: PropTypes.object,
-    plats: PropTypes.object,
+    plats: PropTypes.array,
+    accounts: PropTypes.array,
+    subdivisions: PropTypes.array,
+    lots: PropTypes.array,
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
-    onPlatQuery: PropTypes.func,
 };
 
 function mapStateToProps(state) {
     return {
         currentUser: state.currentUser,
         plats: state.plats,
+        accounts: state.accounts,
+        subdivisions: state.subdivisions,
+        lots: state.lots,
     };
 }
 
@@ -146,16 +172,6 @@ function mapDispatchToProps(dispatch) {
     return {
         onComponentDidMount() {
             dispatch(getPagination('/plat/'));
-        },
-        onPlatQuery(field) {
-            return (e, ...args) => {
-                const value = typeof e.target.value !== 'undefined' ? e.target.value : args[1];
-                const update = {
-                    [field]: value,
-                };
-                dispatch(formUpdate(update));
-                dispatch(getPlatQuery());
-            };
         },
     };
 }
