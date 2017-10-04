@@ -353,7 +353,7 @@ class PlatSummary extends React.Component {
                                 <div className="panel-body">
                                     <div className="col-xs-12">
                                         {plats.id &&
-                                            <Notes content_type="Plat" object_id={plats.id} />
+                                            <Notes content_type="plats, plat" object_id={plats.id} />
                                         }
                                     </div>
                                 </div>

@@ -1,4 +1,4 @@
-from rest_framework import viewsets, status
+from rest_framework import viewsets, status, generics
 from django.db.models import Q
 from rest_framework.response import Response
 from django.contrib.contenttypes.models import ContentType
@@ -124,7 +124,6 @@ class RateViewSet(viewsets.ModelViewSet):
 class FileUploadViewSet(viewsets.ModelViewSet):
     serializer_class = FileUploadSerializer
     queryset = FileUpload.objects.all()
-    parser_classes = (FileUploadParser, MultiPartParser)
 
     def get_queryset(self):
         queryset = FileUpload.objects.all()
@@ -133,11 +132,11 @@ class FileUploadViewSet(viewsets.ModelViewSet):
         file_object_id = self.request.query_params.get('file_object_id', None)
         
         if file_content_type_string is not None:
-            if file_content_type_string == 'Plat':
+            if file_content_type_string == 'plats,plat':
                 file_content_type = ContentType.objects.get_for_model(Plat)
-            elif file_content_type_string == 'Lot':
+            elif file_content_type_string == 'plats,lot':
                 file_content_type = ContentType.objects.get_for_model(Lot)
-            elif file_content_type_string == 'Subdivision':
+            elif file_content_type_string == 'plats,subdivision':
                 file_content_type = ContentType.objects.get_for_model(Subdivision)
 
             query_list = queryset.filter(
@@ -150,35 +149,15 @@ class FileUploadViewSet(viewsets.ModelViewSet):
 
         return queryset.order_by('-date')
 
-    # def get_object(self):
-    #     print('GET OBJECT SELF', self)
-
-    # def post(self, request, filename, format=None):
-    #     print('VIEW REQUEST ', request)
-    #     # print('VIEW DIR REQUEST', dir(request))
-    #     print('VIEW REQUEST DATA', self.request.data.get('file_content_type'))
-    #     print('VIEW REQUEST DATA FILE', request.data['file'])
-    #     # print('VIEW REQUEST DATA CONTENT TYPE', request.query_params.get('upload', None))
-    #     # print('VIEW REQUEST DIR DATA', dir(request.data))
-    #     print('VIEW SELF', self)
-    #     print('VIEW DIR SELF', dir(self))
-    #     file_obj = request.data['file']
-    #     # ...
-    #     # do some stuff with uploaded file
-    #     # ...
-    #     content_type = ContentType.objects.get_for_model(Plat)
-    #     new_upload = FileUpload.objects.create(
-    #         upload=request.data['file'],
-    #         file_content_type=content_type,
-    #         file_object_id=20,
-    #     )
-        # upload_serializer = FileUploadSerializer(context = {
-        #     'upload': request.data['file'],
-        #     'file_content_type': file_content_type,
-        #     'file_object_id': 20,
-        # }).data
-
-        # print('SERIALIZED', upload_serializer)
-
         return Response(status=204)
+
+class FileUploadCreate(generics.CreateAPIView):
+    model = FileUpload
+    serializer_class = FileUploadCreateSerializer
+    parser_classes = (MultiPartParser, FileUploadParser)
+
+    def perform_create(self, serializer):
+        if serializer.is_valid():
+            serializer.save()
+
     
