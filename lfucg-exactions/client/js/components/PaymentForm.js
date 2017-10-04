@@ -230,10 +230,10 @@ class PaymentForm extends React.Component {
 
 PaymentForm.propTypes = {
     activeForm: PropTypes.object,
-    lots: PropTypes.object,
-    accounts: PropTypes.object,
-    agreements: PropTypes.object,
-    payments: PropTypes.object,
+    lots: PropTypes.array,
+    accounts: PropTypes.array,
+    agreements: PropTypes.array,
+    payments: PropTypes.array,
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
     onSubmit: PropTypes.func,

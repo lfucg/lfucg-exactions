@@ -401,10 +401,10 @@ class AgreementSummary extends React.Component {
 
 AgreementSummary.propTypes = {
     currentUser: PropTypes.object,
-    agreements: PropTypes.object,
-    payments: PropTypes.object,
-    projects: PropTypes.object,
-    accountLedgers: PropTypes.object,
+    agreements: PropTypes.array,
+    payments: PropTypes.array,
+    projects: PropTypes.array,
+    accountLedgers: PropTypes.array,
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
 };
