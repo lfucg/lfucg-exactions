@@ -60,6 +60,7 @@ INSTALLED_APPS = (
     # Application base, containing global templates.
     'base',
     'simple_history',
+    'storages',
 
     # Local apps, referenced via appname
     'accounts',
