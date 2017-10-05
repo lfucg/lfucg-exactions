@@ -27,6 +27,7 @@ class Notes extends React.Component {
 
     render() {
         const {
+            currentUser,
             activeForm,
             notes,
             onSubmit,
@@ -76,26 +77,30 @@ class Notes extends React.Component {
                 <div className="row existing-notes">
                     {notesList}
                 </div>
-                <form onSubmit={onSubmit} >
-                    <fieldset>
-                        <div className="row">
-                            <FormGroup label="Add Notes" id="note">
-                                <textarea type="text" className="form-control" placeholder="Add Notes" rows="5" />
-                            </FormGroup>
-                        </div>
-                        <div className="col-sm-3">
-                            <button className="btn btn-lex">
-                                Add Note
-                            </button>
-                        </div>
-                    </fieldset>
-                </form>
+                {console.log('CURRENT USER', currentUser)}
+                {currentUser && currentUser.id &&
+                    <form onSubmit={onSubmit} >
+                        <fieldset>
+                            <div className="row">
+                                <FormGroup label="Add Notes" id="note">
+                                    <textarea type="text" className="form-control" placeholder="Add Notes" rows="5" />
+                                </FormGroup>
+                            </div>
+                            <div className="col-sm-3">
+                                <button className="btn btn-lex">
+                                    Add Note
+                                </button>
+                            </div>
+                        </fieldset>
+                    </form>
+                }
             </div>
         );
     }
 }
 
 Notes.propTypes = {
+    currentUser: PropTypes.object,
     activeForm: PropTypes.object,
     notes: PropTypes.object,
     onComponentDidMount: PropTypes.func,
@@ -108,6 +113,7 @@ Notes.propTypes = {
 
 function mapStateToProps(state) {
     return {
+        currentUser: state.currentUser,
         activeForm: state.activeForm,
         notes: state.notes,
     };
