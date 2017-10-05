@@ -353,6 +353,9 @@ function mapDispatchToProps(dispatch, params) {
                         const update = {
                             lot_id: value_id,
                             address_full: value_name,
+                            lot_exactions: lot_id.response.lot_exactions.current_exactions,
+                            non_sewer_exactions: lot_id.response.lot_exactions.non_sewer_due,
+                            sewer_exactions: lot_id.response.lot_exactions.sewer_due,
                         };
                         dispatch(formUpdate(update));
                     }
