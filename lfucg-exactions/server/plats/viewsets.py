@@ -145,9 +145,7 @@ class LotViewSet(viewsets.ModelViewSet):
 
     def update(self, request, pk):
         existing_object  = self.get_object()
-
         setattr(existing_object, 'modified_by', request.user)
-        
         for key, value in request.data.items():
             for existing_object_key, existing_object_value in existing_object.__dict__.items():
                 if key == existing_object_key:
