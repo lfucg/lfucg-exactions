@@ -101,7 +101,7 @@ def model_directory_path(instance, filename):
 
 class FileUpload(models.Model):
     upload = models.FileField(upload_to=model_directory_path)
-    date = models.DateTimeField(auto_now=True)
+    date = models.DateTimeField(auto_now_add=True)
 
     file_content_type = models.ForeignKey(ContentType)
     file_object_id = models.PositiveIntegerField()
