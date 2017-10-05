@@ -90,7 +90,7 @@ class PaymentExisting extends React.Component {
                         </div>
                         <div className="row">
                             <div className="col-sm-offset-1">
-                                <p className="col-md-4 col-xs-6">Agreement Resolution: {payment.credit_source ? payment.credit_source.resolution_number : null}</p>
+                                <p className="col-md-4 col-xs-6">Agreement Resolution: {payment.credit_source && payment.credit_source.resolution_number}</p>
                                 <p className="col-md-4 col-xs-6">Payment Type: {payment.payment_type}</p>
                                 <p className="col-xs-12">Lot: {payment.lot_id.address_full}</p>
                             </div>
