@@ -126,224 +126,92 @@ class LotSummary extends React.Component {
         return (
             <div className="lot-summary">
                 <Navbar />
-
-                <div className="form-header">
-                    <div className="container">
-                        <h1>LOTS - {currentLot && currentLot.address_full}</h1>
-                    </div>
-                </div>
-                <Breadcrumbs route={this.props.route} parent_link={'lot'} parent_name={'Lots'} />
-
-                <div className="inside-body">
-                    <div className="container">
-                        <div className="row">
-                            <div className="col-xs-10 col-xs-offset-1">
-                                {currentUser && currentUser.id && currentLot && !currentLot.permit_id &&
-                                <button type="button" className="btn btn-lex btn-lg pull-right" data-toggle="modal" data-target="#permitModal">
-                                    <i className="fa fa-clipboard" aria-hidden="true" />&nbsp;Add Permit ID
-                                </button>
-                                }
-                            </div>
+                    <div className="form-header">
+                        <div className="container">
+                            <h1>LOTS - {currentLot && currentLot.address_full}</h1>
                         </div>
-                        <div className="modal fade" id="permitModal" tabIndex="-1" role="dialog" aria-labelledby="modalLabel">
-                            <div className="modal-dialog" role="document">
-                                <div className="modal-content">
-                                    {currentLot && currentLot.total_due && currentLot.total_due > 0 ? (
-                                        <div>
-                                            <div className="modal-header">
-                                                <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                                <h3 className="modal-title" id="modalLabel">Exactions due on this lot.</h3>
-                                            </div>
-                                            <div className="modal-body">
-                                                <h4 className="text-center">Our records indicate an outstanding balance of <strong>${(currentLot.total_due).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</strong> for this lot. Please contact finance to submit payment prior to applying for a permit for:</h4>
-                                                <h4 className="text-center">{currentLot.address_full}</h4>
-                                            </div>
-                                            <div className="modal-footer">
-                                                <button type="button" className="btn btn-default" data-dismiss="modal">Close</button>
-                                            </div>
-                                        </div>
-                                        ) : (
-                                        <div>
-                                            <div className="modal-header">
-                                                <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                                <h2 className="modal-title text-center" id="modalLabel">Permit Request: {currentLot && currentLot.address_full}</h2>
-                                            </div>
-                                            <div className="modal-body">
-                                                <FormGroup label="Permit ID" id="permit_id">
-                                                    <input type="text" className="form-control" placeholder="Please enter the Permit ID for this lot..." />
-                                                </FormGroup>
-                                            </div>
-                                            <div className="modal-footer">
-                                                <button type="button" className="btn btn-primary" onClick={addPermitToLot} data-dismiss="modal">Save</button>
-                                                <button type="button" className="btn btn-default" data-dismiss="modal">Close</button>
-                                            </div>
-                                        </div>
-                                        )
+                    </div>
+                    <Breadcrumbs route={this.props.route} parent_link={'lot'} parent_name={'Lots'} />
+                    
+                    <div className="inside-body">
+                {currentLot &&
+                    <div>
+                        <div className="container">
+                            <div className="row">
+                                <div className="col-xs-10 col-xs-offset-1">
+                                    {currentUser && currentUser.id && !currentLot.permit_id &&
+                                    <button type="button" className="btn btn-lex btn-lg pull-right" data-toggle="modal" data-target="#permitModal">
+                                        <i className="fa fa-clipboard" aria-hidden="true" />&nbsp;Add Permit ID
+                                    </button>
                                     }
                                 </div>
                             </div>
-                        </div>
-                        <div className="col-md-offset-1 col-md-10 panel-group" id="accordion" role="tablist" aria-multiselectable="false">
-                            <a
-                              role="button"
-                              data-toggle="collapse"
-                              data-parent="#accordion"
-                              href="#collapseGeneralLot"
-                              aria-expanded="false"
-                              aria-controls="collapseGeneralLot"
-                            >
-                                <div className="row section-heading" role="tab" id="headingLot">
-                                    <div className="col-xs-1 caret-indicator" />
-                                    <div className="col-xs-10">
-                                        <h2>General Lot Information</h2>
-                                    </div>
-                                </div>
-                            </a>
-                            <div
-                              id="collapseGeneralLot"
-                              className="panel-collapse collapse row"
-                              role="tabpanel"
-                              aria-labelledby="#headingLot"
-                            >
-                                <div className="panel-body">
-                                    <div className="row link-row">
-                                        <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
-                                            <div className="col-xs-5 col-xs-offset-5">
-                                                {currentUser && currentUser.permissions && currentUser.permissions.lot && currentLot &&
-                                                    <Link to={`lot/form/${currentLot.id}`} aria-label="Edit">
-                                                        <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
-                                                        <div className="col-xs-7 link-label">
-                                                            Edit
-                                                        </div>
-                                                    </Link>
-                                                }
+                            <div className="modal fade" id="permitModal" tabIndex="-1" role="dialog" aria-labelledby="modalLabel">
+                                <div className="modal-dialog" role="document">
+                                    <div className="modal-content">
+                                        {currentLot.total_due && currentLot.total_due > 0 ? (
+                                            <div>
+                                                <div className="modal-header">
+                                                    <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                    <h3 className="modal-title" id="modalLabel">Exactions due on this lot.</h3>
+                                                </div>
+                                                <div className="modal-body">
+                                                    <h4 className="text-center">Our records indicate an outstanding balance of <strong>${(currentLot.total_due).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</strong> for this lot. Please contact finance to submit payment prior to applying for a permit for:</h4>
+                                                    <h4 className="text-center">{currentLot.address_full}</h4>
+                                                </div>
+                                                <div className="modal-footer">
+                                                    <button type="button" className="btn btn-default" data-dismiss="modal">Close</button>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                    <div className="col-xs-12">
-                                        <h3 className="col-xs-12 ">Current Exactions: {currentLot && currentLot.lot_exactions && currentLot.lot_exactions.current_exactions}</h3>
-                                        <p className="col-md-8 col-xs-12">Address: {currentLot && currentLot.address_full}</p>
-                                        <p className="col-md-4 col-xs-6">Lot Number: {currentLot && currentLot.lot_number}</p>
-                                        <p className="col-md-4 col-xs-6 ">Permit ID: {currentLot && currentLot.permit_id}</p>
-                                        <p className="col-md-4 col-xs-6">Latitude: {currentLot && currentLot.latitude}</p>
-                                        <p className="col-md-4 col-xs-6">Longitude: {currentLot && currentLot.longitude}</p>
-                                        <p className="col-md-4 col-xs-6">Approved: {currentLot && currentLot.is_approved ? 'Approved' : 'Not Approved'}</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <a
-                              role="button"
-                              data-toggle="collapse"
-                              data-parent="#accordion"
-                              href="#collapseLotExactions"
-                              aria-expanded="false"
-                              aria-controls="collapseLotExactions"
-                            >
-                                <div className="row section-heading" role="tab" id="headingLotExactions">
-                                    <div className="col-xs-1 caret-indicator" />
-                                    <div className="col-xs-10">
-                                        <h2>Lot Exactions</h2>
-                                    </div>
-                                </div>
-                            </a>
-                            <div
-                              id="collapseLotExactions"
-                              className="panel-collapse collapse row"
-                              role="tabpanel"
-                              aria-labelledby="#headingLotExactions"
-                            >
-                                <div className="panel-body">
-                                    <div className="row link-row">
-                                        <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
-                                            <div className="col-xs-5 col-xs-offset-5">
-                                                {currentUser && currentUser.permissions && currentUser.permissions.lot && currentLot &&
-                                                    <Link to={`lot/form/${currentLot.id}`} aria-label="Edit">
-                                                        <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
-                                                        <div className="col-xs-7 link-label">
-                                                            Edit
-                                                        </div>
-                                                    </Link>
-                                                }
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="col-xs-12">
-                                        <h3 className="col-xs-12 ">Current Exactions: {currentLot && currentLot.lot_exactions && currentLot.lot_exactions.current_exactions}</h3>
-                                        <p className="col-sm-6">Road Developer Exactions: ${currentLot && currentLot.dues_roads_dev}</p>
-                                        <p className="col-sm-6">Road Owner Exactions: ${currentLot && currentLot.dues_roads_own}</p>
-                                        <p className="col-sm-6">Sewer Transmission Developer Exactions: ${currentLot && currentLot.dues_sewer_trans_dev}</p>
-                                        <p className="col-sm-6">Sewer Transmission Owner Exactions: ${currentLot && currentLot.dues_sewer_trans_own}</p>
-                                        <p className="col-sm-6">Sewer Capacity Developer Exactions: ${currentLot && currentLot.dues_sewer_cap_dev}</p>
-                                        <p className="col-sm-6">Sewer Capacity Owner Exactions: ${currentLot && currentLot.dues_sewer_cap_own}</p>
-                                        <p className="col-sm-6">Parks Developer Exactions: ${currentLot && currentLot.dues_parks_dev}</p>
-                                        <p className="col-sm-6">Parks Owner Exactions: ${currentLot && currentLot.dues_parks_own}</p>
-                                        <p className="col-sm-6">Storm Developer Exactions: ${currentLot && currentLot.dues_storm_dev}</p>
-                                        <p className="col-sm-6">Storm Owner Exactions: ${currentLot && currentLot.dues_storm_own}</p>
-                                        <p className="col-sm-6">Open Space Developer Exactions: ${currentLot && currentLot.dues_open_space_dev}</p>
-                                        <p className="col-sm-6">Open Space Owner Exactions: ${currentLot && currentLot.dues_open_space_own}</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <a
-                              role="button"
-                              data-toggle="collapse"
-                              data-parent="#accordion"
-                              href="#collapseNotes"
-                              aria-expanded="false"
-                              aria-controls="collapseNotes"
-                            >
-                                <div className="row section-heading" role="tab" id="headingNotes">
-                                    <div className="col-xs-1 caret-indicator" />
-                                    <div className="col-xs-8 col-xs-offset-1">
-                                        <h2>Notes</h2>
-                                    </div>
-                                </div>
-                            </a>
-                            <div
-                              id="collapseNotes"
-                              className="panel-collapse collapse row"
-                              role="tabpanel"
-                              aria-labelledby="#headingNotes"
-                            >
-                                <div className="panel-body">
-                                    <div className="col-xs-12">
-                                        {currentLot && currentLot.id &&
-                                            <Notes content_type="Lot" object_id={currentLot && currentLot.id} parent_content_type="Plat" parent_object_id={currentLot && currentLot.plat.id} />
+                                            ) : (
+                                                <div>
+                                                    <div className="modal-header">
+                                                        <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                        <h2 className="modal-title text-center" id="modalLabel">Permit Request: {currentLot.address_full}</h2>
+                                                    </div>
+                                                    <div className="modal-body">
+                                                        <FormGroup label="Permit ID" id="permit_id">
+                                                            <input type="text" className="form-control" placeholder="Please enter the Permit ID for this lot..." />
+                                                        </FormGroup>
+                                                    </div>
+                                                    <div className="modal-footer">
+                                                        <button type="button" className="btn btn-primary" onClick={addPermitToLot} data-dismiss="modal">Save</button>
+                                                        <button type="button" className="btn btn-default" data-dismiss="modal">Close</button>
+                                                    </div>
+                                                </div>
+                                            )
                                         }
                                     </div>
                                 </div>
                             </div>
-
-                            {currentLot && currentLot.plat ? <div>
+                            <div className="col-md-offset-1 col-md-10 panel-group" id="accordion" role="tablist" aria-multiselectable="false">
                                 <a
                                   role="button"
                                   data-toggle="collapse"
                                   data-parent="#accordion"
-                                  href="#collapsePlat"
+                                  href="#collapseGeneralLot"
                                   aria-expanded="false"
-                                  aria-controls="collapsePlat"
+                                  aria-controls="collapseGeneralLot"
                                 >
-                                    <div className="row section-heading" role="tab" id="headingPlat">
+                                    <div className="row section-heading" role="tab" id="headingLot">
                                         <div className="col-xs-1 caret-indicator" />
                                         <div className="col-xs-10">
-                                            <h2>Plat Information</h2>
+                                            <h2>General Lot Information</h2>
                                         </div>
                                     </div>
                                 </a>
                                 <div
-                                  id="collapsePlat"
+                                  id="collapseGeneralLot"
                                   className="panel-collapse collapse row"
                                   role="tabpanel"
-                                  aria-labelledby="#headingPlat"
+                                  aria-labelledby="#headingLot"
                                 >
                                     <div className="panel-body">
                                         <div className="row link-row">
                                             <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
-                                                <div className="col-xs-5">
-                                                    {currentUser && currentUser.permissions && currentUser.permissions.plat &&
-                                                        <Link to={`plat/form/${currentLot.plat.id}`} aria-label="Edit">
+                                                <div className="col-xs-5 col-xs-offset-5">
+                                                    {currentUser && currentUser.permissions && currentUser.permissions.lot && currentLot &&
+                                                        <Link to={`lot/form/${currentLot.id}`} aria-label="Edit">
                                                             <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
                                                             <div className="col-xs-7 link-label">
                                                                 Edit
@@ -351,60 +219,132 @@ class LotSummary extends React.Component {
                                                         </Link>
                                                     }
                                                 </div>
-                                                <div className="col-xs-5 ">
-                                                    <Link to={`plat/summary/${currentLot.plat.id}`} aria-label="Summary">
-                                                        <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
-                                                        <div className="col-xs-7 link-label">
-                                                            Summary
-                                                        </div>
-                                                    </Link>
+                                            </div>
+                                        </div>
+                                        <div className="col-xs-12">
+                                            <h3 className="col-xs-12 ">Current Exactions: {currentLot.lot_exactions && currentLot.lot_exactions.current_exactions}</h3>
+                                            <p className="col-md-8 col-xs-12">Address: {currentLot.address_full}</p>
+                                            <p className="col-md-4 col-xs-6">Lot Number: {currentLot.lot_number}</p>
+                                            <p className="col-md-4 col-xs-6 ">Permit ID: {currentLot.permit_id}</p>
+                                            <p className="col-md-4 col-xs-6">Latitude: {currentLot.latitude}</p>
+                                            <p className="col-md-4 col-xs-6">Longitude: {currentLot.longitude}</p>
+                                            <p className="col-md-4 col-xs-6">Approved: {currentLot.is_approved ? 'Approved' : 'Not Approved'}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                    
+                                <a
+                                  role="button"
+                                  data-toggle="collapse"
+                                  data-parent="#accordion"
+                                  href="#collapseLotExactions"
+                                  aria-expanded="false"
+                                  aria-controls="collapseLotExactions"
+                                >
+                                    <div className="row section-heading" role="tab" id="headingLotExactions">
+                                        <div className="col-xs-1 caret-indicator" />
+                                        <div className="col-xs-10">
+                                            <h2>Lot Exactions</h2>
+                                        </div>
+                                    </div>
+                                </a>
+                                <div
+                                  id="collapseLotExactions"
+                                  className="panel-collapse collapse row"
+                                  role="tabpanel"
+                                  aria-labelledby="#headingLotExactions"
+                                >
+                                    <div className="panel-body">
+                                        <div className="row link-row">
+                                            <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
+                                                <div className="col-xs-5 col-xs-offset-5">
+                                                    {currentUser && currentUser.permissions && currentUser.permissions.lot && currentLot &&
+                                                        <Link to={`lot/form/${currentLot.id}`} aria-label="Edit">
+                                                            <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
+                                                            <div className="col-xs-7 link-label">
+                                                                Edit
+                                                            </div>
+                                                        </Link>
+                                                    }
                                                 </div>
                                             </div>
                                         </div>
                                         <div className="col-xs-12">
-                                            <p className="col-md-4 col-xs-6">Plat Name: {currentLot && currentLot.plat.name}</p>
-                                            <p className="col-md-4 col-xs-6">Expansion Area: {currentLot && currentLot.plat.expansion_area}</p>
-                                            <p className="col-md-4 col-xs-6">Slide: {currentLot && currentLot.plat.slide}</p>
-                                            <p className="col-md-4 col-xs-6">Buildable Lots: {currentLot && currentLot.plat.buildable_lots}</p>
-                                            <p className="col-md-4 col-xs-6">Non-Buildable Lots: {currentLot && currentLot.plat.non_buildable_lots}</p>
-                                            <p className="col-md-4 col-xs-6">Sewer Exactions: ${currentLot && currentLot.plat.sewer_due}</p>
-                                            <p className="col-md-4 col-xs-6">Non-Sewer Exactions: ${currentLot && currentLot.plat.non_sewer_due}</p>
+                                            <h3 className="col-xs-12 ">Current Exactions: {currentLot.lot_exactions && currentLot.lot_exactions.current_exactions}</h3>
+                                            <p className="col-sm-6">Road Developer Exactions: ${currentLot.dues_roads_dev}</p>
+                                            <p className="col-sm-6">Road Owner Exactions: ${currentLot.dues_roads_own}</p>
+                                            <p className="col-sm-6">Sewer Transmission Developer Exactions: ${currentLot.dues_sewer_trans_dev}</p>
+                                            <p className="col-sm-6">Sewer Transmission Owner Exactions: ${currentLot.dues_sewer_trans_own}</p>
+                                            <p className="col-sm-6">Sewer Capacity Developer Exactions: ${currentLot.dues_sewer_cap_dev}</p>
+                                            <p className="col-sm-6">Sewer Capacity Owner Exactions: ${currentLot.dues_sewer_cap_own}</p>
+                                            <p className="col-sm-6">Parks Developer Exactions: ${currentLot.dues_parks_dev}</p>
+                                            <p className="col-sm-6">Parks Owner Exactions: ${currentLot.dues_parks_own}</p>
+                                            <p className="col-sm-6">Storm Developer Exactions: ${currentLot.dues_storm_dev}</p>
+                                            <p className="col-sm-6">Storm Owner Exactions: ${currentLot.dues_storm_own}</p>
+                                            <p className="col-sm-6">Open Space Developer Exactions: ${currentLot.dues_open_space_dev}</p>
+                                            <p className="col-sm-6">Open Space Owner Exactions: ${currentLot.dues_open_space_own}</p>
                                         </div>
                                     </div>
                                 </div>
-                            </div> : <div className="row section-heading" role="tab" id="headingAccountPayments">
-                                <h2>Plat - None</h2>
-                            </div>}
-
-                            {currentLot && currentLot.account && accounts ?
-                                <div>
+                    
+                                <a
+                                  role="button"
+                                  data-toggle="collapse"
+                                  data-parent="#accordion"
+                                  href="#collapseNotes"
+                                  aria-expanded="false"
+                                  aria-controls="collapseNotes"
+                                >
+                                    <div className="row section-heading" role="tab" id="headingNotes">
+                                        <div className="col-xs-1 caret-indicator" />
+                                        <div className="col-xs-8 col-xs-offset-1">
+                                            <h2>Notes</h2>
+                                        </div>
+                                    </div>
+                                </a>
+                                <div
+                                  id="collapseNotes"
+                                  className="panel-collapse collapse row"
+                                  role="tabpanel"
+                                  aria-labelledby="#headingNotes"
+                                >
+                                    <div className="panel-body">
+                                        <div className="col-xs-12">
+                                            {currentLot.id &&
+                                                <Notes content_type="Lot" object_id={currentLot.id} parent_content_type="Plat" parent_object_id={currentLot.plat.id} />
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                    
+                                {currentLot.plat ? <div>
                                     <a
                                       role="button"
                                       data-toggle="collapse"
                                       data-parent="#accordion"
-                                      href="#collapseAccounts"
+                                      href="#collapsePlat"
                                       aria-expanded="false"
-                                      aria-controls="collapseAccounts"
+                                      aria-controls="collapsePlat"
                                     >
-                                        <div className="row section-heading" role="tab" id="headingAccount">
+                                        <div className="row section-heading" role="tab" id="headingPlat">
                                             <div className="col-xs-1 caret-indicator" />
                                             <div className="col-xs-10">
-                                                <h2>Developer Account</h2>
+                                                <h2>Plat Information</h2>
                                             </div>
                                         </div>
                                     </a>
                                     <div
-                                      id="collapseAccounts"
+                                      id="collapsePlat"
                                       className="panel-collapse collapse row"
                                       role="tabpanel"
-                                      aria-labelledby="#headingAccounts"
+                                      aria-labelledby="#headingPlat"
                                     >
                                         <div className="panel-body">
                                             <div className="row link-row">
                                                 <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
                                                     <div className="col-xs-5">
-                                                        {currentUser && currentUser.permissions && currentUser.permissions.account &&
-                                                            <Link to={`account/form/${accounts.id}`} aria-label="Edit">
+                                                        {currentUser && currentUser.permissions && currentUser.permissions.plat &&
+                                                            <Link to={`plat/form/${currentLot.plat.id}`} aria-label="Edit">
                                                                 <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
                                                                 <div className="col-xs-7 link-label">
                                                                     Edit
@@ -413,7 +353,7 @@ class LotSummary extends React.Component {
                                                         }
                                                     </div>
                                                     <div className="col-xs-5 ">
-                                                        <Link to={`account/summary/${accounts.id}`} aria-label="Summary">
+                                                        <Link to={`plat/summary/${currentLot.plat.id}`} aria-label="Summary">
                                                             <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
                                                             <div className="col-xs-7 link-label">
                                                                 Summary
@@ -423,95 +363,158 @@ class LotSummary extends React.Component {
                                                 </div>
                                             </div>
                                             <div className="col-xs-12">
-                                                <p>Developer Account Name: {accounts.account_name}</p>
-                                                <p className="col-md-4 col-xs-6">{accounts.balance && accounts.balance.credit_availability}</p>
-                                                {currentUser && currentUser.username &&
-                                                    <div className="col-sm-6">
-                                                        <p className="col-md-4 col-xs-6">Account Balance: {accounts.balance && accounts.balance.balance}</p>
-                                                        <p className="col-md-4 col-xs-6">Contact Name: {accounts.contact_full_name}</p>
-                                                    </div>
-                                                }
+                                                <p className="col-md-4 col-xs-6">Plat Name: {currentLot.plat.name}</p>
+                                                <p className="col-md-4 col-xs-6">Expansion Area: {currentLot.plat.expansion_area}</p>
+                                                <p className="col-md-4 col-xs-6">Slide: {currentLot.plat.slide}</p>
+                                                <p className="col-md-4 col-xs-6">Buildable Lots: {currentLot.plat.buildable_lots}</p>
+                                                <p className="col-md-4 col-xs-6">Non-Buildable Lots: {currentLot.plat.non_buildable_lots}</p>
+                                                <p className="col-md-4 col-xs-6">Sewer Exactions: ${currentLot.plat.sewer_due}</p>
+                                                <p className="col-md-4 col-xs-6">Non-Sewer Exactions: ${currentLot.plat.non_sewer_due}</p>
                                             </div>
                                         </div>
                                     </div>
                                 </div> : <div className="row section-heading" role="tab" id="headingAccountPayments">
-                                    <h2>Account - None</h2>
-                                </div>
-                            }
-
-                            {payments_list ? (
-                                <div>
-                                    <a
-                                      role="button"
-                                      data-toggle="collapse"
-                                      data-parent="#accordion"
-                                      href="#collapseAccountPayments"
-                                      aria-expanded="false"
-                                      aria-controls="collapseAccountPayments"
-                                    >
-                                        <div className="row section-heading" role="tab" id="headingAccountPayments">
-                                            <div className="col-xs-1 caret-indicator" />
-                                            <div className="col-xs-10">
-                                                <h2>Payments</h2>
+                                    <h2>Plat - None</h2>
+                                </div>}
+                    
+                                {currentLot.account && accounts ?
+                                    <div>
+                                        <a
+                                          role="button"
+                                          data-toggle="collapse"
+                                          data-parent="#accordion"
+                                          href="#collapseAccounts"
+                                          aria-expanded="false"
+                                          aria-controls="collapseAccounts"
+                                        >
+                                            <div className="row section-heading" role="tab" id="headingAccount">
+                                                <div className="col-xs-1 caret-indicator" />
+                                                <div className="col-xs-10">
+                                                    <h2>Developer Account</h2>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <div
+                                          id="collapseAccounts"
+                                          className="panel-collapse collapse row"
+                                          role="tabpanel"
+                                          aria-labelledby="#headingAccounts"
+                                        >
+                                            <div className="panel-body">
+                                                <div className="row link-row">
+                                                    <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
+                                                        <div className="col-xs-5">
+                                                            {currentUser && currentUser.permissions && currentUser.permissions.account &&
+                                                                <Link to={`account/form/${accounts.id}`} aria-label="Edit">
+                                                                    <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
+                                                                    <div className="col-xs-7 link-label">
+                                                                        Edit
+                                                                    </div>
+                                                                </Link>
+                                                            }
+                                                        </div>
+                                                        <div className="col-xs-5 ">
+                                                            <Link to={`account/summary/${accounts.id}`} aria-label="Summary">
+                                                                <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
+                                                                <div className="col-xs-7 link-label">
+                                                                    Summary
+                                                                </div>
+                                                            </Link>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div className="col-xs-12">
+                                                    <p>Developer Account Name: {accounts.account_name}</p>
+                                                    <p className="col-md-4 col-xs-6">{accounts.balance && accounts.balance.credit_availability}</p>
+                                                    {currentUser && currentUser.username &&
+                                                        <div className="col-sm-6">
+                                                            <p className="col-md-4 col-xs-6">Account Balance: {accounts.balance && accounts.balance.balance}</p>
+                                                            <p className="col-md-4 col-xs-6">Contact Name: {accounts.contact_full_name}</p>
+                                                        </div>
+                                                    }
+                                                </div>
                                             </div>
                                         </div>
-                                    </a>
-                                    <div
-                                      id="collapseAccountPayments"
-                                      className="panel-collapse collapse row"
-                                      role="tabpanel"
-                                      aria-labelledby="#headingAccountPayments"
-                                    >
-                                        <div className="panel-body">
-                                            <div className="col-xs-12">
-                                                {payments_list}
+                                    </div> : <div className="row section-heading" role="tab" id="headingAccountPayments">
+                                        <h2>Account - None</h2>
+                                    </div>
+                                }
+                    
+                                {payments_list ? (
+                                    <div>
+                                        <a
+                                          role="button"
+                                          data-toggle="collapse"
+                                          data-parent="#accordion"
+                                          href="#collapseAccountPayments"
+                                          aria-expanded="false"
+                                          aria-controls="collapseAccountPayments"
+                                        >
+                                            <div className="row section-heading" role="tab" id="headingAccountPayments">
+                                                <div className="col-xs-1 caret-indicator" />
+                                                <div className="col-xs-10">
+                                                    <h2>Payments</h2>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <div
+                                          id="collapseAccountPayments"
+                                          className="panel-collapse collapse row"
+                                          role="tabpanel"
+                                          aria-labelledby="#headingAccountPayments"
+                                        >
+                                            <div className="panel-body">
+                                                <div className="col-xs-12">
+                                                    {payments_list}
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            ) : (
-                                <div className="row section-heading" role="tab" id="headingAccountPayments">
-                                    <h2>Payments - None</h2>
-                                </div>
-                            )}
-
-                            {account_ledgers_list ? (
-                                <div>
-                                    <a
-                                      role="button"
-                                      data-toggle="collapse"
-                                      data-parent="#accordion"
-                                      href="#collapseAccountLedgers"
-                                      aria-expanded="false"
-                                      aria-controls="collapseAccountLedgers"
-                                    >
-                                        <div className="row section-heading" role="tab" id="headingAccountLedgers">
-                                            <div className="col-xs-1 caret-indicator" />
-                                            <div className="col-xs-10">
-                                                <h2>Account Ledgers</h2>
+                                ) : (
+                                    <div className="row section-heading" role="tab" id="headingAccountPayments">
+                                        <h2>Payments - None</h2>
+                                    </div>
+                                )}
+                    
+                                {account_ledgers_list ? (
+                                    <div>
+                                        <a
+                                          role="button"
+                                          data-toggle="collapse"
+                                          data-parent="#accordion"
+                                          href="#collapseAccountLedgers"
+                                          aria-expanded="false"
+                                          aria-controls="collapseAccountLedgers"
+                                        >
+                                            <div className="row section-heading" role="tab" id="headingAccountLedgers">
+                                                <div className="col-xs-1 caret-indicator" />
+                                                <div className="col-xs-10">
+                                                    <h2>Account Ledgers</h2>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </a>
-                                    <div
-                                      id="collapseAccountLedgers"
-                                      className="panel-collapse collapse row"
-                                      role="tabpanel"
-                                      aria-labelledby="#headingAccountLedgers"
-                                    >
-                                        <div className="panel-body">
-                                            <div className="col-xs-12">
-                                                {account_ledgers_list}
+                                        </a>
+                                        <div
+                                          id="collapseAccountLedgers"
+                                          className="panel-collapse collapse row"
+                                          role="tabpanel"
+                                          aria-labelledby="#headingAccountLedgers"
+                                        >
+                                            <div className="panel-body">
+                                                <div className="col-xs-12">
+                                                    {account_ledgers_list}
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            ) : (
-                                <div className="row section-heading" role="tab" id="headingAccountLedgers">
-                                    <h2>Account Ledgers - None</h2>
-                                </div>
-                            )}
+                                ) : (
+                                    <div className="row section-heading" role="tab" id="headingAccountLedgers">
+                                        <h2>Account Ledgers - None</h2>
+                                    </div>
+                                )}
+                            </div>
                         </div>
                     </div>
+                }
                 </div>
                 <Footer />
             </div>
