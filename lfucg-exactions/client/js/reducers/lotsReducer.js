@@ -10,16 +10,13 @@ import {
 } from '../constants/apiConstants';
 
 
-const lotsReducer = (state = {}, action) => {
+const lotsReducer = (state = [], action) => {
     const {
         endpoint,
     } = action;
     switch (endpoint) {
     case GET_LOT_ID:
-        if (Object.keys(state).length > 0) {
-            return [...state];
-        }
-        return action.response;
+        return [...state];
     case GET_LOTS:
     case GET_PLAT_LOTS:
     case POST_LOT:
