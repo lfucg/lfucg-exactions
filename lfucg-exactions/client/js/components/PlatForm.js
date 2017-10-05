@@ -482,37 +482,15 @@ class PlatForm extends React.Component {
                                             </div>
                                         </div>
                                     </div>
-
-                                    <a
-                                      role="button"
-                                      data-toggle="collapse"
-                                      data-parent="#accordion"
-                                      href="#collapseUploads"
-                                      aria-expanded="true"
-                                      aria-controls="collapseUploads"
-                                    >
-                                        <div className="row section-heading" role="tab" id="headingUploads">
-                                            <div className="col-xs-1 caret-indicator" />
-                                            <div className="col-xs-10">
-                                                <h2>Uploads</h2>
-                                            </div>
-                                        </div>
-                                    </a>
-                                    <div
-                                      id="collapseUploads"
-                                      className="panel-collapse collapse in row"
-                                      role="tabpanel"
-                                      aria-labelledby="#headingUploads"
-                                    >
-                                        <div className="panel-body">
-                                            <div className="col-xs-12">
-                                                    <Uploads file_content_type="Plat" file_object_id={plats.id} />
-                                            </div>
-                                        </div>
-                                    </div>
                                 </div>
                             }
                         </div>
+                        {plats.id &&
+                            <Uploads
+                              file_content_type="plats,plat"
+                              file_object_id={plats.id}
+                            />
+                        }
                     </div>
                 </div>
 

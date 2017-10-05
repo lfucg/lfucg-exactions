@@ -50,26 +50,55 @@ class Uploads extends React.Component {
         })(uploads));
 
         return (
-            <div className="container uploads-page">
-                {uploads &&
-                    <div>
-                        <div className="row">
-                            <h2>Existing Uploads</h2>
+            <div className="uploads-page">
+                <div className="clearfix" />
+                <div className="col-md-offset-1 col-md-10 panel-group" id="accordion" role="tablist" aria-multiselectable="false">
+                    <a
+                      role="button"
+                      data-toggle="collapse"
+                      data-parent="#accordion"
+                      href="#collapseUpload"
+                      aria-expanded="true"
+                      aria-controls="collapseUpload"
+                    >
+                        <div className="row section-heading" role="tab" id="headingUploads">
+                            <div className="col-xs-1 caret-indicator" />
+                            <div className="col-xs-10">
+                                <h2>Uploads</h2>
+                            </div>
                         </div>
-                        <div className="row">
-                            <h4>
-                                <div className="col-sm-3">Date</div>
-                                <div className="col-sm-8">Uploads</div>
-                            </h4>
-                        </div>
-                        <div className="row existing-uploads">
-                            {uploadsList}
+                    </a>
+                    <div
+                      id="collapseUpload"
+                      className="panel-collapse collapse row in"
+                      role="tabpanel"
+                      aria-labelledby="#headingUploads"
+                    >
+                        <div className="panel-body">
+                            <div className="col-sm-12">
+                                {uploads && uploads.length > 0 &&
+                                    <div>
+                                        <div className="row">
+                                            <h2>Existing Uploads</h2>
+                                        </div>
+                                        <div className="row">
+                                            <h4>
+                                                <div className="col-sm-3">Date</div>
+                                                <div className="col-sm-8">Uploads</div>
+                                            </h4>
+                                        </div>
+                                        <div className="row existing-uploads">
+                                            {uploadsList}
+                                        </div>
+                                    </div>
+                                }
+                                <Dropzone onDrop={fileUploading} style={{}} >
+                                    <button className="btn btn-lex">Add File</button>
+                                </Dropzone>
+                            </div>
                         </div>
                     </div>
-                }
-                <Dropzone onDrop={fileUploading} style={{}} >
-                    <button className="btn btn-lex">Add File</button>
-                </Dropzone>
+                </div>
             </div>
         );
     }
