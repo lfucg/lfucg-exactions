@@ -23,28 +23,27 @@ class NoteViewSet(viewsets.ModelViewSet):
         parent_content_type_string = self.request.query_params.get('parent_content_type', None)
         parent_object_id = self.request.query_params.get('parent_object_id', None)
                 
-        if parent_content_type_string is not None:
-            if parent_content_type_string == 'Plat':
-                parent_content_type = ContentType.objects.get_for_model(Plat)
-            elif parent_content_type_string == 'Lot':
-                parent_content_type = ContentType.objects.get_for_model(Lot)
-            if child_content_type_string == 'Plat':
-                child_content_type = ContentType.objects.get_for_model(Plat)
-            elif child_content_type_string == 'Lot':
-                child_content_type = ContentType.objects.get_for_model(Lot)
+        if child_content_type_string is not None:
+            child_content_type_app_label = child_content_type_string.split(',')[0]
+            child_content_type_model = child_content_type_string.split(',')[1]
 
-            query_list = queryset.filter(
-                Q(content_type=parent_content_type, object_id=parent_object_id) |
-                Q(content_type=child_content_type, object_id=child_object_id))
+            child_content_type = ContentType.objects.get(app_label=child_content_type_app_label, model=child_content_type_model)
 
-            queryset = query_list
-        elif child_content_type_string is not None:
+            if parent_content_type_string is not None:
+                parent_content_type_app_label = parent_content_type_string.split(',')[0]
+                parent_content_type_model = parent_content_type_string.split(',')[1]
 
-            if child_content_type_string == 'Plat':
-                child_content_type = ContentType.objects.get_for_model(Plat)
-            elif child_content_type_string == 'Lot':
-                child_content_type = ContentType.objects.get_for_model(Lot)
-            queryset = queryset.filter(content_type=child_content_type, object_id=child_object_id)
+                parent_content_type = ContentType.objects.get(app_label=parent_content_type_app_label, model=parent_content_type_model)
+
+                if parent_content_type and child_content_type:
+                    query_list = queryset.filter(
+                        Q(content_type=parent_content_type, object_id=parent_object_id) |
+                        Q(content_type=child_content_type, object_id=child_object_id))
+
+                queryset = query_list
+
+            else:
+                queryset = queryset.filter(content_type=child_content_type, object_id=child_object_id)
 
         else:
             queryset = queryset
@@ -140,8 +139,6 @@ class FileUploadViewSet(viewsets.ModelViewSet):
             queryset = queryset
 
         return queryset.order_by('-date')
-
-        return Response(status=204)
 
 class FileUploadCreate(generics.CreateAPIView):
     model = FileUpload

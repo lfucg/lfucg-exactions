@@ -24,6 +24,7 @@ class Uploads extends React.Component {
 
     render() {
         const {
+            currentUser,
             activeForm,
             uploads,
             fileUploading,
@@ -51,14 +52,13 @@ class Uploads extends React.Component {
 
         return (
             <div className="uploads-page">
-                <div className="clearfix" />
                 <div className="col-md-offset-1 col-md-10 panel-group" id="accordion" role="tablist" aria-multiselectable="false">
                     <a
                       role="button"
                       data-toggle="collapse"
                       data-parent="#accordion"
                       href="#collapseUpload"
-                      aria-expanded="true"
+                      aria-expanded={this.props.ariaExpanded}
                       aria-controls="collapseUpload"
                     >
                         <div className="row section-heading" role="tab" id="headingUploads">
@@ -70,7 +70,7 @@ class Uploads extends React.Component {
                     </a>
                     <div
                       id="collapseUpload"
-                      className="panel-collapse collapse row in"
+                      className={this.props.panelClass}
                       role="tabpanel"
                       aria-labelledby="#headingUploads"
                     >
@@ -92,9 +92,11 @@ class Uploads extends React.Component {
                                         </div>
                                     </div>
                                 }
-                                <Dropzone onDrop={fileUploading} style={{}} >
-                                    <button className="btn btn-lex">Add File</button>
-                                </Dropzone>
+                                {currentUser && currentUser.permissions && `currentUser.permissions.${this.props.permission}` &&
+                                    <Dropzone onDrop={fileUploading} style={{}} >
+                                        <button className="btn btn-lex">Add File</button>
+                                    </Dropzone>
+                                }
                             </div>
                         </div>
                     </div>
@@ -105,16 +107,21 @@ class Uploads extends React.Component {
 }
 
 Uploads.propTypes = {
+    currentUser: PropTypes.object,
     activeForm: PropTypes.object,
     uploads: PropTypes.object,
     onComponentDidMount: PropTypes.func,
     file_content_type: PropTypes.string,
     file_object_id: PropTypes.number,
     fileUploading: PropTypes.func,
+    ariaExpanded: PropTypes.string,
+    panelClass: PropTypes.string,
+    permission: PropTypes.string,
 };
 
 function mapStateToProps(state) {
     return {
+        currentUser: state.currentUser,
         activeForm: state.activeForm,
         uploads: state.uploads,
     };
