@@ -3,6 +3,8 @@
 *.sw[po]
 *.egg*
 .coverage
+.env
+.env.json
 pip-log.txt
 docs/_gh-pages
 build.py
