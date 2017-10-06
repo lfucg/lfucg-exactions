@@ -21,9 +21,9 @@ class ContentTypeField(serializers.Field):
         return ContentType.objects.get(app_label=content_type_app_label, model=content_type_model)
 
     def to_representation(self, obj):
-        if obj.model == 'plat':
+        if obj.model == 'plats,plat':
             return 'Plat'
-        elif obj.model == 'lot':
+        elif obj.model == 'plats,lot':
             return 'Lot'
         else:
             return obj.model

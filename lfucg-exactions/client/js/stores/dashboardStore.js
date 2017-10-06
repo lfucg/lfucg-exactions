@@ -3,7 +3,6 @@ import createDebounce from 'redux-debounced';
 import flashMiddleware from '../middlewares/flashMiddleware';
 import logMiddleware from '../middlewares/logMiddleware';
 import apiMiddleware from '../middlewares/apiMiddleware';
-import uploadMiddleware from '../middlewares/uploadMiddleware';
 import dashboardReducer from '../reducers/dashboardReducer';
 
 const enhancer = compose(
@@ -12,7 +11,6 @@ const enhancer = compose(
         flashMiddleware,
         logMiddleware,
         apiMiddleware,
-        uploadMiddleware,
     ),
 );
 

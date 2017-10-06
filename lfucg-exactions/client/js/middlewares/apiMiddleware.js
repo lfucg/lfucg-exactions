@@ -9,9 +9,6 @@ import {
 } from '../constants/actionTypes';
 import {
     BASE_URL,
-    LOGIN,
-    ME,
-    POST_UPLOAD,
 } from '../constants/apiConstants';
 
 export default function api({ getState, dispatch }) {
@@ -19,7 +16,6 @@ export default function api({ getState, dispatch }) {
         const {
             type,
             endpoint,
-            headers,
             url,
             shouldCallAPI,
             responseValidation,
@@ -30,10 +26,6 @@ export default function api({ getState, dispatch }) {
         } = action;
 
         if (type !== API_CALL) {
-            return next(action);
-        }
-
-        if (endpoint === POST_UPLOAD) {
             return next(action);
         }
 
@@ -62,7 +54,7 @@ export default function api({ getState, dispatch }) {
         };
 
         return Promise.resolve(axios({
-            headers: typeof headers === 'function' ? headers(getState) : header,
+            headers: header,
             url: baseURL + (typeof url === 'function' ? url(getState) : url),
             params: typeof qs === 'function' ? qs(getState) : qs,
             data: typeof body === 'function' ? body(getState) : body,
