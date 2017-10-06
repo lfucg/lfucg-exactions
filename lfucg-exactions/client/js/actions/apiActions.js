@@ -545,7 +545,7 @@ export function putLot(selectedLot) {
                 // payment,
             } = activeForm;
             return {
-                plat,
+                plat_id: plat,
                 parcel_id,
                 lot_number,
                 permit_id,

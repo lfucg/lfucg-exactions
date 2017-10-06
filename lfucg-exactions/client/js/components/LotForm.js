@@ -64,14 +64,13 @@ class LotForm extends React.Component {
             })(accounts));
 
         const ownerDisabled =
-            lots &&
-            lots.dues_roads_own &&
-            lots.dues_roads_own === '0.00' &&
-            lots.dues_parks_own === '0.00' &&
-            lots.dues_storm_own === '0.00' &&
-            lots.dues_open_space_own === '0.00' &&
-            lots.dues_sewer_cap_own === '0.00' &&
-            lots.dues_sewer_trans_own === '0.00';
+            activeForm.dues_roads_own &&
+            activeForm.dues_roads_own === '0.00' &&
+            activeForm.dues_parks_own === '0.00' &&
+            activeForm.dues_storm_own === '0.00' &&
+            activeForm.dues_open_space_own === '0.00' &&
+            activeForm.dues_sewer_cap_own === '0.00' &&
+            activeForm.dues_sewer_trans_own === '0.00';
 
         const submitEnabled =
             activeForm.plat !== 'choose_plat' &&
@@ -523,6 +522,7 @@ function mapDispatchToProps(dispatch, params) {
             event.preventDefault();
             if (selectedLot) {
                 dispatch(putLot(selectedLot));
+                hashHistory.push(`lot/summary/${selectedLot}`);
             } else {
                 dispatch(postLot())
                 .then((data_post) => {
