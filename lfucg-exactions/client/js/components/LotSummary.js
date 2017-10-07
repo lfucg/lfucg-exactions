@@ -8,6 +8,7 @@ import Navbar from './Navbar';
 import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
 import Notes from './Notes';
+import Uploads from './Uploads';
 
 import FormGroup from './FormGroup';
 
@@ -231,36 +232,6 @@ class LotSummary extends React.Component {
                                         <p className="col-md-4 col-xs-6">Longitude: {currentLot.longitude}</p>
                                     </div>
                                 </div>
-                            </div>
-
-                            <a
-                              role="button"
-                              data-toggle="collapse"
-                              data-parent="#accordion"
-                              href="#collapseNotes"
-                              aria-expanded="false"
-                              aria-controls="collapseNotes"
-                            >
-                                <div className="row section-heading" role="tab" id="headingNotes">
-                                    <div className="col-xs-1 caret-indicator" />
-                                    <div className="col-xs-8 col-xs-offset-1">
-                                        <h2>Notes</h2>
-                                    </div>
-                                </div>
-                            </a>
-                            <div
-                              id="collapseNotes"
-                              className="panel-collapse collapse row"
-                              role="tabpanel"
-                              aria-labelledby="#headingNotes"
-                            >
-                                <div className="panel-body">
-                                    <div className="col-xs-12">
-                                        {currentLot.id &&
-                                            <Notes content_type="plats, lot" object_id={currentLot.id} parent_content_type="Plat" parent_object_id={currentLot.plat.id} />
-                                        }
-                                    </div>
-                                </div>
 
                                 <a
                                   role="button"
@@ -339,7 +310,7 @@ class LotSummary extends React.Component {
                                     <div className="panel-body">
                                         <div className="col-xs-12">
                                             {currentLot.id &&
-                                                <Notes content_type="Lot" object_id={currentLot.id} parent_content_type="Plat" parent_object_id={currentLot.plat.id} />
+                                                <Notes content_type="plats,lot" object_id={currentLot.id} parent_content_type="plats,plat" parent_object_id={currentLot.plat.id} />
                                             }
                                         </div>
                                     </div>
@@ -540,6 +511,15 @@ class LotSummary extends React.Component {
                                     </div>
                                 )}
                             </div>
+                            {currentLot.id &&
+                                <Uploads
+                                  file_content_type="plats,lot"
+                                  file_object_id={currentLot.id}
+                                  ariaExpanded="false"
+                                  panelClass="panel-collapse collapse row"
+                                  permission="lot"
+                                />
+                            }
                         </div>
                     </div>
                     }

@@ -11,6 +11,7 @@ import Navbar from './Navbar';
 import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
 import Notes from './Notes';
+import Uploads from './Uploads';
 
 import FormGroup from './FormGroup';
 
@@ -374,12 +375,20 @@ class LotForm extends React.Component {
                                 <div className="panel-body">
                                     <div className="col-xs-12">
                                         {lots.id && lots.plat &&
-                                            <Notes content_type="plats, lot" object_id={lots.id} parent_content_type="Plat" parent_object_id={lots.plat.id} />
+                                            <Notes content_type="plats,lot" object_id={lots.id} parent_content_type="plats,plat" parent_object_id={lots.plat.id} />
                                         }
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        {lots.id &&
+                            <Uploads
+                              file_content_type="plats,lot"
+                              file_object_id={lots.id}
+                              ariaExpanded="true"
+                              panelClass="panel-collapse collapse row in"
+                            />
+                        }
                     </div>
                 </div>
 
