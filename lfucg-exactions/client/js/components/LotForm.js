@@ -4,7 +4,7 @@ import {
     // Link,
     hashHistory,
 } from 'react-router';
-import { map } from 'ramda';
+import { map, filter } from 'ramda';
 import PropTypes from 'prop-types';
 
 import Navbar from './Navbar';
@@ -27,6 +27,7 @@ import {
     getPlatID,
     getAccounts,
     getAccountID,
+    getLots,
 } from '../actions/apiActions';
 
 class LotForm extends React.Component {
@@ -43,7 +44,11 @@ class LotForm extends React.Component {
             formChange,
             onLotSubmit,
             onLotDues,
+            selectedLot,
         } = this.props;
+
+        const currentLot = lots && lots.length > 0 &&
+            filter(lot => lot.id === parseInt(selectedLot, 10))(lots)[0];
 
         const platsList = plats && plats.length > 0 &&
             (map((single_plat) => {
@@ -373,8 +378,8 @@ class LotForm extends React.Component {
                             >
                                 <div className="panel-body">
                                     <div className="col-xs-12">
-                                        {lots.id && lots.plat &&
-                                            <Notes content_type="Lot" object_id={lots.id} parent_content_type="Plat" parent_object_id={lots.plat.id} />
+                                        {currentLot.id && currentLot.plat &&
+                                            <Notes content_type="Lot" object_id={currentLot.id} parent_content_type="Plat" parent_object_id={currentLot.plat.id} />
                                         }
                                     </div>
                                 </div>
@@ -399,6 +404,7 @@ LotForm.propTypes = {
     formChange: PropTypes.func,
     onLotSubmit: PropTypes.func,
     onLotDues: PropTypes.func,
+    selectedLot: PropTypes.string,
 };
 
 function mapStateToProps(state) {
@@ -418,6 +424,7 @@ function mapDispatchToProps(dispatch, params) {
     return {
         onComponentDidMount() {
             dispatch(formInit());
+            dispatch(getLots());
             dispatch(getPlats());
             dispatch(getAccounts());
             if (selectedLot) {
@@ -554,6 +561,7 @@ function mapDispatchToProps(dispatch, params) {
                 });
             }
         },
+        selectedLot,
     };
 }
 
