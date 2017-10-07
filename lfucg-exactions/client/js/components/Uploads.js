@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { map } from 'ramda';
+import { map, contains } from 'ramda';
 import PropTypes from 'prop-types';
 import Dropzone from 'react-dropzone';
 
@@ -92,7 +92,7 @@ class Uploads extends React.Component {
                                         </div>
                                     </div>
                                 }
-                                {currentUser && currentUser.permissions && `currentUser.permissions.${this.props.permission}` &&
+                                {currentUser && currentUser.permissions && contains(this.props.permission, Object.keys(currentUser.permissions)) &&
                                     <Dropzone onDrop={fileUploading} style={{}} >
                                         <button className="btn btn-lex">Add File</button>
                                     </Dropzone>
