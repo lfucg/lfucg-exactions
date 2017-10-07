@@ -141,7 +141,10 @@ function mapDispatchToProps(dispatch) {
             }
         },
         fileUploading(files) {
-            return dispatch(postUpload(files));
+            dispatch(postUpload(files))
+            .then(() => {
+                dispatch(getUploadContent());
+            });
         },
     };
 }

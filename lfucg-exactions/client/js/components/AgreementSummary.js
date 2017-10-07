@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
+import Uploads from './Uploads';
 
 import {
     getAgreementID,
@@ -391,6 +392,15 @@ class AgreementSummary extends React.Component {
                             )}
 
                         </div>
+                        {agreements.id &&
+                            <Uploads
+                              file_content_type="accounts,agreement"
+                              file_object_id={agreements.id}
+                              ariaExpanded="false"
+                              panelClass="panel-collapse collapse row"
+                              permission="agreement"
+                            />
+                        }
                     </div>
                 </div>
                 <Footer />
