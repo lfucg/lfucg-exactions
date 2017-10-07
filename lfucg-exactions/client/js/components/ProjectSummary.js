@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
+import Uploads from './Uploads';
 
 import {
     getProjectID,
@@ -225,6 +226,15 @@ class ProjectSummary extends React.Component {
                                 <h2>Agreement - None</h2>
                             </div>}
                         </div>
+                        {projects.id &&
+                            <Uploads
+                              file_content_type="accounts,project"
+                              file_object_id={projects.id}
+                              ariaExpanded="false"
+                              panelClass="panel-collapse collapse row"
+                              permission="project"
+                            />
+                        }
                     </div>
                 </div>
                 <Footer />
