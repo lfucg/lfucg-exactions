@@ -381,6 +381,7 @@ class LotForm extends React.Component {
                                 </div>
                             </div>
                         </div>
+                        <div className="clearfix" />
                         {lots.id &&
                             <Uploads
                               file_content_type="plats,lot"

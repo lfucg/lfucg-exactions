@@ -113,6 +113,7 @@ class AgreementForm extends React.Component {
                                 <button className="btn btn-lex">Submit</button>
                             </form>
                         </div>
+                        <div className="clearfix" />
                         {agreements.id &&
                             <Uploads
                               file_content_type="accounts,agreement"
