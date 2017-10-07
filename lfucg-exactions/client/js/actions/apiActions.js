@@ -673,26 +673,6 @@ export function postUpload(files) {
         type: API_CALL,
         endpoint: POST_UPLOAD,
         url: '/upload/create/',
-        headers: () => {
-            let stored_token;
-            try {
-                stored_token = localStorage.getItem('Token');
-            } catch (e) {
-                const index_token = document.cookie.indexOf('Token=');
-                if (index_token) {
-                    const semicolon = index_token + 5 + document.cookie.substring(index_token).indexOf(';');
-                    stored_token = document.cookie.substring(index_token, semicolon);
-                } else {
-                    stored_token = null;
-                }
-            }
-
-            const authorization = global.Authorization ? global.Authorization : stored_token;
-            return {
-                'X-CSRFToken': global.CSRFToken,
-                Authorization: `Token ${authorization}`,
-            };
-        },
         method: 'POST',
         body: (getState) => {
             const {
