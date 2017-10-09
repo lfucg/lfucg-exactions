@@ -7,9 +7,6 @@ from django.contrib.auth.models import User
 
 from simple_history.models import HistoricalRecords
 
-# class MediaRootS3BotoStorage(S3BotoStorage):
-#     location = 'media'
-
 class Note(models.Model):
     is_active = models.BooleanField(default=True)
 
@@ -93,6 +90,9 @@ class Rate(models.Model):
 
     def __str__(self):
         return self.zone + ': ' + self.category
+
+class MediaRootS3BotoStorage(S3BotoStorage):
+    location = 'media'
 
 def model_directory_path(instance, filename):
     instance_name = str(type(instance.file_content_object).__name__)
