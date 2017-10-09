@@ -120,6 +120,7 @@ class AgreementForm extends React.Component {
                               file_object_id={agreements.id}
                               ariaExpanded="true"
                               panelClass="panel-collapse collapse row in"
+                              permission="agreement"
                             />
                         }
                     </div>

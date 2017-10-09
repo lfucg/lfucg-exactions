@@ -92,6 +92,7 @@ class Uploads extends React.Component {
                                         </div>
                                     </div>
                                 }
+                                {console.log('PERMISSIONS', this.props.permission)}
                                 {currentUser && currentUser.permissions && contains(this.props.permission, Object.keys(currentUser.permissions)) &&
                                     <Dropzone onDrop={fileUploading} style={{}} >
                                         <button className="btn btn-lex">Add File</button>
