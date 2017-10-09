@@ -77,7 +77,6 @@ class Notes extends React.Component {
                 <div className="row existing-notes">
                     {notesList}
                 </div>
-                {console.log('CURRENT USER', currentUser)}
                 {currentUser && currentUser.id &&
                     <form onSubmit={onSubmit} >
                         <fieldset>
