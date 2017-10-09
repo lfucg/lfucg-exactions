@@ -1,9 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
-import { map } from 'ramda';
+import { map, filter } from 'ramda';
 import PropTypes from 'prop-types';
-
+import { CSVLink } from 'react-csv';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
@@ -14,6 +14,8 @@ import {
     getPagination,
     getPlats,
     getAccounts,
+    searchQuery,
+    getPayments,
 } from '../actions/apiActions';
 
 class LotExisting extends React.Component {
@@ -27,6 +29,8 @@ class LotExisting extends React.Component {
             lots,
             plats,
             accounts,
+            payments,
+            removeSearchPagination,
         } = this.props;
 
         const platsList = plats && plats.length > 0 &&
@@ -87,6 +91,52 @@ class LotExisting extends React.Component {
             })(lots)
         ) : null;
 
+        const headers = [
+            'Address',
+            'Date Modified',
+            'Latitude',
+            'Longitude',
+            'Lot Number',
+            'Parcel ID',
+            'Permit ID',
+            'Current Exactions',
+            'Plat Name',
+            'Plat Type',
+            'Payments',
+            'Last Payment',
+            'Total Paid',
+            'Roads',
+            'Parks',
+            'Storm',
+            'Open Space',
+        ];
+
+        const csvData = lots && payments &&
+            (map((single_lot) => {
+                const paymentsOnCurrentLot = payments && payments.length > 0 &&
+                    filter(payment => payment.lot_id.id === single_lot.id)(payments);
+                console.log(paymentsOnCurrentLot.length);
+                return [
+                    single_lot.address_full || '',
+                    single_lot.date_modified || '',
+                    single_lot.latitude || '',
+                    single_lot.longitude || '',
+                    single_lot.lot_number || '',
+                    single_lot.parcel_id || '',
+                    single_lot.permit_id || '',
+                    single_lot.lot_exactions.current_exactions || '',
+                    single_lot.plat.name || '',
+                    single_lot.plat.plat_zone_display || '',
+                    paymentsOnCurrentLot && paymentsOnCurrentLot.length,
+                    paymentsOnCurrentLot && (paymentsOnCurrentLot[0] ? paymentsOnCurrentLot[0].date_created : ''),
+                    single_lot.longitude || '',
+                    single_lot.longitude || '',
+                    single_lot.longitude || '',
+                    single_lot.longitude || '',
+                    single_lot.longitude || '',
+                ];
+            })(lots));
+
         return (
             <div className="lot-existing">
                 <Navbar />
@@ -98,6 +148,30 @@ class LotExisting extends React.Component {
                 </div>
 
                 <Breadcrumbs route={this.props.route} />
+
+                <div className="row">
+                    <div className="col-xs-10 col-xs-offset-1">
+                        <button type="button" className="btn btn-lex btn-sm pull-right" data-toggle="modal" data-target="#searchCSVModal" onClick={removeSearchPagination}>
+                            <i className="fa fa-line-chart link-icon" aria-hidden="true" />&nbsp;Generate Search CSV
+                        </button>
+                    </div>
+                </div>
+                <div className="modal fade" id="searchCSVModal" tabIndex="-1" role="dialog" aria-labelledby="modalLabel">
+                    <div className="modal-dialog" role="document">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h3 className="modal-title" id="modalLabel">Click below to download the CSV of your search results.</h3>
+                            </div>
+                            <div className="modal-body">
+                                <CSVLink data={csvData} filename="another-name.csv" headers={headers}>Download me </CSVLink>
+                            </div>
+                            <div className="modal-footer">
+                                <button type="button" className="btn btn-default" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
                 <SearchBar
                   apiCalls={[getPlats, getAccounts]}
@@ -124,8 +198,10 @@ LotExisting.propTypes = {
     lots: PropTypes.array,
     plats: PropTypes.array,
     accounts: PropTypes.array,
+    payments: PropTypes.array,
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
+    removeSearchPagination: PropTypes.func,
 };
 
 function mapStateToProps(state) {
@@ -134,6 +210,7 @@ function mapStateToProps(state) {
         lots: state.lots,
         plats: state.plats,
         accounts: state.accounts,
+        payments: state.payments,
     };
 }
 
@@ -141,6 +218,10 @@ function mapDispatchToProps(dispatch) {
     return {
         onComponentDidMount() {
             dispatch(getPagination('/lot/'));
+            dispatch(getPayments());
+        },
+        removeSearchPagination() {
+            dispatch(searchQuery('csv'));
         },
     };
 }

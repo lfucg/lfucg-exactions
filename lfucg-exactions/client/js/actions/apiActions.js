@@ -1296,7 +1296,7 @@ export function getPagination(page) {
     };
 }
 
-export function searchQuery() {
+export function searchQuery(csv) {
     return {
         type: API_CALL,
         endpoint: SEARCH_QUERY,
@@ -1306,7 +1306,7 @@ export function searchQuery() {
             } = getState();
 
 
-            let query_all = `${activeForm.currentPage}?paginatePage`;
+            let query_all = csv ? `${activeForm.currentPage}?` : `${activeForm.currentPage}?paginatePage`;
 
             if (activeForm.currentPage === '/account-ledger/') {
                 query_all = '/ledger/?paginatePage';
@@ -1325,6 +1325,7 @@ export function searchQuery() {
                 filter(a => a[1] && a[0].startsWith('filter_')),
             )(Object.entries(activeForm));
 
+            console.log('QUERY IS: ', queryString);
             return queryString;
         },
         meta: {
