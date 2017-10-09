@@ -491,6 +491,7 @@ class PlatForm extends React.Component {
                               file_object_id={plats.id}
                               ariaExpanded="true"
                               panelClass="panel-collapse collapse row in"
+                              permission="plat"
                             />
                         }
                     </div>

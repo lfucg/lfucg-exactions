@@ -146,6 +146,7 @@ class ProjectCostForm extends React.Component {
                               file_object_id={projectCosts.id}
                               ariaExpanded="true"
                               panelClass="panel-collapse collapse row in"
+                              permission="projectcostestimate"
                             />
                         }
                     </div>

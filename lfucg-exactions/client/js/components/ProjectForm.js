@@ -206,6 +206,7 @@ class ProjectForm extends React.Component {
                               file_object_id={projects.id}
                               ariaExpanded="true"
                               panelClass="panel-collapse collapse row in"
+                              permission="project"
                             />
                         }
                     </div>

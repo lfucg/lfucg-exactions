@@ -394,6 +394,7 @@ class LotForm extends React.Component {
                               file_object_id={lots.id}
                               ariaExpanded="true"
                               panelClass="panel-collapse collapse row in"
+                              permission="lot"
                             />
                         }
                     </div>
