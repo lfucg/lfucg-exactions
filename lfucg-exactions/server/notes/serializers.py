@@ -88,6 +88,11 @@ class FileUploadSerializer(serializers.ModelSerializer):
     file_content_type = ContentTypeField()
     date = CleanedDateField(read_only=True)
 
+    filename_display = serializers.SerializerMethodField(read_only=True)
+
+    def get_filename_display(self, obj):
+        return obj.upload.name
+
     class Meta:
         model = FileUpload
         fields = (
@@ -96,12 +101,14 @@ class FileUploadSerializer(serializers.ModelSerializer):
             'date',
             'file_content_type',
             'file_object_id',
+            'filename_display',
         )
 
         read_only = (
             'upload',
             'file_content_type',
             'file_object_id',
+            'filename_display',
         )
 
 class FileUploadCreateSerializer(serializers.ModelSerializer):

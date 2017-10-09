@@ -40,7 +40,7 @@ class Uploads extends React.Component {
                             </div>
                             <div className="col-sm-8">
                                 <a href={single_upload.upload} >
-                                    {single_upload.upload}
+                                    {single_upload.filename_display}
                                 </a>
                             </div>
                         </h5>
@@ -92,7 +92,6 @@ class Uploads extends React.Component {
                                         </div>
                                     </div>
                                 }
-                                {console.log('PERMISSIONS', this.props.permission)}
                                 {currentUser && currentUser.permissions && contains(this.props.permission, Object.keys(currentUser.permissions)) &&
                                     <Dropzone onDrop={fileUploading} style={{}} >
                                         <button className="btn btn-lex">Add File</button>

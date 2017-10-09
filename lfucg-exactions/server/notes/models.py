@@ -91,7 +91,7 @@ class Rate(models.Model):
     def __str__(self):
         return self.zone + ': ' + self.category
 
-class MediaRootS3BotoStorage(S3BotoStorage):
+class MediaStorage(S3BotoStorage):
     location = 'media'
 
 def model_directory_path(instance, filename):
