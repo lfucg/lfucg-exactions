@@ -153,7 +153,7 @@ class AccountSummary extends React.Component {
                 return (
                     <div key={payment.id} className="col-xs-12">
                         <div className="row form-subheading">
-                            <h3>Agreement Resolution: {payment.credit_source.resolution_number}</h3>
+                            <h3>Agreement Resolution: {payment.credit_source && payment.credit_source.resolution_number}</h3>
                         </div>
                         <div className="row link-row">
                             <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">

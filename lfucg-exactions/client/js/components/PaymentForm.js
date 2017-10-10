@@ -111,6 +111,14 @@ class PaymentForm extends React.Component {
                                                 {lotsList}
                                             </select>
                                         </div>
+                                        <div className="col-sm-6">
+                                            {activeForm.lot_exactions &&
+                                                <div>
+                                                    <h3 htmlFor="lot_exactions" className="text-center" aria-label="Current Exactions">Current Lot Exactions Due:</h3>
+                                                    <h4 className="text-center" >{activeForm.lot_exactions}</h4>
+                                                </div>
+                                            }
+                                        </div>
                                     </div>
                                     <div className="row">
                                         <div className="col-sm-6 form-group">
@@ -172,6 +180,25 @@ class PaymentForm extends React.Component {
                                     <div className="row form-subheading">
                                         <h3>Exactions Payments</h3>
                                     </div>
+                                    {activeForm.sewer_exactions || activeForm.non_sewer_exactions ?
+                                        <div className="white-box">
+                                            {activeForm.sewer_exactions || activeForm.non_sewer_exactions ?
+                                                <div className="text-center">
+                                                    <div className="row">
+                                                        <h4>Exactions Due</h4>
+                                                    </div>
+                                                    <div className="row">
+                                                        <div className="col-sm-6">
+                                                            <h5>Sewer: {activeForm.sewer_exactions}</h5>
+                                                        </div>
+                                                        <div className="col-sm-6">
+                                                            <h5>Non-sewer: {activeForm.non_sewer_exactions}</h5>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            : null}
+                                        </div>
+                                    : null}
                                     <div className="row">
                                         <div className="col-sm-6">
                                             <FormGroup label="Road Exactions Paid" id="paid_roads">
@@ -230,10 +257,10 @@ class PaymentForm extends React.Component {
 
 PaymentForm.propTypes = {
     activeForm: PropTypes.object,
-    lots: PropTypes.array,
-    accounts: PropTypes.array,
-    agreements: PropTypes.array,
-    payments: PropTypes.array,
+    lots: PropTypes.object,
+    accounts: PropTypes.object,
+    agreements: PropTypes.object,
+    payments: PropTypes.object,
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
     onSubmit: PropTypes.func,
@@ -315,6 +342,9 @@ function mapDispatchToProps(dispatch, params) {
                                 account_name: account.response.account_name,
                                 lot_id: value_id,
                                 address_full: value_name,
+                                lot_exactions: lot_id.response.lot_exactions.current_exactions,
+                                non_sewer_exactions: lot_id.response.lot_exactions.non_sewer_due,
+                                sewer_exactions: lot_id.response.lot_exactions.sewer_due,
                             };
                             dispatch(formUpdate(update));
                             dispatch(getAccountAgreements(lot_id.response.account));
@@ -323,6 +353,9 @@ function mapDispatchToProps(dispatch, params) {
                         const update = {
                             lot_id: value_id,
                             address_full: value_name,
+                            lot_exactions: lot_id.response.lot_exactions.current_exactions,
+                            non_sewer_exactions: lot_id.response.lot_exactions.non_sewer_due,
+                            sewer_exactions: lot_id.response.lot_exactions.sewer_due,
                         };
                         dispatch(formUpdate(update));
                     }
