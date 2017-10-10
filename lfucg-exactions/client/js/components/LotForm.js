@@ -228,7 +228,7 @@ class LotForm extends React.Component {
                                                         <input type="text" className="form-control" placeholder="Parcel ID" />
                                                     </FormGroup>
                                                 </div>
-                                                {lots.total_due <= 0 &&
+                                                {currentLot.total_due <= 0 &&
                                                 <div className="col-sm-6">
                                                     <FormGroup label="Permit ID" id="permit_id">
                                                         <input type="text" className="form-control" placeholder="Permit ID" />
@@ -388,10 +388,10 @@ class LotForm extends React.Component {
                             </div>
                         </div>
                         <div className="clearfix" />
-                        {lots.id &&
+                        {currentLot.id &&
                             <Uploads
                               file_content_type="plats,lot"
-                              file_object_id={lots.id}
+                              file_object_id={currentLot.id}
                               ariaExpanded="true"
                               panelClass="panel-collapse collapse row in"
                               permission="lot"
