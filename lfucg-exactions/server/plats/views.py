@@ -42,7 +42,12 @@ class PlatCSVExportView(View):
 
         writer = csv.writer(response)
 
-        plat_csv_data = [ plat_object.subdivision.name,
+        if plat_object.subdivision is not None:
+            sub_name = plat_object.subdivision.name
+        else:
+            sub_name = ''
+
+        plat_csv_data = [ sub_name,
             plat_object.account,
             plat_object.total_acreage,
             plat_object.buildable_lots,
@@ -78,7 +83,7 @@ class PlatCSVExportView(View):
         # LOTS AND LOT DETAILS
         lot_queryset = Lot.objects.filter(plat=plat)
 
-        if lot_queryset is not None:
+        if lot_queryset.exists():
             headers.extend([
                 'Address',
                 'Lot Number',
@@ -168,11 +173,17 @@ class PlatCSVExportView(View):
 
                         current_lot_data.extend([ledger_from_total,])
 
-                if zone_csv_data.exists():
+                if len(zone_csv_data) > 0:
                     lot_csv_data = zone_csv_data + current_lot_data
                 else:
                     lot_csv_data = plat_csv_data + current_lot_data
                         
                 writer.writerow(lot_csv_data)
+        elif len(zone_csv_data) > 0:
+            writer.writerow(headers)
+            writer.writerow(zone_csv_data)
+        else:
+            writer.writerow(headers)
+            writer.writerow(plat_csv_data)
 
         return response
