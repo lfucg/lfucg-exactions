@@ -1,5 +1,6 @@
 from django.contrib import admin
 from simple_history.admin import SimpleHistoryAdmin
+from django.contrib.auth.admin import UserAdmin
 
 from accounts.models import *
 
@@ -133,6 +134,7 @@ class AccountLedgerHistoryAdmin(SimpleHistoryAdmin):
         return obj.lot.address_full
     lot.short_description = 'Lot'
 
+UserAdmin.list_display += ('last_login',)
 
 admin.site.register(Account, AccountHistoryAdmin)
 admin.site.register(Agreement, AgreementHistoryAdmin)
