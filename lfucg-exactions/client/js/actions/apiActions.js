@@ -1251,21 +1251,25 @@ export function postAccountLedger() {
                 entry_date,
                 account_from,
                 account_to,
+                plat,
                 lot,
                 agreement,
                 entry_type,
                 non_sewer_credits,
                 sewer_credits,
+                plat_lot,
             } = activeForm;
             return {
                 entry_date,
                 account_from,
                 account_to,
+                plat,
                 lot,
                 agreement,
                 entry_type,
                 non_sewer_credits,
                 sewer_credits,
+                plat_lot,
             };
         },
     };
@@ -1285,21 +1289,25 @@ export function putAccountLedger(selectedAccountLedger) {
                 entry_date,
                 account_from,
                 account_to,
+                plat,
                 lot,
                 agreement,
                 entry_type,
                 non_sewer_credits,
                 sewer_credits,
+                plat_lot,
             } = activeForm;
             return {
                 entry_date,
                 account_from,
                 account_to,
+                plat,
                 lot,
                 agreement,
                 entry_type,
                 non_sewer_credits,
                 sewer_credits,
+                plat_lot,
             };
         },
     };
