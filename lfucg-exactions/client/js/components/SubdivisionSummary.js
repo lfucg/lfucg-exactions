@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
-import { map } from 'ramda';
+import { map, filter, compose } from 'ramda';
 import PropTypes from 'prop-types';
 
 import Navbar from './Navbar';
@@ -11,6 +11,7 @@ import Breadcrumbs from './Breadcrumbs';
 import {
     getSubdivisionID,
     getSubdivisionPlats,
+    getLots,
 } from '../actions/apiActions';
 
 class SubdivisionSummary extends React.Component {
@@ -24,6 +25,7 @@ class SubdivisionSummary extends React.Component {
             currentUser,
             subdivisions,
             plats,
+            lots,
         } = this.props;
 
         const subdivisionPlats = plats && plats.length > 0 &&
@@ -68,6 +70,50 @@ class SubdivisionSummary extends React.Component {
                     </div>
                 );
             })(plats);
+
+        const platIds = plats && plats.length > 0 && map(plat => plat.id)(plats);
+
+        const subdivisionLots = lots && compose(
+                map((lot) => {
+                    return (
+                        <div key={lot.id}>
+                            <div className="row form-subheading">
+                                <h3>{lot.address_full}</h3>
+                            </div>
+                            <div className="row link-row">
+                                <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
+                                    <div className="col-xs-5">
+                                        {currentUser && currentUser.permissions && currentUser.permissions.lot &&
+                                            <Link to={`lot/form/${lot.id}`} aria-label="Edit">
+                                                <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
+                                                <div className="col-xs-7 link-label">
+                                                    Edit
+                                                </div>
+                                            </Link>
+                                        }
+                                    </div>
+                                    <div className="col-xs-5 ">
+                                        <Link to={`lot/summary/${lot.id}`} aria-label="Summary">
+                                            <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
+                                            <div className="col-xs-7 link-label">
+                                                Summary
+                                            </div>
+                                        </Link>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="row">
+                                <div className="col-sm-offset-1">
+                                    <p className="col-md-4 col-xs-6">Lot Number: {lot.lot_number}</p>
+                                    <p className="col-md-4 col-xs-6 ">Permit ID: {lot.permit_id}</p>
+                                    <p className="col-md-4 col-xs-6 ">Parcel ID: {lot.parcel_id}</p>
+                                </div>
+                            </div>
+                        </div>
+                    );
+                }),
+                filter(lot => platIds.includes(lot.plat.id)),
+            )(lots);
 
         return (
             <div className="subdivision-summary">
@@ -162,6 +208,39 @@ class SubdivisionSummary extends React.Component {
                                     <h2>Plats - None</h2>
                                 </div>
                             )}
+                            {subdivisionLots ?
+                                <div>
+                                    <a
+                                      role="button"
+                                      data-toggle="collapse"
+                                      data-parent="#accordion"
+                                      href="#collapseLots"
+                                      aria-expanded="false"
+                                      aria-controls="collapseLots"
+                                    >
+                                        <div className="row section-heading" role="tab" id="headingLots">
+                                            <div className="col-xs-1 caret-indicator" />
+                                            <div className="col-xs-8 col-xs-offset-1">
+                                                <h2>Lots</h2>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <div
+                                      id="collapseLots"
+                                      className="panel-collapse collapse row"
+                                      role="tabpanel"
+                                      aria-labelledby="#headingLots"
+                                    >
+                                        <div className="panel-body">
+                                            <div className="col-xs-12">
+                                                {subdivisionLots}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div> : <div className="row section-heading" role="tab" id="headingAccountPlats">
+                                    <h2>Lots - None</h2>
+                                </div>
+                            }
                         </div>
                     </div>
                 </div>
@@ -175,6 +254,7 @@ SubdivisionSummary.propTypes = {
     currentUser: PropTypes.object,
     subdivisions: PropTypes.array,
     plats: PropTypes.array,
+    lots: PropTypes.array,
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
 };
@@ -184,6 +264,7 @@ function mapStateToProps(state) {
         currentUser: state.currentUser,
         subdivisions: state.subdivisions,
         plats: state.plats,
+        lots: state.lots,
     };
 }
 
@@ -194,6 +275,7 @@ function mapDispatchToProps(dispatch, params) {
         onComponentDidMount() {
             dispatch(getSubdivisionID(selectedSubdivision));
             dispatch(getSubdivisionPlats(selectedSubdivision));
+            dispatch(getLots());
         },
     };
 }
