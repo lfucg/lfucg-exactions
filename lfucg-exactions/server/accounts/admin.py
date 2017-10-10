@@ -41,7 +41,6 @@ class AgreementHistoryAdmin(SimpleHistoryAdmin):
 class PaymentHistoryAdmin(SimpleHistoryAdmin):
     list_display = (
         'account_name',
-        # 'agreement_resolution',
         'lot_address',
         'id',
         'payment_type',
@@ -58,17 +57,86 @@ class PaymentHistoryAdmin(SimpleHistoryAdmin):
         return obj.credit_account.account_name
     account_name.short_description = 'Account'
 
-    # def agreement_resolution(self, obj):
-    #     return obj.credit_source.resolution_number
-    # agreement_resolution.short_description = 'Agreement'
-
     def lot_address(self, obj):
         return obj.lot_id.address_full
     lot_address.short_description = 'Lot'
 
+class ProjectHistoryAdmin(SimpleHistoryAdmin):
+    list_display = (
+        'name',
+        'project_category',
+        'project_type',
+        'project_status',
+        'expansion_area',
+        'id',
+        'agreement',
+    )
+    readonly_fields = (
+        'created_by',
+        'modified_by',
+        'date_created',
+        'date_modified',
+    )
+
+    def agreement(self, obj):
+        return obj.agreement_id.resolution_number
+    agreement.short_description = 'Agreement'
+
+class ProjectCostEstimateHistoryAdmin(SimpleHistoryAdmin):
+    list_display = (
+        'project',
+        'estimate_type',
+        'id',
+        'credits_available',
+    )
+    readonly_fields = (
+        'created_by',
+        'modified_by',
+        'date_created',
+        'date_modified',
+    )
+
+    def project(self, obj):
+        return obj.project_id.name
+    project.short_description = 'Project'
+
+class AccountLedgerHistoryAdmin(SimpleHistoryAdmin):
+    list_display = (
+        'account_to',
+        'account_from',
+        'agreement',
+        'lot',
+        'id',
+        'entry_type',
+        'entry_date',
+    )
+    readonly_fields = (
+        'created_by',
+        'modified_by',
+        'date_created',
+        'date_modified',
+    )
+
+    def account_from(self, obj):
+        return obj.account_from.account_name
+    account_from.short_description = 'Account From'
+
+    def account_to(self, obj):
+        return obj.account_to.account_name
+    account_to.short_description = 'Account To'
+
+    def agreement(self, obj):
+        return obj.agreement.resolution_number
+    agreement.short_description = 'Agreement'
+
+    def lot(self, obj):
+        return obj.lot.address_full
+    lot.short_description = 'Lot'
+
+
 admin.site.register(Account, AccountHistoryAdmin)
 admin.site.register(Agreement, AgreementHistoryAdmin)
 admin.site.register(Payment, PaymentHistoryAdmin)
-admin.site.register(Project, SimpleHistoryAdmin)
-admin.site.register(ProjectCostEstimate, SimpleHistoryAdmin)
-admin.site.register(AccountLedger, SimpleHistoryAdmin)
+admin.site.register(Project, ProjectHistoryAdmin)
+admin.site.register(ProjectCostEstimate, ProjectCostEstimateHistoryAdmin)
+admin.site.register(AccountLedger, AccountLedgerHistoryAdmin)
