@@ -18,7 +18,8 @@ class ContentTypeField(serializers.Field):
         content_type_app_label = data.split(',')[0]
         content_type_model = data.split(',')[1]
 
-        return ContentType.objects.get(app_label=content_type_app_label, model=content_type_model)
+        if content_type_app_label.count and content_type_model.count:
+            return ContentType.objects.get(app_label=content_type_app_label, model=content_type_model)
 
     def to_representation(self, obj):
         if obj.model == 'plats,plat':

@@ -379,7 +379,6 @@ class LotForm extends React.Component {
                             >
                                 <div className="panel-body">
                                     <div className="col-xs-12">
-
                                         {currentLot.id && currentLot.plat &&
                                             <Notes content_type="Lot" object_id={currentLot.id} parent_content_type="Plat" parent_object_id={currentLot.plat.id} />
                                         }

@@ -27,23 +27,25 @@ class NoteViewSet(viewsets.ModelViewSet):
             child_content_type_app_label = child_content_type_string.split(',')[0]
             child_content_type_model = child_content_type_string.split(',')[1]
 
-            child_content_type = ContentType.objects.get(app_label=child_content_type_app_label, model=child_content_type_model)
+            if child_content_type_app_label.count and child_content_type_model.count:
+                child_content_type = ContentType.objects.get(app_label=child_content_type_app_label, model=child_content_type_model)
 
-            if parent_content_type_string is not None:
-                parent_content_type_app_label = parent_content_type_string.split(',')[0]
-                parent_content_type_model = parent_content_type_string.split(',')[1]
+                if parent_content_type_string is not None:
+                    parent_content_type_app_label = parent_content_type_string.split(',')[0]
+                    parent_content_type_model = parent_content_type_string.split(',')[1]
 
-                parent_content_type = ContentType.objects.get(app_label=parent_content_type_app_label, model=parent_content_type_model)
+                    if parent_content_type_app_label.count and parent_content_type_model.count:
+                        parent_content_type = ContentType.objects.get(app_label=parent_content_type_app_label, model=parent_content_type_model)
 
-                if parent_content_type and child_content_type:
-                    query_list = queryset.filter(
-                        Q(content_type=parent_content_type, object_id=parent_object_id) |
-                        Q(content_type=child_content_type, object_id=child_object_id))
+                        if parent_content_type and child_content_type:
+                            query_list = queryset.filter(
+                                Q(content_type=parent_content_type, object_id=parent_object_id) |
+                                Q(content_type=child_content_type, object_id=child_object_id))
 
-                queryset = query_list
+                        queryset = query_list
 
-            else:
-                queryset = queryset.filter(content_type=child_content_type, object_id=child_object_id)
+                else:
+                    queryset = queryset.filter(content_type=child_content_type, object_id=child_object_id)
 
         else:
             queryset = queryset
@@ -128,12 +130,13 @@ class FileUploadViewSet(viewsets.ModelViewSet):
             content_type_app_label = file_content_type_string.split(',')[0]
             content_type_model = file_content_type_string.split(',')[1]
 
-            file_content_type = ContentType.objects.get(app_label=content_type_app_label, model=content_type_model)
+            if content_type_app_label.count and content_type_model.count:
+                file_content_type = ContentType.objects.get(app_label=content_type_app_label, model=content_type_model)
 
-            query_list = queryset.filter(
-                Q(file_content_type=file_content_type, file_object_id=file_object_id))
+                query_list = queryset.filter(
+                    Q(file_content_type=file_content_type, file_object_id=file_object_id))
 
-            queryset = query_list
+                queryset = query_list
 
         else:
             queryset = queryset
