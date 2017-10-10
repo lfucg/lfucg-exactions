@@ -41,8 +41,8 @@ class DashboardPage extends React.Component {
                                 <p>Lexington account ledgers.  Credit transfers, new credit awards, and credit payments.</p>
                             </div>
                             <div className="col-md-4 col-sm-6">
-                                <Link to="payment" role="link"><h2 className="in-page-link">Payments</h2></Link>
-                                <p>Payments by Cash, Check, or Credit Card.</p>
+                                <Link to="payment" role="link"><h2 className="in-page-link">Monetary Payments</h2></Link>
+                                <p>Payments via cash, credit card, check, or money order.</p>
                             </div>
                             <div className="col-md-4 col-sm-6">
                                 <Link to="project" role="link"><h2 className="in-page-link">Projects</h2></Link>
