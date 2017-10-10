@@ -71,7 +71,7 @@ class SubdivisionSummary extends React.Component {
                 );
             })(plats);
 
-        const platIds = plats && compose(map(plat => plat.id))(plats);
+        const platIds = plats && plats.length > 0 && map(plat => plat.id)(plats);
 
         const subdivisionLots = lots && compose(
                 map((lot) => {
