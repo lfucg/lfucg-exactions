@@ -60,6 +60,7 @@ INSTALLED_APPS = (
     # Application base, containing global templates.
     'base',
     'simple_history',
+    'storages',
 
     # Local apps, referenced via appname
     'accounts',
@@ -96,7 +97,6 @@ MEDIA_ROOT = os.path.join(PROJECT_ROOT, 'media')
 # trailing slash.
 # Examples: "http://media.example.com/media/", "http://example.com/media/"
 MEDIA_URL = '/media/'
-
 # Absolute path to the directory static files should be collected to.
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
@@ -234,7 +234,7 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticatedOrReadOnly',
-    )
+    ),
 }
 
 # Uncomment this and set to all slave DBs in use on the site.

@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
+import Uploads from './Uploads';
 
 import {
     getProjectCostID,
@@ -147,6 +148,15 @@ class ProjectCostSummary extends React.Component {
                                 <h2>Project - None</h2>
                             </div>}
                         </div>
+                        {projectCosts.id &&
+                            <Uploads
+                              file_content_type="accounts_projectcostestimate"
+                              file_object_id={projectCosts.id}
+                              ariaExpanded="false"
+                              panelClass="panel-collapse collapse row"
+                              permission="projectcostestimate"
+                            />
+                        }
                     </div>
                 </div>
                 <Footer />
