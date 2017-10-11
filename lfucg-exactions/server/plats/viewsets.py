@@ -144,18 +144,13 @@ class LotViewSet(viewsets.ModelViewSet):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def update(self, request, pk):
-        existing_object  = self.get_object()
-        setattr(existing_object, 'modified_by', request.user)
-        for key, value in request.data.items():
-            for existing_object_key, existing_object_value in existing_object.__dict__.items():
-                if key == existing_object_key:
-                    if value != existing_object_value:
-                        setattr(existing_object, existing_object_key, value)
-        try:
-            existing_object.save()
-            return Response(status=status.HTTP_200_OK)
-        except Exception as e:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+        existing_object = self.get_object()
+        serializer = self.get_serializer(existing_object, data=request.data, partial=True)
+        if serializer.is_valid(raise_exception=True):
+            self.perform_update(serializer)
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class PlatZoneViewSet(viewsets.ModelViewSet):
     serializer_class = PlatZoneSerializer
