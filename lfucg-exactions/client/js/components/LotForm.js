@@ -228,7 +228,7 @@ class LotForm extends React.Component {
                                                         <input type="text" className="form-control" placeholder="Parcel ID" />
                                                     </FormGroup>
                                                 </div>
-                                                {currentLot.total_due <= 0 &&
+                                                {currentLot.lot_exactions.current_exactions_number <= 0 &&
                                                 <div className="col-sm-6">
                                                     <FormGroup label="Permit ID" id="permit_id">
                                                         <input type="text" className="form-control" placeholder="Permit ID" />
