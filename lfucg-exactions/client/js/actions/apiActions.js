@@ -542,7 +542,7 @@ export function putLot(selectedLot) {
                 // payment,
             } = activeForm;
             return {
-                plat_id: plat,
+                plat,
                 parcel_id,
                 lot_number,
                 permit_id,
@@ -569,7 +569,7 @@ export function putLot(selectedLot) {
                 dues_storm_own,
                 dues_open_space_dev,
                 dues_open_space_own,
-                account_id: account,
+                account,
                 // payment,
             };
         },
