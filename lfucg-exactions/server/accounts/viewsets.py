@@ -294,7 +294,7 @@ class AccountLedgerViewSet(viewsets.ModelViewSet):
                 self.perform_create(serializer)
                 return Response(serializer.data)
         else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response('Invalid Entry', status=status.HTTP_400_BAD_REQUEST)
 
     def update(self, request, pk):
         return update_entry(self, request, pk)
