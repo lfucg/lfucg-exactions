@@ -8,6 +8,7 @@ import Navbar from './Navbar';
 import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
 import Notes from './Notes';
+import Uploads from './Uploads';
 
 import {
     getPlatID,
@@ -353,7 +354,7 @@ class PlatSummary extends React.Component {
                                 <div className="panel-body">
                                     <div className="col-xs-12">
                                         {plats.id &&
-                                            <Notes content_type="Plat" object_id={plats.id} />
+                                            <Notes content_type="plats_plat" object_id={plats.id} />
                                         }
                                     </div>
                                 </div>
@@ -459,6 +460,15 @@ class PlatSummary extends React.Component {
                                 </div>
                             }
                         </div>
+                        {plats.id &&
+                            <Uploads
+                              file_content_type="plats_plat"
+                              file_object_id={plats.id}
+                              ariaExpanded="false"
+                              panelClass="panel-collapse collapse row"
+                              permission="plat"
+                            />
+                        }
                     </div>
                 </div>
                 <Footer />
