@@ -24,17 +24,21 @@ class NoteViewSet(viewsets.ModelViewSet):
         parent_object_id = self.request.query_params.get('parent_object_id', None)
                 
         if child_content_type_string is not None:
-            child_content_type_app_label = child_content_type_string.split(',')[0]
-            child_content_type_model = child_content_type_string.split(',')[1]
+            split_child_content = child_content_type_string.split('_')
 
-            if child_content_type_app_label.count and child_content_type_model.count:
+            if len(split_child_content) == 2:
+                child_content_type_app_label = split_child_content[0]
+                child_content_type_model = split_child_content[1]
+
                 child_content_type = ContentType.objects.get(app_label=child_content_type_app_label, model=child_content_type_model)
 
                 if parent_content_type_string is not None:
-                    parent_content_type_app_label = parent_content_type_string.split(',')[0]
-                    parent_content_type_model = parent_content_type_string.split(',')[1]
+                    split_parent_string = parent_content_type_string.split('_')
 
-                    if parent_content_type_app_label.count and parent_content_type_model.count:
+                    if len(split_parent_string) == 2:
+                        parent_content_type_app_label = split_parent_string[0]
+                        parent_content_type_model = split_parent_string[1]
+
                         parent_content_type = ContentType.objects.get(app_label=parent_content_type_app_label, model=parent_content_type_model)
 
                         if parent_content_type and child_content_type:
@@ -127,10 +131,12 @@ class FileUploadViewSet(viewsets.ModelViewSet):
         file_object_id = self.request.query_params.get('file_object_id', None)
         
         if file_content_type_string is not None:
-            content_type_app_label = file_content_type_string.split(',')[0]
-            content_type_model = file_content_type_string.split(',')[1]
+            split_content_type = file_content_type_string.split('_')
 
-            if content_type_app_label.count and content_type_model.count:
+            if len(split_content_type) == 2:
+                content_type_app_label = split_content_type[0]
+                content_type_model = split_content_type[1]
+
                 file_content_type = ContentType.objects.get(app_label=content_type_app_label, model=content_type_model)
 
                 query_list = queryset.filter(

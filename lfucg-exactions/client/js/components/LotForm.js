@@ -380,7 +380,7 @@ class LotForm extends React.Component {
                                 <div className="panel-body">
                                     <div className="col-xs-12">
                                         {currentLot.id && currentLot.plat &&
-                                            <Notes content_type="Lot" object_id={currentLot.id} parent_content_type="Plat" parent_object_id={currentLot.plat.id} />
+                                            <Notes content_type="plats_lot" object_id={currentLot.id} parent_content_type="plats_plat" parent_object_id={currentLot.plat.id} />
                                         }
                                     </div>
                                 </div>
@@ -389,7 +389,7 @@ class LotForm extends React.Component {
                         <div className="clearfix" />
                         {currentLot.id &&
                             <Uploads
-                              file_content_type="plats,lot"
+                              file_content_type="plats_lot"
                               file_object_id={currentLot.id}
                               ariaExpanded="true"
                               panelClass="panel-collapse collapse row in"
