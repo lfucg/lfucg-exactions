@@ -150,7 +150,7 @@ class ProjectCostSummary extends React.Component {
                         </div>
                         {projectCosts.id &&
                             <Uploads
-                              file_content_type="accounts,projectcostestimate"
+                              file_content_type="accounts_projectcostestimate"
                               file_object_id={projectCosts.id}
                               ariaExpanded="false"
                               panelClass="panel-collapse collapse row"

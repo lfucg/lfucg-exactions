@@ -310,7 +310,7 @@ class LotSummary extends React.Component {
                                     <div className="panel-body">
                                         <div className="col-xs-12">
                                             {currentLot.id &&
-                                                <Notes content_type="plats,lot" object_id={currentLot.id} parent_content_type="plats,plat" parent_object_id={currentLot.plat.id} />
+                                                <Notes content_type="plats_lot" object_id={currentLot.id} parent_content_type="plats_plat" parent_object_id={currentLot.plat.id} />
                                             }
                                         </div>
                                     </div>
@@ -513,7 +513,7 @@ class LotSummary extends React.Component {
                             </div>
                             {currentLot.id &&
                                 <Uploads
-                                  file_content_type="plats,lot"
+                                  file_content_type="plats_lot"
                                   file_object_id={currentLot.id}
                                   ariaExpanded="false"
                                   panelClass="panel-collapse collapse row"

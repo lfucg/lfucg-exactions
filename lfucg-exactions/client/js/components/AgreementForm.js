@@ -116,7 +116,7 @@ class AgreementForm extends React.Component {
                         <div className="clearfix" />
                         {agreements.id &&
                             <Uploads
-                              file_content_type="accounts,agreement"
+                              file_content_type="accounts_agreement"
                               file_object_id={agreements.id}
                               ariaExpanded="true"
                               panelClass="panel-collapse collapse row in"

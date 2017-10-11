@@ -202,7 +202,7 @@ class ProjectForm extends React.Component {
                         <div className="clearfix" />
                         {projects.id &&
                             <Uploads
-                              file_content_type="accounts,project"
+                              file_content_type="accounts_project"
                               file_object_id={projects.id}
                               ariaExpanded="true"
                               panelClass="panel-collapse collapse row in"

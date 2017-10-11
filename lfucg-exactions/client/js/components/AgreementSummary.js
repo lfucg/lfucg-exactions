@@ -394,7 +394,7 @@ class AgreementSummary extends React.Component {
                         </div>
                         {agreements.id &&
                             <Uploads
-                              file_content_type="accounts,agreement"
+                              file_content_type="accounts_agreement"
                               file_object_id={agreements.id}
                               ariaExpanded="false"
                               panelClass="panel-collapse collapse row"

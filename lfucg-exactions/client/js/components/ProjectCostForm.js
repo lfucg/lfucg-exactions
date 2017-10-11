@@ -142,7 +142,7 @@ class ProjectCostForm extends React.Component {
                         <div className="clearfix" />
                         {projectCosts.id &&
                             <Uploads
-                              file_content_type="accounts,projectcostestimate"
+                              file_content_type="accounts_projectcostestimate"
                               file_object_id={projectCosts.id}
                               ariaExpanded="true"
                               panelClass="panel-collapse collapse row in"

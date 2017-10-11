@@ -354,7 +354,7 @@ class PlatSummary extends React.Component {
                                 <div className="panel-body">
                                     <div className="col-xs-12">
                                         {plats.id &&
-                                            <Notes content_type="plats,plat" object_id={plats.id} />
+                                            <Notes content_type="plats_plat" object_id={plats.id} />
                                         }
                                     </div>
                                 </div>
@@ -462,7 +462,7 @@ class PlatSummary extends React.Component {
                         </div>
                         {plats.id &&
                             <Uploads
-                              file_content_type="plats,plat"
+                              file_content_type="plats_plat"
                               file_object_id={plats.id}
                               ariaExpanded="false"
                               panelClass="panel-collapse collapse row"

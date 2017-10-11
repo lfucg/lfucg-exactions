@@ -228,7 +228,7 @@ class ProjectSummary extends React.Component {
                         </div>
                         {projects.id &&
                             <Uploads
-                              file_content_type="accounts,project"
+                              file_content_type="accounts_project"
                               file_object_id={projects.id}
                               ariaExpanded="false"
                               panelClass="panel-collapse collapse row"
