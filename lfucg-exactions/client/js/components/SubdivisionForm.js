@@ -114,6 +114,7 @@ function mapDispatchToProps(dispatch, params) {
                 dispatch(getSubdivisionID(selectedSubdivision))
                 .then((data_subdivision) => {
                     const update = {
+                        sub_id: selectedSubdivision,
                         name: data_subdivision.response.name,
                         gross_acreage: data_subdivision.response.cleaned_gross_acreage,
                     };
