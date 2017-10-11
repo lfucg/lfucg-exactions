@@ -28,8 +28,8 @@ git "/home/ubuntu/lfucg-exactions" do
   group "ubuntu"
 end
 
-template "/home/ubuntu/lfucg-exactions/lfucg-exactions/server/settings/local.py" do
-  source "/home/ubuntu/lfucg-exactions/lfucg-exactions/server/settings/local-dist.py"
+template "/home/ubuntu/lfucg-exactions/lfucg-exactions/server/server/settings/local.py" do
+  source "/home/ubuntu/lfucg-exactions/lfucg-exactions/server/server/settings/local-dist.py"
   local true
   mode 0755
   variables( :config => config )
