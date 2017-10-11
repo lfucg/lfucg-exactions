@@ -22,6 +22,11 @@
     }
 }
 
+.collapsing {
+    -webkit-transition: none;
+    transition: none;
+    display: none;
+}
 .panel-group {
     .section-heading {
         text-align: center;
