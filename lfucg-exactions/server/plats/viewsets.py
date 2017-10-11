@@ -1,14 +1,15 @@
 from rest_framework import viewsets, status, filters
 from django.db.models import Q
+from django.conf import settings
+
 from rest_framework.response import Response
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.pagination import PageNumberPagination
 
 from .models import *
 from .serializers import *
 from .permissions import CanAdminister
-from rest_framework.pagination import PageNumberPagination
-from django_filters.rest_framework import DjangoFilterBackend
-
-from django.conf import settings
+from .utils import update_entry
 
 class SubdivisionViewSet(viewsets.ModelViewSet):
     serializer_class = SubdivisionSerializer
@@ -45,18 +46,7 @@ class SubdivisionViewSet(viewsets.ModelViewSet):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def update(self, request, pk):
-        existing_object  = self.get_object()
-        setattr(existing_object, 'modified_by', request.user)
-        for key, value in request.data.items():
-            for existing_object_key, existing_object_value in existing_object.__dict__.items():
-                if key == existing_object_key:
-                    if value != existing_object_value:
-                        setattr(existing_object, existing_object_key, value)
-        try:
-            existing_object.save()
-            return Response(status=status.HTTP_200_OK)
-        except Exception as e:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+        return update_entry(self, request, pk)
 
 class PlatViewSet(viewsets.ModelViewSet):
     serializer_class = PlatSerializer
@@ -92,18 +82,7 @@ class PlatViewSet(viewsets.ModelViewSet):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def update(self, request, pk):
-        existing_object  = self.get_object()
-        setattr(existing_object, 'modified_by', request.user)
-        for key, value in request.data.items():
-            for existing_object_key, existing_object_value in existing_object.__dict__.items():
-                if key == existing_object_key:
-                    if value != existing_object_value:
-                        setattr(existing_object, existing_object_key, value)
-        try:
-            existing_object.save()
-            return Response(status=status.HTTP_200_OK)
-        except Exception as e:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+        return update_entry(self, request, pk)
 
 class LotViewSet(viewsets.ModelViewSet):
     serializer_class = LotSerializer
@@ -144,13 +123,7 @@ class LotViewSet(viewsets.ModelViewSet):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def update(self, request, pk):
-        existing_object = self.get_object()
-        serializer = self.get_serializer(existing_object, data=request.data, partial=True)
-        if serializer.is_valid(raise_exception=True):
-            self.perform_update(serializer)
-            return Response(serializer.data)
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return update_entry(self, request, pk)
 
 class PlatZoneViewSet(viewsets.ModelViewSet):
     serializer_class = PlatZoneSerializer
@@ -171,18 +144,7 @@ class PlatZoneViewSet(viewsets.ModelViewSet):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def update(self, request, pk):
-        existing_object  = self.get_object()
-        setattr(existing_object, 'modified_by', request.user)
-        for key, value in request.data.items():
-            for existing_object_key, existing_object_value in existing_object.__dict__.items():
-                if key == existing_object_key:
-                    if value != existing_object_value:
-                        setattr(existing_object, existing_object_key, value)
-        try:
-            existing_object.save()
-            return Response(status=status.HTTP_200_OK)
-        except Exception as e:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+        return update_entry(self, request, pk)
 
 class CalculationWorksheetViewSet(viewsets.ModelViewSet):
     serializer_class = CalculationWorksheetSerializer
