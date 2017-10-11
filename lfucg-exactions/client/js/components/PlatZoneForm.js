@@ -153,7 +153,7 @@ function mapDispatchToProps(dispatch, props) {
                 };
                 dispatch(formUpdate(plat_zone_update));
                 if (selectedPlatZone) {
-                    const zone = activeForm.activeForm[`${props.zone_id}`];
+                    const zone = activeForm.activeForm.zone;
                     const acres = activeForm.activeForm[`${props.acre_id}`];
                     dispatch(putPlatZone(selectedPlatZone, zone, acres))
                     .then(() => {

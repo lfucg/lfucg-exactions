@@ -622,7 +622,10 @@ function mapDispatchToProps(dispatch, params) {
         onPlatSubmit(event) {
             event.preventDefault();
             if (selectedPlat) {
-                dispatch(putPlat(selectedPlat));
+                dispatch(putPlat(selectedPlat))
+                .then(() => {
+                    hashHistory.push(`plat/summary/${selectedPlat}`);
+                });
             } else {
                 dispatch(postPlat())
                 .then((data_post) => {
