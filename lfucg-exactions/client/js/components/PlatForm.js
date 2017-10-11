@@ -10,6 +10,7 @@ import Navbar from './Navbar';
 import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
 import Notes from './Notes';
+import Uploads from './Uploads';
 
 import FormGroup from './FormGroup';
 import PlatZoneForm from './PlatZoneForm';
@@ -450,36 +451,49 @@ class PlatForm extends React.Component {
                                     )}
                                 </div>
                             ) : null }
-                            <a
-                              role="button"
-                              data-toggle="collapse"
-                              data-parent="#accordion"
-                              href="#collapseNotes"
-                              aria-expanded="true"
-                              aria-controls="collapseNotes"
-                            >
-                                <div className="row section-heading" role="tab" id="headingNotes">
-                                    <div className="col-xs-1 caret-indicator" />
-                                    <div className="col-xs-10">
-                                        <h2>Notes</h2>
+                            {plats.id &&
+                                <div>
+                                    <a
+                                      role="button"
+                                      data-toggle="collapse"
+                                      data-parent="#accordion"
+                                      href="#collapseNotes"
+                                      aria-expanded="true"
+                                      aria-controls="collapseNotes"
+                                    >
+                                        <div className="row section-heading" role="tab" id="headingNotes">
+                                            <div className="col-xs-1 caret-indicator" />
+                                            <div className="col-xs-10">
+                                                <h2>Notes</h2>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <div
+                                      id="collapseNotes"
+                                      className="panel-collapse collapse in row"
+                                      role="tabpanel"
+                                      aria-labelledby="#headingNotes"
+                                    >
+                                        <div className="panel-body">
+                                            <div className="col-xs-12">
+                                                {plats.id &&
+                                                    <Notes content_type="plats_plat" object_id={plats.id} />
+                                                }
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                            </a>
-                            <div
-                              id="collapseNotes"
-                              className="panel-collapse collapse in row"
-                              role="tabpanel"
-                              aria-labelledby="#headingNotes"
-                            >
-                                <div className="panel-body">
-                                    <div className="col-xs-12">
-                                        {plats.id &&
-                                            <Notes content_type="Plat" object_id={plats.id} />
-                                        }
-                                    </div>
-                                </div>
-                            </div>
+                            }
                         </div>
+                        {plats.id &&
+                            <Uploads
+                              file_content_type="plats_plat"
+                              file_object_id={plats.id}
+                              ariaExpanded="true"
+                              panelClass="panel-collapse collapse row in"
+                              permission="plat"
+                            />
+                        }
                     </div>
                 </div>
 
