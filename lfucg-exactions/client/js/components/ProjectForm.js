@@ -8,9 +8,9 @@ import PropTypes from 'prop-types';
 
 import Navbar from './Navbar';
 import Footer from './Footer';
-
 import FormGroup from './FormGroup';
 import Breadcrumbs from './Breadcrumbs';
+import Uploads from './Uploads';
 
 import {
     formInit,
@@ -199,6 +199,16 @@ class ProjectForm extends React.Component {
                                 }
                             </form>
                         </div>
+                        <div className="clearfix" />
+                        {projects.id &&
+                            <Uploads
+                              file_content_type="accounts_project"
+                              file_object_id={projects.id}
+                              ariaExpanded="true"
+                              panelClass="panel-collapse collapse row in"
+                              permission="project"
+                            />
+                        }
                     </div>
                 </div>
 

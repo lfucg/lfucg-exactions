@@ -240,7 +240,7 @@ class Project(models.Model):
     history = HistoricalRecords()
 
     def __str__(self):
-        return self.project_description
+        return self.name
 
 class ProjectCostEstimate(models.Model):
     is_approved = models.BooleanField(default=False)

@@ -8,6 +8,7 @@ import Navbar from './Navbar';
 import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
 import Notes from './Notes';
+import Uploads from './Uploads';
 
 import FormGroup from './FormGroup';
 
@@ -126,15 +127,15 @@ class LotSummary extends React.Component {
         return (
             <div className="lot-summary">
                 <Navbar />
-                    <div className="form-header">
-                        <div className="container">
-                            <h1>LOTS - {currentLot && currentLot.address_full}</h1>
-                        </div>
+                <div className="form-header">
+                    <div className="container">
+                        <h1>LOTS - {currentLot && currentLot.address_full}</h1>
                     </div>
-                    <Breadcrumbs route={this.props.route} parent_link={'lot'} parent_name={'Lots'} />
-                    
-                    <div className="inside-body">
-                {currentLot &&
+                </div>
+                <Breadcrumbs route={this.props.route} parent_link={'lot'} parent_name={'Lots'} />
+
+                <div className="inside-body">
+                    {currentLot &&
                     <div>
                         <div className="container">
                             <div className="row">
@@ -221,18 +222,17 @@ class LotSummary extends React.Component {
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="col-xs-12">
-                                            <h3 className="col-xs-12 ">Current Exactions: {currentLot.lot_exactions && currentLot.lot_exactions.current_exactions}</h3>
-                                            <p className="col-md-8 col-xs-12">Address: {currentLot.address_full}</p>
-                                            <p className="col-md-4 col-xs-6">Lot Number: {currentLot.lot_number}</p>
-                                            <p className="col-md-4 col-xs-6 ">Permit ID: {currentLot.permit_id}</p>
-                                            <p className="col-md-4 col-xs-6">Latitude: {currentLot.latitude}</p>
-                                            <p className="col-md-4 col-xs-6">Longitude: {currentLot.longitude}</p>
-                                            <p className="col-md-4 col-xs-6">Approved: {currentLot.is_approved ? 'Approved' : 'Not Approved'}</p>
-                                        </div>
+                                    </div>
+                                    <div className="col-xs-12">
+                                        <h3 className="col-xs-12 ">Current Exactions: {currentLot.lot_exactions && currentLot.lot_exactions.current_exactions}</h3>
+                                        <p className="col-md-8 col-xs-12">Address: {currentLot.address_full}</p>
+                                        <p className="col-md-4 col-xs-6">Lot Number: {currentLot.lot_number}</p>
+                                        <p className="col-md-4 col-xs-6 ">Permit ID: {currentLot.permit_id}</p>
+                                        <p className="col-md-4 col-xs-6">Latitude: {currentLot.latitude}</p>
+                                        <p className="col-md-4 col-xs-6">Longitude: {currentLot.longitude}</p>
                                     </div>
                                 </div>
-                    
+
                                 <a
                                   role="button"
                                   data-toggle="collapse"
@@ -286,7 +286,6 @@ class LotSummary extends React.Component {
                                         </div>
                                     </div>
                                 </div>
-                    
                                 <a
                                   role="button"
                                   data-toggle="collapse"
@@ -311,12 +310,12 @@ class LotSummary extends React.Component {
                                     <div className="panel-body">
                                         <div className="col-xs-12">
                                             {currentLot.id &&
-                                                <Notes content_type="Lot" object_id={currentLot.id} parent_content_type="Plat" parent_object_id={currentLot.plat.id} />
+                                                <Notes content_type="plats_lot" object_id={currentLot.id} parent_content_type="plats_plat" parent_object_id={currentLot.plat.id} />
                                             }
                                         </div>
                                     </div>
                                 </div>
-                    
+
                                 {currentLot.plat ? <div>
                                     <a
                                       role="button"
@@ -376,7 +375,7 @@ class LotSummary extends React.Component {
                                 </div> : <div className="row section-heading" role="tab" id="headingAccountPayments">
                                     <h2>Plat - None</h2>
                                 </div>}
-                    
+
                                 {currentLot.account && accounts ?
                                     <div>
                                         <a
@@ -439,7 +438,7 @@ class LotSummary extends React.Component {
                                         <h2>Account - None</h2>
                                     </div>
                                 }
-                    
+
                                 {payments_list ? (
                                     <div>
                                         <a
@@ -475,7 +474,7 @@ class LotSummary extends React.Component {
                                         <h2>Payments - None</h2>
                                     </div>
                                 )}
-                    
+
                                 {account_ledgers_list ? (
                                     <div>
                                         <a
@@ -512,9 +511,18 @@ class LotSummary extends React.Component {
                                     </div>
                                 )}
                             </div>
+                            {currentLot.id &&
+                                <Uploads
+                                  file_content_type="plats_lot"
+                                  file_object_id={currentLot.id}
+                                  ariaExpanded="false"
+                                  panelClass="panel-collapse collapse row"
+                                  permission="lot"
+                                />
+                            }
                         </div>
                     </div>
-                }
+                    }
                 </div>
                 <Footer />
             </div>
