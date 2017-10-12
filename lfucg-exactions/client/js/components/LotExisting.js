@@ -102,21 +102,17 @@ class LotExisting extends React.Component {
             'Current Exactions',
             'Plat Name',
             'Plat Type',
-            'Payments',
-            'Last Payment',
             'Total Paid',
             'Roads',
             'Parks',
             'Storm',
             'Open Space',
         ];
-
+        let paymentLengthPerLot = 0;
+        // let ledgerLengthPerLot = 0;
         const csvData = lots && payments &&
             (map((single_lot) => {
-                const paymentsOnCurrentLot = payments && payments.length > 0 &&
-                    filter(payment => payment.lot_id.id === single_lot.id)(payments);
-                console.log(paymentsOnCurrentLot.length);
-                return [
+                const data = [
                     single_lot.address_full || '',
                     single_lot.date_modified || '',
                     single_lot.latitude || '',
@@ -127,14 +123,25 @@ class LotExisting extends React.Component {
                     single_lot.lot_exactions.current_exactions || '',
                     single_lot.plat.name || '',
                     single_lot.plat.plat_zone_display || '',
-                    paymentsOnCurrentLot && paymentsOnCurrentLot.length,
-                    paymentsOnCurrentLot && (paymentsOnCurrentLot[0] ? paymentsOnCurrentLot[0].date_created : ''),
                     single_lot.longitude || '',
                     single_lot.longitude || '',
                     single_lot.longitude || '',
                     single_lot.longitude || '',
                     single_lot.longitude || '',
                 ];
+
+                const paymentsOnCurrentLot = payments.length > 0 &&
+                    filter(payment => payment.lot_id.id === single_lot.id)(payments);
+
+                map((payment) => {
+                    if (paymentLengthPerLot < paymentsOnCurrentLot.length) {
+                        paymentLengthPerLot += 1;
+                        headers.push('Payment');
+                    }
+                    data.push(payment.total_paid);
+                })(paymentsOnCurrentLot);
+
+                return data;
             })(lots));
 
         return (
