@@ -198,26 +198,26 @@ class PaymentForm extends React.Component {
                                                     </div>
                                                     <div className="row">
                                                         <div className="col-xs-6 col-sm-4 col-sm-offset-2">
-                                                            <h5>Roads: ${activeForm.dues_roads_dev}</h5>
+                                                            <h5>Roads: {activeForm.dues_roads_dev}</h5>
                                                         </div>
                                                         <div className="col-xs-6 col-sm-4">
-                                                            <h5>Parks: ${activeForm.dues_parks_dev}</h5>
+                                                            <h5>Parks: {activeForm.dues_parks_dev}</h5>
                                                         </div>
                                                     </div>
                                                     <div className="row">
                                                         <div className="col-xs-6 col-sm-4 col-sm-offset-2">
-                                                            <h5>Sewer Capacity: ${activeForm.dues_sewer_cap_dev}</h5>
+                                                            <h5>Sewer Capacity: {activeForm.dues_sewer_cap_dev}</h5>
                                                         </div>
                                                         <div className="col-xs-6 col-sm-4">
-                                                            <h5>Sewer Transmission: ${activeForm.dues_sewer_trans_dev}</h5>
+                                                            <h5>Sewer Transmission: {activeForm.dues_sewer_trans_dev}</h5>
                                                         </div>
                                                     </div>
                                                     <div className="row">
                                                         <div className="col-xs-6 col-sm-4 col-sm-offset-2">
-                                                            <h5>Storm: ${activeForm.dues_storm_dev}</h5>
+                                                            <h5>Storm: {activeForm.dues_storm_dev}</h5>
                                                         </div>
                                                         <div className="col-xs-6 col-sm-4">
-                                                            <h5>Open Spaces: ${activeForm.dues_open_space_dev}</h5>
+                                                            <h5>Open Spaces: {activeForm.dues_open_space_dev}</h5>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -358,7 +358,6 @@ function mapDispatchToProps(dispatch, params) {
 
                 dispatch(getLotID(value_id))
                 .then((lot_id) => {
-                    console.log('ALL DATA: ', lot_id);
                     if (lot_id.response.account) {
                         dispatch(getAccountID(lot_id.response.account))
                         .then((account) => {
@@ -371,12 +370,12 @@ function mapDispatchToProps(dispatch, params) {
                                 lot_exactions: lot_id.response.lot_exactions.current_exactions,
                                 non_sewer_exactions: lot_id.response.lot_exactions.non_sewer_due,
                                 sewer_exactions: lot_id.response.lot_exactions.sewer_due,
-                                dues_open_space_dev: lot_id.response.dues_open_space_dev,
-                                dues_parks_dev: lot_id.response.dues_parks_dev,
-                                dues_roads_dev: lot_id.response.dues_roads_dev,
-                                dues_sewer_cap_dev: lot_id.response.dues_sewer_cap_dev,
-                                dues_sewer_trans_dev: lot_id.response.dues_sewer_trans_dev,
-                                dues_storm_dev: lot_id.response.dues_storm_dev,
+                                dues_open_space_dev: lot_id.response.lot_exactions.dues_open_space_dev,
+                                dues_parks_dev: lot_id.response.lot_exactions.dues_parks_dev,
+                                dues_roads_dev: lot_id.response.lot_exactions.dues_roads_dev,
+                                dues_sewer_cap_dev: lot_id.response.lot_exactions.dues_sewer_cap_dev,
+                                dues_sewer_trans_dev: lot_id.response.lot_exactions.dues_sewer_trans_dev,
+                                dues_storm_dev: lot_id.response.lot_exactions.dues_storm_dev,
                             };
                             dispatch(formUpdate(update));
                             dispatch(getAccountAgreements(lot_id.response.account));
@@ -388,12 +387,12 @@ function mapDispatchToProps(dispatch, params) {
                             lot_exactions: lot_id.response.lot_exactions.current_exactions,
                             non_sewer_exactions: lot_id.response.lot_exactions.non_sewer_due,
                             sewer_exactions: lot_id.response.lot_exactions.sewer_due,
-                            dues_open_space_dev: lot_id.response.dues_open_space_dev,
-                            dues_parks_dev: lot_id.response.dues_parks_dev,
-                            dues_roads_dev: lot_id.response.dues_roads_dev,
-                            dues_sewer_cap_dev: lot_id.response.dues_sewer_cap_dev,
-                            dues_sewer_trans_dev: lot_id.response.dues_sewer_trans_dev,
-                            dues_storm_dev: lot_id.response.dues_storm_dev,
+                            dues_open_space_dev: lot_id.response.lot_exactions.dues_open_space_dev,
+                            dues_parks_dev: lot_id.response.lot_exactions.dues_parks_dev,
+                            dues_roads_dev: lot_id.response.lot_exactions.dues_roads_dev,
+                            dues_sewer_cap_dev: lot_id.response.lot_exactions.dues_sewer_cap_dev,
+                            dues_sewer_trans_dev: lot_id.response.lot_exactions.dues_sewer_trans_dev,
+                            dues_storm_dev: lot_id.response.lot_exactions.dues_storm_dev,
                         };
                         dispatch(formUpdate(update));
                     }
