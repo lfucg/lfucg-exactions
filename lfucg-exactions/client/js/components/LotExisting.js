@@ -196,7 +196,7 @@ class LotExisting extends React.Component {
                                 <div className="csv-modal">
                                     {map((lot) => {
                                         return (
-                                            <p>{lot.address_full}</p>
+                                            <p key={lot.id}>{lot.address_full}</p>
                                         );
                                     })(lots)
                                     }
