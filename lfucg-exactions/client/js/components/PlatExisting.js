@@ -138,6 +138,7 @@ class PlatExisting extends React.Component {
                     { filterField: 'filter_subdivision', displayName: 'Subdivision', list: subdivisionsList },
                     { filterField: 'filter_plat_type', displayName: 'Type', list: plat_types },
                     { filterField: 'filter_lot__id', displayName: 'Lot', list: lotsList },
+                    { filterField: 'filter_is_approved', displayName: 'Approval', list: [{ id: true, name: 'Approved' }, { id: false, name: 'Unapproved' }] },
                   ]}
                 />
 

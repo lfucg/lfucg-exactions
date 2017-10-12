@@ -105,6 +105,7 @@ class AgreementExisting extends React.Component {
                     { filterField: 'filter_agreement_type', displayName: 'Type', list: agreement_types },
                     { filterField: 'filter_account_id', displayName: 'Developer', list: accountsList },
                     { filterField: 'filter_expansion_area', displayName: 'EA', list: expansion_areas },
+                    { filterField: 'filter_is_approved', displayName: 'Approval', list: [{ id: true, name: 'Approved' }, { id: false, name: 'Unapproved' }] },
                   ]}
                 />
 

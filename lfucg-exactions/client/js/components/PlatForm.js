@@ -49,6 +49,8 @@ class PlatForm extends React.Component {
             onPlatDues,
         } = this.props;
 
+        const currentParam = this.props.params.id;
+
         const subdivisionsList = subdivisions.length > 0 &&
             (map((single_subdivision) => {
                 return (
@@ -141,7 +143,7 @@ class PlatForm extends React.Component {
                 <div className="inside-body">
                     <div className="container">
                         <div className="col-md-offset-1 col-md-10 panel-group" id="accordion" role="tablist" aria-multiselectable="false">
-                            {plats && !plats.is_approved && <div className="row"><h1 className="approval-pending">Approval Pending</h1></div>}
+                            {currentParam && plats.is_approved === false && <div className="row"><h1 className="approval-pending">Approval Pending</h1></div>}
                             <a
                               role="button"
                               data-toggle="collapse"
@@ -510,6 +512,7 @@ PlatForm.propTypes = {
     plats: PropTypes.array,
     accounts: PropTypes.array,
     route: PropTypes.object,
+    params: PropTypes.object,
     onComponentDidMount: PropTypes.func,
     formChange: PropTypes.func,
     onPlatSubmit: PropTypes.func,

@@ -39,6 +39,8 @@ class AgreementForm extends React.Component {
             formChange,
         } = this.props;
 
+        const currentParam = this.props.params.id;
+
         const accountsList = accounts.length > 0 &&
             (map((account) => {
                 return (
@@ -63,7 +65,7 @@ class AgreementForm extends React.Component {
                 <div className="inside-body">
                     <div className="container">
                         <div className="col-sm-offset-1 col-sm-10">
-                            {agreements && !agreements.is_approved && <div className="row"><h1 className="approval-pending">Approval Pending</h1></div>}
+                            {currentParam && agreements.is_approved === false && <div className="row"><h1 className="approval-pending">Approval Pending</h1></div>}
                             <form onSubmit={onSubmit} >
 
                                 <fieldset>
@@ -138,6 +140,7 @@ AgreementForm.propTypes = {
     accounts: PropTypes.array,
     agreements: PropTypes.array,
     route: PropTypes.object,
+    params: PropTypes.object,
     onComponentDidMount: PropTypes.func,
     onSubmit: PropTypes.func,
     formChange: PropTypes.func,

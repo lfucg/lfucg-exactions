@@ -124,6 +124,7 @@ class PaymentExisting extends React.Component {
                     { filterField: 'filter_credit_account', displayName: 'Developer', list: accountsList },
                     { filterField: 'filter_lot_id', displayName: 'Lot', list: lotsList },
                     { filterField: 'filter_credit_source', displayName: 'Agreement', list: agreementsList },
+                    { filterField: 'filter_is_approved', displayName: 'Approval', list: [{ id: true, name: 'Approved' }, { id: false, name: 'Unapproved' }] },
                   ]}
                 />
 

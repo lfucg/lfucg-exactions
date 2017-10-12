@@ -108,6 +108,7 @@ class ProjectExisting extends React.Component {
                     { filterField: 'filter_project_type', displayName: 'Type', list: project_types },
                     { filterField: 'filter_agreement_id', displayName: 'Agreement', list: agreementsList },
                     { filterField: 'filter_expansion_area', displayName: 'EA', list: expansion_areas },
+                    { filterField: 'filter_is_approved', displayName: 'Approval', list: [{ id: true, name: 'Approved' }, { id: false, name: 'Unapproved' }] },
                   ]}
                 />
 
