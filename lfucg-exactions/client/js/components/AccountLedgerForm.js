@@ -95,11 +95,11 @@ class AccountLedgerForm extends React.Component {
 
                 <div className="form-header">
                     <div className="container">
-                        <h1>ACCOUNT LEDGERS - CREATE</h1>
+                        <h1>CREDIT TRANSFERS - CREATE</h1>
                     </div>
                 </div>
 
-                <Breadcrumbs route={this.props.route} parent_link={'account-ledger'} parent_name={'Account Ledgers'} />
+                <Breadcrumbs route={this.props.route} parent_link={'credit-transfer'} parent_name={'Credit Transfers'} />
 
                 <div className="inside-body">
                     <div className="container">
@@ -443,15 +443,15 @@ function mapDispatchToProps(dispatch, params) {
             if (selectedAccountLedger) {
                 dispatch(putAccountLedger(selectedAccountLedger))
                 .then(() => {
-                    hashHistory.push(`account-ledger/summary/${selectedAccountLedger}`);
+                    hashHistory.push(`credit-transfer/summary/${selectedAccountLedger}`);
                 });
             } else {
                 dispatch(postAccountLedger())
                 .then((data_post) => {
                     if (event === 'lot') {
-                        hashHistory.push(`account-ledger/summary/${data_post.response.id}`);
+                        hashHistory.push(`credit-transfer/summary/${data_post.response.id}`);
                     } else if (event === 'plat') {
-                        hashHistory.push('account-ledger');
+                        hashHistory.push('credit-transfer');
                     }
                 });
             }
