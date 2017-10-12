@@ -176,7 +176,7 @@ class LotExisting extends React.Component {
                 <div className="row">
                     <div className="col-xs-12 text-center">
                         <button type="button" className="btn button-modal-link" data-toggle="modal" data-target="#searchCSVModal" onClick={removeSearchPagination} disabled={payments.length === 0}>
-                            <i className="fa fa-line-chart button-modal-icon" aria-hidden="true" />&nbsp;Generate CSV from Current Results
+                            <i className="fa fa-download button-modal-icon" aria-hidden="true" />&nbsp;Generate CSV from Current Results
                         </button>
                     </div>
                 </div>
