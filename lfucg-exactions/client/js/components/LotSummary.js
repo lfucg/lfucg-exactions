@@ -76,7 +76,7 @@ class LotSummary extends React.Component {
                         <div className="row">
                             <p className="col-sm-4 col-xs-6">Agreement Resolution: {payment.credit_source && payment.credit_source.resolution_number}</p>
                             <p className="col-sm-4 col-xs-6">Total Paid: {payment.total_paid}</p>
-                            <p className="col-sm-4 col-xs-6">Payment Type: ${payment.payment_type}</p>
+                            <p className="col-sm-4 col-xs-6">Payment Type: {payment.payment_type_display}</p>
                             <p className="col-sm-4 col-xs-6">Paid By: {payment.paid_by}</p>
                         </div>
                     </div>
@@ -269,21 +269,23 @@ class LotSummary extends React.Component {
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="col-xs-12">
-                                            <h3 className="col-xs-12 ">Current Exactions: {currentLot.lot_exactions && currentLot.lot_exactions.current_exactions}</h3>
-                                            <p className="col-sm-6">Road Developer Exactions: ${currentLot.dues_roads_dev}</p>
-                                            <p className="col-sm-6">Road Owner Exactions: ${currentLot.dues_roads_own}</p>
-                                            <p className="col-sm-6">Sewer Transmission Developer Exactions: ${currentLot.dues_sewer_trans_dev}</p>
-                                            <p className="col-sm-6">Sewer Transmission Owner Exactions: ${currentLot.dues_sewer_trans_own}</p>
-                                            <p className="col-sm-6">Sewer Capacity Developer Exactions: ${currentLot.dues_sewer_cap_dev}</p>
-                                            <p className="col-sm-6">Sewer Capacity Owner Exactions: ${currentLot.dues_sewer_cap_own}</p>
-                                            <p className="col-sm-6">Parks Developer Exactions: ${currentLot.dues_parks_dev}</p>
-                                            <p className="col-sm-6">Parks Owner Exactions: ${currentLot.dues_parks_own}</p>
-                                            <p className="col-sm-6">Storm Developer Exactions: ${currentLot.dues_storm_dev}</p>
-                                            <p className="col-sm-6">Storm Owner Exactions: ${currentLot.dues_storm_own}</p>
-                                            <p className="col-sm-6">Open Space Developer Exactions: ${currentLot.dues_open_space_dev}</p>
-                                            <p className="col-sm-6">Open Space Owner Exactions: ${currentLot.dues_open_space_own}</p>
-                                        </div>
+                                        {currentLot.lot_exactions &&
+                                            <div className="col-xs-12">
+                                                <h3 className="col-xs-12 ">Current Exactions: {currentLot.lot_exactions.current_exactions}</h3>
+                                                <p className="col-sm-6">Road Developer Exactions: {currentLot.lot_exactions.dues_roads_dev}</p>
+                                                <p className="col-sm-6">Road Owner Exactions: {currentLot.lot_exactions.dues_roads_own}</p>
+                                                <p className="col-sm-6">Sewer Transmission Developer Exactions: {currentLot.lot_exactions.dues_sewer_trans_dev}</p>
+                                                <p className="col-sm-6">Sewer Transmission Owner Exactions: {currentLot.lot_exactions.dues_sewer_trans_own}</p>
+                                                <p className="col-sm-6">Sewer Capacity Developer Exactions: {currentLot.lot_exactions.dues_sewer_cap_dev}</p>
+                                                <p className="col-sm-6">Sewer Capacity Owner Exactions: {currentLot.lot_exactions.dues_sewer_cap_own}</p>
+                                                <p className="col-sm-6">Parks Developer Exactions: {currentLot.lot_exactions.dues_parks_dev}</p>
+                                                <p className="col-sm-6">Parks Owner Exactions: {currentLot.lot_exactions.dues_parks_own}</p>
+                                                <p className="col-sm-6">Storm Developer Exactions: {currentLot.lot_exactions.dues_storm_dev}</p>
+                                                <p className="col-sm-6">Storm Owner Exactions: {currentLot.lot_exactions.dues_storm_own}</p>
+                                                <p className="col-sm-6">Open Space Developer Exactions: {currentLot.lot_exactions.dues_open_space_dev}</p>
+                                                <p className="col-sm-6">Open Space Owner Exactions: {currentLot.lot_exactions.dues_open_space_own}</p>
+                                            </div>
+                                        }
                                     </div>
                                 </div>
                                 <a

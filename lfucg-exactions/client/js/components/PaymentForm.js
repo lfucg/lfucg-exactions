@@ -185,14 +185,39 @@ class PaymentForm extends React.Component {
                                             {activeForm.sewer_exactions || activeForm.non_sewer_exactions ?
                                                 <div className="text-center">
                                                     <div className="row">
-                                                        <h4>Exactions Due</h4>
+                                                        <h3>Exactions Due</h3>
+                                                        <hr />
                                                     </div>
                                                     <div className="row">
-                                                        <div className="col-sm-6">
-                                                            <h5>Sewer: {activeForm.sewer_exactions}</h5>
+                                                        <div className="col-xs-6 col-sm-4 col-sm-offset-2">
+                                                            <h4>Sewer: {activeForm.sewer_exactions}</h4>
                                                         </div>
-                                                        <div className="col-sm-6">
-                                                            <h5>Non-sewer: {activeForm.non_sewer_exactions}</h5>
+                                                        <div className="col-xs-6 col-sm-4">
+                                                            <h4>Non-sewer: {activeForm.non_sewer_exactions}</h4>
+                                                        </div>
+                                                    </div>
+                                                    <div className="row">
+                                                        <div className="col-xs-6 col-sm-4 col-sm-offset-2">
+                                                            <h5>Roads: {activeForm.dues_roads_dev}</h5>
+                                                        </div>
+                                                        <div className="col-xs-6 col-sm-4">
+                                                            <h5>Parks: {activeForm.dues_parks_dev}</h5>
+                                                        </div>
+                                                    </div>
+                                                    <div className="row">
+                                                        <div className="col-xs-6 col-sm-4 col-sm-offset-2">
+                                                            <h5>Sewer Capacity: {activeForm.dues_sewer_cap_dev}</h5>
+                                                        </div>
+                                                        <div className="col-xs-6 col-sm-4">
+                                                            <h5>Sewer Transmission: {activeForm.dues_sewer_trans_dev}</h5>
+                                                        </div>
+                                                    </div>
+                                                    <div className="row">
+                                                        <div className="col-xs-6 col-sm-4 col-sm-offset-2">
+                                                            <h5>Storm: {activeForm.dues_storm_dev}</h5>
+                                                        </div>
+                                                        <div className="col-xs-6 col-sm-4">
+                                                            <h5>Open Spaces: {activeForm.dues_open_space_dev}</h5>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -201,36 +226,36 @@ class PaymentForm extends React.Component {
                                     : null}
                                     <div className="row">
                                         <div className="col-sm-6">
-                                            <FormGroup label="Road Exactions Paid" id="paid_roads">
+                                            <FormGroup label="Road Exactions" id="paid_roads">
                                                 <input type="number" className="form-control" placeholder="Road Exactions Paid" />
                                             </FormGroup>
                                         </div>
                                         <div className="col-sm-6">
-                                            <FormGroup label="Parks Exactions Paid" id="paid_parks">
+                                            <FormGroup label="Parks Exactions" id="paid_parks">
                                                 <input type="number" className="form-control" placeholder="Parks Exactions Paid" />
                                             </FormGroup>
                                         </div>
                                     </div>
                                     <div className="row">
                                         <div className="col-sm-6">
-                                            <FormGroup label="Sewer Capacity Exactions Paid" id="paid_sewer_cap">
+                                            <FormGroup label="Sewer Capacity Exactions" id="paid_sewer_cap">
                                                 <input type="number" className="form-control" placeholder="Sewer Capacity Exactions Paid" />
                                             </FormGroup>
                                         </div>
                                         <div className="col-sm-6">
-                                            <FormGroup label="Sewer Transmission Exactions Paid" id="paid_sewer_trans">
+                                            <FormGroup label="Sewer Transmission Exactions" id="paid_sewer_trans">
                                                 <input type="number" className="form-control" placeholder="Sewer Transmission Exactions Paid" />
                                             </FormGroup>
                                         </div>
                                     </div>
                                     <div className="row">
                                         <div className="col-sm-6">
-                                            <FormGroup label="Storm Exactions Paid" id="paid_storm">
+                                            <FormGroup label="Storm Exactions" id="paid_storm">
                                                 <input type="number" className="form-control" placeholder="Storm Exactions Paid" />
                                             </FormGroup>
                                         </div>
                                         <div className="col-sm-6">
-                                            <FormGroup label="Open Spaces Exactions Paid" id="paid_open_space">
+                                            <FormGroup label="Open Spaces Exactions" id="paid_open_space">
                                                 <input type="number" className="form-control" placeholder="Open Spaces Exactions Paid" />
                                             </FormGroup>
                                         </div>
@@ -345,6 +370,12 @@ function mapDispatchToProps(dispatch, params) {
                                 lot_exactions: lot_id.response.lot_exactions.current_exactions,
                                 non_sewer_exactions: lot_id.response.lot_exactions.non_sewer_due,
                                 sewer_exactions: lot_id.response.lot_exactions.sewer_due,
+                                dues_open_space_dev: lot_id.response.lot_exactions.dues_open_space_dev,
+                                dues_parks_dev: lot_id.response.lot_exactions.dues_parks_dev,
+                                dues_roads_dev: lot_id.response.lot_exactions.dues_roads_dev,
+                                dues_sewer_cap_dev: lot_id.response.lot_exactions.dues_sewer_cap_dev,
+                                dues_sewer_trans_dev: lot_id.response.lot_exactions.dues_sewer_trans_dev,
+                                dues_storm_dev: lot_id.response.lot_exactions.dues_storm_dev,
                             };
                             dispatch(formUpdate(update));
                             dispatch(getAccountAgreements(lot_id.response.account));
@@ -356,6 +387,12 @@ function mapDispatchToProps(dispatch, params) {
                             lot_exactions: lot_id.response.lot_exactions.current_exactions,
                             non_sewer_exactions: lot_id.response.lot_exactions.non_sewer_due,
                             sewer_exactions: lot_id.response.lot_exactions.sewer_due,
+                            dues_open_space_dev: lot_id.response.lot_exactions.dues_open_space_dev,
+                            dues_parks_dev: lot_id.response.lot_exactions.dues_parks_dev,
+                            dues_roads_dev: lot_id.response.lot_exactions.dues_roads_dev,
+                            dues_sewer_cap_dev: lot_id.response.lot_exactions.dues_sewer_cap_dev,
+                            dues_sewer_trans_dev: lot_id.response.lot_exactions.dues_sewer_trans_dev,
+                            dues_storm_dev: lot_id.response.lot_exactions.dues_storm_dev,
                         };
                         dispatch(formUpdate(update));
                     }
