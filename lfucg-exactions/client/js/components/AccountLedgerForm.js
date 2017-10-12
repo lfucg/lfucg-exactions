@@ -113,20 +113,20 @@ class AccountLedgerForm extends React.Component {
                                 <fieldset>
                                     <div className="row">
                                         <div className="col-sm-6 form-group">
-                                            <label htmlFor="plat_lot" className="form-label" id="plat_lot" aria-label="Apply By Plat or Lot">Apply By Plat or Lot</label>
-                                            <select className="form-control" id="plat_lot" onChange={formChange('plat_lot')} value={activeForm.plat_lot_show} >
-                                                <option value="start_entry">Plat or Lot Credit Level</option>
-                                                <option value={['plat', 'plat']}>Plat</option>
-                                                <option value={['lot', 'lot']}>Lot</option>
-                                            </select>
-                                        </div>
-                                        <div className="col-sm-6 form-group">
                                             <label htmlFor="entry_type" className="form-label" id="entry_type" aria-label="Entry Type">Entry Type</label>
                                             <select className="form-control" id="entry_type" onChange={formChange('entry_type')} value={activeForm.entry_type_show} >
                                                 <option value="start_entry">Entry Type</option>
-                                                <option value={['NEW', 'New']}>New</option>
-                                                <option value={['SELL', 'Sell']}>Sell</option>
-                                                <option value={['TRANSFER', 'Transfer']}>Transfer</option>
+                                                <option value={['NEW', 'New Credits']}>New Credits</option>
+                                                <option value={['USE', 'Use Credits']}>Use Credits</option>
+                                                <option value={['TRANSFER', 'Transfer Credits']}>Transfer Credits</option>
+                                            </select>
+                                        </div>
+                                        <div className="col-sm-6 form-group">
+                                            <label htmlFor="plat_lot" className="form-label" id="plat_lot" aria-label="Apply By Plat or Lot">Apply By Plat or Lot</label>
+                                            <select className="form-control" id="plat_lot" onChange={formChange('plat_lot')} value={activeForm.plat_lot_show} disabled={activeForm.entry_type !== 'USE'}>
+                                                <option value="start_entry">Plat or Lot Credit Level</option>
+                                                <option value={['plat', 'plat']}>Plat</option>
+                                                <option value={['lot', 'lot']}>Lot</option>
                                             </select>
                                         </div>
                                     </div>
@@ -140,7 +140,7 @@ class AccountLedgerForm extends React.Component {
                                         </div>
                                         <div className="col-sm-6 form-group">
                                             <label htmlFor="account_to" className="form-label" id="account_to" aria-label="Account To" aria-required="true">* Account To</label>
-                                            <select className="form-control" id="account_to" onChange={accountFormChange('account_to')} value={activeForm.account_to_show} disabled={!openForm || activeForm.entry_type === 'SELL'}>
+                                            <select className="form-control" id="account_to" onChange={accountFormChange('account_to')} value={activeForm.account_to_show} disabled={!openForm || activeForm.entry_type === 'USE'}>
                                                 <option value="start_account_to">Account To</option>
                                                 {accountsList}
                                             </select>
@@ -328,7 +328,7 @@ function mapDispatchToProps(dispatch, params) {
                                 account_from_show: `${data_lfucg.response[0].id},${data_lfucg.response[0].account_name},${data_lfucg.response[0].balance.balance}`,
                             };
                             dispatch(formUpdate(lfucg_from_update));
-                        } else if (value_id === 'SELL') {
+                        } else if (value_id === 'USE') {
                             const lfucg_to_update = {
                                 account_to: data_lfucg.response[0].id,
                                 account_to_show: `${data_lfucg.response[0].id},${data_lfucg.response[0].account_name},${data_lfucg.response[0].balance.balance}`,
