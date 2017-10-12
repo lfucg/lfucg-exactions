@@ -79,13 +79,16 @@
 
 .link-row {
     margin-bottom: 24px;
+    background-color: #3787BA;
+    margin-top: -20px;
+    padding: 5px 0px;
     .link-icon {
-        color: #0057A8;
+        color: white;
         font-size: 22px;
     }
 
     .link-label {
-        color: #5f5f5f;
+        color: white;
         font-size: 18px;
     }
 }
