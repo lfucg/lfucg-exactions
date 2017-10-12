@@ -198,7 +198,7 @@ class AccountSummary extends React.Component {
                             <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
                                 <div className="col-xs-5">
                                     {currentUser && currentUser.permissions && currentUser.permissions.accountledger &&
-                                        <Link to={`account-ledger/form/${accountLedger.id}`} aria-label="Edit">
+                                        <Link to={`credit-transfer/form/${accountLedger.id}`} aria-label="Edit">
                                             <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
                                             <div className="col-xs-7 link-label">
                                                 Edit
@@ -207,7 +207,7 @@ class AccountSummary extends React.Component {
                                     }
                                 </div>
                                 <div className="col-xs-5 ">
-                                    <Link to={`account-ledger/summary/${accountLedger.id}`} aria-label="Summary">
+                                    <Link to={`credit-transfer/summary/${accountLedger.id}`} aria-label="Summary">
                                         <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
                                         <div className="col-xs-7 link-label">
                                             Summary
@@ -447,7 +447,7 @@ class AccountSummary extends React.Component {
                                         <div className="row section-heading" role="tab" id="headingAccountLedgers">
                                             <div className="col-xs-1 caret-indicator" />
                                             <div className="col-xs-10">
-                                                <h2>Account Ledgers</h2>
+                                                <h2>Credit Transfers</h2>
                                             </div>
                                         </div>
                                     </a>
@@ -466,7 +466,7 @@ class AccountSummary extends React.Component {
                                 </div>
                             ) : (
                                 <div className="row section-heading" role="tab" id="headingAccountLedgers">
-                                    <h2>Account Ledgers - None</h2>
+                                    <h2>Credit Transfers - None</h2>
                                 </div>
                             )}
 
