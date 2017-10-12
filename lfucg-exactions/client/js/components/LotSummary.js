@@ -141,8 +141,8 @@ class LotSummary extends React.Component {
                             <div className="row">
                                 <div className="col-xs-10 col-xs-offset-1">
                                     {currentUser && currentUser.id && !currentLot.permit_id &&
-                                    <button type="button" className="btn btn-lex btn-lg pull-right" data-toggle="modal" data-target="#permitModal">
-                                        <i className="fa fa-clipboard" aria-hidden="true" />&nbsp;Add Permit ID
+                                    <button type="button" className="btn pull-right button-modal-link" data-toggle="modal" data-target="#permitModal">
+                                        <i className="fa fa-clipboard button-modal-icon" aria-hidden="true" />&nbsp;Add Permit ID
                                     </button>
                                     }
                                 </div>
@@ -150,14 +150,14 @@ class LotSummary extends React.Component {
                             <div className="modal fade" id="permitModal" tabIndex="-1" role="dialog" aria-labelledby="modalLabel">
                                 <div className="modal-dialog" role="document">
                                     <div className="modal-content">
-                                        {currentLot.total_due && currentLot.total_due > 0 ? (
+                                        {currentLot.lot_exactions && currentLot.lot_exactions.current_exactions_number > 0 ? (
                                             <div>
                                                 <div className="modal-header">
                                                     <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                                                     <h3 className="modal-title" id="modalLabel">Exactions due on this lot.</h3>
                                                 </div>
                                                 <div className="modal-body">
-                                                    <h4 className="text-center">Our records indicate an outstanding balance of <strong>${(currentLot.total_due).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</strong> for this lot. Please contact finance to submit payment prior to applying for a permit for:</h4>
+                                                    <h4 className="text-center">Our records indicate an outstanding balance of <strong>{(currentLot.lot_exactions.current_exactions).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</strong> for this lot. Please contact finance to submit payment prior to applying for a permit for:</h4>
                                                     <h4 className="text-center">{currentLot.address_full}</h4>
                                                 </div>
                                                 <div className="modal-footer">

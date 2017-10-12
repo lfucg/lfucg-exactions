@@ -228,13 +228,14 @@ class LotForm extends React.Component {
                                                         <input type="text" className="form-control" placeholder="Parcel ID" />
                                                     </FormGroup>
                                                 </div>
-                                                {currentLot.total_due <= 0 &&
                                                 <div className="col-sm-6">
                                                     <FormGroup label="Permit ID" id="permit_id">
-                                                        <input type="text" className="form-control" placeholder="Permit ID" />
+                                                        <input type="text" className="form-control" placeholder="Permit ID" disabled={currentLot.lot_exactions && currentLot.lot_exactions.current_exactions_number > 0} />
                                                     </FormGroup>
+                                                    {currentLot.lot_exactions && currentLot.lot_exactions.current_exactions_number > 0 &&
+                                                        <span className="help-block">This lot still has {currentLot.lot_exactions.current_exactions} in exactions. You may add a Permit ID when exactions are paid.</span>
+                                                    }
                                                 </div>
-                                                }
                                             </div>
                                         </fieldset>
                                         <button disabled={!submitEnabled} className="btn btn-lex">Submit</button>
@@ -539,8 +540,10 @@ function mapDispatchToProps(dispatch, params) {
         onLotSubmit(event) {
             event.preventDefault();
             if (selectedLot) {
-                dispatch(putLot(selectedLot));
-                hashHistory.push(`lot/summary/${selectedLot}`);
+                dispatch(putLot(selectedLot))
+                .then(() => {
+                    hashHistory.push(`lot/summary/${selectedLot}`);
+                });
             } else {
                 dispatch(postLot())
                 .then((data_post) => {
