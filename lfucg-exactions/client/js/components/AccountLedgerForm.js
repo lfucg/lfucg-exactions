@@ -80,10 +80,6 @@ class AccountLedgerForm extends React.Component {
             );
         })(agreements));
 
-        const openForm =
-            activeForm.entry_type &&
-            activeForm.plat_lot;
-
         const submitEnabled =
             activeForm.account_from &&
             activeForm.account_to &&
@@ -133,14 +129,14 @@ class AccountLedgerForm extends React.Component {
                                     <div className="row">
                                         <div className="col-sm-6 form-group">
                                             <label htmlFor="account_from" className="form-label" id="account_from" aria-label="Account From" aria-required="true">* Account From</label>
-                                            <select className="form-control" id="account_from" onChange={accountFormChange('account_from')} value={activeForm.account_from_show} disabled={!openForm || activeForm.entry_type === 'NEW'}>
+                                            <select className="form-control" id="account_from" onChange={accountFormChange('account_from')} value={activeForm.account_from_show} disabled={!activeForm.entry_type || activeForm.entry_type === 'NEW'}>
                                                 <option value="start_account_from">Account From</option>
                                                 {accountsList}
                                             </select>
                                         </div>
                                         <div className="col-sm-6 form-group">
                                             <label htmlFor="account_to" className="form-label" id="account_to" aria-label="Account To" aria-required="true">* Account To</label>
-                                            <select className="form-control" id="account_to" onChange={accountFormChange('account_to')} value={activeForm.account_to_show} disabled={!openForm || activeForm.entry_type === 'USE'}>
+                                            <select className="form-control" id="account_to" onChange={accountFormChange('account_to')} value={activeForm.account_to_show} disabled={!activeForm.entry_type || activeForm.entry_type === 'USE'}>
                                                 <option value="start_account_to">Account To</option>
                                                 {accountsList}
                                             </select>
@@ -149,14 +145,14 @@ class AccountLedgerForm extends React.Component {
                                     <div className="row">
                                         <div className="col-sm-6 form-group">
                                             <label htmlFor="plat" className="form-label" id="plat" aria-label="Plat" >Plat</label>
-                                            <select className="form-control" id="plat" onChange={platFormChange('plat')} value={activeForm.plat_show} disabled={!openForm || activeForm.plat_lot === 'lot'}>
+                                            <select className="form-control" id="plat" onChange={platFormChange('plat')} value={activeForm.plat_show} disabled={activeForm.entry_type !== 'USE' || activeForm.plat_lot === 'lot'}>
                                                 <option value="start_plat">Plat</option>
                                                 {platsList}
                                             </select>
                                         </div>
                                         <div className="col-sm-6 form-group">
                                             <label htmlFor="lot" className="form-label" id="lot" aria-label="Lot" >Lot</label>
-                                            <select className="form-control" id="lot" onChange={lotFormChange('lot')} value={activeForm.lot_show} disabled={!openForm || activeForm.plat_lot === 'plat'}>
+                                            <select className="form-control" id="lot" onChange={lotFormChange('lot')} value={activeForm.lot_show} disabled={activeForm.entry_type !== 'USE' || activeForm.plat_lot === 'plat'}>
                                                 <option value="start_lot">Lot</option>
                                                 {lotsList}
                                             </select>
@@ -165,14 +161,14 @@ class AccountLedgerForm extends React.Component {
                                     <div className="row">
                                         <div className="col-sm-6 form-group">
                                             <label htmlFor="agreement" className="form-label" id="agreement" aria-label="Agreement" aria-required="true">* Agreement</label>
-                                            <select className="form-control" id="agreement" onChange={formChange('agreement')} value={activeForm.agreement_show} disabled={!openForm}>
+                                            <select className="form-control" id="agreement" onChange={formChange('agreement')} value={activeForm.agreement_show} disabled={!activeForm.entry_type}>
                                                 <option value="start_agreement">Agreement Resolution</option>
                                                 {agreementsList}
                                             </select>
                                         </div>
                                         <div className="col-sm-6">
                                             <FormGroup label="* Entry Date" id="entry_date" aria-required="true" >
-                                                <input type="date" className="form-control" placeholder="Entry Date" disabled={!openForm} />
+                                                <input type="date" className="form-control" placeholder="Entry Date" disabled={!activeForm.entry_type} />
                                             </FormGroup>
                                         </div>
                                     </div>
@@ -204,12 +200,12 @@ class AccountLedgerForm extends React.Component {
                                     <div className="row">
                                         <div className="col-sm-6">
                                             <FormGroup label="* Non-Sewer Credits" id="non_sewer_credits" aria-required="true" >
-                                                <input type="number" className="form-control" placeholder="Non-Sewer Credits" disabled={!openForm} />
+                                                <input type="number" className="form-control" placeholder="Non-Sewer Credits" disabled={!activeForm.entry_type} />
                                             </FormGroup>
                                         </div>
                                         <div className="col-sm-6">
                                             <FormGroup label="* Sewer Credits" id="sewer_credits" aria-required="true" >
-                                                <input type="number" className="form-control" placeholder="Sewer Credits" disabled={!openForm} />
+                                                <input type="number" className="form-control" placeholder="Sewer Credits" disabled={!activeForm.entry_type} />
                                             </FormGroup>
                                         </div>
                                     </div>
@@ -326,12 +322,14 @@ function mapDispatchToProps(dispatch, params) {
                             const lfucg_from_update = {
                                 account_from: data_lfucg.response[0].id,
                                 account_from_show: `${data_lfucg.response[0].id},${data_lfucg.response[0].account_name},${data_lfucg.response[0].balance.balance}`,
+                                account_to_show: '',
                             };
                             dispatch(formUpdate(lfucg_from_update));
                         } else if (value_id === 'USE') {
                             const lfucg_to_update = {
                                 account_to: data_lfucg.response[0].id,
                                 account_to_show: `${data_lfucg.response[0].id},${data_lfucg.response[0].account_name},${data_lfucg.response[0].balance.balance}`,
+                                account_from_show: '',
                             };
                             dispatch(formUpdate(lfucg_to_update));
                         } else if (value_id === 'TRANSFER') {
