@@ -111,6 +111,7 @@ class LotExisting extends React.Component {
                   advancedSearch={[
                     { filterField: 'filter_plat', displayName: 'Plat', list: platsList },
                     { filterField: 'filter_account', displayName: 'Developer', list: accountsList },
+                    { filterField: 'filter_is_approved', displayName: 'Approval', list: [{ id: true, name: 'Approved' }, { id: false, name: 'Unapproved' }] },
                   ]}
                 />
 

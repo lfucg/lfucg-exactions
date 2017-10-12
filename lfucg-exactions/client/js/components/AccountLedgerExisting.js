@@ -134,6 +134,7 @@ class AccountLedgerExisting extends React.Component {
                     { filterField: 'filter_account_to', displayName: 'Account To', list: accountsList },
                     { filterField: 'filter_account_from', displayName: 'Account From', list: accountsList },
                     { filterField: 'filter_lot', displayName: 'Lots', list: lotsList },
+                    { filterField: 'filter_is_approved', displayName: 'Approval', list: [{ id: true, name: 'Approved' }, { id: false, name: 'Unapproved' }] },
                   ]}
                 />
 
