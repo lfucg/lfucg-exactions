@@ -99,6 +99,7 @@ class LotForm extends React.Component {
                 <div className="inside-body">
                     <div className="container">
                         <div className="col-md-offset-1 col-md-10 panel-group" id="accordion" role="tablist" aria-multiselectable="false">
+                            {lots && !lots.is_approved && <div className="row"><h1 className="approval-pending">Approval Pending</h1></div>}
                             <a
                               role="button"
                               data-toggle="collapse"

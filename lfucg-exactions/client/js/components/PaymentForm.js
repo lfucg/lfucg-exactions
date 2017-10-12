@@ -94,6 +94,7 @@ class PaymentForm extends React.Component {
                 <div className="inside-body">
                     <div className="container">
                         <div className="col-sm-offset-1 col-sm-10">
+                            {payments && !payments.is_approved && <div className="row"><h1 className="approval-pending">Approval Pending</h1></div>}
                             <form onSubmit={onSubmit} >
 
                                 <fieldset>
