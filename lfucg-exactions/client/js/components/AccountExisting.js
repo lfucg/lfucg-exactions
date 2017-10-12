@@ -51,7 +51,7 @@ class AccountExisting extends React.Component {
                 return (
                     <div key={account.id} className="col-xs-12">
                         <div className="row form-subheading">
-                            <div className="col-sm-7 col-md-9">
+                            <div className="col-sm-11">
                                 <h3>{account.account_name}</h3>
                             </div>
                         </div>

@@ -41,40 +41,36 @@ class SubdivisionExisting extends React.Component {
             map((subdivision) => {
                 return (
                     <div key={subdivision.id} className="col-xs-12">
-                        {(currentUser.id || subdivision.is_approved) && <div>
-                            <div className={subdivision.is_approved ? 'row form-subheading' : 'row unapproved-heading'} >
-                                <div className="col-sm-11">
-                                    <h3>{subdivision.name}
-                                        {!subdivision.is_approved && <span className="pull-right">Approval Pending</span>}
-                                    </h3>
-                                </div>
+                        <div className="row form-subheading">
+                            <div className="col-sm-11">
+                                <h3>{subdivision.name}</h3>
                             </div>
-                            <div className={subdivision.is_approved ? 'row link-row' : 'row link-row-approval-pending'}>
-                                <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
-                                    <div className="col-xs-5">
-                                        {currentUser && currentUser.permissions && currentUser.permissions.subdivision &&
-                                            <Link to={`subdivision/form/${subdivision.id}`} aria-label="Edit">
-                                                <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
-                                                <div className="col-xs-7 link-label">
-                                                    Edit
-                                                </div>
-                                            </Link>
-                                        }
-                                    </div>
-                                    <div className="col-xs-5 ">
-                                        <Link to={`subdivision/summary/${subdivision.id}`} aria-label="Summary">
-                                            <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
+                        </div>
+                        <div className="row link-row">
+                            <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
+                                <div className="col-xs-5">
+                                    {currentUser && currentUser.permissions && currentUser.permissions.subdivision &&
+                                        <Link to={`subdivision/form/${subdivision.id}`} aria-label="Edit">
+                                            <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
                                             <div className="col-xs-7 link-label">
-                                                Summary
+                                                Edit
                                             </div>
                                         </Link>
-                                    </div>
+                                    }
+                                </div>
+                                <div className="col-xs-5 ">
+                                    <Link to={`subdivision/summary/${subdivision.id}`} aria-label="Summary">
+                                        <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
+                                        <div className="col-xs-7 link-label">
+                                            Summary
+                                        </div>
+                                    </Link>
                                 </div>
                             </div>
-                            <div className="row">
-                                <p className="col-md-3 col-sm-offset-1 col-sm-4 col-xs-6">Acres: {subdivision.cleaned_gross_acreage}</p>
-                            </div>
-                        </div>}
+                        </div>
+                        <div className="row">
+                            <p className="col-md-3 col-sm-offset-1 col-sm-4 col-xs-6">Acres: {subdivision.cleaned_gross_acreage}</p>
+                        </div>
                     </div>
                 );
             })(subdivisions);

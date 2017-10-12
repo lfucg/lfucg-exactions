@@ -61,40 +61,45 @@ class PaymentExisting extends React.Component {
             map((payment) => {
                 return (
                     <div key={payment.id} className="col-xs-12">
-                        <div className="row form-subheading">
-                            <div className="col-sm-7 col-md-9">
-                                <h3>Developer Account: {payment.credit_account.account_name}</h3>
+                        {(currentUser.id || payment.is_approved) && <div>
+                            <div className={payment.is_approved ? 'row form-subheading' : 'row unapproved-heading'}>
+                                <div className="col-sm-11">
+                                    <h3>
+                                        Developer Account: {payment.credit_account.account_name}
+                                        {!payment.is_approved && <span className="pull-right">Approval Pending</span>}
+                                    </h3>
+                                </div>
                             </div>
-                        </div>
-                        <div className="row link-row">
-                            <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
-                                <div className="col-xs-5">
-                                    {currentUser && currentUser.permissions && currentUser.permissions.payment &&
-                                        <Link to={`payment/form/${payment.id}`} aria-label="Edit">
-                                            <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
+                            <div className={payment.is_approved ? 'row link-row' : 'row link-row-approval-pending'}>
+                                <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
+                                    <div className="col-xs-5">
+                                        {currentUser && currentUser.permissions && currentUser.permissions.payment &&
+                                            <Link to={`payment/form/${payment.id}`} aria-label="Edit">
+                                                <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
+                                                <div className="col-xs-7 link-label">
+                                                    Edit
+                                                </div>
+                                            </Link>
+                                        }
+                                    </div>
+                                    <div className="col-xs-5 ">
+                                        <Link to={`payment/summary/${payment.id}`} aria-label="Summary">
+                                            <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
                                             <div className="col-xs-7 link-label">
-                                                Edit
+                                                Summary
                                             </div>
                                         </Link>
-                                    }
-                                </div>
-                                <div className="col-xs-5 ">
-                                    <Link to={`payment/summary/${payment.id}`} aria-label="Summary">
-                                        <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
-                                        <div className="col-xs-7 link-label">
-                                            Summary
-                                        </div>
-                                    </Link>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div className="row">
-                            <div className="col-sm-offset-1">
-                                <p className="col-md-4 col-xs-6">Agreement Resolution: {payment.credit_source && payment.credit_source.resolution_number}</p>
-                                <p className="col-md-4 col-xs-6">Payment Type: {payment.payment_type}</p>
-                                <p className="col-xs-12">Lot: {payment.lot_id.address_full}</p>
+                            <div className="row">
+                                <div className="col-sm-offset-1">
+                                    <p className="col-md-4 col-xs-6">Agreement Resolution: {payment.credit_source && payment.credit_source.resolution_number}</p>
+                                    <p className="col-md-4 col-xs-6">Payment Type: {payment.payment_type}</p>
+                                    <p className="col-xs-12">Lot: {payment.lot_id.address_full}</p>
+                                </div>
                             </div>
-                        </div>
+                        </div>}
                     </div>
                 );
             })(payments);
