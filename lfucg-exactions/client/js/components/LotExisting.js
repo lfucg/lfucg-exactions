@@ -49,39 +49,46 @@ class LotExisting extends React.Component {
             map((lot) => {
                 return (
                     <div key={lot.id} className="col-xs-12">
-                        <div className="row form-subheading">
-                            <h3>{lot.address_full}</h3>
-                        </div>
-                        <div className="row link-row">
-                            <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
-                                <div className="col-xs-5">
-                                    {currentUser && currentUser.permissions && currentUser.permissions.lot &&
-                                        <Link to={`lot/form/${lot.id}`} aria-label="Edit">
-                                            <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
+                        {(currentUser.id || lot.is_approved) && <div>
+                            <div className={lot.is_approved ? 'row form-subheading' : 'row unapproved-heading'}>
+                                <div className="col-sm-11">
+                                    <h3>
+                                        {lot.address_full}
+                                        {!lot.is_approved && <span className="pull-right">Approval Pending</span>}
+                                    </h3>
+                                </div>
+                            </div>
+                            <div className={lot.is_approved ? 'row link-row' : 'row link-row-approval-pending'}>
+                                <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
+                                    <div className="col-xs-5">
+                                        {currentUser && currentUser.permissions && currentUser.permissions.lot &&
+                                            <Link to={`lot/form/${lot.id}`} aria-label="Edit">
+                                                <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
+                                                <div className="col-xs-7 link-label">
+                                                    Edit
+                                                </div>
+                                            </Link>
+                                        }
+                                    </div>
+                                    <div className="col-xs-5 ">
+                                        <Link to={`lot/summary/${lot.id}`} aria-label="Summary">
+                                            <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
                                             <div className="col-xs-7 link-label">
-                                                Edit
+                                                Summary
                                             </div>
                                         </Link>
-                                    }
-                                </div>
-                                <div className="col-xs-5 ">
-                                    <Link to={`lot/summary/${lot.id}`} aria-label="Summary">
-                                        <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
-                                        <div className="col-xs-7 link-label">
-                                            Summary
-                                        </div>
-                                    </Link>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div className="row">
-                            <div className="col-sm-offset-1">
-                                <h3 className="col-xs-12">Current Exactions: {lot.lot_exactions && lot.lot_exactions.current_exactions}</h3>
-                                <p className="col-md-4 col-xs-6">Plat Name: {lot.plat.name}</p>
-                                <p className="col-md-4 col-xs-6">Lot Number: {lot.lot_number}</p>
-                                <p className="col-md-4 col-xs-6 ">Permit ID: {lot.permit_id}</p>
+                            <div className="row">
+                                <div className="col-sm-offset-1">
+                                    <h3 className="col-xs-12">Current Exactions: {lot.lot_exactions && lot.lot_exactions.current_exactions}</h3>
+                                    <p className="col-md-4 col-xs-6">Plat Name: {lot.plat.name}</p>
+                                    <p className="col-md-4 col-xs-6">Lot Number: {lot.lot_number}</p>
+                                    <p className="col-md-4 col-xs-6 ">Permit ID: {lot.permit_id}</p>
+                                </div>
                             </div>
-                        </div>
+                        </div>}
                     </div>
                 );
             })(lots)
