@@ -275,9 +275,9 @@ class AccountLedger(models.Model):
     is_active = models.BooleanField(default=True)
 
     ENTRY_TYPE = (
-        ('NEW', 'New'),
-        ('SELL', 'Sell'),
-        ('TRANSFER', 'Transfer'),
+        ('NEW', 'New Credits'),
+        ('USE', 'Use Credits'),
+        ('TRANSFER', 'Transfer Credits'),
     )
 
     entry_date = models.DateField()

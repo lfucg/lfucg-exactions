@@ -18,9 +18,9 @@ export const agreement_types = [
 ];
 
 export const entry_types = [
-    { id: 'NEW', name: 'New' },
-    { id: 'SELL', name: 'Sell' },
-    { id: 'TRANSFER', name: 'Transfer' },
+    { id: 'NEW', name: 'New Credits' },
+    { id: 'USE', name: 'Use Credits' },
+    { id: 'TRANSFER', name: 'Transfer Credits' },
 ];
 
 export const payment_types = [
