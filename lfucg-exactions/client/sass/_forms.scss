@@ -58,19 +58,6 @@
     /*background-color: green;*/
 }
 
-.form-subheading {
-    background-color: #001A49;
-    color: white;
-    border-radius: 3px;
-    margin-top: 20px;
-    margin-bottom: 20px;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    h3 {
-        margin: 8px 0px 8px 8px;
-    }
-}
-
 .panel-collapse {
     border: 2px solid #585858;
     border-top: 0;
@@ -176,31 +163,3 @@
     }
 }
 
-.unapproved-heading {
-    background-color: #f1f0f0;
-    color: #001A49;
-    border-radius: 3px;
-    margin-top: 20px;
-    margin-bottom: 20px;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    border: 1px solid #001A49;
-    h3 {
-        margin: 8px 0px 8px 8px;
-        font-weight: normal;
-        .pull-right {
-            font-weight: bold;
-        }
-    }
-}
-
-.approval-pending {
-    color: #001A49;
-    text-align: center;
-    background-color: white;
-    padding: 20px 0px;
-    margin-top: -20px;
-    margin-bottom: 40px;
-    border: red 1px solid;
-    border-radius: 5px;
-}

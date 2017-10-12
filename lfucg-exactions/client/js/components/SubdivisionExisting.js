@@ -49,7 +49,7 @@ class SubdivisionExisting extends React.Component {
                                     </h3>
                                 </div>
                             </div>
-                            <div className="row link-row">
+                            <div className={subdivision.is_approved ? 'row link-row' : 'row link-row-approval-pending'}>
                                 <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
                                     <div className="col-xs-5">
                                         {currentUser && currentUser.permissions && currentUser.permissions.subdivision &&
@@ -71,7 +71,6 @@ class SubdivisionExisting extends React.Component {
                                     </div>
                                 </div>
                             </div>
-                            <hr />
                             <div className="row">
                                 <p className="col-md-3 col-sm-offset-1 col-sm-4 col-xs-6">Acres: {subdivision.cleaned_gross_acreage}</p>
                             </div>
