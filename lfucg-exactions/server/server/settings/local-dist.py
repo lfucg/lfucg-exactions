@@ -18,7 +18,7 @@ AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
 # STATIC_ROOT = "https://%s/static/" % AWS_S3_CUSTOM_DOMAIN
 # STATICFILES_STORAGE = '<%= @config["STATICFILES_STORAGE"] %>'
 
-DEFAULT_FILE_STORAGE = '<%= @config["DEFAULT_FILE_STORAGE"] %>'
+DEFAULT_FILE_STORAGE = 'notes.models.MediaStorage'
 
 AWS_S3_MEDIA_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
 MEDIA_URL = "https://%s/media/" % AWS_S3_MEDIA_DOMAIN
