@@ -223,7 +223,7 @@ class PaymentSummary extends React.Component {
                                     <div className="row section-heading" role="tab" id="headingAgreementInfo">
                                         <div className="col-xs-1 caret-indicator" />
                                         <div className="col-xs-10">
-                                            <h2>Agreement Credit Source</h2>
+                                            <h2>Agreement</h2>
                                         </div>
                                     </div>
                                 </a>
@@ -257,9 +257,8 @@ class PaymentSummary extends React.Component {
                                             </div>
                                         </div>
                                         <div className="col-xs-12">
-                                            <p className="col-md-4 col-xs-6">Resolution Number: {payments.credit_source.resolution_number}</p>
                                             <p className="col-md-4 col-xs-6">Current Balance: {payments.credit_source.agreement_balance && payments.credit_source.agreement_balance.total}</p>
-                                            <p className="col-md-4 col-xs-6">Account: {payments.credit_source.account_id.account_name}</p>
+                                            <p className="col-md-4 col-xs-6">Resolution Number: {payments.credit_source.resolution_number}</p>
                                             <p className="col-md-4 col-xs-6">Expansion Area: {payments.credit_source.expansion_area}</p>
                                             <p className="col-md-4 col-xs-6">Agreement Type: {payments.credit_source.agreement_type_display}</p>
                                             <p className="col-md-4 col-xs-6">Date Executed: {payments.credit_source.date_executed}</p>
@@ -267,7 +266,7 @@ class PaymentSummary extends React.Component {
                                     </div>
                                 </div>
                             </div> : <div className="row section-heading" role="tab" id="headingAgreementInfo">
-                                <h2>Payments - None</h2>
+                                <h2>Agreements - None</h2>
                             </div>}
                         </div>
                     </div>
