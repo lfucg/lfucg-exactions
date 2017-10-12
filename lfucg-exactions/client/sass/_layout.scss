@@ -109,6 +109,16 @@
     }
 }
 
+.existing-notes, .existing-uploads {
+    background-color: white;
+    border-radius: 5px;
+    padding: 5px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    max-height: 300px;
+    overflow: scroll;
+}
+
 .notes-page {
     .existing-notes {
         background-color: white;
@@ -127,3 +137,4 @@
     border: 1px solid rgb(204, 204, 204);
     border-radius: 5px;
 }
+

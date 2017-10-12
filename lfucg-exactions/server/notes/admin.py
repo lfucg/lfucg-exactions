@@ -47,6 +47,16 @@ class RateHistoryAdmin(SimpleHistoryAdmin):
         return obj.rate_table_id.resolution_number
     rate_table.short_description = 'Rate Table'
 
+class FileUploadAdmin(SimpleHistoryAdmin):
+    list_display = (
+        'upload',
+        'file_content_type',
+        'file_object_id',
+        'date',
+        'id',
+    )
+
 admin.site.register(Note, NoteHistoryAdmin)
 admin.site.register(RateTable, RateTableHistoryAdmin)
 admin.site.register(Rate, RateHistoryAdmin)
+admin.site.register(FileUpload, FileUploadAdmin)

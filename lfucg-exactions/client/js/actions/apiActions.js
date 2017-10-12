@@ -41,6 +41,9 @@ import {
     GET_NOTE_CONTENT,
     POST_NOTE,
 
+    GET_UPLOAD_CONTENT,
+    POST_UPLOAD,
+
     GET_AGREEMENTS,
     GET_AGREEMENT_ID,
     GET_ACCOUNT_AGREEMENTS,
@@ -643,6 +646,47 @@ export function postNote() {
                 content_type,
                 object_id,
             };
+        },
+    };
+}
+
+// UPLOADS
+export function getUploadContent() {
+    return {
+        type: API_CALL,
+        endpoint: GET_UPLOAD_CONTENT,
+        url: (getState) => {
+            const {
+                activeForm,
+            } = getState();
+            const {
+                file_content_type,
+                file_object_id,
+            } = activeForm;
+            return `/upload/?file_content_type=${file_content_type}&file_object_id=${file_object_id}`;
+        },
+    };
+}
+
+export function postUpload(files) {
+    return {
+        type: API_CALL,
+        endpoint: POST_UPLOAD,
+        url: '/upload/create/',
+        method: 'POST',
+        body: (getState) => {
+            const {
+                activeForm,
+                currentUser,
+            } = getState();
+            const formData = new FormData();
+
+            formData.append('upload', files[0]);
+            formData.append('file_content_type', activeForm.file_content_type);
+            formData.append('file_object_id', activeForm.file_object_id);
+            formData.append('user', currentUser.id);
+
+            return formData;
         },
     };
 }

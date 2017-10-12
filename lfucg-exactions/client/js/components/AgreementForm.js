@@ -9,6 +9,7 @@ import PropTypes from 'prop-types';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
+import Uploads from './Uploads';
 
 import FormGroup from './FormGroup';
 
@@ -112,6 +113,16 @@ class AgreementForm extends React.Component {
                                 <button className="btn btn-lex">Submit</button>
                             </form>
                         </div>
+                        <div className="clearfix" />
+                        {agreements.id &&
+                            <Uploads
+                              file_content_type="accounts_agreement"
+                              file_object_id={agreements.id}
+                              ariaExpanded="true"
+                              panelClass="panel-collapse collapse row in"
+                              permission="agreement"
+                            />
+                        }
                     </div>
                 </div>
 
