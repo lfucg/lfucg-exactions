@@ -1,6 +1,10 @@
 from rest_framework import serializers
 
 from .models import *
+from .utils import calculate_lot_balance, calculate_plat_balance
+
+from notes.models import Note
+from notes.serializers import NoteSerializer
 
 class SubdivisionSerializer(serializers.ModelSerializer):
     cleaned_gross_acreage = serializers.SerializerMethodField(read_only=True)
@@ -19,7 +23,7 @@ class SubdivisionSerializer(serializers.ModelSerializer):
             'date_created',
             'date_modified',
             'created_by',
-            'modified_by',   
+            'modified_by',
 
             'name',
             'gross_acreage',
@@ -34,51 +38,6 @@ class CalculationWorksheetSerializer(serializers.ModelSerializer):
             'is_active',
             'acres',
             'zone',
-        )
-
-class LotSerializer(serializers.ModelSerializer):
-    # payment = PaymentSerializer(read_only=True)
-
-    class Meta:
-        model = Lot
-        fields = (
-            'id',
-            'is_approved',
-            'is_active',
-            'plat',
-            'parcel_id',            
-            'date_created',
-            'date_modified',
-            'created_by',
-            'modified_by',
-
-            'lot_number',
-            'permit_id',
-            'latitude',
-            'longitude',
-            'address_number',
-            'address_direction',
-            'address_street',
-            'address_suffix',
-            'address_unit',
-            'address_city',
-            'address_state',
-            'address_zip',
-            'address_full',
-
-            'dues_roads_dev',
-            'dues_roads_own',
-            'dues_sewer_trans_dev',
-            'dues_sewer_trans_own',
-            'dues_sewer_cap_dev',
-            'dues_sewer_cap_own',
-            'dues_parks_dev',
-            'dues_parks_own',
-            'dues_storm_dev',
-            'dues_storm_own',
-            'dues_open_space_dev',
-            'dues_open_space_own',
-            # 'payment',
         )
 
 class PlatZoneSerializer(serializers.ModelSerializer):
@@ -112,15 +71,39 @@ class PlatZoneSerializer(serializers.ModelSerializer):
             'cleaned_acres',
         )
 
+class SubdivisionField(serializers.Field):
+    def to_internal_value(self, data):
+        try:
+            return Subdivision.objects.get(id=data)
+        except:
+            None
+
+    def to_representation(self, obj):
+        return SubdivisionSerializer(obj).data
+
 class PlatSerializer(serializers.ModelSerializer):
-    lot = LotSerializer(many=True, read_only=True)
     plat_zone = PlatZoneSerializer(many=True, read_only=True)
     cleaned_total_acreage = serializers.SerializerMethodField(read_only=True)
+    subdivision = SubdivisionField(required=False)
+    plat_type_display = serializers.SerializerMethodField(read_only=True)
+    plat_exactions = serializers.SerializerMethodField(read_only=True)
 
     def get_cleaned_total_acreage(self, obj):
         set_acreage = str(obj.total_acreage).rstrip('0').rstrip('.')
         return set_acreage
-    
+
+    def get_plat_type_display(self, obj):
+        return obj.get_plat_type_display()
+
+    def get_plat_exactions(self, obj):
+        calculated_exactions = calculate_plat_balance(obj.id)
+
+        return {
+            'plat_sewer_due': '${:,.2f}'.format(calculated_exactions['plat_sewer_due']),
+            'plat_non_sewer_due': '${:,.2f}'.format(calculated_exactions['plat_non_sewer_due']),
+            'remaining_lots': calculated_exactions['remaining_lots'],
+        }
+
     class Meta:
         model = Plat 
         fields = (
@@ -128,6 +111,8 @@ class PlatSerializer(serializers.ModelSerializer):
             'is_approved',
             'is_active',
             'subdivision',
+            'account',
+
             'date_recorded',
             'date_created',
             'date_modified',
@@ -151,6 +136,85 @@ class PlatSerializer(serializers.ModelSerializer):
             'calculation_note',
             'sewer_due',
             'non_sewer_due',
-            'lot',
             'plat_zone',
+            'plat_type_display',
+
+            'plat_exactions',
+        )
+
+class PlatField(serializers.Field):
+    def to_internal_value(self, data):
+        try: 
+            return Plat.objects.get(id=data)
+        except: 
+            return None
+
+    def to_representation(self, obj):
+        return PlatSerializer(obj).data
+
+class LotSerializer(serializers.ModelSerializer):
+    plat = PlatField()
+
+    lot_exactions = serializers.SerializerMethodField(read_only=True)
+
+    def get_lot_exactions(self, obj):
+        calculated_exactions = calculate_lot_balance(obj.id)
+
+        return {
+            'total_exactions': '${:,.2f}'.format(calculated_exactions['total_exactions']),
+            'sewer_exactions': '${:,.2f}'.format(calculated_exactions['sewer_exactions']),
+            'non_sewer_exactions': '${:,.2f}'.format(calculated_exactions['non_sewer_exactions']),
+            'sewer_payment': '${:,.2f}'.format(calculated_exactions['sewer_payment']),
+            'non_sewer_payment': '${:,.2f}'.format(calculated_exactions['non_sewer_payment']),
+            'sewer_credits_applied': '${:,.2f}'.format(calculated_exactions['sewer_credits_applied']),
+            'non_sewer_credits_applied': '${:,.2f}'.format(calculated_exactions['non_sewer_credits_applied']),
+            'current_exactions': '${:,.2f}'.format(calculated_exactions['current_exactions']),
+            'current_exactions_number': calculated_exactions['current_exactions'],
+            'sewer_due': '${:,.2f}'.format(calculated_exactions['sewer_due']),
+            'non_sewer_due': '${:,.2f}'.format(calculated_exactions['non_sewer_due']),            
+        }
+
+    class Meta:
+        model = Lot
+        fields = (
+            'id',
+            'is_approved',
+            'is_active',
+            'plat',
+            'account',
+
+            'parcel_id',            
+            'date_created',
+            'date_modified',
+            'created_by',
+            'modified_by',
+
+            'lot_number',
+            'permit_id',
+            'latitude',
+            'longitude',
+            'address_number',
+            'address_direction',
+            'address_street',
+            'address_suffix',
+            'address_unit',
+            'address_city',
+            'address_state',
+            'address_zip',
+            'address_full',
+
+            'dues_roads_dev',
+            'dues_roads_own',
+            'dues_sewer_trans_dev',
+            'dues_sewer_trans_own',
+            'dues_sewer_cap_dev',
+            'dues_sewer_cap_own',
+            'dues_parks_dev',
+            'dues_parks_own',
+            'dues_storm_dev',
+            'dues_storm_own',
+            'dues_open_space_dev',
+            'dues_open_space_own',
+
+            'lot_exactions',
         )

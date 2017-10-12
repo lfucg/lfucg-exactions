@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import {
     hashHistory,
 } from 'react-router';
+import PropTypes from 'prop-types';
 
 import FormGroup from './FormGroup';
 
@@ -16,32 +17,7 @@ import {
     putPlatZoneDues,
 } from '../actions/apiActions';
 
-class PlatZoneForm extends React.Component {
-    static propTypes = {
-        activeForm: React.PropTypes.object,
-        plats: React.PropTypes.object,
-        plat_zone_id: React.PropTypes.string,
-        plat_zone_value: React.PropTypes.number,
-        zone_id: React.PropTypes.string,
-        zone_value: React.PropTypes.string,
-        acre_id: React.PropTypes.string,
-        acre_value: React.PropTypes.number,
-        dues_roads_id: React.PropTypes.string,
-        dues_roads_value: React.PropTypes.number,
-        dues_open_spaces_id: React.PropTypes.string,
-        dues_open_spaces_value: React.PropTypes.number,
-        dues_sewer_cap_id: React.PropTypes.string,
-        dues_sewer_cap_value: React.PropTypes.number,
-        dues_sewer_trans_id: React.PropTypes.string,
-        dues_sewer_trans_value: React.PropTypes.number,
-        dues_parks_id: React.PropTypes.string,
-        dues_parks_value: React.PropTypes.number,
-        dues_storm_water_id: React.PropTypes.string,
-        dues_storm_water_value: React.PropTypes.number,
-        onComponentDidMount: React.PropTypes.func,
-        onPlatZoneDuesChange: React.PropTypes.func,
-    };
-
+class PlatZoneDuesForm extends React.Component {
     componentDidMount() {
         this.props.onComponentDidMount({
             plat_zone_id: this.props.plat_zone_id,
@@ -119,6 +95,31 @@ class PlatZoneForm extends React.Component {
     }
 }
 
+PlatZoneDuesForm.propTypes = {
+    activeForm: PropTypes.object,
+    plats: PropTypes.array,
+    plat_zone_id: PropTypes.string,
+    plat_zone_value: PropTypes.number,
+    zone_id: PropTypes.string,
+    zone_value: PropTypes.string,
+    acre_id: PropTypes.string,
+    acre_value: PropTypes.number,
+    dues_roads_id: PropTypes.string,
+    dues_roads_value: PropTypes.number,
+    dues_open_spaces_id: PropTypes.string,
+    dues_open_spaces_value: PropTypes.number,
+    dues_sewer_cap_id: PropTypes.string,
+    dues_sewer_cap_value: PropTypes.number,
+    dues_sewer_trans_id: PropTypes.string,
+    dues_sewer_trans_value: PropTypes.number,
+    dues_parks_id: PropTypes.string,
+    dues_parks_value: PropTypes.number,
+    dues_storm_water_id: PropTypes.string,
+    dues_storm_water_value: PropTypes.number,
+    onComponentDidMount: PropTypes.func,
+    onPlatZoneDuesChange: PropTypes.func,
+};
+
 function mapStateToProps(state) {
     return {
         activeForm: state.activeForm,
@@ -194,5 +195,5 @@ function mapDispatchToProps(dispatch, props) {
     };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(PlatZoneForm);
+export default connect(mapStateToProps, mapDispatchToProps)(PlatZoneDuesForm);
 

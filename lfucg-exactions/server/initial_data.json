@@ -1,1 +1,3558 @@
-[{"model": "auth.user", "pk": 1, "fields": {"password": "bcrypt_sha256$$2b$12$PP9v0nzrfqKl4NqtucvVZ.gTY5Q.mcFn369W/gX2QA3kTaRFW8BbS", "last_login": "2017-06-29T19:20:13.981Z", "is_superuser": true, "username": "kelly", "first_name": "Kelly", "last_name": "Wright", "email": "kelly@apaxsoftware.com", "is_staff": true, "is_active": true, "date_joined": "2017-06-29T13:14:44Z", "groups": [], "user_permissions": []}}, {"model": "notes.ratetable", "pk": 1, "fields": {"is_active": true, "date_created": "2017-06-29", "date_modified": "2017-07-17", "created_by": 1, "modified_by": 1, "begin_effective_date": "2010-03-25", "end_effective_date": "2017-11-24", "resolution_number": "149-2010"}}, {"model": "notes.rate", "pk": 1, "fields": {"is_active": true, "date_created": "2017-06-29", "date_modified": "2017-06-29", "created_by": 1, "modified_by": 1, "rate_table_id": 1, "expansion_area": "EA-2A", "zone": "EAR-1", "category": "ROADS", "rate": "7583.97"}}, {"model": "notes.rate", "pk": 2, "fields": {"is_active": true, "date_created": "2017-06-29", "date_modified": "2017-06-29", "created_by": 1, "modified_by": 1, "rate_table_id": 1, "expansion_area": "EA-2A", "zone": "EAR-1", "category": "OPEN_SPACE", "rate": "1000.00"}}, {"model": "notes.rate", "pk": 3, "fields": {"is_active": true, "date_created": "2017-06-29", "date_modified": "2017-06-29", "created_by": 1, "modified_by": 1, "rate_table_id": 1, "expansion_area": "EA-2A", "zone": "EAR-1", "category": "SEWER_CAP", "rate": "2081.59"}}, {"model": "notes.rate", "pk": 4, "fields": {"is_active": true, "date_created": "2017-06-29", "date_modified": "2017-06-29", "created_by": 1, "modified_by": 1, "rate_table_id": 1, "expansion_area": "EA-2A", "zone": "EAR-1", "category": "SEWER_TRANS", "rate": "2123.08"}}, {"model": "notes.rate", "pk": 5, "fields": {"is_active": true, "date_created": "2017-06-29", "date_modified": "2017-06-29", "created_by": 1, "modified_by": 1, "rate_table_id": 1, "expansion_area": "EA-2A", "zone": "EAR-1", "category": "PARK", "rate": "2367.61"}}, {"model": "notes.rate", "pk": 6, "fields": {"is_active": true, "date_created": "2017-06-29", "date_modified": "2017-06-29", "created_by": 1, "modified_by": 1, "rate_table_id": 1, "expansion_area": "EA-2A", "zone": "EAR-1", "category": "STORM_WATER", "rate": "3509.07"}}, {"model": "notes.rate", "pk": 7, "fields": {"is_active": true, "date_created": "2017-06-29", "date_modified": "2017-06-29", "created_by": 1, "modified_by": 1, "rate_table_id": 1, "expansion_area": "EA-2A", "zone": "EAR-1SRA", "category": "ROADS", "rate": "2275.19"}}, {"model": "notes.rate", "pk": 8, "fields": {"is_active": true, "date_created": "2017-06-29", "date_modified": "2017-06-29", "created_by": 1, "modified_by": 1, "rate_table_id": 1, "expansion_area": "EA-2A", "zone": "EAR-1SRA", "category": "OPEN_SPACE", "rate": "1000.00"}}, {"model": "notes.rate", "pk": 9, "fields": {"is_active": true, "date_created": "2017-06-29", "date_modified": "2017-06-29", "created_by": 1, "modified_by": 1, "rate_table_id": 1, "expansion_area": "EA-2A", "zone": "EAR-1SRA", "category": "SEWER_CAP", "rate": "624.48"}}, {"model": "notes.rate", "pk": 10, "fields": {"is_active": true, "date_created": "2017-06-29", "date_modified": "2017-06-29", "created_by": 1, "modified_by": 1, "rate_table_id": 1, "expansion_area": "EA-2A", "zone": "EAR-1SRA", "category": "SEWER_TRANS", "rate": "636.92"}}, {"model": "notes.rate", "pk": 11, "fields": {"is_active": true, "date_created": "2017-06-29", "date_modified": "2017-06-29", "created_by": 1, "modified_by": 1, "rate_table_id": 1, "expansion_area": "EA-2A", "zone": "EAR-1SRA", "category": "PARK", "rate": "710.28"}}, {"model": "notes.rate", "pk": 12, "fields": {"is_active": true, "date_created": "2017-06-29", "date_modified": "2017-06-29", "created_by": 1, "modified_by": 1, "rate_table_id": 1, "expansion_area": "EA-2A", "zone": "EAR-1SRA", "category": "STORM_WATER", "rate": "701.81"}}, {"model": "notes.rate", "pk": 13, "fields": {"is_active": true, "date_created": "2017-06-29", "date_modified": "2017-06-29", "created_by": 1, "modified_by": 1, "rate_table_id": 1, "expansion_area": "EA-2A", "zone": "EAR-2", "category": "ROADS", "rate": "17063.93"}}, {"model": "notes.rate", "pk": 14, "fields": {"is_active": true, "date_created": "2017-06-29", "date_modified": "2017-06-29", "created_by": 1, "modified_by": 1, "rate_table_id": 1, "expansion_area": "EA-2A", "zone": "EAR-2", "category": "OPEN_SPACE", "rate": "1000.00"}}, {"model": "notes.rate", "pk": 15, "fields": {"is_active": true, "date_created": "2017-06-29", "date_modified": "2017-06-29", "created_by": 1, "modified_by": 1, "rate_table_id": 1, "expansion_area": "EA-2A", "zone": "EAR-2", "category": "SEWER_CAP", "rate": "4167.28"}}, {"model": "notes.rate", "pk": 16, "fields": {"is_active": true, "date_created": "2017-06-29", "date_modified": "2017-06-29", "created_by": 1, "modified_by": 1, "rate_table_id": 1, "expansion_area": "EA-2A", "zone": "EAR-2", "category": "SEWER_TRANS", "rate": "4250.33"}}, {"model": "notes.rate", "pk": 17, "fields": {"is_active": true, "date_created": "2017-06-29", "date_modified": "2017-06-29", "created_by": 1, "modified_by": 1, "rate_table_id": 1, "expansion_area": "EA-2A", "zone": "EAR-2", "category": "PARK", "rate": "5327.13"}}, {"model": "notes.rate", "pk": 18, "fields": {"is_active": true, "date_created": "2017-06-29", "date_modified": "2017-06-29", "created_by": 1, "modified_by": 1, "rate_table_id": 1, "expansion_area": "EA-2A", "zone": "EAR-2", "category": "STORM_WATER", "rate": "5088.16"}}, {"model": "notes.rate", "pk": 19, "fields": {"is_active": true, "date_created": "2017-06-29", "date_modified": "2017-06-29", "created_by": 1, "modified_by": 1, "rate_table_id": 1, "expansion_area": "EA-2A", "zone": "EAR-3", "category": "ROADS", "rate": "31852.66"}}, {"model": "notes.rate", "pk": 20, "fields": {"is_active": true, "date_created": "2017-06-29", "date_modified": "2017-06-29", "created_by": 1, "modified_by": 1, "rate_table_id": 1, "expansion_area": "EA-2A", "zone": "EAR-3", "category": "OPEN_SPACE", "rate": "1000.00"}}, {"model": "notes.rate", "pk": 21, "fields": {"is_active": true, "date_created": "2017-06-29", "date_modified": "2017-06-29", "created_by": 1, "modified_by": 1, "rate_table_id": 1, "expansion_area": "EA-2A", "zone": "EAR-3", "category": "SEWER_CAP", "rate": "8949.21"}}, {"model": "notes.rate", "pk": 22, "fields": {"is_active": true, "date_created": "2017-06-29", "date_modified": "2017-06-29", "created_by": 1, "modified_by": 1, "rate_table_id": 1, "expansion_area": "EA-2A", "zone": "EAR-3", "category": "SEWER_TRANS", "rate": "9127.56"}}, {"model": "notes.rate", "pk": 23, "fields": {"is_active": true, "date_created": "2017-06-29", "date_modified": "2017-06-29", "created_by": 1, "modified_by": 1, "rate_table_id": 1, "expansion_area": "EA-2A", "zone": "EAR-3", "category": "PARK", "rate": "14205.68"}}, {"model": "notes.rate", "pk": 24, "fields": {"is_active": true, "date_created": "2017-06-29", "date_modified": "2017-06-29", "created_by": 1, "modified_by": 1, "rate_table_id": 1, "expansion_area": "EA-2A", "zone": "EAR-3", "category": "STORM_WATER", "rate": "12457.21"}}, {"model": "notes.rate", "pk": 25, "fields": {"is_active": true, "date_created": "2017-06-29", "date_modified": "2017-06-29", "created_by": 1, "modified_by": 1, "rate_table_id": 1, "expansion_area": "EA-2A", "zone": "CC(RES)", "category": "ROADS", "rate": "31852.66"}}, {"model": "notes.rate", "pk": 26, "fields": {"is_active": true, "date_created": "2017-06-29", "date_modified": "2017-06-29", "created_by": 1, "modified_by": 1, "rate_table_id": 1, "expansion_area": "EA-2A", "zone": "CC(RES)", "category": "OPEN_SPACE", "rate": "1000.00"}}, {"model": "notes.rate", "pk": 27, "fields": {"is_active": true, "date_created": "2017-06-29", "date_modified": "2017-06-29", "created_by": 1, "modified_by": 1, "rate_table_id": 1, "expansion_area": "EA-2A", "zone": "CC(RES)", "category": "SEWER_CAP", "rate": "8949.21"}}, {"model": "notes.rate", "pk": 28, "fields": {"is_active": true, "date_created": "2017-06-29", "date_modified": "2017-06-29", "created_by": 1, "modified_by": 1, "rate_table_id": 1, "expansion_area": "EA-2A", "zone": "CC(RES)", "category": "SEWER_TRANS", "rate": "9127.56"}}, {"model": "notes.rate", "pk": 29, "fields": {"is_active": true, "date_created": "2017-06-29", "date_modified": "2017-06-29", "created_by": 1, "modified_by": 1, "rate_table_id": 1, "expansion_area": "EA-2A", "zone": "CC(RES)", "category": "PARK", "rate": "14205.68"}}, {"model": "notes.rate", "pk": 30, "fields": {"is_active": true, "date_created": "2017-06-29", "date_modified": "2017-06-29", "created_by": 1, "modified_by": 1, "rate_table_id": 1, "expansion_area": "EA-2A", "zone": "CC(RES)", "category": "STORM_WATER", "rate": "12457.21"}}, {"model": "notes.rate", "pk": 31, "fields": {"is_active": true, "date_created": "2017-06-29", "date_modified": "2017-06-29", "created_by": 1, "modified_by": 1, "rate_table_id": 1, "expansion_area": "EA-2A", "zone": "CC(NONR)", "category": "ROADS", "rate": "144531.45"}}, {"model": "notes.rate", "pk": 32, "fields": {"is_active": true, "date_created": "2017-06-29", "date_modified": "2017-06-29", "created_by": 1, "modified_by": 1, "rate_table_id": 1, "expansion_area": "EA-2A", "zone": "CC(NONR)", "category": "OPEN_SPACE", "rate": "1000.00"}}, {"model": "notes.rate", "pk": 33, "fields": {"is_active": true, "date_created": "2017-06-29", "date_modified": "2017-06-29", "created_by": 1, "modified_by": 1, "rate_table_id": 1, "expansion_area": "EA-2A", "zone": "CC(NONR)", "category": "SEWER_CAP", "rate": "11369.97"}}, {"model": "notes.rate", "pk": 34, "fields": {"is_active": true, "date_created": "2017-06-29", "date_modified": "2017-06-29", "created_by": 1, "modified_by": 1, "rate_table_id": 1, "expansion_area": "EA-2A", "zone": "CC(NONR)", "category": "SEWER_TRANS", "rate": "11596.57"}}, {"model": "notes.rate", "pk": 35, "fields": {"is_active": true, "date_created": "2017-06-29", "date_modified": "2017-06-29", "created_by": 1, "modified_by": 1, "rate_table_id": 1, "expansion_area": "EA-2A", "zone": "CC(NONR)", "category": "PARK", "rate": "0.00"}}, {"model": "notes.rate", "pk": 36, "fields": {"is_active": true, "date_created": "2017-06-29", "date_modified": "2017-06-29", "created_by": 1, "modified_by": 1, "rate_table_id": 1, "expansion_area": "EA-2A", "zone": "CC(NONR)", "category": "STORM_WATER", "rate": "12457.21"}}, {"model": "notes.rate", "pk": 37, "fields": {"is_active": true, "date_created": "2017-06-29", "date_modified": "2017-06-29", "created_by": 1, "modified_by": 1, "rate_table_id": 1, "expansion_area": "EA-2A", "zone": "ED", "category": "ROADS", "rate": "40295.37"}}, {"model": "notes.rate", "pk": 38, "fields": {"is_active": true, "date_created": "2017-06-29", "date_modified": "2017-06-29", "created_by": 1, "modified_by": 1, "rate_table_id": 1, "expansion_area": "EA-2A", "zone": "ED", "category": "OPEN_SPACE", "rate": "1000.00"}}, {"model": "notes.rate", "pk": 39, "fields": {"is_active": true, "date_created": "2017-06-29", "date_modified": "2017-06-29", "created_by": 1, "modified_by": 1, "rate_table_id": 1, "expansion_area": "EA-2A", "zone": "ED", "category": "SEWER_CAP", "rate": "13494.03"}}, {"model": "notes.rate", "pk": 40, "fields": {"is_active": true, "date_created": "2017-06-29", "date_modified": "2017-06-29", "created_by": 1, "modified_by": 1, "rate_table_id": 1, "expansion_area": "EA-2A", "zone": "ED", "category": "SEWER_TRANS", "rate": "13762.96"}}, {"model": "notes.rate", "pk": 41, "fields": {"is_active": true, "date_created": "2017-06-29", "date_modified": "2017-06-29", "created_by": 1, "modified_by": 1, "rate_table_id": 1, "expansion_area": "EA-2A", "zone": "ED", "category": "PARK", "rate": "0.00"}}, {"model": "notes.rate", "pk": 42, "fields": {"is_active": true, "date_created": "2017-06-29", "date_modified": "2017-06-29", "created_by": 1, "modified_by": 1, "rate_table_id": 1, "expansion_area": "EA-2A", "zone": "ED", "category": "STORM_WATER", "rate": "12457.21"}}]
+[
+  {
+    "model": "auth.user",
+    "pk": 1,
+    "fields": {
+      "password": "bcrypt_sha256$$2b$12$PP9v0nzrfqKl4NqtucvVZ.gTY5Q.mcFn369W/gX2QA3kTaRFW8BbS",
+      "last_login": "2017-06-29T19:20:13.981Z",
+      "is_superuser": true,
+      "username": "kelly",
+      "first_name": "Kelly",
+      "last_name": "Wright",
+      "email": "kelly@apaxsoftware.com",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2017-06-29T13:14:44Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 2,
+    "fields": {
+      "action_time": "2017-07-25T19:45:59.196Z",
+      "user": 1,
+      "content_type": 3,
+      "object_id": "4",
+      "object_repr": "cbencz",
+      "action_flag": 1,
+      "change_message": "[{\"added\": {}}]"
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 3,
+    "fields": {
+      "password": "bcrypt_sha256$$2b$12$eW0R5uB4VAD9iRPa70gpqOx4N3DO0TyevAQGzBAuLJEZ2ndSchnRa",
+      "last_login": null,
+      "is_superuser": true,
+      "username": "jarane",
+      "first_name": "Justin",
+      "last_name": "Raney",
+      "email": "jarane2@gmail.com",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2017-07-25T19:46:40Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "notes.ratetable",
+    "pk": 1,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-06-29",
+      "date_modified": "2017-07-17",
+      "created_by": 1,
+      "modified_by": 1,
+      "begin_effective_date": "2010-03-25",
+      "end_effective_date": "2017-11-24",
+      "resolution_number": "149-2010"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 1,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-1",
+      "zone": "EAR-1",
+      "category": "ROADS",
+      "rate": "0.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 2,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2A",
+      "zone": "EAR-1",
+      "category": "ROADS",
+      "rate": "7583.97"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 3,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2B",
+      "zone": "EAR-1",
+      "category": "ROADS",
+      "rate": "7583.97"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 4,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2C",
+      "zone": "EAR-1",
+      "category": "ROADS",
+      "rate": "2330.49"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 5,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-3",
+      "zone": "EAR-1",
+      "category": "ROADS",
+      "rate": "2364.41"
+    }
+  },
+  {
+    "model": "auth.group",
+    "pk": 2,
+    "fields": {
+      "name": "Finance",
+      "permissions": [
+        52,
+        53,
+        25,
+        26,
+        37,
+        38,
+        34,
+        35,
+        22,
+        23,
+        55,
+        56,
+        109,
+        110,
+        61,
+        62,
+        79,
+        80,
+        82,
+        83,
+        85,
+        86,
+        100,
+        101,
+        103,
+        104
+      ]
+    }
+  },
+  {
+    "model": "auth.group",
+    "pk": 3,
+    "fields": {
+      "name": "Planning",
+      "permissions": [
+        34,
+        35,
+        109,
+        110,
+        61,
+        62,
+        79,
+        80,
+        82,
+        83,
+        85,
+        86,
+        100,
+        101,
+        103,
+        104
+      ]
+    }
+  },
+  {
+    "model": "auth.group",
+    "pk": 4,
+    "fields": {
+      "name": "Building Inspection",
+      "permissions": [
+        109,
+        110,
+        82,
+        83
+      ]
+    }
+  },
+  {
+    "model": "auth.group",
+    "pk": 5,
+    "fields": {
+      "name": "Supervisor",
+      "permissions": [
+        52,
+        53,
+        25,
+        26,
+        37,
+        38,
+        34,
+        35,
+        22,
+        23,
+        55,
+        56,
+        13,
+        14,
+        109,
+        110,
+        61,
+        62,
+        79,
+        80,
+        82,
+        83,
+        85,
+        86,
+        100,
+        101,
+        103,
+        104
+      ]
+    }
+  },
+  {
+    "model": "accounts.account",
+    "pk": 19,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-09-26",
+      "date_modified": "2017-09-26",
+      "created_by": 1,
+      "modified_by": 1,
+      "account_name": "Lexington Fayette Urban County Government (LFUCG)",
+      "contact_first_name": "Lexington",
+      "contact_last_name": "Fayette",
+      "contact_full_name": "Lexington Fayette",
+      "address_number": 200,
+      "address_street": "E Main St",
+      "address_city": "Lexington",
+      "address_state": "KY",
+      "address_zip": "40507",
+      "address_full": "E Main St, Lexington, KY 40507",
+      "phone": "(859) 425-2255",
+      "email": "lfucg@lexingtonky.gov"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 6,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-1",
+      "zone": "EAR1-SRA",
+      "category": "ROADS",
+      "rate": "0.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 7,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2A",
+      "zone": "EAR1-SRA",
+      "category": "ROADS",
+      "rate": "2275.19"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 8,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2B",
+      "zone": "EAR1-SRA",
+      "category": "ROADS",
+      "rate": "2275.19"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 9,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2C",
+      "zone": "EAR1-SRA",
+      "category": "ROADS",
+      "rate": "0.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 10,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-3",
+      "zone": "EAR1-SRA",
+      "category": "ROADS",
+      "rate": "0.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 11,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-1",
+      "zone": "EAR-2",
+      "category": "ROADS",
+      "rate": "0.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 12,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2A",
+      "zone": "EAR-2",
+      "category": "ROADS",
+      "rate": "17063.93"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 13,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2B",
+      "zone": "EAR-2",
+      "category": "ROADS",
+      "rate": "17063.93"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 14,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2C",
+      "zone": "EAR-2",
+      "category": "ROADS",
+      "rate": "5243.59"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 15,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-3",
+      "zone": "EAR-2",
+      "category": "ROADS",
+      "rate": "5319.92"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 16,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-1",
+      "zone": "EAR-3",
+      "category": "ROADS",
+      "rate": "0.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 17,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2A",
+      "zone": "EAR-3",
+      "category": "ROADS",
+      "rate": "31852.66"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 18,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2B",
+      "zone": "EAR-3",
+      "category": "ROADS",
+      "rate": "0.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 19,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2C",
+      "zone": "EAR-3",
+      "category": "ROADS",
+      "rate": "0.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 20,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-3",
+      "zone": "EAR-3",
+      "category": "ROADS",
+      "rate": "0.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 21,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-1",
+      "zone": "CC(RES)",
+      "category": "ROADS",
+      "rate": "0.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 22,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2A",
+      "zone": "CC(RES)",
+      "category": "ROADS",
+      "rate": "31852.66"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 23,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2B",
+      "zone": "CC(RES)",
+      "category": "ROADS",
+      "rate": "31852.66"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 24,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2C",
+      "zone": "CC(RES)",
+      "category": "ROADS",
+      "rate": "9788.04"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 25,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-3",
+      "zone": "CC(RES)",
+      "category": "ROADS",
+      "rate": "9930.52"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 26,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-1",
+      "zone": "CC(NONR)",
+      "category": "ROADS",
+      "rate": "0.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 27,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2A",
+      "zone": "CC(NONR)",
+      "category": "ROADS",
+      "rate": "144531.45"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 28,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2B",
+      "zone": "CC(NONR)",
+      "category": "ROADS",
+      "rate": "144531.45"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 29,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2C",
+      "zone": "CC(NONR)",
+      "category": "ROADS",
+      "rate": "44413.24"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 30,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-3",
+      "zone": "CC(NONR)",
+      "category": "ROADS",
+      "rate": "45059.72"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 31,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-1",
+      "zone": "ED",
+      "category": "ROADS",
+      "rate": "0.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 32,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2A",
+      "zone": "ED",
+      "category": "ROADS",
+      "rate": "40295.37"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 33,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2B",
+      "zone": "ED",
+      "category": "ROADS",
+      "rate": "40295.37"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 34,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2C",
+      "zone": "ED",
+      "category": "ROADS",
+      "rate": "0.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 35,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-3",
+      "zone": "ED",
+      "category": "ROADS",
+      "rate": "12562.65"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 36,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-1",
+      "zone": "EAR-1",
+      "category": "PARK",
+      "rate": "0.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 37,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2A",
+      "zone": "EAR-1",
+      "category": "PARK",
+      "rate": "2367.61"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 38,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2B",
+      "zone": "EAR-1",
+      "category": "PARK",
+      "rate": "2367.61"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 39,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2C",
+      "zone": "EAR-1",
+      "category": "PARK",
+      "rate": "1463.31"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 40,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-3",
+      "zone": "EAR-1",
+      "category": "PARK",
+      "rate": "0.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 41,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-1",
+      "zone": "EAR1-SRA",
+      "category": "PARK",
+      "rate": "0.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 42,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2A",
+      "zone": "EAR1-SRA",
+      "category": "PARK",
+      "rate": "710.28"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 43,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2B",
+      "zone": "EAR1-SRA",
+      "category": "PARK",
+      "rate": "710.28"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 44,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2C",
+      "zone": "EAR1-SRA",
+      "category": "PARK",
+      "rate": "0.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 45,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-3",
+      "zone": "EAR1-SRA",
+      "category": "PARK",
+      "rate": "0.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 46,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-1",
+      "zone": "EAR-2",
+      "category": "PARK",
+      "rate": "0.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 47,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2A",
+      "zone": "EAR-2",
+      "category": "PARK",
+      "rate": "5327.13"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 48,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2B",
+      "zone": "EAR-2",
+      "category": "PARK",
+      "rate": "5327.13"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 49,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2C",
+      "zone": "EAR-2",
+      "category": "PARK",
+      "rate": "3292.44"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 50,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-3",
+      "zone": "EAR-2",
+      "category": "PARK",
+      "rate": "0.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 51,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-1",
+      "zone": "EAR-3",
+      "category": "PARK",
+      "rate": "0.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 52,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2A",
+      "zone": "EAR-3",
+      "category": "PARK",
+      "rate": "14205.68"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 53,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2B",
+      "zone": "EAR-3",
+      "category": "PARK",
+      "rate": "0.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 54,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2C",
+      "zone": "EAR-3",
+      "category": "PARK",
+      "rate": "0.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 55,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-3",
+      "zone": "EAR-3",
+      "category": "PARK",
+      "rate": "0.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 56,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-1",
+      "zone": "CC(RES)",
+      "category": "PARK",
+      "rate": "0.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 57,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2A",
+      "zone": "CC(RES)",
+      "category": "PARK",
+      "rate": "14205.68"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 58,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2B",
+      "zone": "CC(RES)",
+      "category": "PARK",
+      "rate": "14205.68"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 59,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2C",
+      "zone": "CC(RES)",
+      "category": "PARK",
+      "rate": "8779.83"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 60,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-3",
+      "zone": "CC(RES)",
+      "category": "PARK",
+      "rate": "0.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 61,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-1",
+      "zone": "CC(NONR)",
+      "category": "PARK",
+      "rate": "0.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 62,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2A",
+      "zone": "CC(NONR)",
+      "category": "PARK",
+      "rate": "0.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 63,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2B",
+      "zone": "CC(NONR)",
+      "category": "PARK",
+      "rate": "0.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 64,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2C",
+      "zone": "CC(NONR)",
+      "category": "PARK",
+      "rate": "0.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 65,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-3",
+      "zone": "CC(NONR)",
+      "category": "PARK",
+      "rate": "0.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 66,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-1",
+      "zone": "ED",
+      "category": "PARK",
+      "rate": "0.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 67,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2A",
+      "zone": "ED",
+      "category": "PARK",
+      "rate": "0.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 68,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2B",
+      "zone": "ED",
+      "category": "PARK",
+      "rate": "0.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 69,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2C",
+      "zone": "ED",
+      "category": "PARK",
+      "rate": "0.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 70,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-3",
+      "zone": "ED",
+      "category": "PARK",
+      "rate": "0.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 71,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-1",
+      "zone": "EAR-1",
+      "category": "STORM_WATER",
+      "rate": "0.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 72,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2A",
+      "zone": "EAR-1",
+      "category": "STORM_WATER",
+      "rate": "3509.07"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 73,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2B",
+      "zone": "EAR-1",
+      "category": "STORM_WATER",
+      "rate": "5084.62"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 74,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2C",
+      "zone": "EAR-1",
+      "category": "STORM_WATER",
+      "rate": "6943.87"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 75,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-3",
+      "zone": "EAR-1",
+      "category": "STORM_WATER",
+      "rate": "0.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 76,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-1",
+      "zone": "EAR1-SRA",
+      "category": "STORM_WATER",
+      "rate": "0.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 77,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2A",
+      "zone": "EAR1-SRA",
+      "category": "STORM_WATER",
+      "rate": "701.81"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 78,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2B",
+      "zone": "EAR1-SRA",
+      "category": "STORM_WATER",
+      "rate": "1016.92"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 79,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2C",
+      "zone": "EAR1-SRA",
+      "category": "STORM_WATER",
+      "rate": "0.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 80,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-3",
+      "zone": "EAR1-SRA",
+      "category": "STORM_WATER",
+      "rate": "0.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 81,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-1",
+      "zone": "EAR-2",
+      "category": "STORM_WATER",
+      "rate": "0.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 82,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2A",
+      "zone": "EAR-2",
+      "category": "STORM_WATER",
+      "rate": "5088.16"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 83,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2B",
+      "zone": "EAR-2",
+      "category": "STORM_WATER",
+      "rate": "7372.70"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 84,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2C",
+      "zone": "EAR-2",
+      "category": "STORM_WATER",
+      "rate": "10068.62"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 85,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-3",
+      "zone": "EAR-2",
+      "category": "STORM_WATER",
+      "rate": "0.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 86,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-1",
+      "zone": "EAR-3",
+      "category": "STORM_WATER",
+      "rate": "0.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 87,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2A",
+      "zone": "EAR-3",
+      "category": "STORM_WATER",
+      "rate": "12457.21"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 88,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2B",
+      "zone": "EAR-3",
+      "category": "STORM_WATER",
+      "rate": "0.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 89,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2C",
+      "zone": "EAR-3",
+      "category": "STORM_WATER",
+      "rate": "0.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 90,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-3",
+      "zone": "EAR-3",
+      "category": "STORM_WATER",
+      "rate": "0.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 91,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-1",
+      "zone": "CC(RES)",
+      "category": "STORM_WATER",
+      "rate": "0.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 92,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2A",
+      "zone": "CC(RES)",
+      "category": "STORM_WATER",
+      "rate": "12457.21"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 93,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2B",
+      "zone": "CC(RES)",
+      "category": "STORM_WATER",
+      "rate": "18050.40"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 94,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2C",
+      "zone": "CC(RES)",
+      "category": "STORM_WATER",
+      "rate": "24650.76"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 95,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-3",
+      "zone": "CC(RES)",
+      "category": "STORM_WATER",
+      "rate": "0.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 96,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-1",
+      "zone": "CC(NONR)",
+      "category": "STORM_WATER",
+      "rate": "0.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 97,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2A",
+      "zone": "CC(NONR)",
+      "category": "STORM_WATER",
+      "rate": "12457.21"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 98,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2B",
+      "zone": "CC(NONR)",
+      "category": "STORM_WATER",
+      "rate": "18050.40"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 99,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2C",
+      "zone": "CC(NONR)",
+      "category": "STORM_WATER",
+      "rate": "24650.76"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 100,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-3",
+      "zone": "CC(NONR)",
+      "category": "STORM_WATER",
+      "rate": "0.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 101,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-1",
+      "zone": "ED",
+      "category": "STORM_WATER",
+      "rate": "0.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 102,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2A",
+      "zone": "ED",
+      "category": "STORM_WATER",
+      "rate": "12457.21"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 103,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2B",
+      "zone": "ED",
+      "category": "STORM_WATER",
+      "rate": "0.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 104,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2C",
+      "zone": "ED",
+      "category": "STORM_WATER",
+      "rate": "0.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 105,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-3",
+      "zone": "ED",
+      "category": "STORM_WATER",
+      "rate": "0.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 106,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-1",
+      "zone": "EAR-1",
+      "category": "OPEN_SPACE",
+      "rate": "1000.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 107,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2A",
+      "zone": "EAR-1",
+      "category": "OPEN_SPACE",
+      "rate": "1000.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 108,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2B",
+      "zone": "EAR-1",
+      "category": "OPEN_SPACE",
+      "rate": "1000.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 109,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2C",
+      "zone": "EAR-1",
+      "category": "OPEN_SPACE",
+      "rate": "1000.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 110,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-3",
+      "zone": "EAR-1",
+      "category": "OPEN_SPACE",
+      "rate": "1000.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 111,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-1",
+      "zone": "EAR1-SRA",
+      "category": "OPEN_SPACE",
+      "rate": "0.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 112,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2A",
+      "zone": "EAR1-SRA",
+      "category": "OPEN_SPACE",
+      "rate": "1000.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 113,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2B",
+      "zone": "EAR1-SRA",
+      "category": "OPEN_SPACE",
+      "rate": "1000.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 114,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2C",
+      "zone": "EAR1-SRA",
+      "category": "OPEN_SPACE",
+      "rate": "0.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 115,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-3",
+      "zone": "EAR1-SRA",
+      "category": "OPEN_SPACE",
+      "rate": "0.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 116,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-1",
+      "zone": "EAR-2",
+      "category": "OPEN_SPACE",
+      "rate": "0.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 117,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2A",
+      "zone": "EAR-2",
+      "category": "OPEN_SPACE",
+      "rate": "1000.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 118,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2B",
+      "zone": "EAR-2",
+      "category": "OPEN_SPACE",
+      "rate": "1000.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 119,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2C",
+      "zone": "EAR-2",
+      "category": "OPEN_SPACE",
+      "rate": "1000.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 120,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-3",
+      "zone": "EAR-2",
+      "category": "OPEN_SPACE",
+      "rate": "1000.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 121,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-1",
+      "zone": "EAR-3",
+      "category": "OPEN_SPACE",
+      "rate": "0.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 122,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2A",
+      "zone": "EAR-3",
+      "category": "OPEN_SPACE",
+      "rate": "1000.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 123,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2B",
+      "zone": "EAR-3",
+      "category": "OPEN_SPACE",
+      "rate": "0.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 124,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2C",
+      "zone": "EAR-3",
+      "category": "OPEN_SPACE",
+      "rate": "0.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 125,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-3",
+      "zone": "EAR-3",
+      "category": "OPEN_SPACE",
+      "rate": "0.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 126,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-1",
+      "zone": "CC(RES)",
+      "category": "OPEN_SPACE",
+      "rate": "0.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 127,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2A",
+      "zone": "CC(RES)",
+      "category": "OPEN_SPACE",
+      "rate": "1000.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 128,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2B",
+      "zone": "CC(RES)",
+      "category": "OPEN_SPACE",
+      "rate": "1000.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 129,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2C",
+      "zone": "CC(RES)",
+      "category": "OPEN_SPACE",
+      "rate": "1000.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 130,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-3",
+      "zone": "CC(RES)",
+      "category": "OPEN_SPACE",
+      "rate": "1000.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 131,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-1",
+      "zone": "CC(NONR)",
+      "category": "OPEN_SPACE",
+      "rate": "0.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 132,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2A",
+      "zone": "CC(NONR)",
+      "category": "OPEN_SPACE",
+      "rate": "1000.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 133,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2B",
+      "zone": "CC(NONR)",
+      "category": "OPEN_SPACE",
+      "rate": "1000.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 134,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2C",
+      "zone": "CC(NONR)",
+      "category": "OPEN_SPACE",
+      "rate": "1000.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 135,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-3",
+      "zone": "CC(NONR)",
+      "category": "OPEN_SPACE",
+      "rate": "1000.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 136,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-1",
+      "zone": "ED",
+      "category": "OPEN_SPACE",
+      "rate": "0.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 137,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2A",
+      "zone": "ED",
+      "category": "OPEN_SPACE",
+      "rate": "1000.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 138,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2B",
+      "zone": "ED",
+      "category": "OPEN_SPACE",
+      "rate": "0.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 139,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2C",
+      "zone": "ED",
+      "category": "OPEN_SPACE",
+      "rate": "0.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 140,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-3",
+      "zone": "ED",
+      "category": "OPEN_SPACE",
+      "rate": "1000.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 141,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-1",
+      "zone": "EAR-1",
+      "category": "SEWER_TRANS",
+      "rate": "7944.35"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 142,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2A",
+      "zone": "EAR-1",
+      "category": "SEWER_TRANS",
+      "rate": "2123.08"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 143,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2B",
+      "zone": "EAR-1",
+      "category": "SEWER_TRANS",
+      "rate": "2445.62"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 144,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2C",
+      "zone": "EAR-1",
+      "category": "SEWER_TRANS",
+      "rate": "4420.51"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 145,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-3",
+      "zone": "EAR-1",
+      "category": "SEWER_TRANS",
+      "rate": "1950.01"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 146,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-1",
+      "zone": "EAR1-SRA",
+      "category": "SEWER_TRANS",
+      "rate": "0.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 147,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2A",
+      "zone": "EAR1-SRA",
+      "category": "SEWER_TRANS",
+      "rate": "636.92"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 148,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2B",
+      "zone": "EAR1-SRA",
+      "category": "SEWER_TRANS",
+      "rate": "733.69"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 149,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2C",
+      "zone": "EAR1-SRA",
+      "category": "SEWER_TRANS",
+      "rate": "0.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 150,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-3",
+      "zone": "EAR1-SRA",
+      "category": "SEWER_TRANS",
+      "rate": "0.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 151,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-1",
+      "zone": "EAR-2",
+      "category": "SEWER_TRANS",
+      "rate": "0.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 152,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2A",
+      "zone": "EAR-2",
+      "category": "SEWER_TRANS",
+      "rate": "4250.33"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 153,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2B",
+      "zone": "EAR-2",
+      "category": "SEWER_TRANS",
+      "rate": "4896.05"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 154,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2C",
+      "zone": "EAR-2",
+      "category": "SEWER_TRANS",
+      "rate": "8849.73"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 155,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-3",
+      "zone": "EAR-2",
+      "category": "SEWER_TRANS",
+      "rate": "3903.87"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 156,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-1",
+      "zone": "EAR-3",
+      "category": "SEWER_TRANS",
+      "rate": "0.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 157,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2A",
+      "zone": "EAR-3",
+      "category": "SEWER_TRANS",
+      "rate": "9127.56"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 158,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2B",
+      "zone": "EAR-3",
+      "category": "SEWER_TRANS",
+      "rate": "0.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 159,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2C",
+      "zone": "EAR-3",
+      "category": "SEWER_TRANS",
+      "rate": "0.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 160,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-3",
+      "zone": "EAR-3",
+      "category": "SEWER_TRANS",
+      "rate": "0.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 161,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-1",
+      "zone": "CC(RES)",
+      "category": "SEWER_TRANS",
+      "rate": "0.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 162,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2A",
+      "zone": "CC(RES)",
+      "category": "SEWER_TRANS",
+      "rate": "9127.56"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 163,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2B",
+      "zone": "CC(RES)",
+      "category": "SEWER_TRANS",
+      "rate": "10514.24"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 164,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2C",
+      "zone": "CC(RES)",
+      "category": "SEWER_TRANS",
+      "rate": "19004.73"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 165,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-3",
+      "zone": "CC(RES)",
+      "category": "SEWER_TRANS",
+      "rate": "8383.52"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 166,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-1",
+      "zone": "CC(NONR)",
+      "category": "SEWER_TRANS",
+      "rate": "0.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 167,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2A",
+      "zone": "CC(NONR)",
+      "category": "SEWER_TRANS",
+      "rate": "11596.57"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 168,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2B",
+      "zone": "CC(NONR)",
+      "category": "SEWER_TRANS",
+      "rate": "13358.34"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 169,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2C",
+      "zone": "CC(NONR)",
+      "category": "SEWER_TRANS",
+      "rate": "24145.51"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 170,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-3",
+      "zone": "CC(NONR)",
+      "category": "SEWER_TRANS",
+      "rate": "10651.26"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 171,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-1",
+      "zone": "ED",
+      "category": "SEWER_TRANS",
+      "rate": "0.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 172,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2A",
+      "zone": "ED",
+      "category": "SEWER_TRANS",
+      "rate": "13762.96"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 173,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2B",
+      "zone": "ED",
+      "category": "SEWER_TRANS",
+      "rate": "0.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 174,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2C",
+      "zone": "ED",
+      "category": "SEWER_TRANS",
+      "rate": "0.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 175,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-3",
+      "zone": "ED",
+      "category": "SEWER_TRANS",
+      "rate": "12641.06"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 176,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-1",
+      "zone": "EAR-1",
+      "category": "SEWER_CAP",
+      "rate": "2081.59"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 177,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2A",
+      "zone": "EAR-1",
+      "category": "SEWER_CAP",
+      "rate": "2081.59"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 178,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2B",
+      "zone": "EAR-1",
+      "category": "SEWER_CAP",
+      "rate": "2081.59"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 179,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2C",
+      "zone": "EAR-1",
+      "category": "SEWER_CAP",
+      "rate": "2081.59"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 180,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-3",
+      "zone": "EAR-1",
+      "category": "SEWER_CAP",
+      "rate": "2081.59"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 181,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-1",
+      "zone": "EAR1-SRA",
+      "category": "SEWER_CAP",
+      "rate": "0.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 182,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2A",
+      "zone": "EAR1-SRA",
+      "category": "SEWER_CAP",
+      "rate": "624.48"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 183,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2B",
+      "zone": "EAR1-SRA",
+      "category": "SEWER_CAP",
+      "rate": "624.48"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 184,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2C",
+      "zone": "EAR1-SRA",
+      "category": "SEWER_CAP",
+      "rate": "0.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 185,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-3",
+      "zone": "EAR1-SRA",
+      "category": "SEWER_CAP",
+      "rate": "0.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 186,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-1",
+      "zone": "EAR-2",
+      "category": "SEWER_CAP",
+      "rate": "0.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 187,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2A",
+      "zone": "EAR-2",
+      "category": "SEWER_CAP",
+      "rate": "4167.28"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 188,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2B",
+      "zone": "EAR-2",
+      "category": "SEWER_CAP",
+      "rate": "4167.28"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 189,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2C",
+      "zone": "EAR-2",
+      "category": "SEWER_CAP",
+      "rate": "4167.28"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 190,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-3",
+      "zone": "EAR-2",
+      "category": "SEWER_CAP",
+      "rate": "4167.28"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 191,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-1",
+      "zone": "EAR-3",
+      "category": "SEWER_CAP",
+      "rate": "0.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 192,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2A",
+      "zone": "EAR-3",
+      "category": "SEWER_CAP",
+      "rate": "8949.21"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 193,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2B",
+      "zone": "EAR-3",
+      "category": "SEWER_CAP",
+      "rate": "0.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 194,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2C",
+      "zone": "EAR-3",
+      "category": "SEWER_CAP",
+      "rate": "0.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 195,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-3",
+      "zone": "EAR-3",
+      "category": "SEWER_CAP",
+      "rate": "0.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 196,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-1",
+      "zone": "CC(RES)",
+      "category": "SEWER_CAP",
+      "rate": "0.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 197,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2A",
+      "zone": "CC(RES)",
+      "category": "SEWER_CAP",
+      "rate": "8949.21"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 198,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2B",
+      "zone": "CC(RES)",
+      "category": "SEWER_CAP",
+      "rate": "8949.21"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 199,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2C",
+      "zone": "CC(RES)",
+      "category": "SEWER_CAP",
+      "rate": "8949.21"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 200,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-3",
+      "zone": "CC(RES)",
+      "category": "SEWER_CAP",
+      "rate": "8949.21"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 201,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-1",
+      "zone": "CC(NONR)",
+      "category": "SEWER_CAP",
+      "rate": "0.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 202,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2A",
+      "zone": "CC(NONR)",
+      "category": "SEWER_CAP",
+      "rate": "11369.97"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 203,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2B",
+      "zone": "CC(NONR)",
+      "category": "SEWER_CAP",
+      "rate": "11369.97"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 204,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2C",
+      "zone": "CC(NONR)",
+      "category": "SEWER_CAP",
+      "rate": "11369.97"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 205,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-3",
+      "zone": "CC(NONR)",
+      "category": "SEWER_CAP",
+      "rate": "11369.97"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 206,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-1",
+      "zone": "ED",
+      "category": "SEWER_CAP",
+      "rate": "0.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 207,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2A",
+      "zone": "ED",
+      "category": "SEWER_CAP",
+      "rate": "13494.03"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 208,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2B",
+      "zone": "ED",
+      "category": "SEWER_CAP",
+      "rate": "0.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 209,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-2C",
+      "zone": "ED",
+      "category": "SEWER_CAP",
+      "rate": "0.00"
+    }
+  },
+  {
+    "model": "notes.rate",
+    "pk": 210,
+    "fields": {
+      "is_active": true,
+      "date_created": "2017-07-19",
+      "date_modified": "2017-07-19",
+      "created_by": 1,
+      "modified_by": 1,
+      "rate_table_id": 1,
+      "expansion_area": "EA-3",
+      "zone": "ED",
+      "category": "SEWER_CAP",
+      "rate": "13494.03"
+    }
+  }
+]

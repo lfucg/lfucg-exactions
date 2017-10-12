@@ -34,7 +34,7 @@ STATIC_FILE_DIR = BASE_DIR.child("static")
 # http://www.i18nguy.com/unicode/language-identifiers.html
 LANGUAGE_CODE = 'en-us'
 
-BASE_URL = "http://localhost:8000"
+BASE_URL = "http://52.201.224.95/"
 # Defines the views served for root URLs.
 ROOT_URLCONF = 'server.urls'
 
@@ -49,6 +49,7 @@ INSTALLED_APPS = (
     'django.contrib.humanize',
     'django.contrib.syndication',
     'django.contrib.staticfiles',
+    'django_filters',
     'rest_framework',
     'rest_framework.authtoken',
 
@@ -59,6 +60,7 @@ INSTALLED_APPS = (
     # Application base, containing global templates.
     'base',
     'simple_history',
+    'storages',
 
     # Local apps, referenced via appname
     'accounts',
@@ -95,7 +97,6 @@ MEDIA_ROOT = os.path.join(PROJECT_ROOT, 'media')
 # trailing slash.
 # Examples: "http://media.example.com/media/", "http://example.com/media/"
 MEDIA_URL = '/media/'
-
 # Absolute path to the directory static files should be collected to.
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
@@ -105,7 +106,6 @@ STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
 # URL prefix for static files.
 # Example: "http://media.example.com/static/"
 STATIC_URL = '/static/'
-
 
 
 # Additional locations of static files
@@ -170,21 +170,6 @@ TEMPLATES = [
     },
 ]
 
-
-# TEMPLATE_DIRS = (
-#     # Put strings here, like "/home/html/django_templates" or
-#     # "C:/www/django/templates".
-#     # Always use forward slashes, even on Windows.
-#     # Don't forget to use absolute paths, not relative paths.
-#     os.path.join(PROJECT_ROOT, 'templates'),
-# )
-
-# List of callables that know how to import templates from various sources.
-# TEMPLATE_LOADERS = (
-#     'django.template.loaders.filesystem.Loader',
-#     'django.template.loaders.app_directories.Loader',
-# )
-
 TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 
 
@@ -234,7 +219,7 @@ WSGI_APPLICATION = 'server.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'exactions.db',
+        'NAME': 'exactions',
         'USER': '',
         'PASSWORD': '',
         'HOST': '',
@@ -249,7 +234,7 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticatedOrReadOnly',
-    )
+    ),
 }
 
 # Uncomment this and set to all slave DBs in use on the site.
@@ -325,3 +310,4 @@ LOGGING = {
 #CEF_VENDOR = 'Your Company'
 #CEF_VERSION = '0'
 #CEF_DEVICE_VERSION = '0'
+PAGINATION_SIZE = 10

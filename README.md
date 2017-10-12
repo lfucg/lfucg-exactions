@@ -32,7 +32,7 @@ $ vagrant plugin install vagrant-omnibus
 
 ### Development
 
-After installing `vagrant` and the chef plugins, you can start a vagrant vm using `vagrant up`:
+After installing `vagrant` and the chef plugins, you can start a vagrant vm using `vagrant up` from the chef directory:
 
 ```bash
 $ vagrant up

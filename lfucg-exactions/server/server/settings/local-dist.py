@@ -1,4 +1,31 @@
 from . import base
+import os
+
+# import dj_database_url
+# DATABASES['default'] = dj_database_url.config()
+
+# SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+ALLOWED_HOSTS = ['*']
+
+AWS_DEFAULT_REGION = 'us-east-1'
+AWS_STORAGE_BUCKET_NAME = '<%= @config["AWS_STORAGE_BUCKET_NAME"] %>'
+AWS_ACCESS_KEY_ID = '<%= @config["AWS_ACCESS_KEY_ID"] %>'
+AWS_SECRET_ACCESS_KEY = '<%= @config["AWS_SECRET_ACCESS_KEY"] %>'
+AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+
+# STATIC_URL = "https://%s/" % AWS_S3_CUSTOM_DOMAIN
+# STATIC_ROOT = "https://%s/static/" % AWS_S3_CUSTOM_DOMAIN
+# STATICFILES_STORAGE = '<%= @config["STATICFILES_STORAGE"] %>'
+
+DEFAULT_FILE_STORAGE = 'notes.models.MediaStorage'
+
+AWS_S3_MEDIA_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+MEDIA_URL = "https://%s/media/" % AWS_S3_MEDIA_DOMAIN
+
+# EMAIL_BACKEND = "sgbackend.SendGridBackend"
+# SENDGRID_API_KEY = '<%= @config["SENDGRID_API_KEY"] %>'
+
 
 DATABASES = {
     'default': {
@@ -11,6 +38,7 @@ DATABASES = {
     },
 }
 
+BASE_URL="http://localhost:8000"
 # Recipients of traceback emails and other notifications.
 ADMINS = (
     # ('Your Name', 'your_email@domain.com'),
@@ -31,16 +59,6 @@ DEBUG = TEMPLATE_DEBUG = True
 # instances and False on stage/prod.
 DEV = True
 
-# Hosts/domain names that are valid for this site; required if DEBUG is False
-# See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = ["*"]
-
-# SECURITY WARNING: keep the secret key used in production secret!
-# Hardcoded values can leak through source control. Consider loading
-# the secret key from an environment variable or a file instead.
-
-# Generate a fresh key with the following command:
-# python -c 'import random; print("".join([random.choice("abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(-_=+)") for i in range(50)]))'
 SECRET_KEY = '<%= @config["SECRET_KEY"] %>'
 
 # Remove this configuration variable to use your custom logging configuration

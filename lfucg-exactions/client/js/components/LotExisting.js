@@ -2,65 +2,84 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { map } from 'ramda';
+import PropTypes from 'prop-types';
 
 import Navbar from './Navbar';
 import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
+import Pagination from './Pagination';
+import SearchBar from './SearchBar';
 
 import {
-    getLots,
+    getPagination,
+    getPlats,
+    getAccounts,
 } from '../actions/apiActions';
 
 class LotExisting extends React.Component {
-    static propTypes = {
-        lots: React.PropTypes.object,
-        route: React.PropTypes.object,
-        onComponentDidMount: React.PropTypes.func,
-    };
-
     componentDidMount() {
         this.props.onComponentDidMount();
     }
 
-
     render() {
         const {
+            currentUser,
             lots,
+            plats,
+            accounts,
         } = this.props;
+
+        const platsList = plats && plats.length > 0 &&
+            (map((single_plat) => {
+                return {
+                    id: single_plat.id,
+                    name: single_plat.name,
+                };
+            })(plats));
+
+        const accountsList = accounts && accounts.length > 0 &&
+            (map((single_account) => {
+                return {
+                    id: single_account.id,
+                    name: single_account.account_name,
+                };
+            })(accounts));
 
         const lots_list = lots.length > 0 ? (
             map((lot) => {
                 return (
                     <div key={lot.id} className="col-xs-12">
                         <div className="row form-subheading">
-                            <Link to={`lot/form/${lot.id}`} role="link" className="page-link">
-                                <h3>
-                                    Parcel ID , Lot Number:  {lot.parcel_id ? <span>{lot.parcel_id} , {lot.lot_number}</span> : <span> -- , {lot.lot_number}</span>}
-                                    <i className="fa fa-link" aria-hidden="true" />
-                                </h3>
-                            </Link>
+                            <h3>{lot.address_full}</h3>
+                        </div>
+                        <div className="row link-row">
+                            <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
+                                <div className="col-xs-5">
+                                    {currentUser && currentUser.permissions && currentUser.permissions.lot &&
+                                        <Link to={`lot/form/${lot.id}`} aria-label="Edit">
+                                            <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
+                                            <div className="col-xs-7 link-label">
+                                                Edit
+                                            </div>
+                                        </Link>
+                                    }
+                                </div>
+                                <div className="col-xs-5 ">
+                                    <Link to={`lot/summary/${lot.id}`} aria-label="Summary">
+                                        <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
+                                        <div className="col-xs-7 link-label">
+                                            Summary
+                                        </div>
+                                    </Link>
+                                </div>
+                            </div>
                         </div>
                         <div className="row">
                             <div className="col-sm-offset-1">
-                                <p className="col-md-4 col-xs-12">Plat Name: {lot.plat}</p>
-                                <p className="col-md-8 col-xs-12">Address: {lot.address_full}</p>
+                                <h3 className="col-xs-12">Current Exactions: {lot.lot_exactions && lot.lot_exactions.current_exactions}</h3>
+                                <p className="col-md-4 col-xs-6">Plat Name: {lot.plat.name}</p>
                                 <p className="col-md-4 col-xs-6">Lot Number: {lot.lot_number}</p>
                                 <p className="col-md-4 col-xs-6 ">Permit ID: {lot.permit_id}</p>
-                                <p className="col-md-4 col-xs-6">Latitude: {lot.latitude}</p>
-                                <p className="col-md-4 col-xs-6">Longitude: {lot.longitude}</p>
-                                <p className="col-md-4 col-xs-6">Approved: {lot.is_approved ? 'Approved' : 'Not Approved'}</p>
-                                <p className="col-md-4 col-xs-6">Road Developer Exactions: ${lot.dues_roads_dev}</p>
-                                <p className="col-md-4 col-xs-6">Road Owner Exactions: ${lot.dues_roads_own}</p>
-                                <p className="col-md-4 col-xs-6">Sewer Transmission Developer Exactions: ${lot.dues_sewer_trans_dev}</p>
-                                <p className="col-md-4 col-xs-6">Sewer Transmission Owner Exactions: ${lot.dues_sewer_trans_own}</p>
-                                <p className="col-md-4 col-xs-6">Sewer Capacity Developer Exactions: ${lot.dues_sewer_cap_dev}</p>
-                                <p className="col-md-4 col-xs-6">Sewer Capacity Owner Exactions: ${lot.dues_sewer_cap_own}</p>
-                                <p className="col-md-4 col-xs-6">Parks Developer Exactions: ${lot.dues_parks_dev}</p>
-                                <p className="col-md-4 col-xs-6">Parks Owner Exactions: ${lot.dues_parks_own}</p>
-                                <p className="col-md-4 col-xs-6">Storm Developer Exactions: ${lot.dues_storm_dev}</p>
-                                <p className="col-md-4 col-xs-6">Storm Owner Exactions: ${lot.dues_storm_own}</p>
-                                <p className="col-md-4 col-xs-6">Open Space Developer Exactions: ${lot.dues_open_space_dev}</p>
-                                <p className="col-md-4 col-xs-6">Open Space Owner Exactions: ${lot.dues_open_space_own}</p>
                             </div>
                         </div>
                     </div>
@@ -78,11 +97,20 @@ class LotExisting extends React.Component {
                     </div>
                 </div>
 
-                <Breadcrumbs route={this.props.route} parent_link={'lot'} parent_name={'Lots'} />
+                <Breadcrumbs route={this.props.route} />
+
+                <SearchBar
+                  apiCalls={[getPlats, getAccounts]}
+                  advancedSearch={[
+                    { filterField: 'filter_plat', displayName: 'Plat', list: platsList },
+                    { filterField: 'filter_account', displayName: 'Developer', list: accountsList },
+                  ]}
+                />
 
                 <div className="inside-body">
                     <div className="container">
                         {lots_list}
+                        {lots_list ? <Pagination /> : <h1>No Results Found</h1>}
                     </div>
                 </div>
                 <Footer />
@@ -91,16 +119,28 @@ class LotExisting extends React.Component {
     }
 }
 
+LotExisting.propTypes = {
+    currentUser: PropTypes.object,
+    lots: PropTypes.array,
+    plats: PropTypes.array,
+    accounts: PropTypes.array,
+    route: PropTypes.object,
+    onComponentDidMount: PropTypes.func,
+};
+
 function mapStateToProps(state) {
     return {
+        currentUser: state.currentUser,
         lots: state.lots,
+        plats: state.plats,
+        accounts: state.accounts,
     };
 }
 
 function mapDispatchToProps(dispatch) {
     return {
         onComponentDidMount() {
-            dispatch(getLots());
+            dispatch(getPagination('/lot/'));
         },
     };
 }
