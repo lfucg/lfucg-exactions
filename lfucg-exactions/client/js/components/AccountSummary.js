@@ -178,8 +178,8 @@ class AccountSummary extends React.Component {
                             </div>
                         </div>
                         <div className="row">
-                            <p className="col-sm-4 col-xs-6">Payment Type: {payment.payment_type}</p>
-                            <p className="col-sm-4 col-xs-6">Paid By: {payment.total_paid}</p>
+                            <p className="col-sm-4 col-xs-6">Payment Type: {payment.payment_type_display}</p>
+                            <p className="col-sm-4 col-xs-6">Paid By: {payment.paid_by}</p>
                             <p className="col-sm-4 col-xs-6">Paid By Type: {payment.paid_by_type_display}</p>
                             <p className="col-xs-12">Lot: {payment.lot_id.address_full}</p>
                         </div>
