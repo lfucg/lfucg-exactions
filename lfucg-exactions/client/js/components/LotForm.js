@@ -11,6 +11,7 @@ import Navbar from './Navbar';
 import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
 import Notes from './Notes';
+import Uploads from './Uploads';
 
 import FormGroup from './FormGroup';
 
@@ -227,7 +228,7 @@ class LotForm extends React.Component {
                                                         <input type="text" className="form-control" placeholder="Parcel ID" />
                                                     </FormGroup>
                                                 </div>
-                                                {lots.total_due <= 0 &&
+                                                {currentLot.total_due <= 0 &&
                                                 <div className="col-sm-6">
                                                     <FormGroup label="Permit ID" id="permit_id">
                                                         <input type="text" className="form-control" placeholder="Permit ID" />
@@ -379,12 +380,22 @@ class LotForm extends React.Component {
                                 <div className="panel-body">
                                     <div className="col-xs-12">
                                         {currentLot.id && currentLot.plat &&
-                                            <Notes content_type="Lot" object_id={currentLot.id} parent_content_type="Plat" parent_object_id={currentLot.plat.id} />
+                                            <Notes content_type="plats_lot" object_id={currentLot.id} parent_content_type="plats_plat" parent_object_id={currentLot.plat.id} />
                                         }
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        <div className="clearfix" />
+                        {currentLot.id &&
+                            <Uploads
+                              file_content_type="plats_lot"
+                              file_object_id={currentLot.id}
+                              ariaExpanded="true"
+                              panelClass="panel-collapse collapse row in"
+                              permission="lot"
+                            />
+                        }
                     </div>
                 </div>
 
