@@ -14,9 +14,9 @@ AWS_ACCESS_KEY_ID = '<%= @config["AWS_ACCESS_KEY_ID"] %>'
 AWS_SECRET_ACCESS_KEY = '<%= @config["AWS_SECRET_ACCESS_KEY"] %>'
 AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
 
-# STATIC_URL = "https://%s/" % AWS_S3_CUSTOM_DOMAIN
-# STATIC_ROOT = "https://%s/static/" % AWS_S3_CUSTOM_DOMAIN
-# STATICFILES_STORAGE = '<%= @config["STATICFILES_STORAGE"] %>'
+STATIC_URL = "https://%s/" % AWS_S3_CUSTOM_DOMAIN
+STATIC_ROOT = "https://%s/static/" % AWS_S3_CUSTOM_DOMAIN
+STATICFILES_STORAGE = '<%= @config["STATICFILES_STORAGE"] %>'
 
 DEFAULT_FILE_STORAGE = 'notes.models.MediaStorage'
 
@@ -38,7 +38,7 @@ DATABASES = {
     },
 }
 
-BASE_URL="http://localhost:8000"
+BASE_URL='<%= @config["BASE_URL"] %>'
 # Recipients of traceback emails and other notifications.
 ADMINS = (
     # ('Your Name', 'your_email@domain.com'),

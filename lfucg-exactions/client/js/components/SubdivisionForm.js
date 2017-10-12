@@ -56,7 +56,7 @@ class SubdivisionForm extends React.Component {
                         <div className="col-sm-offset-1 col-sm-10">
                             <form onSubmit={onSubmit} >
 
-                                <fieldset disabled={!((currentUser && currentUser.profile && currentUser.profile.is_supervisor) || (currentUser && currentUser.is_superuser)) && !subdivisions.is_approved} >
+                                <fieldset>
                                     <div className="row">
                                         <FormGroup label="* Subdivision Name" id="name" aria-required="true">
                                             <input type="text" className="form-control" placeholder="Subdivision Name" autoFocus />
