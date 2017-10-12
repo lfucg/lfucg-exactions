@@ -48,14 +48,14 @@ class PlatZoneForm extends React.Component {
                         <div className="row">
                             <div className="col-sm-6 form-group">
                                 <label htmlFor="plat" className="form-label" id="plat">* Plat</label>
-                                <select className="form-control" id="plat" onChange={formChange('plat')} value={activeForm.plat_name} >
+                                <select className="form-control" id="plat" onChange={formChange('plat')} value={activeForm.plat_name} disabled>
                                     <option value="start_plat">{activeForm.plat_name}</option>
                                 </select>
                             </div>
                         </div>
                         <div className="row">
                             <div className="col-sm-6 form-group">
-                                <label htmlFor={this.props.zone_id} className="form-label" id={this.props.zone_id}>* Zone</label>
+                                <label htmlFor={this.props.zone_id} className="form-label">* Zone</label>
                                 <select className="form-control" id={this.props.zone_id} onChange={formChange('zone')} >
                                     {this.props.zone_value ? (
                                         <option value="zone_name" aria-label={this.props.zone_value}>{this.props.zone_value}</option>
@@ -98,7 +98,7 @@ PlatZoneForm.propTypes = {
     plat_zone_id: PropTypes.string,
     plat_zone_value: PropTypes.number,
     acre_id: PropTypes.string,
-    acre_value: PropTypes.number,
+    acre_value: PropTypes.string,
     zone_id: PropTypes.string,
     zone_value: PropTypes.string,
     onComponentDidMount: PropTypes.func,
@@ -115,6 +115,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch, props) {
     const selectedPlatZone = props.plat_zone_value;
+    const selectedPlatZoneId = props.zone_id;
 
     return {
         onComponentDidMount(pass_props) {
@@ -153,7 +154,11 @@ function mapDispatchToProps(dispatch, props) {
                 };
                 dispatch(formUpdate(plat_zone_update));
                 if (selectedPlatZone) {
-                    const zone = activeForm.activeForm[`${props.zone_id}`];
+                    // setting zone based on the submitted select to avoid mishaps on clicking a different submit button than the one changed.
+                    let zone = document.getElementById(`${selectedPlatZoneId}`);
+                    zone = zone.options[zone.selectedIndex].value;
+                    zone = zone.substr(0, zone.indexOf(','));
+
                     const acres = activeForm.activeForm[`${props.acre_id}`];
                     dispatch(putPlatZone(selectedPlatZone, zone, acres))
                     .then(() => {
