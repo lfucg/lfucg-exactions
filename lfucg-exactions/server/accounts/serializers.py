@@ -227,7 +227,7 @@ class ProjectCostEstimateSerializer(serializers.ModelSerializer):
         )
 
 class AccountLedgerSerializer(serializers.ModelSerializer):
-    lot = LotField()
+    lot = LotField(required=False)
     agreement = AgreementField()
     account_from = AccountField()
     account_to = AccountField()
