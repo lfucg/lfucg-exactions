@@ -233,9 +233,9 @@ class LotForm extends React.Component {
                                                 </div>
                                                 <div className="col-sm-6">
                                                     <FormGroup label="Permit ID" id="permit_id">
-                                                        <input type="text" className="form-control" placeholder="Permit ID" disabled={currentLot.lot_exactions && currentLot.lot_exactions.current_exactions_number > 0} />
+                                                        <input type="text" className="form-control" placeholder="Permit ID" disabled={currentLot && currentLot.lot_exactions && currentLot.lot_exactions.current_exactions_number > 0} />
                                                     </FormGroup>
-                                                    {currentLot.lot_exactions && currentLot.lot_exactions.current_exactions_number > 0 &&
+                                                    {currentLot && currentLot.lot_exactions && currentLot.lot_exactions.current_exactions_number > 0 &&
                                                         <span className="help-block">This lot still has {currentLot.lot_exactions.current_exactions} in exactions. You may add a Permit ID when exactions are paid.</span>
                                                     }
                                                 </div>
@@ -360,38 +360,40 @@ class LotForm extends React.Component {
                                     </div>
                                 </div>
                             ) : null}
-                            <a
-                              role="button"
-                              data-toggle="collapse"
-                              data-parent="#accordion"
-                              href="#collapseNotes"
-                              aria-expanded="true"
-                              aria-controls="collapseNotes"
-                            >
-                                <div className="row section-heading" role="tab" id="headingNotes">
-                                    <div className="col-xs-1 caret-indicator" />
-                                    <div className="col-xs-10">
-                                        <h2>Notes</h2>
+                            {currentLot && currentLot.id && currentLot.plat &&
+                                <div>
+                                    <a
+                                      role="button"
+                                      data-toggle="collapse"
+                                      data-parent="#accordion"
+                                      href="#collapseNotes"
+                                      aria-expanded="true"
+                                      aria-controls="collapseNotes"
+                                    >
+                                        <div className="row section-heading" role="tab" id="headingNotes">
+                                            <div className="col-xs-1 caret-indicator" />
+                                            <div className="col-xs-10">
+                                                <h2>Notes</h2>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <div
+                                      id="collapseNotes"
+                                      className="panel-collapse collapse in row"
+                                      role="tabpanel"
+                                      aria-labelledby="#headingNotes"
+                                    >
+                                        <div className="panel-body">
+                                            <div className="col-xs-12">
+                                                <Notes content_type="plats_lot" object_id={currentLot.id} parent_content_type="plats_plat" parent_object_id={currentLot.plat.id} />
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                            </a>
-                            <div
-                              id="collapseNotes"
-                              className="panel-collapse collapse in row"
-                              role="tabpanel"
-                              aria-labelledby="#headingNotes"
-                            >
-                                <div className="panel-body">
-                                    <div className="col-xs-12">
-                                        {currentLot.id && currentLot.plat &&
-                                            <Notes content_type="plats_lot" object_id={currentLot.id} parent_content_type="plats_plat" parent_object_id={currentLot.plat.id} />
-                                        }
-                                    </div>
-                                </div>
-                            </div>
+                            }
                         </div>
                         <div className="clearfix" />
-                        {currentLot.id &&
+                        {currentLot && currentLot.id &&
                             <Uploads
                               file_content_type="plats_lot"
                               file_object_id={currentLot.id}
