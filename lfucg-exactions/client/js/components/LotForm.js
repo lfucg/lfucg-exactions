@@ -540,8 +540,10 @@ function mapDispatchToProps(dispatch, params) {
         onLotSubmit(event) {
             event.preventDefault();
             if (selectedLot) {
-                dispatch(putLot(selectedLot));
-                hashHistory.push(`lot/summary/${selectedLot}`);
+                dispatch(putLot(selectedLot))
+                .then(() => {
+                    hashHistory.push(`lot/summary/${selectedLot}`);
+                });
             } else {
                 dispatch(postLot())
                 .then((data_post) => {
