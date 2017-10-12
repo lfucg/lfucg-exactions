@@ -54,8 +54,8 @@ class SubdivisionForm extends React.Component {
                 <div className="inside-body">
                     <div className="container">
                         <div className="col-sm-offset-1 col-sm-10">
+                            {subdivisions && !subdivisions.is_approved && <div className="row"><h1 className="approval-pending">Approval Pending</h1></div>}
                             <form onSubmit={onSubmit} >
-
                                 <fieldset>
                                     <div className="row">
                                         <FormGroup label="* Subdivision Name" id="name" aria-required="true">

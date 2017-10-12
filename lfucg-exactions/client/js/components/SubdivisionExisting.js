@@ -45,7 +45,7 @@ class SubdivisionExisting extends React.Component {
                             <div className={subdivision.is_approved ? 'row form-subheading' : 'row unapproved-heading'} >
                                 <div className="col-sm-11">
                                     <h3>{subdivision.name}
-                                        {!subdivision.is_approved && <span className="pull-right">Pending Approval</span>}
+                                        {!subdivision.is_approved && <span className="pull-right">Approval Pending</span>}
                                     </h3>
                                 </div>
                             </div>
@@ -71,6 +71,7 @@ class SubdivisionExisting extends React.Component {
                                     </div>
                                 </div>
                             </div>
+                            <hr />
                             <div className="row">
                                 <p className="col-md-3 col-sm-offset-1 col-sm-4 col-xs-6">Acres: {subdivision.cleaned_gross_acreage}</p>
                             </div>
