@@ -248,7 +248,7 @@ function mapDispatchToProps(dispatch) {
             dispatch(getPayments());
         },
         removeSearchPagination() {
-            dispatch(searchQuery('csv'));
+            dispatch(searchQuery('isCSV'));
         },
     };
 }
