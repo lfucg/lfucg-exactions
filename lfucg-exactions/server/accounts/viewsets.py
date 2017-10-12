@@ -15,6 +15,8 @@ from django_filters.rest_framework import DjangoFilterBackend
 
 from plats.models import Plat, Lot
 
+from .utils import update_entry
+
 class AccountViewSet(viewsets.ModelViewSet):
     serializer_class = AccountSerializer
     queryset = Account.objects.all()
@@ -50,18 +52,7 @@ class AccountViewSet(viewsets.ModelViewSet):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def update(self, request, pk):
-        existing_object  = self.get_object()
-        setattr(existing_object, 'modified_by', request.user)
-        for key, value in request.data.items():
-            for existing_object_key, existing_object_value in existing_object.__dict__.items():
-                if key == existing_object_key:
-                    if value != existing_object_value:
-                        setattr(existing_object, existing_object_key, value)
-        try:
-            existing_object.save()
-            return Response(status=status.HTTP_200_OK)
-        except Exception as e:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+        return update_entry(self, request, pk)
 
 class AgreementViewSet(viewsets.ModelViewSet):
     serializer_class = AgreementSerializer
@@ -100,18 +91,7 @@ class AgreementViewSet(viewsets.ModelViewSet):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def update(self, request, pk):
-        existing_object  = self.get_object()
-        setattr(existing_object, 'modified_by', request.user)
-        for key, value in request.data.items():
-            for existing_object_key, existing_object_value in existing_object.__dict__.items():
-                if key == existing_object_key:
-                    if value != existing_object_value:
-                        setattr(existing_object, existing_object_key, value)
-        try:
-            existing_object.save()
-            return Response(status=status.HTTP_200_OK)
-        except Exception as e:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+        return update_entry(self, request, pk)
             
 class PaymentViewSet(viewsets.ModelViewSet):
     serializer_class = PaymentSerializer
@@ -160,18 +140,7 @@ class PaymentViewSet(viewsets.ModelViewSet):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def update(self, request, pk):
-        existing_object  = self.get_object()
-        setattr(existing_object, 'modified_by', request.user)
-        for key, value in request.data.items():
-            for existing_object_key, existing_object_value in existing_object.__dict__.items():
-                if key == existing_object_key:
-                    if value != existing_object_value:
-                        setattr(existing_object, existing_object_key, value)
-        try:
-            existing_object.save()
-            return Response(status=status.HTTP_200_OK)
-        except Exception as e:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+        return update_entry(self, request, pk)
             
 class ProjectViewSet(viewsets.ModelViewSet):
     serializer_class = ProjectSerializer
@@ -212,18 +181,7 @@ class ProjectViewSet(viewsets.ModelViewSet):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def update(self, request, pk):
-        existing_object  = self.get_object()
-        setattr(existing_object, 'modified_by', request.user)
-        for key, value in request.data.items():
-            for existing_object_key, existing_object_value in existing_object.__dict__.items():
-                if key == existing_object_key:
-                    if value != existing_object_value:
-                        setattr(existing_object, existing_object_key, value)
-        try:
-            existing_object.save()
-            return Response(status=status.HTTP_200_OK)
-        except Exception as e:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+        return update_entry(self, request, pk)
             
 class ProjectCostEstimateViewSet(viewsets.ModelViewSet):
     serializer_class = ProjectCostEstimateSerializer
@@ -261,18 +219,7 @@ class ProjectCostEstimateViewSet(viewsets.ModelViewSet):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def update(self, request, pk):
-        existing_object  = self.get_object()
-        setattr(existing_object, 'modified_by', request.user)
-        for key, value in request.data.items():
-            for existing_object_key, existing_object_value in existing_object.__dict__.items():
-                if key == existing_object_key:
-                    if value != existing_object_value:
-                        setattr(existing_object, existing_object_key, value)
-        try:
-            existing_object.save()
-            return Response(status=status.HTTP_200_OK)
-        except Exception as e:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+        return update_entry(self, request, pk)
             
 class AccountLedgerViewSet(viewsets.ModelViewSet):
     serializer_class = AccountLedgerSerializer
@@ -350,18 +297,7 @@ class AccountLedgerViewSet(viewsets.ModelViewSet):
             return Response('Invalid Entry', status=status.HTTP_400_BAD_REQUEST)
 
     def update(self, request, pk):
-        existing_object  = self.get_object()
-        setattr(existing_object, 'modified_by', request.user)
-        for key, value in request.data.items():
-            for existing_object_key, existing_object_value in existing_object.__dict__.items():
-                if key == existing_object_key:
-                    if value != existing_object_value:
-                        setattr(existing_object, existing_object_key, value)
-        try:
-            existing_object.save()
-            return Response(status=status.HTTP_200_OK)
-        except Exception as e:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+        return update_entry(self, request, pk)
                 
 class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
