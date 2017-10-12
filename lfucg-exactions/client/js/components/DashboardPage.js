@@ -37,8 +37,8 @@ class DashboardPage extends React.Component {
                                 <p>Lexington agreements based on resolution numbers or memos.</p>
                             </div>
                             <div className="col-md-4 col-sm-6">
-                                <Link to="account-ledger" role="link"><h2 className="in-page-link">Credit Transfers</h2></Link>
-                                <p>Lexington account ledgers.  Credit transfers, new credit awards, and credit payments.</p>
+                                <Link to="credit-transfer" role="link"><h2 className="in-page-link">Credit Transfers</h2></Link>
+                                <p>Lexington account ledgers for credits.  Credit transfers, new credit awards, and credit payments.</p>
                             </div>
                             <div className="col-md-4 col-sm-6">
                                 <Link to="payment" role="link"><h2 className="in-page-link">Monetary Payments</h2></Link>

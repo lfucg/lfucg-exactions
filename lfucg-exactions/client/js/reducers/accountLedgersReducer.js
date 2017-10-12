@@ -31,7 +31,7 @@ const accountLedgersReducer = (state = [], action) => {
         const prev = action.response.prev;
         if ((next != null && next.startsWith('/ledger')) ||
             (prev != null && prev.startsWith('/ledger')) ||
-            (window.location.hash === '#/account-ledger')) {
+            (window.location.hash === '#/credit-transfer')) {
             return action.response;
         }
         return state;

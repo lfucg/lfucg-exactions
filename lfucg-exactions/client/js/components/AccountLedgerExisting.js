@@ -70,7 +70,7 @@ class AccountLedgerExisting extends React.Component {
                             <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
                                 <div className="col-xs-5">
                                     {currentUser && currentUser.permissions && currentUser.permissions.accountledger &&
-                                        <Link to={`account-ledger/form/${accountLedger.id}`} aria-label="Edit">
+                                        <Link to={`credit-transfer/form/${accountLedger.id}`} aria-label="Edit">
                                             <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
                                             <div className="col-xs-7 link-label">
                                                 Edit
@@ -79,7 +79,7 @@ class AccountLedgerExisting extends React.Component {
                                     }
                                 </div>
                                 <div className="col-xs-5 ">
-                                    <Link to={`account-ledger/summary/${accountLedger.id}`} aria-label="Summary">
+                                    <Link to={`credit-transfer/summary/${accountLedger.id}`} aria-label="Summary">
                                         <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
                                         <div className="col-xs-7 link-label">
                                             Summary
@@ -115,7 +115,7 @@ class AccountLedgerExisting extends React.Component {
 
                 <div className="form-header">
                     <div className="container">
-                        <h1>ACCOUNT LEDGERS - EXISTING</h1>
+                        <h1>CREDIT TRANSFERS - EXISTING</h1>
                     </div>
                 </div>
 
