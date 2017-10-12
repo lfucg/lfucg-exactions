@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { hashHistory } from 'react-router';
+import PropTypes from 'prop-types';
 
 import Navbar from './Navbar';
 import Footer from './Footer';
@@ -13,12 +14,6 @@ import {
 } from '../actions/apiActions';
 
 class Login extends React.Component {
-    static propTypes = {
-        activeForm: React.PropTypes.object,
-        route: React.PropTypes.object,
-        onLogin: React.PropTypes.func,
-    }
-
     render() {
         const {
             activeForm,
@@ -48,7 +43,7 @@ class Login extends React.Component {
                                     <div className="row">
                                         <div className="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
                                             <FormGroup label="Username" id="username">
-                                                <input type="text" className="form-control" placeholder="Username" aria-label="Username" autofocus/>
+                                                <input type="text" className="form-control" placeholder="Username" aria-label="Username" autoFocus />
                                             </FormGroup>
                                         </div>
                                     </div>
@@ -89,6 +84,12 @@ class Login extends React.Component {
         );
     }
 }
+
+Login.propTypes = {
+    activeForm: PropTypes.object,
+    route: PropTypes.object,
+    onLogin: PropTypes.func,
+};
 
 function mapStateToProps(state) {
     return {

@@ -3,6 +3,8 @@
 *.sw[po]
 *.egg*
 .coverage
+.env
+.env.json
 pip-log.txt
 docs/_gh-pages
 build.py
@@ -20,6 +22,6 @@ test_db/
 .vagrant
 *.sublime-project
 *.sublime-workspace
-media/*
 static/*
+media/*
 exactions

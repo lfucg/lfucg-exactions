@@ -3,9 +3,10 @@ from rest_framework import routers
 
 from accounts.auth import *
 from plats.viewsets import *
+from plats.views import PlatCSVExportView
 from notes.viewsets import *
 from accounts.viewsets import *
-from accounts.views import CurrentUserDetails
+from .views import CurrentUserDetails
 
 router = routers.DefaultRouter()
 
@@ -21,6 +22,7 @@ router.register(r'worksheet', CalculationWorksheetViewSet)
 router.register(r'note', NoteViewSet)
 router.register(r'rateTable', RateTableViewSet)
 router.register(r'rate', RateViewSet)
+router.register(r'upload', FileUploadViewSet)
 
 router.register(r'account', AccountViewSet)
 router.register(r'agreement', AgreementViewSet)
@@ -36,6 +38,8 @@ urlpatterns = [
     url(r'^forgot-password/$', forgot_password),
     url(r'^forgot-username/$', forgot_username),
     url(r'^delete_token/', Logout.as_view()),
+    url(r'^upload/create/$', FileUploadCreate.as_view(), name="document-upload"),
+    url(r'^export_plat_csv/$', PlatCSVExportView.as_view()),
 
     url(r'^', include(router.urls)),
 ]

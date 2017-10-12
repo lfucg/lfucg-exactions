@@ -1,5 +1,5 @@
-import axios from 'axios';
 import Promise from 'bluebird';
+import axios from 'axios';
 
 import {
   API_CALL,
@@ -9,7 +9,6 @@ import {
 } from '../constants/actionTypes';
 import {
     BASE_URL,
-    LOGIN,
 } from '../constants/apiConstants';
 
 export default function api({ getState, dispatch }) {
@@ -33,12 +32,29 @@ export default function api({ getState, dispatch }) {
         if (shouldCallAPI && !shouldCallAPI()) {
             return next(action);
         }
-        console.log('GLOBAL TOKEN', global.auth_token);
+        let stored_token;
+        try {
+            stored_token = localStorage.getItem('Token');
+        } catch (e) {
+            const index_token = document.cookie.indexOf('Token=');
+            if (index_token) {
+                const semicolon = index_token + 5 + document.cookie.substring(index_token).indexOf(';');
+                stored_token = document.cookie.substring(index_token, semicolon);
+            } else {
+                stored_token = null;
+            }
+        }
+
+        const authorization = global.Authorization ? global.Authorization : stored_token;
+        const header = (authorization !== null) ? {
+            'X-CSRFToken': global.CSRFToken,
+            Authorization: `Token ${authorization}`,
+        } : {
+            'X-CSRFToken': global.CSRFToken,
+        };
+
         return Promise.resolve(axios({
-            headers: {
-                'X-CSRFToken': global.CSRFToken,
-                Authorization: global.Authorization,
-            },
+            headers: header,
             url: baseURL + (typeof url === 'function' ? url(getState) : url),
             params: typeof qs === 'function' ? qs(getState) : qs,
             data: typeof body === 'function' ? body(getState) : body,
@@ -48,9 +64,6 @@ export default function api({ getState, dispatch }) {
             const error = responseValidation ?
             responseValidation(response.data, { getState, dispatch }) :
             null;
-            if (endpoint === LOGIN) {
-                global.Authorization = `Token ${response.data.key}`;
-            }
             if (error) {
                 dispatch({
                     type: API_CALL_VALIDATION_ERROR,
@@ -58,6 +71,19 @@ export default function api({ getState, dispatch }) {
                 });
                 return Promise.reject(error);
             }
+
+            if (response.data.results) {
+                const adjustedResponse = response.data.results;
+                adjustedResponse.next = response.data.next ? response.data.next.slice(response.data.next.indexOf('api') + 3, response.data.next.length) : null;
+                adjustedResponse.prev = response.data.previous ? response.data.previous.slice(response.data.previous.indexOf('api') + 3, response.data.previous.length) : null;
+                adjustedResponse.count = response.data.count;
+                return dispatch({
+                    type: API_CALL_SUCCESS,
+                    response: adjustedResponse,
+                    endpoint,
+                });
+            }
+
             return dispatch({
                 type: API_CALL_SUCCESS,
                 response: response.data,

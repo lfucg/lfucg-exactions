@@ -1,8 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import {
-    hashHistory,
-} from 'react-router';
+import PropTypes from 'prop-types';
 
 import FormGroup from './FormGroup';
 
@@ -13,23 +11,10 @@ import {
 import {
     postPlatZone,
     putPlatZone,
+    getPlatID,
 } from '../actions/apiActions';
 
 class PlatZoneForm extends React.Component {
-    static propTypes = {
-        activeForm: React.PropTypes.object,
-        plats: React.PropTypes.object,
-        plat_zone_id: React.PropTypes.string,
-        plat_zone_value: React.PropTypes.number,
-        acre_id: React.PropTypes.string,
-        acre_value: React.PropTypes.number,
-        zone_id: React.PropTypes.string,
-        zone_value: React.PropTypes.string,
-        onComponentDidMount: React.PropTypes.func,
-        formChange: React.PropTypes.func,
-        onPlatZoneSubmit: React.PropTypes.func,
-    };
-
     componentDidMount() {
         this.props.onComponentDidMount({
             plat_zone_id: this.props.plat_zone_id,
@@ -63,22 +48,14 @@ class PlatZoneForm extends React.Component {
                         <div className="row">
                             <div className="col-sm-6 form-group">
                                 <label htmlFor="plat" className="form-label" id="plat">* Plat</label>
-                                <select className="form-control" id="plat" onChange={formChange('plat')} >
-                                    {activeForm.plat ? (
-                                        <option value="choose_plat" aria-label={activeForm.plat_name}>
-                                            {activeForm.plat_name}
-                                        </option>
-                                    ) : (
-                                        <option value="choose_plat" aria-label="Select a Plat">
-                                            Visit appropriate plat entry form for other plats.
-                                        </option>
-                                    )}
+                                <select className="form-control" id="plat" onChange={formChange('plat')} value={activeForm.plat_name} disabled>
+                                    <option value="start_plat">{activeForm.plat_name}</option>
                                 </select>
                             </div>
                         </div>
                         <div className="row">
                             <div className="col-sm-6 form-group">
-                                <label htmlFor={this.props.zone_id} className="form-label" id={this.props.zone_id}>* Zone</label>
+                                <label htmlFor={this.props.zone_id} className="form-label">* Zone</label>
                                 <select className="form-control" id={this.props.zone_id} onChange={formChange('zone')} >
                                     {this.props.zone_value ? (
                                         <option value="zone_name" aria-label={this.props.zone_value}>{this.props.zone_value}</option>
@@ -86,7 +63,7 @@ class PlatZoneForm extends React.Component {
                                         <option value="start_zone" aria-label="Zone">Zone</option>
                                     )}
                                     <option value={['EAR-1', 'EAR-1']}>EAR-1</option>
-                                    <option value={['EAR-1SRA', 'EAR-1SRA']}>EAR-1SRA</option>
+                                    <option value={['EAR1-SRA', 'EAR1-SRA']}>EAR1-SRA</option>
                                     <option value={['EAR-2', 'EAR-2']}>EAR-2</option>
                                     <option value={['EAR-3', 'EAR-3']}>EAR-3</option>
                                     <option value={['CC(RES)', 'CC(RES)']}>CC(RES)</option>
@@ -115,6 +92,20 @@ class PlatZoneForm extends React.Component {
     }
 }
 
+PlatZoneForm.propTypes = {
+    activeForm: PropTypes.object,
+    plats: PropTypes.array,
+    plat_zone_id: PropTypes.string,
+    plat_zone_value: PropTypes.number,
+    acre_id: PropTypes.string,
+    acre_value: PropTypes.string,
+    zone_id: PropTypes.string,
+    zone_value: PropTypes.string,
+    onComponentDidMount: PropTypes.func,
+    formChange: PropTypes.func,
+    onPlatZoneSubmit: PropTypes.func,
+};
+
 function mapStateToProps(state) {
     return {
         activeForm: state.activeForm,
@@ -124,6 +115,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch, props) {
     const selectedPlatZone = props.plat_zone_value;
+    const selectedPlatZoneId = props.zone_id;
 
     return {
         onComponentDidMount(pass_props) {
@@ -145,22 +137,56 @@ function mapDispatchToProps(dispatch, props) {
                 const value_id = value.substring(0, comma_index);
                 const value_name = value.substring(comma_index + 1, value.length);
                 const field_name = `${[field]}_name`;
+                const field_show = `${[field]}_show`;
 
                 const update = {
                     [field]: value_id,
                     [field_name]: value_name,
+                    [field_show]: value,
                 };
                 dispatch(formUpdate(update));
             };
         },
         onPlatZoneSubmit(activeForm) {
             return () => {
+                const plat_zone_update = {
+                    zone_section: true,
+                };
+                dispatch(formUpdate(plat_zone_update));
                 if (selectedPlatZone) {
-                    const zone = activeForm.activeForm[`${props.zone_id}`];
+                    // setting zone based on the submitted select to avoid mishaps on clicking a different submit button than the one changed.
+                    let zone = document.getElementById(`${selectedPlatZoneId}`);
+                    zone = zone.options[zone.selectedIndex].value;
+                    zone = zone.substr(0, zone.indexOf(','));
+
                     const acres = activeForm.activeForm[`${props.acre_id}`];
-                    dispatch(putPlatZone(selectedPlatZone, zone, acres));
+                    dispatch(putPlatZone(selectedPlatZone, zone, acres))
+                    .then(() => {
+                        dispatch(getPlatID(activeForm.activeForm.plat))
+                        .then((zone_put_get_plat) => {
+                            const zone_put_update = {
+                                sewer_due: zone_put_get_plat.response.sewer_due,
+                                non_sewer_due: zone_put_get_plat.response.non_sewer_due,
+                                calculation_note: zone_put_get_plat.response.calculation_note,
+                                add_another_plat_zone: false,
+                            };
+                            dispatch(formUpdate(zone_put_update));
+                        });
+                    });
                 } else {
-                    dispatch(postPlatZone());
+                    dispatch(postPlatZone())
+                    .then(() => {
+                        dispatch(getPlatID(activeForm.activeForm.plat))
+                        .then((zone_post_get_plat) => {
+                            const zone_post_update = {
+                                sewer_due: zone_post_get_plat.response.sewer_due,
+                                non_sewer_due: zone_post_get_plat.response.non_sewer_due,
+                                calculation_note: zone_post_get_plat.response.calculation_note,
+                                add_another_plat_zone: false,
+                            };
+                            dispatch(formUpdate(zone_post_update));
+                        });
+                    });
                 }
             };
         },

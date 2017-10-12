@@ -2,102 +2,101 @@ from rest_framework import serializers
 
 from django.contrib.auth.models import User
 from .models import *
+from .utils import calculate_account_balance, calculate_agreement_balance
+from plats.models import Plat, Lot
+from plats.serializers import PlatSerializer, LotSerializer
 
-class AccountLedgerSerializer(serializers.ModelSerializer):
+class LotField(serializers.Field):
+    def to_internal_value(self, data):
+        try: 
+            return Lot.objects.get(id=data)
+        except: 
+            return None
+
+    def to_representation(self, obj):
+        return LotSerializer(obj).data
+
+class AccountSerializer(serializers.ModelSerializer):
+    plat_account = PlatSerializer(many=True, required=False)
+    lot_account = LotSerializer(many=True, required=False)
+
+    address_state_display = serializers.SerializerMethodField(read_only=True)
+
+    balance = serializers.SerializerMethodField(read_only=True)
+
+    def get_address_state_display(self, obj):
+        return obj.get_address_state_display()
+
+    def get_balance(self, obj):
+        calculated_balance = calculate_account_balance(obj.id)
+
+        if calculated_balance > 0:
+            return {
+                'balance': '${:,.2f}'.format(calculated_balance),
+                'credit_availability': 'Credit Available'
+            }
+        else:
+            return {
+                'balance': '${:,.2f}'.format(calculated_balance),
+                'credit_availability': 'No Credit Available'
+            }
+
     class Meta:
-        model = AccountLedger
+        model = Account
         fields = (
             'id',
-            'is_approved',
-            'is_active',
-            'entry_date',
-            'date_created',
-            'date_modified',
-            'created_by',
-            'modified_by',
-            'account_from',
-            'account_to',
-            'lot',
-            'agreement',
-            'entry_type',
-            'non_sewer_credits',
-            'sewer_credits',
-        )
-
-class PaymentSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Payment
-        fields = (
-            'id',
-            'is_approved',
-            'is_active',
-            'lot_id',
-            'date_created',
-            'date_modified',
-            'created_by',
-            'modified_by',
-            'paid_by',
-            'paid_by_type',
-            'payment_type',
-            'check_number',
-            'credit_source',
-            'credit_account',
-            'paid_roads',
-            'paid_sewer_trans',
-            'paid_sewer_cap',
-            'paid_parks',
-            'paid_storm',
-            'paid_open_space',
-        )
-
-class ProjectCostEstimateSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ProjectCostEstimate
-        fields = (
-            'id',
-            'is_approved',
             'is_active',
             'date_created',
             'date_modified',
             'created_by',
             'modified_by',
-            'project_id',
-            'estimate_type',
-            'land_cost',
-            'design_cost',
-            'construction_cost',
-            'admin_cost',
-            'management_cost',
-            'credits_available',
+
+            'plat_account',
+            'lot_account',
+
+            'account_name',
+            'contact_first_name',
+            'contact_last_name',
+            'contact_full_name',
+
+            'address_number',
+            'address_street',
+            'address_city',
+            'address_state',
+            'address_zip',
+            'address_full',
+
+            'phone',
+            'email',
+
+            'address_state_display',
+
+            'balance',
         )
 
-class ProjectSerializer(serializers.ModelSerializer):
-    project_cost_estimates = ProjectCostEstimateSerializer(many=True, read_only=True)
+class AccountField(serializers.Field):
+    def to_internal_value(self, data):
+        try: 
+            return Account.objects.get(id=data)
+        except: 
+            return None
 
-    class Meta:
-        model = Project
-        fields = (
-            'id',
-            'is_approved',
-            'is_active',
-            'date_created',
-            'date_modified',
-            'created_by',
-            'modified_by',
-            'agreement_id',
-            'expansion_area',
-            'project_category',
-            'project_type',
-            'project_description',
-            'project_status',
-            'status_date',
-            'project_cost_estimates',
-        )
+    def to_representation(self, obj):
+        return AccountSerializer(obj).data
 
 class AgreementSerializer(serializers.ModelSerializer):
-    projects = ProjectSerializer(many=True, read_only=True)
-    account_ledgers = AccountLedgerSerializer(many=True, read_only=True)
-    payments = PaymentSerializer(many=True, read_only=True)
+    account_id = AccountField()
+
+    agreement_type_display = serializers.SerializerMethodField(read_only=True)
+    agreement_balance = serializers.SerializerMethodField(read_only=True)
+
+    def get_agreement_type_display(self, obj):
+        return obj.get_agreement_type_display()
+
+    def get_agreement_balance(self, obj):
+        return {
+            'total': '${:,.2f}'.format(calculate_agreement_balance(obj.id)),
+        }
 
     class Meta:
         model = Agreement
@@ -110,40 +109,216 @@ class AgreementSerializer(serializers.ModelSerializer):
             'date_modified',
             'created_by',
             'modified_by',
+
             'account_id',
+
             'resolution_number',
             'expansion_area',
             'agreement_type',
-            'projects',
-            'account_ledgers',
+
+            'agreement_type_display',
+            'agreement_balance',
         )
 
-class AccountSerializer(serializers.ModelSerializer):
-    agreements = AgreementSerializer(many=True, read_only=True)
-    account_ledgers = AccountLedgerSerializer(many=True, read_only=True)
-    payments = PaymentSerializer(many=True, read_only=True)
+class AgreementField(serializers.Field):
+    def to_internal_value(self, data):
+        try: 
+            return Agreement.objects.get(id=data)
+        except: 
+            return None
+
+    def to_representation(self, obj):
+        return AgreementSerializer(obj).data
+
+class ProjectSerializer(serializers.ModelSerializer):
+    agreement_id = AgreementField()
+
+    project_category_display = serializers.SerializerMethodField(read_only=True)
+    project_type_display = serializers.SerializerMethodField(read_only=True)
+    project_status_display = serializers.SerializerMethodField(read_only=True)
+
+    def get_project_category_display(self, obj):
+        return obj.get_project_category_display()
+
+    def get_project_type_display(self, obj):
+        return obj.get_project_type_display()
+
+    def get_project_status_display(self, obj):
+        return obj.get_project_status_display()
 
     class Meta:
-        model = Account
+        model = Project
         fields = (
             'id',
+            'is_approved',
             'is_active',
             'date_created',
             'date_modified',
             'created_by',
             'modified_by',
-            'account_name',
-            'contact_first_name',
-            'contact_last_name',
-            'contact_full_name',
-            'address_city',
-            'address_state',
-            'address_zip',
-            'address_full',
-            'phone',
-            'email',
-            'agreements',
-            'account_ledgers',
+
+            'agreement_id',
+
+            'name',
+            'expansion_area',
+
+            'project_category',
+            'project_type',
+            'project_status',
+            'status_date',
+            'project_description',
+
+            'project_category_display',
+            'project_type_display',
+            'project_status_display',
+
+            'project_description',
+            'status_date',
+        )
+
+class ProjectField(serializers.Field):
+    def to_internal_value(self, data):
+        try: 
+            return Project.objects.get(id=data)
+        except: 
+            return None
+
+    def to_representation(self, obj):
+        return ProjectSerializer(obj).data
+
+class ProjectCostEstimateSerializer(serializers.ModelSerializer):
+    project_id = ProjectField()
+
+    total_costs = serializers.SerializerMethodField(read_only=True)
+
+    def get_total_costs(self,obj):
+        total = (
+            obj.land_cost +
+            obj.design_cost +
+            obj.construction_cost +
+            obj.admin_cost +
+            obj.management_cost
+        )
+        return total
+
+    class Meta:
+        model = ProjectCostEstimate
+        fields = (
+            'id',
+            'is_approved',
+            'is_active',
+            'date_created',
+            'date_modified',
+            'created_by',
+            'modified_by',
+
+            'project_id',
+
+            'estimate_type',
+            'land_cost',
+            'design_cost',
+            'construction_cost',
+            'admin_cost',
+            'management_cost',
+            'other_cost',
+            'credits_available',
+
+            'total_costs',
+        )
+
+class AccountLedgerSerializer(serializers.ModelSerializer):
+    lot = LotField()
+    agreement = AgreementField()
+    account_from = AccountField()
+    account_to = AccountField()
+
+    entry_type_display = serializers.SerializerMethodField(read_only=True)
+
+    def get_entry_type_display(self, obj):
+        return obj.get_entry_type_display()
+
+    class Meta:
+        model = AccountLedger
+        fields = (
+            'id',
+            'is_approved',
+            'is_active',
+            'entry_date',
+            'date_created',
+            'date_modified',
+            'created_by',
+            'modified_by',
+            
+            'account_from',
+            'account_to',
+            'lot',
+            'agreement',
+
+            'entry_type',
+            'non_sewer_credits',
+            'sewer_credits',
+
+            'entry_type_display',
+        )
+
+class PaymentSerializer(serializers.ModelSerializer):
+    lot_id = LotField()
+    credit_account = AccountField()
+    credit_source = AgreementField(read_only=True)
+
+    total_paid = serializers.SerializerMethodField(read_only=True)
+    payment_type_display = serializers.SerializerMethodField(read_only=True)
+    paid_by_type_display = serializers.SerializerMethodField(read_only=True)
+
+    lot_id = LotField()
+
+    def get_total_paid(self,obj):
+        total = (
+            obj.paid_roads +
+            obj.paid_sewer_trans +
+            obj.paid_sewer_cap +
+            obj.paid_parks +
+            obj.paid_storm +
+            obj.paid_open_space
+        )
+        return total
+
+    def get_payment_type_display(self, obj):
+        return obj.get_payment_type_display()
+
+    def get_paid_by_type_display(self, obj):
+        return obj.get_paid_by_type_display()
+
+    class Meta:
+        model = Payment
+        fields = (
+            'id',
+            'is_approved',
+            'is_active',
+            'date_created',
+            'date_modified',
+            'created_by',
+            'modified_by',
+
+            'lot_id',
+            'credit_source',
+            'credit_account',
+
+            'paid_by',
+            'paid_by_type',
+            'payment_type',
+            'check_number',
+
+            'paid_roads',
+            'paid_sewer_trans',
+            'paid_sewer_cap',
+            'paid_parks',
+            'paid_storm',
+            'paid_open_space',
+
+            'total_paid',
+            'payment_type_display',
+            'paid_by_type_display',
         )
 
 class UserSerializer(serializers.ModelSerializer):

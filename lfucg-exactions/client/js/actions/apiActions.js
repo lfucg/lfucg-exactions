@@ -2,13 +2,12 @@ import {
   API_CALL,
 } from '../constants/actionTypes';
 
+import { map, reduce, filter, compose } from 'ramda';
+
 import {
     ME,
 
     LOGIN,
-    REGISTER,
-    PASSWORD,
-    SEND_USERNAME,
     LOGOUT,
 
     GET_SUBDIVISIONS,
@@ -18,19 +17,70 @@ import {
 
     GET_PLATS,
     GET_PLAT_ID,
+    GET_SUBDIVISION_PLATS,
     POST_PLAT,
     PUT_PLAT,
 
-    GET_PLAT_ZONES,
-    GET_PLAT_ZONE_ID,
     POST_PLAT_ZONE,
     PUT_PLAT_ZONE,
     PUT_PLAT_ZONE_DUES,
 
     GET_LOTS,
     GET_LOT_ID,
+    GET_PLAT_LOTS,
     POST_LOT,
     PUT_LOT,
+    PUT_PERMIT_ID_ON_LOT,
+
+    GET_ACCOUNTS,
+    GET_ACCOUNT_ID,
+    GET_LFUCG_ACCOUNT,
+    POST_ACCOUNT,
+    PUT_ACCOUNT,
+
+    GET_NOTE_CONTENT,
+    POST_NOTE,
+
+    GET_UPLOAD_CONTENT,
+    POST_UPLOAD,
+
+    GET_AGREEMENTS,
+    GET_AGREEMENT_ID,
+    GET_ACCOUNT_AGREEMENTS,
+    POST_AGREEMENT,
+    PUT_AGREEMENT,
+
+    GET_PAYMENTS,
+    GET_PAYMENT_ID,
+    GET_LOT_PAYMENTS,
+    GET_ACCOUNT_PAYMENTS,
+    GET_AGREEMENT_PAYMENTS,
+    POST_PAYMENT,
+    PUT_PAYMENT,
+
+    GET_PROJECTS,
+    GET_PROJECT_ID,
+    GET_AGREEMENT_PROJECTS,
+    POST_PROJECT,
+    PUT_PROJECT,
+
+    GET_PROJECT_COSTS,
+    GET_PROJECT_COST_ID,
+    GET_PROJECT_PROJECT_COSTS,
+    POST_PROJECT_COST,
+    PUT_PROJECT_COST,
+
+    GET_ACCOUNT_LEDGERS,
+    GET_ACCOUNT_LEDGER_ID,
+    GET_LOT_ACCOUNT_LEDGERS,
+    GET_ACCOUNT_ACCOUNT_LEDGERS,
+    GET_AGREEMENT_ACCOUNT_LEDGERS,
+    POST_ACCOUNT_LEDGER,
+    PUT_ACCOUNT_LEDGER,
+
+    GET_PAGINATION,
+    SEARCH_QUERY,
+
 } from '../constants/apiConstants';
 
 export function getMe() {
@@ -59,76 +109,6 @@ export function login() {
             return {
                 username,
                 password,
-            };
-        },
-    };
-}
-
-export function register() {
-    return {
-        type: API_CALL,
-        endpoint: REGISTER,
-        url: '/register/',
-        method: 'POST',
-        body: (getState) => {
-            const {
-                activeForm,
-            } = getState();
-            const {
-                username_1,
-                password_1,
-                // password_2,
-                first_name,
-                last_name,
-                email,
-            } = activeForm;
-            return {
-                username: username_1,
-                password_1,
-                // password_2,
-                first_name,
-                last_name,
-                email,
-            };
-        },
-    };
-}
-
-export function passwordReset() {
-    return {
-        type: API_CALL,
-        endpoint: PASSWORD,
-        url: '/forgot-password/',
-        method: 'POST',
-        body: (getState) => {
-            const {
-                activeForm,
-            } = getState();
-            const {
-                email_2,
-            } = activeForm;
-            return {
-                email: email_2,
-            };
-        },
-    };
-}
-
-export function sendUsername() {
-    return {
-        type: API_CALL,
-        endpoint: SEND_USERNAME,
-        url: '/forgot-username/',
-        method: 'POST',
-        body: (getState) => {
-            const {
-                activeForm,
-            } = getState();
-            const {
-                email_3,
-            } = activeForm;
-            return {
-                email: email_3,
             };
         },
     };
@@ -169,18 +149,12 @@ export function postSubdivision() {
         body: (getState) => {
             const {
                 activeForm,
-                currentUser,
             } = getState();
             const {
                 name,
                 gross_acreage,
             } = activeForm;
-            const {
-                id,
-            } = currentUser;
             return {
-                created_by: id,
-                modified_by: id,
                 name,
                 gross_acreage,
             };
@@ -197,18 +171,12 @@ export function putSubdivision(selectedSubdivision) {
         body: (getState) => {
             const {
                 activeForm,
-                currentUser,
             } = getState();
             const {
                 name,
                 gross_acreage,
             } = activeForm;
-            const {
-                id,
-            } = currentUser;
             return {
-                created_by: id,
-                modified_by: id,
                 name,
                 gross_acreage,
             };
@@ -233,6 +201,14 @@ export function getPlatID(selectedPlat) {
     };
 }
 
+export function getSubdivisionPlats(selectedSubdivision) {
+    return {
+        type: API_CALL,
+        endpoint: GET_SUBDIVISION_PLATS,
+        url: `/plat/?subdivision=${selectedSubdivision}`,
+    };
+}
+
 export function postPlat() {
     return {
         type: API_CALL,
@@ -242,7 +218,6 @@ export function postPlat() {
         body: (getState) => {
             const {
                 activeForm,
-                currentUser,
             } = getState();
             const {
                 subdivision,
@@ -263,13 +238,9 @@ export function postPlat() {
                 calculation_note,
                 sewer_due,
                 non_sewer_due,
+                account,
             } = activeForm;
-            const {
-                id,
-            } = currentUser;
             return {
-                created_by: id,
-                modified_by: id,
                 name,
                 subdivision,
                 date_recorded,
@@ -288,6 +259,7 @@ export function postPlat() {
                 calculation_note,
                 sewer_due,
                 non_sewer_due,
+                account,
             };
         },
     };
@@ -302,7 +274,6 @@ export function putPlat(selectedPlat) {
         body: (getState) => {
             const {
                 activeForm,
-                currentUser,
             } = getState();
             const {
                 subdivision,
@@ -323,13 +294,9 @@ export function putPlat(selectedPlat) {
                 calculation_note,
                 sewer_due,
                 non_sewer_due,
+                account,
             } = activeForm;
-            const {
-                id,
-            } = currentUser;
             return {
-                created_by: id,
-                modified_by: id,
                 name,
                 subdivision,
                 date_recorded,
@@ -348,6 +315,7 @@ export function putPlat(selectedPlat) {
                 calculation_note,
                 sewer_due,
                 non_sewer_due,
+                account,
             };
         },
     };
@@ -363,19 +331,13 @@ export function postPlatZone() {
         body: (getState) => {
             const {
                 activeForm,
-                currentUser,
             } = getState();
             const {
                 plat,
                 zone,
                 acres,
             } = activeForm;
-            const {
-                id,
-            } = currentUser;
             return {
-                created_by: id,
-                modified_by: id,
                 plat,
                 zone,
                 acres,
@@ -393,17 +355,11 @@ export function putPlatZone(selectedPlatZone, zone, acres) {
         body: (getState) => {
             const {
                 activeForm,
-                currentUser,
             } = getState();
             const {
                 plat,
             } = activeForm;
-            const {
-                id,
-            } = currentUser;
             return {
-                created_by: id,
-                modified_by: id,
                 plat,
                 zone,
                 acres,
@@ -431,17 +387,11 @@ export function putPlatZoneDues(
         body: (getState) => {
             const {
                 activeForm,
-                currentUser,
             } = getState();
             const {
                 plat,
             } = activeForm;
-            const {
-                id,
-            } = currentUser;
             return {
-                created_by: id,
-                modified_by: id,
                 plat,
                 zone,
                 acres,
@@ -473,6 +423,14 @@ export function getLotID(selectedLot) {
     };
 }
 
+export function getPlatLots(selectedPlat) {
+    return {
+        type: API_CALL,
+        endpoint: GET_PLAT_LOTS,
+        url: `/lot/?plat=${selectedPlat}`,
+    };
+}
+
 export function postLot() {
     return {
         type: API_CALL,
@@ -482,7 +440,6 @@ export function postLot() {
         body: (getState) => {
             const {
                 activeForm,
-                currentUser,
             } = getState();
             const {
                 plat,
@@ -511,14 +468,9 @@ export function postLot() {
                 dues_storm_own,
                 dues_open_space_dev,
                 dues_open_space_own,
-                // payment,
+                account,
             } = activeForm;
-            const {
-                id,
-            } = currentUser;
             return {
-                created_by: id,
-                modified_by: id,
                 plat,
                 parcel_id,
                 lot_number,
@@ -533,7 +485,7 @@ export function postLot() {
                 address_city,
                 address_state,
                 address_zip,
-                address_full: `${address_number} ${address_direction ? address_direction : null} ${address_street} ${address_suffix ? address_suffix : null} ${address_unit ? address_unit : null}, ${address_city}, ${address_state} ${address_zip}`,
+                address_full: `${address_number} ${address_direction ? address_direction : ''} ${address_street} ${address_suffix ? address_suffix : ''} ${address_unit ? address_unit : ''}, Lexington, KY ${address_zip}`,
                 dues_roads_dev,
                 dues_roads_own,
                 dues_sewer_trans_dev,
@@ -546,7 +498,7 @@ export function postLot() {
                 dues_storm_own,
                 dues_open_space_dev,
                 dues_open_space_own,
-                // payment,
+                account,
             };
         },
     };
@@ -561,7 +513,6 @@ export function putLot(selectedLot) {
         body: (getState) => {
             const {
                 activeForm,
-                currentUser,
             } = getState();
             const {
                 plat,
@@ -590,14 +541,10 @@ export function putLot(selectedLot) {
                 dues_storm_own,
                 dues_open_space_dev,
                 dues_open_space_own,
+                account,
                 // payment,
             } = activeForm;
-            const {
-                id,
-            } = currentUser;
             return {
-                created_by: id,
-                modified_by: id,
                 plat,
                 parcel_id,
                 lot_number,
@@ -612,7 +559,7 @@ export function putLot(selectedLot) {
                 address_city,
                 address_state,
                 address_zip,
-                address_full: `${address_number} ${address_direction ? address_direction : null} ${address_street} ${address_suffix ? address_suffix : null} ${address_unit ? address_unit : null}, ${address_city}, ${address_state} ${address_zip}`,
+                address_full: `${address_number} ${address_direction ? address_direction : ''} ${address_street} ${address_suffix ? address_suffix : ''} ${address_unit ? address_unit : ''}, Lexington, KY ${address_zip}`,
                 dues_roads_dev,
                 dues_roads_own,
                 dues_sewer_trans_dev,
@@ -625,8 +572,817 @@ export function putLot(selectedLot) {
                 dues_storm_own,
                 dues_open_space_dev,
                 dues_open_space_own,
+                account,
                 // payment,
             };
+        },
+    };
+}
+
+export function putPermitIdOnLot(selectedLot) {
+    return {
+        type: API_CALL,
+        endpoint: PUT_PERMIT_ID_ON_LOT,
+        url: `/lot/${selectedLot}/`,
+        method: 'PUT',
+        body: (getState) => {
+            const {
+                activeForm,
+            } = getState();
+            const {
+                permit_id,
+            } = activeForm;
+            return {
+                permit_id,
+            };
+        },
+    };
+}
+
+// NOTES
+export function getNoteContent() {
+    return {
+        type: API_CALL,
+        endpoint: GET_NOTE_CONTENT,
+        url: (getState) => {
+            const {
+                activeForm,
+            } = getState();
+            const {
+                content_type,
+                object_id,
+                parent_content_type,
+                parent_object_id,
+            } = activeForm;
+
+            const related_notes = parent_content_type ? `/note/?content_type=${content_type}&object_id=${object_id}&parent_content_type=${parent_content_type}&parent_object_id=${parent_object_id}` : `/note/?content_type=${content_type}&object_id=${object_id}`;
+            return related_notes;
+        },
+    };
+}
+
+export function postNote() {
+    return {
+        type: API_CALL,
+        endpoint: POST_NOTE,
+        url: '/note/',
+        method: 'POST',
+        body: (getState) => {
+            const {
+                activeForm,
+                currentUser,
+            } = getState();
+            const {
+                note,
+                content_type,
+                object_id,
+            } = activeForm;
+            const {
+                id,
+            } = currentUser;
+            return {
+                user: id,
+                note,
+                content_type,
+                object_id,
+            };
+        },
+    };
+}
+
+// UPLOADS
+export function getUploadContent() {
+    return {
+        type: API_CALL,
+        endpoint: GET_UPLOAD_CONTENT,
+        url: (getState) => {
+            const {
+                activeForm,
+            } = getState();
+            const {
+                file_content_type,
+                file_object_id,
+            } = activeForm;
+            return `/upload/?file_content_type=${file_content_type}&file_object_id=${file_object_id}`;
+        },
+    };
+}
+
+export function postUpload(files) {
+    return {
+        type: API_CALL,
+        endpoint: POST_UPLOAD,
+        url: '/upload/create/',
+        method: 'POST',
+        body: (getState) => {
+            const {
+                activeForm,
+                currentUser,
+            } = getState();
+            const formData = new FormData();
+
+            formData.append('upload', files[0]);
+            formData.append('file_content_type', activeForm.file_content_type);
+            formData.append('file_object_id', activeForm.file_object_id);
+            formData.append('user', currentUser.id);
+
+            return formData;
+        },
+    };
+}
+
+// ACCOUNTS
+export function getAccounts() {
+    return {
+        type: API_CALL,
+        endpoint: GET_ACCOUNTS,
+        url: '/account/',
+    };
+}
+
+export function getAccountID(selectedAccount) {
+    return {
+        type: API_CALL,
+        endpoint: GET_ACCOUNT_ID,
+        url: `/account/${selectedAccount}`,
+    };
+}
+
+export function getLFUCGAccount() {
+    return {
+        type: API_CALL,
+        endpoint: GET_LFUCG_ACCOUNT,
+        url: '/account/?search=LFUCG',
+    };
+}
+
+export function postAccount() {
+    return {
+        type: API_CALL,
+        endpoint: POST_ACCOUNT,
+        url: '/account/',
+        method: 'POST',
+        body: (getState) => {
+            const {
+                activeForm,
+            } = getState();
+            const {
+                account_name,
+                contact_first_name,
+                contact_last_name,
+                address_number,
+                address_street,
+                address_city,
+                address_state,
+                address_zip,
+                phone,
+                email,
+            } = activeForm;
+            return {
+                account_name,
+                contact_first_name,
+                contact_last_name,
+                contact_full_name: `${contact_first_name} ${contact_last_name}`,
+                address_number,
+                address_street,
+                address_city,
+                address_state,
+                address_zip,
+                address_full: `${address_number} ${address_street}, ${address_city}, ${address_state} ${address_zip}`,
+                phone,
+                email,
+            };
+        },
+    };
+}
+
+export function putAccount(selectedAccount) {
+    return {
+        type: API_CALL,
+        endpoint: PUT_ACCOUNT,
+        url: `/account/${selectedAccount}/`,
+        method: 'PUT',
+        body: (getState) => {
+            const {
+                activeForm,
+            } = getState();
+            const {
+                account_name,
+                contact_first_name,
+                contact_last_name,
+                address_number,
+                address_street,
+                address_city,
+                address_state,
+                address_zip,
+                phone,
+                email,
+            } = activeForm;
+            return {
+                account_name,
+                contact_first_name,
+                contact_last_name,
+                contact_full_name: `${contact_first_name} ${contact_last_name}`,
+                address_number,
+                address_street,
+                address_city,
+                address_state,
+                address_zip,
+                address_full: `${address_number} ${address_street}, ${address_city}, ${address_state} ${address_zip}`,
+                phone,
+                email,
+            };
+        },
+    };
+}
+
+// AGREEMENTS
+export function getAgreements() {
+    return {
+        type: API_CALL,
+        endpoint: GET_AGREEMENTS,
+        url: '/agreement/',
+    };
+}
+
+export function getAgreementID(selectedAgreement) {
+    return {
+        type: API_CALL,
+        endpoint: GET_AGREEMENT_ID,
+        url: `/agreement/${selectedAgreement}`,
+    };
+}
+
+export function getAccountAgreements(selectedAccount) {
+    return {
+        type: API_CALL,
+        endpoint: GET_ACCOUNT_AGREEMENTS,
+        url: `/agreement/?account_id=${selectedAccount}`,
+    };
+}
+
+export function postAgreement() {
+    return {
+        type: API_CALL,
+        endpoint: POST_AGREEMENT,
+        url: '/agreement/',
+        method: 'POST',
+        body: (getState) => {
+            const {
+                activeForm,
+            } = getState();
+            const {
+                account_id,
+                resolution_number,
+                expansion_area,
+                agreement_type,
+                date_executed,
+            } = activeForm;
+            return {
+                account_id,
+                resolution_number,
+                expansion_area,
+                agreement_type,
+                date_executed,
+            };
+        },
+    };
+}
+
+export function putAgreement(selectedAgreement) {
+    return {
+        type: API_CALL,
+        endpoint: PUT_AGREEMENT,
+        url: `/agreement/${selectedAgreement}/`,
+        method: 'PUT',
+        body: (getState) => {
+            const {
+                activeForm,
+            } = getState();
+            const {
+                account_id,
+                resolution_number,
+                expansion_area,
+                agreement_type,
+                date_executed,
+            } = activeForm;
+            return {
+                account_id,
+                resolution_number,
+                expansion_area,
+                agreement_type,
+                date_executed,
+            };
+        },
+    };
+}
+
+// PAYMENTS
+export function getPayments() {
+    return {
+        type: API_CALL,
+        endpoint: GET_PAYMENTS,
+        url: '/payment/',
+    };
+}
+
+export function getPaymentID(selectedPayment) {
+    return {
+        type: API_CALL,
+        endpoint: GET_PAYMENT_ID,
+        url: `/payment/${selectedPayment}`,
+    };
+}
+
+export function getLotPayments(selectedLot) {
+    return {
+        type: API_CALL,
+        endpoint: GET_LOT_PAYMENTS,
+        url: `/payment/?lot_id=${selectedLot}`,
+    };
+}
+
+export function getAccountPayments(selectedAccount) {
+    return {
+        type: API_CALL,
+        endpoint: GET_ACCOUNT_PAYMENTS,
+        url: `/payment/?credit_account=${selectedAccount}`,
+    };
+}
+
+export function getAgreementPayments(selectedAgreement) {
+    return {
+        type: API_CALL,
+        endpoint: GET_AGREEMENT_PAYMENTS,
+        url: `/payment/?credit_source=${selectedAgreement}`,
+    };
+}
+
+export function postPayment() {
+    return {
+        type: API_CALL,
+        endpoint: POST_PAYMENT,
+        url: '/payment/',
+        method: 'POST',
+        body: (getState) => {
+            const {
+                activeForm,
+            } = getState();
+            const {
+                lot_id,
+                paid_by,
+                paid_by_type,
+                payment_type,
+                check_number,
+                credit_source,
+                credit_account,
+                paid_roads,
+                paid_sewer_trans,
+                paid_sewer_cap,
+                paid_parks,
+                paid_storm,
+                paid_open_space,
+            } = activeForm;
+            return {
+                lot_id,
+                paid_by,
+                paid_by_type,
+                payment_type,
+                check_number,
+                credit_source,
+                credit_account,
+                paid_roads,
+                paid_sewer_trans,
+                paid_sewer_cap,
+                paid_parks,
+                paid_storm,
+                paid_open_space,
+            };
+        },
+    };
+}
+
+export function putPayment(selectedPayment) {
+    return {
+        type: API_CALL,
+        endpoint: PUT_PAYMENT,
+        url: `/payment/${selectedPayment}/`,
+        method: 'PUT',
+        body: (getState) => {
+            const {
+                activeForm,
+            } = getState();
+            const {
+                lot_id,
+                paid_by,
+                paid_by_type,
+                payment_type,
+                check_number,
+                credit_source,
+                credit_account,
+                paid_roads,
+                paid_sewer_trans,
+                paid_sewer_cap,
+                paid_parks,
+                paid_storm,
+                paid_open_space,
+            } = activeForm;
+            return {
+                lot_id,
+                paid_by,
+                paid_by_type,
+                payment_type,
+                check_number,
+                credit_source,
+                credit_account,
+                paid_roads,
+                paid_sewer_trans,
+                paid_sewer_cap,
+                paid_parks,
+                paid_storm,
+                paid_open_space,
+            };
+        },
+    };
+}
+
+// PROJECTS
+export function getProjects() {
+    return {
+        type: API_CALL,
+        endpoint: GET_PROJECTS,
+        url: '/project/',
+    };
+}
+
+export function getProjectID(selectedProject) {
+    return {
+        type: API_CALL,
+        endpoint: GET_PROJECT_ID,
+        url: `/project/${selectedProject}`,
+    };
+}
+
+export function getAgreementProjects(selectedAgreement) {
+    return {
+        type: API_CALL,
+        endpoint: GET_AGREEMENT_PROJECTS,
+        url: `/project/?agreement_id=${selectedAgreement}`,
+    };
+}
+
+export function postProject() {
+    return {
+        type: API_CALL,
+        endpoint: POST_PROJECT,
+        url: '/project/',
+        method: 'POST',
+        body: (getState) => {
+            const {
+                activeForm,
+            } = getState();
+            const {
+                agreement_id,
+                project_category,
+                name,
+                expansion_area,
+                project_type,
+                project_status,
+                status_date,
+                project_cost_estimates,
+                project_description,
+            } = activeForm;
+            return {
+                agreement_id,
+                project_category,
+                name,
+                expansion_area,
+                project_type,
+                project_status,
+                status_date,
+                project_cost_estimates,
+                project_description,
+            };
+        },
+    };
+}
+
+export function putProject(selectedProject) {
+    return {
+        type: API_CALL,
+        endpoint: PUT_PROJECT,
+        url: `/project/${selectedProject}/`,
+        method: 'PUT',
+        body: (getState) => {
+            const {
+                activeForm,
+            } = getState();
+            const {
+                agreement_id,
+                project_category,
+                name,
+                expansion_area,
+                project_type,
+                project_status,
+                status_date,
+                project_cost_estimates,
+                project_description,
+            } = activeForm;
+            return {
+                agreement_id,
+                project_category,
+                name,
+                expansion_area,
+                project_type,
+                project_status,
+                status_date,
+                project_cost_estimates,
+                project_description,
+            };
+        },
+    };
+}
+
+// PROJECT COST ESTIMATES
+export function getProjectCosts() {
+    return {
+        type: API_CALL,
+        endpoint: GET_PROJECT_COSTS,
+        url: '/estimate/',
+    };
+}
+
+export function getProjectCostID(selectedProjectCost) {
+    return {
+        type: API_CALL,
+        endpoint: GET_PROJECT_COST_ID,
+        url: `/estimate/${selectedProjectCost}`,
+    };
+}
+
+export function getProjectProjectCosts(selectedProject) {
+    return {
+        type: API_CALL,
+        endpoint: GET_PROJECT_PROJECT_COSTS,
+        url: `/estimate/?project_id=${selectedProject}`,
+    };
+}
+
+export function postProjectCost() {
+    return {
+        type: API_CALL,
+        endpoint: POST_PROJECT_COST,
+        url: '/estimate/',
+        method: 'POST',
+        body: (getState) => {
+            const {
+                activeForm,
+            } = getState();
+            const {
+                project_id,
+                estimate_type,
+                land_cost,
+                design_cost,
+                construction_cost,
+                admin_cost,
+                management_cost,
+                credits_available,
+            } = activeForm;
+            return {
+                project_id,
+                estimate_type,
+                land_cost,
+                design_cost,
+                construction_cost,
+                admin_cost,
+                management_cost,
+                credits_available,
+            };
+        },
+    };
+}
+
+export function putProjectCost(selectedProjectCost) {
+    return {
+        type: API_CALL,
+        endpoint: PUT_PROJECT_COST,
+        url: `/estimate/${selectedProjectCost}/`,
+        method: 'PUT',
+        body: (getState) => {
+            const {
+                activeForm,
+            } = getState();
+            const {
+                project_id,
+                estimate_type,
+                land_cost,
+                design_cost,
+                construction_cost,
+                admin_cost,
+                management_cost,
+                credits_available,
+            } = activeForm;
+            return {
+                project_id,
+                estimate_type,
+                land_cost,
+                design_cost,
+                construction_cost,
+                admin_cost,
+                management_cost,
+                credits_available,
+            };
+        },
+    };
+}
+
+// ACCOUNT LEDGERS
+export function getAccountLedgers() {
+    return {
+        type: API_CALL,
+        endpoint: GET_ACCOUNT_LEDGERS,
+        url: '/ledger/',
+    };
+}
+
+export function getAccountLedgerID(selectedAccountLedger) {
+    return {
+        type: API_CALL,
+        endpoint: GET_ACCOUNT_LEDGER_ID,
+        url: `/ledger/${selectedAccountLedger}`,
+    };
+}
+
+export function getLotAccountLedgers(selectedLot) {
+    return {
+        type: API_CALL,
+        endpoint: GET_LOT_ACCOUNT_LEDGERS,
+        url: `/ledger/?lot=${selectedLot}`,
+    };
+}
+
+export function getAccountAccountLedgers(selectedAccount) {
+    return {
+        type: API_CALL,
+        endpoint: GET_ACCOUNT_ACCOUNT_LEDGERS,
+        url: `/ledger/?account_from=${selectedAccount}&account_to=${selectedAccount}`,
+    };
+}
+
+export function getAgreementAccountLedgers(selectedAgreement) {
+    return {
+        type: API_CALL,
+        endpoint: GET_AGREEMENT_ACCOUNT_LEDGERS,
+        url: `/ledger/?agreement=${selectedAgreement}`,
+    };
+}
+
+export function postAccountLedger() {
+    return {
+        type: API_CALL,
+        endpoint: POST_ACCOUNT_LEDGER,
+        url: '/ledger/',
+        method: 'POST',
+        body: (getState) => {
+            const {
+                activeForm,
+            } = getState();
+            const {
+                entry_date,
+                account_from,
+                account_to,
+                plat,
+                lot,
+                agreement,
+                entry_type,
+                non_sewer_credits,
+                sewer_credits,
+                plat_lot,
+            } = activeForm;
+            return {
+                entry_date,
+                account_from,
+                account_to,
+                plat,
+                lot,
+                agreement,
+                entry_type,
+                non_sewer_credits,
+                sewer_credits,
+                plat_lot,
+            };
+        },
+    };
+}
+
+export function putAccountLedger(selectedAccountLedger) {
+    return {
+        type: API_CALL,
+        endpoint: PUT_ACCOUNT_LEDGER,
+        url: `/ledger/${selectedAccountLedger}/`,
+        method: 'PUT',
+        body: (getState) => {
+            const {
+                activeForm,
+            } = getState();
+            const {
+                entry_date,
+                account_from,
+                account_to,
+                plat,
+                lot,
+                agreement,
+                entry_type,
+                non_sewer_credits,
+                sewer_credits,
+                plat_lot,
+            } = activeForm;
+            return {
+                entry_date,
+                account_from,
+                account_to,
+                plat,
+                lot,
+                agreement,
+                entry_type,
+                non_sewer_credits,
+                sewer_credits,
+                plat_lot,
+            };
+        },
+    };
+}
+
+export function getPagination(page) {
+    return {
+        type: API_CALL,
+        endpoint: GET_PAGINATION,
+        url: (getState) => {
+            const {
+                activeForm,
+            } = getState();
+            const {
+                currentPage,
+                page_size,
+            } = activeForm;
+            
+            if (!page) {
+                if (currentPage === '/account-ledger/') {
+                    return '/ledger/?paginatePage';
+                }
+
+                if (currentPage === '/project-cost/') {
+                    return '/estimate/?paginatePage';
+                }
+
+                if (page_size) {
+                    return `${currentPage}?paginatePage&pageSize=${page_size}`;
+                }
+                return `${currentPage}?paginatePage`;
+            }
+            if (!page.includes('paginatePage')) {
+                return `${page}?paginatePage`;
+            }
+            return `${page}`;
+        },
+    };
+}
+
+export function searchQuery() {
+    return {
+        type: API_CALL,
+        endpoint: SEARCH_QUERY,
+        url: (getState) => {
+            const {
+                activeForm,
+            } = getState();
+
+
+            let query_all = `${activeForm.currentPage}?paginatePage`;
+
+            if (activeForm.currentPage === '/account-ledger/') {
+                query_all = '/ledger/?paginatePage';
+            }
+
+            if (activeForm.currentPage === '/project-cost/') {
+                query_all = '/estimate/?paginatePage';
+            }
+
+            const queryString = compose(
+                reduce((acc, value) => acc + value, query_all),
+                map((a) => {
+                    const field = a[0].slice(7, a[0].length);
+                    return `&${field}=${a[1]}`;
+                }),
+                filter(a => a[1] && a[0].startsWith('filter_')),
+            )(Object.entries(activeForm));
+
+            return queryString;
+        },
+        meta: {
+            debounce: {
+                time: 300,
+            },
         },
     };
 }

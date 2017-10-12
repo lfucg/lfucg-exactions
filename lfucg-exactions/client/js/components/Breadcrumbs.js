@@ -1,79 +1,65 @@
 import React from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
-
-import {
-    formUpdate,
-} from '../actions/formActions';
+import PropTypes from 'prop-types';
 
 class Breadcrumbs extends React.Component {
-    static propTypes = {
-        activeForm: React.PropTypes.object,
-        parent_link: React.PropTypes.string,
-        parent_name: React.PropTypes.string,
-        onComponentDidMount: React.PropTypes.func,
-    };
-
-    componentDidMount() {
-        setTimeout(() => {
-            this.props.onComponentDidMount({
-                parent_link: this.props.parent_link,
-                parent_name: this.props.parent_name,
-            });
-        }, (Object.keys(this.props.activeForm).length > 0));
-    }
-
     render() {
         const {
-            activeForm,
+            currentUser,
+            route,
         } = this.props;
 
-        const {
-            current_link,
-            current_name,
-        } = activeForm;
+        const route_permission = `currentUser.permissions.${route.name}`;
 
         return (
             <div className="breadcrumb">
                 <div className="container">
-                    <h4>
-                        <Link to="/" role="link">Home</Link>
-                        <span> / </span>
-                        {activeForm.parent_link &&
-                            <span>
-                                <Link to={activeForm.parent_link} role="link">{activeForm.parent_name}</Link>
-                                <span> / </span>
-                            </span>
-                        }
-                        <Link to={current_link}>{current_name}</Link>
-                        <span> / </span>
-                    </h4>
+                    <div className={route.name && route.name.includes('Existing') ? 'col-xs-8 col-md-9' : 'col-xs-12'}>
+                        <h4>
+                            <Link to="/" role="link">Home</Link>
+                            <span> / </span>
+                            {this.props.parent_link &&
+                                <span>
+                                    <Link to={this.props.parent_link} role="link">{this.props.parent_name}</Link>
+                                    <span> / </span>
+                                </span>
+                            }
+                            <Link to={route.path}>{route.name}</Link>
+                            <span> / </span>
+                        </h4>
+                    </div>
+                    {route.name && route.name.includes('Existing') &&
+                        <div className="col-xs-4 col-md-3">
+                            {currentUser && currentUser.permissions && route_permission &&
+                                <Link className="create-link" to={`${route.path}/form/`} aria-label="Create">
+                                    <i className="fa fa-plus-square col-xs-4 col-sm-2 col-xs-offset-1 create-icon" aria-hidden="true" />
+                                    <div className="col-xs-7 col-sm-9 create-label">
+                                        Create
+                                    </div>
+                                </Link>
+                            }
+                        </div>
+                    }
                 </div>
             </div>
         );
     }
 }
 
+Breadcrumbs.propTypes = {
+    currentUser: PropTypes.object,
+    route: PropTypes.object,
+};
+
 function mapStateToProps(state) {
     return {
-        activeForm: state.activeForm,
+        currentUser: state.currentUser,
     };
 }
 
-function mapDispatchToProps(dispatch, route) {
-    const location_url = route.route.path;
-    const location_name = route.route.name;
-
+function mapDispatchToProps(dispatch) {
     return {
-        onComponentDidMount(pass_props) {
-            const update = {
-                current_link: location_url,
-                current_name: location_name,
-                parent_link: pass_props.parent_link,
-                parent_name: pass_props.parent_name,
-            };
-            dispatch(formUpdate(update));
-        },
     };
 }
 
