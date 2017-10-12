@@ -99,14 +99,18 @@ class LotExisting extends React.Component {
             'Lot Number',
             'Parcel ID',
             'Permit ID',
-            'Current Exactions',
             'Plat Name',
             'Plat Type',
-            'Total Paid',
+            'Total Exactions',
+            'Sewer Due',
+            'Non-Sewer Due',
+            'Sewer Trans.',
+            'Sewer Cap.',
             'Roads',
             'Parks',
             'Storm',
             'Open Space',
+            'Current Total Due',
         ];
         let paymentLengthPerLot = 0;
         // let ledgerLengthPerLot = 0;
@@ -120,14 +124,18 @@ class LotExisting extends React.Component {
                     single_lot.lot_number || '',
                     single_lot.parcel_id || '',
                     single_lot.permit_id || '',
-                    single_lot.lot_exactions.current_exactions || '',
                     single_lot.plat.name || '',
-                    single_lot.plat.plat_zone_display || '',
-                    single_lot.longitude || '',
-                    single_lot.longitude || '',
-                    single_lot.longitude || '',
-                    single_lot.longitude || '',
-                    single_lot.longitude || '',
+                    single_lot.plat.plat_type_display || '',
+                    single_lot.lot_exactions.total_exactions || '',
+                    single_lot.lot_exactions.sewer_due || '',
+                    single_lot.lot_exactions.non_sewer_due || '',
+                    single_lot.lot_exactions.dues_sewer_trans_dev || '',
+                    single_lot.lot_exactions.dues_sewer_cap_dev || '',
+                    single_lot.lot_exactions.dues_roads_dev || '',
+                    single_lot.lot_exactions.dues_parks_dev || '',
+                    single_lot.lot_exactions.dues_storm_dev || '',
+                    single_lot.lot_exactions.dues_open_space_dev || '',
+                    single_lot.lot_exactions.current_exactions || '',
                 ];
 
                 const paymentsOnCurrentLot = payments.length > 0 &&
@@ -136,7 +144,7 @@ class LotExisting extends React.Component {
                 map((payment) => {
                     if (paymentLengthPerLot < paymentsOnCurrentLot.length) {
                         paymentLengthPerLot += 1;
-                        headers.push('Payment');
+                        headers.push(`Payment ${paymentLengthPerLot}`);
                     }
                     data.push(payment.total_paid);
                 })(paymentsOnCurrentLot);
@@ -156,29 +164,6 @@ class LotExisting extends React.Component {
 
                 <Breadcrumbs route={this.props.route} />
 
-                <div className="row">
-                    <div className="col-xs-10 col-xs-offset-1">
-                        <button type="button" className="btn btn-lex btn-sm pull-right" data-toggle="modal" data-target="#searchCSVModal" onClick={removeSearchPagination}>
-                            <i className="fa fa-line-chart link-icon" aria-hidden="true" />&nbsp;Generate Search CSV
-                        </button>
-                    </div>
-                </div>
-                <div className="modal fade" id="searchCSVModal" tabIndex="-1" role="dialog" aria-labelledby="modalLabel">
-                    <div className="modal-dialog" role="document">
-                        <div className="modal-content">
-                            <div className="modal-header">
-                                <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                <h3 className="modal-title" id="modalLabel">Click below to download the CSV of your search results.</h3>
-                            </div>
-                            <div className="modal-body">
-                                <CSVLink data={csvData} filename="another-name.csv" headers={headers}>Download me </CSVLink>
-                            </div>
-                            <div className="modal-footer">
-                                <button type="button" className="btn btn-default" data-dismiss="modal">Close</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
                 <SearchBar
                   apiCalls={[getPlats, getAccounts]}
@@ -188,6 +173,41 @@ class LotExisting extends React.Component {
                   ]}
                 />
 
+                <div className="row">
+                    <div className="col-xs-12 text-center">
+                        <button type="button" className="btn button-modal-link" data-toggle="modal" data-target="#searchCSVModal" onClick={removeSearchPagination} disabled={payments.length === 0}>
+                            <i className="fa fa-line-chart button-modal-icon" aria-hidden="true" />&nbsp;Generate CSV from Current Results
+                        </button>
+                    </div>
+                </div>
+                <div className="modal fade" id="searchCSVModal" tabIndex="-1" role="dialog" aria-labelledby="modalLabel">
+                    <div className="modal-dialog" role="document">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h3 className="modal-title text-center" id="modalLabel">Click below to download the CSV of your search results.</h3>
+                            </div>
+                            <div className="modal-body text-center">
+                                <CSVLink className="btn btn-modal" data={csvData} filename="LotReport.csv" headers={headers}>
+                                    <i className="fa fa-download text-white" aria-hidden="true" />
+                                    &nbsp;Download
+                                </CSVLink>
+                                <h5>Lots included in file:</h5>
+                                <div className="csv-modal">
+                                    {map((lot) => {
+                                        return (
+                                            <p>{lot.address_full}</p>
+                                        );
+                                    })(lots)
+                                    }
+                                </div>
+                            </div>
+                            <div className="modal-footer">
+                                <button type="button" className="btn btn-default" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div className="inside-body">
                     <div className="container">
                         {lots_list}

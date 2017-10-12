@@ -1377,7 +1377,6 @@ export function searchQuery(csv) {
                 filter(a => a[1] && a[0].startsWith('filter_')),
             )(Object.entries(activeForm));
 
-            console.log('QUERY IS: ', queryString);
             return queryString;
         },
         meta: {
