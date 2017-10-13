@@ -29,11 +29,11 @@ class AccountLedgerSummary extends React.Component {
 
                 <div className="form-header">
                     <div className="container">
-                        <h1>ACCOUNT LEDGER - SUMMARY</h1>
+                        <h1>CREDIT TRANSFER - SUMMARY</h1>
                     </div>
                 </div>
 
-                <Breadcrumbs route={this.props.route} parent_link={'account-ledger'} parent_name={'Account Ledgers'} />
+                <Breadcrumbs route={this.props.route} parent_link={'credit-transfer'} parent_name={'Credit Transfers'} />
 
                 <div className="inside-body">
                     <div className="container">
@@ -49,7 +49,7 @@ class AccountLedgerSummary extends React.Component {
                                 <div className="row section-heading" role="tab" id="headingAccountLedgerInfo">
                                     <div className="col-xs-1 caret-indicator" />
                                     <div className="col-xs-10">
-                                        <h2>Account Ledger Information</h2>
+                                        <h2>Credit Transfer Information</h2>
                                     </div>
                                 </div>
                             </a>
@@ -64,7 +64,7 @@ class AccountLedgerSummary extends React.Component {
                                         <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
                                             <div className="col-xs-5 col-xs-offset-5">
                                                 {currentUser && currentUser.permissions && currentUser.permissions.accountledger &&
-                                                    <Link to={`account-ledger/form/${accountLedgers.id}`} aria-label="Edit">
+                                                    <Link to={`credit-transfer/form/${accountLedgers.id}`} aria-label="Edit">
                                                         <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
                                                         <div className="col-xs-7 link-label">
                                                             Edit

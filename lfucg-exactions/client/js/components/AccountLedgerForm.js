@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import {
     hashHistory,
 } from 'react-router';
-import { map } from 'ramda';
+import { map, filter } from 'ramda';
 import PropTypes from 'prop-types';
 
 import Navbar from './Navbar';
@@ -46,9 +46,8 @@ class AccountLedgerForm extends React.Component {
             platFormChange,
             lotFormChange,
             accountFormChange,
+            closeModal,
         } = this.props;
-
-        const currentParam = this.props.params.id;
 
         const platsList = plats.length > 0 && (map((plat) => {
             return (
@@ -82,10 +81,6 @@ class AccountLedgerForm extends React.Component {
             );
         })(agreements));
 
-        const openForm =
-            activeForm.entry_type &&
-            activeForm.plat_lot;
-
         const submitEnabled =
             activeForm.account_from &&
             activeForm.account_to &&
@@ -95,55 +90,57 @@ class AccountLedgerForm extends React.Component {
             activeForm.sewer_credits &&
             activeForm.entry_date;
 
+        const currentPlat = plats && plats.length > 0 &&
+            filter(plat => plat.id === parseInt(activeForm.plat, 10))(plats)[0];
+
         return (
             <div className="account-ledger-form">
                 <Navbar />
 
                 <div className="form-header">
                     <div className="container">
-                        <h1>ACCOUNT LEDGERS - CREATE</h1>
+                        <h1>CREDIT TRANSFERS - CREATE</h1>
                     </div>
                 </div>
 
-                <Breadcrumbs route={this.props.route} parent_link={'account-ledger'} parent_name={'Account Ledgers'} />
+                <Breadcrumbs route={this.props.route} parent_link={'credit-transfer'} parent_name={'Credit Transfers'} />
 
                 <div className="inside-body">
                     <div className="container">
                         <div className="col-sm-offset-1 col-sm-10">
-                            {currentParam && accountLedgers.is_approved === false && <div className="row"><h1 className="approval-pending">Approval Pending</h1></div>}
                             <form onSubmit={() => onSubmit(activeForm.plat_lot)} >
 
                                 <fieldset>
                                     <div className="row">
                                         <div className="col-sm-6 form-group">
-                                            <label htmlFor="plat_lot" className="form-label" id="plat_lot" aria-label="Apply By Plat or Lot">Apply By Plat or Lot</label>
-                                            <select className="form-control" id="plat_lot" onChange={formChange('plat_lot')} value={activeForm.plat_lot_show} >
-                                                <option value="start_entry">Plat or Lot Credit Level</option>
-                                                <option value={['plat', 'plat']}>Plat</option>
-                                                <option value={['lot', 'lot']}>Lot</option>
-                                            </select>
-                                        </div>
-                                        <div className="col-sm-6 form-group">
                                             <label htmlFor="entry_type" className="form-label" id="entry_type" aria-label="Entry Type">Entry Type</label>
                                             <select className="form-control" id="entry_type" onChange={formChange('entry_type')} value={activeForm.entry_type_show} >
                                                 <option value="start_entry">Entry Type</option>
-                                                <option value={['NEW', 'New']}>New</option>
-                                                <option value={['SELL', 'Sell']}>Sell</option>
-                                                <option value={['TRANSFER', 'Transfer']}>Transfer</option>
+                                                <option value={['NEW', 'New Credits']}>New Credits</option>
+                                                <option value={['USE', 'Use Credits']}>Use Credits</option>
+                                                <option value={['TRANSFER', 'Transfer Credits']}>Transfer Credits</option>
+                                            </select>
+                                        </div>
+                                        <div className="col-sm-6 form-group">
+                                            <label htmlFor="plat_lot" className="form-label" id="plat_lot" aria-label="Apply By Plat or Lot">Apply By Plat or Lot</label>
+                                            <select className="form-control" id="plat_lot" onChange={formChange('plat_lot')} value={activeForm.plat_lot_show} disabled={activeForm.entry_type !== 'USE'}>
+                                                <option value="start_entry">Plat or Lot Credit Level</option>
+                                                <option value={['plat', 'plat']}>Plat</option>
+                                                <option value={['lot', 'lot']}>Lot</option>
                                             </select>
                                         </div>
                                     </div>
                                     <div className="row">
                                         <div className="col-sm-6 form-group">
                                             <label htmlFor="account_from" className="form-label" id="account_from" aria-label="Account From" aria-required="true">* Account From</label>
-                                            <select className="form-control" id="account_from" onChange={accountFormChange('account_from')} value={activeForm.account_from_show} disabled={!openForm || activeForm.entry_type === 'NEW'}>
+                                            <select className="form-control" id="account_from" onChange={accountFormChange('account_from')} value={activeForm.account_from_show} disabled={!activeForm.entry_type || activeForm.entry_type === 'NEW'}>
                                                 <option value="start_account_from">Account From</option>
                                                 {accountsList}
                                             </select>
                                         </div>
                                         <div className="col-sm-6 form-group">
                                             <label htmlFor="account_to" className="form-label" id="account_to" aria-label="Account To" aria-required="true">* Account To</label>
-                                            <select className="form-control" id="account_to" onChange={accountFormChange('account_to')} value={activeForm.account_to_show} disabled={!openForm || activeForm.entry_type === 'SELL'}>
+                                            <select className="form-control" id="account_to" onChange={accountFormChange('account_to')} value={activeForm.account_to_show} disabled={!activeForm.entry_type || activeForm.entry_type === 'USE'}>
                                                 <option value="start_account_to">Account To</option>
                                                 {accountsList}
                                             </select>
@@ -152,14 +149,14 @@ class AccountLedgerForm extends React.Component {
                                     <div className="row">
                                         <div className="col-sm-6 form-group">
                                             <label htmlFor="plat" className="form-label" id="plat" aria-label="Plat" >Plat</label>
-                                            <select className="form-control" id="plat" onChange={platFormChange('plat')} value={activeForm.plat_show} disabled={!openForm || activeForm.plat_lot === 'lot'}>
+                                            <select className="form-control" id="plat" onChange={platFormChange('plat')} value={activeForm.plat_show} disabled={activeForm.entry_type !== 'USE' || activeForm.plat_lot !== 'plat'}>
                                                 <option value="start_plat">Plat</option>
                                                 {platsList}
                                             </select>
                                         </div>
                                         <div className="col-sm-6 form-group">
                                             <label htmlFor="lot" className="form-label" id="lot" aria-label="Lot" >Lot</label>
-                                            <select className="form-control" id="lot" onChange={lotFormChange('lot')} value={activeForm.lot_show} disabled={!openForm || activeForm.plat_lot === 'plat'}>
+                                            <select className="form-control" id="lot" onChange={lotFormChange('lot')} value={activeForm.lot_show} disabled={activeForm.entry_type !== 'USE' || activeForm.plat_lot !== 'lot'}>
                                                 <option value="start_lot">Lot</option>
                                                 {lotsList}
                                             </select>
@@ -168,14 +165,14 @@ class AccountLedgerForm extends React.Component {
                                     <div className="row">
                                         <div className="col-sm-6 form-group">
                                             <label htmlFor="agreement" className="form-label" id="agreement" aria-label="Agreement" aria-required="true">* Agreement</label>
-                                            <select className="form-control" id="agreement" onChange={formChange('agreement')} value={activeForm.agreement_show} disabled={!openForm}>
+                                            <select className="form-control" id="agreement" onChange={formChange('agreement')} value={activeForm.agreement_show} disabled={!activeForm.entry_type}>
                                                 <option value="start_agreement">Agreement Resolution</option>
                                                 {agreementsList}
                                             </select>
                                         </div>
                                         <div className="col-sm-6">
                                             <FormGroup label="* Entry Date" id="entry_date" aria-required="true" >
-                                                <input type="date" className="form-control" placeholder="Entry Date" disabled={!openForm} />
+                                                <input type="date" className="form-control" placeholder="Entry Date" disabled={!activeForm.entry_type} />
                                             </FormGroup>
                                         </div>
                                     </div>
@@ -194,10 +191,10 @@ class AccountLedgerForm extends React.Component {
                                                     </div>
                                                     <div className="row">
                                                         <div className="col-sm-6">
-                                                            <h5>{activeForm.non_sewer_exactions}</h5>
+                                                            <h5>Non-Sewer Due: {activeForm.non_sewer_exactions}</h5>
                                                         </div>
                                                         <div className="col-sm-6">
-                                                            <h5>{activeForm.sewer_exactions}</h5>
+                                                            <h5>Sewer Due: {activeForm.sewer_exactions}</h5>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -207,12 +204,12 @@ class AccountLedgerForm extends React.Component {
                                     <div className="row">
                                         <div className="col-sm-6">
                                             <FormGroup label="* Non-Sewer Credits" id="non_sewer_credits" aria-required="true" >
-                                                <input type="number" className="form-control" placeholder="Non-Sewer Credits" disabled={!openForm} />
+                                                <input type="number" className="form-control" placeholder="Non-Sewer Credits" disabled={!activeForm.entry_type} />
                                             </FormGroup>
                                         </div>
                                         <div className="col-sm-6">
                                             <FormGroup label="* Sewer Credits" id="sewer_credits" aria-required="true" >
-                                                <input type="number" className="form-control" placeholder="Sewer Credits" disabled={!openForm} />
+                                                <input type="number" className="form-control" placeholder="Sewer Credits" disabled={!activeForm.entry_type} />
                                             </FormGroup>
                                         </div>
                                     </div>
@@ -226,6 +223,35 @@ class AccountLedgerForm extends React.Component {
                                 ) : null
                                 }
                             </form>
+                            {activeForm.openModal && currentPlat.plat_exactions && (currentPlat.plat_exactions.remaining_lots > 0) &&
+                            <div className={activeForm.openModal ? 'modal in' : 'modal'} tabIndex="-1" role="dialog">
+                                <div className="modal-dialog modal-lg" role="document">
+                                    <div className="modal-content">
+                                        <div className="modal-header">
+                                            <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={closeModal}><span aria-hidden="true">&times;</span></button>
+                                            <h4 className="modal-title">Plat is Missing Lots</h4>
+                                        </div>
+                                        <div className="modal-body">
+                                            <div className="container">
+                                                {currentPlat && <div>
+                                                    <h4 className="row">The number of buildable lots is greater than the number of lots in this system.</h4>
+                                                    <div className="col-xs-12">
+                                                        Buildable lots on plat: {currentPlat.buildable_lots}
+                                                    </div>
+                                                    <div className="col-xs-12">
+                                                        Lots in system: {currentPlat.buildable_lots - (currentPlat.plat_exactions && currentPlat.plat_exactions.remaining_lots)}
+                                                    </div>
+                                                    <h5>The credits used will only apply to the lots within the system.</h5>
+                                                </div>}
+                                            </div>
+                                        </div>
+                                        <div className="modal-footer">
+                                            <button type="button" className="btn btn-default" data-dismiss="modal" onClick={closeModal} >Continue</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            }
                         </div>
                     </div>
                 </div>
@@ -244,13 +270,13 @@ AccountLedgerForm.propTypes = {
     agreements: PropTypes.array,
     accountLedgers: PropTypes.array,
     route: PropTypes.object,
-    params: PropTypes.object,
     onComponentDidMount: PropTypes.func,
     onSubmit: PropTypes.func,
     formChange: PropTypes.func,
     platFormChange: PropTypes.func,
     lotFormChange: PropTypes.func,
     accountFormChange: PropTypes.func,
+    closeModal: PropTypes.func,
 };
 
 function mapStateToProps(state) {
@@ -330,12 +356,14 @@ function mapDispatchToProps(dispatch, params) {
                             const lfucg_from_update = {
                                 account_from: data_lfucg.response[0].id,
                                 account_from_show: `${data_lfucg.response[0].id},${data_lfucg.response[0].account_name},${data_lfucg.response[0].balance.balance}`,
+                                account_to_show: '',
                             };
                             dispatch(formUpdate(lfucg_from_update));
-                        } else if (value_id === 'SELL') {
+                        } else if (value_id === 'USE') {
                             const lfucg_to_update = {
                                 account_to: data_lfucg.response[0].id,
                                 account_to_show: `${data_lfucg.response[0].id},${data_lfucg.response[0].account_name},${data_lfucg.response[0].balance.balance}`,
+                                account_from_show: '',
                             };
                             dispatch(formUpdate(lfucg_to_update));
                         } else if (value_id === 'TRANSFER') {
@@ -380,6 +408,7 @@ function mapDispatchToProps(dispatch, params) {
                         [field_show]: value,
                         non_sewer_exactions: value_non_sewer,
                         sewer_exactions: value_sewer,
+                        openModal: true,
                     };
 
                     dispatch(formUpdate(plat_update));
@@ -449,18 +478,21 @@ function mapDispatchToProps(dispatch, params) {
             if (selectedAccountLedger) {
                 dispatch(putAccountLedger(selectedAccountLedger))
                 .then(() => {
-                    hashHistory.push(`account-ledger/summary/${selectedAccountLedger}`);
+                    hashHistory.push(`credit-transfer/summary/${selectedAccountLedger}`);
                 });
             } else {
                 dispatch(postAccountLedger())
                 .then((data_post) => {
-                    if (event === 'lot') {
-                        hashHistory.push(`account-ledger/summary/${data_post.response.id}`);
-                    } else if (event === 'plat') {
-                        hashHistory.push('account-ledger');
+                    if (event === 'plat') {
+                        hashHistory.push('credit-transfer');
+                    } else {
+                        hashHistory.push(`credit-transfer/summary/${data_post.response.id}`);
                     }
                 });
             }
+        },
+        closeModal() {
+            dispatch(formUpdate({ openModal: false }));
         },
     };
 }

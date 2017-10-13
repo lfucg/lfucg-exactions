@@ -1327,7 +1327,7 @@ export function getPagination(page) {
             } = activeForm;
             
             if (!page) {
-                if (currentPage === '/account-ledger/') {
+                if (currentPage === '/credit-transfer/') {
                     return '/ledger/?paginatePage';
                 }
 
@@ -1360,7 +1360,7 @@ export function searchQuery(isCSV) {
 
             let query_all = isCSV ? `${activeForm.currentPage}?` : `${activeForm.currentPage}?paginatePage`;
 
-            if (activeForm.currentPage === '/account-ledger/') {
+            if (activeForm.currentPage === '/credit-transfer/') {
                 query_all = '/ledger/?paginatePage';
             }
 
