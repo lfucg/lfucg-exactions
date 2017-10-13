@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import {
     hashHistory,
 } from 'react-router';
-import { map } from 'ramda';
+import { map, filter } from 'ramda';
 import PropTypes from 'prop-types';
 
 import Navbar from './Navbar';
@@ -89,6 +89,9 @@ class AccountLedgerForm extends React.Component {
             activeForm.sewer_credits &&
             activeForm.entry_date;
 
+        const currentPlat = plats && plats.length > 0 &&
+            filter(plat => plat.id === parseInt(activeForm.plat, 10))(plats)[0];
+
         return (
             <div className="account-ledger-form">
                 <Navbar />
@@ -145,14 +148,14 @@ class AccountLedgerForm extends React.Component {
                                     <div className="row">
                                         <div className="col-sm-6 form-group">
                                             <label htmlFor="plat" className="form-label" id="plat" aria-label="Plat" >Plat</label>
-                                            <select className="form-control" id="plat" onChange={platFormChange('plat')} value={activeForm.plat_show} disabled={activeForm.entry_type !== 'USE' || activeForm.plat_lot === 'lot'}>
+                                            <select className="form-control" id="plat" onChange={platFormChange('plat')} value={activeForm.plat_show} disabled={activeForm.entry_type !== 'USE' || activeForm.plat_lot !== 'plat'}>
                                                 <option value="start_plat">Plat</option>
                                                 {platsList}
                                             </select>
                                         </div>
                                         <div className="col-sm-6 form-group">
                                             <label htmlFor="lot" className="form-label" id="lot" aria-label="Lot" >Lot</label>
-                                            <select className="form-control" id="lot" onChange={lotFormChange('lot')} value={activeForm.lot_show} disabled={activeForm.entry_type !== 'USE' || activeForm.plat_lot === 'plat'}>
+                                            <select className="form-control" id="lot" onChange={lotFormChange('lot')} value={activeForm.lot_show} disabled={activeForm.entry_type !== 'USE' || activeForm.plat_lot !== 'lot'}>
                                                 <option value="start_lot">Lot</option>
                                                 {lotsList}
                                             </select>
@@ -219,16 +222,21 @@ class AccountLedgerForm extends React.Component {
                                 ) : null
                                 }
                             </form>
-                            <div className="modal fade" tabIndex="-1" role="dialog">
+                            <div className="modal fade" tabIndex="-1" role="dialog" >
                                 <div className="modal-dialog" role="document">
                                     <div className="modal-content">
                                         <div className="modal-header">
                                             <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                                             <h4 className="modal-title">Plat is Missing Lots</h4>
                                         </div>
-                                        <div className="modal-body">
-                                            <p>There are more lots available than entered into the system.</p>
-                                        </div>
+                                        {currentPlat &&
+                                            <div className="modal-body">
+                                                <h4>The number of buildable lots is greater than the number of lots in this system.</h4>
+                                                <div className="row">
+                                                    <p>Buildable lots on this plat: {currentPlat.buildable_lots}</p>
+                                                </div>
+                                            </div>
+                                        }
                                         <div className="modal-footer">
                                             <button type="button" className="btn btn-default" data-dismiss="modal">Close</button>
                                             <button type="button" className="btn btn-primary">Continue</button>
@@ -391,6 +399,7 @@ function mapDispatchToProps(dispatch, params) {
                         [field_show]: value,
                         non_sewer_exactions: value_non_sewer,
                         sewer_exactions: value_sewer,
+                        openModal: true,
                     };
 
                     dispatch(formUpdate(plat_update));
