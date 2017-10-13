@@ -4,6 +4,12 @@
     margin-top: 2.5em;
 }
 
+.btn-modal {
+    background-color: #0057A8;
+    color: #fff;
+    margin-top: 0;
+}
+
 .form-header {
     background-color: #001A49;
     color: white;
@@ -22,6 +28,11 @@
     }
 }
 
+.collapsing {
+    -webkit-transition: none;
+    transition: none;
+    display: none;
+}
 .panel-group {
     .section-heading {
         text-align: center;
@@ -51,19 +62,6 @@
         }
     }
     /*background-color: green;*/
-}
-
-.form-subheading {
-    background-color: #001A49;
-    color: white;
-    border-radius: 3px;
-    margin-top: 20px;
-    margin-bottom: 20px;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    h3 {
-        margin: 8px 0px 8px 8px;
-    }
 }
 
 .panel-collapse {
@@ -170,3 +168,4 @@
         border-right: 1px solid black;
     }
 }
+

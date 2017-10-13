@@ -60,7 +60,7 @@ class AgreementViewSet(viewsets.ModelViewSet):
     permission_classes = (CanAdminister,)
     filter_backends = (DjangoFilterBackend, filters.SearchFilter,)
     search_fields = ('resolution_number', 'account_id__account_name', 'agreement_type', 'expansion_area',)
-    filter_fields = ('agreement_type', 'account_id', 'expansion_area',)
+    filter_fields = ('agreement_type', 'account_id', 'expansion_area', 'is_approved',)
 
     def get_queryset(self):
         queryset = Agreement.objects.all()
@@ -99,7 +99,7 @@ class PaymentViewSet(viewsets.ModelViewSet):
     permission_classes = (CanAdminister,)
     filter_backends = (DjangoFilterBackend, filters.SearchFilter,)
     search_fields = ('lot_id__address_full', 'payment_type', 'check_number', 'credit_account__account_name', 'paid_by', 'credit_source__resolution_number')
-    filter_fields = ('payment_type', 'paid_by_type', 'credit_account', 'lot_id', 'credit_source')
+    filter_fields = ('payment_type', 'paid_by_type', 'credit_account', 'lot_id', 'credit_source', 'is_approved',)
 
     def get_queryset(self):
         queryset = Payment.objects.all()
@@ -148,7 +148,7 @@ class ProjectViewSet(viewsets.ModelViewSet):
     permission_classes = (CanAdminister,)
     filter_backends = (DjangoFilterBackend, filters.SearchFilter,)
     search_fields = ('agreement_id__resolution_number', 'name', 'project_category', 'project_description',)
-    filter_fields = ('project_category', 'project_status', 'agreement_id', 'project_type', 'expansion_area',)
+    filter_fields = ('project_category', 'project_status', 'agreement_id', 'project_type', 'expansion_area', 'is_approved',)
 
     def get_queryset(self):
         queryset = Project.objects.all()
@@ -189,7 +189,7 @@ class ProjectCostEstimateViewSet(viewsets.ModelViewSet):
     permission_classes = (CanAdminister,)
     filter_backends = (DjangoFilterBackend, filters.SearchFilter,)
     search_fields = ('project_id__name', 'estimate_type',)
-    filter_fields = ('project_id',)
+    filter_fields = ('project_id', 'is_approved',)
 
 
     def get_queryset(self):
@@ -227,7 +227,7 @@ class AccountLedgerViewSet(viewsets.ModelViewSet):
     permission_classes = (CanAdminister,)
     filter_backends = (DjangoFilterBackend, filters.SearchFilter,)
     search_fields = ('entry_type', 'agreement__resolution_number', 'lot__address_full', 'account_to__account_name', 'account_from__account_name',)
-    filter_fields = ('entry_type', 'agreement', 'lot', 'account_to', 'account_from',)
+    filter_fields = ('entry_type', 'agreement', 'lot', 'account_to', 'account_from', 'is_approved',)
 
     def get_queryset(self):
         queryset = AccountLedger.objects.all()

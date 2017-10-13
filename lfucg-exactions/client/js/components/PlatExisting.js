@@ -61,53 +61,58 @@ class PlatExisting extends React.Component {
             map((plat) => {
                 return (
                     <div key={plat.id} className="col-xs-12">
-                        <div className="row form-subheading">
-                            <div className="col-sm-7 col-md-9">
-                                <h3>{plat.name}</h3>
+                        {(currentUser.id || plat.is_approved) && <div>
+                            <div className={plat.is_approved ? 'row form-subheading' : 'row unapproved-heading'}>
+                                <div className="col-sm-11">
+                                    <h3>
+                                        {plat.name}
+                                        {!plat.is_approved && <span className="pull-right">Approval Pending</span>}
+                                    </h3>
+                                </div>
                             </div>
-                        </div>
-                        <div className="row link-row">
-                            <div className="col-xs-12 col-sm-7 col-md-5 col-sm-offset-5 col-md-offset-7">
-                                <div className="col-xs-3">
-                                    {currentUser && currentUser.permissions && currentUser.permissions.plat &&
-                                        <Link to={`plat/form/${plat.id}`} aria-label="Edit">
-                                            <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
+                            <div className={plat.is_approved ? 'row link-row' : 'row link-row-approval-pending'}>
+                                <div className="col-xs-12 col-sm-7 col-md-5 col-sm-offset-5 col-md-offset-7">
+                                    <div className="col-xs-3">
+                                        {currentUser && currentUser.permissions && currentUser.permissions.plat &&
+                                            <Link to={`plat/form/${plat.id}`} aria-label="Edit">
+                                                <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
+                                                <div className="col-xs-7 link-label">
+                                                    Edit
+                                                </div>
+                                            </Link>
+                                        }
+                                    </div>
+                                    <div className="col-xs-4">
+                                        {currentUser && currentUser.permissions && currentUser.permissions.plat &&
+                                            <Link to={`plat/report/${plat.id}`} aria-label="Report">
+                                                <i className="fa fa-line-chart link-icon col-xs-4" aria-hidden="true" />
+                                                <div className="col-xs-7 link-label">
+                                                    Report
+                                                </div>
+                                            </Link>
+                                        }
+                                    </div>
+                                    <div className="col-xs-4 ">
+                                        <Link to={`plat/summary/${plat.id}`} aria-label="Summary">
+                                            <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
                                             <div className="col-xs-7 link-label">
-                                                Edit
+                                                Summary
                                             </div>
                                         </Link>
-                                    }
-                                </div>
-                                <div className="col-xs-4">
-                                    {currentUser && currentUser.permissions && currentUser.permissions.plat &&
-                                        <Link to={`plat/report/${plat.id}`} aria-label="Report">
-                                            <i className="fa fa-line-chart link-icon col-xs-4" aria-hidden="true" />
-                                            <div className="col-xs-7 link-label">
-                                                Report
-                                            </div>
-                                        </Link>
-                                    }
-                                </div>
-                                <div className="col-xs-4 ">
-                                    <Link to={`plat/summary/${plat.id}`} aria-label="Summary">
-                                        <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
-                                        <div className="col-xs-7 link-label">
-                                            Summary
-                                        </div>
-                                    </Link>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div className="row">
-                            <div className="col-sm-offset-1">
-                                <p className="col-sm-4 col-xs-6">Expansion Area: {plat.expansion_area}</p>
-                                <p className="col-sm-4 col-xs-6">Plat Type: {plat.plat_type_display}</p>
-                                <p className="col-sm-4 col-xs-6">Unit: {plat.unit}</p>
-                                <p className="col-sm-4 col-xs-6">Section: {plat.section}</p>
-                                <p className="col-sm-4 col-xs-6">Block: {plat.block}</p>
-                                <p className="col-sm-4 col-xs-6">Slide: {plat.slide}</p>
+                            <div className="row">
+                                <div className="col-sm-offset-1">
+                                    <p className="col-sm-4 col-xs-6">Expansion Area: {plat.expansion_area}</p>
+                                    <p className="col-sm-4 col-xs-6">Plat Type: {plat.plat_type_display}</p>
+                                    <p className="col-sm-4 col-xs-6">Unit: {plat.unit}</p>
+                                    <p className="col-sm-4 col-xs-6">Section: {plat.section}</p>
+                                    <p className="col-sm-4 col-xs-6">Block: {plat.block}</p>
+                                    <p className="col-sm-4 col-xs-6">Slide: {plat.slide}</p>
+                                </div>
                             </div>
-                        </div>
+                        </div>}
                     </div>
                 );
             })(plats)
@@ -133,6 +138,7 @@ class PlatExisting extends React.Component {
                     { filterField: 'filter_subdivision', displayName: 'Subdivision', list: subdivisionsList },
                     { filterField: 'filter_plat_type', displayName: 'Type', list: plat_types },
                     { filterField: 'filter_lot__id', displayName: 'Lot', list: lotsList },
+                    { filterField: 'filter_is_approved', displayName: 'Approval', list: [{ id: true, name: 'Approved' }, { id: false, name: 'Unapproved' }] },
                   ]}
                 />
 
