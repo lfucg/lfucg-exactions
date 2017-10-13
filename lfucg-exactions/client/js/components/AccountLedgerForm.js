@@ -187,10 +187,10 @@ class AccountLedgerForm extends React.Component {
                                                     </div>
                                                     <div className="row">
                                                         <div className="col-sm-6">
-                                                            <h5>{activeForm.non_sewer_exactions}</h5>
+                                                            <h5>Non-Sewer Due: {activeForm.non_sewer_exactions}</h5>
                                                         </div>
                                                         <div className="col-sm-6">
-                                                            <h5>{activeForm.sewer_exactions}</h5>
+                                                            <h5>Sewer Due: {activeForm.sewer_exactions}</h5>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -219,6 +219,23 @@ class AccountLedgerForm extends React.Component {
                                 ) : null
                                 }
                             </form>
+                            <div className="modal fade" tabIndex="-1" role="dialog">
+                                <div className="modal-dialog" role="document">
+                                    <div className="modal-content">
+                                        <div className="modal-header">
+                                            <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                            <h4 className="modal-title">Plat is Missing Lots</h4>
+                                        </div>
+                                        <div className="modal-body">
+                                            <p>There are more lots available than entered into the system.</p>
+                                        </div>
+                                        <div className="modal-footer">
+                                            <button type="button" className="btn btn-default" data-dismiss="modal">Close</button>
+                                            <button type="button" className="btn btn-primary">Continue</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -448,10 +465,10 @@ function mapDispatchToProps(dispatch, params) {
             } else {
                 dispatch(postAccountLedger())
                 .then((data_post) => {
-                    if (event === 'lot') {
-                        hashHistory.push(`credit-transfer/summary/${data_post.response.id}`);
-                    } else if (event === 'plat') {
+                    if (event === 'plat') {
                         hashHistory.push('credit-transfer');
+                    } else {
+                        hashHistory.push(`credit-transfer/summary/${data_post.response.id}`);
                     }
                 });
             }
