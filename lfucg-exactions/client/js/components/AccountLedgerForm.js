@@ -46,9 +46,8 @@ class AccountLedgerForm extends React.Component {
             platFormChange,
             lotFormChange,
             accountFormChange,
+            closeModal,
         } = this.props;
-
-        const currentParam = this.props.params.id;
 
         const platsList = plats.length > 0 && (map((plat) => {
             return (
@@ -109,7 +108,6 @@ class AccountLedgerForm extends React.Component {
                 <div className="inside-body">
                     <div className="container">
                         <div className="col-sm-offset-1 col-sm-10">
-                            {currentParam && accountLedgers.is_approved === false && <div className="row"><h1 className="approval-pending">Approval Pending</h1></div>}
                             <form onSubmit={() => onSubmit(activeForm.plat_lot)} >
 
                                 <fieldset>
@@ -225,28 +223,35 @@ class AccountLedgerForm extends React.Component {
                                 ) : null
                                 }
                             </form>
-                            <div className="modal in" tabIndex="-1" role="dialog" >
-                                <div className="modal-dialog" role="document">
+                            {activeForm.openModal && currentPlat.plat_exactions && (currentPlat.plat_exactions.remaining_lots > 0) &&
+                            <div className={activeForm.openModal ? 'modal in' : 'modal'} tabIndex="-1" role="dialog">
+                                <div className="modal-dialog modal-lg" role="document">
                                     <div className="modal-content">
                                         <div className="modal-header">
-                                            <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                            <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={closeModal}><span aria-hidden="true">&times;</span></button>
                                             <h4 className="modal-title">Plat is Missing Lots</h4>
                                         </div>
-                                        {currentPlat &&
-                                            <div className="modal-body">
-                                                <h4>The number of buildable lots is greater than the number of lots in this system.</h4>
-                                                <div className="row">
-                                                    <p>Buildable lots on this plat: {currentPlat.buildable_lots}</p>
-                                                </div>
+                                        <div className="modal-body">
+                                            <div className="container">
+                                                {currentPlat && <div>
+                                                    <h4 className="row">The number of buildable lots is greater than the number of lots in this system.</h4>
+                                                    <div className="col-xs-12">
+                                                        Buildable lots on plat: {currentPlat.buildable_lots}
+                                                    </div>
+                                                    <div className="col-xs-12">
+                                                        Lots in system: {currentPlat.buildable_lots - (currentPlat.plat_exactions && currentPlat.plat_exactions.remaining_lots)}
+                                                    </div>
+                                                    <h5>The credits used will only apply to the lots within the system.</h5>
+                                                </div>}
                                             </div>
-                                        }
+                                        </div>
                                         <div className="modal-footer">
-                                            <button type="button" className="btn btn-default" data-dismiss="modal">Close</button>
-                                            <button type="button" className="btn btn-primary">Continue</button>
+                                            <button type="button" className="btn btn-default" data-dismiss="modal" onClick={closeModal} >Continue</button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                            }
                         </div>
                     </div>
                 </div>
@@ -265,13 +270,13 @@ AccountLedgerForm.propTypes = {
     agreements: PropTypes.array,
     accountLedgers: PropTypes.array,
     route: PropTypes.object,
-    params: PropTypes.object,
     onComponentDidMount: PropTypes.func,
     onSubmit: PropTypes.func,
     formChange: PropTypes.func,
     platFormChange: PropTypes.func,
     lotFormChange: PropTypes.func,
     accountFormChange: PropTypes.func,
+    closeModal: PropTypes.func,
 };
 
 function mapStateToProps(state) {
@@ -485,6 +490,9 @@ function mapDispatchToProps(dispatch, params) {
                     }
                 });
             }
+        },
+        closeModal() {
+            dispatch(formUpdate({ openModal: false }));
         },
     };
 }
