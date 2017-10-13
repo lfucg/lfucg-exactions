@@ -321,6 +321,14 @@ class PaymentSerializer(serializers.ModelSerializer):
             'paid_by_type_display',
         )
 
+class ProfileSerializer(serializers.ModelSerializer):
+     class Meta:
+        model = Profile
+        fields = (
+            'id',
+            'is_supervisor',
+        )       
+
 class UserSerializer(serializers.ModelSerializer):
 
     password = serializers.CharField(write_only=True)
@@ -342,7 +350,7 @@ class UserSerializer(serializers.ModelSerializer):
         user.set_password(pwd)
         user.save()
 
-        tasks.send_welcome_email.delay(user.id)
+        # tasks.send_welcome_email.delay(user.id)
 
         return user
 

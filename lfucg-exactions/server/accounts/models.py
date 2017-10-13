@@ -301,3 +301,7 @@ class AccountLedger(models.Model):
 
     def __str__(self):
         return self.entry_type
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+    is_supervisor = models.BooleanField(default=False)
