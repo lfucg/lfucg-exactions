@@ -73,7 +73,7 @@ class SubdivisionSummary extends React.Component {
 
         const platIds = plats && plats.length > 0 && map(plat => plat.id)(plats);
 
-        const subdivisionLots = lots && compose(
+        const subdivisionLots = lots && plats && plats.length > 0 && compose(
                 map((lot) => {
                     return (
                         <div key={lot.id}>
