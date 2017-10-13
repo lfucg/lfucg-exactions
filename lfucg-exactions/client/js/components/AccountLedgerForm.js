@@ -48,6 +48,8 @@ class AccountLedgerForm extends React.Component {
             accountFormChange,
         } = this.props;
 
+        const currentParam = this.props.params.id;
+
         const platsList = plats.length > 0 && (map((plat) => {
             return (
                 <option key={plat.id} value={[plat.id, plat.name, plat.plat_exactions.plat_non_sewer_due, plat.plat_exactions.plat_sewer_due]} >
@@ -108,6 +110,7 @@ class AccountLedgerForm extends React.Component {
                 <div className="inside-body">
                     <div className="container">
                         <div className="col-sm-offset-1 col-sm-10">
+                            {currentParam && accountLedgers.is_approved === false && <div className="row"><h1 className="approval-pending">Approval Pending</h1></div>}
                             <form onSubmit={() => onSubmit(activeForm.plat_lot)} >
 
                                 <fieldset>
@@ -241,6 +244,7 @@ AccountLedgerForm.propTypes = {
     agreements: PropTypes.array,
     accountLedgers: PropTypes.array,
     route: PropTypes.object,
+    params: PropTypes.object,
     onComponentDidMount: PropTypes.func,
     onSubmit: PropTypes.func,
     formChange: PropTypes.func,

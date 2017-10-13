@@ -39,6 +39,8 @@ class ProjectCostForm extends React.Component {
             formChange,
         } = this.props;
 
+        const currentParam = this.props.params.id;
+
         const projectsList = projects.length > 0 &&
             (map((project) => {
                 return (
@@ -68,6 +70,7 @@ class ProjectCostForm extends React.Component {
                 <div className="inside-body">
                     <div className="container">
                         <div className="col-sm-offset-1 col-sm-10">
+                            {currentParam && projectCosts.is_approved === false && <div className="row"><h1 className="approval-pending">Approval Pending</h1></div>}
                             <form onSubmit={onSubmit} >
 
                                 <fieldset>
@@ -163,6 +166,7 @@ ProjectCostForm.propTypes = {
     projects: PropTypes.array,
     projectCosts: PropTypes.array,
     route: PropTypes.object,
+    params: PropTypes.object,
     onComponentDidMount: PropTypes.func,
     onSubmit: PropTypes.func,
     formChange: PropTypes.func,

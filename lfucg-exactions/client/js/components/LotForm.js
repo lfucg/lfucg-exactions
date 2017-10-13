@@ -48,6 +48,8 @@ class LotForm extends React.Component {
             selectedLot,
         } = this.props;
 
+        const currentParam = this.props.params.id;
+
         const currentLot = lots && lots.length > 0 &&
             filter(lot => lot.id === parseInt(selectedLot, 10))(lots)[0];
 
@@ -99,6 +101,7 @@ class LotForm extends React.Component {
                 <div className="inside-body">
                     <div className="container">
                         <div className="col-md-offset-1 col-md-10 panel-group" id="accordion" role="tablist" aria-multiselectable="false">
+                            {currentParam && lots.is_approved === false && <div className="row"><h1 className="approval-pending">Approval Pending</h1></div>}
                             <a
                               role="button"
                               data-toggle="collapse"
@@ -414,6 +417,7 @@ LotForm.propTypes = {
     lots: PropTypes.array,
     accounts: PropTypes.array,
     route: PropTypes.object,
+    params: PropTypes.object,
     onComponentDidMount: PropTypes.func,
     formChange: PropTypes.func,
     onLotSubmit: PropTypes.func,

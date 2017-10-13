@@ -46,6 +46,8 @@ class PaymentForm extends React.Component {
             lotChange,
         } = this.props;
 
+        const currentParam = this.props.params.id;
+
         const lotsList = lots.length > 0 &&
             (map((lot) => {
                 return (
@@ -94,6 +96,7 @@ class PaymentForm extends React.Component {
                 <div className="inside-body">
                     <div className="container">
                         <div className="col-sm-offset-1 col-sm-10">
+                            {currentParam && payments.is_approved === false && <div className="row"><h1 className="approval-pending">Approval Pending</h1></div>}
                             <form onSubmit={onSubmit} >
 
                                 <fieldset>
@@ -287,6 +290,7 @@ PaymentForm.propTypes = {
     agreements: PropTypes.object,
     payments: PropTypes.object,
     route: PropTypes.object,
+    params: PropTypes.object,
     onComponentDidMount: PropTypes.func,
     onSubmit: PropTypes.func,
     formChange: PropTypes.func,
