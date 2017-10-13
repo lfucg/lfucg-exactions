@@ -2,10 +2,16 @@ from django.contrib.auth.models import User
 from rest_framework import serializers
 
 from rest_framework.authtoken.models import Token
+from accounts.serializers import ProfileSerializer
+
+class ProfileField(serializers.Field):
+    def to_representation(self, obj):
+        return ProfileSerializer(obj).data
 
 class CurrentUserSerializer(serializers.ModelSerializer):
     token = serializers.SerializerMethodField(read_only=True)
     permissions = serializers.SerializerMethodField(read_only=True)
+    profile = ProfileField(read_only=True)
 
     def get_token(self, obj):
         token_value = Token.objects.filter(user=obj)[0].key
@@ -31,4 +37,5 @@ class CurrentUserSerializer(serializers.ModelSerializer):
             'is_superuser',
             'token',
             'permissions',
+            'profile',
         )

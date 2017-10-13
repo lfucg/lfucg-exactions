@@ -34,7 +34,7 @@ STATIC_FILE_DIR = BASE_DIR.child("static")
 # http://www.i18nguy.com/unicode/language-identifiers.html
 LANGUAGE_CODE = 'en-us'
 
-BASE_URL = "http://52.201.224.95/"
+# BASE_URL = "http://52.201.224.95/"
 # Defines the views served for root URLs.
 ROOT_URLCONF = 'server.urls'
 

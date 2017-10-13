@@ -54,7 +54,7 @@ class PlatViewSet(viewsets.ModelViewSet):
     permission_classes = (CanAdminister,)
     filter_backends = (DjangoFilterBackend, filters.SearchFilter,)
     search_fields = ('name', 'expansion_area', 'slide', 'subdivision__name', 'cabinet', 'slide', 'unit', 'section', 'block',)
-    filter_fields = ('expansion_area', 'account', 'subdivision', 'plat_type', 'lot__id',)
+    filter_fields = ('expansion_area', 'account', 'subdivision', 'plat_type', 'lot__id', 'is_approved',)
 
     def get_queryset(self):
         queryset = Plat.objects.all()
@@ -89,8 +89,8 @@ class LotViewSet(viewsets.ModelViewSet):
     queryset = Lot.objects.all()
     permission_classes = (CanAdminister,)
     filter_backends = (DjangoFilterBackend, filters.SearchFilter,)
-    filter_fields = ('account', 'plat',)
-    search_fields = ('address_full', 'lot_number', 'parcel_id', 'permit_id', 'plat__expansion_area', 'plat__name',)
+    search_fields = ('address_full', 'lot_number', 'parcel_id', 'permit_id', 'plat__expansion_area', 'plat__name', )
+    filter_fields = ('account', 'plat', 'is_approved',)
 
 
     def get_queryset(self):

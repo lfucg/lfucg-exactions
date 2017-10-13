@@ -42,7 +42,7 @@ class SubdivisionExisting extends React.Component {
                 return (
                     <div key={subdivision.id} className="col-xs-12">
                         <div className="row form-subheading">
-                            <div className="col-sm-7 col-md-9">
+                            <div className="col-sm-11">
                                 <h3>{subdivision.name}</h3>
                             </div>
                         </div>
