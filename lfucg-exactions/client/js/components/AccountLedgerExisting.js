@@ -70,27 +70,25 @@ class AccountLedgerExisting extends React.Component {
                                     </h3>
                                 </div>
                             </div>
-                            <div className="row link-row">
-                                <div className={accountLedger.is_approved ? 'row link-row' : 'row link-row-approval-pending'}>
-                                    <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
-                                        <div className="col-xs-5">
-                                            {currentUser && currentUser.permissions && currentUser.permissions.accountledger &&
-                                                <Link to={`credit-transfer/form/${accountLedger.id}`} aria-label="Edit">
-                                                    <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
-                                                    <div className="col-xs-7 link-label">
-                                                        Edit
-                                                    </div>
-                                                </Link>
-                                            }
-                                        </div>
-                                        <div className="col-xs-5 ">
-                                            <Link to={`credit-transfer/summary/${accountLedger.id}`} aria-label="Summary">
-                                                <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
+                            <div className={accountLedger.is_approved ? 'row link-row' : 'row link-row-approval-pending'}>
+                                <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
+                                    <div className="col-xs-5">
+                                        {currentUser && currentUser.permissions && currentUser.permissions.accountledger &&
+                                            <Link to={`credit-transfer/form/${accountLedger.id}`} aria-label="Edit">
+                                                <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
                                                 <div className="col-xs-7 link-label">
-                                                    Summary
+                                                    Edit
                                                 </div>
                                             </Link>
-                                        </div>
+                                        }
+                                    </div>
+                                    <div className="col-xs-5 ">
+                                        <Link to={`credit-transfer/summary/${accountLedger.id}`} aria-label="Summary">
+                                            <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
+                                            <div className="col-xs-7 link-label">
+                                                Summary
+                                            </div>
+                                        </Link>
                                     </div>
                                 </div>
                             </div>
