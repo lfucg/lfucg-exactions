@@ -33,6 +33,7 @@ import {
 
 class LotForm extends React.Component {
     componentDidMount() {
+        window.scroll(0, 0);
         this.props.onComponentDidMount();
     }
 
@@ -233,22 +234,28 @@ class LotForm extends React.Component {
                                                 </div>
                                                 <div className="col-sm-6">
                                                     <FormGroup label="Permit ID" id="permit_id">
-                                                        <input type="text" className="form-control" placeholder="Permit ID" disabled={currentLot && currentLot.lot_exactions && currentLot.lot_exactions.current_exactions_number > 0} />
+                                                        <input type="text" className="form-control" placeholder="Permit ID" />
                                                     </FormGroup>
-                                                    {currentLot && currentLot.lot_exactions && currentLot.lot_exactions.current_exactions_number > 0 &&
-                                                        <span className="help-block">This lot still has {currentLot.lot_exactions.current_exactions} in exactions. You may add a Permit ID when exactions are paid.</span>
-                                                    }
                                                 </div>
                                             </div>
                                         </fieldset>
-                                        <button disabled={!submitEnabled} className="btn btn-lex">Submit</button>
-                                        {!submitEnabled ? (
-                                            <div>
-                                                <div className="clearfix" />
-                                                <span> * All required fields must be filled.</span>
+                                        <div className="row">
+                                            <div className="col-sm-6">
+                                                <button disabled={!submitEnabled} className="btn btn-lex">Submit</button>
+                                                {!submitEnabled ? (
+                                                    <div>
+                                                        <div className="clearfix" />
+                                                        <span> * All required fields must be filled.</span>
+                                                    </div>
+                                                ) : null
+                                                }
                                             </div>
-                                        ) : null
-                                        }
+                                            <div className="col-sm-6">
+                                                {currentLot && currentLot.lot_exactions && currentLot.lot_exactions.current_exactions_number > 0 &&
+                                                    <span className="help-block alert alert-danger">&nbsp;This lot still has {currentLot.lot_exactions.current_exactions} in exactions.</span>
+                                                }
+                                            </div>
+                                        </div>
                                     </form>
                                 </div>
                             </div>
@@ -271,7 +278,7 @@ class LotForm extends React.Component {
                                     </a>
                                     <div
                                       id="collapseLotExactions"
-                                      className="panel-collapse collapse in row"
+                                      className="panel-collapse collapse row"
                                       role="tabpanel"
                                       aria-labelledby="#headingLotExactions"
                                     >

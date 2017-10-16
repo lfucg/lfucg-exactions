@@ -154,13 +154,24 @@ class LotSummary extends React.Component {
                                             <div>
                                                 <div className="modal-header">
                                                     <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                                    <h3 className="modal-title" id="modalLabel">Exactions due on this lot.</h3>
+                                                    <h3 className="modal-title text-center" id="modalLabel">Permit Addition: {currentLot.address_full}</h3>
                                                 </div>
                                                 <div className="modal-body">
-                                                    <h4 className="text-center">Our records indicate an outstanding balance of <strong>{(currentLot.lot_exactions.current_exactions).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</strong> for this lot. Please contact finance to submit payment prior to applying for a permit for:</h4>
-                                                    <h4 className="text-center">{currentLot.address_full}</h4>
+                                                    <h4 className="text-center">Records indicate an outstanding exactions balance of</h4>
+                                                    <div className="row text-center alert alert-danger">
+                                                        <h2><strong>{(currentLot.lot_exactions.current_exactions).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</strong></h2>
+                                                    </div>
+                                                    <h4 className="text-center">for {currentLot.address_full}</h4>
+                                                    <div className="row">
+                                                        <div className="text-center col-sm-4 col-sm-offset-4 col-xs-12">
+                                                            <FormGroup label="Enter Permit ID" id="permit_id">
+                                                                <input type="text" className="form-control" placeholder="Permit ID" />
+                                                            </FormGroup>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                                 <div className="modal-footer">
+                                                    <button type="button" className="btn btn-primary" onClick={addPermitToLot} data-dismiss="modal">Save</button>
                                                     <button type="button" className="btn btn-default" data-dismiss="modal">Close</button>
                                                 </div>
                                             </div>
@@ -171,8 +182,8 @@ class LotSummary extends React.Component {
                                                         <h2 className="modal-title text-center" id="modalLabel">Permit Request: {currentLot.address_full}</h2>
                                                     </div>
                                                     <div className="modal-body">
-                                                        <FormGroup label="Permit ID" id="permit_id">
-                                                            <input type="text" className="form-control" placeholder="Please enter the Permit ID for this lot..." />
+                                                        <FormGroup label="Enter Permit ID" id="permit_id">
+                                                            <input type="text" className="form-control" placeholder="Permit ID" />
                                                         </FormGroup>
                                                     </div>
                                                     <div className="modal-footer">
@@ -575,6 +586,7 @@ function mapDispatchToProps(dispatch, params) {
             if (selectedLot) {
                 dispatch(putPermitIdOnLot(selectedLot))
                 .then(() => {
+                    dispatch(getLots());
                     dispatch(getLotID(selectedLot));
                 });
             }
