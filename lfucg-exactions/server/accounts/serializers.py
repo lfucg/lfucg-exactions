@@ -278,6 +278,8 @@ class PaymentSerializer(serializers.ModelSerializer):
     payment_type_display = serializers.SerializerMethodField(read_only=True)
     paid_by_type_display = serializers.SerializerMethodField(read_only=True)
 
+    dollar_values = serializers.SerializerMethodField(read_only=True)
+
     lot_id = LotField()
 
     def get_total_paid(self,obj):
@@ -296,6 +298,16 @@ class PaymentSerializer(serializers.ModelSerializer):
 
     def get_paid_by_type_display(self, obj):
         return obj.get_paid_by_type_display()
+
+    def get_dollar_values(self, obj):
+        return {
+            'paid_roads': '${:,.2f}'.format(obj.paid_roads),
+            'paid_sewer_trans': '${:,.2f}'.format(obj.paid_sewer_trans),
+            'paid_sewer_cap': '${:,.2f}'.format(obj.paid_sewer_cap),
+            'paid_parks': '${:,.2f}'.format(obj.paid_parks),
+            'paid_storm': '${:,.2f}'.format(obj.paid_storm),
+            'paid_open_space': '${:,.2f}'.format(obj.paid_open_space),
+        }
 
     class Meta:
         model = Payment
@@ -327,6 +339,7 @@ class PaymentSerializer(serializers.ModelSerializer):
             'total_paid',
             'payment_type_display',
             'paid_by_type_display',
+            'dollar_values',
         )
 
 class ProfileSerializer(serializers.ModelSerializer):
