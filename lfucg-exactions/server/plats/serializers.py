@@ -42,10 +42,21 @@ class CalculationWorksheetSerializer(serializers.ModelSerializer):
 
 class PlatZoneSerializer(serializers.ModelSerializer):
     cleaned_acres = serializers.SerializerMethodField(read_only=True)
+    dollar_values = serializers.SerializerMethodField(read_only=True)
 
     def get_cleaned_acres(self, obj):
         set_acreage = str(obj.acres).rstrip('0').rstrip('.')
         return set_acreage
+
+    def get_dollar_values(self, obj):
+        return {
+            'dollar_roads': '${:,.2f}'.format(obj.dues_roads),
+            'dollar_open_spaces': '${:,.2f}'.format(obj.dues_open_spaces),
+            'dollar_sewer_cap': '${:,.2f}'.format(obj.dues_sewer_cap),
+            'dollar_sewer_trans': '${:,.2f}'.format(obj.dues_sewer_trans),
+            'dollar_parks': '${:,.2f}'.format(obj.dues_parks),
+            'dollar_storm_water': '${:,.2f}'.format(obj.dues_storm_water),
+        }
 
     class Meta:
         model = PlatZone
@@ -69,6 +80,7 @@ class PlatZoneSerializer(serializers.ModelSerializer):
             'dues_storm_water',
 
             'cleaned_acres',
+            'dollar_values',
         )
 
 class SubdivisionField(serializers.Field):
