@@ -104,8 +104,8 @@ class PlatExisting extends React.Component {
                             </div>
                             <div className="row">
                                 <div className="col-sm-offset-1">
-                                    <p className="col-sm-4 col-xs-6">Sewer Remaining: {plat.plat_exactions && plat.plat_exactions.plat_sewer_due}</p>
-                                    <p className="col-sm-4 col-xs-6">Non-Sewer Remaining: {plat.plat_exactions && plat.plat_exactions.plat_non_sewer_due}</p>
+                                    <p className="col-xs-6">Sewer Remaining: {plat.plat_exactions && plat.plat_exactions.plat_sewer_due}</p>
+                                    <p className="col-xs-6">Non-Sewer Remaining: {plat.plat_exactions && plat.plat_exactions.plat_non_sewer_due}</p>
                                     <p className="col-sm-4 col-xs-6">Slide: {plat.slide}</p>
                                     <p className="col-sm-4 col-xs-6">Cabinet: {plat.cabinet}</p>
                                     <p className="col-sm-4 col-xs-6">Section: {plat.section}</p>
