@@ -154,14 +154,14 @@ class LotSummary extends React.Component {
                                             <div>
                                                 <div className="modal-header">
                                                     <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                                    <h3 className="modal-title text-center" id="modalLabel">Permit Addition: {currentLot.address_full}</h3>
+                                                    <h3 className="modal-title text-center" id="modalLabel">Permit Addition</h3>
                                                 </div>
                                                 <div className="modal-body">
                                                     <h4 className="text-center">Records indicate an outstanding exactions balance of</h4>
                                                     <div className="row text-center alert alert-danger">
                                                         <h2><strong>{(currentLot.lot_exactions.current_exactions).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</strong></h2>
                                                     </div>
-                                                    <h4 className="text-center">for {currentLot.address_full}</h4>
+                                                    <h4 className="text-center">for {currentLot.address_full}.</h4>
                                                     <div className="row">
                                                         <div className="text-center col-sm-4 col-sm-offset-4 col-xs-12">
                                                             <FormGroup label="Enter Permit ID" id="permit_id">
@@ -179,12 +179,20 @@ class LotSummary extends React.Component {
                                                 <div>
                                                     <div className="modal-header">
                                                         <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                                        <h2 className="modal-title text-center" id="modalLabel">Permit Request: {currentLot.address_full}</h2>
+                                                        <h3 className="modal-title text-center" id="modalLabel">Permit Addition</h3>
                                                     </div>
                                                     <div className="modal-body">
-                                                        <FormGroup label="Enter Permit ID" id="permit_id">
-                                                            <input type="text" className="form-control" placeholder="Permit ID" />
-                                                        </FormGroup>
+                                                        <h4 className="text-center">Records indicate this lot has no exactions to be paid. You may enter a permit ID for:</h4>
+                                                        <div className="row text-center alert alert-success">
+                                                            <h2><strong>{currentLot.address_full}</strong></h2>
+                                                        </div>
+                                                        <div className="row">
+                                                            <div className="text-center col-sm-4 col-sm-offset-4 col-xs-12">
+                                                                <FormGroup label="Enter Permit ID" id="permit_id">
+                                                                    <input type="text" className="form-control" placeholder="Permit ID" />
+                                                                </FormGroup>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                     <div className="modal-footer">
                                                         <button type="button" className="btn btn-primary" onClick={addPermitToLot} data-dismiss="modal">Save</button>
