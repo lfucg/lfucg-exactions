@@ -16,7 +16,6 @@ import {
     getAccounts,
     searchQuery,
     getPayments,
-    getAccountLedgers,
 } from '../actions/apiActions';
 
 class LotExisting extends React.Component {
@@ -31,7 +30,6 @@ class LotExisting extends React.Component {
             plats,
             accounts,
             payments,
-            accountLedgers,
             removeSearchPagination,
         } = this.props;
 
@@ -122,9 +120,8 @@ class LotExisting extends React.Component {
             'Current Total Due',
         ];
         let paymentLengthPerLot = 0;
-        let ledgerLengthPerLot = 0;
-
-        const csvData = lots.length > 0 ?
+        // let ledgerLengthPerLot = 0;
+        const csvData = lots && payments &&
             (map((single_lot) => {
                 const data = [
                     single_lot.address_full || '',
@@ -134,18 +131,18 @@ class LotExisting extends React.Component {
                     single_lot.lot_number || '',
                     single_lot.parcel_id || '',
                     single_lot.permit_id || '',
-                    (single_lot.plat && single_lot.plat.name) || '',
-                    (single_lot.plat && single_lot.plat.plat_type_display) || '',
-                    (single_lot.lot_exactions && single_lot.lot_exactions.total_exactions) || '',
-                    (single_lot.lot_exactions && single_lot.lot_exactions.sewer_due) || '',
-                    (single_lot.lot_exactions && single_lot.lot_exactions.non_sewer_due) || '',
-                    (single_lot.lot_exactions && single_lot.lot_exactions.dues_sewer_trans_dev) || '',
-                    (single_lot.lot_exactions && single_lot.lot_exactions.dues_sewer_cap_dev) || '',
-                    (single_lot.lot_exactions && single_lot.lot_exactions.dues_roads_dev) || '',
-                    (single_lot.lot_exactions && single_lot.lot_exactions.dues_parks_dev) || '',
-                    (single_lot.lot_exactions && single_lot.lot_exactions.dues_storm_dev) || '',
-                    (single_lot.lot_exactions && single_lot.lot_exactions.dues_open_space_dev) || '',
-                    (single_lot.lot_exactions && single_lot.lot_exactions.current_exactions) || '',
+                    single_lot.plat.name || '',
+                    single_lot.plat.plat_type_display || '',
+                    single_lot.lot_exactions.total_exactions || '',
+                    single_lot.lot_exactions.sewer_due || '',
+                    single_lot.lot_exactions.non_sewer_due || '',
+                    single_lot.lot_exactions.dues_sewer_trans_dev || '',
+                    single_lot.lot_exactions.dues_sewer_cap_dev || '',
+                    single_lot.lot_exactions.dues_roads_dev || '',
+                    single_lot.lot_exactions.dues_parks_dev || '',
+                    single_lot.lot_exactions.dues_storm_dev || '',
+                    single_lot.lot_exactions.dues_open_space_dev || '',
+                    single_lot.lot_exactions.current_exactions || '',
                 ];
 
                 const paymentsOnCurrentLot = payments.length > 0 &&
@@ -154,45 +151,13 @@ class LotExisting extends React.Component {
                 map((payment) => {
                     if (paymentLengthPerLot < paymentsOnCurrentLot.length) {
                         paymentLengthPerLot += 1;
-                        headers.push(
-                            `Pymt. ${paymentLengthPerLot} Date`,
-                            `Pymt. ${paymentLengthPerLot} Amt.`,
-                            `Pymt. ${paymentLengthPerLot} Type`,
-                            );
+                        headers.push(`Payment ${paymentLengthPerLot}`);
                     }
-                    data.push(
-                        payment.date_created,
-                        payment.total_paid,
-                        payment.payment_type_display,
-                        );
-
+                    data.push(payment.total_paid);
                 })(paymentsOnCurrentLot);
 
-                const ledgersOnCurrentLot = accountLedgers.length > 0 &&
-                    filter(accountLedger => accountLedger.lot.id === single_lot.id)(accountLedgers);
-
-                map((ledger) => {
-                    if (ledgerLengthPerLot < ledgersOnCurrentLot.length) {
-                        ledgerLengthPerLot += 1;
-                        headers.push(
-                            `Trf. ${ledgerLengthPerLot} Date`,
-                            `Trf. ${ledgerLengthPerLot} Sewer`,
-                            `Trf. ${ledgerLengthPerLot} Non-Sewer`,
-                            `Trf. ${ledgerLengthPerLot} Type`,
-                            );
-                    }
-
-                    data.push(
-                        ledger.entry_date,
-                        ledger.sewer_credits,
-                        ledger.non_sewer_credits,
-                        ledger.entry_type_display,
-                        );
-
-                })(ledgersOnCurrentLot);
-
                 return data;
-            })(lots)) : 'none';
+            })(lots));
 
         return (
             <div className="lot-existing">
@@ -237,12 +202,11 @@ class LotExisting extends React.Component {
                                 </CSVLink>
                                 <h5>Lots included in file:</h5>
                                 <div className="csv-modal">
-                                    {lots.length > 0 &&
-                                        map((lot) => {
-                                            return (
-                                                <p key={lot.id}>{lot.address_full}</p>
-                                            );
-                                        })(lots)
+                                    {map((lot) => {
+                                        return (
+                                            <p key={lot.id}>{lot.address_full}</p>
+                                        );
+                                    })(lots)
                                     }
                                 </div>
                             </div>
@@ -270,7 +234,6 @@ LotExisting.propTypes = {
     plats: PropTypes.array,
     accounts: PropTypes.array,
     payments: PropTypes.array,
-    accountLedgers: PropTypes.array,
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
     removeSearchPagination: PropTypes.func,
@@ -283,18 +246,14 @@ function mapStateToProps(state) {
         plats: state.plats,
         accounts: state.accounts,
         payments: state.payments,
-        accountLedgers: state.accountLedgers,
     };
 }
 
 function mapDispatchToProps(dispatch) {
     return {
         onComponentDidMount() {
-            dispatch(getPagination('/lot/'))
-            .then(() => {
-                dispatch(getPayments());
-                dispatch(getAccountLedgers());
-            });
+            dispatch(getPagination('/lot/'));
+            dispatch(getPayments());
         },
         removeSearchPagination() {
             dispatch(searchQuery('isCSV'));
@@ -304,4 +263,3 @@ function mapDispatchToProps(dispatch) {
 
 
 export default connect(mapStateToProps, mapDispatchToProps)(LotExisting);
-
