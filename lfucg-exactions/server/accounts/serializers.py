@@ -233,9 +233,16 @@ class AccountLedgerSerializer(serializers.ModelSerializer):
     account_to = AccountField()
 
     entry_type_display = serializers.SerializerMethodField(read_only=True)
+    dollar_values = serializers.SerializerMethodField(read_only=True)
 
     def get_entry_type_display(self, obj):
         return obj.get_entry_type_display()
+
+    def get_dollar_values(self, obj):
+        return {
+            'dollar_non_sewer': '${:,.2f}'.format(obj.non_sewer_credits),
+            'dollar_sewer': '${:,.2f}'.format(obj.sewer_credits),
+        }
 
     class Meta:
         model = AccountLedger
@@ -259,6 +266,7 @@ class AccountLedgerSerializer(serializers.ModelSerializer):
             'sewer_credits',
 
             'entry_type_display',
+            'dollar_values',
         )
 
 class PaymentSerializer(serializers.ModelSerializer):
@@ -281,7 +289,7 @@ class PaymentSerializer(serializers.ModelSerializer):
             obj.paid_storm +
             obj.paid_open_space
         )
-        return total
+        return '${:,.2f}'.format(total)
 
     def get_payment_type_display(self, obj):
         return obj.get_payment_type_display()
