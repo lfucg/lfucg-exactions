@@ -204,7 +204,7 @@ class AccountForm extends React.Component {
 
 AccountForm.propTypes = {
     activeForm: PropTypes.object,
-    accounts: PropTypes.object,
+    accounts: PropTypes.array,
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
     onSubmit: PropTypes.func,

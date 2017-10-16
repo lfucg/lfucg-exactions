@@ -4,13 +4,14 @@ import {
     // Link,
     hashHistory,
 } from 'react-router';
-import { map } from 'ramda';
+import { map, filter } from 'ramda';
 import PropTypes from 'prop-types';
 
 import Navbar from './Navbar';
 import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
 import Notes from './Notes';
+import Uploads from './Uploads';
 
 import FormGroup from './FormGroup';
 
@@ -27,6 +28,7 @@ import {
     getPlatID,
     getAccounts,
     getAccountID,
+    getLots,
 } from '../actions/apiActions';
 
 class LotForm extends React.Component {
@@ -43,7 +45,13 @@ class LotForm extends React.Component {
             formChange,
             onLotSubmit,
             onLotDues,
+            selectedLot,
         } = this.props;
+
+        const currentParam = this.props.params.id;
+
+        const currentLot = lots && lots.length > 0 &&
+            filter(lot => lot.id === parseInt(selectedLot, 10))(lots)[0];
 
         const platsList = plats && plats.length > 0 &&
             (map((single_plat) => {
@@ -64,14 +72,13 @@ class LotForm extends React.Component {
             })(accounts));
 
         const ownerDisabled =
-            lots &&
-            lots.dues_roads_own &&
-            lots.dues_roads_own === '0.00' &&
-            lots.dues_parks_own === '0.00' &&
-            lots.dues_storm_own === '0.00' &&
-            lots.dues_open_space_own === '0.00' &&
-            lots.dues_sewer_cap_own === '0.00' &&
-            lots.dues_sewer_trans_own === '0.00';
+            activeForm.dues_roads_own &&
+            activeForm.dues_roads_own === '0.00' &&
+            activeForm.dues_parks_own === '0.00' &&
+            activeForm.dues_storm_own === '0.00' &&
+            activeForm.dues_open_space_own === '0.00' &&
+            activeForm.dues_sewer_cap_own === '0.00' &&
+            activeForm.dues_sewer_trans_own === '0.00';
 
         const submitEnabled =
             activeForm.plat !== 'choose_plat' &&
@@ -94,6 +101,7 @@ class LotForm extends React.Component {
                 <div className="inside-body">
                     <div className="container">
                         <div className="col-md-offset-1 col-md-10 panel-group" id="accordion" role="tablist" aria-multiselectable="false">
+                            {currentParam && lots.is_approved === false && <div className="row"><h1 className="approval-pending">Approval Pending</h1></div>}
                             <a
                               role="button"
                               data-toggle="collapse"
@@ -223,13 +231,14 @@ class LotForm extends React.Component {
                                                         <input type="text" className="form-control" placeholder="Parcel ID" />
                                                     </FormGroup>
                                                 </div>
-                                                {lots.total_due <= 0 &&
                                                 <div className="col-sm-6">
                                                     <FormGroup label="Permit ID" id="permit_id">
-                                                        <input type="text" className="form-control" placeholder="Permit ID" />
+                                                        <input type="text" className="form-control" placeholder="Permit ID" disabled={currentLot && currentLot.lot_exactions && currentLot.lot_exactions.current_exactions_number > 0} />
                                                     </FormGroup>
+                                                    {currentLot && currentLot.lot_exactions && currentLot.lot_exactions.current_exactions_number > 0 &&
+                                                        <span className="help-block">This lot still has {currentLot.lot_exactions.current_exactions} in exactions. You may add a Permit ID when exactions are paid.</span>
+                                                    }
                                                 </div>
-                                                }
                                             </div>
                                         </fieldset>
                                         <button disabled={!submitEnabled} className="btn btn-lex">Submit</button>
@@ -351,36 +360,48 @@ class LotForm extends React.Component {
                                     </div>
                                 </div>
                             ) : null}
-                            <a
-                              role="button"
-                              data-toggle="collapse"
-                              data-parent="#accordion"
-                              href="#collapseNotes"
-                              aria-expanded="true"
-                              aria-controls="collapseNotes"
-                            >
-                                <div className="row section-heading" role="tab" id="headingNotes">
-                                    <div className="col-xs-1 caret-indicator" />
-                                    <div className="col-xs-10">
-                                        <h2>Notes</h2>
+                            {currentLot && currentLot.id && currentLot.plat &&
+                                <div>
+                                    <a
+                                      role="button"
+                                      data-toggle="collapse"
+                                      data-parent="#accordion"
+                                      href="#collapseNotes"
+                                      aria-expanded="true"
+                                      aria-controls="collapseNotes"
+                                    >
+                                        <div className="row section-heading" role="tab" id="headingNotes">
+                                            <div className="col-xs-1 caret-indicator" />
+                                            <div className="col-xs-10">
+                                                <h2>Notes</h2>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <div
+                                      id="collapseNotes"
+                                      className="panel-collapse collapse in row"
+                                      role="tabpanel"
+                                      aria-labelledby="#headingNotes"
+                                    >
+                                        <div className="panel-body">
+                                            <div className="col-xs-12">
+                                                <Notes content_type="plats_lot" object_id={currentLot.id} parent_content_type="plats_plat" parent_object_id={currentLot.plat.id} />
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                            </a>
-                            <div
-                              id="collapseNotes"
-                              className="panel-collapse collapse in row"
-                              role="tabpanel"
-                              aria-labelledby="#headingNotes"
-                            >
-                                <div className="panel-body">
-                                    <div className="col-xs-12">
-                                        {lots.id && lots.plat &&
-                                            <Notes content_type="Lot" object_id={lots.id} parent_content_type="Plat" parent_object_id={lots.plat.id} />
-                                        }
-                                    </div>
-                                </div>
-                            </div>
+                            }
                         </div>
+                        <div className="clearfix" />
+                        {currentLot && currentLot.id &&
+                            <Uploads
+                              file_content_type="plats_lot"
+                              file_object_id={currentLot.id}
+                              ariaExpanded="true"
+                              panelClass="panel-collapse collapse row in"
+                              permission="lot"
+                            />
+                        }
                     </div>
                 </div>
 
@@ -392,14 +413,16 @@ class LotForm extends React.Component {
 
 LotForm.propTypes = {
     activeForm: PropTypes.object,
-    plats: PropTypes.object,
-    lots: PropTypes.object,
-    accounts: PropTypes.object,
+    plats: PropTypes.array,
+    lots: PropTypes.array,
+    accounts: PropTypes.array,
     route: PropTypes.object,
+    params: PropTypes.object,
     onComponentDidMount: PropTypes.func,
     formChange: PropTypes.func,
     onLotSubmit: PropTypes.func,
     onLotDues: PropTypes.func,
+    selectedLot: PropTypes.string,
 };
 
 function mapStateToProps(state) {
@@ -419,6 +442,7 @@ function mapDispatchToProps(dispatch, params) {
     return {
         onComponentDidMount() {
             dispatch(formInit());
+            dispatch(getLots());
             dispatch(getPlats());
             dispatch(getAccounts());
             if (selectedLot) {
@@ -523,23 +547,8 @@ function mapDispatchToProps(dispatch, params) {
             event.preventDefault();
             if (selectedLot) {
                 dispatch(putLot(selectedLot))
-                .then((data_put_lot) => {
-                    const put_update = {
-                        first_section: true,
-                        dues_roads_dev: data_put_lot.response.dues_roads_dev,
-                        dues_roads_own: data_put_lot.response.dues_roads_own,
-                        dues_sewer_trans_dev: data_put_lot.response.dues_sewer_trans_dev,
-                        dues_sewer_trans_own: data_put_lot.response.dues_sewer_trans_own,
-                        dues_sewer_cap_dev: data_put_lot.response.dues_sewer_cap_dev,
-                        dues_sewer_cap_own: data_put_lot.response.dues_sewer_cap_own,
-                        dues_parks_dev: data_put_lot.response.dues_parks_dev,
-                        dues_parks_own: data_put_lot.response.dues_parks_own,
-                        dues_storm_dev: data_put_lot.response.dues_storm_dev,
-                        dues_storm_own: data_put_lot.response.dues_storm_own,
-                        dues_open_space_dev: data_put_lot.response.dues_open_space_dev,
-                        dues_open_space_own: data_put_lot.response.dues_open_space_own,
-                    };
-                    dispatch(formUpdate(put_update));
+                .then(() => {
+                    hashHistory.push(`lot/summary/${selectedLot}`);
                 });
             } else {
                 dispatch(postLot())
@@ -572,6 +581,7 @@ function mapDispatchToProps(dispatch, params) {
                 });
             }
         },
+        selectedLot,
     };
 }
 

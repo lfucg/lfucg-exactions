@@ -8,9 +8,9 @@ import PropTypes from 'prop-types';
 
 import Navbar from './Navbar';
 import Footer from './Footer';
-
 import FormGroup from './FormGroup';
 import Breadcrumbs from './Breadcrumbs';
+import Uploads from './Uploads';
 
 import {
     formInit,
@@ -37,6 +37,8 @@ class ProjectForm extends React.Component {
             onSubmit,
             formChange,
         } = this.props;
+
+        const currentParam = this.props.params.id;
 
         const agreementsList = agreements.length > 0 ? (map((agreement) => {
             return (
@@ -69,6 +71,7 @@ class ProjectForm extends React.Component {
                 <div className="inside-body">
                     <div className="container">
                         <div className="col-sm-offset-1 col-sm-10">
+                            {currentParam && projects.is_approved === false && <div className="row"><h1 className="approval-pending">Approval Pending</h1></div>}
                             <form onSubmit={onSubmit} >
 
                                 <fieldset>
@@ -199,6 +202,16 @@ class ProjectForm extends React.Component {
                                 }
                             </form>
                         </div>
+                        <div className="clearfix" />
+                        {projects.id &&
+                            <Uploads
+                              file_content_type="accounts_project"
+                              file_object_id={projects.id}
+                              ariaExpanded="true"
+                              panelClass="panel-collapse collapse row in"
+                              permission="project"
+                            />
+                        }
                     </div>
                 </div>
 
@@ -210,9 +223,10 @@ class ProjectForm extends React.Component {
 
 ProjectForm.propTypes = {
     activeForm: PropTypes.object,
-    projects: PropTypes.object,
-    agreements: PropTypes.object,
+    projects: PropTypes.array,
+    agreements: PropTypes.array,
     route: PropTypes.object,
+    params: PropTypes.object,
     onComponentDidMount: PropTypes.func,
     onSubmit: PropTypes.func,
     formChange: PropTypes.func,
@@ -237,6 +251,7 @@ function mapDispatchToProps(dispatch, params) {
                 dispatch(getProjectID(selectedProject))
                 .then((data_project) => {
                     const update = {
+                        name: data_project.response.name,
                         agreement_id: data_project.response.agreement_id ? data_project.response.agreement_id.id : null,
                         agreement_id_show: data_project.response.agreement_id ? `${data_project.response.agreement_id.id},${data_project.response.agreement_id.resolution_number}` : '',
                         expansion_area: data_project.response.expansion_area,

@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 from django.contrib.auth.models import User
 from .models import *
-from .utils import calculate_account_balance
+from .utils import calculate_account_balance, calculate_agreement_balance
 from plats.models import Plat, Lot
 from plats.serializers import PlatSerializer, LotSerializer
 
@@ -88,9 +88,15 @@ class AgreementSerializer(serializers.ModelSerializer):
     account_id = AccountField()
 
     agreement_type_display = serializers.SerializerMethodField(read_only=True)
+    agreement_balance = serializers.SerializerMethodField(read_only=True)
 
     def get_agreement_type_display(self, obj):
         return obj.get_agreement_type_display()
+
+    def get_agreement_balance(self, obj):
+        return {
+            'total': '${:,.2f}'.format(calculate_agreement_balance(obj.id)),
+        }
 
     class Meta:
         model = Agreement
@@ -111,6 +117,7 @@ class AgreementSerializer(serializers.ModelSerializer):
             'agreement_type',
 
             'agreement_type_display',
+            'agreement_balance',
         )
 
 class AgreementField(serializers.Field):
@@ -220,7 +227,7 @@ class ProjectCostEstimateSerializer(serializers.ModelSerializer):
         )
 
 class AccountLedgerSerializer(serializers.ModelSerializer):
-    lot = LotField()
+    lot = LotField(required=False)
     agreement = AgreementField()
     account_from = AccountField()
     account_to = AccountField()
@@ -257,7 +264,7 @@ class AccountLedgerSerializer(serializers.ModelSerializer):
 class PaymentSerializer(serializers.ModelSerializer):
     lot_id = LotField()
     credit_account = AccountField()
-    credit_source = AgreementField()
+    credit_source = AgreementField(read_only=True)
 
     total_paid = serializers.SerializerMethodField(read_only=True)
     payment_type_display = serializers.SerializerMethodField(read_only=True)
@@ -314,6 +321,14 @@ class PaymentSerializer(serializers.ModelSerializer):
             'paid_by_type_display',
         )
 
+class ProfileSerializer(serializers.ModelSerializer):
+     class Meta:
+        model = Profile
+        fields = (
+            'id',
+            'is_supervisor',
+        )       
+
 class UserSerializer(serializers.ModelSerializer):
 
     password = serializers.CharField(write_only=True)
@@ -335,7 +350,7 @@ class UserSerializer(serializers.ModelSerializer):
         user.set_password(pwd)
         user.save()
 
-        tasks.send_welcome_email.delay(user.id)
+        # tasks.send_welcome_email.delay(user.id)
 
         return user
 

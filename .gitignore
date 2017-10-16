@@ -1,1 +1,10 @@
 .DS_Store
+
+dist/
+
+.env
+.env.json
+
+node_modules/
+npm-debug.log
+media/

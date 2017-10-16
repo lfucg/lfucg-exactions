@@ -97,7 +97,7 @@ class PlatZoneDuesForm extends React.Component {
 
 PlatZoneDuesForm.propTypes = {
     activeForm: PropTypes.object,
-    plats: PropTypes.object,
+    plats: PropTypes.array,
     plat_zone_id: PropTypes.string,
     plat_zone_value: PropTypes.number,
     zone_id: PropTypes.string,

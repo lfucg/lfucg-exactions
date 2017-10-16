@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from .models import *
-from .utils import calculate_lot_balance
+from .utils import calculate_lot_balance, calculate_plat_balance
 
 from notes.models import Note
 from notes.serializers import NoteSerializer
@@ -22,6 +22,8 @@ class SubdivisionSerializer(serializers.ModelSerializer):
             'is_active',
             'date_created',
             'date_modified',
+            'created_by',
+            'modified_by',
 
             'name',
             'gross_acreage',
@@ -84,6 +86,7 @@ class PlatSerializer(serializers.ModelSerializer):
     cleaned_total_acreage = serializers.SerializerMethodField(read_only=True)
     subdivision = SubdivisionField(required=False)
     plat_type_display = serializers.SerializerMethodField(read_only=True)
+    plat_exactions = serializers.SerializerMethodField(read_only=True)
 
     def get_cleaned_total_acreage(self, obj):
         set_acreage = str(obj.total_acreage).rstrip('0').rstrip('.')
@@ -91,6 +94,15 @@ class PlatSerializer(serializers.ModelSerializer):
 
     def get_plat_type_display(self, obj):
         return obj.get_plat_type_display()
+
+    def get_plat_exactions(self, obj):
+        calculated_exactions = calculate_plat_balance(obj.id)
+
+        return {
+            'plat_sewer_due': '${:,.2f}'.format(calculated_exactions['plat_sewer_due']),
+            'plat_non_sewer_due': '${:,.2f}'.format(calculated_exactions['plat_non_sewer_due']),
+            'remaining_lots': calculated_exactions['remaining_lots'],
+        }
 
     class Meta:
         model = Plat 
@@ -126,6 +138,8 @@ class PlatSerializer(serializers.ModelSerializer):
             'non_sewer_due',
             'plat_zone',
             'plat_type_display',
+
+            'plat_exactions',
         )
 
 class PlatField(serializers.Field):
@@ -156,7 +170,19 @@ class LotSerializer(serializers.ModelSerializer):
             'non_sewer_credits_applied': '${:,.2f}'.format(calculated_exactions['non_sewer_credits_applied']),
             'current_exactions': '${:,.2f}'.format(calculated_exactions['current_exactions']),
             'sewer_due': '${:,.2f}'.format(calculated_exactions['sewer_due']),
-            'non_sewer_due': '${:,.2f}'.format(calculated_exactions['non_sewer_due']),            
+            'non_sewer_due': '${:,.2f}'.format(calculated_exactions['non_sewer_due']), 
+            'dues_roads_dev': '${:,.2f}'.format(calculated_exactions['dues_roads_dev']),
+            'dues_roads_own': '${:,.2f}'.format(calculated_exactions['dues_roads_own']),
+            'dues_sewer_trans_dev': '${:,.2f}'.format(calculated_exactions['dues_sewer_trans_dev']),
+            'dues_sewer_trans_own': '${:,.2f}'.format(calculated_exactions['dues_sewer_trans_own']),
+            'dues_sewer_cap_dev': '${:,.2f}'.format(calculated_exactions['dues_sewer_cap_dev']),
+            'dues_sewer_cap_own': '${:,.2f}'.format(calculated_exactions['dues_sewer_cap_own']),
+            'dues_parks_dev': '${:,.2f}'.format(calculated_exactions['dues_parks_dev']),
+            'dues_parks_own': '${:,.2f}'.format(calculated_exactions['dues_parks_own']),
+            'dues_storm_dev': '${:,.2f}'.format(calculated_exactions['dues_storm_dev']),
+            'dues_storm_own': '${:,.2f}'.format(calculated_exactions['dues_storm_own']),
+            'dues_open_space_dev': '${:,.2f}'.format(calculated_exactions['dues_open_space_dev']),
+            'dues_open_space_own': '${:,.2f}'.format(calculated_exactions['dues_open_space_own']),
         }
 
     class Meta:

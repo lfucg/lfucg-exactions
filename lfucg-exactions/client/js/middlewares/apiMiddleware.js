@@ -9,8 +9,6 @@ import {
 } from '../constants/actionTypes';
 import {
     BASE_URL,
-    LOGIN,
-    ME,
 } from '../constants/apiConstants';
 
 export default function api({ getState, dispatch }) {

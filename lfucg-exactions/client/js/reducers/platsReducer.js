@@ -1,28 +1,28 @@
 import {
     GET_PLATS,
     GET_PLAT_ID,
-    GET_PLAT_QUERY,
     GET_SUBDIVISION_PLATS,
     POST_PLAT,
     PUT_PLAT,
     GET_PAGINATION,
+    SEARCH_QUERY,
 } from '../constants/apiConstants';
 
 
-const platsReducer = (state = {}, action) => {
+const platsReducer = (state = [], action) => {
     const {
         endpoint,
     } = action;
     switch (endpoint) {
     case GET_PLAT_ID:
     case GET_PLATS:
-    case GET_PLAT_QUERY:
     case GET_SUBDIVISION_PLATS:
     case PUT_PLAT:
         return action.response;
     case POST_PLAT:
         return {};
     case GET_PAGINATION:
+    case SEARCH_QUERY:
         const next = action.response.next;
         const prev = action.response.prev;
         if ((next != null && next.startsWith('/plat')) ||
@@ -30,7 +30,7 @@ const platsReducer = (state = {}, action) => {
             (window.location.hash === '#/plat')) {
             return action.response;
         }
-        return {};
+        return state;
     default:
         return state;
     }

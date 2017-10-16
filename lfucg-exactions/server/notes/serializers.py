@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
 
 from .models import *
-from plats.models import Plat, Lot
+from plats.models import Plat, Lot, Subdivision
 
 class UserNameField(serializers.Field):
     def to_internal_value(self, data):
@@ -15,15 +15,18 @@ class UserNameField(serializers.Field):
 
 class ContentTypeField(serializers.Field):
     def to_internal_value(self, data):
-        if data == 'Plat':
-            return ContentType.objects.get_for_model(Plat)
-        elif data == 'Lot':
-            return ContentType.objects.get_for_model(Lot)
+        split_content_type = data.split('_')
+
+        if len(split_content_type) == 2:
+            content_type_app_label = split_content_type[0]
+            content_type_model = split_content_type[1]
+
+            return ContentType.objects.get(app_label=content_type_app_label, model=content_type_model)
 
     def to_representation(self, obj):
-        if obj.model == 'plat':
+        if obj.model == 'plats_plat':
             return 'Plat'
-        elif obj.model == 'lot':
+        elif obj.model == 'plats_lot':
             return 'Lot'
         else:
             return obj.model
@@ -83,3 +86,45 @@ class RateTableSerializer(serializers.ModelSerializer):
             'resolution_number',
             'rates',
         )
+
+class FileUploadSerializer(serializers.ModelSerializer):
+    file_content_type = ContentTypeField()
+    date = CleanedDateField(read_only=True)
+
+    filename_display = serializers.SerializerMethodField(read_only=True)
+
+    def get_filename_display(self, obj):
+        return obj.upload.name
+
+    class Meta:
+        model = FileUpload
+        fields = (
+            'id',
+            'upload',
+            'date',
+            'file_content_type',
+            'file_object_id',
+            'filename_display',
+        )
+
+        read_only = (
+            'upload',
+            'file_content_type',
+            'file_object_id',
+            'filename_display',
+        )
+
+class FileUploadCreateSerializer(serializers.ModelSerializer):
+    file_content_type = ContentTypeField()
+    date = CleanedDateField(read_only=True)
+
+    class Meta:
+        model = FileUpload
+        fields = (
+            'id',
+            'upload',
+            'date',
+            'file_content_type',
+            'file_object_id',
+        )
+

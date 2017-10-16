@@ -29,6 +29,7 @@ class SubdivisionForm extends React.Component {
 
     render() {
         const {
+            currentUser,
             activeForm,
             subdivisions,
             onSubmit,
@@ -54,7 +55,6 @@ class SubdivisionForm extends React.Component {
                     <div className="container">
                         <div className="col-sm-offset-1 col-sm-10">
                             <form onSubmit={onSubmit} >
-
                                 <fieldset>
                                     <div className="row">
                                         <FormGroup label="* Subdivision Name" id="name" aria-required="true">
@@ -87,8 +87,9 @@ class SubdivisionForm extends React.Component {
 }
 
 SubdivisionForm.propTypes = {
+    currentUser: PropTypes.object,
     activeForm: PropTypes.object,
-    subdivisions: PropTypes.object,
+    subdivisions: PropTypes.array,
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
     onSubmit: PropTypes.func,
@@ -96,6 +97,7 @@ SubdivisionForm.propTypes = {
 
 function mapStateToProps(state) {
     return {
+        currentUser: state.currentUser,
         activeForm: state.activeForm,
         subdivisions: state.subdivisions,
     };
@@ -111,6 +113,7 @@ function mapDispatchToProps(dispatch, params) {
                 dispatch(getSubdivisionID(selectedSubdivision))
                 .then((data_subdivision) => {
                     const update = {
+                        sub_id: selectedSubdivision,
                         name: data_subdivision.response.name,
                         gross_acreage: data_subdivision.response.cleaned_gross_acreage,
                     };
@@ -121,11 +124,14 @@ function mapDispatchToProps(dispatch, params) {
         onSubmit(event) {
             event.preventDefault();
             if (selectedSubdivision) {
-                dispatch(putSubdivision(selectedSubdivision));
+                dispatch(putSubdivision(selectedSubdivision))
+                .then(() => {
+                    hashHistory.push(`subdivision/summary/${selectedSubdivision}`);
+                });
             } else {
                 dispatch(postSubdivision())
                 .then((data_sub_post) => {
-                    hashHistory.push(`subdivision/form/${data_sub_post.response.id}`);
+                    hashHistory.push(`subdivision/summary/${data_sub_post.response.id}`);
                 });
             }
         },

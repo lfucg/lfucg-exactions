@@ -8,15 +8,14 @@ import Navbar from './Navbar';
 import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
 import Pagination from './Pagination';
+import SearchBar from './SearchBar';
+
+import { project_statuses, project_types, project_categories, expansion_areas } from '../constants/searchBarConstants';
 
 import {
     getPagination,
-    getProjectQuery,
+    getAgreements,
 } from '../actions/apiActions';
-
-import {
-    formUpdate,
-} from '../actions/formActions';
 
 class ProjectExisting extends React.Component {
     componentDidMount() {
@@ -27,49 +26,64 @@ class ProjectExisting extends React.Component {
         const {
             currentUser,
             projects,
-            onProjectQuery,
+            agreements,
         } = this.props;
+
+        const agreementsList = agreements && agreements.length > 0 &&
+            (map((single_agreement) => {
+                return {
+                    id: single_agreement.id,
+                    name: single_agreement.resolution_number,
+                };
+            })(agreements));
 
         const projects_list = projects.length > 0 &&
             map((project) => {
                 return (
                     <div key={project.id} className="col-xs-12">
-                        <div className="row form-subheading">
-                            <h3>{project.name}</h3>
-                        </div>
-                        <div className="row link-row">
-                            <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
-                                <div className="col-xs-5">
-                                    {currentUser && currentUser.permissions && currentUser.permissions.project &&
-                                        <Link to={`project/form/${project.id}`} aria-label="Edit">
-                                            <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
+                        {(currentUser.id || project.is_approved) && <div>
+                            <div className={project.is_approved ? 'row form-subheading' : 'row unapproved-heading'}>
+                                <div className="col-sm-11">
+                                    <h3>
+                                        {project.name}
+                                        {!project.is_approved && <span className="pull-right">Approval Pending</span>}
+                                    </h3>
+                                </div>
+                            </div>
+                            <div className={project.is_approved ? 'row link-row' : 'row link-row-approval-pending'}>
+                                <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
+                                    <div className="col-xs-5">
+                                        {currentUser && currentUser.permissions && currentUser.permissions.project &&
+                                            <Link to={`project/form/${project.id}`} aria-label="Edit">
+                                                <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
+                                                <div className="col-xs-7 link-label">
+                                                    Edit
+                                                </div>
+                                            </Link>
+                                        }
+                                    </div>
+                                    <div className="col-xs-5 ">
+                                        <Link to={`project/summary/${project.id}`} aria-label="Summary">
+                                            <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
                                             <div className="col-xs-7 link-label">
-                                                Edit
+                                                Summary
                                             </div>
                                         </Link>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="row">
+                                <div className="col-sm-offset-1">
+                                    {project.agreement_id &&
+                                        <p className="col-md-4 col-xs-6">Agreement: {project.agreement_id.resolution_number}</p>
                                     }
-                                </div>
-                                <div className="col-xs-5 ">
-                                    <Link to={`project/summary/${project.id}`} aria-label="Summary">
-                                        <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
-                                        <div className="col-xs-7 link-label">
-                                            Summary
-                                        </div>
-                                    </Link>
+                                    <p className="col-md-4 col-xs-6">Project Category: {project.project_category_display}</p>
+                                    <p className="col-md-4 col-xs-6">Project Type: {project.project_type_display}</p>
+                                    <p className="col-md-4 col-xs-6 ">Project Status: {project.project_status_display}</p>
+                                    <p className="col-md-4 col-xs-6 ">Status Date: {project.status_date}</p>
                                 </div>
                             </div>
-                        </div>
-                        <div className="row">
-                            <div className="col-sm-offset-1">
-                                {project.agreement_id &&
-                                    <p className="col-md-4 col-xs-6">Agreement: {project.agreement_id.resolution_number}</p>
-                                }
-                                <p className="col-md-4 col-xs-6">Project Category: {project.project_category_display}</p>
-                                <p className="col-md-4 col-xs-6">Project Type: {project.project_type_display}</p>
-                                <p className="col-md-4 col-xs-6 ">Project Status: {project.project_status_display}</p>
-                                <p className="col-md-4 col-xs-6 ">Status Date: {project.status_date}</p>
-                            </div>
-                        </div>
+                        </div>}
                     </div>
                 );
             })(projects);
@@ -86,22 +100,17 @@ class ProjectExisting extends React.Component {
 
                 <Breadcrumbs route={this.props.route} />
 
-                <div className="row search-box">
-                    <form onChange={onProjectQuery('query')} className="col-sm-10 col-sm-offset-1" >
-                        <fieldset>
-                            <div className="col-sm-2 col-xs-12">
-                                <label htmlFor="query" className="form-label">Search</label>
-                            </div>
-                            <div className="col-sm-10 col-xs-12">
-                                <input
-                                  type="text"
-                                  className="form-control"
-                                  placeholder="Search Projects"
-                                />
-                            </div>
-                        </fieldset>
-                    </form>
-                </div>
+                <SearchBar
+                  apiCalls={[getAgreements]}
+                  advancedSearch={[
+                    { filterField: 'filter_project_status', displayName: 'Status', list: project_statuses },
+                    { filterField: 'filter_project_category', displayName: 'Category', list: project_categories },
+                    { filterField: 'filter_project_type', displayName: 'Type', list: project_types },
+                    { filterField: 'filter_agreement_id', displayName: 'Agreement', list: agreementsList },
+                    { filterField: 'filter_expansion_area', displayName: 'EA', list: expansion_areas },
+                    { filterField: 'filter_is_approved', displayName: 'Approval', list: [{ id: true, name: 'Approved' }, { id: false, name: 'Unapproved' }] },
+                  ]}
+                />
 
                 <div className="inside-body">
                     <div className="container">
@@ -117,41 +126,24 @@ class ProjectExisting extends React.Component {
 
 ProjectExisting.propTypes = {
     currentUser: PropTypes.object,
-    projects: PropTypes.object,
+    projects: PropTypes.array,
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
-    onProjectQuery: PropTypes.func,
+    agreements: PropTypes.array,
 };
 
 function mapStateToProps(state) {
     return {
         currentUser: state.currentUser,
         projects: state.projects,
+        agreements: state.agreements,
     };
 }
 
 function mapDispatchToProps(dispatch) {
     return {
         onComponentDidMount() {
-            dispatch(getPagination('/project/'))
-            .then((data) => {
-                const account_update = {
-                    next: data.response.next,
-                    prev: data.response.prev,
-                    count: data.response.count,
-                };
-                dispatch(formUpdate(account_update));
-            });
-        },
-        onProjectQuery(field) {
-            return (e, ...args) => {
-                const value = typeof e.target.value !== 'undefined' ? e.target.value : args[1];
-                const update = {
-                    [field]: value,
-                };
-                dispatch(formUpdate(update));
-                dispatch(getProjectQuery());
-            };
+            dispatch(getPagination('/project/'));
         },
     };
 }

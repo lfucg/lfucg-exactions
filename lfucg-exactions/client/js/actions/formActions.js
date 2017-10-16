@@ -24,4 +24,3 @@ export function formReset() {
         type: FORM_RESET,
     };
 }
-

@@ -9,6 +9,7 @@ import PropTypes from 'prop-types';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
+import Uploads from './Uploads';
 
 import FormGroup from './FormGroup';
 
@@ -38,6 +39,8 @@ class AgreementForm extends React.Component {
             formChange,
         } = this.props;
 
+        const currentParam = this.props.params.id;
+
         const accountsList = accounts.length > 0 &&
             (map((account) => {
                 return (
@@ -62,6 +65,7 @@ class AgreementForm extends React.Component {
                 <div className="inside-body">
                     <div className="container">
                         <div className="col-sm-offset-1 col-sm-10">
+                            {currentParam && agreements.is_approved === false && <div className="row"><h1 className="approval-pending">Approval Pending</h1></div>}
                             <form onSubmit={onSubmit} >
 
                                 <fieldset>
@@ -112,6 +116,16 @@ class AgreementForm extends React.Component {
                                 <button className="btn btn-lex">Submit</button>
                             </form>
                         </div>
+                        <div className="clearfix" />
+                        {agreements.id &&
+                            <Uploads
+                              file_content_type="accounts_agreement"
+                              file_object_id={agreements.id}
+                              ariaExpanded="true"
+                              panelClass="panel-collapse collapse row in"
+                              permission="agreement"
+                            />
+                        }
                     </div>
                 </div>
 
@@ -123,9 +137,10 @@ class AgreementForm extends React.Component {
 
 AgreementForm.propTypes = {
     activeForm: PropTypes.object,
-    accounts: PropTypes.object,
-    agreements: PropTypes.object,
+    accounts: PropTypes.array,
+    agreements: PropTypes.array,
     route: PropTypes.object,
+    params: PropTypes.object,
     onComponentDidMount: PropTypes.func,
     onSubmit: PropTypes.func,
     formChange: PropTypes.func,
