@@ -220,7 +220,7 @@ class AccountSummary extends React.Component {
                             <p className="col-sm-4 col-xs-6">Account From: {accountLedger.account_from.account_name}</p>
                             <p className="col-sm-4 col-xs-6">Account To: {accountLedger.account_to.account_name}</p>
                             <p className="col-sm-4 col-xs-6">Agreement: {accountLedger.agreement.resolution_number}</p>
-                            <p className="col-xs-12">Lot: {accountLedger.lot.address_full}</p>
+                            <p className="col-xs-12">Lot: {accountLedger.lot && accountLedger.lot.address_full}</p>
                         </div>
                     </div>
                 );
