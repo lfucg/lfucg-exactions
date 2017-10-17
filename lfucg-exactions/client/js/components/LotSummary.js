@@ -159,7 +159,7 @@ class LotSummary extends React.Component {
                                                 <div className="modal-body">
                                                     <h4 className="text-center">Records indicate an outstanding exactions balance of</h4>
                                                     <div className="row text-center alert alert-danger">
-                                                        <h2><strong>{(currentLot.lot_exactions.current_exactions).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</strong></h2>
+                                                        <h2><strong>{currentLot.lot_exactions.current_exactions}</strong></h2>
                                                     </div>
                                                     <h4 className="text-center">for {currentLot.address_full}.</h4>
                                                     <div className="row">
