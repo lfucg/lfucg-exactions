@@ -6,7 +6,7 @@ from plats.viewsets import *
 from plats.views import PlatCSVExportView
 from notes.viewsets import *
 from accounts.viewsets import *
-from .views import CurrentUserDetails
+from accounts.views import CurrentUserDetails
 
 router = routers.DefaultRouter()
 
