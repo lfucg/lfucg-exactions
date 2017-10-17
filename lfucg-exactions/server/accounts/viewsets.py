@@ -70,7 +70,7 @@ class AgreementViewSet(viewsets.ModelViewSet):
         account_id_set = self.request.query_params.get('account_id', None)
         if account_id_set is not None:
             queryset = queryset.filter(account_id=account_id_set)
-            
+
         if paginatePage is not None:
             pagination_class = PageNumberPagination
             PageNumberPagination.page_size = pageSize
