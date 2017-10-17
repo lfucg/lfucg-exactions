@@ -223,7 +223,7 @@ class AccountSummary extends React.Component {
                             <p className="col-sm-4 col-xs-6">Agreement: {accountLedger.agreement.resolution_number}</p>
                             <p className="col-md-3 col-sm-4 col-xs-6">Non-Sewer Credits: {accountLedger.dollar_values && accountLedger.dollar_values.dollar_non_sewer}</p>
                             <p className="col-md-3 col-sm-4 col-xs-6">Sewer Credits: {accountLedger.dollar_values && accountLedger.dollar_values.dollar_sewer}</p>
-                            <p className="col-xs-12">Lot: {accountLedger.lot.address_full}</p>
+                            <p className="col-xs-12">Lot: {accountLedger.lot && accountLedger.lot.address_full}</p>
                         </div>
                     </div>
                 );
