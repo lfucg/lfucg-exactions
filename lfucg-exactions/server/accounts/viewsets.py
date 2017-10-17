@@ -232,8 +232,6 @@ class AccountLedgerViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         queryset = AccountLedger.objects.all()
         PageNumberPagination.page_size = 0
-        print('hello from the account ledgers')
-        print(self.request.query_params)
         paginatePage = self.request.query_params.get('paginatePage', None)
         pageSize = self.request.query_params.get('pageSize', settings.PAGINATION_SIZE)
         
@@ -248,7 +246,6 @@ class AccountLedgerViewSet(viewsets.ModelViewSet):
         account_set = self.request.query_params.get('acct', None)
         if account_set is not None:
             queryset = queryset.filter(Q(account_from=account_set) | Q(account_to=account_set))
-            print(queryset)
 
         agreement_set = self.request.query_params.get('agreement', None)
         if agreement_set is not None:
