@@ -182,8 +182,8 @@ class PlatSummary extends React.Component {
                                         <p className="col-md-3 col-sm-4 col-xs-6">Slide: {plats.slide}</p>
                                         <p className="col-md-3 col-sm-4 col-xs-6">Buildable Lots: {plats.buildable_lots}</p>
                                         <p className="col-md-3 col-sm-4 col-xs-6">Non-Buildable Lots: {plats.non_buildable_lots}</p>
-                                        <p className="col-sm-4 col-xs-6">Current Sewer Due: ${plats.plat_exactions && plats.plat_exactions.plat_sewer_due}</p>
-                                        <p className="col-sm-4 col-xs-6">Current Non-Sewer Due: ${plats.plat_exactions && plats.plat_exactions.plat_non_sewer_due}</p>
+                                        <p className="col-sm-4 col-xs-6">Current Sewer Due: {plats.plat_exactions && plats.plat_exactions.plat_sewer_due}</p>
+                                        <p className="col-sm-4 col-xs-6">Current Non-Sewer Due: {plats.plat_exactions && plats.plat_exactions.plat_non_sewer_due}</p>
                                         <p className="col-xs-12">Calculation Note: {plats.calculation_note}</p>
                                     </div>
                                 </div>
