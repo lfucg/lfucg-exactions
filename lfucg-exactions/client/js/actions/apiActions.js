@@ -1225,7 +1225,7 @@ export function getAccountAccountLedgers(selectedAccount) {
     return {
         type: API_CALL,
         endpoint: GET_ACCOUNT_ACCOUNT_LEDGERS,
-        url: `/ledger/?account_from=${selectedAccount}&account_to=${selectedAccount}`,
+        url: `/ledger/?acct=${selectedAccount}`,
     };
 }
 
