@@ -190,6 +190,7 @@ class ProjectCostEstimateSerializer(serializers.ModelSerializer):
     project_id = ProjectField()
 
     total_costs = serializers.SerializerMethodField(read_only=True)
+    dollar_values = serializers.SerializerMethodField(read_only=True)
 
     def get_total_costs(self,obj):
         total = (
@@ -199,7 +200,18 @@ class ProjectCostEstimateSerializer(serializers.ModelSerializer):
             obj.admin_cost +
             obj.management_cost
         )
-        return total
+        return '${:,.2f}'.format(total)
+
+    def get_dollar_values(self, obj):
+        return {
+            'land_cost': '${:,.2f}'.format(obj.land_cost),
+            'design_cost': '${:,.2f}'.format(obj.design_cost),
+            'construction_cost': '${:,.2f}'.format(obj.construction_cost),
+            'admin_cost': '${:,.2f}'.format(obj.admin_cost),
+            'management_cost': '${:,.2f}'.format(obj.management_cost),
+            'other_cost': '${:,.2f}'.format(obj.other_cost),
+            'credits_available': '${:,.2f}'.format(obj.credits_available),
+        }
 
     class Meta:
         model = ProjectCostEstimate
@@ -224,6 +236,7 @@ class ProjectCostEstimateSerializer(serializers.ModelSerializer):
             'credits_available',
 
             'total_costs',
+            'dollar_values',
         )
 
 class AccountLedgerSerializer(serializers.ModelSerializer):
