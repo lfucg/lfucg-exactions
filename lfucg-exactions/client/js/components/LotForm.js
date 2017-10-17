@@ -485,7 +485,6 @@ function mapDispatchToProps(dispatch, params) {
                         dues_open_space_dev: data_lot.response.dues_open_space_dev,
                         dues_open_space_own: data_lot.response.dues_open_space_own,
                         first_section: true,
-                        show_exactions: false,
                     };
                     dispatch(formUpdate(update));
                     if (data_lot.response.account) {
