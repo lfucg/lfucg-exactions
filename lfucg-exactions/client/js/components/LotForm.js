@@ -46,6 +46,8 @@ class LotForm extends React.Component {
             onLotSubmit,
             onLotDues,
             selectedLot,
+            showExactions,
+            hideExactions,
         } = this.props;
 
         const currentParam = this.props.params.id;
@@ -233,22 +235,28 @@ class LotForm extends React.Component {
                                                 </div>
                                                 <div className="col-sm-6">
                                                     <FormGroup label="Permit ID" id="permit_id">
-                                                        <input type="text" className="form-control" placeholder="Permit ID" disabled={currentLot && currentLot.lot_exactions && currentLot.lot_exactions.current_exactions_number > 0} />
+                                                        <input type="text" className="form-control" placeholder="Permit ID" onFocus={showExactions} onBlur={hideExactions}/>
                                                     </FormGroup>
-                                                    {currentLot && currentLot.lot_exactions && currentLot.lot_exactions.current_exactions_number > 0 &&
-                                                        <span className="help-block">This lot still has {currentLot.lot_exactions.current_exactions} in exactions. You may add a Permit ID when exactions are paid.</span>
-                                                    }
                                                 </div>
                                             </div>
                                         </fieldset>
-                                        <button disabled={!submitEnabled} className="btn btn-lex">Submit</button>
-                                        {!submitEnabled ? (
-                                            <div>
-                                                <div className="clearfix" />
-                                                <span> * All required fields must be filled.</span>
+                                        <div className="row">
+                                            <div className="col-sm-6">
+                                                <button disabled={!submitEnabled} className="btn btn-lex">Submit</button>
+                                                {!submitEnabled ? (
+                                                    <div>
+                                                        <div className="clearfix" />
+                                                        <span> * All required fields must be filled.</span>
+                                                    </div>
+                                                ) : null
+                                                }
                                             </div>
-                                        ) : null
-                                        }
+                                            <div className="col-sm-6">
+                                                {activeForm.show_exactions && currentLot.lot_exactions && currentLot.lot_exactions.current_exactions_number > 0 &&
+                                                    <h3 className="help-block alert alert-danger">&nbsp;There are still {currentLot.lot_exactions.current_exactions} in exactions due on this lot.</h3>
+                                                }
+                                            </div>
+                                        </div>
                                     </form>
                                 </div>
                             </div>
@@ -271,7 +279,7 @@ class LotForm extends React.Component {
                                     </a>
                                     <div
                                       id="collapseLotExactions"
-                                      className="panel-collapse collapse in row"
+                                      className="panel-collapse collapse row"
                                       role="tabpanel"
                                       aria-labelledby="#headingLotExactions"
                                     >
@@ -422,6 +430,8 @@ LotForm.propTypes = {
     formChange: PropTypes.func,
     onLotSubmit: PropTypes.func,
     onLotDues: PropTypes.func,
+    showExactions: PropTypes.func,
+    hideExactions: PropTypes.func,
     selectedLot: PropTypes.string,
 };
 
@@ -442,9 +452,6 @@ function mapDispatchToProps(dispatch, params) {
     return {
         onComponentDidMount() {
             dispatch(formInit());
-            dispatch(getLots());
-            dispatch(getPlats());
-            dispatch(getAccounts());
             if (selectedLot) {
                 dispatch(getLotID(selectedLot))
                 .then((data_lot) => {
@@ -524,6 +531,9 @@ function mapDispatchToProps(dispatch, params) {
                 };
                 dispatch(formUpdate(else_update));
             }
+            dispatch(getLots());
+            dispatch(getPlats());
+            dispatch(getAccounts());
         },
         formChange(field) {
             return (e, ...args) => {
@@ -580,6 +590,12 @@ function mapDispatchToProps(dispatch, params) {
                     hashHistory.push(`lot/summary/${selectedLot}`);
                 });
             }
+        },
+        showExactions() {
+            dispatch(formUpdate({ show_exactions: true }));
+        },
+        hideExactions() {
+            dispatch(formUpdate({ show_exactions: false }));
         },
         selectedLot,
     };
