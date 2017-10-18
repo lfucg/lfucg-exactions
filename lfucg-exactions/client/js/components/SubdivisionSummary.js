@@ -64,8 +64,8 @@ class SubdivisionSummary extends React.Component {
                             <p className="col-md-3 col-sm-4 col-xs-6">Approval: {plat.is_approved ? 'Approved' : 'Not Approved'}</p>
                             <p className="col-md-3 col-sm-4 col-xs-6">Expansion Area: {plat.expansion_area}</p>
                             <p className="col-md-3 col-sm-4 col-xs-6">Slide: {plat.slide}</p>
-                            <p className="col-md-3 col-sm-4 col-xs-6">Sewer Exactions: ${plat.sewer_due}</p>
-                            <p className="col-md-3 col-sm-4 col-xs-6">Non-Sewer Exactions: ${plat.non_sewer_due}</p>
+                            <p className="col-md-3 col-sm-4 col-xs-6">Sewer Exactions: {plat.plat_exactions && plat.plat_exactions.plat_sewer_due}</p>
+                            <p className="col-md-3 col-sm-4 col-xs-6">Non-Sewer Exactions: {plat.plat_exactions && plat.plat_exactions.plat_non_sewer_due}</p>
                         </div>
                     </div>
                 );
