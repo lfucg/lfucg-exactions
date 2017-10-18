@@ -465,7 +465,7 @@ function mapDispatchToProps(dispatch, params) {
                         [field_show]: value,
                     };
                     dispatch(formUpdate(account_update));
-                    if (field === 'account_from' && !value_name.includes('LFUCG')) {
+                    if (field === 'account_from' && (value_name.indexOf('LFUCG') === -1)) {
                         const balance_update = {
                             balance: value_balance,
                         };

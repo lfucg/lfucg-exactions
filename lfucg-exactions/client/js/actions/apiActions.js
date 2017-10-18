@@ -1340,7 +1340,7 @@ export function getPagination(page) {
                 }
                 return `${currentPage}?paginatePage`;
             }
-            if (!page.includes('paginatePage')) {
+            if (page.indexOf('paginatePage') === -1) {
                 return `${page}?paginatePage`;
             }
             return `${page}`;
