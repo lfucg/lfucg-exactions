@@ -71,6 +71,8 @@ Vagrant.configure("2") do |config|
             'MEDIA_URL': '/media/',
             'DEFAULT_FILE_STORAGE': 'django.core.files.storage.FileSystemStorage',
             'STATICFILES_STORAGE': 'django.contrib.staticfiles.storage.StaticFilesStorage',
+            'DEV': true,
+            'DEBUG': true,
           }
         }
       },
