@@ -14,13 +14,13 @@ AWS_STORAGE_BUCKET_NAME = '<%= @config["AWS_STORAGE_BUCKET_NAME"] %>'
 AWS_ACCESS_KEY_ID = '<%= @config["AWS_ACCESS_KEY_ID"] %>'
 AWS_SECRET_ACCESS_KEY = '<%= @config["AWS_SECRET_ACCESS_KEY"] %>'
 
-# STATIC_URL = '<%= @config["STATIC_URL"] %>'
-# STATIC_ROOT = "%s/static/" % STATIC_URL
+STATIC_URL = '<%= @config["STATIC_URL"] %>'
+STATIC_ROOT = "%s/static/" % STATIC_URL
 STATICFILES_STORAGE = '<%= @config["STATICFILES_STORAGE"] %>'
 
 DEFAULT_FILE_STORAGE = '<%= @config["DEFAULT_FILE_STORAGE"] %>'
 
-# MEDIA_URL = '<%= @config["MEDIA_URL"] %>'
+MEDIA_URL = '<%= @config["MEDIA_URL"] %>'
 
 # EMAIL_BACKEND = "sgbackend.SendGridBackend"
 # SENDGRID_API_KEY = '<%= @config["SENDGRID_API_KEY"] %>'
