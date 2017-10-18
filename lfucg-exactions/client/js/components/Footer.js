@@ -13,7 +13,7 @@ class Footer extends React.Component {
                     </div>
                     <div className="col-md-5  col-sm-7">
                         <div className="col-md-3 col-sm-4 col-xs-2 footer-logo-div">
-                            <img src={`${window.StaticURL}Lexington_Web_White_Horse_Only.png`} role="presentation" className="white-horse-logo" />
+                            <img src={`${window.StaticURL}/images/Lexington_Web_White_Horse_Only.png`} role="presentation" className="white-horse-logo" />
                         </div>
                         <div className="col-md-9 col-sm-8 col-xs-10 footer-text">
                             <div className="row">
