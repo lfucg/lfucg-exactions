@@ -446,8 +446,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch, params) {
     const params_location = params.location.pathname;
-    const selectedLot = (params_location.includes('plat')) ? null : (params.params.id);
-    const plat_start = (params_location.includes('plat')) ? (params.params.id) : null;
+    const selectedLot = ((params_location.indexOf('plat') !== -1)) ? null : (params.params.id);
+    const plat_start = ((params_location.indexOf('plat') !== -1)) ? (params.params.id) : null;
 
     return {
         onComponentDidMount() {

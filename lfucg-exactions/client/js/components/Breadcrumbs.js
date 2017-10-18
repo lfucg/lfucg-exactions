@@ -15,7 +15,7 @@ class Breadcrumbs extends React.Component {
         return (
             <div className="breadcrumb">
                 <div className="container">
-                    <div className={route.name && route.name.includes('Existing') ? 'col-xs-8 col-md-9' : 'col-xs-12'}>
+                    <div className={route.name && (route.name.indexOf('Existing') !== 0) ? 'col-xs-8 col-md-9' : 'col-xs-12'}>
                         <h4>
                             <Link to="/" role="link">Home</Link>
                             <span> / </span>
@@ -29,7 +29,7 @@ class Breadcrumbs extends React.Component {
                             <span> / </span>
                         </h4>
                     </div>
-                    {route.name && route.name.includes('Existing') &&
+                    {route.name && (route.name.indexOf('Existing') !== 0) &&
                         <div className="col-xs-4 col-md-3">
                             {currentUser && currentUser.permissions && route_permission &&
                                 <Link className="create-link" to={`${route.path}/form/`} aria-label="Create">
