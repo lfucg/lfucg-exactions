@@ -166,6 +166,9 @@ class Lot(models.Model):
     address_zip = models.CharField(max_length=10, choices=ZIPCODES, blank=True, null=True)
     address_full = models.CharField(max_length=300)
 
+    alternative_address_number = models.IntegerField(blank=True, null=True)
+    alternative_address_street = models.CharField(max_length=200, blank=True, null=True)
+
     dues_roads_dev = models.DecimalField(max_digits=20, decimal_places=2, default=0)
     dues_roads_own = models.DecimalField(max_digits=20, decimal_places=2, default=0)
     
