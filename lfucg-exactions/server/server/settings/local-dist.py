@@ -52,11 +52,11 @@ CACHES = {
     }
 }
 
-DEBUG = TEMPLATE_DEBUG = True
+DEBUG = '<%= @config["DEBUG"] %>'
 
 # Is this a development instance? Set this to True on development/master
 # instances and False on stage/prod.
-DEV = True
+DEV = '<%= @config["DEV"] %>'
 
 SECRET_KEY = '<%= @config["SECRET_KEY"] %>'
 
