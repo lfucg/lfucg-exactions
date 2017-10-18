@@ -117,8 +117,8 @@ class LotSummary extends React.Component {
                             <p className="col-sm-4 col-xs-6">Account To: {accountLedger.account_to.account_name}</p>
                             <p className="col-sm-4 col-xs-6">Agreement Resolution: {accountLedger.agreement.resolution_number}</p>
                             <p className="col-md-3 col-sm-4 col-xs-6">Entry Type: {accountLedger.entry_type_display}</p>
-                            <p className="col-md-3 col-sm-4 col-xs-6">Non-Sewer Credits: {accountLedger.non_sewer_credits}</p>
-                            <p className="col-md-3 col-sm-4 col-xs-6">Sewer Credits: {accountLedger.sewer_credits}</p>
+                            <p className="col-md-3 col-sm-4 col-xs-6">Non-Sewer Credits: {accountLedger.dollar_values && accountLedger.dollar_values.dollar_non_sewer}</p>
+                            <p className="col-md-3 col-sm-4 col-xs-6">Sewer Credits: {accountLedger.dollar_values && accountLedger.dollar_values.dollar_sewer}</p>
                         </div>
                     </div>
                 );
@@ -388,8 +388,8 @@ class LotSummary extends React.Component {
                                                 <p className="col-md-4 col-xs-6">Slide: {currentLot.plat.slide}</p>
                                                 <p className="col-md-4 col-xs-6">Buildable Lots: {currentLot.plat.buildable_lots}</p>
                                                 <p className="col-md-4 col-xs-6">Non-Buildable Lots: {currentLot.plat.non_buildable_lots}</p>
-                                                <p className="col-md-4 col-xs-6">Sewer Exactions: ${currentLot.plat.sewer_due}</p>
-                                                <p className="col-md-4 col-xs-6">Non-Sewer Exactions: ${currentLot.plat.non_sewer_due}</p>
+                                                <p className="col-md-4 col-xs-6">Sewer Exactions: {currentLot.plat.plat_exactions && currentLot.plat.plat_exactions.plat_sewer_due}</p>
+                                                <p className="col-md-4 col-xs-6">Non-Sewer Exactions: {currentLot.plat.plat_exactions && currentLot.plat.plat_exactions.plat_non_sewer_due}</p>
                                             </div>
                                         </div>
                                     </div>
