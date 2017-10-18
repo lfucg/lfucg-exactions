@@ -14,6 +14,7 @@ import {
     getPagination,
     getPlats,
     getLots,
+    testEmail,
 } from '../actions/apiActions';
 
 
@@ -28,6 +29,7 @@ class AccountExisting extends React.Component {
             accounts,
             plats,
             lots,
+            sendTestEmail,
         } = this.props;
 
         const platsList = plats && plats.length > 0 &&
@@ -104,6 +106,10 @@ class AccountExisting extends React.Component {
 
                 <Breadcrumbs route={this.props.route} />
 
+                <button className="btn btn-primary" onClick={sendTestEmail}>
+                    Send Test Email
+                </button>
+
                 <SearchBar
                   apiCalls={[getPlats, getLots]}
                   advancedSearch={[
@@ -138,6 +144,9 @@ function mapDispatchToProps(dispatch) {
         onComponentDidMount() {
             dispatch(getPagination('/account/'));
         },
+        sendTestEmail() {
+            dispatch(testEmail());
+        },
     };
 }
 
@@ -148,6 +157,7 @@ AccountExisting.propTypes = {
     lots: PropTypes.array,
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
+    sendTestEmail: PropTypes.func,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AccountExisting);
