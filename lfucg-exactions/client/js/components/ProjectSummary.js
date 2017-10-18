@@ -58,8 +58,8 @@ class ProjectSummary extends React.Component {
                         <div className="row">
                             <div className="col-sm-offset-1">
                                 <p className="col-md-4 col-xs-6">Project: {projectCost.project_id.name}</p>
-                                <p className="col-md-4 col-xs-6">Total Costs: ${projectCost.total_costs}</p>
-                                <p className="col-md-4 col-xs-6 ">Credits Available: ${projectCost.credits_available}</p>
+                                <p className="col-md-4 col-xs-6">Total Costs: {projectCost.total_costs}</p>
+                                <p className="col-md-4 col-xs-6 ">Credits Available: {projectCost.dollar_values && projectCost.dollar_values.credits_available}</p>
                             </div>
                         </div>
                     </div>
