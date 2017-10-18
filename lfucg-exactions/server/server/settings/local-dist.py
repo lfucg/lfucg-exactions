@@ -1,5 +1,6 @@
 from . import base
 import os
+import django
 
 # import dj_database_url
 # DATABASES['default'] = dj_database_url.config()
@@ -12,16 +13,14 @@ AWS_DEFAULT_REGION = 'us-east-1'
 AWS_STORAGE_BUCKET_NAME = '<%= @config["AWS_STORAGE_BUCKET_NAME"] %>'
 AWS_ACCESS_KEY_ID = '<%= @config["AWS_ACCESS_KEY_ID"] %>'
 AWS_SECRET_ACCESS_KEY = '<%= @config["AWS_SECRET_ACCESS_KEY"] %>'
-AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
 
-STATIC_URL = "https://%s/" % AWS_S3_CUSTOM_DOMAIN
-STATIC_ROOT = "https://%s/static/" % AWS_S3_CUSTOM_DOMAIN
+STATIC_URL = '<%= @config["STATIC_URL"] %>'
+STATIC_ROOT = "%s/static/" % STATIC_URL
 STATICFILES_STORAGE = '<%= @config["STATICFILES_STORAGE"] %>'
 
-DEFAULT_FILE_STORAGE = 'notes.models.MediaStorage'
+DEFAULT_FILE_STORAGE = '<%= @config["DEFAULT_FILE_STORAGE"] %>'
 
-AWS_S3_MEDIA_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
-MEDIA_URL = "https://%s/media/" % AWS_S3_MEDIA_DOMAIN
+MEDIA_URL = '<%= @config["MEDIA_URL"] %>'
 
 # EMAIL_BACKEND = "sgbackend.SendGridBackend"
 # SENDGRID_API_KEY = '<%= @config["SENDGRID_API_KEY"] %>'
@@ -53,11 +52,11 @@ CACHES = {
     }
 }
 
-DEBUG = TEMPLATE_DEBUG = True
+DEBUG = '<%= @config["DEBUG"] %>'
 
 # Is this a development instance? Set this to True on development/master
 # instances and False on stage/prod.
-DEV = True
+DEV = '<%= @config["DEV"] %>'
 
 SECRET_KEY = '<%= @config["SECRET_KEY"] %>'
 
