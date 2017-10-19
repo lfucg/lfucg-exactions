@@ -83,8 +83,8 @@ class Plat(models.Model):
 
     expansion_area = models.CharField(max_length=100, choices=EXPANSION_AREAS)
     unit = models.CharField(max_length=200, null=True, blank=True)
-    section = models.CharField(max_length=200)
-    block = models.CharField(max_length=200)
+    section = models.CharField(max_length=200, null=True, blank=True)
+    block = models.CharField(max_length=200, null=True, blank=True)
     
     buildable_lots = models.IntegerField()
     non_buildable_lots = models.IntegerField(default=0)
