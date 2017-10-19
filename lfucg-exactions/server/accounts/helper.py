@@ -47,17 +47,18 @@ def send_test_email(user):
     text_template = get_template('emails/email_test.txt')
 
     subject, from_email = 'LFUCG Exactions: TEST!', settings.DEFAULT_FROM_EMAIL
-    to_email = "jmstewart00@gmail.com"
+    to_email = ['jmstewart00@gmail.com', 'kelly@apaxsoftware.com']
 
     context = {
         'baseURL': settings.BASE_URL,
-        'name': 'Josh',
+        'name': 'Nicki',
+        'staticURL': 'static/'
     }
 
     html_content = html_template.render(context)
     text_content = text_template.render(context)
 
-    msg = EmailMultiAlternatives(subject, text_content, from_email, [to_email])
+    msg = EmailMultiAlternatives(subject, text_content, from_email, to_email)
     msg.attach_alternative(html_content, "text/html")
     msg.send()
 

@@ -1388,31 +1388,3 @@ export function searchQuery(isCSV) {
         },
     };
 }
-
-export function testEmail() {
-    return {
-        type: API_CALL,
-        endpoint: TEST_EMAIL,
-        method: 'POST',
-        url: '/test_email/',
-        body: (getState) => {
-            const {
-                currentUser,
-            } = getState();
-            const {
-                first_name,
-                last_name,
-                username,
-                email,
-                id,
-            } = currentUser;
-            return {
-                first_name,
-                last_name,
-                username,
-                email,
-                id,
-            };
-        },
-    };
-}
