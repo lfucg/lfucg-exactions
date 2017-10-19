@@ -204,12 +204,24 @@ class AccountLedgerForm extends React.Component {
                                     <div className="row">
                                         <div className="col-sm-6">
                                             <FormGroup label="* Non-Sewer Credits" id="non_sewer_credits" aria-required="true" >
-                                                <input type="number" className="form-control" placeholder="Non-Sewer Credits" disabled={!activeForm.entry_type} />
+                                                <input
+                                                  type="number"
+                                                  className="form-control"
+                                                  placeholder="Non-Sewer Credits"
+                                                  disabled={!activeForm.entry_type}
+                                                  step="0.01"
+                                                />
                                             </FormGroup>
                                         </div>
                                         <div className="col-sm-6">
                                             <FormGroup label="* Sewer Credits" id="sewer_credits" aria-required="true" >
-                                                <input type="number" className="form-control" placeholder="Sewer Credits" disabled={!activeForm.entry_type} />
+                                                <input
+                                                  type="number"
+                                                  className="form-control"
+                                                  placeholder="Sewer Credits"
+                                                  disabled={!activeForm.entry_type}
+                                                  step="0.01"
+                                                />
                                             </FormGroup>
                                         </div>
                                     </div>

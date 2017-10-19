@@ -1370,12 +1370,12 @@ export function searchQuery(isCSV) {
 
             const queryString = compose(
                 reduce((acc, value) => acc + value, query_all),
-                map((a) => {
-                    const field = a[0].slice(7, a[0].length);
-                    return `&${field}=${a[1]}`;
+                map((key_name) => {
+                    const field = key_name.slice(7, key_name.length);
+                    return `&${field}=${activeForm[key_name]}`;
                 }),
-                filter(a => a[1] && a[0].startsWith('filter_')),
-            )(Object.entries(activeForm));
+                filter(key_name => activeForm[key_name] && (key_name.indexOf('filter_') !== -1)),
+            )(Object.keys(activeForm));
 
             return queryString;
         },
