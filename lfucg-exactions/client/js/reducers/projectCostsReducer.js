@@ -5,6 +5,7 @@ import {
     PUT_PROJECT_COST,
     GET_PAGINATION,
     SEARCH_QUERY,
+    GET_PROJECT_PROJECT_COSTS,
 } from '../constants/apiConstants';
 
 
@@ -15,6 +16,7 @@ const projectCostsReducer = (state = [], action) => {
     switch (endpoint) {
     case GET_PROJECT_COST_ID:
     case GET_PROJECT_COSTS:
+    case GET_PROJECT_PROJECT_COSTS:
         return action.response;
     case POST_PROJECT_COST:
     case PUT_PROJECT_COST:
