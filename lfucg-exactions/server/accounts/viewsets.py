@@ -4,11 +4,11 @@ from rest_framework import viewsets, status, filters
 from django.db.models import Q
 from rest_framework.response import Response
 
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Permission
 from .models import *
 from .serializers import *
 from .permissions import CanAdminister
-
+from .helper import *
 from django.conf import settings
 
 from django_filters.rest_framework import DjangoFilterBackend
@@ -16,6 +16,8 @@ from django_filters.rest_framework import DjangoFilterBackend
 from plats.models import Plat, Lot
 
 from .utils import update_entry
+
+from pprint import pprint
 
 class AccountViewSet(viewsets.ModelViewSet):
     serializer_class = AccountSerializer
@@ -40,16 +42,20 @@ class AccountViewSet(viewsets.ModelViewSet):
 
     def create(self, request):
         data_set = request.data
-
+        print('got here')
         data_set['created_by'] = self.request.user.id
         data_set['modified_by'] = self.request.user.id
-
+        print('got here 2')
+        send_email_to_supervisors(data_set, 'Planning', 'add_account')
+        return
         serializer = AccountSerializer(data=data_set)
         if serializer.is_valid(raise_exception=True):
             self.perform_create(serializer)
+            send_email_to_supervisors('add_account', serializer.data)
             return Response(serializer.data)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
     def update(self, request, pk):
         return update_entry(self, request, pk)
