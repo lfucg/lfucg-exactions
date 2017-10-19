@@ -161,7 +161,7 @@ class Payment(models.Model):
     paid_by = models.CharField(max_length=100)
     paid_by_type = models.CharField(max_length=100, choices=PAID_BY_TYPE_CHOICES)
     payment_type = models.CharField(max_length=100, choices=PAYMENT_TYPE)
-    check_number = models.IntegerField(null=True, blank=True)
+    check_number = models.CharField(max_length=20, null=True, blank=True)
 
     paid_roads = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True, default=0)
     paid_sewer_trans = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True, default=0)

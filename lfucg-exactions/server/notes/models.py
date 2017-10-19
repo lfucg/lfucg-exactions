@@ -48,7 +48,7 @@ class Rate(models.Model):
     
     ZONES = (
         ('EAR-1', 'EAR-1'),
-        ('EAR1-SRA', 'EAR1-SRA'),
+        ('EAR-1SRA', 'EAR-1SRA'),
         ('EAR-2', 'EAR-2'),
         ('EAR-3', 'EAR-3'),
         ('CC(RES)', 'CC(RES)'),
