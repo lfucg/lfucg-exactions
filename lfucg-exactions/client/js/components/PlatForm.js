@@ -222,7 +222,12 @@ class PlatForm extends React.Component {
                                                 </div>
                                                 <div className="col-sm-6">
                                                     <FormGroup label="* Gross Acreage" id="total_acreage" aria-required="true">
-                                                        <input type="number" className="form-control" placeholder="Gross Acreage" />
+                                                        <input
+                                                          type="number"
+                                                          step="0.01"
+                                                          className="form-control"
+                                                          placeholder="Gross Acreage"
+                                                        />
                                                     </FormGroup>
                                                 </div>
                                             </div>
@@ -412,12 +417,24 @@ class PlatForm extends React.Component {
                                                                 <div className="row">
                                                                     <div className="col-sm-6">
                                                                         <FormGroup label="Sewer Exactions" id="sewer_due">
-                                                                            <input type="number" className="form-control" placeholder="Sewer Exactions" disabled />
+                                                                            <input
+                                                                              type="number"
+                                                                              step="0.01"
+                                                                              className="form-control"
+                                                                              placeholder="Sewer Exactions"
+                                                                              disabled
+                                                                            />
                                                                         </FormGroup>
                                                                     </div>
                                                                     <div className="col-sm-6">
                                                                         <FormGroup label="Non-Sewer Exactions" id="non_sewer_due">
-                                                                            <input type="number" className="form-control" placeholder="Non-Sewer Exactions" disabled />
+                                                                            <input
+                                                                              type="number"
+                                                                              step="0.01"
+                                                                              className="form-control"
+                                                                              placeholder="Non-Sewer Exactions"
+                                                                              disabled
+                                                                            />
                                                                         </FormGroup>
                                                                     </div>
                                                                 </div>

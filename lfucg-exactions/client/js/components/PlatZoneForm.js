@@ -73,7 +73,7 @@ class PlatZoneForm extends React.Component {
                             </div>
                             <div className="col-sm-6">
                                 <FormGroup label="* Gross Acreage" id={this.props.acre_id}>
-                                    <input type="number" className="form-control" placeholder="Gross Acreage" />
+                                    <input type="number" step="0.01" className="form-control" placeholder="Gross Acreage" />
                                 </FormGroup>
                             </div>
                         </div>

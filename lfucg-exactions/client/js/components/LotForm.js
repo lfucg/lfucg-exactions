@@ -292,72 +292,138 @@ class LotForm extends React.Component {
                                                     <div className="row">
                                                         <div className="col-sm-6">
                                                             <FormGroup label="Road Developer Exactions" id="dues_roads_dev">
-                                                                <input type="number" className="form-control" placeholder="Road Developer Exactions" />
+                                                                <input
+                                                                  type="number"
+                                                                  step="0.01"
+                                                                  className="form-control"
+                                                                  placeholder="Road Developer Exactions"
+                                                                />
                                                             </FormGroup>
                                                         </div>
                                                         <div className="col-sm-6">
                                                             <FormGroup label="Road Owner Exactions" id="dues_roads_own">
-                                                                <input type="number" className="form-control" placeholder="Road Owner Exactions" disabled={ownerDisabled} />
+                                                                <input
+                                                                  type="number"
+                                                                  step="0.01"
+                                                                  className="form-control"
+                                                                  placeholder="Road Owner Exactions"
+                                                                  disabled={ownerDisabled}
+                                                                />
                                                             </FormGroup>
                                                         </div>
                                                     </div>
                                                     <div className="row">
                                                         <div className="col-sm-6">
                                                             <FormGroup label="Sewer Transmission Developer Exactions" id="dues_sewer_trans_dev">
-                                                                <input type="number" className="form-control" placeholder="Sewer Transmission Developer Exactions" />
+                                                                <input
+                                                                  type="number"
+                                                                  step="0.01"
+                                                                  className="form-control"
+                                                                  placeholder="Sewer Transmission Developer Exactions"
+                                                                />
                                                             </FormGroup>
                                                         </div>
                                                         <div className="col-sm-6">
                                                             <FormGroup label="Sewer Transmission Owner Exactions" id="dues_sewer_trans_own">
-                                                                <input type="number" className="form-control" placeholder="Sewer Transmission Owner Exactions" disabled={ownerDisabled} />
+                                                                <input
+                                                                  type="number"
+                                                                  step="0.01"
+                                                                  className="form-control"
+                                                                  placeholder="Sewer Transmission Owner Exactions"
+                                                                  disabled={ownerDisabled}
+                                                                />
                                                             </FormGroup>
                                                         </div>
                                                     </div>
                                                     <div className="row">
                                                         <div className="col-sm-6">
                                                             <FormGroup label="Sewer Capacity Developer Exactions" id="dues_sewer_cap_dev">
-                                                                <input type="number" className="form-control" placeholder="Sewer Capacity Developer Exactions" />
+                                                                <input
+                                                                  type="number"
+                                                                  step="0.01"
+                                                                  className="form-control"
+                                                                  placeholder="Sewer Capacity Developer Exactions"
+                                                                />
                                                             </FormGroup>
                                                         </div>
                                                         <div className="col-sm-6">
                                                             <FormGroup label="Sewer Capacity Owner Exactions" id="dues_sewer_cap_own">
-                                                                <input type="number" className="form-control" placeholder="Sewer Capacity Owner Exactions" disabled={ownerDisabled} />
+                                                                <input
+                                                                  type="number"
+                                                                  step="0.01"
+                                                                  className="form-control"
+                                                                  placeholder="Sewer Capacity Owner Exactions"
+                                                                  disabled={ownerDisabled}
+                                                                />
                                                             </FormGroup>
                                                         </div>
                                                     </div>
                                                     <div className="row">
                                                         <div className="col-sm-6">
                                                             <FormGroup label="Parks Developer Exactions" id="dues_parks_dev">
-                                                                <input type="number" className="form-control" placeholder="Parks Developer Exactions" />
+                                                                <input
+                                                                  type="number"
+                                                                  step="0.01"
+                                                                  className="form-control"
+                                                                  placeholder="Parks Developer Exactions"
+                                                                />
                                                             </FormGroup>
                                                         </div>
                                                         <div className="col-sm-6">
                                                             <FormGroup label="Parks Owner Exactions" id="dues_parks_own">
-                                                                <input type="number" className="form-control" placeholder="Parks Owner Exactions" disabled={ownerDisabled} />
+                                                                <input
+                                                                  type="number"
+                                                                  step="0.01"
+                                                                  className="form-control"
+                                                                  placeholder="Parks Owner Exactions"
+                                                                  disabled={ownerDisabled}
+                                                                />
                                                             </FormGroup>
                                                         </div>
                                                     </div>
                                                     <div className="row">
                                                         <div className="col-sm-6">
                                                             <FormGroup label="Storm Developer Exactions" id="dues_storm_dev">
-                                                                <input type="number" className="form-control" placeholder="Storm Developer Exactions" />
+                                                                <input
+                                                                  type="number"
+                                                                  step="0.01"
+                                                                  className="form-control"
+                                                                  placeholder="Storm Developer Exactions"
+                                                                />
                                                             </FormGroup>
                                                         </div>
                                                         <div className="col-sm-6">
                                                             <FormGroup label="Storm Owner Exactions" id="dues_storm_own">
-                                                                <input type="number" className="form-control" placeholder="Storm Owner Exactions" disabled={ownerDisabled} />
+                                                                <input
+                                                                  type="number"
+                                                                  step="0.01"
+                                                                  className="form-control"
+                                                                  placeholder="Storm Owner Exactions"
+                                                                  disabled={ownerDisabled}
+                                                                />
                                                             </FormGroup>
                                                         </div>
                                                     </div>
                                                     <div className="row">
                                                         <div className="col-sm-6">
                                                             <FormGroup label="Open Space Developer Exactions" id="dues_open_space_dev">
-                                                                <input type="number" className="form-control" placeholder="Open Space Developer Exactions" />
+                                                                <input
+                                                                  type="number"
+                                                                  step="0.01"
+                                                                  className="form-control"
+                                                                  placeholder="Open Space Developer Exactions"
+                                                                />
                                                             </FormGroup>
                                                         </div>
                                                         <div className="col-sm-6">
                                                             <FormGroup label="Open Space Owner Exactions" id="dues_open_space_own">
-                                                                <input type="number" className="form-control" placeholder="Open Space Owner Exactions" disabled={ownerDisabled} />
+                                                                <input
+                                                                  type="number"
+                                                                  step="0.01"
+                                                                  className="form-control"
+                                                                  placeholder="Open Space Owner Exactions"
+                                                                  disabled={ownerDisabled}
+                                                                />
                                                             </FormGroup>
                                                         </div>
                                                     </div>
