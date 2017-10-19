@@ -81,6 +81,8 @@ import {
     GET_PAGINATION,
     SEARCH_QUERY,
 
+    TEST_EMAIL,
+
 } from '../constants/apiConstants';
 
 export function getMe() {
@@ -1383,6 +1385,34 @@ export function searchQuery(isCSV) {
             debounce: {
                 time: 300,
             },
+        },
+    };
+}
+
+export function testEmail() {
+    return {
+        type: API_CALL,
+        endpoint: TEST_EMAIL,
+        method: 'POST',
+        url: '/test_email/',
+        body: (getState) => {
+            const {
+                currentUser,
+            } = getState();
+            const {
+                first_name,
+                last_name,
+                username,
+                email,
+                id,
+            } = currentUser;
+            return {
+                first_name,
+                last_name,
+                username,
+                email,
+                id,
+            };
         },
     };
 }
