@@ -79,12 +79,12 @@ class PaymentSummary extends React.Component {
                                         <p className="col-md-4 col-xs-6">Paid By: {payments.paid_by}</p>
                                         <p className="col-md-4 col-xs-6">Paid By Type: {payments.paid_by_type_display}</p>
                                         <p className="col-md-4 col-xs-6">Check Number: {payments.check_number}</p>
-                                        <p className="col-md-4 col-xs-6">Paid Roads: ${payments.paid_roads}</p>
-                                        <p className="col-md-4 col-xs-6">Paid Sewer Capacity: ${payments.paid_sewer_cap}</p>
-                                        <p className="col-md-4 col-xs-6">Paid Sewer Transmission: ${payments.paid_sewer_trans}</p>
-                                        <p className="col-md-4 col-xs-6">Paid Parks: ${payments.paid_parks}</p>
-                                        <p className="col-md-4 col-xs-6">Paid Storm: ${payments.paid_storm}</p>
-                                        <p className="col-md-4 col-xs-6">Paid Open Space: ${payments.paid_open_space}</p>
+                                        <p className="col-md-4 col-xs-6">Paid Roads: {payments.dollar_values && payments.dollar_values.paid_roads}</p>
+                                        <p className="col-md-4 col-xs-6">Paid Sewer Capacity: {payments.dollar_values && payments.dollar_values.paid_sewer_cap}</p>
+                                        <p className="col-md-4 col-xs-6">Paid Sewer Transmission: {payments.dollar_values && payments.dollar_values.paid_sewer_trans}</p>
+                                        <p className="col-md-4 col-xs-6">Paid Parks: {payments.dollar_values && payments.dollar_values.paid_parks}</p>
+                                        <p className="col-md-4 col-xs-6">Paid Storm: {payments.dollar_values && payments.dollar_values.paid_storm}</p>
+                                        <p className="col-md-4 col-xs-6">Paid Open Space: {payments.dollar_values && payments.dollar_values.paid_open_space}</p>
                                     </div>
                                 </div>
                             </div>
