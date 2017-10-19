@@ -27,6 +27,19 @@ def calculate_lot_balance(lot_id):
         lot.dues_open_space_dev +
         lot.dues_open_space_own)
 
+    dues_roads_dev = lot.dues_roads_dev
+    dues_roads_own = lot.dues_roads_own
+    dues_sewer_trans_dev = lot.dues_sewer_trans_dev
+    dues_sewer_trans_own = lot.dues_sewer_trans_own
+    dues_sewer_cap_dev = lot.dues_sewer_cap_dev
+    dues_sewer_cap_own = lot.dues_sewer_cap_own
+    dues_parks_dev = lot.dues_parks_dev
+    dues_parks_own = lot.dues_parks_own
+    dues_storm_dev = lot.dues_storm_dev
+    dues_storm_own = lot.dues_storm_own
+    dues_open_space_dev = lot.dues_open_space_dev
+    dues_open_space_own = lot.dues_open_space_own
+
     total_exactions = sewer_exactions + non_sewer_exactions
 
     if payments is not None:
@@ -41,6 +54,13 @@ def calculate_lot_balance(lot_id):
                 payment.paid_storm +
                 payment.paid_open_space
             )
+
+            dues_roads_dev -= payment.paid_roads
+            dues_sewer_trans_dev -= payment.paid_sewer_trans
+            dues_sewer_cap_dev -= payment.paid_sewer_cap
+            dues_parks_dev -= payment.paid_parks
+            dues_storm_dev -= payment.paid_storm
+            dues_open_space_dev -= payment.paid_open_space
 
             sewer_payment += sewer_payment_paid
             non_sewer_payment += non_sewer_payment_paid
@@ -71,18 +91,18 @@ def calculate_lot_balance(lot_id):
         'current_exactions': total_exactions - sewer_payment - non_sewer_payment - sewer_credits_applied - non_sewer_credits_applied,
         'sewer_due': sewer_exactions - sewer_payment - sewer_credits_applied,
         'non_sewer_due': non_sewer_exactions - non_sewer_payment - non_sewer_credits_applied,
-        'dues_roads_dev': lot.dues_roads_dev,
-        'dues_roads_own': lot.dues_roads_own,
-        'dues_sewer_trans_dev': lot.dues_sewer_trans_dev,
-        'dues_sewer_trans_own': lot.dues_sewer_trans_own,
-        'dues_sewer_cap_dev': lot.dues_sewer_cap_dev,
-        'dues_sewer_cap_own': lot.dues_sewer_cap_own,
-        'dues_parks_dev': lot.dues_parks_dev,
-        'dues_parks_own': lot.dues_parks_own,
-        'dues_storm_dev': lot.dues_storm_dev,
-        'dues_storm_own': lot.dues_storm_own,
-        'dues_open_space_dev': lot.dues_open_space_dev,
-        'dues_open_space_own': lot.dues_open_space_own,
+        'dues_roads_dev': dues_roads_dev,
+        'dues_roads_own': dues_roads_own,
+        'dues_sewer_trans_dev': dues_sewer_trans_dev,
+        'dues_sewer_trans_own': dues_sewer_trans_own,
+        'dues_sewer_cap_dev': dues_sewer_cap_dev,
+        'dues_sewer_cap_own': dues_sewer_cap_own,
+        'dues_parks_dev': dues_parks_dev,
+        'dues_parks_own': dues_parks_own,
+        'dues_storm_dev': dues_storm_dev,
+        'dues_storm_own': dues_storm_own,
+        'dues_open_space_dev': dues_open_space_dev,
+        'dues_open_space_own': dues_open_space_own,
     }
 
     return all_exactions
