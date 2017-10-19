@@ -103,6 +103,8 @@ class AccountLedgerExisting extends React.Component {
                                     { accountLedger.agreement &&
                                         <p className="col-md-4 col-xs-6">Agreement: {accountLedger.agreement.resolution_number}</p>
                                     }
+                                    <p className="col-md-4 col-xs-6">Non-Sewer: {accountLedger.dollar_values && accountLedger.dollar_values.dollar_non_sewer}</p>
+                                    <p className="col-md-4 col-xs-6">Sewer: {accountLedger.dollar_values && accountLedger.dollar_values.dollar_sewer}</p>
                                     { accountLedger.lot &&
                                         <p className="col-xs-12">Lot: {accountLedger.lot.address_full}</p>
                                     }

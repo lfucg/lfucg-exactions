@@ -97,3 +97,5 @@ If changes are made to the dashboard `package.json` dependencies, you'll want to
 $ npm install
 $ npm run gulp build
 ```
+
+In local.py comment out STATIC_ROOT

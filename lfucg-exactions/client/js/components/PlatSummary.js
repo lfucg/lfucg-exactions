@@ -57,22 +57,22 @@ class PlatSummary extends React.Component {
                             <p className="table-data">{plat_exaction.cleaned_acres}</p>
                         </div>
                         <div className="row table-border">
-                            <p className="table-data">$ {plat_exaction.dues_roads}</p>
+                            <p className="table-data">{plat_exaction.dollar_values && plat_exaction.dollar_values.dollar_roads}</p>
                         </div>
                         <div className="row table-border">
-                            <p className="table-data">$ {plat_exaction.dues_open_spaces}</p>
+                            <p className="table-data">{plat_exaction.dollar_values && plat_exaction.dollar_values.dollar_open_spaces}</p>
                         </div>
                         <div className="row table-border">
-                            <p className="table-data">$ {plat_exaction.dues_sewer_cap}</p>
+                            <p className="table-data">{plat_exaction.dollar_values && plat_exaction.dollar_values.dollar_sewer_cap}</p>
                         </div>
                         <div className="row table-border">
-                            <p className="table-data">$ {plat_exaction.dues_sewer_trans}</p>
+                            <p className="table-data">{plat_exaction.dollar_values && plat_exaction.dollar_values.dollar_sewer_trans}</p>
                         </div>
                         <div className="row table-border">
-                            <p className="table-data">$ {plat_exaction.dues_parks}</p>
+                            <p className="table-data">{plat_exaction.dollar_values && plat_exaction.dollar_values.dollar_parks}</p>
                         </div>
                         <div className="row table-border">
-                            <p className="table-data">$ {plat_exaction.dues_storm_water}</p>
+                            <p className="table-data">{plat_exaction.dollar_values && plat_exaction.dollar_values.dollar_storm_water}</p>
                         </div>
                     </div>
                 </div>
@@ -182,8 +182,8 @@ class PlatSummary extends React.Component {
                                         <p className="col-md-3 col-sm-4 col-xs-6">Slide: {plats.slide}</p>
                                         <p className="col-md-3 col-sm-4 col-xs-6">Buildable Lots: {plats.buildable_lots}</p>
                                         <p className="col-md-3 col-sm-4 col-xs-6">Non-Buildable Lots: {plats.non_buildable_lots}</p>
-                                        <p className="col-md-3 col-sm-4 col-xs-6">Sewer Exactions: ${plats.sewer_due}</p>
-                                        <p className="col-md-3 col-sm-4 col-xs-6">Non-Sewer Exactions: ${plats.non_sewer_due}</p>
+                                        <p className="col-sm-4 col-xs-6">Current Sewer Due: {plats.plat_exactions && plats.plat_exactions.plat_sewer_due}</p>
+                                        <p className="col-sm-4 col-xs-6">Current Non-Sewer Due: {plats.plat_exactions && plats.plat_exactions.plat_non_sewer_due}</p>
                                         <p className="col-xs-12">Calculation Note: {plats.calculation_note}</p>
                                     </div>
                                 </div>
@@ -311,10 +311,10 @@ class PlatSummary extends React.Component {
                                                     </div>
                                                     <div className="row">
                                                         <div className="col-sm-offset-2 col-sm-5">
-                                                            <p>Sewer Dues: {plats.sewer_due}</p>
+                                                            <p>Sewer Dues: {plats.plat_exactions && plats.plat_exactions.plat_sewer_due}</p>
                                                         </div>
                                                         <div className="col-sm-5">
-                                                            <p>Non-Sewer Dues: {plats.non_sewer_due}</p>
+                                                            <p>Non-Sewer Dues: {plats.plat_exactions && plats.plat_exactions.plat_non_sewer_due}</p>
                                                         </div>
                                                     </div>
                                                 </div>
