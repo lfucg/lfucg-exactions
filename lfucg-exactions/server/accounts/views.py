@@ -1,13 +1,17 @@
-# from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from django.contrib.sites.shortcuts import get_current_site
+from django.contrib.auth.models import User
+from rest_framework.generics import RetrieveAPIView
 
-# from rest_framework.generics import RetrieveAPIView
+from django.http import HttpResponse
 
-# from django.contrib.auth.models import User
-# from .serializers import UserSerializer
+from .serializers import AccountSerializer
+from .helper import * 
+from .models import Account
 
-# class CurrentUserDetails(RetrieveAPIView):
-#     model = User
-#     serializer_class = UserSerializer
-
-#     def get_object(self):
-#         return self.request.user
+def test_email(request):
+	if request.method == 'POST':
+		user = request.user
+	send_test_email(user)
+	return HttpResponse(request)
