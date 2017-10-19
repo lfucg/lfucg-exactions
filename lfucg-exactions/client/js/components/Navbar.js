@@ -28,11 +28,11 @@ class Navbar extends React.Component {
                         <div className="navbar-header">
                             {windowWidth <= 767 ?
                                 <Link to="dashboard/" aria-label="Exactions Home" role="link" >
-                                    <img className="navbar-brand" src={`${window.StaticURL}Lexington_Web_Color_Horse_Only.png`} alt="#" aria-hidden />
+                                    <img className="navbar-brand" src={`${window.StaticURL}images/Lexington_Web_Color_Horse_Only.png`} alt="#" aria-hidden />
                                 </Link>
                             :
                                 <Link to="dashboard/" aria-label="Exactions Home" role="link" >
-                                    <img className="navbar-brand" src={`${window.StaticURL}lexington-logo.svg`} alt="#" aria-hidden />
+                                    <img className="navbar-brand" src={`${window.StaticURL}images/lexington-logo.svg`} alt="#" aria-hidden />
                                 </Link>
                             }
                             <button className="btn navbar-btn navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
