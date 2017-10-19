@@ -2,6 +2,7 @@ from django.conf.urls import include, url
 from rest_framework import routers
 
 from accounts.auth import *
+from accounts.views import test_email
 from plats.viewsets import *
 from plats.views import PlatCSVExportView
 from notes.viewsets import *
@@ -40,6 +41,7 @@ urlpatterns = [
     url(r'^delete_token/', Logout.as_view()),
     url(r'^upload/create/$', FileUploadCreate.as_view(), name="document-upload"),
     url(r'^export_plat_csv/$', PlatCSVExportView.as_view()),
+    url(r'^test_email/$', test_email),
 
     url(r'^', include(router.urls)),
 ]
