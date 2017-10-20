@@ -10,7 +10,7 @@ class Breadcrumbs extends React.Component {
             route,
         } = this.props;
 
-        const route_permission = `currentUser.permissions.${route.name}`;
+        const route_permission = this.props.route_permission;
 
         return (
             <div className="breadcrumb">
@@ -31,7 +31,7 @@ class Breadcrumbs extends React.Component {
                     </div>
                     {route.name && (route.name.indexOf('Existing') > -1) &&
                         <div className="col-xs-4 col-md-3">
-                            {currentUser && currentUser.permissions && route_permission &&
+                            {currentUser && currentUser.permissions && route_permission in currentUser.permissions &&
                                 <Link className="create-link" to={`${route.path}/form/`} aria-label="Create">
                                     <i className="fa fa-plus-square col-xs-4 col-sm-2 col-xs-offset-1 create-icon" aria-hidden="true" />
                                     <div className="col-xs-7 col-sm-9 create-label">
@@ -50,6 +50,7 @@ class Breadcrumbs extends React.Component {
 Breadcrumbs.propTypes = {
     currentUser: PropTypes.object,
     route: PropTypes.object,
+    route_permission: PropTypes.string,
 };
 
 function mapStateToProps(state) {
