@@ -98,7 +98,7 @@ class ProjectExisting extends React.Component {
                     </div>
                 </div>
 
-                <Breadcrumbs route={this.props.route} />
+                <Breadcrumbs route={this.props.route} route_permission="project" />
 
                 <SearchBar
                   apiCalls={[getAgreements]}
