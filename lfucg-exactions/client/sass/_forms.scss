@@ -173,3 +173,11 @@
     }
 }
 
+.btn-link {
+    outline: none;
+    &:focus, &:active, &:active:focus {
+        box-shadow: none;
+        outline: none;
+    }
+}
+

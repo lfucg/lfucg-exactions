@@ -81,8 +81,6 @@ import {
     GET_PAGINATION,
     SEARCH_QUERY,
 
-    TEST_EMAIL,
-
 } from '../constants/apiConstants';
 
 export function getMe() {

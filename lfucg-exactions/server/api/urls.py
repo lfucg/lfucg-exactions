@@ -2,7 +2,6 @@ from django.conf.urls import include, url
 from rest_framework import routers
 
 from accounts.auth import *
-from accounts.views import test_email
 from plats.viewsets import *
 from plats.views import PlatCSVExportView
 from notes.viewsets import *

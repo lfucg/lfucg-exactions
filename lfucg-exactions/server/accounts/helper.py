@@ -43,12 +43,14 @@ def send_lost_username_email(user):
     msg.attach_alternative(html_content, "text/html")
     msg.send()
 
-def send_email_to_supervisors(entry, group, codename):
-    perm = Permission.objects.get(codename=codename)
-    print('hello')
-    users = User.objects.filter(Q(groups__name=group) & Q(profile__is_supervisor=True)).distinct()
-    print(users)
-    return
+def send_email_to_supervisors(entry, **kwargs):
+    if 'perm_name' in kwargs:
+        perm = Permission.objects.get(codename=kwargs['perm_name'])
+
+    q_objects = Q()
+    for group in kwargs['group']:
+        q_objects.add(Q(groups__name=group), Q.OR)
+    users = User.objects.filter(Q(profile__is_supervisor=True), q_objects)
 
     to_emails = []
     for user in users:
@@ -56,14 +58,17 @@ def send_email_to_supervisors(entry, group, codename):
 
     html_template = get_template('emails/email_test.html')
     text_template = get_template('emails/email_test.txt')
-    subject = 'LFUCG Exactions Activity: Pending Approval - New ' + str(perm.content_type).title() + ' ' + entry['account_name']
+
+    subject = 'LFUCG Exactions Activity: Pending Approval - New ' + str(perm.content_type).title()
     from_email = settings.DEFAULT_FROM_EMAIL
+
+    entry_id = entry['id'] if type(entry) == 'list' else entry
 
     context = {
         'baseURL': settings.BASE_URL,
         'model': perm.content_type,
         'staticURL': 'https://lfucg-exactions-storage.s3.amazonaws.com/',
-        'id': entry['id'],
+        'id': entry_id,
     }
 
     html_content = html_template.render(context)
@@ -72,4 +77,4 @@ def send_email_to_supervisors(entry, group, codename):
     msg = EmailMultiAlternatives(subject, text_content, from_email, to_emails)
     msg.attach_alternative(html_content, "text/html")
     msg.send()
-
+    print('success!')
