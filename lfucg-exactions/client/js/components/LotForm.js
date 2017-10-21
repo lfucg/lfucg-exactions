@@ -509,19 +509,6 @@ function mapDispatchToProps(dispatch, params) {
                         });
                     }
                 });
-            } else if (plat_start) {
-                dispatch(getPlatID(plat_start))
-                .then((data_plat_start) => {
-                    const plat_update = {
-                        plat: data_plat_start.response.id,
-                        plat_name: data_plat_start.response.name,
-                        first_section: false,
-                        account_show: '',
-                        plat_show: data_plat_start.response.plat ? `${data_plat_start.response.plat.id},${data_plat_start.response.plat.name}` : '',
-                        address_zip_show: '',
-                    };
-                    dispatch(formUpdate(plat_update));
-                });
             } else {
                 const else_update = {
                     first_section: false,
@@ -532,7 +519,23 @@ function mapDispatchToProps(dispatch, params) {
                 dispatch(formUpdate(else_update));
             }
             dispatch(getLots());
-            dispatch(getPlats());
+            dispatch(getPlats())
+            .then((all_plats) => {
+                if (plat_start) {
+                    const plat_start_number = parseInt(plat_start, 10);
+                    const starting_plat = all_plats.response.filter(plat => (plat.id === plat_start_number));
+
+                    const plat_update = {
+                        plat: starting_plat[0].id,
+                        plat_name: starting_plat[0].name,
+                        first_section: false,
+                        account_show: '',
+                        plat_show: `${starting_plat[0].id},${starting_plat[0].name}`,
+                        address_zip_show: '',
+                    };
+                    dispatch(formUpdate(plat_update));
+                }
+            });
             dispatch(getAccounts());
         },
         formChange(field) {
@@ -598,6 +601,7 @@ function mapDispatchToProps(dispatch, params) {
             dispatch(formUpdate({ show_exactions: false }));
         },
         selectedLot,
+        plat_start,
     };
 }
 
