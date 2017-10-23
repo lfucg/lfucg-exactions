@@ -111,6 +111,7 @@ class AccountExisting extends React.Component {
                     { filterField: 'filter_lot_account__id', displayName: 'Lot', list: lotsList },
                   ]}
                 />
+
                 <div className="inside-body">
                     <div className="container">
                         {accounts_list}
