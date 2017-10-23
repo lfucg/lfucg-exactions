@@ -20,7 +20,7 @@ class SubdivisionViewSet(viewsets.ModelViewSet):
     filter_fields = ('plat__id',)
 
     def get_queryset(self):
-        queryset = Subdivision.objects.all()
+        queryset = Subdivision.objects.all().exclude(is_active=False)
         paginatePage = self.request.query_params.get('paginatePage', None)
         pageSize = self.request.query_params.get('pageSize', settings.PAGINATION_SIZE)
         PageNumberPagination.page_size = 0
@@ -50,7 +50,7 @@ class SubdivisionViewSet(viewsets.ModelViewSet):
 
 class PlatViewSet(viewsets.ModelViewSet):
     serializer_class = PlatSerializer
-    queryset = Plat.objects.all()
+    queryset = Plat.objects.all().exclude(is_active=False)
     permission_classes = (CanAdminister,)
     filter_backends = (DjangoFilterBackend, filters.SearchFilter,)
     search_fields = ('name', 'expansion_area', 'slide', 'subdivision__name', 'cabinet', 'slide', 'unit', 'section', 'block',)
@@ -86,7 +86,7 @@ class PlatViewSet(viewsets.ModelViewSet):
 
 class LotViewSet(viewsets.ModelViewSet):
     serializer_class = LotSerializer
-    queryset = Lot.objects.all()
+    queryset = Lot.objects.all().exclude(is_active=False)
     permission_classes = (CanAdminister,)
     filter_backends = (DjangoFilterBackend, filters.SearchFilter,)
     search_fields = ('address_full', 'lot_number', 'parcel_id', 'permit_id', 'plat__expansion_area', 'plat__name', )
@@ -127,7 +127,7 @@ class LotViewSet(viewsets.ModelViewSet):
 
 class PlatZoneViewSet(viewsets.ModelViewSet):
     serializer_class = PlatZoneSerializer
-    queryset = PlatZone.objects.all()
+    queryset = PlatZone.objects.all().exclude(is_active=False)
     permission_classes = (CanAdminister,)
 
     def create(self, request):

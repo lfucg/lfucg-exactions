@@ -26,7 +26,7 @@ class AccountViewSet(viewsets.ModelViewSet):
     filter_fields = ('plat_account__id', 'lot_account__id')
 
     def get_queryset(self):
-        queryset = Account.objects.all()
+        queryset = Account.objects.all().exclude(is_active=False)
         PageNumberPagination.page_size = 0
         
         paginatePage = self.request.query_params.get('paginatePage', None)
@@ -63,7 +63,7 @@ class AgreementViewSet(viewsets.ModelViewSet):
     filter_fields = ('agreement_type', 'account_id', 'expansion_area', 'is_approved',)
 
     def get_queryset(self):
-        queryset = Agreement.objects.all()
+        queryset = Agreement.objects.all().exclude(is_active=False)
         paginatePage = self.request.query_params.get('paginatePage', None)
         pageSize = self.request.query_params.get('pageSize', settings.PAGINATION_SIZE)
 
@@ -102,7 +102,7 @@ class PaymentViewSet(viewsets.ModelViewSet):
     filter_fields = ('payment_type', 'paid_by_type', 'credit_account', 'lot_id', 'credit_source', 'is_approved',)
 
     def get_queryset(self):
-        queryset = Payment.objects.all()
+        queryset = Payment.objects.all().exclude(is_active=False)
         PageNumberPagination.page_size = 0
 
         paginatePage = self.request.query_params.get('paginatePage', None)
@@ -144,7 +144,7 @@ class PaymentViewSet(viewsets.ModelViewSet):
             
 class ProjectViewSet(viewsets.ModelViewSet):
     serializer_class = ProjectSerializer
-    queryset = Project.objects.all()
+    queryset = Project.objects.all().exclude(is_active=False)
     permission_classes = (CanAdminister,)
     filter_backends = (DjangoFilterBackend, filters.SearchFilter,)
     search_fields = ('agreement_id__resolution_number', 'name', 'project_category', 'project_description',)
@@ -193,7 +193,7 @@ class ProjectCostEstimateViewSet(viewsets.ModelViewSet):
 
 
     def get_queryset(self):
-        queryset = ProjectCostEstimate.objects.all()
+        queryset = ProjectCostEstimate.objects.all().exclude(is_active=False)
         PageNumberPagination.page_size = 0
 
         paginatePage = self.request.query_params.get('paginatePage', None)
@@ -223,7 +223,7 @@ class ProjectCostEstimateViewSet(viewsets.ModelViewSet):
             
 class AccountLedgerViewSet(viewsets.ModelViewSet):
     serializer_class = AccountLedgerSerializer
-    queryset = AccountLedger.objects.all()
+    queryset = AccountLedger.objects.all().exclude(is_active=False)
     permission_classes = (CanAdminister,)
     filter_backends = (DjangoFilterBackend, filters.SearchFilter,)
     search_fields = ('entry_type', 'agreement__resolution_number', 'lot__address_full', 'account_to__account_name', 'account_from__account_name',)
