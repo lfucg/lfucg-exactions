@@ -86,12 +86,13 @@ class AgreementViewSet(viewsets.ModelViewSet):
         serializer = AgreementSerializer(data=data_set)
         if serializer.is_valid(raise_exception=True):
             self.perform_create(serializer)
-            send_email_to_supervisors(serializer.data, group = ['Finance'], perm_name = 'add_agreement')
+            send_email_to_supervisors(entry = serializer.data, group = ['Finance'], perm_name = 'add_agreement')
             return Response(serializer.data)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def update(self, request, pk):
+        send_email_to_supervisors(pk = pk, group = ['Finance'], perm_name = 'change_agreement')
         return update_entry(self, request, pk)
             
 class PaymentViewSet(viewsets.ModelViewSet):
@@ -136,12 +137,13 @@ class PaymentViewSet(viewsets.ModelViewSet):
         serializer = PaymentSerializer(data=data_set)
         if serializer.is_valid(raise_exception=True):
             self.perform_create(serializer)
-            send_email_to_supervisors(serializer.data, group = ['Finance'], perm_name = 'add_payment')
+            send_email_to_supervisors(entry = serializer.data, group = ['Finance'], perm_name = 'add_payment')
             return Response(serializer.data)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def update(self, request, pk):
+        send_email_to_supervisors(pk = pk, group = ['Finance'], perm_name = 'change_payment')
         return update_entry(self, request, pk)
             
 class ProjectViewSet(viewsets.ModelViewSet):
@@ -178,12 +180,13 @@ class ProjectViewSet(viewsets.ModelViewSet):
         serializer = ProjectSerializer(data=data_set)
         if serializer.is_valid(raise_exception=True):
             self.perform_create(serializer)
-            send_email_to_supervisors(serializer.data, group = ['Finance'], perm_name = 'add_project')
+            send_email_to_supervisors(entry = serializer.data, group = ['Finance'], perm_name = 'add_project')
             return Response(serializer.data)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def update(self, request, pk):
+        send_email_to_supervisors(pk = pk, group = ['Finance'], perm_name = 'change_project')
         return update_entry(self, request, pk)
             
 class ProjectCostEstimateViewSet(viewsets.ModelViewSet):
@@ -216,12 +219,13 @@ class ProjectCostEstimateViewSet(viewsets.ModelViewSet):
         serializer = ProjectCostEstimateSerializer(data=data_set)
         if serializer.is_valid(raise_exception=True):
             self.perform_create(serializer)
-            send_email_to_supervisors(serializer.data, group = ['Finance'], perm_name = 'add_projectcostestimate')
+            send_email_to_supervisors(entry = serializer.data, group = ['Finance'], perm_name = 'add_projectcostestimate')
             return Response(serializer.data)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def update(self, request, pk):
+        send_email_to_supervisors(pk = pk, group = ['Finance'], perm_name = 'change_projectcostestimate')
         return update_entry(self, request, pk)
             
 class AccountLedgerViewSet(viewsets.ModelViewSet):
@@ -287,7 +291,7 @@ class AccountLedgerViewSet(viewsets.ModelViewSet):
                 serializer = AccountLedgerSerializer(data=data_set)
                 if serializer.is_valid(raise_exception=True):
                     self.perform_create(serializer)
-                    send_email_to_supervisors(serializer.data, group = ['Finance'], perm_name = 'add_accountledger')
+                    send_email_to_supervisors(entry = serializer.data, group = ['Finance'], perm_name = 'add_accountledger')
             return Response('Success')
 
         elif 'lot' in self.request.data:
@@ -295,17 +299,17 @@ class AccountLedgerViewSet(viewsets.ModelViewSet):
             serializer = AccountLedgerSerializer(data=data_set)
             if serializer.is_valid(raise_exception=True):
                 self.perform_create(serializer)
-                send_email_to_supervisors(serializer.data, group = ['Finance'], perm_name = 'add_accountledger')
+                send_email_to_supervisors(entry = serializer.data, group = ['Finance'], perm_name = 'add_accountledger')
                 return Response(serializer.data)
         else:
             serializer = AccountLedgerSerializer(data=data_set)
             if serializer.is_valid(raise_exception=True):
                 self.perform_create(serializer)
-                send_email_to_supervisors(serializer.data, group = ['Finance'], perm_name = 'add_accountledger')
+                send_email_to_supervisors(entry = serializer.data, group = ['Finance'], perm_name = 'add_accountledger')
                 return Response(serializer.data)
 
     def update(self, request, pk):
-        send_email_to_supervisors(pk, group = ['Finance', 'Building Inspection'], perm_name = 'add_accountledger')
+        send_email_to_supervisors(pk = pk, group = ['Finance'], perm_name = 'change_accountledger')
         return update_entry(self, request, pk)
                 
 class UserViewSet(viewsets.ModelViewSet):

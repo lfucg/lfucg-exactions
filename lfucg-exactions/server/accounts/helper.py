@@ -43,7 +43,7 @@ def send_lost_username_email(user):
     msg.attach_alternative(html_content, "text/html")
     msg.send()
 
-def send_email_to_supervisors(entry, **kwargs):
+def send_email_to_supervisors(**kwargs):
     if 'perm_name' in kwargs:
         perm = Permission.objects.get(codename=kwargs['perm_name'])
 
@@ -56,13 +56,17 @@ def send_email_to_supervisors(entry, **kwargs):
     for user in users:
         to_emails.append(user.email)
 
-    html_template = get_template('emails/email_test.html')
-    text_template = get_template('emails/email_test.txt')
+    html_template = get_template('emails/supervisor_email.html')
+    text_template = get_template('emails/supervisor_email.txt')
 
     subject = 'LFUCG Exactions Activity: Pending Approval - New ' + str(perm.content_type).title()
     from_email = settings.DEFAULT_FROM_EMAIL
 
-    entry_id = entry['id'] if type(entry) == 'list' else entry
+    if 'entry' in kwargs:
+        entry_id = kwargs['entry']['id']
+
+    if 'pk' in kwargs:
+        entry_id = kwargs['pk']
 
     context = {
         'baseURL': settings.BASE_URL,
@@ -77,4 +81,3 @@ def send_email_to_supervisors(entry, **kwargs):
     msg = EmailMultiAlternatives(subject, text_content, from_email, to_emails)
     msg.attach_alternative(html_content, "text/html")
     msg.send()
-    print('success!')
