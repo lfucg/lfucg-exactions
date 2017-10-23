@@ -6,8 +6,8 @@
 # from .serializers import UserSerializer
 
 # class CurrentUserDetails(RetrieveAPIView):
-# 	model = User
-# 	serializer_class = UserSerializer
+    # model = User
+    # serializer_class = UserSerializer
 
-# 	def get_object(self):
-# 		return self.request.user
+    # def get_object(self):
+    #     return self.request.user
