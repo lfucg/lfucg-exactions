@@ -10,6 +10,7 @@ from .models import *
 from .serializers import *
 from .permissions import CanAdminister
 from .utils import update_entry
+from accounts.helper import *
 
 class SubdivisionViewSet(viewsets.ModelViewSet):
     serializer_class = SubdivisionSerializer
@@ -77,11 +78,13 @@ class PlatViewSet(viewsets.ModelViewSet):
         serializer = PlatSerializer(data=data_set)
         if serializer.is_valid(raise_exception=True):
             self.perform_create(serializer)
+            send_email_to_supervisors(entry = serializer.data, group = ['Planning'], perm_name = 'add_plat')
             return Response(serializer.data)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def update(self, request, pk):
+        send_email_to_supervisors(pk = pk, group = ['Planning'], perm_name = 'change_plat')
         return update_entry(self, request, pk)
 
 class LotViewSet(viewsets.ModelViewSet):
@@ -118,11 +121,13 @@ class LotViewSet(viewsets.ModelViewSet):
         serializer = LotSerializer(data=data_set)
         if serializer.is_valid(raise_exception=True):
             self.perform_create(serializer)
+            send_email_to_supervisors(entry = serializer.data, group = ['Planning'], perm_name = 'add_lot')
             return Response(serializer.data)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def update(self, request, pk):
+        send_email_to_supervisors(pk = pk, group = ['Planning'], perm_name = 'change_lot')
         return update_entry(self, request, pk)
 
 class PlatZoneViewSet(viewsets.ModelViewSet):
@@ -139,11 +144,13 @@ class PlatZoneViewSet(viewsets.ModelViewSet):
         serializer = PlatZoneSerializer(data=data_set)
         if serializer.is_valid(raise_exception=True):
             self.perform_create(serializer)
+            send_email_to_supervisors(entry = serializer.data, group = ['Planning'], perm_name = 'add_platzone')
             return Response(serializer.data)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def update(self, request, pk):
+        send_email_to_supervisors(pk = pk, group = ['Planning'], perm_name = 'change_platzone')
         return update_entry(self, request, pk)
 
 class CalculationWorksheetViewSet(viewsets.ModelViewSet):
