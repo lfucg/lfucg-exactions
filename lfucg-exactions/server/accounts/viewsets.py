@@ -4,7 +4,7 @@ from rest_framework import viewsets, status, filters
 from django.db.models import Q
 from rest_framework.response import Response
 
-from django.contrib.auth.models import User, Permission
+from django.contrib.auth.models import User
 from .models import *
 from .serializers import *
 from .permissions import CanAdminister
@@ -15,7 +15,6 @@ from django_filters.rest_framework import DjangoFilterBackend
 from plats.models import Plat, Lot
 
 from .utils import update_entry
-
 
 class AccountViewSet(viewsets.ModelViewSet):
     serializer_class = AccountSerializer
@@ -48,7 +47,6 @@ class AccountViewSet(viewsets.ModelViewSet):
             return Response(serializer.data)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 
     def update(self, request, pk):
         return update_entry(self, request, pk)
@@ -209,6 +207,7 @@ class ProjectCostEstimateViewSet(viewsets.ModelViewSet):
 
         data_set['created_by'] = self.request.user.id
         data_set['modified_by'] = self.request.user.id
+        
         serializer = ProjectCostEstimateSerializer(data=data_set)
         if serializer.is_valid(raise_exception=True):
             self.perform_create(serializer)

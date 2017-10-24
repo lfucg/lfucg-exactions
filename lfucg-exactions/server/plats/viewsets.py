@@ -10,7 +10,6 @@ from .models import *
 from .serializers import *
 from .permissions import CanAdminister
 from .utils import update_entry
-from accounts.helper import *
 
 class SubdivisionViewSet(viewsets.ModelViewSet):
     serializer_class = SubdivisionSerializer
