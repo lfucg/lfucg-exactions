@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
-from storages.backends.s3boto import S3BotoStorage
+from storages.backends.s3boto3 import S3Boto3Storage
 
 from django.contrib.auth.models import User
 
@@ -91,7 +91,7 @@ class Rate(models.Model):
     def __str__(self):
         return self.zone + ': ' + self.category
 
-class MediaStorage(S3BotoStorage):
+class MediaStorage(S3Boto3Storage):
     location = 'media'
 
 def model_directory_path(instance, filename):

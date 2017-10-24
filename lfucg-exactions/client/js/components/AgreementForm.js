@@ -13,6 +13,8 @@ import Uploads from './Uploads';
 
 import FormGroup from './FormGroup';
 
+import DeclineDelete from './DeclineDelete';
+
 import {
     formInit,
     formUpdate,
@@ -37,6 +39,7 @@ class AgreementForm extends React.Component {
             agreements,
             onSubmit,
             formChange,
+            selectedAgreement,
         } = this.props;
 
         const currentParam = this.props.params.id;
@@ -49,6 +52,11 @@ class AgreementForm extends React.Component {
                     </option>
                 );
             })(accounts));
+
+        const submitEnabled =
+            activeForm.resolution_number &&
+            activeForm.expansion_area &&
+            activeForm.agreement_type;
 
         return (
             <div className="agreement-form">
@@ -66,7 +74,7 @@ class AgreementForm extends React.Component {
                     <div className="container">
                         <div className="col-sm-offset-1 col-sm-10">
                             {currentParam && agreements.is_approved === false && <div className="row"><h1 className="approval-pending">Approval Pending</h1></div>}
-                            <form onSubmit={onSubmit} >
+                            <form >
 
                                 <fieldset>
                                     <div className="row">
@@ -113,7 +121,19 @@ class AgreementForm extends React.Component {
                                         </div>
                                     </div>
                                 </fieldset>
-                                <button className="btn btn-lex">Submit</button>
+                                <div className="col-xs-8">
+                                    <button disabled={!submitEnabled} className="btn btn-lex" onClick={onSubmit} >Submit</button>
+                                    {!submitEnabled ? (
+                                        <div>
+                                            <div className="clearfix" />
+                                            <span> * All required fields must be filled.</span>
+                                        </div>
+                                    ) : null
+                                    }
+                                </div>
+                                <div className="col-xs-4">
+                                    <DeclineDelete currentForm="/agreement/" selectedEntry={selectedAgreement} parentRoute="agreement" />
+                                </div>
                             </form>
                         </div>
                         <div className="clearfix" />
@@ -144,6 +164,7 @@ AgreementForm.propTypes = {
     onComponentDidMount: PropTypes.func,
     onSubmit: PropTypes.func,
     formChange: PropTypes.func,
+    selectedAgreement: PropTypes.string,
 };
 
 function mapStateToProps(state) {
@@ -216,6 +237,7 @@ function mapDispatchToProps(dispatch, params) {
                 });
             }
         },
+        selectedAgreement,
     };
 }
 
