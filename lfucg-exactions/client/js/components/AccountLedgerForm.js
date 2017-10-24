@@ -172,7 +172,7 @@ class AccountLedgerForm extends React.Component {
                                         </div>
                                         <div className="col-sm-6">
                                             <FormGroup label="* Entry Date" id="entry_date" aria-required="true" >
-                                                <input type="date" className="form-control" placeholder="Entry Date" disabled={!activeForm.entry_type} />
+                                                <input type="date" className="form-control" placeholder="Date Format YYYY-MM-DD" disabled={!activeForm.entry_type} />
                                             </FormGroup>
                                         </div>
                                     </div>
