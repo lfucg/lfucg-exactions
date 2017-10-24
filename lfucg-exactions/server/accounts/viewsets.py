@@ -144,14 +144,14 @@ class PaymentViewSet(viewsets.ModelViewSet):
             
 class ProjectViewSet(viewsets.ModelViewSet):
     serializer_class = ProjectSerializer
-    queryset = Project.objects.all().exclude(is_active=False)
+    queryset = Project.objects.all()
     permission_classes = (CanAdminister,)
     filter_backends = (DjangoFilterBackend, filters.SearchFilter,)
     search_fields = ('agreement_id__resolution_number', 'name', 'project_category', 'project_description',)
     filter_fields = ('project_category', 'project_status', 'agreement_id', 'project_type', 'expansion_area', 'is_approved',)
 
     def get_queryset(self):
-        queryset = Project.objects.all()
+        queryset = Project.objects.all().exclude(is_active=False)
         PageNumberPagination.page_size = 0
 
         paginatePage = self.request.query_params.get('paginatePage', None)
@@ -223,14 +223,14 @@ class ProjectCostEstimateViewSet(viewsets.ModelViewSet):
             
 class AccountLedgerViewSet(viewsets.ModelViewSet):
     serializer_class = AccountLedgerSerializer
-    queryset = AccountLedger.objects.all().exclude(is_active=False)
+    queryset = AccountLedger.objects.all()
     permission_classes = (CanAdminister,)
     filter_backends = (DjangoFilterBackend, filters.SearchFilter,)
     search_fields = ('entry_type', 'agreement__resolution_number', 'lot__address_full', 'account_to__account_name', 'account_from__account_name',)
     filter_fields = ('entry_type', 'agreement', 'lot', 'account_to', 'account_from', 'is_approved',)
 
     def get_queryset(self):
-        queryset = AccountLedger.objects.all()
+        queryset = AccountLedger.objects.all().exclude(is_active=False)
         PageNumberPagination.page_size = 0
         paginatePage = self.request.query_params.get('paginatePage', None)
         pageSize = self.request.query_params.get('pageSize', settings.PAGINATION_SIZE)

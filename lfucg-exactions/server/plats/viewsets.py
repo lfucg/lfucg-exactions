@@ -50,14 +50,14 @@ class SubdivisionViewSet(viewsets.ModelViewSet):
 
 class PlatViewSet(viewsets.ModelViewSet):
     serializer_class = PlatSerializer
-    queryset = Plat.objects.all().exclude(is_active=False)
+    queryset = Plat.objects.all()
     permission_classes = (CanAdminister,)
     filter_backends = (DjangoFilterBackend, filters.SearchFilter,)
     search_fields = ('name', 'expansion_area', 'slide', 'subdivision__name', 'cabinet', 'slide', 'unit', 'section', 'block',)
     filter_fields = ('expansion_area', 'account', 'subdivision', 'plat_type', 'lot__id', 'is_approved',)
 
     def get_queryset(self):
-        queryset = Plat.objects.all()
+        queryset = Plat.objects.all().exclude(is_active=False)
         PageNumberPagination.page_size = 0
         paginatePage = self.request.query_params.get('paginatePage', None)
         pageSize = self.request.query_params.get('pageSize', settings.PAGINATION_SIZE)
@@ -86,7 +86,7 @@ class PlatViewSet(viewsets.ModelViewSet):
 
 class LotViewSet(viewsets.ModelViewSet):
     serializer_class = LotSerializer
-    queryset = Lot.objects.all().exclude(is_active=False)
+    queryset = Lot.objects.all()
     permission_classes = (CanAdminister,)
     filter_backends = (DjangoFilterBackend, filters.SearchFilter,)
     search_fields = ('address_full', 'lot_number', 'parcel_id', 'permit_id', 'plat__expansion_area', 'plat__name', )
@@ -94,7 +94,7 @@ class LotViewSet(viewsets.ModelViewSet):
 
 
     def get_queryset(self):
-        queryset = Lot.objects.all()
+        queryset = Lot.objects.all().exclude(is_active=False)
         PageNumberPagination.page_size = 0
         paginatePage = self.request.query_params.get('paginatePage', None)
         pageSize = self.request.query_params.get('pageSize', settings.PAGINATION_SIZE)
@@ -127,8 +127,12 @@ class LotViewSet(viewsets.ModelViewSet):
 
 class PlatZoneViewSet(viewsets.ModelViewSet):
     serializer_class = PlatZoneSerializer
-    queryset = PlatZone.objects.all().exclude(is_active=False)
+    queryset = PlatZone.objects.all()
     permission_classes = (CanAdminister,)
+
+    def get_queryset(self):
+        queryset = PlatZone.objects.all().exclude(is_active=False)
+        return queryset.order_by('zone')
 
     def create(self, request):
         data_set = request.data
