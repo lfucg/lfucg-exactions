@@ -370,9 +370,7 @@ class LotForm extends React.Component {
                                                     </div>
                                                 </fieldset>
                                                 <div className="col-xs-8">
-                                                    <button disabled={!submitEnabled} className="btn btn-lex" onClick={onLotDues} >
-                                                        {currentUser.is_superuser || (currentUser.profile && currentUser.profile.is_supervisor) ? <div>Submit / Approve</div> : <div>Submit</div>}
-                                                    </button>
+                                                    <button disabled={!submitEnabled} className="btn btn-lex" onClick={onLotDues} >Submit</button>
                                                     {!submitEnabled ? (
                                                         <div>
                                                             <div className="clearfix" />
