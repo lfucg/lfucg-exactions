@@ -454,10 +454,8 @@ function mapDispatchToProps(dispatch, params) {
         onSubmit(event) {
             event.preventDefault();
             if (selectedPayment) {
-                dispatch(putPayment(selectedPayment))
-                .then(() => {
-                    hashHistory.push(`payment/summary/${selectedPayment}`);
-                });
+                dispatch(putPayment(selectedPayment));
+                hashHistory.push(`payment/summary/${selectedPayment}`);
             } else {
                 dispatch(postPayment())
                 .then((data_post) => {

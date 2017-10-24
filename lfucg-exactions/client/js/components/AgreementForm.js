@@ -207,10 +207,8 @@ function mapDispatchToProps(dispatch, params) {
         onSubmit(event) {
             event.preventDefault();
             if (selectedAgreement) {
-                dispatch(putAgreement(selectedAgreement))
-                .then(() => {
-                    hashHistory.push(`agreement/summary/${selectedAgreement}`);
-                });
+                dispatch(putAgreement(selectedAgreement));
+                hashHistory.push(`agreement/summary/${selectedAgreement}`);
             } else {
                 dispatch(postAgreement())
                 .then((data_post) => {

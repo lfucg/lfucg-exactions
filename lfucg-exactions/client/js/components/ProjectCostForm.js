@@ -231,10 +231,8 @@ function mapDispatchToProps(dispatch, params) {
         onSubmit(event) {
             event.preventDefault();
             if (selectedProjectCost) {
-                dispatch(putProjectCost(selectedProjectCost))
-                .then(() => {
-                    hashHistory.push(`project-cost/summary/${selectedProjectCost}`);
-                });
+                dispatch(putProjectCost(selectedProjectCost));
+                hashHistory.push(`project-cost/summary/${selectedProjectCost}`);
             } else {
                 dispatch(postProjectCost())
                 .then((data_post) => {

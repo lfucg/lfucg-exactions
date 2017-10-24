@@ -657,10 +657,8 @@ function mapDispatchToProps(dispatch, params) {
         },
         onLotDues() {
             if (selectedLot) {
-                dispatch(putLot(selectedLot))
-                .then(() => {
-                    hashHistory.push(`lot/summary/${selectedLot}`);
-                });
+                dispatch(putLot(selectedLot));
+                hashHistory.push(`lot/summary/${selectedLot}`);
             }
         },
         showExactions() {

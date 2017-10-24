@@ -269,10 +269,8 @@ function mapDispatchToProps(dispatch, params) {
         onSubmit(event) {
             event.preventDefault();
             if (selectedAccount) {
-                dispatch(putAccount(selectedAccount))
-                .then(() => {
-                    hashHistory.push(`account/summary/${selectedAccount}`);
-                });
+                dispatch(putAccount(selectedAccount));
+                hashHistory.push(`account/summary/${selectedAccount}`);
             } else {
                 dispatch(postAccount())
                 .then((data_post) => {

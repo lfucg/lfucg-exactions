@@ -488,10 +488,8 @@ function mapDispatchToProps(dispatch, params) {
         },
         onSubmit(event) {
             if (selectedAccountLedger) {
-                dispatch(putAccountLedger(selectedAccountLedger))
-                .then(() => {
-                    hashHistory.push(`credit-transfer/summary/${selectedAccountLedger}`);
-                });
+                dispatch(putAccountLedger(selectedAccountLedger));
+                hashHistory.push(`credit-transfer/summary/${selectedAccountLedger}`);
             } else {
                 dispatch(postAccountLedger())
                 .then((data_post) => {
