@@ -278,7 +278,6 @@ function mapDispatchToProps(dispatch, params) {
         onSubmit(event) {
             event.preventDefault();
             if (selectedAccount) {
-                console.log('FAIL AND SUBMIT');
                 dispatch(putAccount(selectedAccount))
                 .then(() => {
                     hashHistory.push(`account/summary/${selectedAccount}`);

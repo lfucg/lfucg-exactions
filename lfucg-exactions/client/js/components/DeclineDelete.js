@@ -39,7 +39,7 @@ class DeclineDelete extends React.Component {
                                 <h4>Delete Confirmation</h4>
                             </div>
                             <div className="modal-body">
-                                Please Confirm the deletion of this entry.
+                                Please confirm the deletion of this entry.
                             </div>
                             <div className="modal-footer">
                                 <button type="button" className="btn btn-lex" data-dismiss="modal">Cancel</button>
