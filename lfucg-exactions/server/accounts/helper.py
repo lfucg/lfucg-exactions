@@ -7,8 +7,8 @@ from django.contrib.auth.models import User
 
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
-from plats.models import *
-from .models import *
+from plats.models import Plat, Lot
+from .models import Agreement, AccountLedger, Payment, Project, ProjectCostEstimate
 
 def send_password_reset_email(user):
     text_template = get_template('emails/password_reset.txt')
