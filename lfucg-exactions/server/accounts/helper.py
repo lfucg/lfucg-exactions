@@ -54,8 +54,6 @@ def send_lost_username_email(user):
 @receiver(post_save, sender=ProjectCostEstimate)
 @receiver(post_save, sender=Plat)
 @receiver(post_save, sender=Lot)
-@receiver(post_save, sender=Subdivision)
-
 def send_email_to_supervisors(sender, instance, created=False, **kwargs):
 
     if instance.modified_by.is_superuser or (hasattr(instance.modified_by, 'profile') and instance.modified_by.profile.is_supervisor == True):
