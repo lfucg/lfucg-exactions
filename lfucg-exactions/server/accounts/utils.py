@@ -72,6 +72,7 @@ def update_entry(self, request, pk):
     else:
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+# TODO: FIGURE OUT HOW TO UPDATE ENTRIES TO IS APPROVED!
 def set_approval(self, request, data_set):
     print('got here')
     if (hasattr(self.request.user, 'profile') & self.request.user.profile.is_supervisor == True) or self.request.user.is_superuser == True:
