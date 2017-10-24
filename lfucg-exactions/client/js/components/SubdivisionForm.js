@@ -10,6 +10,7 @@ import Footer from './Footer';
 
 import FormGroup from './FormGroup';
 import Breadcrumbs from './Breadcrumbs';
+import DeclineDelete from './DeclineDelete';
 
 import {
     formInit,
@@ -33,6 +34,7 @@ class SubdivisionForm extends React.Component {
             activeForm,
             subdivisions,
             onSubmit,
+            selectedSubdivision,
         } = this.props;
 
         const submitEnabled =
@@ -54,7 +56,7 @@ class SubdivisionForm extends React.Component {
                 <div className="inside-body">
                     <div className="container">
                         <div className="col-sm-offset-1 col-sm-10">
-                            <form onSubmit={onSubmit} >
+                            <form >
                                 <fieldset>
                                     <div className="row">
                                         <FormGroup label="* Subdivision Name" id="name" aria-required="true">
@@ -67,14 +69,19 @@ class SubdivisionForm extends React.Component {
                                         </FormGroup>
                                     </div>
                                 </fieldset>
-                                <button disabled={!submitEnabled} className="btn btn-lex">Submit</button>
-                                {!submitEnabled ? (
-                                    <div>
-                                        <div className="clearfix" />
-                                        <span> * All required fields must be filled.</span>
-                                    </div>
-                                ) : null
-                                }
+                                <div className="col-xs-8">
+                                    <button disabled={!submitEnabled} className="btn btn-lex" onClick={onSubmit} >Submit</button>
+                                    {!submitEnabled ? (
+                                        <div>
+                                            <div className="clearfix" />
+                                            <span> * All required fields must be filled.</span>
+                                        </div>
+                                    ) : null
+                                    }
+                                </div>
+                                <div className="col-xs-4">
+                                    <DeclineDelete currentForm="/subdivision/" selectedEntry={selectedSubdivision} parentRoute="subdivision" />
+                                </div>
                             </form>
                         </div>
                     </div>
@@ -93,6 +100,7 @@ SubdivisionForm.propTypes = {
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
     onSubmit: PropTypes.func,
+    selectedSubdivision: PropTypes.string,
 };
 
 function mapStateToProps(state) {
@@ -135,6 +143,7 @@ function mapDispatchToProps(dispatch, params) {
                 });
             }
         },
+        selectedSubdivision,
     };
 }
 

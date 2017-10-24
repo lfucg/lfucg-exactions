@@ -20,7 +20,7 @@ class SubdivisionViewSet(viewsets.ModelViewSet):
     filter_fields = ('plat__id',)
 
     def get_queryset(self):
-        queryset = Subdivision.objects.all()
+        queryset = Subdivision.objects.exclude(is_active=False)
         paginatePage = self.request.query_params.get('paginatePage', None)
         pageSize = self.request.query_params.get('pageSize', settings.PAGINATION_SIZE)
         PageNumberPagination.page_size = 0
@@ -57,7 +57,7 @@ class PlatViewSet(viewsets.ModelViewSet):
     filter_fields = ('expansion_area', 'account', 'subdivision', 'plat_type', 'lot__id', 'is_approved',)
 
     def get_queryset(self):
-        queryset = Plat.objects.all()
+        queryset = Plat.objects.exclude(is_active=False)
         PageNumberPagination.page_size = 0
         paginatePage = self.request.query_params.get('paginatePage', None)
         pageSize = self.request.query_params.get('pageSize', settings.PAGINATION_SIZE)
@@ -94,7 +94,7 @@ class LotViewSet(viewsets.ModelViewSet):
 
 
     def get_queryset(self):
-        queryset = Lot.objects.all()
+        queryset = Lot.objects.exclude(is_active=False)
         PageNumberPagination.page_size = 0
         paginatePage = self.request.query_params.get('paginatePage', None)
         pageSize = self.request.query_params.get('pageSize', settings.PAGINATION_SIZE)
@@ -129,6 +129,9 @@ class PlatZoneViewSet(viewsets.ModelViewSet):
     serializer_class = PlatZoneSerializer
     queryset = PlatZone.objects.all()
     permission_classes = (CanAdminister,)
+
+    def get_queryset(self):
+        return PlatZone.objects.exclude(is_active=False).order_by('zone')
 
     def create(self, request):
         data_set = request.data
