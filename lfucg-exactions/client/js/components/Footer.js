@@ -27,6 +27,10 @@ class Footer extends React.Component {
                             </div>
                         </div>
                     </div>
+                    <div className="col-xs-12 legal-text">
+                        <div className="row">LFUCG does not guarantee the timeliness or accuracy of the information contained in this database.</div>
+                        <div className="row">For more information, please contact the Department of Planning, Preservation, and Development at 859-258-3430.</div>
+                    </div>
                 </div>
             </div>
         );
