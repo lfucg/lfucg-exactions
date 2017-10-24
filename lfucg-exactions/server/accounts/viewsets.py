@@ -219,13 +219,13 @@ class ProjectCostEstimateViewSet(viewsets.ModelViewSet):
         serializer = ProjectCostEstimateSerializer(data=data_set)
         if serializer.is_valid(raise_exception=True):
             self.perform_create(serializer)
-            send_email_to_supervisors(pk = serializer.data['id'], groups = ['Finance'], action = 'added projectcostestimate')
+            send_email_to_supervisors(pk = serializer.data['id'], groups = ['Finance'], action = 'added project cost estimate')
             return Response(serializer.data)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def update(self, request, pk):
-        send_email_to_supervisors(pk = pk, groups = ['Finance'], action = 'projectcostestimate updated')
+        send_email_to_supervisors(pk = pk, groups = ['Finance'], action = 'project cost estimate updated')
         return update_entry(self, request, pk)
             
 class AccountLedgerViewSet(viewsets.ModelViewSet):
@@ -291,7 +291,7 @@ class AccountLedgerViewSet(viewsets.ModelViewSet):
                 serializer = AccountLedgerSerializer(data=data_set)
                 if serializer.is_valid(raise_exception=True):
                     self.perform_create(serializer)
-                    send_email_to_supervisors(pk = serializer.data['id'], groups = ['Finance'], action = 'added accountledger')
+                    send_email_to_supervisors(pk = serializer.data['id'], groups = ['Finance'], action = 'added credit transfer')
             return Response('Success')
 
         elif 'lot' in self.request.data:
@@ -299,17 +299,17 @@ class AccountLedgerViewSet(viewsets.ModelViewSet):
             serializer = AccountLedgerSerializer(data=data_set)
             if serializer.is_valid(raise_exception=True):
                 self.perform_create(serializer)
-                send_email_to_supervisors(pk = serializer.data['id'], groups = ['Finance'], action = 'added accountledger')
+                send_email_to_supervisors(pk = serializer.data['id'], groups = ['Finance'], action = 'added credit transfer')
                 return Response(serializer.data)
         else:
             serializer = AccountLedgerSerializer(data=data_set)
             if serializer.is_valid(raise_exception=True):
                 self.perform_create(serializer)
-                send_email_to_supervisors(pk = serializer.data['id'], groups = ['Finance'], action = 'added accountledger')
+                send_email_to_supervisors(pk = serializer.data['id'], groups = ['Finance'], action = 'added credit transfer')
                 return Response(serializer.data)
 
     def update(self, request, pk):
-        send_email_to_supervisors(pk = pk, groups = ['Finance'], action = 'accountledger updated')
+        send_email_to_supervisors(pk = pk, groups = ['Finance'], action = 'credit transfer updated')
         return update_entry(self, request, pk)
                 
 class UserViewSet(viewsets.ModelViewSet):
