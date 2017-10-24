@@ -1,6 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import {
+    hashHistory,
+} from 'react-router';
 
 import {
     postDelete,
@@ -11,6 +14,7 @@ class DeclineDelete extends React.Component {
         this.props.onComponentDidMount({
             currentForm: this.props.currentForm,
             selectedEntry: this.props.selectedEntry,
+            parentRoute: this.props.parentRoute,
         });
     }
 
@@ -18,7 +22,6 @@ class DeclineDelete extends React.Component {
         const {
             currentUser,
             onDelete,
-            selectedEntry,
         } = this.props;
 
         return (
@@ -28,7 +31,6 @@ class DeclineDelete extends React.Component {
                         Decline / Delete
                     </button>
                 }
-                {console.log('SELECTED ENTRY', selectedEntry)}
             </div>
         );
     }
@@ -40,6 +42,7 @@ DeclineDelete.propTypes = {
     onDelete: PropTypes.func,
     currentForm: PropTypes.string,
     selectedEntry: PropTypes.string,
+    parentRoute: PropTypes.string,
 };
 
 function mapStateToProps(state) {
@@ -53,7 +56,10 @@ function mapDispatchToProps(dispatch, props) {
         onComponentDidMount() {
         },
         onDelete() {
-            dispatch(postDelete(props.currentForm, props.selectedEntry));
+            dispatch(postDelete(props.currentForm, props.selectedEntry))
+            .then(() => {
+                hashHistory.push(props.parentRoute);
+            });
         },
     };
 }

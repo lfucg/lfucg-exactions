@@ -1390,9 +1390,6 @@ export function searchQuery(isCSV) {
 }
 
 export function postDelete(currentForm, selectedEntry) {
-    console.log('CURRENT FORM', currentForm);
-    console.log('SELECTED ENTRY', selectedEntry);
-    console.log('URL', `${currentForm}${selectedEntry}/`);
     return {
         type: API_CALL,
         endpoint: POST_DELETE,

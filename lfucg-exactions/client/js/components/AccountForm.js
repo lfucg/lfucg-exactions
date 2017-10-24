@@ -63,7 +63,7 @@ class AccountForm extends React.Component {
                 <div className="inside-body">
                     <div className="container">
                         <div className="col-sm-offset-1 col-sm-10">
-                            <form onSubmit={onSubmit} >
+                            <form >
 
                                 <fieldset>
                                     <div className="row">
@@ -187,7 +187,7 @@ class AccountForm extends React.Component {
                                     </div>
                                 </fieldset>
                                 <div className="col-xs-8">
-                                    <button disabled={!submitEnabled} className="btn btn-lex">Submit</button>
+                                    <button disabled={!submitEnabled} className="btn btn-lex" onClick={onSubmit} >Submit</button>
                                     {!submitEnabled ? (
                                         <div>
                                             <div className="clearfix" />
@@ -197,7 +197,7 @@ class AccountForm extends React.Component {
                                     }
                                 </div>
                                 <div className="col-xs-4">
-                                    <DeclineDelete currentForm="/account/" selectedEntry={selectedAccount} />
+                                    <DeclineDelete currentForm="/account/" selectedEntry={selectedAccount} parentRoute="account" />
                                 </div>
                             </form>
                         </div>
@@ -278,6 +278,7 @@ function mapDispatchToProps(dispatch, params) {
         onSubmit(event) {
             event.preventDefault();
             if (selectedAccount) {
+                console.log('FAIL AND SUBMIT');
                 dispatch(putAccount(selectedAccount))
                 .then(() => {
                     hashHistory.push(`account/summary/${selectedAccount}`);
