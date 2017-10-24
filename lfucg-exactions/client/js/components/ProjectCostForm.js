@@ -12,6 +12,7 @@ import Breadcrumbs from './Breadcrumbs';
 import Uploads from './Uploads';
 
 import FormGroup from './FormGroup';
+import DeclineDelete from './DeclineDelete';
 
 import {
     formInit,
@@ -37,6 +38,7 @@ class ProjectCostForm extends React.Component {
             projectCosts,
             onSubmit,
             formChange,
+            selectedProjectCost,
         } = this.props;
 
         const currentParam = this.props.params.id;
@@ -71,7 +73,7 @@ class ProjectCostForm extends React.Component {
                     <div className="container">
                         <div className="col-sm-offset-1 col-sm-10">
                             {currentParam && projectCosts.is_approved === false && <div className="row"><h1 className="approval-pending">Approval Pending</h1></div>}
-                            <form onSubmit={onSubmit} >
+                            <form >
 
                                 <fieldset>
                                     <div className="row">
@@ -132,14 +134,19 @@ class ProjectCostForm extends React.Component {
                                         </div>
                                     </div>
                                 </fieldset>
-                                <button disabled={!submitEnabled} className="btn btn-lex">Submit</button>
-                                {!submitEnabled ? (
-                                    <div>
-                                        <div className="clearfix" />
-                                        <span> * All required fields must be filled.</span>
-                                    </div>
-                                ) : null
-                                }
+                                <div className="col-xs-8">
+                                    <button disabled={!submitEnabled} className="btn btn-lex" onClick={onSubmit} >Submit</button>
+                                    {!submitEnabled ? (
+                                        <div>
+                                            <div className="clearfix" />
+                                            <span> * All required fields must be filled.</span>
+                                        </div>
+                                    ) : null
+                                    }
+                                </div>
+                                <div className="col-xs-4">
+                                    <DeclineDelete currentForm="/estimate/" selectedEntry={selectedProjectCost} parentRoute="project-cost" />
+                                </div>
                             </form>
                         </div>
                         <div className="clearfix" />
@@ -170,6 +177,7 @@ ProjectCostForm.propTypes = {
     onComponentDidMount: PropTypes.func,
     onSubmit: PropTypes.func,
     formChange: PropTypes.func,
+    selectedProjectCost: PropTypes.string,
 };
 
 function mapStateToProps(state) {
@@ -242,6 +250,7 @@ function mapDispatchToProps(dispatch, params) {
                 });
             }
         },
+        selectedProjectCost,
     };
 }
 
