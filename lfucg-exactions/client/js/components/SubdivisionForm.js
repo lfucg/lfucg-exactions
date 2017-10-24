@@ -10,6 +10,7 @@ import Footer from './Footer';
 
 import FormGroup from './FormGroup';
 import Breadcrumbs from './Breadcrumbs';
+import DeclineDelete from './DeclineDelete';
 
 import {
     formInit,
@@ -29,9 +30,11 @@ class SubdivisionForm extends React.Component {
 
     render() {
         const {
+            currentUser,
             activeForm,
             subdivisions,
             onSubmit,
+            selectedSubdivision,
         } = this.props;
 
         const submitEnabled =
@@ -53,8 +56,7 @@ class SubdivisionForm extends React.Component {
                 <div className="inside-body">
                     <div className="container">
                         <div className="col-sm-offset-1 col-sm-10">
-                            <form onSubmit={onSubmit} >
-
+                            <form >
                                 <fieldset>
                                     <div className="row">
                                         <FormGroup label="* Subdivision Name" id="name" aria-required="true">
@@ -67,14 +69,19 @@ class SubdivisionForm extends React.Component {
                                         </FormGroup>
                                     </div>
                                 </fieldset>
-                                <button disabled={!submitEnabled} className="btn btn-lex">Submit</button>
-                                {!submitEnabled ? (
-                                    <div>
-                                        <div className="clearfix" />
-                                        <span> * All required fields must be filled.</span>
-                                    </div>
-                                ) : null
-                                }
+                                <div className="col-xs-8">
+                                    <button disabled={!submitEnabled} className="btn btn-lex" onClick={onSubmit} >Submit</button>
+                                    {!submitEnabled ? (
+                                        <div>
+                                            <div className="clearfix" />
+                                            <span> * All required fields must be filled.</span>
+                                        </div>
+                                    ) : null
+                                    }
+                                </div>
+                                <div className="col-xs-4">
+                                    <DeclineDelete currentForm="/subdivision/" selectedEntry={selectedSubdivision} parentRoute="subdivision" />
+                                </div>
                             </form>
                         </div>
                     </div>
@@ -87,15 +94,18 @@ class SubdivisionForm extends React.Component {
 }
 
 SubdivisionForm.propTypes = {
+    currentUser: PropTypes.object,
     activeForm: PropTypes.object,
-    subdivisions: PropTypes.object,
+    subdivisions: PropTypes.array,
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
     onSubmit: PropTypes.func,
+    selectedSubdivision: PropTypes.string,
 };
 
 function mapStateToProps(state) {
     return {
+        currentUser: state.currentUser,
         activeForm: state.activeForm,
         subdivisions: state.subdivisions,
     };
@@ -111,6 +121,7 @@ function mapDispatchToProps(dispatch, params) {
                 dispatch(getSubdivisionID(selectedSubdivision))
                 .then((data_subdivision) => {
                     const update = {
+                        sub_id: selectedSubdivision,
                         name: data_subdivision.response.name,
                         gross_acreage: data_subdivision.response.cleaned_gross_acreage,
                     };
@@ -121,14 +132,18 @@ function mapDispatchToProps(dispatch, params) {
         onSubmit(event) {
             event.preventDefault();
             if (selectedSubdivision) {
-                dispatch(putSubdivision(selectedSubdivision));
+                dispatch(putSubdivision(selectedSubdivision))
+                .then(() => {
+                    hashHistory.push(`subdivision/summary/${selectedSubdivision}`);
+                });
             } else {
                 dispatch(postSubdivision())
                 .then((data_sub_post) => {
-                    hashHistory.push(`subdivision/form/${data_sub_post.response.id}`);
+                    hashHistory.push(`subdivision/summary/${data_sub_post.response.id}`);
                 });
             }
         },
+        selectedSubdivision,
     };
 }
 

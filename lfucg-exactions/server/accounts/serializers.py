@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 from django.contrib.auth.models import User
 from .models import *
-from .utils import calculate_account_balance
+from .utils import calculate_account_balance, calculate_agreement_balance
 from plats.models import Plat, Lot
 from plats.serializers import PlatSerializer, LotSerializer
 
@@ -88,9 +88,15 @@ class AgreementSerializer(serializers.ModelSerializer):
     account_id = AccountField()
 
     agreement_type_display = serializers.SerializerMethodField(read_only=True)
+    agreement_balance = serializers.SerializerMethodField(read_only=True)
 
     def get_agreement_type_display(self, obj):
         return obj.get_agreement_type_display()
+
+    def get_agreement_balance(self, obj):
+        return {
+            'total': '${:,.2f}'.format(calculate_agreement_balance(obj.id)),
+        }
 
     class Meta:
         model = Agreement
@@ -111,6 +117,7 @@ class AgreementSerializer(serializers.ModelSerializer):
             'agreement_type',
 
             'agreement_type_display',
+            'agreement_balance',
         )
 
 class AgreementField(serializers.Field):
@@ -183,6 +190,7 @@ class ProjectCostEstimateSerializer(serializers.ModelSerializer):
     project_id = ProjectField()
 
     total_costs = serializers.SerializerMethodField(read_only=True)
+    dollar_values = serializers.SerializerMethodField(read_only=True)
 
     def get_total_costs(self,obj):
         total = (
@@ -192,7 +200,18 @@ class ProjectCostEstimateSerializer(serializers.ModelSerializer):
             obj.admin_cost +
             obj.management_cost
         )
-        return total
+        return '${:,.2f}'.format(total)
+
+    def get_dollar_values(self, obj):
+        return {
+            'land_cost': '${:,.2f}'.format(obj.land_cost),
+            'design_cost': '${:,.2f}'.format(obj.design_cost),
+            'construction_cost': '${:,.2f}'.format(obj.construction_cost),
+            'admin_cost': '${:,.2f}'.format(obj.admin_cost),
+            'management_cost': '${:,.2f}'.format(obj.management_cost),
+            'other_cost': '${:,.2f}'.format(obj.other_cost),
+            'credits_available': '${:,.2f}'.format(obj.credits_available),
+        }
 
     class Meta:
         model = ProjectCostEstimate
@@ -217,18 +236,26 @@ class ProjectCostEstimateSerializer(serializers.ModelSerializer):
             'credits_available',
 
             'total_costs',
+            'dollar_values',
         )
 
 class AccountLedgerSerializer(serializers.ModelSerializer):
-    lot = LotField()
+    lot = LotField(required=False)
     agreement = AgreementField()
     account_from = AccountField()
     account_to = AccountField()
 
     entry_type_display = serializers.SerializerMethodField(read_only=True)
+    dollar_values = serializers.SerializerMethodField(read_only=True)
 
     def get_entry_type_display(self, obj):
         return obj.get_entry_type_display()
+
+    def get_dollar_values(self, obj):
+        return {
+            'dollar_non_sewer': '${:,.2f}'.format(obj.non_sewer_credits),
+            'dollar_sewer': '${:,.2f}'.format(obj.sewer_credits),
+        }
 
     class Meta:
         model = AccountLedger
@@ -252,16 +279,19 @@ class AccountLedgerSerializer(serializers.ModelSerializer):
             'sewer_credits',
 
             'entry_type_display',
+            'dollar_values',
         )
 
 class PaymentSerializer(serializers.ModelSerializer):
     lot_id = LotField()
     credit_account = AccountField()
-    credit_source = AgreementField()
+    credit_source = AgreementField(read_only=True)
 
     total_paid = serializers.SerializerMethodField(read_only=True)
     payment_type_display = serializers.SerializerMethodField(read_only=True)
     paid_by_type_display = serializers.SerializerMethodField(read_only=True)
+
+    dollar_values = serializers.SerializerMethodField(read_only=True)
 
     lot_id = LotField()
 
@@ -274,13 +304,23 @@ class PaymentSerializer(serializers.ModelSerializer):
             obj.paid_storm +
             obj.paid_open_space
         )
-        return total
+        return '${:,.2f}'.format(total)
 
     def get_payment_type_display(self, obj):
         return obj.get_payment_type_display()
 
     def get_paid_by_type_display(self, obj):
         return obj.get_paid_by_type_display()
+
+    def get_dollar_values(self, obj):
+        return {
+            'paid_roads': '${:,.2f}'.format(obj.paid_roads),
+            'paid_sewer_trans': '${:,.2f}'.format(obj.paid_sewer_trans),
+            'paid_sewer_cap': '${:,.2f}'.format(obj.paid_sewer_cap),
+            'paid_parks': '${:,.2f}'.format(obj.paid_parks),
+            'paid_storm': '${:,.2f}'.format(obj.paid_storm),
+            'paid_open_space': '${:,.2f}'.format(obj.paid_open_space),
+        }
 
     class Meta:
         model = Payment
@@ -312,7 +352,16 @@ class PaymentSerializer(serializers.ModelSerializer):
             'total_paid',
             'payment_type_display',
             'paid_by_type_display',
+            'dollar_values',
         )
+
+class ProfileSerializer(serializers.ModelSerializer):
+     class Meta:
+        model = Profile
+        fields = (
+            'id',
+            'is_supervisor',
+        )       
 
 class UserSerializer(serializers.ModelSerializer):
 
@@ -335,7 +384,7 @@ class UserSerializer(serializers.ModelSerializer):
         user.set_password(pwd)
         user.save()
 
-        tasks.send_welcome_email.delay(user.id)
+        # tasks.send_welcome_email.delay(user.id)
 
         return user
 

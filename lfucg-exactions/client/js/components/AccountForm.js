@@ -12,6 +12,8 @@ import Footer from './Footer';
 import FormGroup from './FormGroup';
 import Breadcrumbs from './Breadcrumbs';
 
+import DeclineDelete from './DeclineDelete';
+
 import {
     formInit,
     formUpdate,
@@ -34,6 +36,7 @@ class AccountForm extends React.Component {
             accounts,
             onSubmit,
             formChange,
+            selectedAccount,
         } = this.props;
 
         const submitEnabled =
@@ -60,7 +63,7 @@ class AccountForm extends React.Component {
                 <div className="inside-body">
                     <div className="container">
                         <div className="col-sm-offset-1 col-sm-10">
-                            <form onSubmit={onSubmit} >
+                            <form >
 
                                 <fieldset>
                                     <div className="row">
@@ -183,14 +186,19 @@ class AccountForm extends React.Component {
                                         </div>
                                     </div>
                                 </fieldset>
-                                <button disabled={!submitEnabled} className="btn btn-lex">Submit</button>
-                                {!submitEnabled ? (
-                                    <div>
-                                        <div className="clearfix" />
-                                        <span> * All required fields must be filled.</span>
-                                    </div>
-                                ) : null
-                                }
+                                <div className="col-xs-8">
+                                    <button disabled={!submitEnabled} className="btn btn-lex" onClick={onSubmit} >Submit</button>
+                                    {!submitEnabled ? (
+                                        <div>
+                                            <div className="clearfix" />
+                                            <span> * All required fields must be filled.</span>
+                                        </div>
+                                    ) : null
+                                    }
+                                </div>
+                                <div className="col-xs-4">
+                                    <DeclineDelete currentForm="/account/" selectedEntry={selectedAccount} parentRoute="account" />
+                                </div>
                             </form>
                         </div>
                     </div>
@@ -204,11 +212,12 @@ class AccountForm extends React.Component {
 
 AccountForm.propTypes = {
     activeForm: PropTypes.object,
-    accounts: PropTypes.object,
+    accounts: PropTypes.array,
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
     onSubmit: PropTypes.func,
     formChange: PropTypes.func,
+    selectedAccount: PropTypes.string,
 };
 
 function mapStateToProps(state) {
@@ -280,6 +289,7 @@ function mapDispatchToProps(dispatch, params) {
                 });
             }
         },
+        selectedAccount,
     };
 }
 

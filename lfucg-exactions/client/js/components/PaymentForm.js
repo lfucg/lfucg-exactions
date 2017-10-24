@@ -11,6 +11,7 @@ import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
 
 import FormGroup from './FormGroup';
+import DeclineDelete from './DeclineDelete';
 
 import {
     formInit,
@@ -44,7 +45,10 @@ class PaymentForm extends React.Component {
             onSubmit,
             formChange,
             lotChange,
+            selectedPayment,
         } = this.props;
+
+        const currentParam = this.props.params.id;
 
         const lotsList = lots.length > 0 &&
             (map((lot) => {
@@ -94,7 +98,8 @@ class PaymentForm extends React.Component {
                 <div className="inside-body">
                     <div className="container">
                         <div className="col-sm-offset-1 col-sm-10">
-                            <form onSubmit={onSubmit} >
+                            {currentParam && payments.is_approved === false && <div className="row"><h1 className="approval-pending">Approval Pending</h1></div>}
+                            <form >
 
                                 <fieldset>
                                     <div className="row form-subheading">
@@ -110,6 +115,14 @@ class PaymentForm extends React.Component {
                                                 }
                                                 {lotsList}
                                             </select>
+                                        </div>
+                                        <div className="col-sm-6">
+                                            {activeForm.lot_exactions &&
+                                                <div>
+                                                    <h3 htmlFor="lot_exactions" className="text-center" aria-label="Current Exactions">Current Lot Exactions Due:</h3>
+                                                    <h4 className="text-center" >{activeForm.lot_exactions}</h4>
+                                                </div>
+                                            }
                                         </div>
                                     </div>
                                     <div className="row">
@@ -172,51 +185,100 @@ class PaymentForm extends React.Component {
                                     <div className="row form-subheading">
                                         <h3>Exactions Payments</h3>
                                     </div>
+                                    {activeForm.sewer_exactions || activeForm.non_sewer_exactions ?
+                                        <div className="white-box">
+                                            {activeForm.sewer_exactions || activeForm.non_sewer_exactions ?
+                                                <div className="text-center">
+                                                    <div className="row">
+                                                        <h3>Exactions Due</h3>
+                                                        <hr />
+                                                    </div>
+                                                    <div className="row">
+                                                        <div className="col-xs-6 col-sm-4 col-sm-offset-2">
+                                                            <h4>Sewer: {activeForm.sewer_exactions}</h4>
+                                                        </div>
+                                                        <div className="col-xs-6 col-sm-4">
+                                                            <h4>Non-sewer: {activeForm.non_sewer_exactions}</h4>
+                                                        </div>
+                                                    </div>
+                                                    <div className="row">
+                                                        <div className="col-xs-6 col-sm-4 col-sm-offset-2">
+                                                            <h5>Roads: {activeForm.dues_roads_dev}</h5>
+                                                        </div>
+                                                        <div className="col-xs-6 col-sm-4">
+                                                            <h5>Parks: {activeForm.dues_parks_dev}</h5>
+                                                        </div>
+                                                    </div>
+                                                    <div className="row">
+                                                        <div className="col-xs-6 col-sm-4 col-sm-offset-2">
+                                                            <h5>Sewer Capacity: {activeForm.dues_sewer_cap_dev}</h5>
+                                                        </div>
+                                                        <div className="col-xs-6 col-sm-4">
+                                                            <h5>Sewer Transmission: {activeForm.dues_sewer_trans_dev}</h5>
+                                                        </div>
+                                                    </div>
+                                                    <div className="row">
+                                                        <div className="col-xs-6 col-sm-4 col-sm-offset-2">
+                                                            <h5>Storm: {activeForm.dues_storm_dev}</h5>
+                                                        </div>
+                                                        <div className="col-xs-6 col-sm-4">
+                                                            <h5>Open Spaces: {activeForm.dues_open_space_dev}</h5>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            : null}
+                                        </div>
+                                    : null}
                                     <div className="row">
                                         <div className="col-sm-6">
-                                            <FormGroup label="Road Exactions Paid" id="paid_roads">
+                                            <FormGroup label="Road Exactions" id="paid_roads">
                                                 <input type="number" className="form-control" placeholder="Road Exactions Paid" />
                                             </FormGroup>
                                         </div>
                                         <div className="col-sm-6">
-                                            <FormGroup label="Parks Exactions Paid" id="paid_parks">
+                                            <FormGroup label="Parks Exactions" id="paid_parks">
                                                 <input type="number" className="form-control" placeholder="Parks Exactions Paid" />
                                             </FormGroup>
                                         </div>
                                     </div>
                                     <div className="row">
                                         <div className="col-sm-6">
-                                            <FormGroup label="Sewer Capacity Exactions Paid" id="paid_sewer_cap">
+                                            <FormGroup label="Sewer Capacity Exactions" id="paid_sewer_cap">
                                                 <input type="number" className="form-control" placeholder="Sewer Capacity Exactions Paid" />
                                             </FormGroup>
                                         </div>
                                         <div className="col-sm-6">
-                                            <FormGroup label="Sewer Transmission Exactions Paid" id="paid_sewer_trans">
+                                            <FormGroup label="Sewer Transmission Exactions" id="paid_sewer_trans">
                                                 <input type="number" className="form-control" placeholder="Sewer Transmission Exactions Paid" />
                                             </FormGroup>
                                         </div>
                                     </div>
                                     <div className="row">
                                         <div className="col-sm-6">
-                                            <FormGroup label="Storm Exactions Paid" id="paid_storm">
+                                            <FormGroup label="Storm Exactions" id="paid_storm">
                                                 <input type="number" className="form-control" placeholder="Storm Exactions Paid" />
                                             </FormGroup>
                                         </div>
                                         <div className="col-sm-6">
-                                            <FormGroup label="Open Spaces Exactions Paid" id="paid_open_space">
+                                            <FormGroup label="Open Spaces Exactions" id="paid_open_space">
                                                 <input type="number" className="form-control" placeholder="Open Spaces Exactions Paid" />
                                             </FormGroup>
                                         </div>
                                     </div>
                                 </fieldset>
-                                <button disabled={!submitEnabled} className="btn btn-lex">Submit</button>
-                                {!submitEnabled ? (
-                                    <div>
-                                        <div className="clearfix" />
-                                        <span> * All required fields must be filled.</span>
-                                    </div>
-                                ) : null
-                                }
+                                <div className="col-xs-8">
+                                    <button disabled={!submitEnabled} className="btn btn-lex" onClick={onSubmit} >Submit</button>
+                                    {!submitEnabled ? (
+                                        <div>
+                                            <div className="clearfix" />
+                                            <span> * All required fields must be filled.</span>
+                                        </div>
+                                    ) : null
+                                    }
+                                </div>
+                                <div className="col-xs-4">
+                                    <DeclineDelete currentForm="/payment/" selectedEntry={selectedPayment} parentRoute="payment" />
+                                </div>
                             </form>
                         </div>
                     </div>
@@ -235,10 +297,12 @@ PaymentForm.propTypes = {
     agreements: PropTypes.object,
     payments: PropTypes.object,
     route: PropTypes.object,
+    params: PropTypes.object,
     onComponentDidMount: PropTypes.func,
     onSubmit: PropTypes.func,
     formChange: PropTypes.func,
     lotChange: PropTypes.func,
+    selectedPayment: PropTypes.string,
 };
 
 function mapStateToProps(state) {
@@ -309,13 +373,21 @@ function mapDispatchToProps(dispatch, params) {
                     if (lot_id.response.account) {
                         dispatch(getAccountID(lot_id.response.account))
                         .then((account) => {
-                            console.log('ACCOUNT NUMBER', lot_id.response.account);
                             const update = {
                                 credit_account_show: account.response.account_name,
                                 credit_account: lot_id.response.account,
                                 account_name: account.response.account_name,
                                 lot_id: value_id,
                                 address_full: value_name,
+                                lot_exactions: lot_id.response.lot_exactions.current_exactions,
+                                non_sewer_exactions: lot_id.response.lot_exactions.non_sewer_due,
+                                sewer_exactions: lot_id.response.lot_exactions.sewer_due,
+                                dues_open_space_dev: lot_id.response.lot_exactions.dues_open_space_dev,
+                                dues_parks_dev: lot_id.response.lot_exactions.dues_parks_dev,
+                                dues_roads_dev: lot_id.response.lot_exactions.dues_roads_dev,
+                                dues_sewer_cap_dev: lot_id.response.lot_exactions.dues_sewer_cap_dev,
+                                dues_sewer_trans_dev: lot_id.response.lot_exactions.dues_sewer_trans_dev,
+                                dues_storm_dev: lot_id.response.lot_exactions.dues_storm_dev,
                             };
                             dispatch(formUpdate(update));
                             dispatch(getAccountAgreements(lot_id.response.account));
@@ -324,6 +396,15 @@ function mapDispatchToProps(dispatch, params) {
                         const update = {
                             lot_id: value_id,
                             address_full: value_name,
+                            lot_exactions: lot_id.response.lot_exactions.current_exactions,
+                            non_sewer_exactions: lot_id.response.lot_exactions.non_sewer_due,
+                            sewer_exactions: lot_id.response.lot_exactions.sewer_due,
+                            dues_open_space_dev: lot_id.response.lot_exactions.dues_open_space_dev,
+                            dues_parks_dev: lot_id.response.lot_exactions.dues_parks_dev,
+                            dues_roads_dev: lot_id.response.lot_exactions.dues_roads_dev,
+                            dues_sewer_cap_dev: lot_id.response.lot_exactions.dues_sewer_cap_dev,
+                            dues_sewer_trans_dev: lot_id.response.lot_exactions.dues_sewer_trans_dev,
+                            dues_storm_dev: lot_id.response.lot_exactions.dues_storm_dev,
                         };
                         dispatch(formUpdate(update));
                     }
@@ -362,6 +443,7 @@ function mapDispatchToProps(dispatch, params) {
                 });
             }
         },
+        selectedPayment,
     };
 }
 

@@ -63,8 +63,8 @@ class AccountSummary extends React.Component {
                             <p className="col-sm-4 col-xs-6">Approval: {plat.is_approved ? 'Approved' : 'Not Approved'}</p>
                             <p className="col-sm-4 col-xs-6">Expansion Area: {plat.expansion_area}</p>
                             <p className="col-sm-4 col-xs-6">Slide: {plat.slide}</p>
-                            <p className="col-sm-4 col-xs-6">Sewer Exactions: ${plat.sewer_due}</p>
-                            <p className="col-sm-4 col-xs-6">Non-Sewer Exactions: ${plat.non_sewer_due}</p>
+                            <p className="col-sm-4 col-xs-6">Sewer Exactions: {plat.plat_exactions && plat.plat_exactions.plat_sewer_due}</p>
+                            <p className="col-sm-4 col-xs-6">Non-Sewer Exactions: {plat.plat_exactions && plat.plat_exactions.plat_non_sewer_due}</p>
                         </div>
                     </div>
                 );
@@ -139,6 +139,7 @@ class AccountSummary extends React.Component {
                             </div>
                         </div>
                         <div className="row">
+                            <p className="col-sm-4 col-xs-6">Current Balance: {agreement.agreement_balance && agreement.agreement_balance.total}</p>
                             <p className="col-sm-4 col-xs-6">Expansion Area: {agreement.expansion_area}</p>
                             <p className="col-sm-4 col-xs-6">Agreement Type: {agreement.agreement_type_display}</p>
                             <p className="col-sm-4 col-xs-6">Date Executed: {agreement.date_executed}</p>
@@ -152,7 +153,7 @@ class AccountSummary extends React.Component {
                 return (
                     <div key={payment.id} className="col-xs-12">
                         <div className="row form-subheading">
-                            <h3>Agreement Resolution: {payment.credit_source.resolution_number}</h3>
+                            <h3>Agreement Resolution: {payment.credit_source && payment.credit_source.resolution_number}</h3>
                         </div>
                         <div className="row link-row">
                             <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
@@ -177,8 +178,9 @@ class AccountSummary extends React.Component {
                             </div>
                         </div>
                         <div className="row">
-                            <p className="col-sm-4 col-xs-6">Payment Type: {payment.payment_type}</p>
-                            <p className="col-sm-4 col-xs-6">Paid By: {payment.total_paid}</p>
+                            <p className="col-sm-4 col-xs-6">Total Paid: {payment.total_paid}</p>
+                            <p className="col-sm-4 col-xs-6">Payment Type: {payment.payment_type_display}</p>
+                            <p className="col-sm-4 col-xs-6">Paid By: {payment.paid_by}</p>
                             <p className="col-sm-4 col-xs-6">Paid By Type: {payment.paid_by_type_display}</p>
                             <p className="col-xs-12">Lot: {payment.lot_id.address_full}</p>
                         </div>
@@ -197,7 +199,7 @@ class AccountSummary extends React.Component {
                             <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
                                 <div className="col-xs-5">
                                     {currentUser && currentUser.permissions && currentUser.permissions.accountledger &&
-                                        <Link to={`account-ledger/form/${accountLedger.id}`} aria-label="Edit">
+                                        <Link to={`credit-transfer/form/${accountLedger.id}`} aria-label="Edit">
                                             <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
                                             <div className="col-xs-7 link-label">
                                                 Edit
@@ -206,7 +208,7 @@ class AccountSummary extends React.Component {
                                     }
                                 </div>
                                 <div className="col-xs-5 ">
-                                    <Link to={`account-ledger/summary/${accountLedger.id}`} aria-label="Summary">
+                                    <Link to={`credit-transfer/summary/${accountLedger.id}`} aria-label="Summary">
                                         <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
                                         <div className="col-xs-7 link-label">
                                             Summary
@@ -219,7 +221,9 @@ class AccountSummary extends React.Component {
                             <p className="col-sm-4 col-xs-6">Account From: {accountLedger.account_from.account_name}</p>
                             <p className="col-sm-4 col-xs-6">Account To: {accountLedger.account_to.account_name}</p>
                             <p className="col-sm-4 col-xs-6">Agreement: {accountLedger.agreement.resolution_number}</p>
-                            <p className="col-xs-12">Lot: {accountLedger.lot.address_full}</p>
+                            <p className="col-md-3 col-sm-4 col-xs-6">Non-Sewer Credits: {accountLedger.dollar_values && accountLedger.dollar_values.dollar_non_sewer}</p>
+                            <p className="col-md-3 col-sm-4 col-xs-6">Sewer Credits: {accountLedger.dollar_values && accountLedger.dollar_values.dollar_sewer}</p>
+                            <p className="col-xs-12">Lot: {accountLedger.lot && accountLedger.lot.address_full}</p>
                         </div>
                     </div>
                 );
@@ -446,7 +450,7 @@ class AccountSummary extends React.Component {
                                         <div className="row section-heading" role="tab" id="headingAccountLedgers">
                                             <div className="col-xs-1 caret-indicator" />
                                             <div className="col-xs-10">
-                                                <h2>Account Ledgers</h2>
+                                                <h2>Credit Transfers</h2>
                                             </div>
                                         </div>
                                     </a>
@@ -465,7 +469,7 @@ class AccountSummary extends React.Component {
                                 </div>
                             ) : (
                                 <div className="row section-heading" role="tab" id="headingAccountLedgers">
-                                    <h2>Account Ledgers - None</h2>
+                                    <h2>Credit Transfers - None</h2>
                                 </div>
                             )}
 
@@ -480,10 +484,10 @@ class AccountSummary extends React.Component {
 
 AccountSummary.propTypes = {
     currentUser: PropTypes.object,
-    accounts: PropTypes.object,
-    agreements: PropTypes.object,
-    payments: PropTypes.object,
-    accountLedgers: PropTypes.object,
+    accounts: PropTypes.array,
+    agreements: PropTypes.array,
+    payments: PropTypes.array,
+    accountLedgers: PropTypes.array,
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
 };

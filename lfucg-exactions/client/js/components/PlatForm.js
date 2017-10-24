@@ -10,8 +10,10 @@ import Navbar from './Navbar';
 import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
 import Notes from './Notes';
+import Uploads from './Uploads';
 
 import FormGroup from './FormGroup';
+import DeclineDelete from './DeclineDelete';
 import PlatZoneForm from './PlatZoneForm';
 import PlatZoneDuesForm from './PlatZoneDuesForm';
 
@@ -46,7 +48,10 @@ class PlatForm extends React.Component {
             onPlatAndCreateLot,
             addAnotherPlatZone,
             onPlatDues,
+            selectedPlat,
         } = this.props;
+
+        const currentParam = this.props.params.id;
 
         const subdivisionsList = subdivisions.length > 0 &&
             (map((single_subdivision) => {
@@ -140,6 +145,7 @@ class PlatForm extends React.Component {
                 <div className="inside-body">
                     <div className="container">
                         <div className="col-md-offset-1 col-md-10 panel-group" id="accordion" role="tablist" aria-multiselectable="false">
+                            {currentParam && plats.is_approved === false && <div className="row"><h1 className="approval-pending">Approval Pending</h1></div>}
                             <a
                               role="button"
                               data-toggle="collapse"
@@ -162,7 +168,7 @@ class PlatForm extends React.Component {
                               aria-labelledby="#headingPlat"
                             >
                                 <div className="panel-body">
-                                    <form onSubmit={onPlatSubmit} className="col-xs-12">
+                                    <form className="col-xs-12">
 
                                         <fieldset>
                                             <div className="row form-subheading">
@@ -289,14 +295,19 @@ class PlatForm extends React.Component {
                                                 </div>
                                             </div>
                                         </fieldset>
-                                        <button disabled={!submitEnabled} className="btn btn-lex">Submit</button>
-                                        {!submitEnabled ? (
-                                            <div>
-                                                <div className="clearfix" />
-                                                <span> * All required fields must be filled.</span>
-                                            </div>
-                                        ) : null
-                                        }
+                                        <div className="col-xs-8">
+                                            <button disabled={!submitEnabled} className="btn btn-lex" onClick={onPlatSubmit} >Submit</button>
+                                            {!submitEnabled ? (
+                                                <div>
+                                                    <div className="clearfix" />
+                                                    <span> * All required fields must be filled.</span>
+                                                </div>
+                                            ) : null
+                                            }
+                                        </div>
+                                        <div className="col-xs-4">
+                                            <DeclineDelete currentForm="/plat/" selectedEntry={selectedPlat} parentRoute="plat" />
+                                        </div>
                                     </form>
                                 </div>
                             </div>
@@ -368,7 +379,7 @@ class PlatForm extends React.Component {
                                             >
                                                 <div className="panel-body">
                                                     <div className="col-xs-12">
-                                                        <form onSubmit={onPlatDues}>
+                                                        <form >
                                                             <fieldset>
                                                                 <div className="row form-subheading">
                                                                     <h3>Exactions and Calculations</h3>
@@ -450,36 +461,49 @@ class PlatForm extends React.Component {
                                     )}
                                 </div>
                             ) : null }
-                            <a
-                              role="button"
-                              data-toggle="collapse"
-                              data-parent="#accordion"
-                              href="#collapseNotes"
-                              aria-expanded="true"
-                              aria-controls="collapseNotes"
-                            >
-                                <div className="row section-heading" role="tab" id="headingNotes">
-                                    <div className="col-xs-1 caret-indicator" />
-                                    <div className="col-xs-10">
-                                        <h2>Notes</h2>
+                            {plats.id &&
+                                <div>
+                                    <a
+                                      role="button"
+                                      data-toggle="collapse"
+                                      data-parent="#accordion"
+                                      href="#collapseNotes"
+                                      aria-expanded="true"
+                                      aria-controls="collapseNotes"
+                                    >
+                                        <div className="row section-heading" role="tab" id="headingNotes">
+                                            <div className="col-xs-1 caret-indicator" />
+                                            <div className="col-xs-10">
+                                                <h2>Notes</h2>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <div
+                                      id="collapseNotes"
+                                      className="panel-collapse collapse in row"
+                                      role="tabpanel"
+                                      aria-labelledby="#headingNotes"
+                                    >
+                                        <div className="panel-body">
+                                            <div className="col-xs-12">
+                                                {plats.id &&
+                                                    <Notes content_type="plats_plat" object_id={plats.id} />
+                                                }
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                            </a>
-                            <div
-                              id="collapseNotes"
-                              className="panel-collapse collapse in row"
-                              role="tabpanel"
-                              aria-labelledby="#headingNotes"
-                            >
-                                <div className="panel-body">
-                                    <div className="col-xs-12">
-                                        {plats.id &&
-                                            <Notes content_type="Plat" object_id={plats.id} />
-                                        }
-                                    </div>
-                                </div>
-                            </div>
+                            }
                         </div>
+                        {plats.id &&
+                            <Uploads
+                              file_content_type="plats_plat"
+                              file_object_id={plats.id}
+                              ariaExpanded="true"
+                              panelClass="panel-collapse collapse row in"
+                              permission="plat"
+                            />
+                        }
                     </div>
                 </div>
 
@@ -491,16 +515,18 @@ class PlatForm extends React.Component {
 
 PlatForm.propTypes = {
     activeForm: PropTypes.object,
-    subdivisions: PropTypes.object,
-    plats: PropTypes.object,
-    accounts: PropTypes.object,
+    subdivisions: PropTypes.array,
+    plats: PropTypes.array,
+    accounts: PropTypes.array,
     route: PropTypes.object,
+    params: PropTypes.object,
     onComponentDidMount: PropTypes.func,
     formChange: PropTypes.func,
     onPlatSubmit: PropTypes.func,
     onPlatAndCreateLot: PropTypes.func,
     addAnotherPlatZone: PropTypes.func,
     onPlatDues: PropTypes.func,
+    selectedPlat: PropTypes.string,
 };
 
 function mapStateToProps(state) {
@@ -623,12 +649,8 @@ function mapDispatchToProps(dispatch, params) {
             event.preventDefault();
             if (selectedPlat) {
                 dispatch(putPlat(selectedPlat))
-                .then((data_plat_put) => {
-                    const put_update = {
-                        first_section: true,
-                        plat_show: `${data_plat_put.response.id},${data_plat_put.response.name}`,
-                    };
-                    dispatch(formUpdate(put_update));
+                .then(() => {
+                    hashHistory.push(`plat/summary/${selectedPlat}`);
                 });
             } else {
                 dispatch(postPlat())
@@ -665,6 +687,7 @@ function mapDispatchToProps(dispatch, params) {
                 });
             }
         },
+        selectedPlat,
     };
 }
 

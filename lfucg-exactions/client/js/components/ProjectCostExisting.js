@@ -8,15 +8,13 @@ import Navbar from './Navbar';
 import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
 import Pagination from './Pagination';
+import SearchBar from './SearchBar';
 
 import {
     getPagination,
-    getProjectCostQuery,
+    getProjects,
 } from '../actions/apiActions';
 
-import {
-    formUpdate,
-} from '../actions/formActions';
 
 class ProjectCostExisting extends React.Component {
     componentDidMount() {
@@ -27,47 +25,60 @@ class ProjectCostExisting extends React.Component {
         const {
             currentUser,
             projectCosts,
-            onProjectCostQuery,
+            projects,
         } = this.props;
+
+        const projectsList = projects && projects.length > 0 &&
+            (map((single_project) => {
+                return {
+                    id: single_project.id,
+                    name: single_project.name,
+                };
+            })(projects));
 
         const projectCosts_list = projectCosts.length > 0 ? (
             map((projectCost) => {
                 return (
                     <div key={projectCost.id} className="col-xs-12">
-                        <div className="row form-subheading">
-                            <div className="col-sm-7 col-md-9">
-                                <h3>Project Cost Category: {projectCost.estimate_type}</h3>
+                        {(currentUser.id || projectCost.is_approved) && <div>
+                            <div className={projectCost.is_approved ? 'row form-subheading' : 'row unapproved-heading'}>
+                                <div className="col-sm-11">
+                                    <h3>
+                                        Project Cost Category: {projectCost.estimate_type}
+                                        {!projectCost.is_approved && <span className="pull-right">Approval Pending</span>}
+                                    </h3>
+                                </div>
                             </div>
-                        </div>
-                        <div className="row link-row">
-                            <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
-                                <div className="col-xs-5">
-                                    {currentUser && currentUser.permissions && currentUser.permissions.projectcostestimate &&
-                                        <Link to={`project-cost/form/${projectCost.id}`} aria-label="Edit">
-                                            <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
+                            <div className={projectCost.is_approved ? 'row link-row' : 'row link-row-approval-pending'}>
+                                <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
+                                    <div className="col-xs-5">
+                                        {currentUser && currentUser.permissions && currentUser.permissions.projectcostestimate &&
+                                            <Link to={`project-cost/form/${projectCost.id}`} aria-label="Edit">
+                                                <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
+                                                <div className="col-xs-7 link-label">
+                                                    Edit
+                                                </div>
+                                            </Link>
+                                        }
+                                    </div>
+                                    <div className="col-xs-5 ">
+                                        <Link to={`project-cost/summary/${projectCost.id}`} aria-label="Summary">
+                                            <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
                                             <div className="col-xs-7 link-label">
-                                                Edit
+                                                Summary
                                             </div>
                                         </Link>
-                                    }
-                                </div>
-                                <div className="col-xs-5 ">
-                                    <Link to={`project-cost/summary/${projectCost.id}`} aria-label="Summary">
-                                        <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
-                                        <div className="col-xs-7 link-label">
-                                            Summary
-                                        </div>
-                                    </Link>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div className="row">
-                            <div className="col-sm-offset-1">
-                                <p className="col-md-4 col-xs-6">Project: {projectCost.project_id.name}</p>
-                                <p className="col-md-4 col-xs-6">Total Costs: ${projectCost.total_costs}</p>
-                                <p className="col-md-4 col-xs-6 ">Credits Available: ${projectCost.credits_available}</p>
+                            <div className="row">
+                                <div className="col-sm-offset-1">
+                                    <p className="col-md-4 col-xs-6">Project: {projectCost.project_id.name}</p>
+                                    <p className="col-md-4 col-xs-6">Total Costs: {projectCost.total_costs}</p>
+                                    <p className="col-md-4 col-xs-6 ">Credits Available: {projectCost.dollar_values && projectCost.dollar_values.credits_available}</p>
+                                </div>
                             </div>
-                        </div>
+                        </div>}
                     </div>
                 );
             })(projectCosts)
@@ -85,22 +96,13 @@ class ProjectCostExisting extends React.Component {
 
                 <Breadcrumbs route={this.props.route} />
 
-                <div className="row search-box">
-                    <form onChange={onProjectCostQuery('query')} className="col-sm-10 col-sm-offset-1" >
-                        <fieldset>
-                            <div className="col-sm-2 col-xs-12">
-                                <label htmlFor="query" className="form-label">Search</label>
-                            </div>
-                            <div className="col-sm-10 col-xs-12">
-                                <input
-                                  type="text"
-                                  className="form-control"
-                                  placeholder="Search ProjectCosts"
-                                />
-                            </div>
-                        </fieldset>
-                    </form>
-                </div>
+                <SearchBar
+                  apiCalls={[getProjects]}
+                  advancedSearch={[
+                    { filterField: 'filter_project_id', displayName: 'Project', list: projectsList },
+                    { filterField: 'filter_is_approved', displayName: 'Approval', list: [{ id: true, name: 'Approved' }, { id: false, name: 'Unapproved' }] },
+                  ]}
+                />
 
                 <div className="inside-body">
                     <div className="container">
@@ -116,16 +118,17 @@ class ProjectCostExisting extends React.Component {
 
 ProjectCostExisting.propTypes = {
     currentUser: PropTypes.object,
-    projectCosts: PropTypes.object,
+    projectCosts: PropTypes.array,
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
-    onProjectCostQuery: PropTypes.func,
+    projects: PropTypes.array,
 };
 
 function mapStateToProps(state) {
     return {
         currentUser: state.currentUser,
         projectCosts: state.projectCosts,
+        projects: state.projects,
     };
 }
 
@@ -133,16 +136,6 @@ function mapDispatchToProps(dispatch) {
     return {
         onComponentDidMount() {
             dispatch(getPagination('/estimate/'));
-        },
-        onProjectCostQuery(field) {
-            return (e, ...args) => {
-                const value = typeof e.target.value !== 'undefined' ? e.target.value : args[1];
-                const update = {
-                    [field]: value,
-                };
-                dispatch(formUpdate(update));
-                dispatch(getProjectCostQuery());
-            };
         },
     };
 }

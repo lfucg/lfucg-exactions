@@ -9,8 +9,11 @@ import PropTypes from 'prop-types';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
+import Uploads from './Uploads';
 
 import FormGroup from './FormGroup';
+
+import DeclineDelete from './DeclineDelete';
 
 import {
     formInit,
@@ -36,7 +39,10 @@ class AgreementForm extends React.Component {
             agreements,
             onSubmit,
             formChange,
+            selectedAgreement,
         } = this.props;
+
+        const currentParam = this.props.params.id;
 
         const accountsList = accounts.length > 0 &&
             (map((account) => {
@@ -46,6 +52,11 @@ class AgreementForm extends React.Component {
                     </option>
                 );
             })(accounts));
+
+        const submitEnabled =
+            activeForm.resolution_number &&
+            activeForm.expansion_area &&
+            activeForm.agreement_type;
 
         return (
             <div className="agreement-form">
@@ -62,7 +73,8 @@ class AgreementForm extends React.Component {
                 <div className="inside-body">
                     <div className="container">
                         <div className="col-sm-offset-1 col-sm-10">
-                            <form onSubmit={onSubmit} >
+                            {currentParam && agreements.is_approved === false && <div className="row"><h1 className="approval-pending">Approval Pending</h1></div>}
+                            <form >
 
                                 <fieldset>
                                     <div className="row">
@@ -86,7 +98,7 @@ class AgreementForm extends React.Component {
                                             </FormGroup>
                                         </div>
                                         <div className="col-sm-6 form-group">
-                                            <label htmlFor="expansion_area" className="form-label" id="expansion_area">* Expansion Area</label>
+                                            <label htmlFor="expansion_area" className="form-label" id="expansion_area" aria-required="true">* Expansion Area</label>
                                             <select className="form-control" id="expansion_area" onChange={formChange('expansion_area')} value={activeForm.expansion_area_show} >
                                                 <option value="start_area">Expansion Area</option>
                                                 <option value={['EA-1', 'EA-1']}>EA-1</option>
@@ -99,7 +111,7 @@ class AgreementForm extends React.Component {
                                     </div>
                                     <div className="row">
                                         <div className="col-sm-6 form-group">
-                                            <label htmlFor="agreement_type" className="form-label" id="agreement_type" aria-label="Agreement Type">Agreement Type</label>
+                                            <label htmlFor="agreement_type" className="form-label" id="agreement_type" aria-label="Agreement Type" aria-required="true">* Agreement Type</label>
                                             <select className="form-control" id="agreement_type" onChange={formChange('agreement_type')} value={activeForm.agreement_type_show} >
                                                 <option value="start_type">Agreement Type</option>
                                                 <option value={['MEMO', 'Memo']}>Memo</option>
@@ -109,9 +121,31 @@ class AgreementForm extends React.Component {
                                         </div>
                                     </div>
                                 </fieldset>
-                                <button className="btn btn-lex">Submit</button>
+                                <div className="col-xs-8">
+                                    <button disabled={!submitEnabled} className="btn btn-lex" onClick={onSubmit} >Submit</button>
+                                    {!submitEnabled ? (
+                                        <div>
+                                            <div className="clearfix" />
+                                            <span> * All required fields must be filled.</span>
+                                        </div>
+                                    ) : null
+                                    }
+                                </div>
+                                <div className="col-xs-4">
+                                    <DeclineDelete currentForm="/agreement/" selectedEntry={selectedAgreement} parentRoute="agreement" />
+                                </div>
                             </form>
                         </div>
+                        <div className="clearfix" />
+                        {agreements.id &&
+                            <Uploads
+                              file_content_type="accounts_agreement"
+                              file_object_id={agreements.id}
+                              ariaExpanded="true"
+                              panelClass="panel-collapse collapse row in"
+                              permission="agreement"
+                            />
+                        }
                     </div>
                 </div>
 
@@ -123,12 +157,14 @@ class AgreementForm extends React.Component {
 
 AgreementForm.propTypes = {
     activeForm: PropTypes.object,
-    accounts: PropTypes.object,
-    agreements: PropTypes.object,
+    accounts: PropTypes.array,
+    agreements: PropTypes.array,
     route: PropTypes.object,
+    params: PropTypes.object,
     onComponentDidMount: PropTypes.func,
     onSubmit: PropTypes.func,
     formChange: PropTypes.func,
+    selectedAgreement: PropTypes.string,
 };
 
 function mapStateToProps(state) {
@@ -203,6 +239,7 @@ function mapDispatchToProps(dispatch, params) {
                 });
             }
         },
+        selectedAgreement,
     };
 }
 

@@ -9,8 +9,10 @@ import PropTypes from 'prop-types';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
+import Uploads from './Uploads';
 
 import FormGroup from './FormGroup';
+import DeclineDelete from './DeclineDelete';
 
 import {
     formInit,
@@ -36,7 +38,10 @@ class ProjectCostForm extends React.Component {
             projectCosts,
             onSubmit,
             formChange,
+            selectedProjectCost,
         } = this.props;
+
+        const currentParam = this.props.params.id;
 
         const projectsList = projects.length > 0 &&
             (map((project) => {
@@ -46,6 +51,11 @@ class ProjectCostForm extends React.Component {
                     </option>
                 );
             })(projects));
+
+        const submitEnabled =
+            activeForm.project_id &&
+            activeForm.estimate_type &&
+            activeForm.credits_available;
 
         return (
             <div className="project-cost-form">
@@ -62,20 +72,21 @@ class ProjectCostForm extends React.Component {
                 <div className="inside-body">
                     <div className="container">
                         <div className="col-sm-offset-1 col-sm-10">
-                            <form onSubmit={onSubmit} >
+                            {currentParam && projectCosts.is_approved === false && <div className="row"><h1 className="approval-pending">Approval Pending</h1></div>}
+                            <form >
 
                                 <fieldset>
                                     <div className="row">
                                         <div className="col-sm-6 form-group">
-                                            <label htmlFor="project_id" className="form-label" id="project_id" aria-label="Project">Project</label>
+                                            <label htmlFor="project_id" className="form-label" id="project_id" aria-label="* Project" aria-required="true">* Project</label>
                                             <select className="form-control" id="project_id" onChange={formChange('project_id')} value={activeForm.project_id_show} >
-                                                <option value="start_project">Project</option>
+                                                <option value="start_project">* Project</option>
                                                 {projectsList}
                                             </select>
                                         </div>
                                         <div className="col-sm-6">
-                                            <FormGroup label="Estimate Type" id="estimate_type">
-                                                <input type="text" className="form-control" placeholder="Estimate Type" />
+                                            <FormGroup label="* Estimate Type" id="estimate_type">
+                                                <input type="text" className="form-control" placeholder="* Estimate Type" aria-required="true" />
                                             </FormGroup>
                                         </div>
                                     </div>
@@ -117,15 +128,37 @@ class ProjectCostForm extends React.Component {
                                     </div>
                                     <div className="row">
                                         <div className="col-sm-6">
-                                            <FormGroup label="Credits Available" id="credits_available">
-                                                <input type="number" className="form-control" placeholder="Credits Available" />
+                                            <FormGroup label="* Credits Available" id="credits_available">
+                                                <input type="number" className="form-control" placeholder="* Credits Available" aria-required="true" />
                                             </FormGroup>
                                         </div>
                                     </div>
                                 </fieldset>
-                                <button className="btn btn-lex">Submit</button>
+                                <div className="col-xs-8">
+                                    <button disabled={!submitEnabled} className="btn btn-lex" onClick={onSubmit} >Submit</button>
+                                    {!submitEnabled ? (
+                                        <div>
+                                            <div className="clearfix" />
+                                            <span> * All required fields must be filled.</span>
+                                        </div>
+                                    ) : null
+                                    }
+                                </div>
+                                <div className="col-xs-4">
+                                    <DeclineDelete currentForm="/estimate/" selectedEntry={selectedProjectCost} parentRoute="project-cost" />
+                                </div>
                             </form>
                         </div>
+                        <div className="clearfix" />
+                        {projectCosts.id &&
+                            <Uploads
+                              file_content_type="accounts_projectcostestimate"
+                              file_object_id={projectCosts.id}
+                              ariaExpanded="true"
+                              panelClass="panel-collapse collapse row in"
+                              permission="projectcostestimate"
+                            />
+                        }
                     </div>
                 </div>
 
@@ -137,12 +170,14 @@ class ProjectCostForm extends React.Component {
 
 ProjectCostForm.propTypes = {
     activeForm: PropTypes.object,
-    projects: PropTypes.object,
-    projectCosts: PropTypes.object,
+    projects: PropTypes.array,
+    projectCosts: PropTypes.array,
     route: PropTypes.object,
+    params: PropTypes.object,
     onComponentDidMount: PropTypes.func,
     onSubmit: PropTypes.func,
     formChange: PropTypes.func,
+    selectedProjectCost: PropTypes.string,
 };
 
 function mapStateToProps(state) {
@@ -215,6 +250,7 @@ function mapDispatchToProps(dispatch, params) {
                 });
             }
         },
+        selectedProjectCost,
     };
 }
 

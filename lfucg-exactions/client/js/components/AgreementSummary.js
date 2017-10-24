@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
+import Uploads from './Uploads';
 
 import {
     getAgreementID,
@@ -120,7 +121,7 @@ class AgreementSummary extends React.Component {
                             <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
                                 <div className="col-xs-5">
                                     {currentUser && currentUser.permissions && currentUser.permissions.accountledger &&
-                                        <Link to={`account-ledger/form/${accountLedger.id}`} aria-label="Edit">
+                                        <Link to={`credit-transfer/form/${accountLedger.id}`} aria-label="Edit">
                                             <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
                                             <div className="col-xs-7 link-label">
                                                 Edit
@@ -129,7 +130,7 @@ class AgreementSummary extends React.Component {
                                     }
                                 </div>
                                 <div className="col-xs-5 ">
-                                    <Link to={`account-ledger/summary/${accountLedger.id}`} aria-label="Summary">
+                                    <Link to={`credit-transfer/summary/${accountLedger.id}`} aria-label="Summary">
                                         <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
                                         <div className="col-xs-7 link-label">
                                             Summary
@@ -208,6 +209,7 @@ class AgreementSummary extends React.Component {
                                         </div>
                                     </div>
                                     <div className="col-xs-12">
+                                        <p className="col-md-4 col-xs-6">Current Balance: {agreements.agreement_balance && agreements.agreement_balance.total}</p>
                                         <p className="col-md-4 col-xs-6">Resolution Number: {agreements.resolution_number}</p>
                                         <p className="col-md-4 col-xs-6">Expansion Area: {agreements.expansion_area}</p>
                                         <p className="col-md-4 col-xs-6">Agreement Type: {agreements.agreement_type_display}</p>
@@ -366,7 +368,7 @@ class AgreementSummary extends React.Component {
                                         <div className="row section-heading" role="tab" id="headingAccountLedgers">
                                             <div className="col-xs-1 caret-indicator" />
                                             <div className="col-xs-10">
-                                                <h2>Account Ledgers</h2>
+                                                <h2>Credit Transfers</h2>
                                             </div>
                                         </div>
                                     </a>
@@ -385,11 +387,20 @@ class AgreementSummary extends React.Component {
                                 </div>
                             ) : (
                                 <div className="row section-heading" role="tab" id="headingAccountLedgers">
-                                    <h2>Account Ledgers - None</h2>
+                                    <h2>Credit Transfers - None</h2>
                                 </div>
                             )}
 
                         </div>
+                        {agreements.id &&
+                            <Uploads
+                              file_content_type="accounts_agreement"
+                              file_object_id={agreements.id}
+                              ariaExpanded="false"
+                              panelClass="panel-collapse collapse row"
+                              permission="agreement"
+                            />
+                        }
                     </div>
                 </div>
                 <Footer />
@@ -400,10 +411,10 @@ class AgreementSummary extends React.Component {
 
 AgreementSummary.propTypes = {
     currentUser: PropTypes.object,
-    agreements: PropTypes.object,
-    payments: PropTypes.object,
-    projects: PropTypes.object,
-    accountLedgers: PropTypes.object,
+    agreements: PropTypes.array,
+    payments: PropTypes.array,
+    projects: PropTypes.array,
+    accountLedgers: PropTypes.array,
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
 };

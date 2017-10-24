@@ -29,11 +29,11 @@ class AccountLedgerSummary extends React.Component {
 
                 <div className="form-header">
                     <div className="container">
-                        <h1>ACCOUNT LEDGER - SUMMARY</h1>
+                        <h1>CREDIT TRANSFER - SUMMARY</h1>
                     </div>
                 </div>
 
-                <Breadcrumbs route={this.props.route} parent_link={'account-ledger'} parent_name={'Account Ledgers'} />
+                <Breadcrumbs route={this.props.route} parent_link={'credit-transfer'} parent_name={'Credit Transfers'} />
 
                 <div className="inside-body">
                     <div className="container">
@@ -49,7 +49,7 @@ class AccountLedgerSummary extends React.Component {
                                 <div className="row section-heading" role="tab" id="headingAccountLedgerInfo">
                                     <div className="col-xs-1 caret-indicator" />
                                     <div className="col-xs-10">
-                                        <h2>Account Ledger Information</h2>
+                                        <h2>Credit Transfer Information</h2>
                                     </div>
                                 </div>
                             </a>
@@ -64,7 +64,7 @@ class AccountLedgerSummary extends React.Component {
                                         <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
                                             <div className="col-xs-5 col-xs-offset-5">
                                                 {currentUser && currentUser.permissions && currentUser.permissions.accountledger &&
-                                                    <Link to={`account-ledger/form/${accountLedgers.id}`} aria-label="Edit">
+                                                    <Link to={`credit-transfer/form/${accountLedgers.id}`} aria-label="Edit">
                                                         <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
                                                         <div className="col-xs-7 link-label">
                                                             Edit
@@ -76,8 +76,8 @@ class AccountLedgerSummary extends React.Component {
                                     </div>
                                     <div className="col-xs-12">
                                         <p className="col-md-4 col-xs-6">Entry Type: {accountLedgers.entry_type_display}</p>
-                                        <p className="col-md-4 col-xs-6">Sewer Credits: ${accountLedgers.sewer_credits}</p>
-                                        <p className="col-md-4 col-xs-6">Non-Sewer Credits: ${accountLedgers.non_sewer_credits}</p>
+                                        <p className="col-md-4 col-xs-6">Sewer Credits: {accountLedgers.dollar_values && accountLedgers.dollar_values.dollar_sewer}</p>
+                                        <p className="col-md-4 col-xs-6">Non-Sewer Credits: {accountLedgers.dollar_values && accountLedgers.dollar_values.dollar_non_sewer}</p>
                                     </div>
                                 </div>
                             </div>
@@ -130,7 +130,7 @@ class AccountLedgerSummary extends React.Component {
                                             </div>
                                             <div className="col-xs-12">
                                                 <p className="col-xs-12">Lot Address: {accountLedgers.lot.address_full}</p>
-                                                <p className="col-md-4 col-xs-6">Current Exactions: {accountLedgers.lot && accountLedgers.lot.lot_exactions && accountLedgers.lot.lot_exactions.current_exactions}</p>
+                                                <p className="col-md-4 col-xs-6">Current Exactions: {accountLedgers.lot.lot_exactions && accountLedgers.lot.lot_exactions.current_exactions}</p>
                                                 <p className="col-md-4 col-xs-6 ">Lot Number: {accountLedgers.lot.lot_number}</p>
                                                 <p className="col-md-4 col-xs-6">Permit ID: {accountLedgers.lot.permit_id}</p>
                                             </div>
@@ -322,6 +322,7 @@ class AccountLedgerSummary extends React.Component {
                                                 </div>
                                             </div>
                                             <div className="col-xs-12">
+                                                <p className="col-md-4 col-xs-6">Current Balance: {accountLedgers.agreement.agreement_balance && accountLedgers.agreement.agreement_balance.total}</p>
                                                 <p className="col-md-4 col-xs-6">Resolution Number: {accountLedgers.agreement.resolution_number}</p>
                                                 <p className="col-md-4 col-xs-6">Expansion Area: {accountLedgers.agreement.expansion_area}</p>
                                                 <p className="col-md-4 col-xs-6">Agreement Type: {accountLedgers.agreement.agreement_type_display}</p>
@@ -347,7 +348,7 @@ class AccountLedgerSummary extends React.Component {
 
 AccountLedgerSummary.propTypes = {
     currentUser: PropTypes.object,
-    accountLedgers: PropTypes.object,
+    accountLedgers: PropTypes.array,
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
 };

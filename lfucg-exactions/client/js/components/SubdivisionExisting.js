@@ -8,15 +8,13 @@ import Navbar from './Navbar';
 import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
 import Pagination from './Pagination';
+import SearchBar from './SearchBar';
 
 import {
     getPagination,
-    getSubdivisionQuery,
+    getPlats,
 } from '../actions/apiActions';
 
-import {
-    formUpdate,
-} from '../actions/formActions';
 
 class SubdivisionExisting extends React.Component {
     componentDidMount() {
@@ -28,15 +26,23 @@ class SubdivisionExisting extends React.Component {
         const {
             currentUser,
             subdivisions,
-            onSubdivisionQuery,
+            plats,
         } = this.props;
+
+        const platsList = plats && plats.length > 0 &&
+            (map((single_plat) => {
+                return {
+                    id: single_plat.id,
+                    name: single_plat.name,
+                };
+            })(plats));
 
         const subdivisions_list = subdivisions && subdivisions.length > 0 &&
             map((subdivision) => {
                 return (
                     <div key={subdivision.id} className="col-xs-12">
                         <div className="row form-subheading">
-                            <div className="col-sm-7 col-md-9">
+                            <div className="col-sm-11">
                                 <h3>{subdivision.name}</h3>
                             </div>
                         </div>
@@ -81,22 +87,12 @@ class SubdivisionExisting extends React.Component {
 
                 <Breadcrumbs route={this.props.route} />
 
-                <div className="row search-box">
-                    <form onChange={onSubdivisionQuery('query')} className="col-sm-10 col-sm-offset-1" >
-                        <fieldset>
-                            <div className="col-sm-2 col-xs-12">
-                                <label htmlFor="query" className="form-label">Search</label>
-                            </div>
-                            <div className="col-sm-10 col-xs-12">
-                                <input
-                                  type="text"
-                                  className="form-control"
-                                  placeholder="Search Subdivisions"
-                                />
-                            </div>
-                        </fieldset>
-                    </form>
-                </div>
+                <SearchBar
+                  apiCalls={[getPlats]}
+                  advancedSearch={[
+                    { filterField: 'filter_plat__id', displayName: 'Plat', list: platsList },
+                  ]}
+                />
 
                 <div className="inside-body">
                     <div className="container">
@@ -112,16 +108,17 @@ class SubdivisionExisting extends React.Component {
 
 SubdivisionExisting.propTypes = {
     currentUser: PropTypes.object,
-    subdivisions: PropTypes.object,
+    subdivisions: PropTypes.array,
+    plats: PropTypes.array,
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
-    onSubdivisionQuery: PropTypes.func,
 };
 
 function mapStateToProps(state) {
     return {
         currentUser: state.currentUser,
         subdivisions: state.subdivisions,
+        plats: state.plats,
     };
 }
 
@@ -129,16 +126,6 @@ function mapDispatchToProps(dispatch) {
     return {
         onComponentDidMount() {
             dispatch(getPagination('/subdivision/'));
-        },
-        onSubdivisionQuery(field) {
-            return (e, ...args) => {
-                const value = typeof e.target.value !== 'undefined' ? e.target.value : args[1];
-                const update = {
-                    [field]: value,
-                };
-                dispatch(formUpdate(update));
-                dispatch(getSubdivisionQuery());
-            };
         },
     };
 }

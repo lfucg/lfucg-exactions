@@ -53,11 +53,6 @@ import AccountLedgerForm from './components/AccountLedgerForm';
 import RateTableForm from './components/RateTableForm';
 
 global.reduxStore = dashboardStore;
-global.BASE_STATIC_URL = (window.location.host === '52.201.224.95') ?
-    //'52.201.224.95' :
-    'https://s3.amazonaws.com/chef-lfucg/temp_exactions_images' :
-    '/static';
-// global.BASE_STATIC_URL = '/static';
 
 const history = syncHistoryWithStore(hashHistory, dashboardStore);
 global.Promise = require('bluebird');
@@ -116,10 +111,10 @@ ReactDOM.render(
             <Route path="project-cost/form" component={ProjectCostForm} name="Project Cost Form" />
             <Route path="project-cost/form/:id" component={ProjectCostForm} name="Current Project Cost Form" />
 
-            <Route path="account-ledger" component={AccountLedgerExisting} name="Existing Account Ledgers" />
-            <Route path="account-ledger/summary/:id" component={AccountLedgerSummary} name="Account Ledger Summary" />
-            <Route path="account-ledger/form" component={AccountLedgerForm} name="Account Ledger Form" />
-            <Route path="account-ledger/form/:id" component={AccountLedgerForm} name="Current Account Ledger Form" />
+            <Route path="credit-transfer" component={AccountLedgerExisting} name="Existing Credit Transfers" />
+            <Route path="credit-transfer/summary/:id" component={AccountLedgerSummary} name="Credit Transfer Summary" />
+            <Route path="credit-transfer/form" component={AccountLedgerForm} name="Credit Transfer Form" />
+            <Route path="credit-transfer/form/:id" component={AccountLedgerForm} name="Current Credit Transfer Form" />
 
             <Route path="rate-table/form" component={RateTableForm} name="Rate Table Form" />
             <Route path="rate-table/form/:id" component={RateTableForm} name="Rate Table Form" />
