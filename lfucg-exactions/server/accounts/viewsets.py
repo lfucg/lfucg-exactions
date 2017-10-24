@@ -15,7 +15,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 
 from plats.models import Plat, Lot
 
-from .utils import update_entry, set_approval
+from .utils import update_entry
 
 class AccountViewSet(viewsets.ModelViewSet):
     serializer_class = AccountSerializer
@@ -82,8 +82,6 @@ class AgreementViewSet(viewsets.ModelViewSet):
 
         data_set['created_by'] = self.request.user.id
         data_set['modified_by'] = self.request.user.id
-
-        set_approval(self, request, data_set)
 
         serializer = AgreementSerializer(data=data_set)
         if serializer.is_valid(raise_exception=True):
