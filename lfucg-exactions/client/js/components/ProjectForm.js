@@ -8,9 +8,11 @@ import PropTypes from 'prop-types';
 
 import Navbar from './Navbar';
 import Footer from './Footer';
-
 import FormGroup from './FormGroup';
 import Breadcrumbs from './Breadcrumbs';
+import Uploads from './Uploads';
+
+import DeclineDelete from './DeclineDelete';
 
 import {
     formInit,
@@ -36,7 +38,10 @@ class ProjectForm extends React.Component {
             agreements,
             onSubmit,
             formChange,
+            selectedProject,
         } = this.props;
+
+        const currentParam = this.props.params.id;
 
         const agreementsList = agreements.length > 0 ? (map((agreement) => {
             return (
@@ -69,7 +74,8 @@ class ProjectForm extends React.Component {
                 <div className="inside-body">
                     <div className="container">
                         <div className="col-sm-offset-1 col-sm-10">
-                            <form onSubmit={onSubmit} >
+                            {currentParam && projects.is_approved === false && <div className="row"><h1 className="approval-pending">Approval Pending</h1></div>}
+                            <form >
 
                                 <fieldset>
                                     <div className="row">
@@ -189,16 +195,31 @@ class ProjectForm extends React.Component {
                                         </div>
                                     </div>
                                 </fieldset>
-                                <button disabled={!submitEnabled} className="btn btn-lex">Submit</button>
-                                {!submitEnabled ? (
-                                    <div>
-                                        <div className="clearfix" />
-                                        <span> * All required fields must be filled.</span>
-                                    </div>
-                                ) : null
-                                }
+                                <div className="col-xs-8">
+                                    <button disabled={!submitEnabled} className="btn btn-lex" onClick={onSubmit} >Submit</button>
+                                    {!submitEnabled ? (
+                                        <div>
+                                            <div className="clearfix" />
+                                            <span> * All required fields must be filled.</span>
+                                        </div>
+                                    ) : null
+                                    }
+                                </div>
+                                <div className="col-xs-4">
+                                    <DeclineDelete currentForm="/project/" selectedEntry={selectedProject} parentRoute="project" />
+                                </div>
                             </form>
                         </div>
+                        <div className="clearfix" />
+                        {projects.id &&
+                            <Uploads
+                              file_content_type="accounts_project"
+                              file_object_id={projects.id}
+                              ariaExpanded="true"
+                              panelClass="panel-collapse collapse row in"
+                              permission="project"
+                            />
+                        }
                     </div>
                 </div>
 
@@ -210,12 +231,14 @@ class ProjectForm extends React.Component {
 
 ProjectForm.propTypes = {
     activeForm: PropTypes.object,
-    projects: PropTypes.object,
-    agreements: PropTypes.object,
+    projects: PropTypes.array,
+    agreements: PropTypes.array,
     route: PropTypes.object,
+    params: PropTypes.object,
     onComponentDidMount: PropTypes.func,
     onSubmit: PropTypes.func,
     formChange: PropTypes.func,
+    selectedProject: PropTypes.string,
 };
 
 function mapStateToProps(state) {
@@ -237,6 +260,7 @@ function mapDispatchToProps(dispatch, params) {
                 dispatch(getProjectID(selectedProject))
                 .then((data_project) => {
                     const update = {
+                        name: data_project.response.name,
                         agreement_id: data_project.response.agreement_id ? data_project.response.agreement_id.id : null,
                         agreement_id_show: data_project.response.agreement_id ? `${data_project.response.agreement_id.id},${data_project.response.agreement_id.resolution_number}` : '',
                         expansion_area: data_project.response.expansion_area,
@@ -295,6 +319,7 @@ function mapDispatchToProps(dispatch, params) {
                 });
             }
         },
+        selectedProject,
     };
 }
 

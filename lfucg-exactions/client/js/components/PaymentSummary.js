@@ -75,16 +75,16 @@ class PaymentSummary extends React.Component {
                                     </div>
                                     <div className="col-xs-12">
                                         <p className="col-md-4 col-xs-6">Payment Category: {payments.payment_category}</p>
-                                        <p className="col-md-4 col-xs-6">Payment Type: {payments.payment_type}</p>
+                                        <p className="col-md-4 col-xs-6">Payment Type: {payments.payment_type_display}</p>
                                         <p className="col-md-4 col-xs-6">Paid By: {payments.paid_by}</p>
                                         <p className="col-md-4 col-xs-6">Paid By Type: {payments.paid_by_type_display}</p>
                                         <p className="col-md-4 col-xs-6">Check Number: {payments.check_number}</p>
-                                        <p className="col-md-4 col-xs-6">Paid Roads: ${payments.paid_roads}</p>
-                                        <p className="col-md-4 col-xs-6">Paid Sewer Capacity: ${payments.paid_sewer_cap}</p>
-                                        <p className="col-md-4 col-xs-6">Paid Sewer Transmission: ${payments.paid_sewer_trans}</p>
-                                        <p className="col-md-4 col-xs-6">Paid Parks: ${payments.paid_park}</p>
-                                        <p className="col-md-4 col-xs-6">Paid Storm: ${payments.paid_storm}</p>
-                                        <p className="col-md-4 col-xs-6">Paid Open Space: ${payments.paid_open_space}</p>
+                                        <p className="col-md-4 col-xs-6">Paid Roads: {payments.dollar_values && payments.dollar_values.paid_roads}</p>
+                                        <p className="col-md-4 col-xs-6">Paid Sewer Capacity: {payments.dollar_values && payments.dollar_values.paid_sewer_cap}</p>
+                                        <p className="col-md-4 col-xs-6">Paid Sewer Transmission: {payments.dollar_values && payments.dollar_values.paid_sewer_trans}</p>
+                                        <p className="col-md-4 col-xs-6">Paid Parks: {payments.dollar_values && payments.dollar_values.paid_parks}</p>
+                                        <p className="col-md-4 col-xs-6">Paid Storm: {payments.dollar_values && payments.dollar_values.paid_storm}</p>
+                                        <p className="col-md-4 col-xs-6">Paid Open Space: {payments.dollar_values && payments.dollar_values.paid_open_space}</p>
                                     </div>
                                 </div>
                             </div>
@@ -223,7 +223,7 @@ class PaymentSummary extends React.Component {
                                     <div className="row section-heading" role="tab" id="headingAgreementInfo">
                                         <div className="col-xs-1 caret-indicator" />
                                         <div className="col-xs-10">
-                                            <h2>Agreement Credit Source</h2>
+                                            <h2>Agreement</h2>
                                         </div>
                                     </div>
                                 </a>
@@ -257,8 +257,8 @@ class PaymentSummary extends React.Component {
                                             </div>
                                         </div>
                                         <div className="col-xs-12">
+                                            <p className="col-md-4 col-xs-6">Current Balance: {payments.credit_source.agreement_balance && payments.credit_source.agreement_balance.total}</p>
                                             <p className="col-md-4 col-xs-6">Resolution Number: {payments.credit_source.resolution_number}</p>
-                                            <p className="col-md-4 col-xs-6">Account: {payments.credit_source.account_id.account_name}</p>
                                             <p className="col-md-4 col-xs-6">Expansion Area: {payments.credit_source.expansion_area}</p>
                                             <p className="col-md-4 col-xs-6">Agreement Type: {payments.credit_source.agreement_type_display}</p>
                                             <p className="col-md-4 col-xs-6">Date Executed: {payments.credit_source.date_executed}</p>
@@ -266,7 +266,7 @@ class PaymentSummary extends React.Component {
                                     </div>
                                 </div>
                             </div> : <div className="row section-heading" role="tab" id="headingAgreementInfo">
-                                <h2>Payments - None</h2>
+                                <h2>Agreements - None</h2>
                             </div>}
                         </div>
                     </div>
@@ -279,7 +279,7 @@ class PaymentSummary extends React.Component {
 
 PaymentSummary.propTypes = {
     currentUser: PropTypes.object,
-    payments: PropTypes.object,
+    payments: PropTypes.array,
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
 };

@@ -8,15 +8,14 @@ import Navbar from './Navbar';
 import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
 import Pagination from './Pagination';
+import SearchBar from './SearchBar';
+
+import { expansion_areas, agreement_types } from '../constants/searchBarConstants';
 
 import {
     getPagination,
-    getAgreementQuery,
+    getAccounts,
 } from '../actions/apiActions';
-
-import {
-    formUpdate,
-} from '../actions/formActions';
 
 class AgreementExisting extends React.Component {
     componentDidMount() {
@@ -27,48 +26,62 @@ class AgreementExisting extends React.Component {
         const {
             currentUser,
             agreements,
-            onAgreementQuery,
+            accounts,
         } = this.props;
+
+        const accountsList = accounts && accounts.length > 0 &&
+            (map((single_account) => {
+                return {
+                    id: single_account.id,
+                    name: single_account.account_name,
+                };
+            })(accounts));
 
         const agreements_list = agreements.length > 0 ? (
             map((agreement) => {
                 return (
                     <div key={agreement.id} className="col-xs-12">
-                        <div className="row form-subheading">
-                            <div className="col-sm-7 col-md-9">
-                                <h3>Resolution Number: {agreement.resolution_number}</h3>
+                        {(currentUser.id || agreement.is_approved) && <div>
+                            <div className={agreement.is_approved ? 'row form-subheading' : 'row unapproved-heading'}>
+                                <div className="col-sm-11">
+                                    <h3>
+                                        Resolution Number: {agreement.resolution_number}
+                                        {!agreement.is_approved && <span className="pull-right">Approval Pending</span>}
+                                    </h3>
+                                </div>
                             </div>
-                        </div>
-                        <div className="row link-row">
-                            <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
-                                <div className="col-xs-5">
-                                    {currentUser && currentUser.permissions && currentUser.permissions.agreement &&
-                                        <Link to={`agreement/form/${agreement.id}`} aria-label="Edit">
-                                            <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
+                            <div className={agreement.is_approved ? 'row link-row' : 'row link-row-approval-pending'}>
+                                <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
+                                    <div className="col-xs-5">
+                                        {currentUser && currentUser.permissions && currentUser.permissions.agreement &&
+                                            <Link to={`agreement/form/${agreement.id}`} aria-label="Edit">
+                                                <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
+                                                <div className="col-xs-7 link-label">
+                                                    Edit
+                                                </div>
+                                            </Link>
+                                        }
+                                    </div>
+                                    <div className="col-xs-5 ">
+                                        <Link to={`agreement/summary/${agreement.id}`} aria-label="Summary">
+                                            <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
                                             <div className="col-xs-7 link-label">
-                                                Edit
+                                                Summary
                                             </div>
                                         </Link>
-                                    }
-                                </div>
-                                <div className="col-xs-5 ">
-                                    <Link to={`agreement/summary/${agreement.id}`} aria-label="Summary">
-                                        <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
-                                        <div className="col-xs-7 link-label">
-                                            Summary
-                                        </div>
-                                    </Link>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div className="row">
-                            <div className="col-sm-offset-1">
-                                <p className="col-md-4 col-xs-6">Account: {agreement.account_id.account_name}</p>
-                                <p className="col-md-4 col-xs-6">Expansion Area: {agreement.expansion_area}</p>
-                                <p className="col-md-4 col-xs-6">Agreement Type: {agreement.agreement_type_display}</p>
-                                <p className="col-md-4 col-xs-6 ">Date Executed: {agreement.date_executed}</p>
+                            <div className="row">
+                                <div className="col-sm-offset-1">
+                                    <p className="col-md-4 col-xs-6">Current Balance: {agreement.agreement_balance && agreement.agreement_balance.total}</p>
+                                    <p className="col-md-4 col-xs-6">Account: {agreement.account_id && agreement.account_id.account_name}</p>
+                                    <p className="col-md-4 col-xs-6">Expansion Area: {agreement.expansion_area}</p>
+                                    <p className="col-md-4 col-xs-6">Agreement Type: {agreement.agreement_type_display}</p>
+                                    <p className="col-md-4 col-xs-6 ">Date Executed: {agreement.date_executed}</p>
+                                </div>
                             </div>
-                        </div>
+                        </div>}
                     </div>
                 );
             })(agreements)
@@ -86,22 +99,15 @@ class AgreementExisting extends React.Component {
 
                 <Breadcrumbs route={this.props.route} />
 
-                <div className="row search-box">
-                    <form onChange={onAgreementQuery('query')} className="col-sm-10 col-sm-offset-1" >
-                        <fieldset>
-                            <div className="col-sm-2 col-xs-12">
-                                <label htmlFor="query" className="form-label">Search</label>
-                            </div>
-                            <div className="col-sm-10 col-xs-12">
-                                <input
-                                  type="text"
-                                  className="form-control"
-                                  placeholder="Search Agreements"
-                                />
-                            </div>
-                        </fieldset>
-                    </form>
-                </div>
+                <SearchBar
+                  apiCalls={[getAccounts]}
+                  advancedSearch={[
+                    { filterField: 'filter_agreement_type', displayName: 'Type', list: agreement_types },
+                    { filterField: 'filter_account_id', displayName: 'Developer', list: accountsList },
+                    { filterField: 'filter_expansion_area', displayName: 'EA', list: expansion_areas },
+                    { filterField: 'filter_is_approved', displayName: 'Approval', list: [{ id: true, name: 'Approved' }, { id: false, name: 'Unapproved' }] },
+                  ]}
+                />
 
                 <div className="inside-body">
                     <div className="container">
@@ -117,16 +123,17 @@ class AgreementExisting extends React.Component {
 
 AgreementExisting.propTypes = {
     currentUser: PropTypes.object,
-    agreements: PropTypes.object,
+    agreements: PropTypes.array,
+    accounts: PropTypes.array,
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
-    onAgreementQuery: PropTypes.func,
 };
 
 function mapStateToProps(state) {
     return {
         currentUser: state.currentUser,
         agreements: state.agreements,
+        accounts: state.accounts,
     };
 }
 
@@ -134,16 +141,6 @@ function mapDispatchToProps(dispatch) {
     return {
         onComponentDidMount() {
             dispatch(getPagination('/agreement/'));
-        },
-        onAgreementQuery(field) {
-            return (e, ...args) => {
-                const value = typeof e.target.value !== 'undefined' ? e.target.value : args[1];
-                const update = {
-                    [field]: value,
-                };
-                dispatch(formUpdate(update));
-                dispatch(getAgreementQuery());
-            };
         },
     };
 }

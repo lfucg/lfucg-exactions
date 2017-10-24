@@ -8,15 +8,16 @@ import Navbar from './Navbar';
 import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
 import Pagination from './Pagination';
+import SearchBar from './SearchBar';
+
+import { entry_types } from '../constants/searchBarConstants';
 
 import {
     getPagination,
-    getAccountLedgerQuery,
+    getAgreements,
+    getLots,
+    getAccounts,
 } from '../actions/apiActions';
-
-import {
-    formUpdate,
-} from '../actions/formActions';
 
 class AccountLedgerExisting extends React.Component {
     componentDidMount() {
@@ -27,56 +28,89 @@ class AccountLedgerExisting extends React.Component {
         const {
             currentUser,
             accountLedgers,
-            onAccountLedgerQuery,
+            lots,
+            agreements,
+            accounts,
         } = this.props;
+
+        const agreementsList = agreements && agreements.length > 0 &&
+            (map((single_agreement) => {
+                return {
+                    id: single_agreement.id,
+                    name: single_agreement.resolution_number,
+                };
+            })(agreements));
+
+        const lotsList = lots && lots.length > 0 &&
+            (map((single_lot) => {
+                return {
+                    id: single_lot.id,
+                    name: single_lot.address_full,
+                };
+            })(lots));
+
+        const accountsList = accounts && accounts.length > 0 &&
+            (map((single_account) => {
+                return {
+                    id: single_account.id,
+                    name: single_account.account_name,
+                };
+            })(accounts));
 
         const accountLedgers_list = accountLedgers.length > 0 ? (
             map((accountLedger) => {
                 return (
                     <div key={accountLedger.id} className="col-xs-12">
-                        <div className="row form-subheading">
-                            <div className="col-sm-7 col-md-9">
-                                <h3>{accountLedger.entry_type_display}</h3>
+                        {(currentUser.id || accountLedger.is_approved) && <div>
+                            <div className={accountLedger.is_approved ? 'row form-subheading' : 'row unapproved-heading'}>
+                                <div className="col-sm-11">
+                                    <h3>
+                                        {accountLedger.entry_type_display}
+                                        {!accountLedger.is_approved && <span className="pull-right">Approval Pending</span>}
+                                    </h3>
+                                </div>
                             </div>
-                        </div>
-                        <div className="row link-row">
-                            <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
-                                <div className="col-xs-5">
-                                    {currentUser && currentUser.permissions && currentUser.permissions.accountledger &&
-                                        <Link to={`account-ledger/form/${accountLedger.id}`} aria-label="Edit">
-                                            <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
+                            <div className={accountLedger.is_approved ? 'row link-row' : 'row link-row-approval-pending'}>
+                                <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
+                                    <div className="col-xs-5">
+                                        {currentUser && currentUser.permissions && currentUser.permissions.accountledger &&
+                                            <Link to={`credit-transfer/form/${accountLedger.id}`} aria-label="Edit">
+                                                <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
+                                                <div className="col-xs-7 link-label">
+                                                    Edit
+                                                </div>
+                                            </Link>
+                                        }
+                                    </div>
+                                    <div className="col-xs-5 ">
+                                        <Link to={`credit-transfer/summary/${accountLedger.id}`} aria-label="Summary">
+                                            <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
                                             <div className="col-xs-7 link-label">
-                                                Edit
+                                                Summary
                                             </div>
                                         </Link>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="row">
+                                <div className="col-sm-offset-1">
+                                    { accountLedger.account_from &&
+                                        <p className="col-md-4 col-xs-6">Account From: {accountLedger.account_from.account_name}</p>
+                                    }
+                                    { accountLedger.account_to &&
+                                        <p className="col-md-4 col-xs-6">Account To: {accountLedger.account_to.account_name}</p>
+                                    }
+                                    { accountLedger.agreement &&
+                                        <p className="col-md-4 col-xs-6">Agreement: {accountLedger.agreement.resolution_number}</p>
+                                    }
+                                    <p className="col-md-4 col-xs-6">Non-Sewer: {accountLedger.dollar_values && accountLedger.dollar_values.dollar_non_sewer}</p>
+                                    <p className="col-md-4 col-xs-6">Sewer: {accountLedger.dollar_values && accountLedger.dollar_values.dollar_sewer}</p>
+                                    { accountLedger.lot &&
+                                        <p className="col-xs-12">Lot: {accountLedger.lot.address_full}</p>
                                     }
                                 </div>
-                                <div className="col-xs-5 ">
-                                    <Link to={`account-ledger/summary/${accountLedger.id}`} aria-label="Summary">
-                                        <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
-                                        <div className="col-xs-7 link-label">
-                                            Summary
-                                        </div>
-                                    </Link>
-                                </div>
                             </div>
-                        </div>
-                        <div className="row">
-                            <div className="col-sm-offset-1">
-                                { accountLedger.account_from &&
-                                    <p className="col-md-4 col-xs-6">Account From: {accountLedger.account_from.account_name}</p>
-                                }
-                                { accountLedger.account_to &&
-                                    <p className="col-md-4 col-xs-6">Account To: {accountLedger.account_to.account_name}</p>
-                                }
-                                { accountLedger.agreement &&
-                                    <p className="col-md-4 col-xs-6">Agreement: {accountLedger.agreement.resolution_number}</p>
-                                }
-                                { accountLedger.lot &&
-                                    <p className="col-xs-12">Lot: {accountLedger.lot.address_full}</p>
-                                }
-                            </div>
-                        </div>
+                        </div>}
                     </div>
                 );
             })(accountLedgers)
@@ -88,28 +122,23 @@ class AccountLedgerExisting extends React.Component {
 
                 <div className="form-header">
                     <div className="container">
-                        <h1>ACCOUNT LEDGERS - EXISTING</h1>
+                        <h1>CREDIT TRANSFERS - EXISTING</h1>
                     </div>
                 </div>
 
                 <Breadcrumbs route={this.props.route} />
 
-                <div className="row search-box">
-                    <form onChange={onAccountLedgerQuery('query')} className="col-sm-10 col-sm-offset-1" >
-                        <fieldset>
-                            <div className="col-sm-2 col-xs-12">
-                                <label htmlFor="query" className="form-label">Search</label>
-                            </div>
-                            <div className="col-sm-10 col-xs-12">
-                                <input
-                                  type="text"
-                                  className="form-control"
-                                  placeholder="Search Account Ledgers"
-                                />
-                            </div>
-                        </fieldset>
-                    </form>
-                </div>
+                <SearchBar
+                  apiCalls={[getAgreements, getLots, getAccounts]}
+                  advancedSearch={[
+                    { filterField: 'filter_entry_type', displayName: 'Type', list: entry_types },
+                    { filterField: 'filter_agreement', displayName: 'Agreement', list: agreementsList },
+                    { filterField: 'filter_account_to', displayName: 'Account To', list: accountsList },
+                    { filterField: 'filter_account_from', displayName: 'Account From', list: accountsList },
+                    { filterField: 'filter_lot', displayName: 'Lots', list: lotsList },
+                    { filterField: 'filter_is_approved', displayName: 'Approval', list: [{ id: true, name: 'Approved' }, { id: false, name: 'Unapproved' }] },
+                  ]}
+                />
 
                 <div className="inside-body">
                     <div className="container">
@@ -125,16 +154,21 @@ class AccountLedgerExisting extends React.Component {
 
 AccountLedgerExisting.propTypes = {
     currentUser: PropTypes.object,
-    accountLedgers: PropTypes.object,
+    accountLedgers: PropTypes.array,
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
-    onAccountLedgerQuery: PropTypes.func,
+    agreements: PropTypes.array,
+    lots: PropTypes.array,
+    accounts: PropTypes.array,
 };
 
 function mapStateToProps(state) {
     return {
         currentUser: state.currentUser,
         accountLedgers: state.accountLedgers,
+        agreements: state.agreements,
+        lots: state.lots,
+        accounts: state.accounts,
     };
 }
 
@@ -142,16 +176,6 @@ function mapDispatchToProps(dispatch) {
     return {
         onComponentDidMount() {
             dispatch(getPagination('/ledger/'));
-        },
-        onAccountLedgerQuery(field) {
-            return (e, ...args) => {
-                const value = typeof e.target.value !== 'undefined' ? e.target.value : args[1];
-                const update = {
-                    [field]: value,
-                };
-                dispatch(formUpdate(update));
-                dispatch(getAccountLedgerQuery());
-            };
         },
     };
 }

@@ -1,4 +1,30 @@
 from . import base
+import os
+import django
+
+# import dj_database_url
+# DATABASES['default'] = dj_database_url.config()
+
+# SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+ALLOWED_HOSTS = ['*']
+
+AWS_DEFAULT_REGION = 'us-east-1'
+AWS_STORAGE_BUCKET_NAME = '<%= @config["AWS_STORAGE_BUCKET_NAME"] %>'
+AWS_ACCESS_KEY_ID = '<%= @config["AWS_ACCESS_KEY_ID"] %>'
+AWS_SECRET_ACCESS_KEY = '<%= @config["AWS_SECRET_ACCESS_KEY"] %>'
+
+STATIC_URL = '<%= @config["STATIC_URL"] %>'
+STATIC_ROOT = "%s/static/" % STATIC_URL
+STATICFILES_STORAGE = '<%= @config["STATICFILES_STORAGE"] %>'
+
+DEFAULT_FILE_STORAGE = '<%= @config["DEFAULT_FILE_STORAGE"] %>'
+
+MEDIA_URL = '<%= @config["MEDIA_URL"] %>'
+
+# EMAIL_BACKEND = "sgbackend.SendGridBackend"
+# SENDGRID_API_KEY = '<%= @config["SENDGRID_API_KEY"] %>'
+
 
 DATABASES = {
     'default': {
@@ -11,7 +37,7 @@ DATABASES = {
     },
 }
 
-BASE_URL="http://localhost:8000"
+BASE_URL='<%= @config["BASE_URL"] %>'
 # Recipients of traceback emails and other notifications.
 ADMINS = (
     # ('Your Name', 'your_email@domain.com'),
@@ -26,22 +52,12 @@ CACHES = {
     }
 }
 
-DEBUG = TEMPLATE_DEBUG = True
+DEBUG = '<%= @config["DEBUG"] %>'
 
 # Is this a development instance? Set this to True on development/master
 # instances and False on stage/prod.
-DEV = True
+DEV = '<%= @config["DEV"] %>'
 
-# Hosts/domain names that are valid for this site; required if DEBUG is False
-# See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = ["*"]
-
-# SECURITY WARNING: keep the secret key used in production secret!
-# Hardcoded values can leak through source control. Consider loading
-# the secret key from an environment variable or a file instead.
-
-# Generate a fresh key with the following command:
-# python -c 'import random; print("".join([random.choice("abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(-_=+)") for i in range(50)]))'
 SECRET_KEY = '<%= @config["SECRET_KEY"] %>'
 
 # Remove this configuration variable to use your custom logging configuration

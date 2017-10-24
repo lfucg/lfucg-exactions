@@ -1,32 +1,32 @@
-from rest_framework import viewsets, status
+from rest_framework import viewsets, status, filters
 from django.db.models import Q
+from django.conf import settings
+
 from rest_framework.response import Response
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.pagination import PageNumberPagination
 
 from .models import *
 from .serializers import *
 from .permissions import CanAdminister
-from rest_framework.pagination import PageNumberPagination
-
-from django.conf import settings
-
+from .utils import update_entry
 
 class SubdivisionViewSet(viewsets.ModelViewSet):
     serializer_class = SubdivisionSerializer
     queryset = Subdivision.objects.all()
     permission_classes = (CanAdminister,)
+    filter_backends = (DjangoFilterBackend, filters.SearchFilter,)
+    search_fields = ('name',)
+    filter_fields = ('plat__id',)
 
     def get_queryset(self):
-        queryset = Subdivision.objects.all()
+        queryset = Subdivision.objects.exclude(is_active=False)
         paginatePage = self.request.query_params.get('paginatePage', None)
+        pageSize = self.request.query_params.get('pageSize', settings.PAGINATION_SIZE)
         PageNumberPagination.page_size = 0
 
-        query_text = self.request.query_params.get('query', None)
-        if query_text is not None:
-            query_text = query_text.lower()
-            queryset = queryset.filter(name__icontains=query_text)
-
         if paginatePage is not None:
-            PageNumberPagination.page_size = settings.PAGINATION_SIZE
+            PageNumberPagination.page_size = pageSize
             pagination_class = PageNumberPagination
             
 
@@ -46,40 +46,24 @@ class SubdivisionViewSet(viewsets.ModelViewSet):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def update(self, request, pk):
-        existing_object  = self.get_object()
-        setattr(existing_object, 'modified_by', request.user)
-        for key, value in request.data.items():
-            for existing_object_key, existing_object_value in existing_object.__dict__.items():
-                if key == existing_object_key:
-                    if value != existing_object_value:
-                        setattr(existing_object, existing_object_key, value)
-        try:
-            existing_object.save()
-            return Response(status=status.HTTP_200_OK)
-        except Exception as e:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+        return update_entry(self, request, pk)
 
 class PlatViewSet(viewsets.ModelViewSet):
     serializer_class = PlatSerializer
     queryset = Plat.objects.all()
     permission_classes = (CanAdminister,)
+    filter_backends = (DjangoFilterBackend, filters.SearchFilter,)
+    search_fields = ('name', 'expansion_area', 'slide', 'subdivision__name', 'cabinet', 'slide', 'unit', 'section', 'block',)
+    filter_fields = ('expansion_area', 'account', 'subdivision', 'plat_type', 'lot__id', 'is_approved',)
 
     def get_queryset(self):
-        queryset = Plat.objects.all()
+        queryset = Plat.objects.exclude(is_active=False)
         PageNumberPagination.page_size = 0
         paginatePage = self.request.query_params.get('paginatePage', None)
-
-        query_text = self.request.query_params.get('query', None)
-        if query_text is not None:
-            query_text = query_text.lower()
-            queryset = queryset.filter(
-                Q(name__icontains=query_text) |
-                Q(expansion_area__icontains=query_text) |
-                Q(slide__icontains=query_text) |
-                Q(subdivision__name__icontains=query_text))
+        pageSize = self.request.query_params.get('pageSize', settings.PAGINATION_SIZE)
 
         if paginatePage is not None:
-            PageNumberPagination.page_size = settings.PAGINATION_SIZE
+            PageNumberPagination.page_size = pageSize
             pagination_class = PageNumberPagination
 
         return queryset.order_by('expansion_area')
@@ -98,47 +82,29 @@ class PlatViewSet(viewsets.ModelViewSet):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def update(self, request, pk):
-        existing_object  = self.get_object()
-        setattr(existing_object, 'modified_by', request.user)
-        for key, value in request.data.items():
-            for existing_object_key, existing_object_value in existing_object.__dict__.items():
-                if key == existing_object_key:
-                    if value != existing_object_value:
-                        setattr(existing_object, existing_object_key, value)
-        try:
-            existing_object.save()
-            return Response(status=status.HTTP_200_OK)
-        except Exception as e:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+        return update_entry(self, request, pk)
 
 class LotViewSet(viewsets.ModelViewSet):
     serializer_class = LotSerializer
     queryset = Lot.objects.all()
     permission_classes = (CanAdminister,)
+    filter_backends = (DjangoFilterBackend, filters.SearchFilter,)
+    search_fields = ('address_full', 'lot_number', 'parcel_id', 'permit_id', 'plat__expansion_area', 'plat__name', )
+    filter_fields = ('account', 'plat', 'is_approved',)
 
 
     def get_queryset(self):
-        queryset = Lot.objects.all()
+        queryset = Lot.objects.exclude(is_active=False)
         PageNumberPagination.page_size = 0
         paginatePage = self.request.query_params.get('paginatePage', None)
+        pageSize = self.request.query_params.get('pageSize', settings.PAGINATION_SIZE)
 
         plat_set = self.request.query_params.get('plat', None)
         if plat_set is not None:
             queryset = queryset.filter(plat=plat_set)
 
-        query_text = self.request.query_params.get('query', None)
-        if query_text is not None:
-            query_text = query_text.lower()
-            queryset = queryset.filter(
-                Q(address_full__icontains=query_text) |
-                Q(lot_number__icontains=query_text) |
-                Q(parcel_id__icontains=query_text) |
-                Q(permit_id__icontains=query_text) |
-                Q(plat__expansion_area__icontains=query_text) |
-                Q(plat__name__icontains=query_text))
-
         if paginatePage is not None:
-            PageNumberPagination.page_size = settings.PAGINATION_SIZE
+            PageNumberPagination.page_size = pageSize
             pagination_class = PageNumberPagination
 
         return queryset.order_by('address_street')
@@ -157,23 +123,15 @@ class LotViewSet(viewsets.ModelViewSet):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def update(self, request, pk):
-        existing_object  = self.get_object()
-        setattr(existing_object, 'modified_by', request.user)
-        for key, value in request.data.items():
-            for existing_object_key, existing_object_value in existing_object.__dict__.items():
-                if key == existing_object_key:
-                    if value != existing_object_value:
-                        setattr(existing_object, existing_object_key, value)
-        try:
-            existing_object.save()
-            return Response(status=status.HTTP_200_OK)
-        except Exception as e:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+        return update_entry(self, request, pk)
 
 class PlatZoneViewSet(viewsets.ModelViewSet):
     serializer_class = PlatZoneSerializer
     queryset = PlatZone.objects.all()
     permission_classes = (CanAdminister,)
+
+    def get_queryset(self):
+        return PlatZone.objects.exclude(is_active=False).order_by('zone')
 
     def create(self, request):
         data_set = request.data
@@ -189,18 +147,7 @@ class PlatZoneViewSet(viewsets.ModelViewSet):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def update(self, request, pk):
-        existing_object  = self.get_object()
-        setattr(existing_object, 'modified_by', request.user)
-        for key, value in request.data.items():
-            for existing_object_key, existing_object_value in existing_object.__dict__.items():
-                if key == existing_object_key:
-                    if value != existing_object_value:
-                        setattr(existing_object, existing_object_key, value)
-        try:
-            existing_object.save()
-            return Response(status=status.HTTP_200_OK)
-        except Exception as e:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+        return update_entry(self, request, pk)
 
 class CalculationWorksheetViewSet(viewsets.ModelViewSet):
     serializer_class = CalculationWorksheetSerializer

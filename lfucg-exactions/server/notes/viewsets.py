@@ -1,12 +1,14 @@
-from rest_framework import viewsets, status
+from rest_framework import viewsets, status, generics
 from django.db.models import Q
 from rest_framework.response import Response
 from django.contrib.contenttypes.models import ContentType
 
+from rest_framework.parsers import FileUploadParser, MultiPartParser
+
 from .models import *
 from .serializers import *
+from plats.models import *
 from .permissions import CanAdminister
-from plats.models import Plat, Lot
 
 class NoteViewSet(viewsets.ModelViewSet):
     serializer_class = NoteSerializer
@@ -21,28 +23,33 @@ class NoteViewSet(viewsets.ModelViewSet):
         parent_content_type_string = self.request.query_params.get('parent_content_type', None)
         parent_object_id = self.request.query_params.get('parent_object_id', None)
                 
-        if parent_content_type_string is not None:
-            if parent_content_type_string == 'Plat':
-                parent_content_type = ContentType.objects.get_for_model(Plat)
-            elif parent_content_type_string == 'Lot':
-                parent_content_type = ContentType.objects.get_for_model(Lot)
-            if child_content_type_string == 'Plat':
-                child_content_type = ContentType.objects.get_for_model(Plat)
-            elif child_content_type_string == 'Lot':
-                child_content_type = ContentType.objects.get_for_model(Lot)
+        if child_content_type_string is not None:
+            split_child_content = child_content_type_string.split('_')
 
-            query_list = queryset.filter(
-                Q(content_type=parent_content_type, object_id=parent_object_id) |
-                Q(content_type=child_content_type, object_id=child_object_id))
+            if len(split_child_content) == 2:
+                child_content_type_app_label = split_child_content[0]
+                child_content_type_model = split_child_content[1]
 
-            queryset = query_list
-        elif child_content_type_string is not None:
+                child_content_type = ContentType.objects.get(app_label=child_content_type_app_label, model=child_content_type_model)
 
-            if child_content_type_string == 'Plat':
-                child_content_type = ContentType.objects.get_for_model(Plat)
-            elif child_content_type_string == 'Lot':
-                child_content_type = ContentType.objects.get_for_model(Lot)
-            queryset = queryset.filter(content_type=child_content_type, object_id=child_object_id)
+                if parent_content_type_string is not None:
+                    split_parent_string = parent_content_type_string.split('_')
+
+                    if len(split_parent_string) == 2:
+                        parent_content_type_app_label = split_parent_string[0]
+                        parent_content_type_model = split_parent_string[1]
+
+                        parent_content_type = ContentType.objects.get(app_label=parent_content_type_app_label, model=parent_content_type_model)
+
+                        if parent_content_type and child_content_type:
+                            query_list = queryset.filter(
+                                Q(content_type=parent_content_type, object_id=parent_object_id) |
+                                Q(content_type=child_content_type, object_id=child_object_id))
+
+                        queryset = query_list
+
+                else:
+                    queryset = queryset.filter(content_type=child_content_type, object_id=child_object_id)
 
         else:
             queryset = queryset
@@ -125,4 +132,43 @@ class RateViewSet(viewsets.ModelViewSet):
             return Response(status=status.HTTP_200_OK)
         except Exception as e:
             return Response(status=status.HTTP_400_BAD_REQUEST)
+
+class FileUploadViewSet(viewsets.ModelViewSet):
+    serializer_class = FileUploadSerializer
+    queryset = FileUpload.objects.all()
+
+    def get_queryset(self):
+        queryset = FileUpload.objects.all()
+
+        file_content_type_string = self.request.query_params.get('file_content_type', None)
+        file_object_id = self.request.query_params.get('file_object_id', None)
+        
+        if file_content_type_string is not None:
+            split_content_type = file_content_type_string.split('_')
+
+            if len(split_content_type) == 2:
+                content_type_app_label = split_content_type[0]
+                content_type_model = split_content_type[1]
+
+                file_content_type = ContentType.objects.get(app_label=content_type_app_label, model=content_type_model)
+
+                query_list = queryset.filter(
+                    Q(file_content_type=file_content_type, file_object_id=file_object_id))
+
+                queryset = query_list
+
+        else:
+            queryset = queryset
+
+        return queryset.order_by('-date')
+
+class FileUploadCreate(generics.CreateAPIView):
+    model = FileUpload
+    serializer_class = FileUploadCreateSerializer
+    parser_classes = (MultiPartParser, FileUploadParser)
+
+    def perform_create(self, serializer):
+        if serializer.is_valid():
+            serializer.save()
+
     

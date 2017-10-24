@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
+import Uploads from './Uploads';
 
 import {
     getProjectID,
@@ -57,8 +58,8 @@ class ProjectSummary extends React.Component {
                         <div className="row">
                             <div className="col-sm-offset-1">
                                 <p className="col-md-4 col-xs-6">Project: {projectCost.project_id.name}</p>
-                                <p className="col-md-4 col-xs-6">Total Costs: ${projectCost.total_costs}</p>
-                                <p className="col-md-4 col-xs-6 ">Credits Available: ${projectCost.credits_available}</p>
+                                <p className="col-md-4 col-xs-6">Total Costs: {projectCost.total_costs}</p>
+                                <p className="col-md-4 col-xs-6 ">Credits Available: {projectCost.dollar_values && projectCost.dollar_values.credits_available}</p>
                             </div>
                         </div>
                     </div>
@@ -211,8 +212,9 @@ class ProjectSummary extends React.Component {
                                         </div>
                                         <div className="col-xs-12">
                                             <p className="col-md-4 col-xs-6">Resolution Number: {projects.agreement_id.resolution_number}</p>
+                                            <p className="col-md-4 col-xs-6">Current Balance: {projects.agreement_id.agreement_balance && projects.agreement_id.agreement_balance.total}</p>
                                             {projects.agreement_id.account_id &&
-                                                <p className="col-md-4 col-xs-6">Account: {projects.agreement_id.account_id.account_name}</p>
+                                                <p className="col-md-4 col-xs-6">Account: {projects.agreement_id.account_id && projects.agreement_id.account_id.account_name}</p>
                                             }
                                             <p className="col-md-4 col-xs-6">Expansion Area: {projects.agreement_id.expansion_area}</p>
                                             <p className="col-md-4 col-xs-6">Agreement Type: {projects.agreement_id.agreement_type_display}</p>
@@ -224,6 +226,15 @@ class ProjectSummary extends React.Component {
                                 <h2>Agreement - None</h2>
                             </div>}
                         </div>
+                        {projects.id &&
+                            <Uploads
+                              file_content_type="accounts_project"
+                              file_object_id={projects.id}
+                              ariaExpanded="false"
+                              panelClass="panel-collapse collapse row"
+                              permission="project"
+                            />
+                        }
                     </div>
                 </div>
                 <Footer />
@@ -234,8 +245,8 @@ class ProjectSummary extends React.Component {
 
 ProjectSummary.propTypes = {
     currentUser: PropTypes.object,
-    projects: PropTypes.object,
-    projectCosts: PropTypes.object,
+    projects: PropTypes.array,
+    projectCosts: PropTypes.array,
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
 };

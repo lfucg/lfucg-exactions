@@ -19,6 +19,7 @@ import accountLedgersReducer from './accountLedgersReducer';
 
 import notesReducer from './notesReducer';
 import ratesReducer from './ratesReducer';
+import uploadReducer from './uploadReducer';
 
 const dashboardReducer = combineReducers({
     routing: routerReducer,
@@ -41,6 +42,7 @@ const dashboardReducer = combineReducers({
 
     notes: notesReducer,
     rates: ratesReducer,
+    uploads: uploadReducer,
 });
 
 export default dashboardReducer;

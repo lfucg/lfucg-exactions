@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
+from storages.backends.s3boto3 import S3Boto3Storage
 
 from django.contrib.auth.models import User
 
@@ -47,7 +48,7 @@ class Rate(models.Model):
     
     ZONES = (
         ('EAR-1', 'EAR-1'),
-        ('EAR1-SRA', 'EAR1-SRA'),
+        ('EAR-1SRA', 'EAR-1SRA'),
         ('EAR-2', 'EAR-2'),
         ('EAR-3', 'EAR-3'),
         ('CC(RES)', 'CC(RES)'),
@@ -89,3 +90,22 @@ class Rate(models.Model):
 
     def __str__(self):
         return self.zone + ': ' + self.category
+
+class MediaStorage(S3Boto3Storage):
+    location = 'media'
+
+def model_directory_path(instance, filename):
+    instance_name = str(type(instance.file_content_object).__name__)
+
+    return '{0}/{1}'.format(instance_name, filename)
+
+class FileUpload(models.Model):
+    upload = models.FileField(upload_to=model_directory_path)
+    date = models.DateTimeField(auto_now_add=True)
+
+    file_content_type = models.ForeignKey(ContentType)
+    file_object_id = models.PositiveIntegerField()
+    file_content_object = GenericForeignKey('file_content_type', 'file_object_id')
+
+    def __str__(self):
+        return str(self.upload)

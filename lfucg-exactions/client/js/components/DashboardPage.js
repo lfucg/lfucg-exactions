@@ -17,7 +17,7 @@ class DashboardPage extends React.Component {
             <div className="dashboard">
                 <Navbar />
 
-                <img src={`${global.BASE_STATIC_URL}/lexington-hero-interior.jpg`} role="presentation" className="lex-banner" />
+                <img src={`${window.StaticURL}images/lexington-hero-interior.jpg`} role="presentation" className="lex-banner" />
                 <div className="inside-body">
                     <div className="container">
                         <div className="row">
@@ -39,11 +39,15 @@ class DashboardPage extends React.Component {
                             </div>
                             <div className="col-md-4 col-sm-6">
                                 <Link to="agreement" role="link"><h2 className="in-page-link">Agreements</h2></Link>
-                                <p>Lexington agreements.</p>
+                                <p>Lexington agreements based on resolution numbers or memos.</p>
                             </div>
                             <div className="col-md-4 col-sm-6">
-                                <Link to="payment" role="link"><h2 className="in-page-link">Payments</h2></Link>
-                                <p>Lexington payments.</p>
+                                <Link to="credit-transfer" role="link"><h2 className="in-page-link">Credit Transfers</h2></Link>
+                                <p>Lexington account ledgers for credits.  Credit transfers, new credit awards, and credit payments.</p>
+                            </div>
+                            <div className="col-md-4 col-sm-6">
+                                <Link to="payment" role="link"><h2 className="in-page-link">Monetary Payments</h2></Link>
+                                <p>Payments via cash, credit card, check, or money order.</p>
                             </div>
                             <div className="col-md-4 col-sm-6">
                                 <Link to="project" role="link"><h2 className="in-page-link">Projects</h2></Link>
@@ -52,10 +56,6 @@ class DashboardPage extends React.Component {
                             <div className="col-md-4 col-sm-6">
                                 <Link to="project-cost" role="link"><h2 className="in-page-link">Project Costs</h2></Link>
                                 <p>Lexington project costs.</p>
-                            </div>
-                            <div className="col-md-4 col-sm-6">
-                                <Link to="account-ledger" role="link"><h2 className="in-page-link">Account Ledgers</h2></Link>
-                                <p>Lexington account ledgers.</p>
                             </div>
                             {currentUser && currentUser.is_superuser &&
                                 <div className="col-md-4 col-sm-6">

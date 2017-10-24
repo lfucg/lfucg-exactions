@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
+import Uploads from './Uploads';
 
 import {
     getProjectCostID,
@@ -75,14 +76,14 @@ class ProjectCostSummary extends React.Component {
                                     </div>
                                     <div className="col-xs-12">
                                         <p className="col-md-3 col-sm-4 col-xs-6">Estimate Type: {projectCosts.estimate_type}</p>
-                                        <p className="col-md-3 col-sm-4 col-xs-6">Total Costs: ${projectCosts.total_costs}</p>
-                                        <p className="col-md-3 col-sm-4 col-xs-6 ">Credits Available: ${projectCosts.credits_available}</p>
-                                        <p className="col-md-3 col-sm-4 col-xs-6">Land Cost: ${projectCosts.land_cost}</p>
-                                        <p className="col-md-3 col-sm-4 col-xs-6">Design Cost: ${projectCosts.design_cost}</p>
-                                        <p className="col-md-3 col-sm-4 col-xs-6">Construction Cost: ${projectCosts.construction_cost}</p>
-                                        <p className="col-md-3 col-sm-4 col-xs-6">Administrative Cost: ${projectCosts.admin_cost}</p>
-                                        <p className="col-md-3 col-sm-4 col-xs-6">Management Cost: ${projectCosts.management_cost}</p>
-                                        <p className="col-md-3 col-sm-4 col-xs-6">Other Costs: ${projectCosts.other_cost}</p>
+                                        <p className="col-md-3 col-sm-4 col-xs-6">Total Costs: {projectCosts.total_costs}</p>
+                                        <p className="col-md-3 col-sm-4 col-xs-6 ">Credits Available: {projectCosts.dollar_values && projectCosts.dollar_values.credits_available}</p>
+                                        <p className="col-md-3 col-sm-4 col-xs-6">Land Cost: {projectCosts.dollar_values && projectCosts.dollar_values.land_cost}</p>
+                                        <p className="col-md-3 col-sm-4 col-xs-6">Design Cost: {projectCosts.dollar_values && projectCosts.dollar_values.design_cost}</p>
+                                        <p className="col-md-3 col-sm-4 col-xs-6">Construction Cost: {projectCosts.dollar_values && projectCosts.dollar_values.construction_cost}</p>
+                                        <p className="col-md-3 col-sm-4 col-xs-6">Administrative Cost: {projectCosts.dollar_values && projectCosts.dollar_values.admin_cost}</p>
+                                        <p className="col-md-3 col-sm-4 col-xs-6">Management Cost: {projectCosts.dollar_values && projectCosts.dollar_values.management_cost}</p>
+                                        <p className="col-md-3 col-sm-4 col-xs-6">Other Costs: {projectCosts.dollar_values && projectCosts.dollar_values.other_cost}</p>
                                     </div>
                                 </div>
                             </div>
@@ -147,6 +148,15 @@ class ProjectCostSummary extends React.Component {
                                 <h2>Project - None</h2>
                             </div>}
                         </div>
+                        {projectCosts.id &&
+                            <Uploads
+                              file_content_type="accounts_projectcostestimate"
+                              file_object_id={projectCosts.id}
+                              ariaExpanded="false"
+                              panelClass="panel-collapse collapse row"
+                              permission="projectcostestimate"
+                            />
+                        }
                     </div>
                 </div>
                 <Footer />
@@ -157,7 +167,7 @@ class ProjectCostSummary extends React.Component {
 
 ProjectCostSummary.propTypes = {
     currentUser: PropTypes.object,
-    projectCosts: PropTypes.object,
+    projectCosts: PropTypes.array,
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
 };
