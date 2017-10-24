@@ -93,7 +93,6 @@ class AgreementViewSet(viewsets.ModelViewSet):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def update(self, request, pk):
-        set_approval(self, request, data_set)
         return update_entry(self, request, pk)
             
 class PaymentViewSet(viewsets.ModelViewSet):
