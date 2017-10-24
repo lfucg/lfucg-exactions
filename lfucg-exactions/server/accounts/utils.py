@@ -67,18 +67,6 @@ def update_entry(self, request, pk):
     serializer = self.get_serializer(existing_object, data=request.data, partial=True)
     if serializer.is_valid(raise_exception=True):
         self.perform_update(serializer)
-        set_approval(self, request, serializer.data)
         return Response(serializer.data, status=status.HTTP_200_OK)
     else:
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-# TODO: FIGURE OUT HOW TO UPDATE ENTRIES TO IS APPROVED!
-def set_approval(self, request, data_set):
-    print('got here')
-    if (hasattr(self.request.user, 'profile') & self.request.user.profile.is_supervisor == True) or self.request.user.is_superuser == True:
-        data_set['is_approved'] = True
-        print('got here 1')
-    else:
-        print('got here 2')
-        data_set['is_approved'] = False
-    return data_set
