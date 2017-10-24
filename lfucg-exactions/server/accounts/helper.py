@@ -85,4 +85,3 @@ def send_email_to_supervisors(sender, instance, created=False, **kwargs):
     msg = EmailMultiAlternatives(subject, text_content, from_email, to_emails)
     msg.attach_alternative(html_content, "text/html")
     msg.send()
-    print('success!')
