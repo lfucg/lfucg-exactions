@@ -43,12 +43,10 @@ def send_lost_username_email(user):
     msg.attach_alternative(html_content, "text/html")
     msg.send()
 
-def send_email_to_supervisors(**kwargs):
-    if 'perm_name' in kwargs:
-        perm = Permission.objects.get(codename=kwargs['perm_name'])
+def send_email_to_supervisors(pk = None, groups = [], action = ''):
 
     q_objects = Q()
-    for group in kwargs['group']:
+    for group in groups:
         q_objects.add(Q(groups__name=group), Q.OR)
     users = User.objects.filter(Q(profile__is_supervisor=True), q_objects)
 
@@ -59,20 +57,14 @@ def send_email_to_supervisors(**kwargs):
     html_template = get_template('emails/supervisor_email.html')
     text_template = get_template('emails/supervisor_email.txt')
 
-    subject = 'LFUCG Exactions Activity: Pending Approval - New ' + str(perm.content_type).title()
+    subject = 'LFUCG Exactions Activity: Pending Approval - ' + action.title()
     from_email = settings.DEFAULT_FROM_EMAIL
-
-    if 'entry' in kwargs:
-        entry_id = kwargs['entry']['id']
-
-    if 'pk' in kwargs:
-        entry_id = kwargs['pk']
 
     context = {
         'baseURL': settings.BASE_URL,
-        'model': perm.content_type,
-        'staticURL': 'https://lfucg-exactions-storage.s3.amazonaws.com/',
-        'id': entry_id,
+        'model': action,
+        'staticURL': settings.STATIC_URL,
+        'id': pk,
     }
 
     html_content = html_template.render(context)
