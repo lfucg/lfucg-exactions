@@ -27,10 +27,27 @@ class DeclineDelete extends React.Component {
         return (
             <div className="decline-delete">
                 {currentUser && (currentUser.is_superuser || (currentUser.profile && currentUser.profile.is_supervisor)) &&
-                    <button className="btn btn-danger btn-lex-danger" onClick={onDelete}>
+                    <button className="btn btn-danger btn-lex-danger" data-toggle="modal" data-target="#deleteConfirm">
                         Decline / Delete
                     </button>
                 }
+                <div id="deleteConfirm" className="modal fade" role="dialog">
+                    <div className="modal-dialog">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <button type="button" className="close" data-dismiss="modal">&times;</button>
+                                <h4>Delete Confirmation</h4>
+                            </div>
+                            <div className="modal-body">
+                                Please Confirm the deletion of this entry.
+                            </div>
+                            <div className="modal-footer">
+                                <button type="button" className="btn btn-lex" data-dismiss="modal">Cancel</button>
+                                <button onClick={onDelete} className="btn btn-danger btn-lex-danger">Confirm Deletion</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         );
     }
