@@ -49,6 +49,7 @@ class LotForm extends React.Component {
             selectedLot,
             showExactions,
             hideExactions,
+            currentUser,
         } = this.props;
 
         const currentParam = this.props.params.id;
@@ -243,7 +244,9 @@ class LotForm extends React.Component {
                                         </fieldset>
                                         <div className="row">
                                             <div className="col-sm-4 col-xs-6">
-                                                <button disabled={!submitEnabled} className="btn btn-lex" onClick={onLotSubmit} >Submit</button>
+                                                <button disabled={!submitEnabled} className="btn btn-lex" onClick={onLotSubmit} >
+                                                    {currentUser.is_superuser || (currentUser.profile && currentUser.profile.is_supervisor) ? <div>Submit / Approve</div> : <div>Submit</div>}
+                                                </button>
                                                 {!submitEnabled ? (
                                                     <div>
                                                         <div className="clearfix" />
@@ -367,7 +370,9 @@ class LotForm extends React.Component {
                                                     </div>
                                                 </fieldset>
                                                 <div className="col-xs-8">
-                                                    <button disabled={!submitEnabled} className="btn btn-lex" onClick={onLotDues}  >Submit</button>
+                                                    <button disabled={!submitEnabled} className="btn btn-lex" onClick={onLotDues} >
+                                                        {currentUser.is_superuser || (currentUser.profile && currentUser.profile.is_supervisor) ? <div>Submit / Approve</div> : <div>Submit</div>}
+                                                    </button>
                                                     {!submitEnabled ? (
                                                         <div>
                                                             <div className="clearfix" />
@@ -449,6 +454,7 @@ LotForm.propTypes = {
     showExactions: PropTypes.func,
     hideExactions: PropTypes.func,
     selectedLot: PropTypes.string,
+    currentUser: PropTypes.object,
 };
 
 function mapStateToProps(state) {
@@ -457,6 +463,7 @@ function mapStateToProps(state) {
         plats: state.plats,
         lots: state.lots,
         accounts: state.accounts,
+        currentUser: state.currentUser,
     };
 }
 
