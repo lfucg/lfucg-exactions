@@ -58,5 +58,4 @@ def set_approval(sender, instance, **kwargs):
         instance.is_approved = True
     else:
         instance.is_approved = False
-    print(vars(instance))
     return instance
