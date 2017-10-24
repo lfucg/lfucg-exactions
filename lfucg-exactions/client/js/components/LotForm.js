@@ -523,17 +523,20 @@ function mapDispatchToProps(dispatch, params) {
             .then((all_plats) => {
                 if (plat_start) {
                     const plat_start_number = parseInt(plat_start, 10);
-                    const starting_plat = all_plats.response.filter(plat => (plat.id === plat_start_number));
+                    const matching_plats = all_plats.response.filter(plat => (plat.id === plat_start_number));
 
-                    const plat_update = {
-                        plat: starting_plat[0].id,
-                        plat_name: starting_plat[0].name,
-                        first_section: false,
-                        account_show: '',
-                        plat_show: `${starting_plat[0].id},${starting_plat[0].name}`,
-                        address_zip_show: '',
-                    };
-                    dispatch(formUpdate(plat_update));
+                    if (matching_plats.length > 0) {
+                        const starting_plat = matching_plats[0];
+                        const plat_update = {
+                            plat: starting_plat.id,
+                            plat_name: starting_plat.name,
+                            first_section: false,
+                            account_show: '',
+                            plat_show: `${starting_plat.id},${starting_plat.name}`,
+                            address_zip_show: '',
+                        };
+                        dispatch(formUpdate(plat_update));
+                    }
                 }
             });
             dispatch(getAccounts());
