@@ -109,16 +109,15 @@ class PlatSerializer(serializers.ModelSerializer):
 
     def get_plat_exactions(self, obj):
         calculated_exactions = calculate_plat_balance(obj.id)
-
-    def get_plat_zone(self, obj):
-        plat_zone_set = PlatZone.objects.filter(is_active=True, plat=obj.id)
-        return PlatZoneSerializer(instance=plat_zone_set, many=True).data
-
         return {
             'plat_sewer_due': '${:,.2f}'.format(calculated_exactions['plat_sewer_due']),
             'plat_non_sewer_due': '${:,.2f}'.format(calculated_exactions['plat_non_sewer_due']),
             'remaining_lots': calculated_exactions['remaining_lots'],
         }
+
+    def get_plat_zone(self, obj):
+        plat_zone_set = PlatZone.objects.filter(is_active=True, plat=obj.id)
+        return PlatZoneSerializer(instance=plat_zone_set, many=True).data
 
     class Meta:
         model = Plat 
