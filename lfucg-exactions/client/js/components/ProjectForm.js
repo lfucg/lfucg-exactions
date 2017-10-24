@@ -180,7 +180,7 @@ class ProjectForm extends React.Component {
                                         </div>
                                         <div className="col-sm-6">
                                             <FormGroup label="* Status Date" id="status_date" >
-                                                <input type="date" className="form-control" placeholder="Status Date" />
+                                                <input type="date" className="form-control" placeholder="Date Format YYYY-MM-DD" />
                                             </FormGroup>
                                         </div>
                                     </div>
