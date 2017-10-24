@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { hashHistory } from 'react-router';
+import PropTypes from 'prop-types';
 
 import Navbar from './Navbar';
 import Footer from './Footer';
@@ -10,11 +10,11 @@ import {
     passwordReset,
 } from '../actions/apiActions';
 
+import {
+    formUpdate,
+} from '../actions/formActions'
+
 class ForgotPassword extends React.Component {
-    static propTypes = {
-        activeForm: React.PropTypes.object,
-        forgotPassword: React.PropTypes.func,
-    }
 
     render() {
         const {
@@ -72,10 +72,17 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     return {
         forgotPassword(event) {
-            event.preventDefault();
+            const email = document.getElementById('email_2').value;
+            console.log(email);
+            dispatch(formUpdate({ email }));
             dispatch(passwordReset());
         },
     };
 }
+
+ForgotPassword.propTypes = {
+    activeForm: PropTypes.object,
+    forgotPassword: PropTypes.func,
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(ForgotPassword);
