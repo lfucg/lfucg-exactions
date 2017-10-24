@@ -3,16 +3,12 @@ from django.template.loader import get_template
 from rest_framework import viewsets, status, filters
 from django.db.models import Q
 from django.core.mail import EmailMultiAlternatives
-from django.core.mail import mail_admins, send_mail
-from django.contrib.auth.models import User, Permission
-from postmarker.django import PostmarkEmailMessage
+from django.contrib.auth.models import User
 
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from plats.models import *
 from .models import *
-
-from pprint import pprint
 
 def send_password_reset_email(user):
     text_template = get_template('emails/password_reset.txt')
