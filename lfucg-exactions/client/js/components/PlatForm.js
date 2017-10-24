@@ -49,6 +49,7 @@ class PlatForm extends React.Component {
             addAnotherPlatZone,
             onPlatDues,
             selectedPlat,
+            currentUser,
         } = this.props;
 
         const currentParam = this.props.params.id;
@@ -296,7 +297,9 @@ class PlatForm extends React.Component {
                                             </div>
                                         </fieldset>
                                         <div className="col-xs-8">
-                                            <button disabled={!submitEnabled} className="btn btn-lex" onClick={onPlatSubmit} >Submit</button>
+                                            <button disabled={!submitEnabled} className="btn btn-lex" onClick={onPlatSubmit} >
+                                                {currentUser.is_superuser || (currentUser.profile && currentUser.profile.is_supervisor) ? <div>Submit / Approve</div> : <div>Submit</div>}
+                                            </button>
                                             {!submitEnabled ? (
                                                 <div>
                                                     <div className="clearfix" />
@@ -527,6 +530,7 @@ PlatForm.propTypes = {
     addAnotherPlatZone: PropTypes.func,
     onPlatDues: PropTypes.func,
     selectedPlat: PropTypes.string,
+    currentUser: PropTypes.object,
 };
 
 function mapStateToProps(state) {
@@ -535,6 +539,7 @@ function mapStateToProps(state) {
         subdivisions: state.subdivisions,
         plats: state.plats,
         accounts: state.accounts,
+        currentUser: state.currentUser,
     };
 }
 

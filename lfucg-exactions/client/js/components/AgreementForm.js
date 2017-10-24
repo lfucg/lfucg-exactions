@@ -40,6 +40,7 @@ class AgreementForm extends React.Component {
             onSubmit,
             formChange,
             selectedAgreement,
+            currentUser,
         } = this.props;
 
         const currentParam = this.props.params.id;
@@ -122,7 +123,9 @@ class AgreementForm extends React.Component {
                                     </div>
                                 </fieldset>
                                 <div className="col-xs-8">
-                                    <button disabled={!submitEnabled} className="btn btn-lex" onClick={onSubmit} >Submit</button>
+                                    <button disabled={!submitEnabled} className="btn btn-lex" onClick={onSubmit} >
+                                        {currentUser.is_superuser || (currentUser.profile && currentUser.profile.is_supervisor) ? <div>Submit / Approve</div> : <div>Submit</div>}
+                                    </button>
                                     {!submitEnabled ? (
                                         <div>
                                             <div className="clearfix" />
@@ -165,6 +168,7 @@ AgreementForm.propTypes = {
     onSubmit: PropTypes.func,
     formChange: PropTypes.func,
     selectedAgreement: PropTypes.string,
+    currentUser: PropTypes.object,
 };
 
 function mapStateToProps(state) {
@@ -172,6 +176,7 @@ function mapStateToProps(state) {
         activeForm: state.activeForm,
         accounts: state.accounts,
         agreements: state.agreements,
+        currentUser: state.currentUser,
     };
 }
 
