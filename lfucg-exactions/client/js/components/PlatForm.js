@@ -13,6 +13,7 @@ import Notes from './Notes';
 import Uploads from './Uploads';
 
 import FormGroup from './FormGroup';
+import DeclineDelete from './DeclineDelete';
 import PlatZoneForm from './PlatZoneForm';
 import PlatZoneDuesForm from './PlatZoneDuesForm';
 
@@ -47,6 +48,7 @@ class PlatForm extends React.Component {
             onPlatAndCreateLot,
             addAnotherPlatZone,
             onPlatDues,
+            selectedPlat,
         } = this.props;
 
         const currentParam = this.props.params.id;
@@ -166,7 +168,7 @@ class PlatForm extends React.Component {
                               aria-labelledby="#headingPlat"
                             >
                                 <div className="panel-body">
-                                    <form onSubmit={onPlatSubmit} className="col-xs-12">
+                                    <form className="col-xs-12">
 
                                         <fieldset>
                                             <div className="row form-subheading">
@@ -293,14 +295,19 @@ class PlatForm extends React.Component {
                                                 </div>
                                             </div>
                                         </fieldset>
-                                        <button disabled={!submitEnabled} className="btn btn-lex">Submit</button>
-                                        {!submitEnabled ? (
-                                            <div>
-                                                <div className="clearfix" />
-                                                <span> * All required fields must be filled.</span>
-                                            </div>
-                                        ) : null
-                                        }
+                                        <div className="col-xs-8">
+                                            <button disabled={!submitEnabled} className="btn btn-lex" onClick={onPlatSubmit} >Submit</button>
+                                            {!submitEnabled ? (
+                                                <div>
+                                                    <div className="clearfix" />
+                                                    <span> * All required fields must be filled.</span>
+                                                </div>
+                                            ) : null
+                                            }
+                                        </div>
+                                        <div className="col-xs-4">
+                                            <DeclineDelete currentForm="/plat/" selectedEntry={selectedPlat} parentRoute="plat" />
+                                        </div>
                                     </form>
                                 </div>
                             </div>
@@ -372,7 +379,7 @@ class PlatForm extends React.Component {
                                             >
                                                 <div className="panel-body">
                                                     <div className="col-xs-12">
-                                                        <form onSubmit={onPlatDues}>
+                                                        <form >
                                                             <fieldset>
                                                                 <div className="row form-subheading">
                                                                     <h3>Exactions and Calculations</h3>
@@ -519,6 +526,7 @@ PlatForm.propTypes = {
     onPlatAndCreateLot: PropTypes.func,
     addAnotherPlatZone: PropTypes.func,
     onPlatDues: PropTypes.func,
+    selectedPlat: PropTypes.string,
 };
 
 function mapStateToProps(state) {
@@ -679,6 +687,7 @@ function mapDispatchToProps(dispatch, params) {
                 });
             }
         },
+        selectedPlat,
     };
 }
 

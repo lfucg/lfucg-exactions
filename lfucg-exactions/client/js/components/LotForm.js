@@ -14,6 +14,7 @@ import Notes from './Notes';
 import Uploads from './Uploads';
 
 import FormGroup from './FormGroup';
+import DeclineDelete from './DeclineDelete';
 
 import {
     formInit,
@@ -126,7 +127,7 @@ class LotForm extends React.Component {
                               aria-labelledby="#headingLot"
                             >
                                 <div className="panel-body">
-                                    <form onSubmit={onLotSubmit} >
+                                    <form >
 
                                         <fieldset>
                                             <div className="row form-subheading">
@@ -241,8 +242,8 @@ class LotForm extends React.Component {
                                             </div>
                                         </fieldset>
                                         <div className="row">
-                                            <div className="col-sm-6">
-                                                <button disabled={!submitEnabled} className="btn btn-lex">Submit</button>
+                                            <div className="col-sm-4 col-xs-6">
+                                                <button disabled={!submitEnabled} className="btn btn-lex" onClick={onLotSubmit} >Submit</button>
                                                 {!submitEnabled ? (
                                                     <div>
                                                         <div className="clearfix" />
@@ -251,10 +252,13 @@ class LotForm extends React.Component {
                                                 ) : null
                                                 }
                                             </div>
-                                            <div className="col-sm-6">
+                                            <div className="col-sm-4 col-xs-6">
                                                 {activeForm.show_exactions && currentLot.lot_exactions && currentLot.lot_exactions.current_exactions_number > 0 &&
                                                     <h3 className="help-block alert alert-danger">&nbsp;There are still {currentLot.lot_exactions.current_exactions} in exactions due on this lot.</h3>
                                                 }
+                                            </div>
+                                            <div className="col-sm-4 col-xs-6">
+                                                <DeclineDelete currentForm="/lot/" selectedEntry={selectedLot} parentRoute="lot" />
                                             </div>
                                         </div>
                                     </form>
@@ -284,7 +288,7 @@ class LotForm extends React.Component {
                                       aria-labelledby="#headingLotExactions"
                                     >
                                         <div className="panel-body">
-                                            <form onSubmit={onLotDues} >
+                                            <form >
                                                 <fieldset>
                                                     <div className="row form-subheading">
                                                         <h3>Exactions</h3>
@@ -362,7 +366,19 @@ class LotForm extends React.Component {
                                                         </div>
                                                     </div>
                                                 </fieldset>
-                                                <button className="btn btn-lex" >Submit</button>
+                                                <div className="col-xs-8">
+                                                    <button disabled={!submitEnabled} className="btn btn-lex" onClick={onLotDues}  >Submit</button>
+                                                    {!submitEnabled ? (
+                                                        <div>
+                                                            <div className="clearfix" />
+                                                            <span> * All required fields must be filled.</span>
+                                                        </div>
+                                                    ) : null
+                                                    }
+                                                </div>
+                                                <div className="col-xs-4">
+                                                    <DeclineDelete currentForm="/lot/" selectedEntry={selectedLot} parentRoute="lot" />
+                                                </div>
                                             </form>
                                         </div>
                                     </div>

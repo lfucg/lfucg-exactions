@@ -94,7 +94,7 @@ class SubdivisionField(serializers.Field):
         return SubdivisionSerializer(obj).data
 
 class PlatSerializer(serializers.ModelSerializer):
-    plat_zone = PlatZoneSerializer(many=True, read_only=True)
+    plat_zone = serializers.SerializerMethodField(read_only=True)
     cleaned_total_acreage = serializers.SerializerMethodField(read_only=True)
     subdivision = SubdivisionField(required=False)
     plat_type_display = serializers.SerializerMethodField(read_only=True)
@@ -109,6 +109,10 @@ class PlatSerializer(serializers.ModelSerializer):
 
     def get_plat_exactions(self, obj):
         calculated_exactions = calculate_plat_balance(obj.id)
+
+    def get_plat_zone(self, obj):
+        plat_zone_set = PlatZone.objects.filter(is_active=True, plat=obj.id)
+        return PlatZoneSerializer(instance=plat_zone_set, many=True).data
 
         return {
             'plat_sewer_due': '${:,.2f}'.format(calculated_exactions['plat_sewer_due']),
