@@ -7,6 +7,13 @@ from django.core.mail import mail_admins, send_mail
 from django.contrib.auth.models import User, Permission
 from postmarker.django import PostmarkEmailMessage
 
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from plats.models import *
+from .models import *
+
+from pprint import pprint
+
 def send_password_reset_email(user):
     text_template = get_template('emails/password_reset.txt')
     html_template = get_template('emails/password_reset.html')
@@ -43,28 +50,37 @@ def send_lost_username_email(user):
     msg.attach_alternative(html_content, "text/html")
     msg.send()
 
-def send_email_to_supervisors(pk = None, groups = [], action = ''):
 
-    q_objects = Q()
-    for group in groups:
-        q_objects.add(Q(groups__name=group), Q.OR)
-    users = User.objects.filter(Q(profile__is_supervisor=True), q_objects)
+@receiver(post_save, sender=Agreement)
+@receiver(post_save, sender=AccountLedger)
+@receiver(post_save, sender=Payment)
+@receiver(post_save, sender=Project)
+@receiver(post_save, sender=ProjectCostEstimate)
+@receiver(post_save, sender=Plat)
+@receiver(post_save, sender=Lot)
+def send_email_to_supervisors(sender, instance, created=False, **kwargs):
 
-    to_emails = []
-    for user in users:
-        to_emails.append(user.email)
+    ctype = ContentType.objects.get_for_model(instance)
+    if ctype.app_label == 'accounts':
+        group = ['Finance']
+    elif ctype.app_label == 'plats':
+        group = ['Planning']
+
+    users = User.objects.filter(Q(profile__is_supervisor=True) & Q(groups__name__in=group))
+
+    to_emails = list(users.values_list('email', flat=True))
 
     html_template = get_template('emails/supervisor_email.html')
     text_template = get_template('emails/supervisor_email.txt')
 
-    subject = 'LFUCG Exactions Activity: Pending Approval - ' + action.title()
+    subject = 'LFUCG Exactions Activity: New Entry Pending Approval'
     from_email = settings.DEFAULT_FROM_EMAIL
 
     context = {
         'baseURL': settings.BASE_URL,
-        'model': action,
+        'model': ctype.model,
         'staticURL': settings.STATIC_URL,
-        'id': pk,
+        'id': instance.id,
     }
 
     html_content = html_template.render(context)
@@ -73,3 +89,4 @@ def send_email_to_supervisors(pk = None, groups = [], action = ''):
     msg = EmailMultiAlternatives(subject, text_content, from_email, to_emails)
     msg.attach_alternative(html_content, "text/html")
     msg.send()
+    print('success!')

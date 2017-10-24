@@ -78,13 +78,11 @@ class PlatViewSet(viewsets.ModelViewSet):
         serializer = PlatSerializer(data=data_set)
         if serializer.is_valid(raise_exception=True):
             self.perform_create(serializer)
-            send_email_to_supervisors(pk = serializer.data['id'], groups = ['Planning'], action = 'new plat')
             return Response(serializer.data)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def update(self, request, pk):
-        send_email_to_supervisors(pk = pk, groups = ['Planning'], action = 'plat updated')
         return update_entry(self, request, pk)
 
 class LotViewSet(viewsets.ModelViewSet):
@@ -121,13 +119,11 @@ class LotViewSet(viewsets.ModelViewSet):
         serializer = LotSerializer(data=data_set)
         if serializer.is_valid(raise_exception=True):
             self.perform_create(serializer)
-            send_email_to_supervisors(pk = serializer.data['id'], groups = ['Planning'], action = 'new lot')
             return Response(serializer.data)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def update(self, request, pk):
-        send_email_to_supervisors(pk = pk, groups = ['Planning'], action = 'lot updated')
         return update_entry(self, request, pk)
 
 class PlatZoneViewSet(viewsets.ModelViewSet):
@@ -144,13 +140,11 @@ class PlatZoneViewSet(viewsets.ModelViewSet):
         serializer = PlatZoneSerializer(data=data_set)
         if serializer.is_valid(raise_exception=True):
             self.perform_create(serializer)
-            send_email_to_supervisors(pk = serializer.data['id'], groups = ['Planning'], action = 'new plat zone')
             return Response(serializer.data)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def update(self, request, pk):
-        send_email_to_supervisors(pk = pk, groups = ['Planning'], action = 'plat zone updated')
         return update_entry(self, request, pk)
 
 class CalculationWorksheetViewSet(viewsets.ModelViewSet):
