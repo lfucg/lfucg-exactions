@@ -254,7 +254,7 @@ class PlatForm extends React.Component {
                                                 </div>
                                                 <div className="col-sm-6">
                                                     <FormGroup label="* Date Recorded" id="date_recorded" aria-required="true">
-                                                        <input type="date" className="form-control" placeholder="Date Recorded" />
+                                                        <input type="date" className="form-control" placeholder="Use YYYY-MM-DD Format for Date" />
                                                     </FormGroup>
                                                 </div>
                                             </div>
@@ -690,10 +690,8 @@ function mapDispatchToProps(dispatch, params) {
         },
         onPlatAndCreateLot() {
             if (selectedPlat) {
-                dispatch(putPlat(selectedPlat))
-                .then(() => {
-                    hashHistory.push(`plat/${selectedPlat}/lot/form`);
-                });
+                dispatch(putPlat(selectedPlat));
+                hashHistory.push(`plat/${selectedPlat}/lot/form`);
             }
         },
     };

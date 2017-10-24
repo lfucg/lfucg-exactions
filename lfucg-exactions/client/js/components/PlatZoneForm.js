@@ -160,18 +160,16 @@ function mapDispatchToProps(dispatch, props) {
                     zone = zone.substr(0, zone.indexOf(','));
 
                     const acres = activeForm.activeForm[`${props.acre_id}`];
-                    dispatch(putPlatZone(selectedPlatZone, zone, acres))
-                    .then(() => {
-                        dispatch(getPlatID(activeForm.activeForm.plat))
-                        .then((zone_put_get_plat) => {
-                            const zone_put_update = {
-                                sewer_due: zone_put_get_plat.response.sewer_due,
-                                non_sewer_due: zone_put_get_plat.response.non_sewer_due,
-                                calculation_note: zone_put_get_plat.response.calculation_note,
-                                add_another_plat_zone: false,
-                            };
-                            dispatch(formUpdate(zone_put_update));
-                        });
+                    dispatch(putPlatZone(selectedPlatZone, zone, acres));
+                    dispatch(getPlatID(activeForm.activeForm.plat))
+                    .then((zone_put_get_plat) => {
+                        const zone_put_update = {
+                            sewer_due: zone_put_get_plat.response.sewer_due,
+                            non_sewer_due: zone_put_get_plat.response.non_sewer_due,
+                            calculation_note: zone_put_get_plat.response.calculation_note,
+                            add_another_plat_zone: false,
+                        };
+                        dispatch(formUpdate(zone_put_update));
                     });
                 } else {
                     dispatch(postPlatZone())
