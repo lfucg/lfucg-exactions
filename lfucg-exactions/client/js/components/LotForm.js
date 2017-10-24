@@ -14,6 +14,7 @@ import Notes from './Notes';
 import Uploads from './Uploads';
 
 import FormGroup from './FormGroup';
+import DeclineDelete from './DeclineDelete';
 
 import {
     formInit,
@@ -126,7 +127,7 @@ class LotForm extends React.Component {
                               aria-labelledby="#headingLot"
                             >
                                 <div className="panel-body">
-                                    <form onSubmit={onLotSubmit} >
+                                    <form >
 
                                         <fieldset>
                                             <div className="row form-subheading">
@@ -241,8 +242,8 @@ class LotForm extends React.Component {
                                             </div>
                                         </fieldset>
                                         <div className="row">
-                                            <div className="col-sm-6">
-                                                <button disabled={!submitEnabled} className="btn btn-lex">Submit</button>
+                                            <div className="col-sm-4 col-xs-6">
+                                                <button disabled={!submitEnabled} className="btn btn-lex" onClick={onLotSubmit} >Submit</button>
                                                 {!submitEnabled ? (
                                                     <div>
                                                         <div className="clearfix" />
@@ -251,10 +252,13 @@ class LotForm extends React.Component {
                                                 ) : null
                                                 }
                                             </div>
-                                            <div className="col-sm-6">
+                                            <div className="col-sm-4 col-xs-6">
                                                 {activeForm.show_exactions && currentLot.lot_exactions && currentLot.lot_exactions.current_exactions_number > 0 &&
                                                     <h3 className="help-block alert alert-danger">&nbsp;There are still {currentLot.lot_exactions.current_exactions} in exactions due on this lot.</h3>
                                                 }
+                                            </div>
+                                            <div className="col-sm-4 col-xs-6">
+                                                <DeclineDelete currentForm="/lot/" selectedEntry={selectedLot} parentRoute="lot" />
                                             </div>
                                         </div>
                                     </form>
@@ -284,7 +288,7 @@ class LotForm extends React.Component {
                                       aria-labelledby="#headingLotExactions"
                                     >
                                         <div className="panel-body">
-                                            <form onSubmit={onLotDues} >
+                                            <form >
                                                 <fieldset>
                                                     <div className="row form-subheading">
                                                         <h3>Exactions</h3>
@@ -362,7 +366,19 @@ class LotForm extends React.Component {
                                                         </div>
                                                     </div>
                                                 </fieldset>
-                                                <button className="btn btn-lex" >Submit</button>
+                                                <div className="col-xs-8">
+                                                    <button disabled={!submitEnabled} className="btn btn-lex" onClick={onLotDues}  >Submit</button>
+                                                    {!submitEnabled ? (
+                                                        <div>
+                                                            <div className="clearfix" />
+                                                            <span> * All required fields must be filled.</span>
+                                                        </div>
+                                                    ) : null
+                                                    }
+                                                </div>
+                                                <div className="col-xs-4">
+                                                    <DeclineDelete currentForm="/lot/" selectedEntry={selectedLot} parentRoute="lot" />
+                                                </div>
                                             </form>
                                         </div>
                                     </div>
@@ -509,19 +525,6 @@ function mapDispatchToProps(dispatch, params) {
                         });
                     }
                 });
-            } else if (plat_start) {
-                dispatch(getPlatID(plat_start))
-                .then((data_plat_start) => {
-                    const plat_update = {
-                        plat: data_plat_start.response.id,
-                        plat_name: data_plat_start.response.name,
-                        first_section: false,
-                        account_show: '',
-                        plat_show: data_plat_start.response.plat ? `${data_plat_start.response.plat.id},${data_plat_start.response.plat.name}` : '',
-                        address_zip_show: '',
-                    };
-                    dispatch(formUpdate(plat_update));
-                });
             } else {
                 const else_update = {
                     first_section: false,
@@ -532,7 +535,26 @@ function mapDispatchToProps(dispatch, params) {
                 dispatch(formUpdate(else_update));
             }
             dispatch(getLots());
-            dispatch(getPlats());
+            dispatch(getPlats())
+            .then((all_plats) => {
+                if (plat_start) {
+                    const plat_start_number = parseInt(plat_start, 10);
+                    const matching_plats = all_plats.response.filter(plat => (plat.id === plat_start_number));
+
+                    if (matching_plats.length > 0) {
+                        const starting_plat = matching_plats[0];
+                        const plat_update = {
+                            plat: starting_plat.id,
+                            plat_name: starting_plat.name,
+                            first_section: false,
+                            account_show: '',
+                            plat_show: `${starting_plat.id},${starting_plat.name}`,
+                            address_zip_show: '',
+                        };
+                        dispatch(formUpdate(plat_update));
+                    }
+                }
+            });
             dispatch(getAccounts());
         },
         formChange(field) {
@@ -598,6 +620,7 @@ function mapDispatchToProps(dispatch, params) {
             dispatch(formUpdate({ show_exactions: false }));
         },
         selectedLot,
+        plat_start,
     };
 }
 
