@@ -24,6 +24,8 @@ from django.utils.timezone import now
 from datetime import timedelta
 import random
 
+from pprint import pprint
+
 # @api_view(['POST'])
 # @permission_classes((AllowAny, ))
 
@@ -97,9 +99,11 @@ class Registration(GenericAPIView):
 @api_view(['POST'])
 @permission_classes((AllowAny, ))
 def forgot_password(request):
+    print('we outchea!')
     email = request.data.get('email', None)
-    user = User.objects.filter(email__icontains=email)
-    if user.exists():
+    user = User.objects.get(email=email)
+    print(user)
+    if user:
         send_password_reset_email(user)
         
     # Always return success

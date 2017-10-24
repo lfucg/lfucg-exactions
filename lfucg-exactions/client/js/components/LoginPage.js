@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { hashHistory } from 'react-router';
+import { hashHistory, Link } from 'react-router';
 import PropTypes from 'prop-types';
 
 import Navbar from './Navbar';
@@ -61,21 +61,19 @@ class Login extends React.Component {
                                     </div>
                                 </div>
                             </form>
-                            {
-                                // <div className="row login-link-row">
-                                //     <div className="col-md-offset-3 col-md-6 col-sm-8 col-sm-offset-2">
-                                //         <div className="col-sm-3">
-                                //             <Link to="registration/" role="link" className="btn btn-lex">Register</Link>
-                                //         </div>
-                                //         <div className="col-sm-4">
-                                //             <Link to="forgot-password/" role="link" className="btn btn-lex">Forgot Password</Link>
-                                //         </div>
-                                //         <div className="col-sm-4">
-                                //             <Link to="forgot-username/" role="link" className="btn btn-lex">Forgot Username</Link>
-                                //         </div>
-                                //     </div>
-                                // </div>
-                            }
+                                <div className="row login-link-row">
+                                    <div className="col-md-offset-3 col-md-6 col-sm-8 col-sm-offset-2">
+                                        <div className="col-sm-3">
+                                            <Link to="registration/" role="link" className="btn btn-lex">Register</Link>
+                                        </div>
+                                        <div className="col-sm-4">
+                                            <Link to="forgot-password/" role="link" className="btn btn-lex">Forgot Password</Link>
+                                        </div>
+                                        <div className="col-sm-4">
+                                            <Link to="forgot-username/" role="link" className="btn btn-lex">Forgot Username</Link>
+                                        </div>
+                                    </div>
+                                </div>
                         </div>
                     </div>
                 </div>
