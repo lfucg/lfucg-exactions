@@ -385,35 +385,15 @@ class LotForm extends React.Component {
                                 </div>
                             ) : null}
                             {currentLot && currentLot.id && currentLot.plat &&
-                                <div>
-                                    <a
-                                      role="button"
-                                      data-toggle="collapse"
-                                      data-parent="#accordion"
-                                      href="#collapseNotes"
-                                      aria-expanded="true"
-                                      aria-controls="collapseNotes"
-                                    >
-                                        <div className="row section-heading" role="tab" id="headingNotes">
-                                            <div className="col-xs-1 caret-indicator" />
-                                            <div className="col-xs-10">
-                                                <h2>Notes</h2>
-                                            </div>
-                                        </div>
-                                    </a>
-                                    <div
-                                      id="collapseNotes"
-                                      className="panel-collapse collapse in row"
-                                      role="tabpanel"
-                                      aria-labelledby="#headingNotes"
-                                    >
-                                        <div className="panel-body">
-                                            <div className="col-xs-12">
-                                                <Notes content_type="plats_lot" object_id={currentLot.id} parent_content_type="plats_plat" parent_object_id={currentLot.plat.id} />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                <Notes
+                                  content_type="plats_lot"
+                                  object_id={currentLot.id}
+                                  parent_content_type="plats_plat"
+                                  parent_object_id={currentLot.plat.id}
+                                  ariaExpanded="true"
+                                  panelClass="panel-collapse collapse row in"
+                                  permission="lot"
+                                />
                             }
                         </div>
                         <div className="clearfix" />

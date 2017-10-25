@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { map } from 'ramda';
+import { map, contains } from 'ramda';
 import PropTypes from 'prop-types';
 
 import FormGroup from './FormGroup';
@@ -64,35 +64,67 @@ class Notes extends React.Component {
         })(notes));
 
         return (
-            <div className="container notes-page">
-                <div className="row">
-                    <h2>Existing Notes</h2>
-                </div>
-                <div className="row">
-                    <h4>
-                        <div className="col-sm-3">Information</div>
-                        <div className="col-sm-8">Notes</div>
-                    </h4>
-                </div>
-                <div className="row existing-notes">
-                    {notesList}
-                </div>
-                {currentUser && currentUser.id &&
-                    <form onSubmit={onSubmit} >
-                        <fieldset>
-                            <div className="row">
-                                <FormGroup label="Add Notes" id="note">
-                                    <textarea type="text" className="form-control" placeholder="Add Notes" rows="5" />
-                                </FormGroup>
+            <div className="notes-page">
+                <div className="panel-group" id="accordion" role="tablist" aria-multiselectable="false">
+                    <a
+                      role="button"
+                      data-toggle="collapse"
+                      data-parent="#accordion"
+                      href="#collapseNote"
+                      aria-expanded={this.props.ariaExpanded}
+                      aria-controls="collapseNote"
+                    >
+                        <div className="row section-heading" role="tab" id="headingNotes">
+                            <div className="col-xs-1 caret-indicator" />
+                            <div className="col-xs-10">
+                                <h2>Existing Notes</h2>
                             </div>
-                            <div className="col-sm-3">
-                                <button className="btn btn-lex">
-                                    Add Note
-                                </button>
+                        </div>
+                    </a>
+                    <div
+                      id="collapseNote"
+                      className={this.props.panelClass}
+                      role="tabpanel"
+                      aria-labelledby="#headingNotes"
+                    >
+                        <div className="panel-body">
+                            <div className="col-sm-12">
+                                {notes && notes.length > 0 &&
+                                    <div>
+                                        <div className="row">
+                                            <h2>Existing Notes</h2>
+                                        </div>
+                                        <div className="row">
+                                            <h4>
+                                                <div className="col-sm-3">Information</div>
+                                                <div className="col-sm-8">Notes</div>
+                                            </h4>
+                                        </div>
+                                        <div className="row existing-notes">
+                                            {notesList}
+                                        </div>
+                                    </div>
+                                }
+                                {currentUser && currentUser.permissions && contains(this.props.permission, Object.keys(currentUser.permissions)) &&
+                                    <form onSubmit={onSubmit} >
+                                        <fieldset>
+                                            <div className="row">
+                                                <FormGroup label="Add Notes" id="note">
+                                                    <textarea type="text" className="form-control" placeholder="Add Notes" rows="5" />
+                                                </FormGroup>
+                                            </div>
+                                            <div className="col-sm-3">
+                                                <button className="btn btn-lex">
+                                                    Add Note
+                                                </button>
+                                            </div>
+                                        </fieldset>
+                                    </form>
+                                }
                             </div>
-                        </fieldset>
-                    </form>
-                }
+                        </div>
+                    </div>
+                </div>
             </div>
         );
     }
@@ -108,6 +140,9 @@ Notes.propTypes = {
     object_id: PropTypes.number,
     parent_content_type: PropTypes.string,
     parent_object_id: PropTypes.number,
+    ariaExpanded: PropTypes.string,
+    panelClass: PropTypes.string,
+    permission: PropTypes.string,
 };
 
 function mapStateToProps(state) {
@@ -118,7 +153,7 @@ function mapStateToProps(state) {
     };
 }
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch, props) {
     return {
         onComponentDidMount(pass_props) {
             if (pass_props.content_type) {
@@ -134,7 +169,7 @@ function mapDispatchToProps(dispatch) {
             }
         },
         onSubmit() {
-            dispatch(postNote())
+            dispatch(postNote(props.content_type, props.object_id))
             .then(() => {
                 const clear_note = {
                     note: '',

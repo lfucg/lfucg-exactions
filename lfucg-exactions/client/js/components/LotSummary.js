@@ -307,6 +307,17 @@ class LotSummary extends React.Component {
                                         }
                                     </div>
                                 </div>
+                                {currentLot.id && currentLot.plat &&
+                                    <Notes
+                                      content_type="plats_lot"
+                                      object_id={currentLot.id}
+                                      parent_content_type="plats_plat"
+                                      parent_object_id={currentLot.plat.id}
+                                      ariaExpanded="false"
+                                      panelClass="panel-collapse collapse row"
+                                      permission="lot"
+                                    />
+                                }
                                 <a
                                   role="button"
                                   data-toggle="collapse"
