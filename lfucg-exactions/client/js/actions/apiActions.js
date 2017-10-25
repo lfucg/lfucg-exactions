@@ -10,6 +10,7 @@ import {
     LOGIN,
     LOGOUT,
     PASSWORD,
+    RESET_PASSWORD,
 
     GET_SUBDIVISIONS,
     GET_SUBDIVISION_ID,
@@ -117,7 +118,7 @@ export function login() {
     };
 }
 
-export function passwordReset() {
+export function passwordForgot() {
     return {
         type: API_CALL,
         endpoint: PASSWORD,
@@ -132,6 +133,30 @@ export function passwordReset() {
             } = activeForm;
             return {
                 email,
+            };
+        },
+    };
+}
+
+export function passwordReset(token, uid) {
+    return {
+        type: API_CALL,
+        endpoint: RESET_PASSWORD,
+        url: '/password_reset/',
+        method: 'POST',
+        body: (getState) => {
+            const {
+                activeForm,
+            } = getState();
+            const {
+                newPassword1,
+                newPassword2,
+            } = activeForm;
+            return {
+                newPassword1,
+                newPassword2,
+                token,
+                uid,
             };
         },
     };
