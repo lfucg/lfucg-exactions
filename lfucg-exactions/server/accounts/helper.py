@@ -1,10 +1,10 @@
 from django.conf import settings
 from django.template.loader import get_template
-
 from django.core.mail import EmailMultiAlternatives
 from django.core.mail import mail_admins
+from django.utils.http import int_to_base36
 
-def send_password_reset_email(user):
+def send_password_reset_email(user, token):
     text_template = get_template('emails/password_reset.txt')
     html_template = get_template('emails/password_reset.html')
 
@@ -13,6 +13,8 @@ def send_password_reset_email(user):
     context = {
         'user': user,
         'baseURL': settings.BASE_URL,
+        'uid': int_to_base36(user.id),
+        'token': token,
     }
 
     text_content = text_template.render(context)

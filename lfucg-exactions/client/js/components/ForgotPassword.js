@@ -7,7 +7,7 @@ import Footer from './Footer';
 import FormGroup from './FormGroup';
 
 import {
-    passwordReset,
+    passwordForgot,
 } from '../actions/apiActions';
 
 import {
@@ -75,7 +75,7 @@ function mapDispatchToProps(dispatch) {
             const email = document.getElementById('email_2').value;
             console.log(email);
             dispatch(formUpdate({ email }));
-            dispatch(passwordReset());
+            dispatch(passwordForgot());
         },
     };
 }

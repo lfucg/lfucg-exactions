@@ -4,6 +4,7 @@ from django.core import signing
 
 from rest_framework import authentication, permissions
 from django.contrib.auth import views as auth_views
+from django.contrib.auth.tokens import PasswordResetTokenGenerator
 
 from django.shortcuts import redirect
 from rest_framework import status as statuses, serializers
@@ -24,7 +25,6 @@ from django.utils.timezone import now
 from datetime import timedelta
 import random
 
-from pprint import pprint
 
 # @api_view(['POST'])
 # @permission_classes((AllowAny, ))
@@ -99,13 +99,13 @@ class Registration(GenericAPIView):
 @api_view(['POST'])
 @permission_classes((AllowAny, ))
 def forgot_password(request):
-    print('we outchea!')
     email = request.data.get('email', None)
     user = User.objects.get(email=email)
-    print(user)
+    token = PasswordResetTokenGenerator().make_token(user)
     if user:
-        send_password_reset_email(user)
-        
+        print(user)
+        print('yep')
+        send_password_reset_email(user, token)
     # Always return success
     return Response({'message': 'An email was sent to your account with instructions to reset your password.'}, status=statuses.HTTP_200_OK)
 
@@ -121,30 +121,42 @@ def forgot_username(request):
     # Always return success
     return Response({'message': 'An email was sent to your account with your username.'}, status=statuses.HTTP_200_OK)
 
+@api_view(['POST'])
+@permission_classes((AllowAny, ))
+def reset_password(request):
+    user = User.objects.get(id=request.data['uid'])
+    token = request.data['token']
+    response, status, user = _validate_token(user, token)
+    if status == statuses.HTTP_200_OK:
+        user.set_password(request.data.get('newPassword1'))
+        user.save()
+        _delete_token(token)
+        response = {'success': 'New password has been saved.'}
 
-# def _validate_token(token):
-#     response = {}
-#     status = statuses.HTTP_400_BAD_REQUEST
-#     user = None
-#     try:
-#         data = signing.loads(token, max_age=900) # 15 minute expiration
-#         data_token = data.get('passtoken', None)
-#         email = data.get('email', None)
-#         if email is not None:
-#             user = User.objects.get(email=email)
-#             passtoken = ExpiringToken.objects.filter(user_id=user.id)
-#             if passtoken.exists() and passtoken[0].key == data_token:
-#                 response = None
-#                 status = statuses.HTTP_200_OK
-#             else:
-#                 response['token'] = 'This password reset request cannot be used any more.'
-#         else:
-#             response['token'] = 'Missing email in password reset request.'
-#     except signing.SignatureExpired:
-#         response['token'] = 'Reset password request has expired.'
-#     except signing.BadSignature:
-#         response['token'] = 'Invalid reset password request.'
-#     return response, status, user
+    return Response(response, status=status)
+
+def _validate_token(user, token):
+    response = {}
+    status = statuses.HTTP_400_BAD_REQUEST
+    print('we outchea')
+    print(PasswordResetTokenGenerator().check_token(user, token))
+    if PasswordResetTokenGenerator().check_token(user, token):
+        response = None
+        status = statuses.HTTP_200_OK
+        print(status)
+            
+    #     if user.email is not None:
+    #         passtoken = ExpiringToken.objects.filter(user_id=user.id)
+    #         if passtoken.exists() and passtoken[0].key == data_token:
+    #         else:
+    #             response['token'] = 'This password reset request cannot be used any more.'
+    #     else:
+    #         response['token'] = 'Missing email in password reset request.'
+    # except signing.SignatureExpired:
+    #     response['token'] = 'Reset password request has expired.'
+    # except signing.BadSignature:
+    #     response['token'] = 'Invalid reset password request.'
+    return response, status, user
 
 def _delete_token(token):
     try:
