@@ -333,6 +333,8 @@ class PlatSummary extends React.Component {
                                 <Notes
                                   content_type="plats_plat"
                                   object_id={plats.id}
+                                  parent_content_type="plats_subdivision"
+                                  parent_object_id={plats.subdivision && plats.subdivision.id}
                                   ariaExpanded="false"
                                   panelClass="panel-collapse collapse row"
                                   permission="plat"

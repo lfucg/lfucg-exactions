@@ -313,6 +313,8 @@ class LotSummary extends React.Component {
                                       object_id={currentLot.id}
                                       parent_content_type="plats_plat"
                                       parent_object_id={currentLot.plat.id}
+                                      grandparent_content_type="plats_subdivision"
+                                      grandparent_object_id={currentLot.plat.subdivision && currentLot.plat.subdivision.id}
                                       ariaExpanded="false"
                                       panelClass="panel-collapse collapse row"
                                       permission="lot"

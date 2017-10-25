@@ -465,6 +465,8 @@ class PlatForm extends React.Component {
                                 <Notes
                                   content_type="plats_plat"
                                   object_id={plats.id}
+                                  parent_content_type="plats_subdivision"
+                                  parent_object_id={plats.subdivision && plats.subdivision.id}
                                   ariaExpanded="true"
                                   panelClass="panel-collapse collapse row in"
                                   permission="plat"
