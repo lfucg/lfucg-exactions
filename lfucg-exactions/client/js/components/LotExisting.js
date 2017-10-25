@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { map, filter } from 'ramda';
 import PropTypes from 'prop-types';
-// import { CSVLink } from 'react-csv';
+import { CSVLink } from 'react-csv';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
@@ -180,6 +180,41 @@ class LotExisting extends React.Component {
                     { filterField: 'filter_is_approved', displayName: 'Approval', list: [{ id: true, name: 'Approved' }, { id: false, name: 'Unapproved' }] },
                   ]}
                 />
+                <div className="row">
+                    <div className="col-xs-12 text-center">
+                        <button type="button" className="btn button-modal-link" data-toggle="modal" data-target="#searchCSVModal" onClick={removeSearchPagination} disabled={payments.length === 0}>
+                            <i className="fa fa-download button-modal-icon" aria-hidden="true" />&nbsp;Generate CSV from Current Results
+                        </button>
+                    </div>
+                </div>
+                <div className="modal fade" id="searchCSVModal" tabIndex="-1" role="dialog" aria-labelledby="modalLabel">
+                    <div className="modal-dialog" role="document">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h3 className="modal-title text-center" id="modalLabel">Click below to download the CSV of your search results.</h3>
+                            </div>
+                            <div className="modal-body text-center">
+                                <CSVLink className="btn btn-modal" data={csvData} filename="LotReport.csv" headers={headers}>
+                                    <i className="fa fa-download text-white" aria-hidden="true" />
+                                    &nbsp;Download
+                                </CSVLink>
+                                <h5>Lots included in file:</h5>
+                                <div className="csv-modal">
+                                    {map((lot) => {
+                                        return (
+                                            <p key={lot.id}>{lot.address_full}</p>
+                                        );
+                                    })(lots)
+                                    }
+                                </div>
+                            </div>
+                            <div className="modal-footer">
+                                <button type="button" className="btn btn-default" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
                 <div className="inside-body">
                     <div className="container">
@@ -192,41 +227,6 @@ class LotExisting extends React.Component {
         );
     }
 }
-                // <div className="row">
-                //     <div className="col-xs-12 text-center">
-                //         <button type="button" className="btn button-modal-link" data-toggle="modal" data-target="#searchCSVModal" onClick={removeSearchPagination} disabled={payments.length === 0}>
-                //             <i className="fa fa-download button-modal-icon" aria-hidden="true" />&nbsp;Generate CSV from Current Results
-                //         </button>
-                //     </div>
-                // </div>
-                // <div className="modal fade" id="searchCSVModal" tabIndex="-1" role="dialog" aria-labelledby="modalLabel">
-                //     <div className="modal-dialog" role="document">
-                //         <div className="modal-content">
-                //             <div className="modal-header">
-                //                 <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                //                 <h3 className="modal-title text-center" id="modalLabel">Click below to download the CSV of your search results.</h3>
-                //             </div>
-                //             <div className="modal-body text-center">
-                //                 <CSVLink className="btn btn-modal" data={csvData} filename="LotReport.csv" headers={headers}>
-                //                     <i className="fa fa-download text-white" aria-hidden="true" />
-                //                     &nbsp;Download
-                //                 </CSVLink>
-                //                 <h5>Lots included in file:</h5>
-                //                 <div className="csv-modal">
-                //                     {map((lot) => {
-                //                         return (
-                //                             <p key={lot.id}>{lot.address_full}</p>
-                //                         );
-                //                     })(lots)
-                //                     }
-                //                 </div>
-                //             </div>
-                //             <div className="modal-footer">
-                //                 <button type="button" className="btn btn-default" data-dismiss="modal">Close</button>
-                //             </div>
-                //         </div>
-                //     </div>
-                // </div>
 
 LotExisting.propTypes = {
     currentUser: PropTypes.object,
