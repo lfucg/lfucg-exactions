@@ -623,7 +623,7 @@ export function getNoteContent() {
     };
 }
 
-export function postNote() {
+export function postNote(content_type, object_id) {
     return {
         type: API_CALL,
         endpoint: POST_NOTE,
@@ -636,8 +636,6 @@ export function postNote() {
             } = getState();
             const {
                 note,
-                content_type,
-                object_id,
             } = activeForm;
             const {
                 id,

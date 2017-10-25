@@ -8,6 +8,7 @@ import PropTypes from 'prop-types';
 import Navbar from './Navbar';
 import Footer from './Footer';
 
+import Notes from './Notes';
 import FormGroup from './FormGroup';
 import Breadcrumbs from './Breadcrumbs';
 import DeclineDelete from './DeclineDelete';

@@ -8,7 +8,6 @@ export const API_CALL_VALIDATION_ERROR = 'API_CALL_VALIDATION_ERROR';
 export const FORM_INIT = 'FORM_INIT';
 export const FORM_UPDATE = 'FORM_UPDATE';
 export const FORM_RESET = 'FORM_RESET';
-export const CURRENT_JOB_UPDATE = 'CURRENT_JOB_UPDATE';
 
 // Flash Messages
 export const FLASH_MESSAGE_SET = 'FLASH_MESSAGE_SET';

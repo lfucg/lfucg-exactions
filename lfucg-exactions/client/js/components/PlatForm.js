@@ -462,37 +462,13 @@ class PlatForm extends React.Component {
                                 </div>
                             ) : null }
                             {plats.id &&
-                                <div>
-                                    <a
-                                      role="button"
-                                      data-toggle="collapse"
-                                      data-parent="#accordion"
-                                      href="#collapseNotes"
-                                      aria-expanded="true"
-                                      aria-controls="collapseNotes"
-                                    >
-                                        <div className="row section-heading" role="tab" id="headingNotes">
-                                            <div className="col-xs-1 caret-indicator" />
-                                            <div className="col-xs-10">
-                                                <h2>Notes</h2>
-                                            </div>
-                                        </div>
-                                    </a>
-                                    <div
-                                      id="collapseNotes"
-                                      className="panel-collapse collapse in row"
-                                      role="tabpanel"
-                                      aria-labelledby="#headingNotes"
-                                    >
-                                        <div className="panel-body">
-                                            <div className="col-xs-12">
-                                                {plats.id &&
-                                                    <Notes content_type="plats_plat" object_id={plats.id} />
-                                                }
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                <Notes
+                                  content_type="plats_plat"
+                                  object_id={plats.id}
+                                  ariaExpanded="true"
+                                  panelClass="panel-collapse collapse row in"
+                                  permission="plat"
+                                />
                             }
                         </div>
                         {plats.id &&
