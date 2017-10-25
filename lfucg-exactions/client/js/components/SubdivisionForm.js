@@ -84,6 +84,17 @@ class SubdivisionForm extends React.Component {
                                     <DeclineDelete currentForm="/subdivision/" selectedEntry={selectedSubdivision} parentRoute="subdivision" />
                                 </div>
                             </form>
+                            <div className="clearfix" />
+                            <hr aria-hidden="true" />
+                            {selectedSubdivision &&
+                                <Notes
+                                  content_type="plats_subdivision"
+                                  object_id={selectedSubdivision}
+                                  ariaExpanded="true"
+                                  panelClass="panel-collapse collapse row in"
+                                  permission="subdivision"
+                                />
+                            }
                         </div>
                     </div>
                 </div>

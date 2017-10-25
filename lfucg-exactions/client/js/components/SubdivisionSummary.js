@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
+import Notes from './Notes';
 
 import {
     getSubdivisionID,
@@ -172,6 +173,15 @@ class SubdivisionSummary extends React.Component {
                                     </div>
                                 </div>
                             </div>
+                            {subdivisions && subdivisions.id &&
+                                <Notes
+                                  content_type="plats_subdivision"
+                                  object_id={subdivisions.id}
+                                  ariaExpanded="false"
+                                  panelClass="panel-collapse collapse row"
+                                  permission="subdivision"
+                                />
+                            }
 
                             {subdivisionPlats ? (
                                 <div>

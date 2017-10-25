@@ -22,6 +22,8 @@ class NoteViewSet(viewsets.ModelViewSet):
         child_object_id = self.request.query_params.get('object_id', None)
         parent_content_type_string = self.request.query_params.get('parent_content_type', None)
         parent_object_id = self.request.query_params.get('parent_object_id', None)
+        grandparent_content_type_string = self.request.query_params.get('grandparent_content_type', None)
+        grandparent_object_id = self.request.query_params.get('grandparent_object_id', None)
                 
         if child_content_type_string is not None:
             split_child_content = child_content_type_string.split('_')
@@ -41,7 +43,22 @@ class NoteViewSet(viewsets.ModelViewSet):
 
                         parent_content_type = ContentType.objects.get(app_label=parent_content_type_app_label, model=parent_content_type_model)
 
-                        if parent_content_type and child_content_type:
+                        if grandparent_content_type_string is not None:
+                            split_grandparent_string = grandparent_content_type_string.split('_')
+
+                            if len(split_grandparent_string) == 2:
+                                grandparent_content_type_app_label = split_grandparent_string[0]
+                                grandparent_content_type_model = split_grandparent_string[1]
+
+                                grandparent_content_type = ContentType.objects.get(app_label=grandparent_content_type_app_label, model=grandparent_content_type_model)
+
+                                if grandparent_content_type and parent_content_type and child_content_type:
+                                    query_list = queryset.filter(
+                                        Q(content_type=grandparent_content_type, object_id=grandparent_object_id) |
+                                        Q(content_type=parent_content_type, object_id=parent_object_id) |
+                                        Q(content_type=child_content_type, object_id=child_object_id))
+
+                        elif parent_content_type and child_content_type:
                             query_list = queryset.filter(
                                 Q(content_type=parent_content_type, object_id=parent_object_id) |
                                 Q(content_type=child_content_type, object_id=child_object_id))

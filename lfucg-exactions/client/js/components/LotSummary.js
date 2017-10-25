@@ -318,35 +318,6 @@ class LotSummary extends React.Component {
                                       permission="lot"
                                     />
                                 }
-                                <a
-                                  role="button"
-                                  data-toggle="collapse"
-                                  data-parent="#accordion"
-                                  href="#collapseNotes"
-                                  aria-expanded="false"
-                                  aria-controls="collapseNotes"
-                                >
-                                    <div className="row section-heading" role="tab" id="headingNotes">
-                                        <div className="col-xs-1 caret-indicator" />
-                                        <div className="col-xs-8 col-xs-offset-1">
-                                            <h2>Notes</h2>
-                                        </div>
-                                    </div>
-                                </a>
-                                <div
-                                  id="collapseNotes"
-                                  className="panel-collapse collapse row"
-                                  role="tabpanel"
-                                  aria-labelledby="#headingNotes"
-                                >
-                                    <div className="panel-body">
-                                        <div className="col-xs-12">
-                                            {currentLot.id &&
-                                                <Notes content_type="plats_lot" object_id={currentLot.id} parent_content_type="plats_plat" parent_object_id={currentLot.plat.id} />
-                                            }
-                                        </div>
-                                    </div>
-                                </div>
 
                                 {currentLot.plat ? <div>
                                     <a
