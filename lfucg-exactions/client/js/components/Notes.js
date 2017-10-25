@@ -16,19 +16,13 @@ import {
 
 class Notes extends React.Component {
     componentDidMount() {
-        this.props.onComponentDidMount({
-            content_type: this.props.content_type,
-            object_id: this.props.object_id,
-            parent_content_type: this.props.parent_content_type,
-            parent_object_id: this.props.parent_object_id,
-        });
+        this.props.onComponentDidMount();
     }
 
 
     render() {
         const {
             currentUser,
-            activeForm,
             notes,
             onSubmit,
         } = this.props;
@@ -77,7 +71,7 @@ class Notes extends React.Component {
                         <div className="row section-heading" role="tab" id="headingNotes">
                             <div className="col-xs-1 caret-indicator" />
                             <div className="col-xs-10">
-                                <h2>Existing Notes</h2>
+                                <h2>Notes</h2>
                             </div>
                         </div>
                     </a>
@@ -132,14 +126,9 @@ class Notes extends React.Component {
 
 Notes.propTypes = {
     currentUser: PropTypes.object,
-    activeForm: PropTypes.object,
     notes: PropTypes.object,
     onComponentDidMount: PropTypes.func,
     onSubmit: PropTypes.func,
-    content_type: PropTypes.string,
-    object_id: PropTypes.number,
-    parent_content_type: PropTypes.string,
-    parent_object_id: PropTypes.number,
     ariaExpanded: PropTypes.string,
     panelClass: PropTypes.string,
     permission: PropTypes.string,
@@ -148,25 +137,16 @@ Notes.propTypes = {
 function mapStateToProps(state) {
     return {
         currentUser: state.currentUser,
-        activeForm: state.activeForm,
         notes: state.notes,
     };
 }
 
 function mapDispatchToProps(dispatch, props) {
     return {
-        onComponentDidMount(pass_props) {
-            if (pass_props.content_type) {
-                const update_content = {};
-
-                update_content.content_type = pass_props.content_type;
-                update_content.object_id = pass_props.object_id;
-                update_content.parent_content_type = pass_props.parent_content_type;
-                update_content.parent_object_id = pass_props.parent_object_id;
-
-                dispatch(formUpdate(update_content));
-                dispatch(getNoteContent());
-            }
+        onComponentDidMount() {
+            console.log('CONTENT TYPE', props.content_type);
+            console.log('OBJECT ID', props.object_id);
+            dispatch(getNoteContent(props.content_type, props.object_id, props.parent_content_type, props.parent_object_id, props.grandparent_content_type, props.grandparent_object_id));
         },
         onSubmit() {
             dispatch(postNote(props.content_type, props.object_id))
@@ -175,7 +155,7 @@ function mapDispatchToProps(dispatch, props) {
                     note: '',
                 };
                 dispatch(formUpdate(clear_note));
-                dispatch(getNoteContent());
+                dispatch(getNoteContent(props.content_type, props.object_id, props.parent_content_type, props.parent_object_id, props.grandparent_content_type, props.grandparent_object_id));
             });
         },
     };
