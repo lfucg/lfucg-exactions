@@ -11,6 +11,6 @@ export function flashMessageSet(message, messageType) {
 export function flashMessageClear() {
     return {
         type: FLASH_MESSAGE_CLEAR,
-        message: null,        },
+        message: null,        
     };
 }
