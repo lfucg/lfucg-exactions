@@ -81,6 +81,8 @@ import {
     GET_PAGINATION,
     SEARCH_QUERY,
 
+    POST_DELETE,
+
 } from '../constants/apiConstants';
 
 export function getMe() {
@@ -1225,7 +1227,7 @@ export function getAccountAccountLedgers(selectedAccount) {
     return {
         type: API_CALL,
         endpoint: GET_ACCOUNT_ACCOUNT_LEDGERS,
-        url: `/ledger/?account_from=${selectedAccount}&account_to=${selectedAccount}`,
+        url: `/ledger/?acct=${selectedAccount}`,
     };
 }
 
@@ -1386,3 +1388,18 @@ export function searchQuery(isCSV) {
         },
     };
 }
+
+export function postDelete(currentForm, selectedEntry) {
+    return {
+        type: API_CALL,
+        endpoint: POST_DELETE,
+        url: `${currentForm}${selectedEntry}/`,
+        method: 'PUT',
+        body: () => {
+            return {
+                is_active: false,
+            };
+        },
+    };
+}
+

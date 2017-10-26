@@ -63,8 +63,8 @@ class AccountSummary extends React.Component {
                             <p className="col-sm-4 col-xs-6">Approval: {plat.is_approved ? 'Approved' : 'Not Approved'}</p>
                             <p className="col-sm-4 col-xs-6">Expansion Area: {plat.expansion_area}</p>
                             <p className="col-sm-4 col-xs-6">Slide: {plat.slide}</p>
-                            <p className="col-sm-4 col-xs-6">Sewer Exactions: ${plat.sewer_due}</p>
-                            <p className="col-sm-4 col-xs-6">Non-Sewer Exactions: ${plat.non_sewer_due}</p>
+                            <p className="col-sm-4 col-xs-6">Sewer Exactions: {plat.plat_exactions && plat.plat_exactions.plat_sewer_due}</p>
+                            <p className="col-sm-4 col-xs-6">Non-Sewer Exactions: {plat.plat_exactions && plat.plat_exactions.plat_non_sewer_due}</p>
                         </div>
                     </div>
                 );
@@ -100,7 +100,7 @@ class AccountSummary extends React.Component {
                             </div>
                         </div>
                         <div className="row">
-                            <p className="col-sm-4 col-xs-6">Current Exactions: ${lot.lot_exactions && lot.lot_exactions.current_exactions}</p>
+                            <p className="col-sm-4 col-xs-6">Current Exactions: {lot.lot_exactions && lot.lot_exactions.current_exactions}</p>
                             <p className="col-sm-4 col-xs-6">Approval: {lot.is_approved ? 'Approved' : 'Not Approved'}</p>
                             <p className="col-sm-4 col-xs-6">Lot Number: {lot.lot_number}</p>
                             <p className="col-sm-4 col-xs-6">Parcel ID: {lot.parcel_id}</p>
@@ -178,6 +178,7 @@ class AccountSummary extends React.Component {
                             </div>
                         </div>
                         <div className="row">
+                            <p className="col-sm-4 col-xs-6">Total Paid: {payment.total_paid}</p>
                             <p className="col-sm-4 col-xs-6">Payment Type: {payment.payment_type_display}</p>
                             <p className="col-sm-4 col-xs-6">Paid By: {payment.paid_by}</p>
                             <p className="col-sm-4 col-xs-6">Paid By Type: {payment.paid_by_type_display}</p>
@@ -220,7 +221,9 @@ class AccountSummary extends React.Component {
                             <p className="col-sm-4 col-xs-6">Account From: {accountLedger.account_from.account_name}</p>
                             <p className="col-sm-4 col-xs-6">Account To: {accountLedger.account_to.account_name}</p>
                             <p className="col-sm-4 col-xs-6">Agreement: {accountLedger.agreement.resolution_number}</p>
-                            <p className="col-xs-12">Lot: {accountLedger.lot.address_full}</p>
+                            <p className="col-md-3 col-sm-4 col-xs-6">Non-Sewer Credits: {accountLedger.dollar_values && accountLedger.dollar_values.dollar_non_sewer}</p>
+                            <p className="col-md-3 col-sm-4 col-xs-6">Sewer Credits: {accountLedger.dollar_values && accountLedger.dollar_values.dollar_sewer}</p>
+                            <p className="col-xs-12">Lot: {accountLedger.lot && accountLedger.lot.address_full}</p>
                         </div>
                     </div>
                 );

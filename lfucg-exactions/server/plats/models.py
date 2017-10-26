@@ -8,7 +8,7 @@ from notes.models import *
 
 ZONES = (
     ('EAR-1', 'EAR-1'),
-    ('EAR1-SRA', 'EAR1-SRA'),
+    ('EAR-1SRA', 'EAR-1SRA'),
     ('EAR-2', 'EAR-2'),
     ('EAR-3', 'EAR-3'),
     ('CC(RES)', 'CC(RES)'),
@@ -83,8 +83,8 @@ class Plat(models.Model):
 
     expansion_area = models.CharField(max_length=100, choices=EXPANSION_AREAS)
     unit = models.CharField(max_length=200, null=True, blank=True)
-    section = models.CharField(max_length=200)
-    block = models.CharField(max_length=200)
+    section = models.CharField(max_length=200, null=True, blank=True)
+    block = models.CharField(max_length=200, null=True, blank=True)
     
     buildable_lots = models.IntegerField()
     non_buildable_lots = models.IntegerField(default=0)
@@ -165,6 +165,9 @@ class Lot(models.Model):
     address_state = models.CharField(max_length=50, choices=STATES, default='KY')
     address_zip = models.CharField(max_length=10, choices=ZIPCODES, blank=True, null=True)
     address_full = models.CharField(max_length=300)
+
+    alternative_address_number = models.IntegerField(blank=True, null=True)
+    alternative_address_street = models.CharField(max_length=200, blank=True, null=True)
 
     dues_roads_dev = models.DecimalField(max_digits=20, decimal_places=2, default=0)
     dues_roads_own = models.DecimalField(max_digits=20, decimal_places=2, default=0)

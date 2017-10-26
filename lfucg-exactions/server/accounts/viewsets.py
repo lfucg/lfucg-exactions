@@ -26,7 +26,7 @@ class AccountViewSet(viewsets.ModelViewSet):
     filter_fields = ('plat_account__id', 'lot_account__id')
 
     def get_queryset(self):
-        queryset = Account.objects.all()
+        queryset = Account.objects.exclude(is_active=False)
         PageNumberPagination.page_size = 0
         
         paginatePage = self.request.query_params.get('paginatePage', None)
@@ -63,14 +63,14 @@ class AgreementViewSet(viewsets.ModelViewSet):
     filter_fields = ('agreement_type', 'account_id', 'expansion_area', 'is_approved',)
 
     def get_queryset(self):
-        queryset = Agreement.objects.all()
+        queryset = Agreement.objects.exclude(is_active=False)
         paginatePage = self.request.query_params.get('paginatePage', None)
         pageSize = self.request.query_params.get('pageSize', settings.PAGINATION_SIZE)
 
         account_id_set = self.request.query_params.get('account_id', None)
         if account_id_set is not None:
             queryset = queryset.filter(account_id=account_id_set)
-            
+
         if paginatePage is not None:
             pagination_class = PageNumberPagination
             PageNumberPagination.page_size = pageSize
@@ -102,7 +102,7 @@ class PaymentViewSet(viewsets.ModelViewSet):
     filter_fields = ('payment_type', 'paid_by_type', 'credit_account', 'lot_id', 'credit_source', 'is_approved',)
 
     def get_queryset(self):
-        queryset = Payment.objects.all()
+        queryset = Payment.objects.exclude(is_active=False)
         PageNumberPagination.page_size = 0
 
         paginatePage = self.request.query_params.get('paginatePage', None)
@@ -151,7 +151,7 @@ class ProjectViewSet(viewsets.ModelViewSet):
     filter_fields = ('project_category', 'project_status', 'agreement_id', 'project_type', 'expansion_area', 'is_approved',)
 
     def get_queryset(self):
-        queryset = Project.objects.all()
+        queryset = Project.objects.exclude(is_active=False)
         PageNumberPagination.page_size = 0
 
         paginatePage = self.request.query_params.get('paginatePage', None)
@@ -193,7 +193,7 @@ class ProjectCostEstimateViewSet(viewsets.ModelViewSet):
 
 
     def get_queryset(self):
-        queryset = ProjectCostEstimate.objects.all()
+        queryset = ProjectCostEstimate.objects.exclude(is_active=False)
         PageNumberPagination.page_size = 0
 
         paginatePage = self.request.query_params.get('paginatePage', None)
@@ -230,9 +230,8 @@ class AccountLedgerViewSet(viewsets.ModelViewSet):
     filter_fields = ('entry_type', 'agreement', 'lot', 'account_to', 'account_from', 'is_approved',)
 
     def get_queryset(self):
-        queryset = AccountLedger.objects.all()
+        queryset = AccountLedger.objects.exclude(is_active=False)
         PageNumberPagination.page_size = 0
-
         paginatePage = self.request.query_params.get('paginatePage', None)
         pageSize = self.request.query_params.get('pageSize', settings.PAGINATION_SIZE)
         
@@ -244,9 +243,9 @@ class AccountLedgerViewSet(viewsets.ModelViewSet):
         if lot_set is not None:
             queryset = queryset.filter(lot=lot_set)
 
-        account_from_set = self.request.query_params.get('account_from', None)
-        if account_from_set is not None:
-            queryset = queryset.filter(account_from=account_from_set)
+        account_set = self.request.query_params.get('acct', None)
+        if account_set is not None:
+            queryset = queryset.filter(Q(account_from=account_set) | Q(account_to=account_set))
 
         agreement_set = self.request.query_params.get('agreement', None)
         if agreement_set is not None:

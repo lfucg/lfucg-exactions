@@ -14,6 +14,7 @@ import Notes from './Notes';
 import Uploads from './Uploads';
 
 import FormGroup from './FormGroup';
+import DeclineDelete from './DeclineDelete';
 
 import {
     formInit,
@@ -46,6 +47,8 @@ class LotForm extends React.Component {
             onLotSubmit,
             onLotDues,
             selectedLot,
+            showExactions,
+            hideExactions,
         } = this.props;
 
         const currentParam = this.props.params.id;
@@ -124,7 +127,7 @@ class LotForm extends React.Component {
                               aria-labelledby="#headingLot"
                             >
                                 <div className="panel-body">
-                                    <form onSubmit={onLotSubmit} >
+                                    <form >
 
                                         <fieldset>
                                             <div className="row form-subheading">
@@ -233,22 +236,31 @@ class LotForm extends React.Component {
                                                 </div>
                                                 <div className="col-sm-6">
                                                     <FormGroup label="Permit ID" id="permit_id">
-                                                        <input type="text" className="form-control" placeholder="Permit ID" disabled={currentLot && currentLot.lot_exactions && currentLot.lot_exactions.current_exactions_number > 0} />
+                                                        <input type="text" className="form-control" placeholder="Permit ID" onFocus={showExactions} onBlur={hideExactions}/>
                                                     </FormGroup>
-                                                    {currentLot && currentLot.lot_exactions && currentLot.lot_exactions.current_exactions_number > 0 &&
-                                                        <span className="help-block">This lot still has {currentLot.lot_exactions.current_exactions} in exactions. You may add a Permit ID when exactions are paid.</span>
-                                                    }
                                                 </div>
                                             </div>
                                         </fieldset>
-                                        <button disabled={!submitEnabled} className="btn btn-lex">Submit</button>
-                                        {!submitEnabled ? (
-                                            <div>
-                                                <div className="clearfix" />
-                                                <span> * All required fields must be filled.</span>
+                                        <div className="row">
+                                            <div className="col-sm-4 col-xs-6">
+                                                <button disabled={!submitEnabled} className="btn btn-lex" onClick={onLotSubmit} >Submit</button>
+                                                {!submitEnabled ? (
+                                                    <div>
+                                                        <div className="clearfix" />
+                                                        <span> * All required fields must be filled.</span>
+                                                    </div>
+                                                ) : null
+                                                }
                                             </div>
-                                        ) : null
-                                        }
+                                            <div className="col-sm-4 col-xs-6">
+                                                {activeForm.show_exactions && currentLot.lot_exactions && currentLot.lot_exactions.current_exactions_number > 0 &&
+                                                    <h3 className="help-block alert alert-danger">&nbsp;There are still {currentLot.lot_exactions.current_exactions} in exactions due on this lot.</h3>
+                                                }
+                                            </div>
+                                            <div className="col-sm-4 col-xs-6">
+                                                <DeclineDelete currentForm="/lot/" selectedEntry={selectedLot} parentRoute="lot" />
+                                            </div>
+                                        </div>
                                     </form>
                                 </div>
                             </div>
@@ -271,12 +283,12 @@ class LotForm extends React.Component {
                                     </a>
                                     <div
                                       id="collapseLotExactions"
-                                      className="panel-collapse collapse in row"
+                                      className="panel-collapse collapse row"
                                       role="tabpanel"
                                       aria-labelledby="#headingLotExactions"
                                     >
                                         <div className="panel-body">
-                                            <form onSubmit={onLotDues} >
+                                            <form >
                                                 <fieldset>
                                                     <div className="row form-subheading">
                                                         <h3>Exactions</h3>
@@ -354,7 +366,19 @@ class LotForm extends React.Component {
                                                         </div>
                                                     </div>
                                                 </fieldset>
-                                                <button className="btn btn-lex" >Submit</button>
+                                                <div className="col-xs-8">
+                                                    <button disabled={!submitEnabled} className="btn btn-lex" onClick={onLotDues}  >Submit</button>
+                                                    {!submitEnabled ? (
+                                                        <div>
+                                                            <div className="clearfix" />
+                                                            <span> * All required fields must be filled.</span>
+                                                        </div>
+                                                    ) : null
+                                                    }
+                                                </div>
+                                                <div className="col-xs-4">
+                                                    <DeclineDelete currentForm="/lot/" selectedEntry={selectedLot} parentRoute="lot" />
+                                                </div>
                                             </form>
                                         </div>
                                     </div>
@@ -422,6 +446,8 @@ LotForm.propTypes = {
     formChange: PropTypes.func,
     onLotSubmit: PropTypes.func,
     onLotDues: PropTypes.func,
+    showExactions: PropTypes.func,
+    hideExactions: PropTypes.func,
     selectedLot: PropTypes.string,
 };
 
@@ -442,9 +468,6 @@ function mapDispatchToProps(dispatch, params) {
     return {
         onComponentDidMount() {
             dispatch(formInit());
-            dispatch(getLots());
-            dispatch(getPlats());
-            dispatch(getAccounts());
             if (selectedLot) {
                 dispatch(getLotID(selectedLot))
                 .then((data_lot) => {
@@ -502,19 +525,6 @@ function mapDispatchToProps(dispatch, params) {
                         });
                     }
                 });
-            } else if (plat_start) {
-                dispatch(getPlatID(plat_start))
-                .then((data_plat_start) => {
-                    const plat_update = {
-                        plat: data_plat_start.response.id,
-                        plat_name: data_plat_start.response.name,
-                        first_section: false,
-                        account_show: '',
-                        plat_show: data_plat_start.response.plat ? `${data_plat_start.response.plat.id},${data_plat_start.response.plat.name}` : '',
-                        address_zip_show: '',
-                    };
-                    dispatch(formUpdate(plat_update));
-                });
             } else {
                 const else_update = {
                     first_section: false,
@@ -524,6 +534,28 @@ function mapDispatchToProps(dispatch, params) {
                 };
                 dispatch(formUpdate(else_update));
             }
+            dispatch(getLots());
+            dispatch(getPlats())
+            .then((all_plats) => {
+                if (plat_start) {
+                    const plat_start_number = parseInt(plat_start, 10);
+                    const matching_plats = all_plats.response.filter(plat => (plat.id === plat_start_number));
+
+                    if (matching_plats.length > 0) {
+                        const starting_plat = matching_plats[0];
+                        const plat_update = {
+                            plat: starting_plat.id,
+                            plat_name: starting_plat.name,
+                            first_section: false,
+                            account_show: '',
+                            plat_show: `${starting_plat.id},${starting_plat.name}`,
+                            address_zip_show: '',
+                        };
+                        dispatch(formUpdate(plat_update));
+                    }
+                }
+            });
+            dispatch(getAccounts());
         },
         formChange(field) {
             return (e, ...args) => {
@@ -581,7 +613,14 @@ function mapDispatchToProps(dispatch, params) {
                 });
             }
         },
+        showExactions() {
+            dispatch(formUpdate({ show_exactions: true }));
+        },
+        hideExactions() {
+            dispatch(formUpdate({ show_exactions: false }));
+        },
         selectedLot,
+        plat_start,
     };
 }
 

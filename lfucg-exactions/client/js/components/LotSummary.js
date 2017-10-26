@@ -117,8 +117,8 @@ class LotSummary extends React.Component {
                             <p className="col-sm-4 col-xs-6">Account To: {accountLedger.account_to.account_name}</p>
                             <p className="col-sm-4 col-xs-6">Agreement Resolution: {accountLedger.agreement.resolution_number}</p>
                             <p className="col-md-3 col-sm-4 col-xs-6">Entry Type: {accountLedger.entry_type_display}</p>
-                            <p className="col-md-3 col-sm-4 col-xs-6">Non-Sewer Credits: {accountLedger.non_sewer_credits}</p>
-                            <p className="col-md-3 col-sm-4 col-xs-6">Sewer Credits: {accountLedger.sewer_credits}</p>
+                            <p className="col-md-3 col-sm-4 col-xs-6">Non-Sewer Credits: {accountLedger.dollar_values && accountLedger.dollar_values.dollar_non_sewer}</p>
+                            <p className="col-md-3 col-sm-4 col-xs-6">Sewer Credits: {accountLedger.dollar_values && accountLedger.dollar_values.dollar_sewer}</p>
                         </div>
                     </div>
                 );
@@ -154,13 +154,24 @@ class LotSummary extends React.Component {
                                             <div>
                                                 <div className="modal-header">
                                                     <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                                    <h3 className="modal-title" id="modalLabel">Exactions due on this lot.</h3>
+                                                    <h3 className="modal-title text-center" id="modalLabel">Permit Addition</h3>
                                                 </div>
                                                 <div className="modal-body">
-                                                    <h4 className="text-center">Our records indicate an outstanding balance of <strong>{(currentLot.lot_exactions.current_exactions).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</strong> for this lot. Please contact finance to submit payment prior to applying for a permit for:</h4>
-                                                    <h4 className="text-center">{currentLot.address_full}</h4>
+                                                    <h4 className="text-center">Records indicate an outstanding exactions balance of</h4>
+                                                    <div className="row text-center alert alert-danger">
+                                                        <h2><strong>{currentLot.lot_exactions.current_exactions}</strong></h2>
+                                                    </div>
+                                                    <h4 className="text-center">for {currentLot.address_full}.</h4>
+                                                    <div className="row">
+                                                        <div className="text-center col-sm-4 col-sm-offset-4 col-xs-12">
+                                                            <FormGroup label="Enter Permit ID" id="permit_id">
+                                                                <input type="text" className="form-control" placeholder="Permit ID" />
+                                                            </FormGroup>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                                 <div className="modal-footer">
+                                                    <button type="button" className="btn btn-primary" onClick={addPermitToLot} data-dismiss="modal">Save</button>
                                                     <button type="button" className="btn btn-default" data-dismiss="modal">Close</button>
                                                 </div>
                                             </div>
@@ -168,12 +179,20 @@ class LotSummary extends React.Component {
                                                 <div>
                                                     <div className="modal-header">
                                                         <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                                        <h2 className="modal-title text-center" id="modalLabel">Permit Request: {currentLot.address_full}</h2>
+                                                        <h3 className="modal-title text-center" id="modalLabel">Permit Addition</h3>
                                                     </div>
                                                     <div className="modal-body">
-                                                        <FormGroup label="Permit ID" id="permit_id">
-                                                            <input type="text" className="form-control" placeholder="Please enter the Permit ID for this lot..." />
-                                                        </FormGroup>
+                                                        <h4 className="text-center">Records indicate this lot has no exactions to be paid. You may enter a permit ID for:</h4>
+                                                        <div className="row text-center alert alert-success">
+                                                            <h2><strong>{currentLot.address_full}</strong></h2>
+                                                        </div>
+                                                        <div className="row">
+                                                            <div className="text-center col-sm-4 col-sm-offset-4 col-xs-12">
+                                                                <FormGroup label="Enter Permit ID" id="permit_id">
+                                                                    <input type="text" className="form-control" placeholder="Permit ID" />
+                                                                </FormGroup>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                     <div className="modal-footer">
                                                         <button type="button" className="btn btn-primary" onClick={addPermitToLot} data-dismiss="modal">Save</button>
@@ -369,8 +388,8 @@ class LotSummary extends React.Component {
                                                 <p className="col-md-4 col-xs-6">Slide: {currentLot.plat.slide}</p>
                                                 <p className="col-md-4 col-xs-6">Buildable Lots: {currentLot.plat.buildable_lots}</p>
                                                 <p className="col-md-4 col-xs-6">Non-Buildable Lots: {currentLot.plat.non_buildable_lots}</p>
-                                                <p className="col-md-4 col-xs-6">Sewer Exactions: ${currentLot.plat.sewer_due}</p>
-                                                <p className="col-md-4 col-xs-6">Non-Sewer Exactions: ${currentLot.plat.non_sewer_due}</p>
+                                                <p className="col-md-4 col-xs-6">Sewer Exactions: {currentLot.plat.plat_exactions && currentLot.plat.plat_exactions.plat_sewer_due}</p>
+                                                <p className="col-md-4 col-xs-6">Non-Sewer Exactions: {currentLot.plat.plat_exactions && currentLot.plat.plat_exactions.plat_non_sewer_due}</p>
                                             </div>
                                         </div>
                                     </div>
@@ -575,6 +594,7 @@ function mapDispatchToProps(dispatch, params) {
             if (selectedLot) {
                 dispatch(putPermitIdOnLot(selectedLot))
                 .then(() => {
+                    dispatch(getLots());
                     dispatch(getLotID(selectedLot));
                 });
             }
