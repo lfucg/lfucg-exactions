@@ -11,7 +11,7 @@ import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
 
 import FormGroup from './FormGroup';
-
+import Notes from './Notes';
 import DeclineDelete from './DeclineDelete';
 
 import {
@@ -28,6 +28,7 @@ import {
     getAccountLedgerID,
     postAccountLedger,
     putAccountLedger,
+    getNoteContent,
 } from '../actions/apiActions';
 
 class AccountLedgerForm extends React.Component {
@@ -95,6 +96,9 @@ class AccountLedgerForm extends React.Component {
 
         const currentPlat = plats && plats.length > 0 &&
             filter(plat => plat.id === parseInt(activeForm.plat, 10))(plats)[0];
+
+        const currentLot = lots && lots.length > 0 &&
+            filter(lot => lot.id === parseInt(activeForm.lot, 10))(lots)[0];
 
         return (
             <div className="account-ledger-form">
@@ -260,6 +264,31 @@ class AccountLedgerForm extends React.Component {
                                 </div>
                             </div>
                             }
+                            <div className="clearfix" />
+                            {currentLot && currentLot.id && currentLot.plat &&
+                                <Notes
+                                  content_type="plats_lot"
+                                  object_id={currentLot.id}
+                                  parent_content_type="plats_plat"
+                                  parent_object_id={currentLot.plat.id}
+                                  grandparent_content_type="plats_subdivision"
+                                  grandparent_object_id={currentLot.plat.subdivision && currentLot.plat.subdivision.id}
+                                  ariaExpanded="true"
+                                  panelClass="panel-collapse collapse row in"
+                                  permission="lot"
+                                />
+                            }
+                            {currentPlat && currentPlat.id &&
+                                <Notes
+                                  content_type="plats_plat"
+                                  object_id={currentPlat.id}
+                                  parent_content_type="plats_subdivision"
+                                  parent_object_id={currentPlat.subdivision && currentPlat.subdivision.id}
+                                  ariaExpanded="true"
+                                  panelClass="panel-collapse collapse row in"
+                                  permission="plat"
+                                />
+                            }
                         </div>
                     </div>
                 </div>
@@ -388,8 +417,20 @@ function mapDispatchToProps(dispatch, params) {
                 if (field === 'plat_lot') {
                     if (value_id === 'plat') {
                         dispatch(getPlats());
+                        const remove_lot = {
+                            lot: '',
+                            lot_show: '',
+                            lot_name: '',
+                        };
+                        dispatch(formUpdate(remove_lot));
                     } else if (value_id === 'lot') {
                         dispatch(getLots());
+                        const remove_plat = {
+                            plat: '',
+                            plat_show: '',
+                            plat_name: '',
+                        };
+                        dispatch(formUpdate(remove_plat));
                     }
                 }
             };

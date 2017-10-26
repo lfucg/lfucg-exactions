@@ -216,7 +216,7 @@ class LotSummary extends React.Component {
                                     <div className="row section-heading" role="tab" id="headingLot">
                                         <div className="col-xs-1 caret-indicator" />
                                         <div className="col-xs-10">
-                                            <h2>General Lot Information</h2>
+                                            <h3>General Lot Information</h3>
                                         </div>
                                     </div>
                                 </a>
@@ -263,7 +263,7 @@ class LotSummary extends React.Component {
                                     <div className="row section-heading" role="tab" id="headingLotExactions">
                                         <div className="col-xs-1 caret-indicator" />
                                         <div className="col-xs-10">
-                                            <h2>Lot Exactions</h2>
+                                            <h3>Lot Exactions</h3>
                                         </div>
                                     </div>
                                 </a>
@@ -333,7 +333,7 @@ class LotSummary extends React.Component {
                                         <div className="row section-heading" role="tab" id="headingPlat">
                                             <div className="col-xs-1 caret-indicator" />
                                             <div className="col-xs-10">
-                                                <h2>Plat Information</h2>
+                                                <h3>Plat Information</h3>
                                             </div>
                                         </div>
                                     </a>
@@ -378,7 +378,7 @@ class LotSummary extends React.Component {
                                         </div>
                                     </div>
                                 </div> : <div className="row section-heading" role="tab" id="headingAccountPayments">
-                                    <h2>Plat - None</h2>
+                                    <h3>Plat - None</h3>
                                 </div>}
 
                                 {currentLot.account && accounts ?
@@ -394,7 +394,7 @@ class LotSummary extends React.Component {
                                             <div className="row section-heading" role="tab" id="headingAccount">
                                                 <div className="col-xs-1 caret-indicator" />
                                                 <div className="col-xs-10">
-                                                    <h2>Developer Account</h2>
+                                                    <h3>Developer Account</h3>
                                                 </div>
                                             </div>
                                         </a>
@@ -440,7 +440,7 @@ class LotSummary extends React.Component {
                                             </div>
                                         </div>
                                     </div> : <div className="row section-heading" role="tab" id="headingAccountPayments">
-                                        <h2>Account - None</h2>
+                                        <h3>Account - None</h3>
                                     </div>
                                 }
 
@@ -457,7 +457,7 @@ class LotSummary extends React.Component {
                                             <div className="row section-heading" role="tab" id="headingAccountPayments">
                                                 <div className="col-xs-1 caret-indicator" />
                                                 <div className="col-xs-10">
-                                                    <h2>Payments</h2>
+                                                    <h3>Payments</h3>
                                                 </div>
                                             </div>
                                         </a>
@@ -476,7 +476,7 @@ class LotSummary extends React.Component {
                                     </div>
                                 ) : (
                                     <div className="row section-heading" role="tab" id="headingAccountPayments">
-                                        <h2>Payments - None</h2>
+                                        <h3>Payments - None</h3>
                                     </div>
                                 )}
 
@@ -493,7 +493,7 @@ class LotSummary extends React.Component {
                                             <div className="row section-heading" role="tab" id="headingAccountLedgers">
                                                 <div className="col-xs-1 caret-indicator" />
                                                 <div className="col-xs-10">
-                                                    <h2>Credit Transfers</h2>
+                                                    <h3>Credit Transfers</h3>
                                                 </div>
                                             </div>
                                         </a>
@@ -512,19 +512,19 @@ class LotSummary extends React.Component {
                                     </div>
                                 ) : (
                                     <div className="row section-heading" role="tab" id="headingAccountLedgers">
-                                        <h2>Credit Transfers - None</h2>
+                                        <h3>Credit Transfers - None</h3>
                                     </div>
                                 )}
+                                {currentLot.id &&
+                                    <Uploads
+                                      file_content_type="plats_lot"
+                                      file_object_id={currentLot.id}
+                                      ariaExpanded="false"
+                                      panelClass="panel-collapse collapse row"
+                                      permission="lot"
+                                    />
+                                }
                             </div>
-                            {currentLot.id &&
-                                <Uploads
-                                  file_content_type="plats_lot"
-                                  file_object_id={currentLot.id}
-                                  ariaExpanded="false"
-                                  panelClass="panel-collapse collapse row"
-                                  permission="lot"
-                                />
-                            }
                         </div>
                     </div>
                     }

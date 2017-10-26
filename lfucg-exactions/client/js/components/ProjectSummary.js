@@ -92,7 +92,7 @@ class ProjectSummary extends React.Component {
                                 <div className="row section-heading" role="tab" id="headingProjectInfo">
                                     <div className="col-xs-1 caret-indicator" />
                                     <div className="col-xs-10">
-                                        <h2>Project Information</h2>
+                                        <h3>Project Information</h3>
                                     </div>
                                 </div>
                             </a>
@@ -142,7 +142,7 @@ class ProjectSummary extends React.Component {
                                         <div className="row section-heading" role="tab" id="headingCostEstimates">
                                             <div className="col-xs-1 caret-indicator" />
                                             <div className="col-xs-10">
-                                                <h2>Project Cost Estimates</h2>
+                                                <h3>Project Cost Estimates</h3>
                                             </div>
                                         </div>
                                     </a>
@@ -161,7 +161,7 @@ class ProjectSummary extends React.Component {
                                 </div>
                             ) : (
                                 <div className="row section-heading" role="tab" id="headingCostEstimates">
-                                    <h2>Project Cost Estimates - None</h2>
+                                    <h3>Project Cost Estimates - None</h3>
                                 </div>
                             )}
 
@@ -177,7 +177,7 @@ class ProjectSummary extends React.Component {
                                     <div className="row section-heading" role="tab" id="headingAgreementInfo">
                                         <div className="col-xs-1 caret-indicator" />
                                         <div className="col-xs-10">
-                                            <h2>Agreement</h2>
+                                            <h3>Agreement</h3>
                                         </div>
                                     </div>
                                 </a>
@@ -223,18 +223,18 @@ class ProjectSummary extends React.Component {
                                     </div>
                                 </div>
                             </div> : <div className="row section-heading" role="tab" id="headingCostEstimates">
-                                <h2>Agreement - None</h2>
+                                <h3>Agreement - None</h3>
                             </div>}
+                            {projects.id &&
+                                <Uploads
+                                  file_content_type="accounts_project"
+                                  file_object_id={projects.id}
+                                  ariaExpanded="false"
+                                  panelClass="panel-collapse collapse row"
+                                  permission="project"
+                                />
+                            }
                         </div>
-                        {projects.id &&
-                            <Uploads
-                              file_content_type="accounts_project"
-                              file_object_id={projects.id}
-                              ariaExpanded="false"
-                              panelClass="panel-collapse collapse row"
-                              permission="project"
-                            />
-                        }
                     </div>
                 </div>
                 <Footer />

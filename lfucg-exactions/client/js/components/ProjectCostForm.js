@@ -148,17 +148,17 @@ class ProjectCostForm extends React.Component {
                                     <DeclineDelete currentForm="/estimate/" selectedEntry={selectedProjectCost} parentRoute="project-cost" />
                                 </div>
                             </form>
+                            <div className="clearfix" />
+                            {projectCosts.id &&
+                                <Uploads
+                                  file_content_type="accounts_projectcostestimate"
+                                  file_object_id={projectCosts.id}
+                                  ariaExpanded="true"
+                                  panelClass="panel-collapse collapse row in"
+                                  permission="projectcostestimate"
+                                />
+                            }
                         </div>
-                        <div className="clearfix" />
-                        {projectCosts.id &&
-                            <Uploads
-                              file_content_type="accounts_projectcostestimate"
-                              file_object_id={projectCosts.id}
-                              ariaExpanded="true"
-                              panelClass="panel-collapse collapse row in"
-                              permission="projectcostestimate"
-                            />
-                        }
                     </div>
                 </div>
 
