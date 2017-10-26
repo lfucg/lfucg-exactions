@@ -129,10 +129,10 @@ export function passwordForgot() {
                 activeForm,
             } = getState();
             const {
-                email,
+                email_forgot_password,
             } = activeForm;
             return {
-                email,
+                email_forgot_password,
             };
         },
     };
@@ -149,12 +149,12 @@ export function passwordReset(token, uid) {
                 activeForm,
             } = getState();
             const {
-                newPassword1,
-                newPassword2,
+                password_1,
+                password_2,
             } = activeForm;
             return {
-                newPassword1,
-                newPassword2,
+                password_1,
+                password_2,
                 token,
                 uid,
             };

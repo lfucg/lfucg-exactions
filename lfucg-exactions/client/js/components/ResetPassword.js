@@ -1,7 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-
+import {
+    hashHistory,
+} from 'react-router';
+import FlashMessage from './FlashMessage';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import FormGroup from './FormGroup';
@@ -11,20 +14,30 @@ import {
 } from '../actions/apiActions';
 
 import {
-    formUpdate,
+    flashMessageSet,
+} from '../actions/flashMessageActions';
+
+import {
+    formInit,
 } from '../actions/formActions';
 
 class ResetPassword extends React.Component {
+    componentDidMount() {
+    }
 
     render() {
         const {
             activeForm,
             resetPassword,
-            handleUserInput,
         } = this.props;
 
         const {
         } = activeForm;
+
+        const submitEnabled =
+            activeForm.password_1 &&
+            activeForm.password_2 &&
+            activeForm.password_1 === activeForm.password_2;
 
         return (
             <div className="resetPassword">
@@ -35,8 +48,11 @@ class ResetPassword extends React.Component {
                         <h1>RESET PASSWORD</h1>
                     </div>
                 </div>
+
+
                 <div className="inside-body">
                     <div className="container">
+                        <FlashMessage />
                         <div className="col-md-offset-1 col-md-10">
                             <form onSubmit={resetPassword}>
                                 <fieldset>
@@ -45,10 +61,9 @@ class ResetPassword extends React.Component {
                                             <FormGroup label="Enter Password" id="password_1">
                                                 <input
                                                   type="password"
-                                                  className="form-control"
+                                                  className={`form-control ${activeForm.password_1 !== activeForm.password_2 ? 'error' : ''}`}
                                                   placeholder="Enter Password"
                                                   aria-label="Password Enter"
-                                                  onChange={handleUserInput}
                                                 />
                                             </FormGroup>
                                         </div>
@@ -58,18 +73,20 @@ class ResetPassword extends React.Component {
                                             <FormGroup label="Confirm Password" id="password_2">
                                                 <input
                                                   type="password"
-                                                  className="form-control"
-                                                  placeholder="Enter Password"
-                                                  aria-label="Password Enter"
-                                                  onChange={handleUserInput}
+                                                  className={`form-control ${activeForm.password_1 !== activeForm.password_2 ? 'error' : ''}`}
+                                                  placeholder="Confirm Password"
+                                                  aria-label="Password Confirm"
                                                 />
                                             </FormGroup>
+                                            <p className={`help-block bg-danger text-center ${activeForm.password_1 !== activeForm.password_2 ? '' : 'hidden'}`} aria-label="Password Mismatch Warning">
+                                                <i className="fa fa-exclamation-circle" />&nbsp;Your passwords do not match.
+                                            </p>
                                         </div>
                                     </div>
                                 </fieldset>
                                 <div className="row">
                                     <div className="col-sm-offset-8">
-                                        <button className="btn btn-lex">Submit</button>
+                                        <button disabled={!submitEnabled} className="btn btn-lex">Submit</button>
                                     </div>
                                 </div>
                                 <br />
@@ -93,25 +110,17 @@ function mapDispatchToProps(dispatch, params) {
     const userToken = params.params.token;
     const userID = params.params.uid;
     return {
-        onComponentDidMount() {
-            // app.get('/reset/:token', function(req, res) {
-            //   User.findOne({ resetPasswordToken: req.params.token, resetPasswordExpires: { $gt: Date.now() } }, function(err, user) {
-            //     if (!user) {
-            //       req.flash('error', 'Password reset token is invalid or has expired.');
-            //       return res.redirect('/forgot');
-            //     }
-            //     res.render('reset', {
-            //       user: req.user
-            //     });
-            //   });
-            // });
-        },
         resetPassword() {
-            // console.log('hellow');
-            const newPassword1 = document.getElementById('password_1').value;
-            const newPassword2 = document.getElementById('password_2').value;
-            dispatch(formUpdate({ newPassword1, newPassword2 }));
-            dispatch(passwordReset(userToken, userID));
+            dispatch(passwordReset(userToken, userID))
+            .then((response) => {
+                if (response.error) {
+                    dispatch(flashMessageSet('Looks like you\'ve used this link before or your link has expired. Please submit your email again to get a new link sent to your email.', 'danger'));
+                } else {
+                    hashHistory.push('login/');
+                    dispatch(flashMessageSet('Your password has been updated! Please login.', 'success'));
+                    dispatch(formInit());
+                }
+            });
         },
     };
 }
@@ -119,7 +128,6 @@ function mapDispatchToProps(dispatch, params) {
 ResetPassword.propTypes = {
     activeForm: PropTypes.object,
     resetPassword: PropTypes.func,
-    handleUserInput: PropTypes.func,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ResetPassword);
