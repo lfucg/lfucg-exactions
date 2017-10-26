@@ -99,12 +99,10 @@ class Registration(GenericAPIView):
 @api_view(['POST'])
 @permission_classes((AllowAny, ))
 def forgot_password(request):
-    email = request.data.get('email', None)
+    email = request.data.get('email_forgot_password', None)
     user = User.objects.get(email=email)
     token = PasswordResetTokenGenerator().make_token(user)
     if user:
-        print(user)
-        print('yep')
         send_password_reset_email(user, token)
     # Always return success
     return Response({'message': 'An email was sent to your account with instructions to reset your password.'}, status=statuses.HTTP_200_OK)
@@ -128,7 +126,7 @@ def reset_password(request):
     token = request.data['token']
     response, status, user = _validate_token(user, token)
     if status == statuses.HTTP_200_OK:
-        user.set_password(request.data.get('newPassword1'))
+        user.set_password(request.data.get('password_2'))
         user.save()
         _delete_token(token)
         response = {'success': 'New password has been saved.'}
@@ -138,24 +136,9 @@ def reset_password(request):
 def _validate_token(user, token):
     response = {}
     status = statuses.HTTP_400_BAD_REQUEST
-    print('we outchea')
-    print(PasswordResetTokenGenerator().check_token(user, token))
     if PasswordResetTokenGenerator().check_token(user, token):
         response = None
         status = statuses.HTTP_200_OK
-        print(status)
-            
-    #     if user.email is not None:
-    #         passtoken = ExpiringToken.objects.filter(user_id=user.id)
-    #         if passtoken.exists() and passtoken[0].key == data_token:
-    #         else:
-    #             response['token'] = 'This password reset request cannot be used any more.'
-    #     else:
-    #         response['token'] = 'Missing email in password reset request.'
-    # except signing.SignatureExpired:
-    #     response['token'] = 'Reset password request has expired.'
-    # except signing.BadSignature:
-    #     response['token'] = 'Invalid reset password request.'
     return response, status, user
 
 def _delete_token(token):

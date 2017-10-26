@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
+import FlashMessage from './FlashMessage';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import FormGroup from './FormGroup';
@@ -11,8 +12,12 @@ import {
 } from '../actions/apiActions';
 
 import {
-    formUpdate,
-} from '../actions/formActions'
+    flashMessageSet,
+} from '../actions/flashMessageActions';
+
+import {
+    formInit,
+} from '../actions/formActions';
 
 class ForgotPassword extends React.Component {
 
@@ -36,12 +41,13 @@ class ForgotPassword extends React.Component {
                 </div>
                 <div className="inside-body">
                     <div className="container">
+                        <FlashMessage />
                         <div className="col-md-offset-1 col-md-10">
                             <form onSubmit={forgotPassword}>
                                 <fieldset>
                                     <div className="row">
                                         <div className="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
-                                            <FormGroup label="Email" id="email_2">
+                                            <FormGroup label="Email" id="email_forgot_password">
                                                 <input type="email" className="form-control" placeholder="Email" aria-label="Email" />
                                             </FormGroup>
                                         </div>
@@ -71,11 +77,12 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        forgotPassword(event) {
-            const email = document.getElementById('email_2').value;
-            console.log(email);
-            dispatch(formUpdate({ email }));
-            dispatch(passwordForgot());
+        forgotPassword() {
+            dispatch(passwordForgot())
+            .then(() => {
+                dispatch(flashMessageSet('If an email matches the one you\'ve entered, you should receive an email momentarily with a link to reset your password.', 'success'));
+            });
+            dispatch(formInit());
         },
     };
 }

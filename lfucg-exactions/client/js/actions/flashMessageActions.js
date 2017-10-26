@@ -5,6 +5,11 @@ export function flashMessageSet(message, messageType) {
         type: FLASH_MESSAGE_SET,
         message,
         messageType,
+        meta: {
+            debounce: {
+                time: 2000,
+            },
+        },
     };
 }
 
@@ -12,5 +17,10 @@ export function flashMessageClear() {
     return {
         type: FLASH_MESSAGE_CLEAR,
         message: null,
+        meta: {
+            debounce: {
+                time: 2000,
+            },
+        },
     };
 }
