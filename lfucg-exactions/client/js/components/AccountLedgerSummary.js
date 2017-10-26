@@ -49,7 +49,7 @@ class AccountLedgerSummary extends React.Component {
                                 <div className="row section-heading" role="tab" id="headingAccountLedgerInfo">
                                     <div className="col-xs-1 caret-indicator" />
                                     <div className="col-xs-10">
-                                        <h2>Credit Transfer Information</h2>
+                                        <h3>Credit Transfer Information</h3>
                                     </div>
                                 </div>
                             </a>
@@ -95,7 +95,7 @@ class AccountLedgerSummary extends React.Component {
                                         <div className="row section-heading" role="tab" id="headingLotInfo">
                                             <div className="col-xs-1 caret-indicator" />
                                             <div className="col-xs-10">
-                                                <h2>Lot</h2>
+                                                <h3>Lot</h3>
                                             </div>
                                         </div>
                                     </a>
@@ -139,7 +139,7 @@ class AccountLedgerSummary extends React.Component {
                                 </div>
                             :
                                 <div className="row section-heading" role="tab" id="headingAccountPlats">
-                                    <h2>Lot - None</h2>
+                                    <h3>Lot - None</h3>
                                 </div>
                             }
 
@@ -156,7 +156,7 @@ class AccountLedgerSummary extends React.Component {
                                         <div className="row section-heading" role="tab" id="headingAccountFromInfo">
                                             <div className="col-xs-1 caret-indicator" />
                                             <div className="col-xs-10">
-                                                <h2>Account From</h2>
+                                                <h3>Account From</h3>
                                             </div>
                                         </div>
                                     </a>
@@ -205,7 +205,7 @@ class AccountLedgerSummary extends React.Component {
                                 </div>
                             :
                                 <div className="row section-heading" role="tab" id="headingAccountPlats">
-                                    <h2>Account From - None</h2>
+                                    <h3>Account From - None</h3>
                                 </div>
                             }
 
@@ -222,7 +222,7 @@ class AccountLedgerSummary extends React.Component {
                                         <div className="row section-heading" role="tab" id="headingAccountToInfo">
                                             <div className="col-xs-1 caret-indicator" />
                                             <div className="col-xs-10">
-                                                <h2>Account To</h2>
+                                                <h3>Account To</h3>
                                             </div>
                                         </div>
                                     </a>
@@ -271,7 +271,7 @@ class AccountLedgerSummary extends React.Component {
                                 </div>
                             :
                                 <div className="row section-heading" role="tab" id="headingAccountPlats">
-                                    <h2>Account To - None</h2>
+                                    <h3>Account To - None</h3>
                                 </div>
                             }
 
@@ -288,7 +288,7 @@ class AccountLedgerSummary extends React.Component {
                                         <div className="row section-heading" role="tab" id="headingAgreementInfo">
                                             <div className="col-xs-1 caret-indicator" />
                                             <div className="col-xs-10">
-                                                <h2>Agreement</h2>
+                                                <h3>Agreement</h3>
                                             </div>
                                         </div>
                                     </a>
@@ -333,7 +333,7 @@ class AccountLedgerSummary extends React.Component {
                                 </div>
                             :
                                 <div className="row section-heading" role="tab" id="headingAccountPlats">
-                                    <h2>Agreement - None</h2>
+                                    <h3>Agreement - None</h3>
                                 </div>
                             }
 

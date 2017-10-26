@@ -255,7 +255,7 @@ class AccountSummary extends React.Component {
                                 <div className="row section-heading" role="tab" id="headingAccountInfo">
                                     <div className="col-xs-1 caret-indicator" />
                                     <div className="col-xs-10">
-                                        <h2>Developer Account Information</h2>
+                                        <h3>Developer Account Information</h3>
                                     </div>
                                 </div>
                             </a>
@@ -306,7 +306,7 @@ class AccountSummary extends React.Component {
                                         <div className="row section-heading" role="tab" id="headingAccountPlats">
                                             <div className="col-xs-1 caret-indicator" />
                                             <div className="col-xs-10">
-                                                <h2>Plats</h2>
+                                                <h3>Plats</h3>
                                             </div>
                                         </div>
                                     </a>
@@ -325,7 +325,7 @@ class AccountSummary extends React.Component {
                                 </div>
                             ) : (
                                 <div className="row section-heading" role="tab" id="headingAccountPlats">
-                                    <h2>Plats - None</h2>
+                                    <h3>Plats - None</h3>
                                 </div>
                             )}
 
@@ -342,7 +342,7 @@ class AccountSummary extends React.Component {
                                         <div className="row section-heading" role="tab" id="headingAccountLots">
                                             <div className="col-xs-1 caret-indicator" />
                                             <div className="col-xs-10">
-                                                <h2>Lots</h2>
+                                                <h3>Lots</h3>
                                             </div>
                                         </div>
                                     </a>
@@ -361,7 +361,7 @@ class AccountSummary extends React.Component {
                                 </div>
                             ) : (
                                 <div className="row section-heading" role="tab" id="headingAccountLots">
-                                    <h2>Lots - None</h2>
+                                    <h3>Lots - None</h3>
                                 </div>
                             )}
 
@@ -378,7 +378,7 @@ class AccountSummary extends React.Component {
                                         <div className="row section-heading" role="tab" id="headingAccountAgreements">
                                             <div className="col-xs-1 caret-indicator" />
                                             <div className="col-xs-10">
-                                                <h2>Agreements</h2>
+                                                <h3>Agreements</h3>
                                             </div>
                                         </div>
                                     </a>
@@ -397,7 +397,7 @@ class AccountSummary extends React.Component {
                                 </div>
                             ) : (
                                 <div className="row section-heading" role="tab" id="headingAccountAgreements">
-                                    <h2>Agreements - None</h2>
+                                    <h3>Agreements - None</h3>
                                 </div>
                             )}
 
@@ -414,7 +414,7 @@ class AccountSummary extends React.Component {
                                         <div className="row section-heading" role="tab" id="headingAccountPayments">
                                             <div className="col-xs-1 caret-indicator" />
                                             <div className="col-xs-10">
-                                                <h2>Payments</h2>
+                                                <h3>Payments</h3>
                                             </div>
                                         </div>
                                     </a>
@@ -433,7 +433,7 @@ class AccountSummary extends React.Component {
                                 </div>
                             ) : (
                                 <div className="row section-heading" role="tab" id="headingAccountPayments">
-                                    <h2>Payments - None</h2>
+                                    <h3>Payments - None</h3>
                                 </div>
                             )}
 
@@ -450,7 +450,7 @@ class AccountSummary extends React.Component {
                                         <div className="row section-heading" role="tab" id="headingAccountLedgers">
                                             <div className="col-xs-1 caret-indicator" />
                                             <div className="col-xs-10">
-                                                <h2>Credit Transfers</h2>
+                                                <h3>Credit Transfers</h3>
                                             </div>
                                         </div>
                                     </a>
@@ -469,7 +469,7 @@ class AccountSummary extends React.Component {
                                 </div>
                             ) : (
                                 <div className="row section-heading" role="tab" id="headingAccountLedgers">
-                                    <h2>Credit Transfers - None</h2>
+                                    <h3>Credit Transfers - None</h3>
                                 </div>
                             )}
 

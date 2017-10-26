@@ -142,7 +142,7 @@ class SubdivisionSummary extends React.Component {
                                 <div className="row section-heading" role="tab" id="headingSubdivision">
                                     <div className="col-xs-1 caret-indicator" />
                                     <div className="col-xs-10">
-                                        <h2>General Subdivision Information</h2>
+                                        <h3>General Subdivision Information</h3>
                                     </div>
                                 </div>
                             </a>
@@ -196,7 +196,7 @@ class SubdivisionSummary extends React.Component {
                                         <div className="row section-heading" role="tab" id="headingPlats">
                                             <div className="col-xs-1 caret-indicator" />
                                             <div className="col-xs-8 col-xs-offset-1">
-                                                <h2>Plats</h2>
+                                                <h3>Plats</h3>
                                             </div>
                                         </div>
                                     </a>
@@ -215,7 +215,7 @@ class SubdivisionSummary extends React.Component {
                                 </div>
                             ) : (
                                 <div className="row section-heading" role="tab" id="headingAccountPlats">
-                                    <h2>Plats - None</h2>
+                                    <h3>Plats - None</h3>
                                 </div>
                             )}
                             {subdivisionLots ?
@@ -231,7 +231,7 @@ class SubdivisionSummary extends React.Component {
                                         <div className="row section-heading" role="tab" id="headingLots">
                                             <div className="col-xs-1 caret-indicator" />
                                             <div className="col-xs-8 col-xs-offset-1">
-                                                <h2>Lots</h2>
+                                                <h3>Lots</h3>
                                             </div>
                                         </div>
                                     </a>
@@ -248,7 +248,7 @@ class SubdivisionSummary extends React.Component {
                                         </div>
                                     </div>
                                 </div> : <div className="row section-heading" role="tab" id="headingAccountPlats">
-                                    <h2>Lots - None</h2>
+                                    <h3>Lots - None</h3>
                                 </div>
                             }
                         </div>

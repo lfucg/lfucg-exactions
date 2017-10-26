@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import {
     hashHistory,
 } from 'react-router';
-import { map } from 'ramda';
+import { map, filter } from 'ramda';
 import PropTypes from 'prop-types';
 
 import Navbar from './Navbar';
@@ -12,6 +12,7 @@ import Breadcrumbs from './Breadcrumbs';
 
 import FormGroup from './FormGroup';
 import DeclineDelete from './DeclineDelete';
+import Notes from './Notes';
 
 import {
     formInit,
@@ -28,6 +29,7 @@ import {
     getPaymentID,
     postPayment,
     putPayment,
+    getNoteContent,
 } from '../actions/apiActions';
 
 class PaymentForm extends React.Component {
@@ -76,6 +78,9 @@ class PaymentForm extends React.Component {
                     </option>
                 );
             })(agreements));
+
+        const currentLot = lots && lots.length > 0 &&
+            filter(lot => lot.id === parseInt(activeForm.lot_id, 10))(lots)[0];
 
         const submitEnabled =
             activeForm.lot_id &&
@@ -280,6 +285,20 @@ class PaymentForm extends React.Component {
                                     <DeclineDelete currentForm="/payment/" selectedEntry={selectedPayment} parentRoute="payment" />
                                 </div>
                             </form>
+                            <div className="clearfix" />
+                            {currentLot && currentLot.id && currentLot.plat &&
+                                <Notes
+                                  content_type="plats_lot"
+                                  object_id={currentLot.id}
+                                  parent_content_type="plats_plat"
+                                  parent_object_id={currentLot.plat.id}
+                                  grandparent_content_type="plats_subdivision"
+                                  grandparent_object_id={currentLot.plat.subdivision && currentLot.plat.subdivision.id}
+                                  ariaExpanded="true"
+                                  panelClass="panel-collapse collapse row in"
+                                  permission="lot"
+                                />
+                            }
                         </div>
                     </div>
                 </div>
@@ -408,6 +427,7 @@ function mapDispatchToProps(dispatch, params) {
                         };
                         dispatch(formUpdate(update));
                     }
+                    dispatch(getNoteContent('plats_lot', value_id, 'plats_plat', lot_id.response.plat.id, 'plats_subdivision', lot_id.response.plat.subdivision.id));
                 });
             };
         },

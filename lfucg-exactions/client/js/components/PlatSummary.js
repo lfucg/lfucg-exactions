@@ -86,7 +86,7 @@ class PlatSummary extends React.Component {
                         <h3>{lot.address_full}</h3>
                     </div>
                     <div className="row link-row">
-                        <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
+                        <div className="pull-right">
                             <div className="col-xs-5">
                                 {currentUser && currentUser.permissions && currentUser.permissions.lot &&
                                     <Link to={`lot/form/${lot.id}`} aria-label="Edit">
@@ -144,7 +144,7 @@ class PlatSummary extends React.Component {
                                 <div className="row section-heading" role="tab" id="headingPlat">
                                     <div className="col-xs-1 caret-indicator" />
                                     <div className="col-xs-10">
-                                        <h2>General Plat Information</h2>
+                                        <h3>General Plat Information</h3>
                                     </div>
                                 </div>
                             </a>
@@ -201,7 +201,7 @@ class PlatSummary extends React.Component {
                                     <div className="row section-heading" role="tab" id="headingPlatZone">
                                         <div className="col-xs-1 caret-indicator" />
                                         <div className="col-xs-10">
-                                            <h2>Plat Zones</h2>
+                                            <h3>Plat Zones</h3>
                                         </div>
                                     </div>
                                 </a>
@@ -248,7 +248,7 @@ class PlatSummary extends React.Component {
                                         <div className="row section-heading" role="tab" id="headingPlatExactions">
                                             <div className="col-xs-1 caret-indicator" />
                                             <div className="col-xs-10">
-                                                <h2>Plat Exactions</h2>
+                                                <h3>Plat Exactions</h3>
                                             </div>
                                         </div>
                                     </a>
@@ -354,7 +354,7 @@ class PlatSummary extends React.Component {
                                         <div className="row section-heading" role="tab" id="headingLots">
                                             <div className="col-xs-1 caret-indicator" />
                                             <div className="col-xs-8 col-xs-offset-1">
-                                                <h2>Lots</h2>
+                                                <h3>Lots</h3>
                                             </div>
                                         </div>
                                     </a>
@@ -371,7 +371,7 @@ class PlatSummary extends React.Component {
                                         </div>
                                     </div>
                                 </div> : <div className="row section-heading" role="tab" id="headingAccountPlats">
-                                    <h2>Lots - None</h2>
+                                    <h3>Lots - None</h3>
                                 </div>
                             }
 
@@ -388,7 +388,7 @@ class PlatSummary extends React.Component {
                                         <div className="row section-heading" role="tab" id="headingAccount">
                                             <div className="col-xs-1 caret-indicator" />
                                             <div className="col-xs-10">
-                                                <h2>Developer Account</h2>
+                                                <h3>Developer Account</h3>
                                             </div>
                                         </div>
                                     </a>
@@ -437,19 +437,19 @@ class PlatSummary extends React.Component {
                                         </div>
                                     </div>
                                 </div> : <div className="row section-heading" role="tab" id="headingAccountPlats">
-                                    <h2>Account - None</h2>
+                                    <h3>Account - None</h3>
                                 </div>
                             }
+                            {plats.id &&
+                                <Uploads
+                                  file_content_type="plats_plat"
+                                  file_object_id={plats.id}
+                                  ariaExpanded="false"
+                                  panelClass="panel-collapse collapse row"
+                                  permission="plat"
+                                />
+                            }
                         </div>
-                        {plats.id &&
-                            <Uploads
-                              file_content_type="plats_plat"
-                              file_object_id={plats.id}
-                              ariaExpanded="false"
-                              panelClass="panel-collapse collapse row"
-                              permission="plat"
-                            />
-                        }
                     </div>
                 </div>
                 <Footer />

@@ -47,9 +47,7 @@ class Notes extends React.Component {
                             </div>
                         </div>
                         <div className="col-sm-8">
-                            <h5>
-                                {single_note.note}
-                            </h5>
+                            {single_note.note}
                         </div>
                     </div>
                     <hr aria-hidden="true" />
@@ -71,7 +69,7 @@ class Notes extends React.Component {
                         <div className="row section-heading" role="tab" id="headingNotes">
                             <div className="col-xs-1 caret-indicator" />
                             <div className="col-xs-10">
-                                <h2>Notes</h2>
+                                <h3>Notes</h3>
                             </div>
                         </div>
                     </a>
@@ -144,8 +142,6 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch, props) {
     return {
         onComponentDidMount() {
-            console.log('CONTENT TYPE', props.content_type);
-            console.log('OBJECT ID', props.object_id);
             dispatch(getNoteContent(props.content_type, props.object_id, props.parent_content_type, props.parent_object_id, props.grandparent_content_type, props.grandparent_object_id));
         },
         onSubmit() {
