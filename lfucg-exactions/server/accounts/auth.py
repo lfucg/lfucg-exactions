@@ -137,6 +137,7 @@ def _validate_token(user, token):
     response = {}
     status = statuses.HTTP_400_BAD_REQUEST
     if PasswordResetTokenGenerator().check_token(user, token):
+        print('we outchea')
         response = None
         status = statuses.HTTP_200_OK
     return response, status, user
