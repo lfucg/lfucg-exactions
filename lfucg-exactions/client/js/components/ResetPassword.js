@@ -63,7 +63,7 @@ class ResetPassword extends React.Component {
                                                   type="password"
                                                   className={`form-control ${activeForm.password_1 !== activeForm.password_2 ? 'error' : ''}`}
                                                   placeholder="Enter Password"
-                                                  aria-label="Password Enter"
+                                                  aria-label="Enter Password"
                                                 />
                                             </FormGroup>
                                         </div>
@@ -75,7 +75,7 @@ class ResetPassword extends React.Component {
                                                   type="password"
                                                   className={`form-control ${activeForm.password_1 !== activeForm.password_2 ? 'error' : ''}`}
                                                   placeholder="Confirm Password"
-                                                  aria-label="Password Confirm"
+                                                  aria-label="Confirm Password"
                                                 />
                                             </FormGroup>
                                             <p className={`help-block bg-danger text-center ${activeForm.password_1 !== activeForm.password_2 ? '' : 'hidden'}`} aria-label="Password Mismatch Warning">
