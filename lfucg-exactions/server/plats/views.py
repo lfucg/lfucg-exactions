@@ -3,6 +3,8 @@ import datetime
 import csv
 from django.views.generic import View
 from django.http import HttpResponse
+from django.db.models import Count, Max
+from rest_framework import viewsets
 from rest_framework.decorators import api_view, permission_classes
 from .models import *
 from .serializers import *
@@ -205,19 +207,20 @@ class LotSearchCSVExportView(View):
         response['Content-Disposition'] = 'attachment; filename="export.csv"'
 
         lots = Lot.objects.all()
-        
-        plat_set = request.query_params.get('plat', None)
+
+        plat_set = self.request.GET.get('plat', None)
         if plat_set is not None:
             lots = lots.filter(plat=plat_set)
 
-        is_approved_set = request.query_params.get('is_approved', None)
+        is_approved_set = self.request.GET.get('is_approved', None)
         if is_approved_set is not None:
             is_approved_set = True if is_approved_set == 'true' else False
             lots = lots.filter(is_approved=is_approved_set)
 
-        account_set = request.query_params.get('account', None)
+        account_set = self.request.GET.get('account', None)
         if account_set is not None:
             lots = lots.filter(account=account_set)
+
         serializer = self.get_serializer(
             lots,
             many=True
@@ -244,7 +247,30 @@ class LotSearchCSVExportView(View):
             'Open Space',
             'Current Total Due',
         ]
-        
+
+        payment_length_per_lot = 0
+        ledger_length_per_lot = 0   
+        max_payments = Payment.objects.values("lot_id").annotate(num_payments=Count("lot_id")).aggregate(Max('num_payments'))
+        print(max_payments)
+
+
+        for lot in serializer.data:
+            if len(payment_queryset) > payment_length_per_lot:
+                payment_length_per_lot = len(payment_length_per_lot)
+            while len(payment_queryset) > payment_length_per_lot:
+                payment_length_per_lot = payment_length_per_lot + 1
+                headers.extend(['Pymt. Date %s' % payment_length_per_lot,])
+                headers.extend(['Pymt. Amt. %s' % payment_length_per_lot,])
+                headers.extend(['Pymt. Type %s' % payment_length_per_lot,])
+
+            ledger_from_queryset = AccountLedger.objects.filter(account_from=lot['account'])
+            while len(ledger_from_queryset) > ledger_length_per_lot:
+                ledger_length_per_lot = ledger_length_per_lot + 1
+                headers.extend(['Trf. %s Date' % ledger_length_per_lot])
+                headers.extend(['Trf. %s Sewer' % ledger_length_per_lot])
+                headers.extend(['Trf. %s Non-Sewer' % ledger_length_per_lot])
+                headers.extend(['Trf. %s Type' % ledger_length_per_lot])
+
         writer = csv.DictWriter(response, fieldnames=headers, extrasaction='ignore')
         writer.writeheader()
 
@@ -270,6 +296,34 @@ class LotSearchCSVExportView(View):
                 'Open Space': lot['lot_exactions']['dues_open_space_dev'],
                 'Current Total Due': lot['lot_exactions']['current_exactions'],
             }
+
+            payment_queryset = Payment.objects.filter(lot_id=lot['id'])
+
+            if payment_queryset is not None:
+                payment_length_per_lot = 0
+                for single_payment in payment_queryset:
+                    payment_total = (single_payment.paid_roads +
+                        single_payment.paid_sewer_trans +
+                        single_payment.paid_sewer_cap +
+                        single_payment.paid_parks +
+                        single_payment.paid_storm +
+                        single_payment.paid_open_space)
+                    payment_length_per_lot += 1
+                    row['Pymt. Date %s' % payment_length_per_lot] = single_payment.date_created
+                    row['Pymt. Amt. %s' % payment_length_per_lot] = '${:,.2f}'.format(payment_total)
+                    row['Pymt. Type %s' % payment_length_per_lot] = single_payment.payment_type
+
+            ledger_from_queryset = AccountLedger.objects.filter(account_from=lot['account'])
+            if ledger_from_queryset is not None:
+                ledger_length_per_lot = 0
+                for account_from in ledger_from_queryset:
+                    ledger_length_per_lot += 1
+                    row['Trf. %s Date' % ledger_length_per_lot] = account_from.entry_date
+                    row['Trf. %s Sewer' % ledger_length_per_lot] = '${:,.2f}'.format(account_from.sewer_credits)
+                    row['Trf. %s Non-Sewer' % ledger_length_per_lot] = '${:,.2f}'.format(account_from.non_sewer_credits)
+                    row['Trf. %s Type' % ledger_length_per_lot] = account_from.entry_type
+
             writer.writerow(row)
+
 
         return response

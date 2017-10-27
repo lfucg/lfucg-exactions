@@ -1420,13 +1420,11 @@ export function searchQuery() {
                 reduce((acc, value) => acc + value, query_all),
                 map((key_name) => {
                     const filter_index = key_name.indexOf('filter_') + 'filter_'.length;
-                    const field = key_name.slice(filter_index + 1, key_name.length);
-                    console.log(field);
+                    const field = key_name.slice(filter_index, key_name.length);
                     return `&${field}=${activeForm[key_name]}`;
                 }),
                 filter(key_name => activeForm[key_name] && (key_name.indexOf('filter_') !== -1)),
             )(Object.keys(activeForm));
-            console.log('QUERY: ', queryString);
             return queryString;
         },
         meta: {
