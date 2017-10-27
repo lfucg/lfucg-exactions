@@ -184,7 +184,7 @@ class ProjectForm extends React.Component {
                                         </div>
                                         <div className="col-sm-6">
                                             <FormGroup label="* Status Date" id="status_date" >
-                                                <input type="date" className="form-control" placeholder="Status Date" />
+                                                <input type="date" className="form-control" placeholder="Date Format YYYY-MM-DD" />
                                             </FormGroup>
                                         </div>
                                     </div>
@@ -313,10 +313,8 @@ function mapDispatchToProps(dispatch, params) {
         onSubmit(event) {
             event.preventDefault();
             if (selectedProject) {
-                dispatch(putProject(selectedProject))
-                .then(() => {
-                    hashHistory.push(`project/summary/${selectedProject}`);
-                });
+                dispatch(putProject(selectedProject));
+                hashHistory.push(`project/summary/${selectedProject}`);
             } else {
                 dispatch(postProject())
                 .then((data_post) => {

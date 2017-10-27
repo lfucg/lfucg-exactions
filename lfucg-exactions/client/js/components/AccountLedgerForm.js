@@ -176,7 +176,7 @@ class AccountLedgerForm extends React.Component {
                                         </div>
                                         <div className="col-sm-6">
                                             <FormGroup label="* Entry Date" id="entry_date" aria-required="true" >
-                                                <input type="date" className="form-control" placeholder="Entry Date" disabled={!activeForm.entry_type} />
+                                                <input type="date" className="form-control" placeholder="Date Format YYYY-MM-DD" disabled={!activeForm.entry_type} />
                                             </FormGroup>
                                         </div>
                                     </div>
@@ -208,12 +208,24 @@ class AccountLedgerForm extends React.Component {
                                     <div className="row">
                                         <div className="col-sm-6">
                                             <FormGroup label="* Non-Sewer Credits" id="non_sewer_credits" aria-required="true" >
-                                                <input type="number" className="form-control" placeholder="Non-Sewer Credits" disabled={!activeForm.entry_type} />
+                                                <input
+                                                  type="number"
+                                                  className="form-control"
+                                                  placeholder="Non-Sewer Credits"
+                                                  disabled={!activeForm.entry_type}
+                                                  step="0.01"
+                                                />
                                             </FormGroup>
                                         </div>
                                         <div className="col-sm-6">
                                             <FormGroup label="* Sewer Credits" id="sewer_credits" aria-required="true" >
-                                                <input type="number" className="form-control" placeholder="Sewer Credits" disabled={!activeForm.entry_type} />
+                                                <input
+                                                  type="number"
+                                                  className="form-control"
+                                                  placeholder="Sewer Credits"
+                                                  disabled={!activeForm.entry_type}
+                                                  step="0.01"
+                                                />
                                             </FormGroup>
                                         </div>
                                     </div>
@@ -481,7 +493,7 @@ function mapDispatchToProps(dispatch, params) {
                         [field_show]: value,
                     };
                     dispatch(formUpdate(account_update));
-                    if (field === 'account_from' && !value_name.includes('LFUCG')) {
+                    if (field === 'account_from' && (value_name.indexOf('LFUCG') === -1)) {
                         const balance_update = {
                             balance: value_balance,
                         };
@@ -492,10 +504,8 @@ function mapDispatchToProps(dispatch, params) {
         },
         onSubmit(event) {
             if (selectedAccountLedger) {
-                dispatch(putAccountLedger(selectedAccountLedger))
-                .then(() => {
-                    hashHistory.push(`credit-transfer/summary/${selectedAccountLedger}`);
-                });
+                dispatch(putAccountLedger(selectedAccountLedger));
+                hashHistory.push(`credit-transfer/summary/${selectedAccountLedger}`);
             } else {
                 dispatch(postAccountLedger())
                 .then((data_post) => {
