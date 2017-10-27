@@ -12,6 +12,8 @@ import Breadcrumbs from './Breadcrumbs';
 
 import FormGroup from './FormGroup';
 
+import DeclineDelete from './DeclineDelete';
+
 import {
     formInit,
     formUpdate,
@@ -47,6 +49,8 @@ class AccountLedgerForm extends React.Component {
             lotFormChange,
             accountFormChange,
             closeModal,
+            selectedAccountLedger,
+            currentUser,
         } = this.props;
 
         const platsList = plats.length > 0 && (map((plat) => {
@@ -108,7 +112,7 @@ class AccountLedgerForm extends React.Component {
                 <div className="inside-body">
                     <div className="container">
                         <div className="col-sm-offset-1 col-sm-10">
-                            <form onSubmit={() => onSubmit(activeForm.plat_lot)} >
+                            <form >
 
                                 <fieldset>
                                     <div className="row">
@@ -214,14 +218,21 @@ class AccountLedgerForm extends React.Component {
                                         </div>
                                     </div>
                                 </fieldset>
-                                <button disabled={!submitEnabled} className="btn btn-lex">Submit</button>
-                                {!submitEnabled ? (
-                                    <div>
-                                        <div className="clearfix" />
-                                        <span> * All required fields must be filled.</span>
-                                    </div>
-                                ) : null
-                                }
+                                <div className="col-xs-8">
+                                    <button disabled={!submitEnabled} className="btn btn-lex" onClick={() => onSubmit(activeForm.plat_lot)} >
+                                        {currentUser.is_superuser || (currentUser.profile && currentUser.profile.is_supervisor) ? <div>Submit / Approve</div> : <div>Submit</div>}
+                                    </button>
+                                    {!submitEnabled ? (
+                                        <div>
+                                            <div className="clearfix" />
+                                            <span> * All required fields must be filled.</span>
+                                        </div>
+                                    ) : null
+                                    }
+                                </div>
+                                <div className="col-xs-4">
+                                    <DeclineDelete currentForm="/ledger/" selectedEntry={selectedAccountLedger} parentRoute="credit-transfer" />
+                                </div>
                             </form>
                             {activeForm.openModal && currentPlat.plat_exactions && (currentPlat.plat_exactions.remaining_lots > 0) &&
                             <div className={activeForm.openModal ? 'modal in' : 'modal'} tabIndex="-1" role="dialog">
@@ -277,6 +288,8 @@ AccountLedgerForm.propTypes = {
     lotFormChange: PropTypes.func,
     accountFormChange: PropTypes.func,
     closeModal: PropTypes.func,
+    selectedAccountLedger: PropTypes.string,
+    currentUser: PropTypes.object,
 };
 
 function mapStateToProps(state) {
@@ -287,6 +300,7 @@ function mapStateToProps(state) {
         accounts: state.accounts,
         agreements: state.agreements,
         accountLedgers: state.accountLedgers,
+        currentUser: state.currentUser,
     };
 }
 
@@ -496,6 +510,7 @@ function mapDispatchToProps(dispatch, params) {
         closeModal() {
             dispatch(formUpdate({ openModal: false }));
         },
+        selectedAccountLedger,
     };
 }
 
