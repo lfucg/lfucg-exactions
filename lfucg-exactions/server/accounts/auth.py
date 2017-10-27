@@ -100,10 +100,14 @@ class Registration(GenericAPIView):
 @permission_classes((AllowAny, ))
 def forgot_password(request):
     email = request.data.get('email_forgot_password', None)
-    user = User.objects.get(email=email)
-    token = PasswordResetTokenGenerator().make_token(user)
-    if user:
-        send_password_reset_email(user, token)
+    print('got here')
+    if email is not None:
+        print('got here 2')
+        users = User.objects.filter(email=email)
+        for user in users:
+            print('got here 3')
+            token = PasswordResetTokenGenerator().make_token(user)
+            send_password_reset_email(user, token)
     # Always return success
     return Response({'message': 'An email was sent to your account with instructions to reset your password.'}, status=statuses.HTTP_200_OK)
 
@@ -137,7 +141,6 @@ def _validate_token(user, token):
     response = {}
     status = statuses.HTTP_400_BAD_REQUEST
     if PasswordResetTokenGenerator().check_token(user, token):
-        print('we outchea')
         response = None
         status = statuses.HTTP_200_OK
     return response, status, user
