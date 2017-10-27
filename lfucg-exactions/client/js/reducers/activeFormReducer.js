@@ -17,11 +17,6 @@ export default function activeFormReducer(state = {}, action) {
                 delete state[key_name];
             }
         })(Object.keys(state));
-        // map((entry) => {
-        //     if (entry[1] && entry[0].startsWith('filter')) {
-        //         delete state[entry[0]];
-        //     }
-        // })(Object.entries(state));
         return merge(state, action.update);
     case API_CALL_SUCCESS:
         if (action.endpoint === 'GET_PAGINATION' || (action.endpoint.indexOf('QUERY') !== -1)) {

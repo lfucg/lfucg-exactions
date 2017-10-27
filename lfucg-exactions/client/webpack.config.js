@@ -1,7 +1,5 @@
 module.exports = {
   entry: {
-    // 'main': './js/main.js',
-    // 'dashboard': './js/dashboard.js',
     'dashboard': ['core-js/fn/object', './js/dashboard.js'],
   },
   devtool: 'source-map',
