@@ -46,6 +46,7 @@ class PaymentForm extends React.Component {
             formChange,
             lotChange,
             selectedPayment,
+            currentUser,
         } = this.props;
 
         const currentParam = this.props.params.id;
@@ -297,7 +298,9 @@ class PaymentForm extends React.Component {
                                     </div>
                                 </fieldset>
                                 <div className="col-xs-8">
-                                    <button disabled={!submitEnabled} className="btn btn-lex" onClick={onSubmit} >Submit</button>
+                                    <button disabled={!submitEnabled} className="btn btn-lex" onClick={onSubmit} >
+                                        {currentUser.is_superuser || (currentUser.profile && currentUser.profile.is_supervisor) ? <div>Submit / Approve</div> : <div>Submit</div>}
+                                    </button>
                                     {!submitEnabled ? (
                                         <div>
                                             <div className="clearfix" />
@@ -333,6 +336,7 @@ PaymentForm.propTypes = {
     formChange: PropTypes.func,
     lotChange: PropTypes.func,
     selectedPayment: PropTypes.string,
+    currentUser: PropTypes.object,
 };
 
 function mapStateToProps(state) {
@@ -342,6 +346,7 @@ function mapStateToProps(state) {
         accounts: state.accounts,
         agreements: state.agreements,
         payments: state.payments,
+        currentUser: state.currentUser,
     };
 }
 

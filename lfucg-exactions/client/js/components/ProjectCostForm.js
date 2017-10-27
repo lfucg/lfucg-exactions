@@ -39,6 +39,7 @@ class ProjectCostForm extends React.Component {
             onSubmit,
             formChange,
             selectedProjectCost,
+            currentUser,
         } = this.props;
 
         const currentParam = this.props.params.id;
@@ -135,7 +136,9 @@ class ProjectCostForm extends React.Component {
                                     </div>
                                 </fieldset>
                                 <div className="col-xs-8">
-                                    <button disabled={!submitEnabled} className="btn btn-lex" onClick={onSubmit} >Submit</button>
+                                    <button disabled={!submitEnabled} className="btn btn-lex" onClick={onSubmit} >
+                                        {currentUser.is_superuser || (currentUser.profile && currentUser.profile.is_supervisor) ? <div>Submit / Approve</div> : <div>Submit</div>}
+                                    </button>
                                     {!submitEnabled ? (
                                         <div>
                                             <div className="clearfix" />
@@ -178,6 +181,7 @@ ProjectCostForm.propTypes = {
     onSubmit: PropTypes.func,
     formChange: PropTypes.func,
     selectedProjectCost: PropTypes.string,
+    currentUser: PropTypes.object,
 };
 
 function mapStateToProps(state) {
@@ -185,6 +189,7 @@ function mapStateToProps(state) {
         activeForm: state.activeForm,
         projects: state.projects,
         projectCosts: state.projectCosts,
+        currentUser: state.currentUser,
     };
 }
 
