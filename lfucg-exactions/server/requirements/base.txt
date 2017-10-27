@@ -14,7 +14,6 @@ django-storages==1.6.5
 -e git+https://github.com/chris-allen/django-storages.git@a1c807eb9da34c9051e2a3853059abcac2fe2966#egg=django_storages_redux
 djangorestframework==3.5.3
 djangorestframework-expiring-authtoken==0.1.4
-django-queryset-csv==1.0.0
 docutils==0.14
 html5lib==0.999999999
 jmespath==0.9.3

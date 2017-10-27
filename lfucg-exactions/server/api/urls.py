@@ -4,7 +4,7 @@ from django.contrib.auth import views as auth_views
 
 from accounts.auth import *
 from plats.viewsets import *
-from plats.views import PlatCSVExportView, lot_search_csv_export
+from plats.views import PlatCSVExportView, LotSearchCSVExportView
 from notes.viewsets import *
 from accounts.viewsets import *
 from accounts.views import CurrentUserDetails
@@ -42,7 +42,7 @@ urlpatterns = [
     url(r'^delete_token/', Logout.as_view()),
     url(r'^upload/create/$', FileUploadCreate.as_view(), name="document-upload"),
     url(r'^export_plat_csv/$', PlatCSVExportView.as_view()),
-    url(r'^lot_search_csv/$', lot_search_csv_export),
+    url(r'^lot_search_csv/$', LotSearchCSVExportView.as_view()),
     url(r'^reset/(?P<uidb36>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$', auth_views.password_reset_confirm, name='password_reset_confirm'),
     url(r'^', include(router.urls)),
 ]
