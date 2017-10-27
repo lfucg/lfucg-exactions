@@ -12,6 +12,7 @@ import Login from './components/LoginPage';
 import Registration from './components/RegistrationPage';
 import ForgotPassword from './components/ForgotPassword';
 import ForgotUsername from './components/ForgotUsername';
+import ResetPassword from './components/ResetPassword';
 
 import SubdivisionExisting from './components/SubdivisionExisting';
 import SubdivisionForm from './components/SubdivisionForm';
@@ -66,6 +67,7 @@ ReactDOM.render(
             <Route path="registration/" component={Registration} name="Registration" />
             <Route path="forgot-password/" component={ForgotPassword} name="Forgot Password" />
             <Route path="forgot-username/" component={ForgotUsername} name="Forgot Username" />
+            <Route path="reset/:uid/:token/" component={ResetPassword} name="Reset Password" />
 
             <Route path="subdivision" component={SubdivisionExisting} name="Existing Subdivisions" />
             <Route path="subdivision/summary/:id" component={SubdivisionSummary} name="Subdivision Summary" />
