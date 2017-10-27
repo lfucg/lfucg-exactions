@@ -25,8 +25,8 @@ const projectsReducer = (state = [], action) => {
     case SEARCH_QUERY:
         const next = action.response.next;
         const prev = action.response.prev;
-        if ((next != null && next.startsWith('/project')) ||
-            (prev != null && prev.startsWith('/project')) ||
+        if ((next != null && next.substr(0, next.length) === '/project') ||
+            (prev != null && next.substr(0, prev.length) === '/project') ||
             (window.location.hash === '#/project')) {
             return action.response;
         }
