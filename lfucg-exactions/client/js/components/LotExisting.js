@@ -169,7 +169,7 @@ class LotExisting extends React.Component {
                     </div>
                 </div>
 
-                <Breadcrumbs route={this.props.route} />
+                <Breadcrumbs route={this.props.route} route_permission="lot" />
 
 
                 <SearchBar
@@ -180,7 +180,6 @@ class LotExisting extends React.Component {
                     { filterField: 'filter_is_approved', displayName: 'Approval', list: [{ id: true, name: 'Approved' }, { id: false, name: 'Unapproved' }] },
                   ]}
                 />
-
                 <div className="row">
                     <div className="col-xs-12 text-center">
                         <button type="button" className="btn button-modal-link" data-toggle="modal" data-target="#searchCSVModal" onClick={removeSearchPagination} disabled={payments.length === 0}>
@@ -216,6 +215,7 @@ class LotExisting extends React.Component {
                         </div>
                     </div>
                 </div>
+
                 <div className="inside-body">
                     <div className="container">
                         {lots_list}

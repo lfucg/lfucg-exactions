@@ -238,36 +238,66 @@ class PaymentForm extends React.Component {
                                     <div className="row">
                                         <div className="col-sm-6">
                                             <FormGroup label="Road Exactions" id="paid_roads">
-                                                <input type="number" className="form-control" placeholder="Road Exactions Paid" />
+                                                <input
+                                                  type="number"
+                                                  step="0.01"
+                                                  className="form-control"
+                                                  placeholder="Road Exactions Paid"
+                                                />
                                             </FormGroup>
                                         </div>
                                         <div className="col-sm-6">
                                             <FormGroup label="Parks Exactions" id="paid_parks">
-                                                <input type="number" className="form-control" placeholder="Parks Exactions Paid" />
+                                                <input
+                                                  type="number"
+                                                  step="0.01"
+                                                  className="form-control"
+                                                  placeholder="Parks Exactions Paid"
+                                                />
                                             </FormGroup>
                                         </div>
                                     </div>
                                     <div className="row">
                                         <div className="col-sm-6">
                                             <FormGroup label="Sewer Capacity Exactions" id="paid_sewer_cap">
-                                                <input type="number" className="form-control" placeholder="Sewer Capacity Exactions Paid" />
+                                                <input
+                                                  type="number"
+                                                  step="0.01"
+                                                  className="form-control"
+                                                  placeholder="Sewer Capacity Exactions Paid"
+                                                />
                                             </FormGroup>
                                         </div>
                                         <div className="col-sm-6">
                                             <FormGroup label="Sewer Transmission Exactions" id="paid_sewer_trans">
-                                                <input type="number" className="form-control" placeholder="Sewer Transmission Exactions Paid" />
+                                                <input
+                                                  type="number"
+                                                  step="0.01"
+                                                  className="form-control"
+                                                  placeholder="Sewer Transmission Exactions Paid"
+                                                />
                                             </FormGroup>
                                         </div>
                                     </div>
                                     <div className="row">
                                         <div className="col-sm-6">
                                             <FormGroup label="Storm Exactions" id="paid_storm">
-                                                <input type="number" className="form-control" placeholder="Storm Exactions Paid" />
+                                                <input
+                                                  type="number"
+                                                  step="0.01"
+                                                  className="form-control"
+                                                  placeholder="Storm Exactions Paid"
+                                                />
                                             </FormGroup>
                                         </div>
                                         <div className="col-sm-6">
                                             <FormGroup label="Open Spaces Exactions" id="paid_open_space">
-                                                <input type="number" className="form-control" placeholder="Open Spaces Exactions Paid" />
+                                                <input
+                                                  type="number"
+                                                  step="0.01"
+                                                  className="form-control"
+                                                  placeholder="Open Spaces Exactions Paid"
+                                                />
                                             </FormGroup>
                                         </div>
                                     </div>
@@ -457,10 +487,8 @@ function mapDispatchToProps(dispatch, params) {
         onSubmit(event) {
             event.preventDefault();
             if (selectedPayment) {
-                dispatch(putPayment(selectedPayment))
-                .then(() => {
-                    hashHistory.push(`payment/summary/${selectedPayment}`);
-                });
+                dispatch(putPayment(selectedPayment));
+                hashHistory.push(`payment/summary/${selectedPayment}`);
             } else {
                 dispatch(postPayment())
                 .then((data_post) => {
