@@ -5,7 +5,7 @@ from django.db.models import Q
 from django.core.mail import EmailMultiAlternatives
 from django.contrib.auth.models import User
 
-from django.db.models.signals import pre_save
+from django.db.models.signals import pre_save, post_save
 from django.dispatch import receiver
 from plats.models import Plat, Lot
 from .models import Agreement, AccountLedger, Payment, Project, ProjectCostEstimate
