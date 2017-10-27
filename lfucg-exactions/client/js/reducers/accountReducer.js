@@ -23,8 +23,8 @@ const accountReducer = (state = [], action) => {
     case GET_PAGINATION:
         const next = action.response.next;
         const prev = action.response.prev;
-        if ((next != null && next.startsWith('/account')) ||
-            (prev != null && prev.startsWith('/account')) ||
+        if ((next != null && next.substr(0, next.length) === '/account') ||
+            (prev != null && next.substr(0, prev.length) === '/account') ||
             (window.location.hash === '#/account')) {
             return action.response;
         }

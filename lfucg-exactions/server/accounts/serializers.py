@@ -1,6 +1,8 @@
 from rest_framework import serializers
 
 from django.contrib.auth.models import User
+from rest_framework.authtoken.models import Token
+
 from .models import *
 from .utils import calculate_account_balance, calculate_agreement_balance
 from plats.models import Plat, Lot
@@ -363,39 +365,38 @@ class ProfileSerializer(serializers.ModelSerializer):
             'is_supervisor',
         )       
 
+class ProfileField(serializers.Field):
+    def to_representation(self, obj):
+        return ProfileSerializer(obj).data
+
 class UserSerializer(serializers.ModelSerializer):
+    token = serializers.SerializerMethodField(read_only=True)
+    permissions = serializers.SerializerMethodField(read_only=True)
+    profile = ProfileField(read_only=True)
 
-    password = serializers.CharField(write_only=True)
+    def get_token(self, obj):
+        token_value = Token.objects.filter(user=obj)[0].key
+        return token_value
 
-    # def validate_password(self, pwd):
-    #     strong_enough, error_msg = password_strong_enough(pwd)
-    #     if not strong_enough:
-    #         raise serializers.ValidationError(error_msg)
-    #     return pwd
+    def get_permissions(self, obj):
+        permission_set = {}
+        for permission in obj.get_all_permissions():
+            permission_name = permission[permission.index('_') + 1: len(permission)]
 
-    def validate_email(self, email):
-        validate_email(email)
-        return email
+            permission_set[permission_name] = True
 
-    def create(self, validated_data):
-        pwd = validated_data.pop('password')
-        username = validated_data.pop('username').lower()
-        user = User.objects.create(username=username, **validated_data)
-        user.set_password(pwd)
-        user.save()
-
-        # tasks.send_welcome_email.delay(user.id)
-
-        return user
+        return permission_set
 
     class Meta:
         model = User
         fields = (
             'id',
             'username',
-            'password',
             'email',
             'first_name',
             'last_name',
+            'is_superuser',
+            'token',
+            'permissions',
+            'profile',
         )
-        extra_kwargs = {'email': {'required': True}}

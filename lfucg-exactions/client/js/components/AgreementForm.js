@@ -80,8 +80,8 @@ class AgreementForm extends React.Component {
                                 <fieldset>
                                     <div className="row">
                                         <div className="col-sm-6 form-group">
-                                            <label htmlFor="account_id" className="form-label" id="account_id">Developer Account</label>
-                                            <select className="form-control" id="account_id" onChange={formChange('account_id')} value={activeForm.account_id_show} >
+                                            <label htmlFor="account_id" className="form-label" id="account_id">* Developer Account</label>
+                                            <select className="form-control" id="account_id" onChange={formChange('account_id')} value={activeForm.account_id_show} aria-required="true">
                                                 <option value="start_account">Developer Account</option>
                                                 {accountsList}
                                             </select>
@@ -94,13 +94,13 @@ class AgreementForm extends React.Component {
                                     </div>
                                     <div className="row">
                                         <div className="col-sm-6">
-                                            <FormGroup label="Date Executed" id="date_executed">
-                                                <input type="date" className="form-control" placeholder="Date Executed" />
+                                            <FormGroup label="* Date Executed" id="date_executed" aria-required="true">
+                                                <input type="date" className="form-control" placeholder="Date Format YYYY-MM-DD" />
                                             </FormGroup>
                                         </div>
                                         <div className="col-sm-6 form-group">
-                                            <label htmlFor="expansion_area" className="form-label" id="expansion_area" aria-required="true">* Expansion Area</label>
-                                            <select className="form-control" id="expansion_area" onChange={formChange('expansion_area')} value={activeForm.expansion_area_show} >
+                                            <label htmlFor="expansion_area" className="form-label" id="expansion_area">* Expansion Area</label>
+                                            <select className="form-control" id="expansion_area" onChange={formChange('expansion_area')} value={activeForm.expansion_area_show} aria-required="true">
                                                 <option value="start_area">Expansion Area</option>
                                                 <option value={['EA-1', 'EA-1']}>EA-1</option>
                                                 <option value={['EA-2A', 'EA-2A']}>EA-2A</option>
@@ -112,8 +112,8 @@ class AgreementForm extends React.Component {
                                     </div>
                                     <div className="row">
                                         <div className="col-sm-6 form-group">
-                                            <label htmlFor="agreement_type" className="form-label" id="agreement_type" aria-label="Agreement Type" aria-required="true">* Agreement Type</label>
-                                            <select className="form-control" id="agreement_type" onChange={formChange('agreement_type')} value={activeForm.agreement_type_show} >
+                                            <label htmlFor="agreement_type" className="form-label" id="agreement_type" aria-label="Agreement Type">* Agreement Type</label>
+                                            <select className="form-control" id="agreement_type" onChange={formChange('agreement_type')} value={activeForm.agreement_type_show} aria-required="true">
                                                 <option value="start_type">Agreement Type</option>
                                                 <option value={['MEMO', 'Memo']}>Memo</option>
                                                 <option value={['RESOLUTION', 'Resolution']}>Resolution</option>
@@ -233,10 +233,8 @@ function mapDispatchToProps(dispatch, params) {
         onSubmit(event) {
             event.preventDefault();
             if (selectedAgreement) {
-                dispatch(putAgreement(selectedAgreement))
-                .then(() => {
-                    hashHistory.push(`agreement/summary/${selectedAgreement}`);
-                });
+                dispatch(putAgreement(selectedAgreement));
+                hashHistory.push(`agreement/summary/${selectedAgreement}`);
             } else {
                 dispatch(postAgreement())
                 .then((data_post) => {

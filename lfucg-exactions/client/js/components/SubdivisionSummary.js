@@ -113,7 +113,7 @@ class SubdivisionSummary extends React.Component {
                         </div>
                     );
                 }),
-                filter(lot => platIds.includes(lot.plat.id)),
+                filter(lot => (platIds.indexOf(lot.plat.id) !== -1)),
             )(lots);
 
         return (
