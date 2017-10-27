@@ -49,6 +49,7 @@ class PlatForm extends React.Component {
             addAnotherPlatZone,
             onPlatDues,
             selectedPlat,
+            currentUser,
         } = this.props;
 
         const currentParam = this.props.params.id;
@@ -224,7 +225,12 @@ class PlatForm extends React.Component {
                                                 </div>
                                                 <div className="col-sm-6">
                                                     <FormGroup label="* Gross Acreage" id="total_acreage" aria-required="true">
-                                                        <input type="number" className="form-control" placeholder="Gross Acreage" />
+                                                        <input
+                                                          type="number"
+                                                          step="0.01"
+                                                          className="form-control"
+                                                          placeholder="Gross Acreage"
+                                                        />
                                                     </FormGroup>
                                                 </div>
                                             </div>
@@ -251,7 +257,7 @@ class PlatForm extends React.Component {
                                                 </div>
                                                 <div className="col-sm-6">
                                                     <FormGroup label="* Date Recorded" id="date_recorded" aria-required="true">
-                                                        <input type="date" className="form-control" placeholder="Date Recorded" />
+                                                        <input type="date" className="form-control" placeholder="Use YYYY-MM-DD Format for Date" />
                                                     </FormGroup>
                                                 </div>
                                             </div>
@@ -296,7 +302,9 @@ class PlatForm extends React.Component {
                                             </div>
                                         </fieldset>
                                         <div className="col-xs-8">
-                                            <button disabled={!submitEnabled} className="btn btn-lex" onClick={onPlatSubmit} >Submit</button>
+                                            <button disabled={!submitEnabled} className="btn btn-lex" onClick={onPlatSubmit} >
+                                                {currentUser.is_superuser || (currentUser.profile && currentUser.profile.is_supervisor) ? <div>Submit / Approve</div> : <div>Submit</div>}
+                                            </button>
                                             {!submitEnabled ? (
                                                 <div>
                                                     <div className="clearfix" />
@@ -419,12 +427,24 @@ class PlatForm extends React.Component {
                                                                 <div className="row">
                                                                     <div className="col-sm-6">
                                                                         <FormGroup label="Sewer Exactions" id="sewer_due">
-                                                                            <input type="number" className="form-control" placeholder="Sewer Exactions" disabled />
+                                                                            <input
+                                                                              type="number"
+                                                                              step="0.01"
+                                                                              className="form-control"
+                                                                              placeholder="Sewer Exactions"
+                                                                              disabled
+                                                                            />
                                                                         </FormGroup>
                                                                     </div>
                                                                     <div className="col-sm-6">
                                                                         <FormGroup label="Non-Sewer Exactions" id="non_sewer_due">
-                                                                            <input type="number" className="form-control" placeholder="Non-Sewer Exactions" disabled />
+                                                                            <input
+                                                                              type="number"
+                                                                              step="0.01"
+                                                                              className="form-control"
+                                                                              placeholder="Non-Sewer Exactions"
+                                                                              disabled
+                                                                            />
                                                                         </FormGroup>
                                                                     </div>
                                                                 </div>
@@ -527,6 +547,7 @@ PlatForm.propTypes = {
     addAnotherPlatZone: PropTypes.func,
     onPlatDues: PropTypes.func,
     selectedPlat: PropTypes.string,
+    currentUser: PropTypes.object,
 };
 
 function mapStateToProps(state) {
@@ -535,6 +556,7 @@ function mapStateToProps(state) {
         subdivisions: state.subdivisions,
         plats: state.plats,
         accounts: state.accounts,
+        currentUser: state.currentUser,
     };
 }
 
@@ -681,10 +703,8 @@ function mapDispatchToProps(dispatch, params) {
         },
         onPlatAndCreateLot() {
             if (selectedPlat) {
-                dispatch(putPlat(selectedPlat))
-                .then(() => {
-                    hashHistory.push(`plat/${selectedPlat}/lot/form`);
-                });
+                dispatch(putPlat(selectedPlat));
+                hashHistory.push(`plat/${selectedPlat}/lot/form`);
             }
         },
         selectedPlat,

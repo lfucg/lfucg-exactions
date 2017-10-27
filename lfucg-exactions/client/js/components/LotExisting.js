@@ -213,7 +213,7 @@ class LotExisting extends React.Component {
                     </div>
                 </div>
 
-                <Breadcrumbs route={this.props.route} />
+                <Breadcrumbs route={this.props.route} route_permission="lot" />
 
 
                 <SearchBar
@@ -224,7 +224,6 @@ class LotExisting extends React.Component {
                     { filterField: 'filter_is_approved', displayName: 'Approval', list: [{ id: true, name: 'Approved' }, { id: false, name: 'Unapproved' }] },
                   ]}
                 />
-
                 <div className="row">
                     <div className="col-xs-12 text-center">
                         <a href={`${queryString}`}>
@@ -234,6 +233,7 @@ class LotExisting extends React.Component {
                         </a>
                     </div>
                 </div>
+
                 <div className="inside-body">
                     <div className="container">
                         {lots_list}

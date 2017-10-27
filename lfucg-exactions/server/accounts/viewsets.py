@@ -8,7 +8,6 @@ from django.contrib.auth.models import User
 from .models import *
 from .serializers import *
 from .permissions import CanAdminister
-
 from django.conf import settings
 
 from django_filters.rest_framework import DjangoFilterBackend
@@ -40,10 +39,8 @@ class AccountViewSet(viewsets.ModelViewSet):
 
     def create(self, request):
         data_set = request.data
-
         data_set['created_by'] = self.request.user.id
         data_set['modified_by'] = self.request.user.id
-
         serializer = AccountSerializer(data=data_set)
         if serializer.is_valid(raise_exception=True):
             self.perform_create(serializer)
@@ -210,7 +207,7 @@ class ProjectCostEstimateViewSet(viewsets.ModelViewSet):
 
         data_set['created_by'] = self.request.user.id
         data_set['modified_by'] = self.request.user.id
-
+        
         serializer = ProjectCostEstimateSerializer(data=data_set)
         if serializer.is_valid(raise_exception=True):
             self.perform_create(serializer)

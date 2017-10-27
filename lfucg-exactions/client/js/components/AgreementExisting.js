@@ -97,7 +97,7 @@ class AgreementExisting extends React.Component {
                     </div>
                 </div>
 
-                <Breadcrumbs route={this.props.route} />
+                <Breadcrumbs route={this.props.route} route_permission="agreement" />
 
                 <SearchBar
                   apiCalls={[getAccounts]}

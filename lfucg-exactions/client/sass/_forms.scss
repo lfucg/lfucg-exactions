@@ -178,3 +178,22 @@
     }
 }
 
+
+.error {
+    border: 1px solid red;
+}
+
+.bg-danger {
+    color: #a74545;
+    padding: 5px;
+}
+
+.btn-link {
+    outline: none;
+    &:focus, &:active, &:active:focus {
+        box-shadow: none;
+        outline: none;
+    }
+}
+
+

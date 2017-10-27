@@ -39,6 +39,7 @@ class ProjectCostForm extends React.Component {
             onSubmit,
             formChange,
             selectedProjectCost,
+            currentUser,
         } = this.props;
 
         const currentParam = this.props.params.id;
@@ -93,49 +94,51 @@ class ProjectCostForm extends React.Component {
                                     <div className="row">
                                         <div className="col-sm-6">
                                             <FormGroup label="Land Cost" id="land_cost">
-                                                <input type="number" className="form-control" placeholder="Land Cost" />
+                                                <input type="number" step="0.01" className="form-control" placeholder="Land Cost" />
                                             </FormGroup>
                                         </div>
                                         <div className="col-sm-6">
                                             <FormGroup label="Design Cost" id="design_cost">
-                                                <input type="number" className="form-control" placeholder="Design Cost" />
+                                                <input type="number" step="0.01" className="form-control" placeholder="Design Cost" />
                                             </FormGroup>
                                         </div>
                                     </div>
                                     <div className="row">
                                         <div className="col-sm-6">
                                             <FormGroup label="Construction Cost" id="construction_cost">
-                                                <input type="number" className="form-control" placeholder="Construction Cost" />
+                                                <input type="number" step="0.01" className="form-control" placeholder="Construction Cost" />
                                             </FormGroup>
                                         </div>
                                         <div className="col-sm-6">
                                             <FormGroup label="Administrative Cost" id="admin_cost">
-                                                <input type="number" className="form-control" placeholder="Administrative Cost" />
+                                                <input type="number" step="0.01" className="form-control" placeholder="Administrative Cost" />
                                             </FormGroup>
                                         </div>
                                     </div>
                                     <div className="row">
                                         <div className="col-sm-6">
                                             <FormGroup label="Management Cost" id="management_cost">
-                                                <input type="number" className="form-control" placeholder="Management Cost" />
+                                                <input type="number" step="0.01" className="form-control" placeholder="Management Cost" />
                                             </FormGroup>
                                         </div>
                                         <div className="col-sm-6">
                                             <FormGroup label="Other Costs" id="other_cost">
-                                                <input type="number" className="form-control" placeholder="Other Costs" />
+                                                <input type="number" step="0.01" className="form-control" placeholder="Other Costs" />
                                             </FormGroup>
                                         </div>
                                     </div>
                                     <div className="row">
                                         <div className="col-sm-6">
                                             <FormGroup label="* Credits Available" id="credits_available">
-                                                <input type="number" className="form-control" placeholder="* Credits Available" aria-required="true" />
+                                                <input type="number" step="0.01" className="form-control" placeholder="* Credits Available" aria-required="true" />
                                             </FormGroup>
                                         </div>
                                     </div>
                                 </fieldset>
                                 <div className="col-xs-8">
-                                    <button disabled={!submitEnabled} className="btn btn-lex" onClick={onSubmit} >Submit</button>
+                                    <button disabled={!submitEnabled} className="btn btn-lex" onClick={onSubmit} >
+                                        {currentUser.is_superuser || (currentUser.profile && currentUser.profile.is_supervisor) ? <div>Submit / Approve</div> : <div>Submit</div>}
+                                    </button>
                                     {!submitEnabled ? (
                                         <div>
                                             <div className="clearfix" />
@@ -178,6 +181,7 @@ ProjectCostForm.propTypes = {
     onSubmit: PropTypes.func,
     formChange: PropTypes.func,
     selectedProjectCost: PropTypes.string,
+    currentUser: PropTypes.object,
 };
 
 function mapStateToProps(state) {
@@ -185,6 +189,7 @@ function mapStateToProps(state) {
         activeForm: state.activeForm,
         projects: state.projects,
         projectCosts: state.projectCosts,
+        currentUser: state.currentUser,
     };
 }
 
@@ -239,10 +244,8 @@ function mapDispatchToProps(dispatch, params) {
         onSubmit(event) {
             event.preventDefault();
             if (selectedProjectCost) {
-                dispatch(putProjectCost(selectedProjectCost))
-                .then(() => {
-                    hashHistory.push(`project-cost/summary/${selectedProjectCost}`);
-                });
+                dispatch(putProjectCost(selectedProjectCost));
+                hashHistory.push(`project-cost/summary/${selectedProjectCost}`);
             } else {
                 dispatch(postProjectCost())
                 .then((data_post) => {
