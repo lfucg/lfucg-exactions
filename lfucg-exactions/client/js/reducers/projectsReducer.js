@@ -26,7 +26,7 @@ const projectsReducer = (state = [], action) => {
         const next = action.response.next;
         const prev = action.response.prev;
         if ((next != null && next.substr(0, next.length) === '/project') ||
-            (prev != null && next.substr(0, prev.length) === '/project') ||
+            (prev != null && prev.substr(0, prev.length) === '/project') ||
             (window.location.hash === '#/project')) {
             return action.response;
         }

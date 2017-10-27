@@ -1419,8 +1419,7 @@ export function searchQuery() {
             const queryString = compose(
                 reduce((acc, value) => acc + value, query_all),
                 map((key_name) => {
-                    const filter_index = key_name.lastIndexOf('filter_');
-                    console.log(filter_index);
+                    const filter_index = key_name.indexOf('filter_') + 'filter_'.length;
                     const field = key_name.slice(filter_index + 1, key_name.length);
                     console.log(field);
                     return `&${field}=${activeForm[key_name]}`;
