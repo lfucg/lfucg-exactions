@@ -25,8 +25,8 @@ const platsReducer = (state = [], action) => {
     case SEARCH_QUERY:
         const next = action.response.next;
         const prev = action.response.prev;
-        if ((next != null && next.startsWith('/plat')) ||
-            (prev != null && prev.startsWith('/plat')) ||
+        if ((next != null && next.substr(0, next.length) === '/plat') ||
+            (prev != null && next.substr(0, prev.length) === '/plat') ||
             (window.location.hash === '#/plat')) {
             return action.response;
         }
