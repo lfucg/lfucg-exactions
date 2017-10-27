@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
+import { hashHistory } from 'react-router';
 import PropTypes from 'prop-types';
 
 import {
@@ -88,6 +89,7 @@ function mapDispatchToProps(dispatch) {
         },
         onLogout() {
             dispatch(logout());
+            hashHistory.push('login/');
         },
     };
 }
