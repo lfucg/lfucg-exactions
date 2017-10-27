@@ -1,0 +1,12 @@
+{% extends "emails/email_template.html" %}
+{% load staticfiles %}
+
+{% block email_body %}
+
+	<h3>Hello,</h3>
+
+   	<p>An {{model}} was created and/or updated in the LFUCG Exactions system and it is now pending your approval.</p>
+
+   	<p>To review the {{model}}, please <a href="{{baseURL}}#/{{model}}/summary/{{id}}">click here</a> to view the entry.</p>
+    
+{% endblock email_body %}
