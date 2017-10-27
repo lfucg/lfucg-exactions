@@ -28,7 +28,7 @@ const lotsReducer = (state = [], action) => {
         const next = action.response.next;
         const prev = action.response.prev;
         if ((next != null && next.substr(0, next.length) === '/lot') ||
-            (prev != null && next.substr(0, prev.length) === '/lot') ||
+            (prev != null && prev.substr(0, prev.length) === '/lot') ||
             (window.location.hash === '#/lot')) {
             return action.response;
         }

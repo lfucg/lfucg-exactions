@@ -26,7 +26,7 @@ const platsReducer = (state = [], action) => {
         const next = action.response.next;
         const prev = action.response.prev;
         if ((next != null && next.substr(0, next.length) === '/plat') ||
-            (prev != null && next.substr(0, prev.length) === '/plat') ||
+            (prev != null && prev.substr(0, prev.length) === '/plat') ||
             (window.location.hash === '#/plat')) {
             return action.response;
         }

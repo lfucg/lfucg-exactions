@@ -24,7 +24,7 @@ const subdivisionsReducer = (state = [], action) => {
         const next = action.response.next;
         const prev = action.response.prev;
         if ((next != null && next.substr(0, next.length) === '/subdivision') ||
-            (prev != null && next.substr(0, prev.length) === '/subdivision') ||
+            (prev != null && prev.substr(0, prev.length) === '/subdivision') ||
             (window.location.hash === '#/subdivision')) {
             return action.response;
         }
