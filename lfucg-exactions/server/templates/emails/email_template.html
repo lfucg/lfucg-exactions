@@ -1,0 +1,68 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+
+<body>
+  <div>
+    <div id="header" style="
+      top: 0;
+      left: 0;
+      padding: 1% 5%;
+      width: 100%;
+      height: 5%;
+      background-color: rgb(0, 87, 168);
+      color: white;
+      display: flex;
+      line-height: 30px;
+      font-size: 3vh;
+      font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+      letter-spacing: 3px;
+      margin: auto;
+    ">
+      <a href="http://52.201.224.95/#/dashboard/" style="height: 3vh;">
+        <img id="logo" src="{{staticURL}}images/Lexington_Web_White_Horse_Only.png" alt="Lexington White Horse" style="height: 150%; padding: 3vh 2vh 0 3vh;">
+      </a>
+      <p>LEXINGTON</p>
+      <hr id="rule" style="
+        width: 1px;
+        height: 40px;
+        background-color: #FFFFFF;
+        margin: 2vh 2vw;
+      "/>
+      <p id="subheading" style="font-weight: lighter; letter-spacing: 6px;"> EXACTIONS </p>
+    </div>
+  </div>
+
+  <div id="email-body" style="
+    background-color: white;
+    height: 350px;
+    width: 50vw;
+    text-align: left;
+    padding: 20px 40px;
+  ">
+    {% block email_body %}
+        
+    {% endblock email_body %}
+  </div>
+
+  <div id="footer" style="
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 5vh;
+    background-color: rgb(0, 26, 73);
+    color: white;
+    text-align: right;
+    padding: 2vh 0;
+  ">
+    <p style="padding-right: 15px; font-size: 8px;">
+      © 2017 Lexington-Fayette Urban County Government
+      <br>
+      Lexington KY, Horse Capital of the World <sup>®</sup>
+      <br>
+      <a href="https://www.lexingtonky.gov/terms-of-use" style="color: white;">Terms of use</a>
+      &nbsp;
+    </p>
+  </div>
+
+</body>

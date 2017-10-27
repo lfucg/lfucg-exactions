@@ -1,0 +1,6 @@
+Hello
+
+A/An {{model}} was created/ or updated in the LFUCG Exactions system and it is now pending your approval
+
+Please login to the system to review the changes. 
+    
