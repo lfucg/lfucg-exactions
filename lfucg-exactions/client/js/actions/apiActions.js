@@ -9,6 +9,8 @@ import {
 
     LOGIN,
     LOGOUT,
+    PASSWORD,
+    RESET_PASSWORD,
 
     GET_SUBDIVISIONS,
     GET_SUBDIVISION_ID,
@@ -111,6 +113,50 @@ export function login() {
             return {
                 username,
                 password,
+            };
+        },
+    };
+}
+
+export function passwordForgot() {
+    return {
+        type: API_CALL,
+        endpoint: PASSWORD,
+        url: '/forgot-password/',
+        method: 'POST',
+        body: (getState) => {
+            const {
+                activeForm,
+            } = getState();
+            const {
+                email_forgot_password,
+            } = activeForm;
+            return {
+                email_forgot_password,
+            };
+        },
+    };
+}
+
+export function passwordReset(token, uid) {
+    return {
+        type: API_CALL,
+        endpoint: RESET_PASSWORD,
+        url: '/password_reset/',
+        method: 'POST',
+        body: (getState) => {
+            const {
+                activeForm,
+            } = getState();
+            const {
+                password_1,
+                password_2,
+            } = activeForm;
+            return {
+                password_1,
+                password_2,
+                token,
+                uid,
             };
         },
     };

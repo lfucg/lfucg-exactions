@@ -5,6 +5,7 @@ import {
 
 import Navbar from './Navbar';
 import Footer from './Footer';
+import FlashMessage from './FlashMessage';
 
 class DashboardPage extends React.Component {
     render() {
@@ -15,6 +16,7 @@ class DashboardPage extends React.Component {
                 <img src={`${window.StaticURL}images/lexington-hero-interior.jpg`} role="presentation" className="lex-banner" />
                 <div className="inside-body">
                     <div className="container">
+                        <FlashMessage />
                         <div className="row">
                             <div className="col-md-4 col-sm-6">
                                 <Link to="subdivision" role="link"><h2 className="in-page-link">Subdivisions</h2></Link>
