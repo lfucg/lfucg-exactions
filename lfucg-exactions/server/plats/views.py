@@ -1,4 +1,5 @@
 from django.shortcuts import render
+import datetime
 import csv
 from django.views.generic import View
 from django.http import HttpResponse
@@ -8,6 +9,7 @@ from .serializers import *
 from accounts.models import *
 from .utils import calculate_lot_balance
 from rest_framework.permissions import AllowAny
+from .serializers import *
 
 class PlatCSVExportView(View):
      def get(self, request, *args, **kwargs):
@@ -189,36 +191,85 @@ class PlatCSVExportView(View):
 
         return response
 
-from djqscsv import render_to_csv_response
-@api_view(['GET',])
-@permission_classes((AllowAny,))
-def lot_search_csv_export(request):
-    lots = Lot.objects.all()
-    lots.filter(**request.query_params).values(
-        'address_full',
-        'date_modified',
-        'latitude',
-        'longitude',
-        'lot_number',
-        'parcel_id',
-        'permit_id',
-        'plat__name',
-        'plat__plat_type',
+class LotSearchCSVExportView(View):
+    serializer_class = LotSerializer
+
+    def get_serializer(self, queryset, many=True):
+        return self.serializer_class(
+            queryset,
+            many=many,
         )
 
-    print('we here')
-    print(lots)
-    # plat_set = request.query_params.get('plat', None)
-    # if plat_set is not None:
-    #     lots = lots.filter(plat=plat_set)
+    def get(self, request, *args, **kwargs):
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename="export.csv"'
 
-    # is_approved_set = request.query_params.get('is_approved', None)
-    # if is_approved_set is not None:
-    #     is_approved_set = True if is_approved_set == 'true' else False
-    #     lots = lots.filter(is_approved=is_approved_set)
+        lots = Lot.objects.all()
+        
+        plat_set = request.query_params.get('plat', None)
+        if plat_set is not None:
+            lots = lots.filter(plat=plat_set)
 
-    # account_set = request.query_params.get('account', None)
-    # if account_set is not None:
-    #     lots = lots.filter(account=account_set)
+        is_approved_set = request.query_params.get('is_approved', None)
+        if is_approved_set is not None:
+            is_approved_set = True if is_approved_set == 'true' else False
+            lots = lots.filter(is_approved=is_approved_set)
 
-    return render_to_csv_response(lots, use_verbose_names=True)
+        account_set = request.query_params.get('account', None)
+        if account_set is not None:
+            lots = lots.filter(account=account_set)
+        serializer = self.get_serializer(
+            lots,
+            many=True
+        )
+
+        headers = [
+            'Address',
+            'Date Modified',
+            'Latitude',
+            'Longitude',
+            'Lot Number',
+            'Parcel ID',
+            'Permit ID',
+            'Plat Name',
+            'Plat Type',
+            'Total Exactions',
+            'Sewer Due',
+            'Non-Sewer Due',
+            'Sewer Trans.',
+            'Sewer Cap.',
+            'Roads',
+            'Parks',
+            'Storm',
+            'Open Space',
+            'Current Total Due',
+        ]
+        
+        writer = csv.DictWriter(response, fieldnames=headers, extrasaction='ignore')
+        writer.writeheader()
+
+        for lot in serializer.data:
+            row = {
+                'Address': lot['address_full'],
+                'Date Modified': lot['date_modified'],
+                'Latitude': lot['latitude'],
+                'Longitude': lot['longitude'],
+                'Lot Number': lot['lot_number'],
+                'Parcel ID': lot['parcel_id'],
+                'Permit ID': lot['permit_id'],
+                'Plat Name': lot['plat']['name'],
+                'Plat Type': lot['plat']['plat_type_display'],
+                'Total Exactions': lot['lot_exactions']['total_exactions'],
+                'Sewer Due': lot['lot_exactions']['sewer_due'],
+                'Non-Sewer Due': lot['lot_exactions']['non_sewer_due'],
+                'Sewer Trans.': lot['lot_exactions']['dues_sewer_trans_dev'],
+                'Sewer Cap.': lot['lot_exactions']['dues_sewer_cap_dev'],
+                'Roads': lot['lot_exactions']['dues_roads_dev'],
+                'Parks': lot['lot_exactions']['dues_parks_dev'],
+                'Storm': lot['lot_exactions']['dues_storm_dev'],
+                'Open Space': lot['lot_exactions']['dues_open_space_dev'],
+                'Current Total Due': lot['lot_exactions']['current_exactions'],
+            }
+            writer.writerow(row)
+
+        return response
