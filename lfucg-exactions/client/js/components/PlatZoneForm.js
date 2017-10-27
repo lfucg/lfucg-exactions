@@ -33,6 +33,7 @@ class PlatZoneForm extends React.Component {
             plats,
             formChange,
             onPlatZoneSubmit,
+            currentUser,
         } = this.props;
 
         const submitEnabled =
@@ -81,7 +82,9 @@ class PlatZoneForm extends React.Component {
                     </fieldset>
                     <div>
                         <div className="col-xs-8">
-                            <button className="btn btn-lex" onClick={onPlatZoneSubmit({ activeForm })} >Submit Plat Zone</button>
+                            <button className="btn btn-lex" onClick={onPlatZoneSubmit({ activeForm })} >
+                                {currentUser.is_superuser || (currentUser.profile && currentUser.profile.is_supervisor) ? <div>Submit / Approve</div> : <div>Submit</div>}
+                            </button>
                             {!submitEnabled ? (
                                 <div>
                                     <div className="clearfix" />
@@ -113,12 +116,14 @@ PlatZoneForm.propTypes = {
     onComponentDidMount: PropTypes.func,
     formChange: PropTypes.func,
     onPlatZoneSubmit: PropTypes.func,
+    currentUser: PropTypes.object,
 };
 
 function mapStateToProps(state) {
     return {
         activeForm: state.activeForm,
         plats: state.plats,
+        currentUser: state.currentUser,
     };
 }
 
