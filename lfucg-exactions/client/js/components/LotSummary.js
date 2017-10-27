@@ -592,11 +592,9 @@ function mapDispatchToProps(dispatch, params) {
         addPermitToLot(event) {
             event.preventDefault();
             if (selectedLot) {
-                dispatch(putPermitIdOnLot(selectedLot))
-                .then(() => {
-                    dispatch(getLots());
-                    dispatch(getLotID(selectedLot));
-                });
+                dispatch(putPermitIdOnLot(selectedLot));
+                dispatch(getLots());
+                dispatch(getLotID(selectedLot));
             }
         },
         selectedLot,
