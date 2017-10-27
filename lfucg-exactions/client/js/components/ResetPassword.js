@@ -78,7 +78,7 @@ class ResetPassword extends React.Component {
                                                   aria-label="Confirm Password"
                                                 />
                                             </FormGroup>
-                                            <p className={`help-block bg-danger text-center ${activeForm.password_1 !== activeForm.password_2 ? '' : 'hidden'}`} aria-label="Password Mismatch Warning">
+                                            <p className={`help-block bg-danger text-center ${activeForm.password_1 !== activeForm.password_2 ? '' : 'hidden'}`} aria-label="Your passwords do not match.">
                                                 <i className="fa fa-exclamation-circle" />&nbsp;Your passwords do not match.
                                             </p>
                                         </div>

@@ -17,8 +17,8 @@ class LotField(serializers.Field):
         return LotSerializer(obj).data
 
 class AccountSerializer(serializers.ModelSerializer):
-    plat_account = PlatSerializer(many=True, required=False)
-    lot_account = LotSerializer(many=True, required=False)
+    plat_account = PlatSerializer(many=True, required=False, allow_null=True)
+    lot_account = LotSerializer(many=True, required=False, allow_null=True)
 
     address_state_display = serializers.SerializerMethodField(read_only=True)
 
@@ -240,7 +240,7 @@ class ProjectCostEstimateSerializer(serializers.ModelSerializer):
         )
 
 class AccountLedgerSerializer(serializers.ModelSerializer):
-    lot = LotField(required=False)
+    lot = LotField(required=False, allow_null=True)
     agreement = AgreementField()
     account_from = AccountField()
     account_to = AccountField()

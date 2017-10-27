@@ -50,6 +50,7 @@ class AccountLedgerForm extends React.Component {
             accountFormChange,
             closeModal,
             selectedAccountLedger,
+            currentUser,
         } = this.props;
 
         const platsList = plats.length > 0 && (map((plat) => {
@@ -218,7 +219,9 @@ class AccountLedgerForm extends React.Component {
                                     </div>
                                 </fieldset>
                                 <div className="col-xs-8">
-                                    <button disabled={!submitEnabled} className="btn btn-lex" onClick={() => onSubmit(activeForm.plat_lot)} >Submit</button>
+                                    <button disabled={!submitEnabled} className="btn btn-lex" onClick={() => onSubmit(activeForm.plat_lot)} >
+                                        {currentUser.is_superuser || (currentUser.profile && currentUser.profile.is_supervisor) ? <div>Submit / Approve</div> : <div>Submit</div>}
+                                    </button>
                                     {!submitEnabled ? (
                                         <div>
                                             <div className="clearfix" />
@@ -286,6 +289,7 @@ AccountLedgerForm.propTypes = {
     accountFormChange: PropTypes.func,
     closeModal: PropTypes.func,
     selectedAccountLedger: PropTypes.string,
+    currentUser: PropTypes.object,
 };
 
 function mapStateToProps(state) {
@@ -296,6 +300,7 @@ function mapStateToProps(state) {
         accounts: state.accounts,
         agreements: state.agreements,
         accountLedgers: state.accountLedgers,
+        currentUser: state.currentUser,
     };
 }
 
@@ -307,6 +312,8 @@ function mapDispatchToProps(dispatch, params) {
             dispatch(formInit());
             dispatch(getAccounts());
             dispatch(getAgreements());
+            dispatch(getLots());
+            dispatch(getPlats());
             if (selectedAccountLedger) {
                 dispatch(getAccountLedgerID(selectedAccountLedger))
                 .then((data_account_ledger) => {
