@@ -1350,7 +1350,7 @@ export function getPagination(page) {
     };
 }
 
-export function searchQuery(isCSV) {
+export function searchQuery() {
     return {
         type: API_CALL,
         endpoint: SEARCH_QUERY,
@@ -1360,7 +1360,7 @@ export function searchQuery(isCSV) {
             } = getState();
 
 
-            let query_all = isCSV ? `${activeForm.currentPage}?` : `${activeForm.currentPage}?paginatePage`;
+            let query_all = `${activeForm.currentPage}?paginatePage`;
 
             if (activeForm.currentPage === '/credit-transfer/') {
                 query_all = '/ledger/?paginatePage';
