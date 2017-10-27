@@ -12,6 +12,8 @@ import FormGroup from './FormGroup';
 import Breadcrumbs from './Breadcrumbs';
 import Uploads from './Uploads';
 
+import DeclineDelete from './DeclineDelete';
+
 import {
     formInit,
     formUpdate,
@@ -36,6 +38,8 @@ class ProjectForm extends React.Component {
             agreements,
             onSubmit,
             formChange,
+            selectedProject,
+            currentUser,
         } = this.props;
 
         const currentParam = this.props.params.id;
@@ -72,7 +76,7 @@ class ProjectForm extends React.Component {
                     <div className="container">
                         <div className="col-sm-offset-1 col-sm-10">
                             {currentParam && projects.is_approved === false && <div className="row"><h1 className="approval-pending">Approval Pending</h1></div>}
-                            <form onSubmit={onSubmit} >
+                            <form >
 
                                 <fieldset>
                                     <div className="row">
@@ -192,14 +196,21 @@ class ProjectForm extends React.Component {
                                         </div>
                                     </div>
                                 </fieldset>
-                                <button disabled={!submitEnabled} className="btn btn-lex">Submit</button>
-                                {!submitEnabled ? (
-                                    <div>
-                                        <div className="clearfix" />
-                                        <span> * All required fields must be filled.</span>
-                                    </div>
-                                ) : null
-                                }
+                                <div className="col-xs-8">
+                                    <button disabled={!submitEnabled} className="btn btn-lex" onClick={onSubmit} >
+                                        {currentUser.is_superuser || (currentUser.profile && currentUser.profile.is_supervisor) ? <div>Submit / Approve</div> : <div>Submit</div>}
+                                    </button>
+                                    {!submitEnabled ? (
+                                        <div>
+                                            <div className="clearfix" />
+                                            <span> * All required fields must be filled.</span>
+                                        </div>
+                                    ) : null
+                                    }
+                                </div>
+                                <div className="col-xs-4">
+                                    <DeclineDelete currentForm="/project/" selectedEntry={selectedProject} parentRoute="project" />
+                                </div>
                             </form>
                         </div>
                         <div className="clearfix" />
@@ -230,6 +241,8 @@ ProjectForm.propTypes = {
     onComponentDidMount: PropTypes.func,
     onSubmit: PropTypes.func,
     formChange: PropTypes.func,
+    selectedProject: PropTypes.string,
+    currentUser: PropTypes.object,
 };
 
 function mapStateToProps(state) {
@@ -237,6 +250,7 @@ function mapStateToProps(state) {
         activeForm: state.activeForm,
         projects: state.projects,
         agreements: state.agreements,
+        currentUser: state.currentUser,
     };
 }
 
@@ -310,6 +324,7 @@ function mapDispatchToProps(dispatch, params) {
                 });
             }
         },
+        selectedProject,
     };
 }
 

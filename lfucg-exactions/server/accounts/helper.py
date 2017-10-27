@@ -5,10 +5,10 @@ from django.db.models import Q
 from django.core.mail import EmailMultiAlternatives
 from django.contrib.auth.models import User
 
-from django.db.models.signals import post_save
+from django.db.models.signals import pre_save
 from django.dispatch import receiver
-from plats.models import *
-from .models import *
+from plats.models import Plat, Lot
+from .models import Agreement, AccountLedger, Payment, Project, ProjectCostEstimate
 
 def send_password_reset_email(user):
     text_template = get_template('emails/password_reset.txt')
@@ -45,7 +45,6 @@ def send_lost_username_email(user):
     msg = EmailMultiAlternatives(subject, text_content, from_email, [user.email])
     msg.attach_alternative(html_content, "text/html")
     msg.send()
-
 
 @receiver(post_save, sender=Agreement)
 @receiver(post_save, sender=AccountLedger)
@@ -88,3 +87,18 @@ def send_email_to_supervisors(sender, instance, created=False, **kwargs):
     msg = EmailMultiAlternatives(subject, text_content, from_email, to_emails)
     msg.attach_alternative(html_content, "text/html")
     msg.send()
+
+@receiver(pre_save, sender=Agreement)
+@receiver(pre_save, sender=AccountLedger)
+@receiver(pre_save, sender=Payment)
+@receiver(pre_save, sender=Project)
+@receiver(pre_save, sender=ProjectCostEstimate)
+@receiver(pre_save, sender=Plat)
+@receiver(pre_save, sender=Lot)
+def set_approval(sender, instance, **kwargs):
+    if instance.modified_by.is_superuser == True or (hasattr(instance.modified_by, 'profile') and instance.modified_by.profile.is_supervisor == True):
+        instance.is_approved = True
+    else:
+        instance.is_approved = False
+    return instance
+

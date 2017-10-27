@@ -80,3 +80,5 @@ export const PUT_ACCOUNT_LEDGER = 'PUT_ACCOUNT_LEDGER';
 
 export const GET_PAGINATION = 'GET_PAGINATION';
 export const SEARCH_QUERY = 'SEARCH_QUERY';
+
+export const POST_DELETE = 'POST_DELETE';

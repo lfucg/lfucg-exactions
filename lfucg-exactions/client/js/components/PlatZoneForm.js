@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import FormGroup from './FormGroup';
+import DeclineDelete from './DeclineDelete';
 
 import {
     formUpdate,
@@ -32,6 +33,7 @@ class PlatZoneForm extends React.Component {
             plats,
             formChange,
             onPlatZoneSubmit,
+            currentUser,
         } = this.props;
 
         const submitEnabled =
@@ -40,7 +42,7 @@ class PlatZoneForm extends React.Component {
 
         return (
             <div className="plat-zone-form">
-                <form onSubmit={onPlatZoneSubmit({ activeForm })} >
+                <form >
                     <fieldset>
                         <div className="row form-subheading">
                             {this.props.zone_value ? <h3>Plat Zone - {this.props.zone_value}</h3> : <h3>Plat Zone</h3>}
@@ -78,14 +80,24 @@ class PlatZoneForm extends React.Component {
                             </div>
                         </div>
                     </fieldset>
-                    <button className="btn btn-lex">Submit Plat Zone</button>
-                    {!submitEnabled ? (
-                        <div>
-                            <div className="clearfix" />
-                            <span> * All required fields must be filled.</span>
+                    <div>
+                        <div className="col-xs-8">
+                            <button className="btn btn-lex" onClick={onPlatZoneSubmit({ activeForm })} >
+                                {currentUser.is_superuser || (currentUser.profile && currentUser.profile.is_supervisor) ? <div>Submit / Approve</div> : <div>Submit</div>}
+                            </button>
+                            {!submitEnabled ? (
+                                <div>
+                                    <div className="clearfix" />
+                                    <span> * All required fields must be filled.</span>
+                                </div>
+                            ) : null
+                            }
                         </div>
-                    ) : null
-                    }
+                        <div className="col-xs-4">
+                            <DeclineDelete currentForm="/platZone/" selectedEntry={this.props.plat_zone_value} parentRoute="plat" />
+                        </div>
+                    </div>
+                    <div className="clearfix" />
                 </form>
             </div>
         );
@@ -104,12 +116,14 @@ PlatZoneForm.propTypes = {
     onComponentDidMount: PropTypes.func,
     formChange: PropTypes.func,
     onPlatZoneSubmit: PropTypes.func,
+    currentUser: PropTypes.object,
 };
 
 function mapStateToProps(state) {
     return {
         activeForm: state.activeForm,
         plats: state.plats,
+        currentUser: state.currentUser,
     };
 }
 
