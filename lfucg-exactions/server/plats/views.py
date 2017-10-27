@@ -2,11 +2,12 @@ from django.shortcuts import render
 import csv
 from django.views.generic import View
 from django.http import HttpResponse
-
+from rest_framework.decorators import api_view, permission_classes
 from .models import *
 from .serializers import *
 from accounts.models import *
 from .utils import calculate_lot_balance
+from rest_framework.permissions import AllowAny
 
 class PlatCSVExportView(View):
      def get(self, request, *args, **kwargs):
@@ -187,3 +188,37 @@ class PlatCSVExportView(View):
             writer.writerow(plat_csv_data)
 
         return response
+
+from djqscsv import render_to_csv_response
+@api_view(['GET',])
+@permission_classes((AllowAny,))
+def lot_search_csv_export(request):
+    lots = Lot.objects.all()
+    lots.filter(**request.query_params).values(
+        'address_full',
+        'date_modified',
+        'latitude',
+        'longitude',
+        'lot_number',
+        'parcel_id',
+        'permit_id',
+        'plat__name',
+        'plat__plat_type',
+        )
+
+    print('we here')
+    print(lots)
+    # plat_set = request.query_params.get('plat', None)
+    # if plat_set is not None:
+    #     lots = lots.filter(plat=plat_set)
+
+    # is_approved_set = request.query_params.get('is_approved', None)
+    # if is_approved_set is not None:
+    #     is_approved_set = True if is_approved_set == 'true' else False
+    #     lots = lots.filter(is_approved=is_approved_set)
+
+    # account_set = request.query_params.get('account', None)
+    # if account_set is not None:
+    #     lots = lots.filter(account=account_set)
+
+    return render_to_csv_response(lots, use_verbose_names=True)

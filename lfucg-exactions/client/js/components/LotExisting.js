@@ -1,9 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
-import { map, filter } from 'ramda';
+import { map, filter, reduce, compose } from 'ramda';
 import PropTypes from 'prop-types';
-import { CSVLink } from 'react-csv';
+
 import Navbar from './Navbar';
 import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
@@ -32,7 +32,7 @@ class LotExisting extends React.Component {
             accounts,
             payments,
             accountLedgers,
-            removeSearchPagination,
+            activeForm,
         } = this.props;
 
         const platsList = plats && plats.length > 0 &&
@@ -99,6 +99,15 @@ class LotExisting extends React.Component {
                 );
             })(lots)
         ) : null;
+
+        const queryString = compose(
+            reduce((acc, value) => acc + value, '../api/lot_search_csv/?'),
+            map((a) => {
+                const field = a[0].slice(7, a[0].length);
+                return `&${field}=${a[1]}`;
+            }),
+            filter(a => a[1] && a[0].startsWith('filter_')),
+        )(Object.entries(activeForm));
 
         const headers = [
             'Address',
@@ -169,7 +178,7 @@ class LotExisting extends React.Component {
                 })(paymentsOnCurrentLot);
 
                 const ledgersOnCurrentLot = accountLedgers.length > 0 &&
-                    filter(accountLedger => accountLedger.lot.id === single_lot.id)(accountLedgers);
+                    filter(accountLedger => accountLedger.lot && accountLedger.lot.id === single_lot.id)(accountLedgers);
 
                 map((ledger) => {
                     if (ledgerLengthPerLot < ledgersOnCurrentLot.length) {
@@ -218,38 +227,11 @@ class LotExisting extends React.Component {
 
                 <div className="row">
                     <div className="col-xs-12 text-center">
-                        <button type="button" className="btn button-modal-link" data-toggle="modal" data-target="#searchCSVModal" onClick={removeSearchPagination} disabled={payments.length === 0}>
-                            <i className="fa fa-download button-modal-icon" aria-hidden="true" />&nbsp;Generate CSV from Current Results
-                        </button>
-                    </div>
-                </div>
-                <div className="modal fade" id="searchCSVModal" tabIndex="-1" role="dialog" aria-labelledby="modalLabel">
-                    <div className="modal-dialog" role="document">
-                        <div className="modal-content">
-                            <div className="modal-header">
-                                <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                <h3 className="modal-title text-center" id="modalLabel">Click below to download the CSV of your search results.</h3>
-                            </div>
-                            <div className="modal-body text-center">
-                                <CSVLink className="btn btn-modal" data={csvData} filename="LotReport.csv" headers={headers}>
-                                    <i className="fa fa-download text-white" aria-hidden="true" />
-                                    &nbsp;Download
-                                </CSVLink>
-                                <h5>Lots included in file:</h5>
-                                <div className="csv-modal">
-                                    {lots.length > 0 &&
-                                        map((lot) => {
-                                            return (
-                                                <p key={lot.id}>{lot.address_full}</p>
-                                            );
-                                        })(lots)
-                                    }
-                                </div>
-                            </div>
-                            <div className="modal-footer">
-                                <button type="button" className="btn btn-default" data-dismiss="modal">Close</button>
-                            </div>
-                        </div>
+                        <a href={`${queryString}`}>
+                            <button type="button" className="btn button-modal-link" disabled={payments.length === 0}>
+                                <i className="fa fa-download button-modal-icon" aria-hidden="true" />&nbsp;Generate CSV from Current Results
+                            </button>
+                        </a>
                     </div>
                 </div>
                 <div className="inside-body">
@@ -273,7 +255,7 @@ LotExisting.propTypes = {
     accountLedgers: PropTypes.array,
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
-    removeSearchPagination: PropTypes.func,
+    activeForm: PropTypes.object,
 };
 
 function mapStateToProps(state) {
@@ -284,6 +266,7 @@ function mapStateToProps(state) {
         accounts: state.accounts,
         payments: state.payments,
         accountLedgers: state.accountLedgers,
+        activeForm: state.activeForm,
     };
 }
 
@@ -295,9 +278,6 @@ function mapDispatchToProps(dispatch) {
                 dispatch(getPayments());
                 dispatch(getAccountLedgers());
             });
-        },
-        removeSearchPagination() {
-            dispatch(searchQuery('isCSV'));
         },
     };
 }

@@ -3,7 +3,7 @@ from rest_framework import routers
 
 from accounts.auth import *
 from plats.viewsets import *
-from plats.views import PlatCSVExportView
+from plats.views import PlatCSVExportView, lot_search_csv_export
 from notes.viewsets import *
 from accounts.viewsets import *
 from .views import CurrentUserDetails
@@ -40,6 +40,7 @@ urlpatterns = [
     url(r'^delete_token/', Logout.as_view()),
     url(r'^upload/create/$', FileUploadCreate.as_view(), name="document-upload"),
     url(r'^export_plat_csv/$', PlatCSVExportView.as_view()),
+    url(r'^lot_search_csv/$', lot_search_csv_export),
 
     url(r'^', include(router.urls)),
 ]
