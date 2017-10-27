@@ -109,100 +109,6 @@ class LotExisting extends React.Component {
             filter(a => a[1] && a[0].startsWith('filter_')),
         )(Object.entries(activeForm));
 
-        const headers = [
-            'Address',
-            'Date Modified',
-            'Latitude',
-            'Longitude',
-            'Lot Number',
-            'Parcel ID',
-            'Permit ID',
-            'Plat Name',
-            'Plat Type',
-            'Total Exactions',
-            'Sewer Due',
-            'Non-Sewer Due',
-            'Sewer Trans.',
-            'Sewer Cap.',
-            'Roads',
-            'Parks',
-            'Storm',
-            'Open Space',
-            'Current Total Due',
-        ];
-        let paymentLengthPerLot = 0;
-        let ledgerLengthPerLot = 0;
-
-        const csvData = lots.length > 0 ?
-            (map((single_lot) => {
-                const data = [
-                    single_lot.address_full || '',
-                    single_lot.date_modified || '',
-                    single_lot.latitude || '',
-                    single_lot.longitude || '',
-                    single_lot.lot_number || '',
-                    single_lot.parcel_id || '',
-                    single_lot.permit_id || '',
-                    single_lot.plat.name || '',
-                    single_lot.plat.plat_type_display || '',
-                    single_lot.lot_exactions.total_exactions || '',
-                    single_lot.lot_exactions.sewer_due || '',
-                    single_lot.lot_exactions.non_sewer_due || '',
-                    single_lot.lot_exactions.dues_sewer_trans_dev || '',
-                    single_lot.lot_exactions.dues_sewer_cap_dev || '',
-                    single_lot.lot_exactions.dues_roads_dev || '',
-                    single_lot.lot_exactions.dues_parks_dev || '',
-                    single_lot.lot_exactions.dues_storm_dev || '',
-                    single_lot.lot_exactions.dues_open_space_dev || '',
-                    single_lot.lot_exactions.current_exactions || '',
-                ];
-
-                const paymentsOnCurrentLot = payments.length > 0 &&
-                    filter(payment => payment.lot_id.id === single_lot.id)(payments);
-
-                map((payment) => {
-                    if (paymentLengthPerLot < paymentsOnCurrentLot.length) {
-                        paymentLengthPerLot += 1;
-                        headers.push(
-                            `Pymt. ${paymentLengthPerLot} Date`,
-                            `Pymt. ${paymentLengthPerLot} Amt.`,
-                            `Pymt. ${paymentLengthPerLot} Type`,
-                            );
-                    }
-                    data.push(
-                        payment.date_created,
-                        payment.total_paid,
-                        payment.payment_type_display,
-                        );
-
-                })(paymentsOnCurrentLot);
-
-                const ledgersOnCurrentLot = accountLedgers.length > 0 &&
-                    filter(accountLedger => accountLedger.lot && accountLedger.lot.id === single_lot.id)(accountLedgers);
-
-                map((ledger) => {
-                    if (ledgerLengthPerLot < ledgersOnCurrentLot.length) {
-                        ledgerLengthPerLot += 1;
-                        headers.push(
-                            `Trf. ${ledgerLengthPerLot} Date`,
-                            `Trf. ${ledgerLengthPerLot} Sewer`,
-                            `Trf. ${ledgerLengthPerLot} Non-Sewer`,
-                            `Trf. ${ledgerLengthPerLot} Type`,
-                            );
-                    }
-
-                    data.push(
-                        ledger.entry_date,
-                        ledger.sewer_credits,
-                        ledger.non_sewer_credits,
-                        ledger.entry_type_display,
-                        );
-
-                })(ledgersOnCurrentLot);
-
-                return data;
-            })(lots)) : 'none';
-
         return (
             <div className="lot-existing">
                 <Navbar />
@@ -227,7 +133,7 @@ class LotExisting extends React.Component {
                 <div className="row">
                     <div className="col-xs-12 text-center">
                         <a href={`${queryString}`}>
-                            <button type="button" className="btn button-modal-link" disabled={payments.length === 0}>
+                            <button type="button" className="btn button-modal-link">
                                 <i className="fa fa-download button-modal-icon" aria-hidden="true" />&nbsp;Generate CSV from Current Results
                             </button>
                         </a>
