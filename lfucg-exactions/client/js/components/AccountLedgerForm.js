@@ -28,7 +28,6 @@ import {
     getAccountLedgerID,
     postAccountLedger,
     putAccountLedger,
-    getNoteContent,
 } from '../actions/apiActions';
 
 class AccountLedgerForm extends React.Component {
@@ -96,9 +95,6 @@ class AccountLedgerForm extends React.Component {
 
         const currentPlat = plats && plats.length > 0 &&
             filter(plat => plat.id === parseInt(activeForm.plat, 10))(plats)[0];
-
-        const currentLot = lots && lots.length > 0 &&
-            filter(lot => lot.id === parseInt(activeForm.lot, 10))(lots)[0];
 
         return (
             <div className="account-ledger-form">
@@ -265,29 +261,39 @@ class AccountLedgerForm extends React.Component {
                             </div>
                             }
                             <div className="clearfix" />
-                            {currentLot && currentLot.id && currentLot.plat &&
-                                <Notes
-                                  content_type="plats_lot"
-                                  object_id={currentLot.id}
-                                  parent_content_type="plats_plat"
-                                  parent_object_id={currentLot.plat.id}
-                                  grandparent_content_type="plats_subdivision"
-                                  grandparent_object_id={currentLot.plat.subdivision && currentLot.plat.subdivision.id}
-                                  ariaExpanded="true"
-                                  panelClass="panel-collapse collapse row in"
-                                  permission="lot"
-                                />
+                            {
+                                lots && lots.length > 0 &&
+                                    map((lot =>
+                                        (lot.id === parseInt(activeForm.lot, 10)) ?
+                                            <Notes
+                                              content_type="plats_lot"
+                                              object_id={lot.id}
+                                              parent_content_type="plats_plat"
+                                              parent_object_id={lot.plat.id}
+                                              grandparent_content_type="plats_subdivision"
+                                              grandparent_object_id={lot.plat.subdivision && lot.plat.subdivision.id}
+                                              ariaExpanded="true"
+                                              panelClass="panel-collapse collapse row in"
+                                              permission="lot"
+                                            />
+                                        : null
+                                ))(lots)
                             }
-                            {currentPlat && currentPlat.id &&
-                                <Notes
-                                  content_type="plats_plat"
-                                  object_id={currentPlat.id}
-                                  parent_content_type="plats_subdivision"
-                                  parent_object_id={currentPlat.subdivision && currentPlat.subdivision.id}
-                                  ariaExpanded="true"
-                                  panelClass="panel-collapse collapse row in"
-                                  permission="plat"
-                                />
+                            {
+                                plats && plats.length > 0 &&
+                                    map((plat =>
+                                        (plat.id === parseInt(activeForm.plat, 10)) ?
+                                            <Notes
+                                              content_type="plats_plat"
+                                              object_id={plat.id}
+                                              parent_content_type="plats_subdivision"
+                                              parent_object_id={plat.subdivision && plat.subdivision.id}
+                                              ariaExpanded="true"
+                                              panelClass="panel-collapse collapse row in"
+                                              permission="plat"
+                                            />
+                                        : null
+                                ))(plats)
                             }
                         </div>
                     </div>
