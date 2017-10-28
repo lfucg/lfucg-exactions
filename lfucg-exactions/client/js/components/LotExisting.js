@@ -14,9 +14,6 @@ import {
     getPagination,
     getPlats,
     getAccounts,
-    searchQuery,
-    getPayments,
-    getAccountLedgers,
 } from '../actions/apiActions';
 
 class LotExisting extends React.Component {
@@ -30,8 +27,6 @@ class LotExisting extends React.Component {
             lots,
             plats,
             accounts,
-            payments,
-            accountLedgers,
             activeForm,
         } = this.props;
 
@@ -157,8 +152,6 @@ LotExisting.propTypes = {
     lots: PropTypes.array,
     plats: PropTypes.array,
     accounts: PropTypes.array,
-    payments: PropTypes.array,
-    accountLedgers: PropTypes.array,
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
     activeForm: PropTypes.object,
@@ -170,8 +163,6 @@ function mapStateToProps(state) {
         lots: state.lots,
         plats: state.plats,
         accounts: state.accounts,
-        payments: state.payments,
-        accountLedgers: state.accountLedgers,
         activeForm: state.activeForm,
     };
 }
@@ -179,11 +170,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     return {
         onComponentDidMount() {
-            dispatch(getPagination('/lot/'))
-            .then(() => {
-                dispatch(getPayments());
-                dispatch(getAccountLedgers());
-            });
+            dispatch(getPagination('/lot/'));
         },
     };
 }

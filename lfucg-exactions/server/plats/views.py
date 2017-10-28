@@ -4,13 +4,10 @@ import csv
 from django.views.generic import View
 from django.http import HttpResponse
 from django.db.models import Count, Max
-from rest_framework import viewsets
-from rest_framework.decorators import api_view, permission_classes
 from .models import *
 from .serializers import *
 from accounts.models import *
 from .utils import calculate_lot_balance
-from rest_framework.permissions import AllowAny
 from .serializers import *
 
 class PlatCSVExportView(View):
@@ -203,8 +200,11 @@ class LotSearchCSVExportView(View):
         )
 
     def get(self, request, *args, **kwargs):
+        filename = 'lot_report_' + datetime.datetime.now().strftime("%Y-%m-%d") 
         response = HttpResponse(content_type='text/csv')
-        response['Content-Disposition'] = 'attachment; filename="export.csv"'
+        response['Content-Disposition'] = 'attachment; filename='+filename+'.csv'
+
+        # QUERY DB // FILTER ON PARAMS
 
         lots = Lot.objects.all()
 
@@ -226,6 +226,7 @@ class LotSearchCSVExportView(View):
             many=True
         )
 
+        # HEADERS 
         headers = [
             'Address',
             'Date Modified',
@@ -248,32 +249,35 @@ class LotSearchCSVExportView(View):
             'Current Total Due',
         ]
 
-        payment_length_per_lot = 0
-        ledger_length_per_lot = 0   
-        max_payments = Payment.objects.values("lot_id").annotate(num_payments=Count("lot_id")).aggregate(Max('num_payments'))
-        print(max_payments)
+        # APPEND PAYMENT HEADERS FROM OUTSET BASED ON MAX PAYMENTS ON LOTS QUERY
+        max_payments = Payment.objects.filter(lot_id__in=lots).values("lot_id").annotate(payments_on_lots=Count("lot_id")).aggregate(Max('payments_on_lots'))['payments_on_lots__max']
 
+        payment_number = 1
+        if max_payments is not None:
+            while max_payments >= payment_number:
+                headers.extend(['Pymt. Date %s' % payment_number,])
+                headers.extend(['Pymt. Amt. %s' % payment_number,])
+                headers.extend(['Pymt. Type %s' % payment_number,])
+                payment_number += 1
 
-        for lot in serializer.data:
-            if len(payment_queryset) > payment_length_per_lot:
-                payment_length_per_lot = len(payment_length_per_lot)
-            while len(payment_queryset) > payment_length_per_lot:
-                payment_length_per_lot = payment_length_per_lot + 1
-                headers.extend(['Pymt. Date %s' % payment_length_per_lot,])
-                headers.extend(['Pymt. Amt. %s' % payment_length_per_lot,])
-                headers.extend(['Pymt. Type %s' % payment_length_per_lot,])
+        # APPEND LEDGER HEADERS FROM OUTSET BASED ON MAX LEDGERS ON LOTS QUERY
+        max_ledgers = AccountLedger.objects.filter(lot__in=lots).values("lot").annotate(ledgers_on_lots=Count("lot")).aggregate(Max('ledgers_on_lots'))['ledgers_on_lots__max']
 
-            ledger_from_queryset = AccountLedger.objects.filter(account_from=lot['account'])
-            while len(ledger_from_queryset) > ledger_length_per_lot:
-                ledger_length_per_lot = ledger_length_per_lot + 1
-                headers.extend(['Trf. %s Date' % ledger_length_per_lot])
-                headers.extend(['Trf. %s Sewer' % ledger_length_per_lot])
-                headers.extend(['Trf. %s Non-Sewer' % ledger_length_per_lot])
-                headers.extend(['Trf. %s Type' % ledger_length_per_lot])
+        ledger_number = 1
+        if max_ledgers is not None:
+            while max_ledgers >= ledger_number:
+                headers.extend(['Trf. %s Date' % ledger_number])
+                headers.extend(['Trf. %s Sewer' % ledger_number])
+                headers.extend(['Trf. %s Non-Sewer' % ledger_number])
+                headers.extend(['Trf. %s Type' % ledger_number])
+                ledger_number += 1
 
+        # WRITE HEADERS
         writer = csv.DictWriter(response, fieldnames=headers, extrasaction='ignore')
         writer.writeheader()
+        # END HEADERS
 
+        # ROWS
         for lot in serializer.data:
             row = {
                 'Address': lot['address_full'],
@@ -313,15 +317,15 @@ class LotSearchCSVExportView(View):
                     row['Pymt. Amt. %s' % payment_length_per_lot] = '${:,.2f}'.format(payment_total)
                     row['Pymt. Type %s' % payment_length_per_lot] = single_payment.payment_type
 
-            ledger_from_queryset = AccountLedger.objects.filter(account_from=lot['account'])
+            ledger_from_queryset = AccountLedger.objects.filter(lot=lot['id'])
             if ledger_from_queryset is not None:
                 ledger_length_per_lot = 0
-                for account_from in ledger_from_queryset:
+                for ledger in ledger_from_queryset:
                     ledger_length_per_lot += 1
-                    row['Trf. %s Date' % ledger_length_per_lot] = account_from.entry_date
-                    row['Trf. %s Sewer' % ledger_length_per_lot] = '${:,.2f}'.format(account_from.sewer_credits)
-                    row['Trf. %s Non-Sewer' % ledger_length_per_lot] = '${:,.2f}'.format(account_from.non_sewer_credits)
-                    row['Trf. %s Type' % ledger_length_per_lot] = account_from.entry_type
+                    row['Trf. %s Date' % ledger_length_per_lot] = ledger.entry_date
+                    row['Trf. %s Sewer' % ledger_length_per_lot] = '${:,.2f}'.format(ledger.sewer_credits)
+                    row['Trf. %s Non-Sewer' % ledger_length_per_lot] = '${:,.2f}'.format(ledger.non_sewer_credits)
+                    row['Trf. %s Type' % ledger_length_per_lot] = ledger.entry_type
 
             writer.writerow(row)
 
