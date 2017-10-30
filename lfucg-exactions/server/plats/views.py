@@ -3,7 +3,7 @@ import datetime
 import csv
 from django.views.generic import View
 from django.http import HttpResponse
-from django.db.models import Count, Max
+from django.db.models import Count, Max, Q
 from .models import *
 from .serializers import *
 from accounts.models import *
@@ -157,23 +157,13 @@ class PlatCSVExportView(View):
                 payment_queryset = Payment.objects.filter(lot_id=single_lot.id)
                 if payment_queryset is not None:
                     for single_payment in payment_queryset:
-                        payment_total = (single_payment.paid_roads +
-                            single_payment.paid_sewer_trans +
-                            single_payment.paid_sewer_cap +
-                            single_payment.paid_parks +
-                            single_payment.paid_storm +
-                            single_payment.paid_open_space)
-
                         current_lot_data.extend([
-                            payment_total,
+                            single_payment.calculate_payment_total(),
                         ])
 
                 ledger_from_queryset = AccountLedger.objects.filter(account_from=single_lot.account)
-                if ledger_from_queryset is not None:
-                    for account_from in ledger_from_queryset:
-                        ledger_from_total = account_from.non_sewer_credits + account_from.sewer_credits
-
-                        current_lot_data.extend([ledger_from_total,])
+                for account_from in ledger_from_queryset:
+                    current_lot_data.extend([account_from.calculate_credits(),])
 
                 if len(zone_csv_data) > 0:
                     lot_csv_data = zone_csv_data + current_lot_data
@@ -220,6 +210,17 @@ class LotSearchCSVExportView(View):
         account_set = self.request.GET.get('account', None)
         if account_set is not None:
             lots = lots.filter(account=account_set)
+
+        search_set = self.request.GET.get('search', None)
+        if search_set is not None:
+            lots = lots.filter(
+                    Q(address_full__icontains=search_set) |
+                    Q(lot_number__icontains=search_set) |
+                    Q(parcel_id__icontains=search_set) |
+                    Q(permit_id__icontains=search_set) |
+                    Q(plat__expansion_area__icontains=search_set) |
+                    Q(plat__name__icontains=search_set)
+                )
 
         serializer = self.get_serializer(
             lots,
@@ -306,15 +307,9 @@ class LotSearchCSVExportView(View):
             if payment_queryset is not None:
                 payment_length_per_lot = 0
                 for single_payment in payment_queryset:
-                    payment_total = (single_payment.paid_roads +
-                        single_payment.paid_sewer_trans +
-                        single_payment.paid_sewer_cap +
-                        single_payment.paid_parks +
-                        single_payment.paid_storm +
-                        single_payment.paid_open_space)
                     payment_length_per_lot += 1
                     row['Pymt. Date %s' % payment_length_per_lot] = single_payment.date_created
-                    row['Pymt. Amt. %s' % payment_length_per_lot] = '${:,.2f}'.format(payment_total)
+                    row['Pymt. Amt. %s' % payment_length_per_lot] = '${:,.2f}'.format(single_payment.calculate_payment_total())
                     row['Pymt. Type %s' % payment_length_per_lot] = single_payment.payment_type
 
             ledger_from_queryset = AccountLedger.objects.filter(lot=lot['id'])
