@@ -128,7 +128,7 @@ class LotExisting extends React.Component {
                 />
                 <div className="row">
                     <div className="col-xs-12 text-center">
-                        <a href={`${queryString}`} className="btn button-modal-link">
+                        <a href={`${queryString}`} className="btn button-modal-link" aria-label="Generate CSV from Current Results">
                             <i className="fa fa-download button-modal-icon" aria-hidden="true" />&nbsp;Generate CSV from Current Results
                         </a>
                     </div>
