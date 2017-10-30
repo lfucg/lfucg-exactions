@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
-import { map, filter, reduce, compose } from 'ramda';
+import { map } from 'ramda';
 import PropTypes from 'prop-types';
 
 import Navbar from './Navbar';
@@ -27,7 +27,6 @@ class LotExisting extends React.Component {
             lots,
             plats,
             accounts,
-            activeForm,
         } = this.props;
 
         const platsList = plats && plats.length > 0 &&
@@ -95,16 +94,6 @@ class LotExisting extends React.Component {
             })(lots)
         ) : null;
 
-        const queryString = compose(
-            reduce((acc, value) => acc + value, '../api/lot_search_csv/?'),
-            map((key_name) => {
-                const filter_index = key_name.indexOf('filter_') + 'filter_'.length;
-                const field = key_name.slice(filter_index, key_name.length);
-                return `&${field}=${activeForm[key_name]}`;
-            }),
-            filter(key_name => activeForm[key_name] && (key_name.indexOf('filter_') !== -1)),
-        )(Object.keys(activeForm));
-
         return (
             <div className="lot-existing">
                 <Navbar />
@@ -125,14 +114,8 @@ class LotExisting extends React.Component {
                     { filterField: 'filter_account', displayName: 'Developer', list: accountsList },
                     { filterField: 'filter_is_approved', displayName: 'Approval', list: [{ id: true, name: 'Approved' }, { id: false, name: 'Unapproved' }] },
                   ]}
+                  csvEndpoint="../api/lot_search_csv/?"
                 />
-                <div className="row">
-                    <div className="col-xs-12 text-center">
-                        <a href={`${queryString}`} className="btn button-modal-link" aria-label="Generate CSV from Current Results">
-                            <i className="fa fa-download button-modal-icon" aria-hidden="true" />&nbsp;Generate CSV from Current Results
-                        </a>
-                    </div>
-                </div>
 
                 <div className="inside-body">
                     <div className="container">
@@ -153,7 +136,6 @@ LotExisting.propTypes = {
     accounts: PropTypes.array,
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
-    activeForm: PropTypes.object,
 };
 
 function mapStateToProps(state) {
@@ -162,7 +144,6 @@ function mapStateToProps(state) {
         lots: state.lots,
         plats: state.plats,
         accounts: state.accounts,
-        activeForm: state.activeForm,
     };
 }
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { map } from 'ramda';
+import { map, compose, filter, reduce } from 'ramda';
 import {
     searchQuery,
     getPagination,
@@ -17,6 +17,7 @@ class SearchBar extends React.Component {
         this.props.onComponentDidMount({
             apiCalls: this.props.apiCalls,
             advancedSearch: this.props.advancedSearch,
+            csvEndpoint: this.props.csvEndpoint,
         });
     }
 
@@ -28,6 +29,16 @@ class SearchBar extends React.Component {
             advancedSearchPopulation,
             clearFilters,
         } = this.props;
+
+        const queryString = compose(
+            reduce((acc, value) => acc + value, '../api/lot_search_csv/?'),
+            map((key_name) => {
+                const filter_index = key_name.indexOf('filter_') + 'filter_'.length;
+                const field = key_name.slice(filter_index, key_name.length);
+                return `&${field}=${activeForm[key_name]}`;
+            }),
+            filter(key_name => activeForm[key_name] && (key_name.indexOf('filter_') !== -1)),
+        )(Object.keys(activeForm));
 
         const advancedSearchDropdowns = this.props && this.props.advancedSearch &&
             (map((field) => {
@@ -115,6 +126,15 @@ class SearchBar extends React.Component {
                         </div>
                     </div>
                 </div>
+                { this.props.csvEndpoint &&
+                    <div className="row">
+                        <div className="col-xs-12 text-center">
+                            <a href={`${queryString}`} className="btn button-modal-link" aria-label="Generate CSV from Current Results">
+                                <i className="fa fa-download button-modal-icon" aria-hidden="true" />&nbsp;Generate CSV from Current Results
+                            </a>
+                        </div>
+                    </div>
+                }
             </div>
         );
     }
@@ -129,6 +149,7 @@ SearchBar.propTypes = {
     advancedSearchPopulation: PropTypes.func,
     apiCalls: PropTypes.array,
     advancedSearch: PropTypes.array,
+    csvEndpoint: PropTypes.string,
 };
 
 function mapStateToProps(state) {
