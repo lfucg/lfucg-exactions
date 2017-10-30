@@ -71,7 +71,6 @@ class AgreementViewSet(viewsets.ModelViewSet):
         if account_id_set is not None:
             queryset = queryset.filter(account_id=account_id_set)
 
-
         if paginatePage is not None:
             pagination_class = PageNumberPagination
             PageNumberPagination.page_size = pageSize
@@ -127,7 +126,6 @@ class PaymentViewSet(viewsets.ModelViewSet):
         credit_source_set = self.request.query_params.get('credit_source', None)
         if credit_source_set is not None:
             queryset = queryset.filter(credit_source=credit_source_set)
-
 
         return queryset.order_by('-date_created')
 
