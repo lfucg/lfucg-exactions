@@ -64,9 +64,13 @@ class AgreementViewSet(viewsets.ModelViewSet):
         paginatePage = self.request.query_params.get('paginatePage', None)
         pageSize = self.request.query_params.get('pageSize', settings.PAGINATION_SIZE)
 
+        if self.request.user.is_anonymous(): 
+            queryset = queryset.exclude(is_approved=False)
+
         account_id_set = self.request.query_params.get('account_id', None)
         if account_id_set is not None:
             queryset = queryset.filter(account_id=account_id_set)
+
 
         if paginatePage is not None:
             pagination_class = PageNumberPagination
@@ -105,6 +109,9 @@ class PaymentViewSet(viewsets.ModelViewSet):
         paginatePage = self.request.query_params.get('paginatePage', None)
         pageSize = self.request.query_params.get('pageSize', settings.PAGINATION_SIZE)
 
+        if self.request.user.is_anonymous(): 
+            queryset = queryset.exclude(is_approved=False)
+
         if paginatePage is not None:
             pagination_class = PageNumberPagination
             PageNumberPagination.page_size = pageSize
@@ -120,6 +127,7 @@ class PaymentViewSet(viewsets.ModelViewSet):
         credit_source_set = self.request.query_params.get('credit_source', None)
         if credit_source_set is not None:
             queryset = queryset.filter(credit_source=credit_source_set)
+
 
         return queryset.order_by('-date_created')
 
@@ -153,6 +161,9 @@ class ProjectViewSet(viewsets.ModelViewSet):
 
         paginatePage = self.request.query_params.get('paginatePage', None)
         pageSize = self.request.query_params.get('pageSize', settings.PAGINATION_SIZE)
+
+        if self.request.user.is_anonymous(): 
+            queryset = queryset.exclude(is_approved=False)
 
         if paginatePage is not None:
             pagination_class = PageNumberPagination
@@ -196,6 +207,9 @@ class ProjectCostEstimateViewSet(viewsets.ModelViewSet):
         paginatePage = self.request.query_params.get('paginatePage', None)
         pageSize = self.request.query_params.get('pageSize', settings.PAGINATION_SIZE)
         
+        if self.request.user.is_anonymous(): 
+            queryset = queryset.exclude(is_approved=False)
+
         if paginatePage is not None:
             pagination_class = PageNumberPagination
             PageNumberPagination.page_size = pageSize
@@ -231,6 +245,9 @@ class AccountLedgerViewSet(viewsets.ModelViewSet):
         PageNumberPagination.page_size = 0
         paginatePage = self.request.query_params.get('paginatePage', None)
         pageSize = self.request.query_params.get('pageSize', settings.PAGINATION_SIZE)
+
+        if self.request.user.is_anonymous(): 
+            queryset = queryset.exclude(is_approved=False)
         
         if paginatePage is not None:
             pagination_class = PageNumberPagination
