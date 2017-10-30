@@ -97,12 +97,13 @@ class LotExisting extends React.Component {
 
         const queryString = compose(
             reduce((acc, value) => acc + value, '../api/lot_search_csv/?'),
-            map((a) => {
-                const field = a[0].slice(7, a[0].length);
-                return `&${field}=${a[1]}`;
+            map((key_name) => {
+                const filter_index = key_name.indexOf('filter_') + 'filter_'.length;
+                const field = key_name.slice(filter_index, key_name.length);
+                return `&${field}=${activeForm[key_name]}`;
             }),
-            filter(a => a[1] && a[0].startsWith('filter_')),
-        )(Object.entries(activeForm));
+            filter(key_name => activeForm[key_name] && (key_name.indexOf('filter_') !== -1)),
+        )(Object.keys(activeForm));
 
         return (
             <div className="lot-existing">
@@ -127,10 +128,8 @@ class LotExisting extends React.Component {
                 />
                 <div className="row">
                     <div className="col-xs-12 text-center">
-                        <a href={`${queryString}`}>
-                            <button type="button" className="btn button-modal-link">
-                                <i className="fa fa-download button-modal-icon" aria-hidden="true" />&nbsp;Generate CSV from Current Results
-                            </button>
+                        <a href={`${queryString}`} className="btn button-modal-link">
+                            <i className="fa fa-download button-modal-icon" aria-hidden="true" />&nbsp;Generate CSV from Current Results
                         </a>
                     </div>
                 </div>
