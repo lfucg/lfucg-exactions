@@ -24,7 +24,7 @@ const accountReducer = (state = [], action) => {
         const next = action.response.next;
         const prev = action.response.prev;
         if ((next != null && next.substr(0, next.length) === '/account') ||
-            (prev != null && next.substr(0, prev.length) === '/account') ||
+            (prev != null && prev.substr(0, prev.length) === '/account') ||
             (window.location.hash === '#/account')) {
             return action.response;
         }
