@@ -21,7 +21,6 @@ class AccountReport extends React.Component {
         const {
             accounts,
             lots,
-            accounts,
         } = this.props;
 
         const accountLots = lots && lots.length > 0 && (map((lot) => {
