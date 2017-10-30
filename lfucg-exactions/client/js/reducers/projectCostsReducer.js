@@ -26,7 +26,7 @@ const projectCostsReducer = (state = [], action) => {
         const next = action.response.next;
         const prev = action.response.prev;
         if ((next != null && next.substr(0, next.length) === '/estimate') ||
-            (prev != null && next.substr(0, prev.length) === '/estimate') ||
+            (prev != null && prev.substr(0, prev.length) === '/estimate') ||
             (window.location.hash === '#/project-cost')) {
             return action.response;
         }
