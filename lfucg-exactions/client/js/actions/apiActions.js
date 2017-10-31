@@ -1379,11 +1379,11 @@ export function getRateTables() {
 }
 
 
-export function getRates() {
+export function getRates(selectedRateTable) {
     return {
         type: API_CALL,
         endpoint: GET_RATES,
-        url: '/rate/',
+        url: `/rate/?rate_table_id=${selectedRateTable}`,
     };
 }
 
@@ -1396,52 +1396,23 @@ export function postRate(rate_table_id, category, zone, expansion_area, rate) {
         url: '/rate/',
         method: 'POST',
         body: {
-        // (getState) => {
-            // const {
-            //     activeForm,
-            // } = getState();
-            // const {
-            //     rate_table_id,
-            //     category,
-            //     zone,
-            //     expansion_area,
-            //     rate,
-            // } = activeForm;
-            // return {
             rate_table_id,
             category,
             zone,
             expansion_area,
             rate,
-            // };
         },
     };
 }
 
-export function putRate(selectedRate) {
+export function putRate(selectedRate, rate) {
     return {
         type: API_CALL,
         endpoint: PUT_RATE,
         url: `/rate/${selectedRate}/`,
         method: 'PUT',
-        body: (getState) => {
-            const {
-                activeForm,
-            } = getState();
-            const {
-                rate_table_id,
-                expansion_area,
-                zone,
-                category,
-                rate,
-            } = activeForm;
-            return {
-                rate_table_id,
-                expansion_area,
-                zone,
-                category,
-                rate,
-            };
+        body: {
+            rate,
         },
     };
 }
@@ -1458,7 +1429,7 @@ export function getPagination(page) {
                 currentPage,
                 page_size,
             } = activeForm;
-            
+
             if (!page) {
                 if (currentPage === '/credit-transfer/') {
                     return '/ledger/?paginatePage';

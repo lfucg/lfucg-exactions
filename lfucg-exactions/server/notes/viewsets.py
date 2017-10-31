@@ -1,9 +1,10 @@
-from rest_framework import viewsets, status, generics
+from rest_framework import viewsets, status, generics, filters
 from django.db.models import Q
 from rest_framework.response import Response
 from django.contrib.contenttypes.models import ContentType
 
 from rest_framework.parsers import FileUploadParser, MultiPartParser
+from django_filters.rest_framework import DjangoFilterBackend
 
 from .models import *
 from .serializers import *
@@ -92,6 +93,8 @@ class RateViewSet(viewsets.ModelViewSet):
     serializer_class = RateSerializer
     queryset = Rate.objects.all()
     permission_classes = (CanAdminister,)
+    filter_backends = (DjangoFilterBackend, filters.SearchFilter,)
+    filter_fields = ('rate_table_id__id',)
 
     def get_queryset(self):
         queryset = Rate.objects.all()
