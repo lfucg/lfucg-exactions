@@ -94,7 +94,7 @@ class ProjectCostExisting extends React.Component {
                     </div>
                 </div>
 
-                <Breadcrumbs route={this.props.route} />
+                <Breadcrumbs route={this.props.route} route_permission="projectcostestimate" />
 
                 <SearchBar
                   apiCalls={[getProjects]}

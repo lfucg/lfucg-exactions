@@ -283,10 +283,10 @@ INTERNAL_IPS = ('127.0.0.1')
 # Set this to true if you use a proxy that sets X-Forwarded-Host
 #USE_X_FORWARDED_HOST = False
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 SERVER_EMAIL = "webmaster@example.com"
-DEFAULT_FROM_EMAIL = "webmaster@example.com"
+DEFAULT_FROM_EMAIL = "josh@apaxsoftware.com"
 SYSTEM_EMAIL_PREFIX = "[server]"
 
 ## Log settings
@@ -311,3 +311,4 @@ LOGGING = {
 #CEF_VERSION = '0'
 #CEF_DEVICE_VERSION = '0'
 PAGINATION_SIZE = 10
+PASSWORD_RESET_TIMEOUT_DAYS = 1

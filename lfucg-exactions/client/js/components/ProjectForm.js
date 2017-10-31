@@ -39,6 +39,7 @@ class ProjectForm extends React.Component {
             onSubmit,
             formChange,
             selectedProject,
+            currentUser,
         } = this.props;
 
         const currentParam = this.props.params.id;
@@ -183,7 +184,7 @@ class ProjectForm extends React.Component {
                                         </div>
                                         <div className="col-sm-6">
                                             <FormGroup label="* Status Date" id="status_date" >
-                                                <input type="date" className="form-control" placeholder="Status Date" />
+                                                <input type="date" className="form-control" placeholder="Date Format YYYY-MM-DD" />
                                             </FormGroup>
                                         </div>
                                     </div>
@@ -196,7 +197,9 @@ class ProjectForm extends React.Component {
                                     </div>
                                 </fieldset>
                                 <div className="col-xs-8">
-                                    <button disabled={!submitEnabled} className="btn btn-lex" onClick={onSubmit} >Submit</button>
+                                    <button disabled={!submitEnabled} className="btn btn-lex" onClick={onSubmit} >
+                                        {currentUser.is_superuser || (currentUser.profile && currentUser.profile.is_supervisor) ? <div>Submit / Approve</div> : <div>Submit</div>}
+                                    </button>
                                     {!submitEnabled ? (
                                         <div>
                                             <div className="clearfix" />
@@ -239,6 +242,7 @@ ProjectForm.propTypes = {
     onSubmit: PropTypes.func,
     formChange: PropTypes.func,
     selectedProject: PropTypes.string,
+    currentUser: PropTypes.object,
 };
 
 function mapStateToProps(state) {
@@ -246,6 +250,7 @@ function mapStateToProps(state) {
         activeForm: state.activeForm,
         projects: state.projects,
         agreements: state.agreements,
+        currentUser: state.currentUser,
     };
 }
 
@@ -308,10 +313,8 @@ function mapDispatchToProps(dispatch, params) {
         onSubmit(event) {
             event.preventDefault();
             if (selectedProject) {
-                dispatch(putProject(selectedProject))
-                .then(() => {
-                    hashHistory.push(`project/summary/${selectedProject}`);
-                });
+                dispatch(putProject(selectedProject));
+                hashHistory.push(`project/summary/${selectedProject}`);
             } else {
                 dispatch(postProject())
                 .then((data_post) => {

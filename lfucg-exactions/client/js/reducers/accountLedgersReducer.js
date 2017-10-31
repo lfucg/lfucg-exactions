@@ -29,8 +29,8 @@ const accountLedgersReducer = (state = [], action) => {
     case SEARCH_QUERY:
         const next = action.response.next;
         const prev = action.response.prev;
-        if ((next != null && next.startsWith('/ledger')) ||
-            (prev != null && prev.startsWith('/ledger')) ||
+        if ((next != null && next.substr(0, next.length) === '/ledger') ||
+            (prev != null && prev.substr(0, prev.length) === '/ledger') ||
             (window.location.hash === '#/credit-transfer')) {
             return action.response;
         }

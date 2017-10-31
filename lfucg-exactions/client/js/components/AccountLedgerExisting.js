@@ -126,7 +126,7 @@ class AccountLedgerExisting extends React.Component {
                     </div>
                 </div>
 
-                <Breadcrumbs route={this.props.route} />
+                <Breadcrumbs route={this.props.route} route_permission="accountledger" />
 
                 <SearchBar
                   apiCalls={[getAgreements, getLots, getAccounts]}
