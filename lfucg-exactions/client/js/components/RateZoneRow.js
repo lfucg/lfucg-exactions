@@ -25,6 +25,7 @@ class RateZoneRow extends React.Component {
     render() {
         const {
             activeForm,
+            rates,
             // onRateChange,
         } = this.props;
 
@@ -47,6 +48,7 @@ class RateZoneRow extends React.Component {
                       // }
                       // id={[this.props.category, this.props.zone, expansion, 'rate']}
                       id={`${this.props.category}, ${this.props.zone}, ${expansion}`}
+                      table_id={`${this.props.category}, ${this.props.zone}, ${expansion}`}
                       category={this.props.category}
                       zone={this.props.zone}
                       expansion={expansion}
@@ -80,6 +82,7 @@ class RateZoneRow extends React.Component {
 
 RateZoneRow.propTypes = {
     activeForm: PropTypes.object,
+    rates: PropTypes.object,
     // onComponentDidMount: PropTypes.func,
     // onRateChange: PropTypes.func,
     category: PropTypes.string,
@@ -89,6 +92,7 @@ RateZoneRow.propTypes = {
 function mapStateToProps(state) {
     return {
         activeForm: state.activeForm,
+        rates: state.rates,
     };
 }
 

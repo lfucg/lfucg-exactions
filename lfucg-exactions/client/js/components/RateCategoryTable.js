@@ -24,6 +24,7 @@ class RateCategoryTable extends React.Component {
     render() {
         const {
             activeForm,
+            rates,
         } = this.props;
 
         const ZONES = ['EAR-1', 'EAR1-SRA', 'EAR-2', 'EAR-3', 'CC(RES)', 'CC(NONR)', 'ED'];
@@ -75,6 +76,7 @@ class RateCategoryTable extends React.Component {
 
 RateCategoryTable.propTypes = {
     activeForm: PropTypes.object,
+    rates: PropTypes.object,
     // onComponentDidMount: PropTypes.func,
     category: PropTypes.string,
 };
@@ -82,6 +84,7 @@ RateCategoryTable.propTypes = {
 function mapStateToProps(state) {
     return {
         activeForm: state.activeForm,
+        rates: state.rates,
     };
 }
 
