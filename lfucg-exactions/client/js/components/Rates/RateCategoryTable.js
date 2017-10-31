@@ -1,34 +1,12 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import { map } from 'ramda';
 import PropTypes from 'prop-types';
 
 import RateZoneRow from './RateZoneRow';
 
-// import {
-//     formInit,
-//     formUpdate,
-// } from '../actions/formActions';
-
-// import {
-//     getRates,
-// } from '../actions/apiActions';
-
 class RateCategoryTable extends React.Component {
-    // componentDidMount() {
-    //     this.props.onComponentDidMount({
-    //         category: this.props.category,
-    //     });
-    // }
-
     render() {
-        const {
-            activeForm,
-            rates,
-        } = this.props;
-
         const ZONES = ['EAR-1', 'EAR1-SRA', 'EAR-2', 'EAR-3', 'CC(RES)', 'CC(NONR)', 'ED'];
-        const EXPANSION_AREAS = ['EA-1', 'EA-2A', 'EA-2B', 'EA-2C', 'EA-3'];
 
         const zone_list = map((zone, index) => {
             return (
@@ -64,7 +42,16 @@ class RateCategoryTable extends React.Component {
                     <div className="panel-body">
                         <div className="row">
                             <h4 className="col-sm-2">Zone</h4>
-                            <h4 className="col-sm-10">Expansion Area</h4>
+                            <h4 className="col-sm-10 rate-table">Expansion Area</h4>
+                        </div>
+                        <div className="row">
+                            <div className="col-sm-offset-2 rate-table">
+                                <div className="col-sm-2">EA-1</div>
+                                <div className="col-sm-2">EA-2A</div>
+                                <div className="col-sm-2">EA-2B</div>
+                                <div className="col-sm-2">EA-2C</div>
+                                <div className="col-sm-2">EA-3</div>
+                            </div>
                         </div>
                         {zone_list && zone_list}
                     </div>
@@ -75,45 +62,7 @@ class RateCategoryTable extends React.Component {
 }
 
 RateCategoryTable.propTypes = {
-    activeForm: PropTypes.object,
-    rates: PropTypes.object,
-    // onComponentDidMount: PropTypes.func,
     category: PropTypes.string,
 };
 
-function mapStateToProps(state) {
-    return {
-        activeForm: state.activeForm,
-        rates: state.rates,
-    };
-}
-
-// function mapDispatchToProps(dispatch) {
-//     return {
-//         onComponentDidMount() {
-            // dispatch(formInit());
-            // dispatch(getRates())
-            // .then((data_rate) => {
-            //     // const all_results = data_rate.response;
-            //     // console.log('ALL RESULTS', all_results);
-            //     const rate_update = {
-            //         all_results: data_rate.response,
-            //     };
-            //     dispatch(formUpdate(rate_update));
-            // });
-        // },
-
-        // onSubmit(activeForm) {
-        //     return (e, ...args) => {
-        //         const field_name = typeof e.target.id !== 'undefined' ? e.target.id : args[1];
-        //         const value = typeof e.target.value !== 'undefined' ? e.target.value : args[1];
-        //         const update = {
-        //             [field_name]: value,
-        //         };
-        //         dispatch(formUpdate(update));
-        //     };
-        // },
-//     };
-// }
-
-export default connect(mapStateToProps)(RateCategoryTable);
+export default RateCategoryTable;

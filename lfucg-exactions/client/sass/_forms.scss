@@ -243,4 +243,16 @@
     }
 }
 
+.rate-table {
+    text-align: center;
+}
 
+.rate-form-group {
+    font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+    .form-group {
+        color: black;
+        font-weight: normal;
+        margin-bottom: 0.5em;
+        width: 125%;
+    }
+}

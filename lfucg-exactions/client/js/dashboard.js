@@ -51,7 +51,7 @@ import AccountLedgerExisting from './components/AccountLedgerExisting';
 import AccountLedgerSummary from './components/AccountLedgerSummary';
 import AccountLedgerForm from './components/AccountLedgerForm';
 
-import RateTableForm from './components/RateTableForm';
+import RateTableForm from './components/Rates/RateTableForm';
 
 global.reduxStore = dashboardStore;
 
