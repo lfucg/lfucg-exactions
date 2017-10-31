@@ -132,10 +132,8 @@ function mapDispatchToProps(dispatch, params) {
         onSubmit(event) {
             event.preventDefault();
             if (selectedSubdivision) {
-                dispatch(putSubdivision(selectedSubdivision))
-                .then(() => {
-                    hashHistory.push(`subdivision/summary/${selectedSubdivision}`);
-                });
+                dispatch(putSubdivision(selectedSubdivision));
+                hashHistory.push(`subdivision/summary/${selectedSubdivision}`);
             } else {
                 dispatch(postSubdivision())
                 .then((data_sub_post) => {

@@ -1,12 +1,13 @@
 from django.conf.urls import include, url
 from rest_framework import routers
+from django.contrib.auth import views as auth_views
 
 from accounts.auth import *
 from plats.viewsets import *
 from plats.views import PlatCSVExportView
 from notes.viewsets import *
 from accounts.viewsets import *
-from .views import CurrentUserDetails
+from accounts.views import CurrentUserDetails
 
 router = routers.DefaultRouter()
 
@@ -36,10 +37,11 @@ urlpatterns = [
     url(r'^login/$', CustomObtainAuthToken.as_view()),
     url(r'^register/$', Registration.as_view()),
     url(r'^forgot-password/$', forgot_password),
+    url(r'^password_reset/$', reset_password),
     url(r'^forgot-username/$', forgot_username),
     url(r'^delete_token/', Logout.as_view()),
     url(r'^upload/create/$', FileUploadCreate.as_view(), name="document-upload"),
     url(r'^export_plat_csv/$', PlatCSVExportView.as_view()),
-
+    url(r'^reset/(?P<uidb36>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$', auth_views.password_reset_confirm, name='password_reset_confirm'),
     url(r'^', include(router.urls)),
 ]

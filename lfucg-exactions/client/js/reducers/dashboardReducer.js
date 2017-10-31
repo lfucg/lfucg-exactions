@@ -5,6 +5,7 @@ import currentUserReducer from './currentUserReducer';
 import tokenReducer from './tokenReducer';
 
 import activeFormReducer from './activeFormReducer';
+import flashMessageReducer from './flashMessageReducer';
 
 import subdivisionsReducer from './subdivisionsReducer';
 import platsReducer from './platsReducer';
@@ -28,6 +29,7 @@ const dashboardReducer = combineReducers({
     token: tokenReducer,
 
     activeForm: activeFormReducer,
+    flashMessage: flashMessageReducer,
 
     subdivisions: subdivisionsReducer,
     plats: platsReducer,

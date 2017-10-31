@@ -33,6 +33,7 @@ class PlatZoneForm extends React.Component {
             plats,
             formChange,
             onPlatZoneSubmit,
+            currentUser,
         } = this.props;
 
         const submitEnabled =
@@ -74,14 +75,16 @@ class PlatZoneForm extends React.Component {
                             </div>
                             <div className="col-sm-6">
                                 <FormGroup label="* Gross Acreage" id={this.props.acre_id}>
-                                    <input type="number" className="form-control" placeholder="Gross Acreage" />
+                                    <input type="number" step="0.01" className="form-control" placeholder="Gross Acreage" />
                                 </FormGroup>
                             </div>
                         </div>
                     </fieldset>
                     <div>
                         <div className="col-xs-8">
-                            <button className="btn btn-lex" onClick={onPlatZoneSubmit({ activeForm })} >Submit Plat Zone</button>
+                            <button className="btn btn-lex" onClick={onPlatZoneSubmit({ activeForm })} >
+                                {currentUser.is_superuser || (currentUser.profile && currentUser.profile.is_supervisor) ? <div>Submit / Approve</div> : <div>Submit</div>}
+                            </button>
                             {!submitEnabled ? (
                                 <div>
                                     <div className="clearfix" />
@@ -113,12 +116,14 @@ PlatZoneForm.propTypes = {
     onComponentDidMount: PropTypes.func,
     formChange: PropTypes.func,
     onPlatZoneSubmit: PropTypes.func,
+    currentUser: PropTypes.object,
 };
 
 function mapStateToProps(state) {
     return {
         activeForm: state.activeForm,
         plats: state.plats,
+        currentUser: state.currentUser,
     };
 }
 
@@ -169,18 +174,16 @@ function mapDispatchToProps(dispatch, props) {
                     zone = zone.substr(0, zone.indexOf(','));
 
                     const acres = activeForm.activeForm[`${props.acre_id}`];
-                    dispatch(putPlatZone(selectedPlatZone, zone, acres))
-                    .then(() => {
-                        dispatch(getPlatID(activeForm.activeForm.plat))
-                        .then((zone_put_get_plat) => {
-                            const zone_put_update = {
-                                sewer_due: zone_put_get_plat.response.sewer_due,
-                                non_sewer_due: zone_put_get_plat.response.non_sewer_due,
-                                calculation_note: zone_put_get_plat.response.calculation_note,
-                                add_another_plat_zone: false,
-                            };
-                            dispatch(formUpdate(zone_put_update));
-                        });
+                    dispatch(putPlatZone(selectedPlatZone, zone, acres));
+                    dispatch(getPlatID(activeForm.activeForm.plat))
+                    .then((zone_put_get_plat) => {
+                        const zone_put_update = {
+                            sewer_due: zone_put_get_plat.response.sewer_due,
+                            non_sewer_due: zone_put_get_plat.response.non_sewer_due,
+                            calculation_note: zone_put_get_plat.response.calculation_note,
+                            add_another_plat_zone: false,
+                        };
+                        dispatch(formUpdate(zone_put_update));
                     });
                 } else {
                     dispatch(postPlatZone())

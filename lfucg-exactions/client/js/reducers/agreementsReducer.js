@@ -25,8 +25,8 @@ const agreementsReducer = (state = [], action) => {
     case SEARCH_QUERY:
         const next = action.response.next;
         const prev = action.response.prev;
-        if ((next != null && next.startsWith('/agreement')) ||
-            (prev != null && prev.startsWith('/agreement')) ||
+        if ((next != null && next.substr(0, next.length) === '/agreement') ||
+            (prev != null && prev.substr(0, prev.length) === '/agreement') ||
             (window.location.hash === '#/agreement')) {
             return action.response;
         }

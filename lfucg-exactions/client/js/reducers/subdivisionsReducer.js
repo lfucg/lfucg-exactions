@@ -23,8 +23,8 @@ const subdivisionsReducer = (state = [], action) => {
     case SEARCH_QUERY:
         const next = action.response.next;
         const prev = action.response.prev;
-        if ((next != null && next.startsWith('/subdivision')) ||
-            (prev != null && prev.startsWith('/subdivision')) ||
+        if ((next != null && next.substr(0, next.length) === '/subdivision') ||
+            (prev != null && prev.substr(0, prev.length) === '/subdivision') ||
             (window.location.hash === '#/subdivision')) {
             return action.response;
         }
