@@ -8,12 +8,14 @@ import FormGroup from './../FormGroup';
 
 import {
     formUpdate,
+    clearRates,
 } from '../../actions/formActions';
 
 import {
     getRateTables,
     postRateTable,
     putRateTable,
+    getRates,
 } from '../../actions/apiActions';
 
 class RateTableForm extends React.Component {
@@ -57,6 +59,7 @@ class RateTableForm extends React.Component {
                             <option value={currentTable.id} >{currentTable.resolution_number}</option>
                             : <option value="start_table">Rate Table</option>
                         }
+                        <option value="new_table">New Table</option>
                         {existing_tables}
                     </select>
                 </div>
@@ -100,6 +103,7 @@ class RateTableForm extends React.Component {
                             <span> * All required fields must be filled.</span>
                         </div>}
                     </form>
+                    <div className="clearfix" />
                 </div>}
             </div>
         );
@@ -133,7 +137,14 @@ function mapDispatchToProps(dispatch, props) {
         onRateTableSelection() {
             return (e, ...args) => {
                 const value = typeof e.target.value !== 'undefined' ? e.target.value : args[1];
-                hashHistory.push(`rate-table/form/${value}`);
+                if (value === 'new_table') {
+                    dispatch(clearRates());
+                    dispatch(formUpdate({ editRateTable: true }));
+                    // hashHistory.push('rate-table/form/');
+                } else {
+                    dispatch(getRates(value));
+                    hashHistory.push(`rate-table/form/${value}`);
+                }
             };
         },
         onRateTableForm() {
