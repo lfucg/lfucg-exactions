@@ -4,6 +4,7 @@ import {
     hashHistory,
 } from 'react-router';
 import PropTypes from 'prop-types';
+import { map } from 'ramda';
 
 import Navbar from './Navbar';
 import Footer from './Footer';
@@ -16,6 +17,10 @@ import {
     formInit,
     formUpdate,
 } from '../actions/formActions';
+
+import {
+    errorMessageSet,
+} from '../actions/flashMessageActions';
 
 import {
     getSubdivisionID,
@@ -132,12 +137,23 @@ function mapDispatchToProps(dispatch, params) {
         onSubmit(event) {
             event.preventDefault();
             if (selectedSubdivision) {
-                dispatch(putSubdivision(selectedSubdivision));
-                hashHistory.push(`subdivision/summary/${selectedSubdivision}`);
+                dispatch(putSubdivision(selectedSubdivision))
+                    .then((data_sub_put) => {
+                        if (data_sub_put.error) {
+                            console.log('this is the subdivision form');
+                            console.log(data_sub_put.error_message);
+                        } else {
+                            hashHistory.push(`subdivision/summary/${selectedSubdivision}`);
+                        }
+                    });
             } else {
                 dispatch(postSubdivision())
                 .then((data_sub_post) => {
-                    hashHistory.push(`subdivision/summary/${data_sub_post.response.id}`);
+                    if (data_sub_post.error) {
+                        dispatch(errorMessageSet(data_sub_post.error_message));
+                    } else {
+                        hashHistory.push(`subdivision/summary/${data_sub_post.response.id}`);
+                    }
                 });
             }
         },
