@@ -81,7 +81,6 @@ import {
     PUT_ACCOUNT_LEDGER,
 
     GET_RATE_TABLES,
-    GET_RATE_TABLE_ID,
     POST_RATE_TABLE,
     PUT_RATE_TABLE,
 
@@ -1378,6 +1377,53 @@ export function getRateTables() {
     };
 }
 
+export function postRateTable() {
+    return {
+        type: API_CALL,
+        endpoint: POST_RATE_TABLE,
+        url: '/rateTable/',
+        method: 'POST',
+        body: (getState) => {
+            const {
+                activeForm,
+            } = getState();
+            const {
+                resolution_number,
+                begin_effective_date,
+                end_effective_date,
+            } = activeForm;
+            return {
+                resolution_number,
+                begin_effective_date,
+                end_effective_date,
+            };
+        },
+    };
+}
+
+export function putRateTable(selectedRateTable) {
+    return {
+        type: API_CALL,
+        endpoint: POST_RATE_TABLE,
+        url: `/rateTable/${selectedRateTable}/`,
+        method: 'PUT',
+        body: (getState) => {
+            const {
+                activeForm,
+            } = getState();
+            const {
+                resolution_number,
+                begin_effective_date,
+                end_effective_date,
+            } = activeForm;
+            return {
+                resolution_number,
+                begin_effective_date,
+                end_effective_date,
+            };
+        },
+    };
+}
 
 export function getRates(selectedRateTable) {
     return {

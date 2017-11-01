@@ -42,7 +42,7 @@ const RateFormGroup = ({
 
 RateFormGroup.propTypes = {
     children: PropTypes.element.isRequired,
-    rates: PropTypes.array,
+    rates: PropTypes.object,
     activeForm: PropTypes.object.isRequired,
     id: PropTypes.string.isRequired,
     category: PropTypes.string,

@@ -7,13 +7,13 @@ import Navbar from '../Navbar';
 import Footer from '../Footer';
 import Breadcrumbs from '../Breadcrumbs';
 import RateCategoryTable from './RateCategoryTable';
+import RateTableExisting from './RateTableExisting';
 
 import {
     formInit,
 } from '../../actions/formActions';
 
 import {
-    getRateTables,
     getRates,
 } from '../../actions/apiActions';
 
@@ -26,6 +26,7 @@ class RateTableForm extends React.Component {
         const {
             rates,
             route,
+            selectedRateTable,
         } = this.props;
 
         const CATEGORIES = ['ROADS', 'OPEN_SPACE', 'SEWER_CAP', 'SEWER_TRANS', 'PARK', 'STORM_WATER'];
@@ -52,9 +53,8 @@ class RateTableForm extends React.Component {
 
                 <div className="inside-body">
                     <div className="container">
-                        {
-                            // Create a new rate table
-                        }
+                        <RateTableExisting selectedRateTable={selectedRateTable} />
+                        <div className="clearfix" />
                         <div className="col-md-offset-1 col-md-10 rate-panel-group" id="accordion" role="tablist" aria-multiselectable="false">
                             {category_chart && category_chart}
                         </div>
@@ -67,9 +67,10 @@ class RateTableForm extends React.Component {
 }
 
 RateTableForm.propTypes = {
-    rates: PropTypes.array,
+    rates: PropTypes.object,
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
+    selectedRateTable: PropTypes.string,
 };
 
 function mapStateToProps(state) {
@@ -83,11 +84,11 @@ function mapDispatchToProps(dispatch, params) {
     return {
         onComponentDidMount() {
             dispatch(formInit());
-            dispatch(getRateTables());
             if (selectedRateTable) {
                 dispatch(getRates(selectedRateTable));
             }
         },
+        selectedRateTable,
     };
 }
 

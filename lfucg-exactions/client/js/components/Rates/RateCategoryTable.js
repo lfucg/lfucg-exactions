@@ -6,7 +6,7 @@ import RateZoneRow from './RateZoneRow';
 
 class RateCategoryTable extends React.Component {
     render() {
-        const ZONES = ['EAR-1', 'EAR1-SRA', 'EAR-2', 'EAR-3', 'CC(RES)', 'CC(NONR)', 'ED'];
+        const ZONES = ['EAR-1', 'EAR-1SRA', 'EAR-2', 'EAR-3', 'CC(RES)', 'CC(NONR)', 'ED'];
 
         const zone_list = map((zone, index) => {
             return (
