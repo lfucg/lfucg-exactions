@@ -88,6 +88,9 @@ class Rate(models.Model):
 
     history = HistoricalRecords()
 
+    class Meta:
+        unique_together = (('rate_table_id', 'expansion_area', 'zone', 'category'),)
+
     def __str__(self):
         return self.zone + ': ' + self.category
 
