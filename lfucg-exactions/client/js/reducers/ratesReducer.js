@@ -6,7 +6,12 @@ import {
     PUT_RATE,
 } from '../constants/apiConstants';
 
-const ratesReducer = (state = {}, action) => {
+import {
+    API_CALL_SUCCESS,
+    CLEAR_RATES,
+} from '../constants/actionTypes';
+
+function ratesEndpoints(state = {}, action) {
     const {
         endpoint,
     } = action;
@@ -21,6 +26,17 @@ const ratesReducer = (state = {}, action) => {
     case POST_RATE:
     case PUT_RATE:
         return state;
+    default:
+        return state;
+    }
+}
+
+const ratesReducer = (state = {}, action) => {
+    switch (action.type) {
+    case CLEAR_RATES:
+        return {};
+    case API_CALL_SUCCESS:
+        return ratesEndpoints(state, action);
     default:
         return state;
     }

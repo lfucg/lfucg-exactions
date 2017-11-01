@@ -30,7 +30,7 @@ const RateFormGroup = ({
                         category,
                         zone,
                         expansion,
-                        value: (activeForm && activeForm[id] ? activeForm[id] : ((rates && rates[0] && rates[0][id].rate) ? rates[0][id].rate : '')),
+                        value: (activeForm && activeForm[id] ? activeForm[id] : ((rates && rates[0] && rates[0][id] && rates[0][id].rate) || '')),
                         onChange: formChange(id),
                         onBlur: (rates && rates[0] ? rateChangeSubmit({ existing: rates[0][id], rate: activeForm[id], id }) : rateChangeSubmit({ rate: activeForm[id], id })),
                     },
