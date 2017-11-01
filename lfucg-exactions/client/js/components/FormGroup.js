@@ -24,6 +24,7 @@ const FormGroup = ({
                     },
                 )
             }
+            <p className="help-block hidden" helpBlock={id}><i className="fa fa-exclamation-circle" />&nbsp;Your passwords do not match.</p>
         </div>
     );
 };
