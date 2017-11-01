@@ -32,14 +32,18 @@ class AccountSerializer(serializers.ModelSerializer):
     def get_balance(self, obj):
         calculated_balance = calculate_account_balance(obj.id)
 
-        if calculated_balance > 0:
+        if calculated_balance['current_account_balance'] > 0:
             return {
-                'balance': '${:,.2f}'.format(calculated_balance),
+                'balance': '${:,.2f}'.format(calculated_balance['current_account_balance']),
+                'sewer_balance': '${:,.2f}'.format(calculated_balance['current_sewer_balance']),
+                'non_sewer_balance': '${:,.2f}'.format(calculated_balance['current_non_sewer_balance']),
                 'credit_availability': 'Credit Available'
             }
         else:
             return {
-                'balance': '${:,.2f}'.format(calculated_balance),
+                'balance': '${:,.2f}'.format(calculated_balance['current_account_balance']),
+                'sewer_balance': '${:,.2f}'.format(calculated_balance['current_sewer_balance']),
+                'non_sewer_balance': '${:,.2f}'.format(calculated_balance['current_non_sewer_balance']),
                 'credit_availability': 'No Credit Available'
             }
 
