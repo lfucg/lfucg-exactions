@@ -73,6 +73,7 @@ Vagrant.configure("2") do |config|
             'STATICFILES_STORAGE': 'django.contrib.staticfiles.storage.StaticFilesStorage',
             'DEV': true,
             'DEBUG': true,
+            'POSTMARK_API_KEY': 'postmark_api_key',
           }
         }
       },

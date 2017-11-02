@@ -175,6 +175,15 @@ class Payment(models.Model):
     def __str__(self):
         return self.lot_id.address_full
 
+    def calculate_payment_total(self):
+        return self.paid_roads + \
+            self.paid_sewer_trans + \
+            self.paid_sewer_cap + \
+            self.paid_parks + \
+            self.paid_storm + \
+            self.paid_open_space
+
+
 class Project(models.Model):
     is_approved = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
@@ -301,6 +310,9 @@ class AccountLedger(models.Model):
 
     def __str__(self):
         return self.entry_type
+
+    def calculate_credits(self):
+        return self.non_sewer_credits + self.sewer_credits
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
