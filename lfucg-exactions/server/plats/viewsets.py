@@ -62,6 +62,9 @@ class PlatViewSet(viewsets.ModelViewSet):
         paginatePage = self.request.query_params.get('paginatePage', None)
         pageSize = self.request.query_params.get('pageSize', settings.PAGINATION_SIZE)
 
+        if self.request.user.is_anonymous(): 
+            queryset = queryset.exclude(is_approved=False)
+
         if paginatePage is not None:
             PageNumberPagination.page_size = pageSize
             pagination_class = PageNumberPagination
@@ -102,6 +105,9 @@ class LotViewSet(viewsets.ModelViewSet):
         plat_set = self.request.query_params.get('plat', None)
         if plat_set is not None:
             queryset = queryset.filter(plat=plat_set)
+
+        if self.request.user.is_anonymous(): 
+            queryset = queryset.exclude(is_approved=False)
 
         if paginatePage is not None:
             PageNumberPagination.page_size = pageSize
