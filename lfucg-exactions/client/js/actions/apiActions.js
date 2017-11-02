@@ -81,8 +81,10 @@ import {
     PUT_ACCOUNT_LEDGER,
 
     GET_RATE_TABLES,
+    GET_RATE_TABLE_ID,
     POST_RATE_TABLE,
     PUT_RATE_TABLE,
+    PUT_RATE_TABLE_ACTIVE,
 
     GET_RATES,
     POST_RATE,
@@ -1377,6 +1379,14 @@ export function getRateTables() {
     };
 }
 
+export function getRateTableID(selectedRateTable) {
+    return {
+        type: API_CALL,
+        endpoint: GET_RATE_TABLE_ID,
+        url: `/rateTable/${selectedRateTable}`,
+    };
+}
+
 export function postRateTable() {
     return {
         type: API_CALL,
@@ -1404,7 +1414,7 @@ export function postRateTable() {
 export function putRateTable(selectedRateTable) {
     return {
         type: API_CALL,
-        endpoint: POST_RATE_TABLE,
+        endpoint: PUT_RATE_TABLE,
         url: `/rateTable/${selectedRateTable}/`,
         method: 'PUT',
         body: (getState) => {
@@ -1425,6 +1435,19 @@ export function putRateTable(selectedRateTable) {
     };
 }
 
+export function putRateTableActive(selectedRateTable) {
+    return {
+        type: API_CALL,
+        endpoint: PUT_RATE_TABLE_ACTIVE,
+        url: `/rateTable/${selectedRateTable}/`,
+        method: 'PUT',
+        body: {
+            is_active: true,
+            id: selectedRateTable,
+        },
+    };
+}
+
 export function getRates(selectedRateTable) {
     return {
         type: API_CALL,
@@ -1434,8 +1457,6 @@ export function getRates(selectedRateTable) {
 }
 
 export function postRate(rate_table_id, category, zone, expansion_area, rate) {
-    console.log('RATE TABLE ID', rate_table_id);
-    console.log('RATE VALUE', rate);
     return {
         type: API_CALL,
         endpoint: POST_RATE,

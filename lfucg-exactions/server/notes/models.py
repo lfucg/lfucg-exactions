@@ -25,7 +25,7 @@ class Note(models.Model):
         return self.note
 
 class RateTable(models.Model):
-    is_active = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=False)
 
     date_created = models.DateField(auto_now_add=True)
     date_modified = models.DateField(auto_now=True)
@@ -42,6 +42,34 @@ class RateTable(models.Model):
 
     def __str__(self):
         return self.resolution_number
+
+    # def save(self, *args, **kwargs):
+    #     print('SELF SELF ', self)
+    #     print('SELF SELF DIR', dir(self))
+    #     print('SELF SELF ', self)
+    #     print('SELF IS ACTIVE', self.is_active)
+    #     if self.is_active == True:
+    #         all_true_tables = RateTable.objects.filter(is_active=True)
+    #         rate_count = Rate.objects.filter(rate_table_id=self.id).count()
+
+    #         if rate_count == 210:
+    #             for rate_table in all_true_tables:
+    #                 if self != rate_table:
+    #                     rate_table.is_active = False
+    #                     rate_table.save()
+    #                 elif self == rate_table:
+    #                     super(RateTable, self).save(*args, **kwargs)
+                        
+    #                 print('RATE TABLE ', rate_table)
+    #                 # print('RATE TABLE DIR ', dir(rate_table))
+    #                 # print('RATE TABLE VARS', vars(rate_table))
+    #                 # rate_table.is_active = False
+    #         else:
+    #             print('You May Not Pass')
+    #             # raise 
+    #     else:
+    #         print('CANNOT SAVE')
+        # super(RateTable, self).save(*args, **kwargs)
 
 class Rate(models.Model):
     is_active = models.BooleanField(default=True)
