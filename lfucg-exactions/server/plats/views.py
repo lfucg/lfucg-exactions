@@ -1,12 +1,14 @@
 from django.shortcuts import render
+import datetime
 import csv
 from django.views.generic import View
 from django.http import HttpResponse
-
+from django.db.models import Count, Max, Q
 from .models import *
 from .serializers import *
 from accounts.models import *
 from .utils import calculate_lot_balance
+from .serializers import *
 
 class PlatCSVExportView(View):
      def get(self, request, *args, **kwargs):
@@ -155,23 +157,13 @@ class PlatCSVExportView(View):
                 payment_queryset = Payment.objects.filter(lot_id=single_lot.id)
                 if payment_queryset is not None:
                     for single_payment in payment_queryset:
-                        payment_total = (single_payment.paid_roads +
-                            single_payment.paid_sewer_trans +
-                            single_payment.paid_sewer_cap +
-                            single_payment.paid_parks +
-                            single_payment.paid_storm +
-                            single_payment.paid_open_space)
-
                         current_lot_data.extend([
-                            payment_total,
+                            single_payment.calculate_payment_total(),
                         ])
 
                 ledger_from_queryset = AccountLedger.objects.filter(account_from=single_lot.account)
-                if ledger_from_queryset is not None:
-                    for account_from in ledger_from_queryset:
-                        ledger_from_total = account_from.non_sewer_credits + account_from.sewer_credits
-
-                        current_lot_data.extend([ledger_from_total,])
+                for account_from in ledger_from_queryset:
+                    current_lot_data.extend([account_from.calculate_credits(),])
 
                 if len(zone_csv_data) > 0:
                     lot_csv_data = zone_csv_data + current_lot_data
@@ -185,5 +177,152 @@ class PlatCSVExportView(View):
         else:
             writer.writerow(headers)
             writer.writerow(plat_csv_data)
+
+        return response
+
+class LotSearchCSVExportView(View):
+    serializer_class = LotSerializer
+
+    def get_serializer(self, queryset, many=True):
+        return self.serializer_class(
+            queryset,
+            many=many,
+        )
+
+    def get(self, request, *args, **kwargs):
+        filename = 'lot_report_' + datetime.datetime.now().strftime("%Y-%m-%d") 
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename='+filename+'.csv'
+
+        # QUERY DB // FILTER ON PARAMS
+
+        lots = Lot.objects.all()
+
+        plat_set = self.request.GET.get('plat', None)
+        if plat_set is not None:
+            lots = lots.filter(plat=plat_set)
+
+        is_approved_set = self.request.GET.get('is_approved', None)
+        if is_approved_set is not None:
+            is_approved_set = True if is_approved_set == 'true' else False
+            lots = lots.filter(is_approved=is_approved_set)
+
+        account_set = self.request.GET.get('account', None)
+        if account_set is not None:
+            lots = lots.filter(account=account_set)
+
+        search_set = self.request.GET.get('search', None)
+        if search_set is not None:
+            lots = lots.filter(
+                    Q(address_full__icontains=search_set) |
+                    Q(lot_number__icontains=search_set) |
+                    Q(parcel_id__icontains=search_set) |
+                    Q(permit_id__icontains=search_set) |
+                    Q(plat__expansion_area__icontains=search_set) |
+                    Q(plat__name__icontains=search_set)
+                )
+
+        serializer = self.get_serializer(
+            lots,
+            many=True
+        )
+
+        # HEADERS 
+        headers = [
+            'Address',
+            'Date Modified',
+            'Latitude',
+            'Longitude',
+            'Lot Number',
+            'Parcel ID',
+            'Permit ID',
+            'Plat Name',
+            'Plat Type',
+            'Total Exactions',
+            'Sewer Due',
+            'Non-Sewer Due',
+            'Sewer Trans.',
+            'Sewer Cap.',
+            'Roads',
+            'Parks',
+            'Storm',
+            'Open Space',
+            'Current Total Due',
+        ]
+
+        # APPEND PAYMENT HEADERS FROM OUTSET BASED ON MAX PAYMENTS ON LOTS QUERY
+        max_payments = Payment.objects.filter(lot_id__in=lots).values("lot_id").annotate(payments_on_lots=Count("lot_id")).aggregate(Max('payments_on_lots'))['payments_on_lots__max']
+
+        payment_number = 1
+        if max_payments is not None:
+            while max_payments >= payment_number:
+                headers.extend(['Pymt. Date %s' % payment_number,])
+                headers.extend(['Pymt. Amt. %s' % payment_number,])
+                headers.extend(['Pymt. Type %s' % payment_number,])
+                payment_number += 1
+
+        # APPEND LEDGER HEADERS FROM OUTSET BASED ON MAX LEDGERS ON LOTS QUERY
+        max_ledgers = AccountLedger.objects.filter(lot__in=lots).values("lot").annotate(ledgers_on_lots=Count("lot")).aggregate(Max('ledgers_on_lots'))['ledgers_on_lots__max']
+
+        ledger_number = 1
+        if max_ledgers is not None:
+            while max_ledgers >= ledger_number:
+                headers.extend(['Trf. %s Date' % ledger_number])
+                headers.extend(['Trf. %s Sewer' % ledger_number])
+                headers.extend(['Trf. %s Non-Sewer' % ledger_number])
+                headers.extend(['Trf. %s Type' % ledger_number])
+                ledger_number += 1
+
+        # WRITE HEADERS
+        writer = csv.DictWriter(response, fieldnames=headers, extrasaction='ignore')
+        writer.writeheader()
+        # END HEADERS
+
+        # ROWS
+        for lot in serializer.data:
+            row = {
+                'Address': lot['address_full'],
+                'Date Modified': lot['date_modified'],
+                'Latitude': lot['latitude'],
+                'Longitude': lot['longitude'],
+                'Lot Number': lot['lot_number'],
+                'Parcel ID': lot['parcel_id'],
+                'Permit ID': lot['permit_id'],
+                'Plat Name': lot['plat']['name'],
+                'Plat Type': lot['plat']['plat_type_display'],
+                'Total Exactions': lot['lot_exactions']['total_exactions'],
+                'Sewer Due': lot['lot_exactions']['sewer_due'],
+                'Non-Sewer Due': lot['lot_exactions']['non_sewer_due'],
+                'Sewer Trans.': lot['lot_exactions']['dues_sewer_trans_dev'],
+                'Sewer Cap.': lot['lot_exactions']['dues_sewer_cap_dev'],
+                'Roads': lot['lot_exactions']['dues_roads_dev'],
+                'Parks': lot['lot_exactions']['dues_parks_dev'],
+                'Storm': lot['lot_exactions']['dues_storm_dev'],
+                'Open Space': lot['lot_exactions']['dues_open_space_dev'],
+                'Current Total Due': lot['lot_exactions']['current_exactions'],
+            }
+
+            payment_queryset = Payment.objects.filter(lot_id=lot['id'])
+
+            if payment_queryset is not None:
+                payment_length_per_lot = 0
+                for single_payment in payment_queryset:
+                    payment_length_per_lot += 1
+                    row['Pymt. Date %s' % payment_length_per_lot] = single_payment.date_created
+                    row['Pymt. Amt. %s' % payment_length_per_lot] = '${:,.2f}'.format(single_payment.calculate_payment_total())
+                    row['Pymt. Type %s' % payment_length_per_lot] = single_payment.payment_type
+
+            ledger_from_queryset = AccountLedger.objects.filter(lot=lot['id'])
+            if ledger_from_queryset is not None:
+                ledger_length_per_lot = 0
+                for ledger in ledger_from_queryset:
+                    ledger_length_per_lot += 1
+                    row['Trf. %s Date' % ledger_length_per_lot] = ledger.entry_date
+                    row['Trf. %s Sewer' % ledger_length_per_lot] = '${:,.2f}'.format(ledger.sewer_credits)
+                    row['Trf. %s Non-Sewer' % ledger_length_per_lot] = '${:,.2f}'.format(ledger.non_sewer_credits)
+                    row['Trf. %s Type' % ledger_length_per_lot] = ledger.entry_type
+
+            writer.writerow(row)
+
 
         return response
