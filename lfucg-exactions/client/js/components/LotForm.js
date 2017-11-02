@@ -12,7 +12,7 @@ import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
 import Notes from './Notes';
 import Uploads from './Uploads';
-
+import {Typeahead} from 'react-bootstrap-typeahead';
 import FormGroup from './FormGroup';
 import DeclineDelete from './DeclineDelete';
 
@@ -137,12 +137,20 @@ class LotForm extends React.Component {
                                             <div className="row">
                                                 <div className="col-sm-6 form-group">
                                                     <label htmlFor="account" className="form-label" id="account">Developer Account</label>
-                                                    <select className="form-control" id="account" onChange={formChange('account')} value={activeForm.account_show} >
-                                                        <option value="start_account">Developer Account</option>
-                                                        {accountsList}
-                                                    </select>
+                                                    <Typeahead
+                                                      onChange={formChange('account')}
+                                                      id="account"
+                                                      options={accounts}
+                                                      labelKey={option => `${option.account_name}`}
+                                                    />
                                                 </div>
                                             </div>
+                                            {
+                                            //         <select className="form-control" id="account" onChange={formChange('account')} value={activeForm.account_show} >
+                                            //             <option value="start_account">Developer Account</option>
+                                            //             {accountsList}
+                                            //         </select>
+                                            }
 
                                             <div className="row form-subheading">
                                                 <h3>Address</h3>
