@@ -90,7 +90,6 @@ const mapDispatch = (dispatch) => {
 
                     dispatch(postRate(rate_table_id, category, zone, expansion_area, rate));
                 }
-                console.log('FIELD', field);
             };
         },
     };

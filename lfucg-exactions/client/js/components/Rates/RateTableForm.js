@@ -10,7 +10,7 @@ import RateCategoryTable from './RateCategoryTable';
 import RateTableExisting from './RateTableExisting';
 
 import {
-    formInit,
+    clearRates,
 } from '../../actions/formActions';
 
 import {
@@ -83,7 +83,7 @@ function mapDispatchToProps(dispatch, params) {
     const selectedRateTable = params.params.id;
     return {
         onComponentDidMount() {
-            dispatch(formInit());
+            dispatch(clearRates());
             if (selectedRateTable) {
                 dispatch(getRates(selectedRateTable));
             }

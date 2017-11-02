@@ -18,6 +18,7 @@ class RateTableHistoryAdmin(SimpleHistoryAdmin):
         'resolution_number',
         'begin_effective_date',
         'end_effective_date',
+        'is_active',
         'id',
     )
     readonly_fields = (
