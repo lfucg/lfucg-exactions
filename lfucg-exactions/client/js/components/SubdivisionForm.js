@@ -4,7 +4,6 @@ import {
     hashHistory,
 } from 'react-router';
 import PropTypes from 'prop-types';
-import { map } from 'ramda';
 
 import Navbar from './Navbar';
 import Footer from './Footer';
@@ -18,9 +17,6 @@ import {
     formUpdate,
 } from '../actions/formActions';
 
-import {
-    errorMessageSet,
-} from '../actions/flashMessageActions';
 
 import {
     getSubdivisionID,
@@ -35,9 +31,7 @@ class SubdivisionForm extends React.Component {
 
     render() {
         const {
-            currentUser,
             activeForm,
-            subdivisions,
             onSubmit,
             selectedSubdivision,
         } = this.props;
@@ -99,9 +93,7 @@ class SubdivisionForm extends React.Component {
 }
 
 SubdivisionForm.propTypes = {
-    currentUser: PropTypes.object,
     activeForm: PropTypes.object,
-    subdivisions: PropTypes.array,
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
     onSubmit: PropTypes.func,
@@ -110,9 +102,7 @@ SubdivisionForm.propTypes = {
 
 function mapStateToProps(state) {
     return {
-        currentUser: state.currentUser,
         activeForm: state.activeForm,
-        subdivisions: state.subdivisions,
     };
 }
 
@@ -138,8 +128,10 @@ function mapDispatchToProps(dispatch, params) {
             event.preventDefault();
             if (selectedSubdivision) {
                 dispatch(putSubdivision(selectedSubdivision))
-                    .then(() => {
-                        hashHistory.push(`subdivision/summary/${selectedSubdivision}`);
+                    .then((data) => {
+                        if (data.response) {
+                            hashHistory.push(`subdivision/summary/${selectedSubdivision}`);
+                        }
                     });
             } else {
                 dispatch(postSubdivision())
