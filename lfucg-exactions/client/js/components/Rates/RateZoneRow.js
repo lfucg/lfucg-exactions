@@ -17,6 +17,7 @@ class RateZoneRow extends React.Component {
                       zone={this.props.zone}
                       expansion={expansion}
                       value="rate"
+                      selectedRateTable={this.props.selectedRateTable}
                     >
                         <input
                           type="number"
@@ -44,6 +45,7 @@ class RateZoneRow extends React.Component {
 RateZoneRow.propTypes = {
     category: PropTypes.string,
     zone: PropTypes.string,
+    selectedRateTable: PropTypes.string,
 };
 
 export default RateZoneRow;

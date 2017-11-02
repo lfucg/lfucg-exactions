@@ -34,7 +34,10 @@ class RateTableForm extends React.Component {
         const category_chart = map((category, index) => {
             return (
                 <div key={index}>
-                    <RateCategoryTable category={category} />
+                    <RateCategoryTable
+                      category={category}
+                      selectedRateTable={selectedRateTable}
+                    />
                 </div>
             );
         })(CATEGORIES);

@@ -32,7 +32,7 @@ const RateFormGroup = ({
                         expansion,
                         value: (activeForm && activeForm[id] ? activeForm[id] : ((rates && rates[0] && rates[0][id] && rates[0][id].rate) || '')),
                         onChange: formChange(id),
-                        onBlur: (rates && rates[0] ? rateChangeSubmit({ existing: rates[0][id], rate: activeForm[id], id }) : rateChangeSubmit({ rate: activeForm[id], id })),
+                        onBlur: (rates && rates[0] && rates[0][id] ? rateChangeSubmit({ existing: rates[0][id], rate: activeForm[id], id }) : rateChangeSubmit({ rate: activeForm[id], id })),
                     },
                 )
             }
@@ -59,7 +59,7 @@ function mapState(state) {
     };
 }
 
-const mapDispatch = (dispatch) => {
+const mapDispatch = (dispatch, props) => {
     return {
         formChange(field) {
             return (e, ...args) => {
@@ -80,7 +80,7 @@ const mapDispatch = (dispatch) => {
                 } else {
                     const split_field = field.id.split(', ');
 
-                    const rate_table_id = 2;
+                    const rate_table_id = props.selectedRateTable;
 
                     const category = split_field[0];
                     const zone = split_field[1];
