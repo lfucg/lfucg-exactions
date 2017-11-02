@@ -17,10 +17,13 @@ export default function flashMiddleware({ dispatch }) {
             }, 5000);
         }
         if (action.type === ERROR_MESSAGE_SET) {
-            const element = document.getElementById(Object.keys(action.response)[0]);
-            element.classList.add('error');
-            element.htmlFor.classList.add('error');
-            // document.getElementsByTagName('help', Object.keys(action.response)[0]).classList.remove('hidden');
+            map((error) => {
+                document.getElementById(error).classList.add('error');
+                document.querySelector(`label[for='${error}']`).classList.add('label-error');
+                const help_text = document.getElementById(`help-block-${error}`);
+                help_text.classList.remove('hidden');
+                help_text.innerHTML += ` ${action.response[error]}`;
+            })(Object.keys(action.response));
         }
         return next(action);
     };
