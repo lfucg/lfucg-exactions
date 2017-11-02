@@ -11,6 +11,9 @@ import {
 import {
     BASE_URL,
 } from '../constants/apiConstants';
+import {
+    errorMessageSet,
+} from '../actions/flashMessageActions';
 
 export default function api({ getState, dispatch }) {
     return next => (action) => {
@@ -98,10 +101,11 @@ export default function api({ getState, dispatch }) {
             map((one_error) => {
                 error_message[one_error] = error_obj[one_error][0];
             })(Object.keys(error_obj));
+
+            dispatch(errorMessageSet(error_message));
             return dispatch({
                 type: API_CALL_ERROR,
                 error,
-                error_message,
             });
         });
     };

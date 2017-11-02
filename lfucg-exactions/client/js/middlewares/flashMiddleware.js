@@ -22,7 +22,7 @@ export default function flashMiddleware({ dispatch }) {
                 document.querySelector(`label[for='${error}']`).classList.add('label-error');
                 const help_text = document.getElementById(`help-block-${error}`);
                 help_text.classList.remove('hidden');
-                help_text.innerHTML += ` ${action.response[error]}`;
+                help_text.innerHTML = `<i class="fa fa-exclamation-circle"></i> ${action.response[error]}`;
             })(Object.keys(action.response));
         }
         return next(action);
