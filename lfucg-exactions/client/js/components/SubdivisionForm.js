@@ -138,20 +138,13 @@ function mapDispatchToProps(dispatch, params) {
             event.preventDefault();
             if (selectedSubdivision) {
                 dispatch(putSubdivision(selectedSubdivision))
-                    .then((data_sub_put) => {
-                        if (data_sub_put.error) {
-                            console.log('this is the subdivision form');
-                            console.log(data_sub_put.error_message);
-                        } else {
-                            hashHistory.push(`subdivision/summary/${selectedSubdivision}`);
-                        }
+                    .then(() => {
+                        hashHistory.push(`subdivision/summary/${selectedSubdivision}`);
                     });
             } else {
                 dispatch(postSubdivision())
                 .then((data_sub_post) => {
-                    if (data_sub_post.error) {
-                        dispatch(errorMessageSet(data_sub_post.error_message));
-                    } else {
+                    if (data_sub_post.response) {
                         hashHistory.push(`subdivision/summary/${data_sub_post.response.id}`);
                     }
                 });

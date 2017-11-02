@@ -24,7 +24,7 @@ const FormGroup = ({
                     },
                 )
             }
-            <p className="help-block hidden" id={`help-block-${id}`}><i className="fa fa-exclamation-circle" /></p>
+            <p className="help-block hidden" id={`help-block-${id}`} />
         </div>
     );
 };
