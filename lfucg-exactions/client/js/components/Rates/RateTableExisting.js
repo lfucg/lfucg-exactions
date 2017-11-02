@@ -7,6 +7,7 @@ import { hashHistory } from 'react-router';
 import FormGroup from './../FormGroup';
 
 import {
+    formInit,
     formUpdate,
     clearRates,
 } from '../../actions/formActions';
@@ -53,8 +54,7 @@ class RateTableForm extends React.Component {
 
         const submitEnabled =
             activeForm.resolution_number &&
-            activeForm.begin_effective_date &&
-            activeForm.end_effective_date;
+            activeForm.begin_effective_date;
 
         return (
             <div className="existing-rate-table">
@@ -80,7 +80,7 @@ class RateTableForm extends React.Component {
                         {existing_tables}
                     </select>
                 </div>
-                {currentTable ? <div>
+                {currentTable && <div>
                     <div className="col-xs-6 col-sm-3">
                         <h4>Start: {currentTable.begin_effective_date}</h4>
                     </div>
@@ -90,7 +90,8 @@ class RateTableForm extends React.Component {
                     <div className="row">
                         <button className="btn btn-primary col-xs-3 col-xs-offset-8" onClick={onRateTableForm} >Edit Rate Table</button>
                     </div>
-                </div> : <button className="btn btn-primary col-xs-6 col-sm-3 col-sm-offset-3" onClick={onRateTableForm}>Create a new rate table</button>}
+                </div>}
+                {!currentTable && <button className="btn btn-primary col-xs-6 col-sm-3 col-sm-offset-3" onClick={onRateTableForm}>Create a new rate table</button>}
                 { activeForm && activeForm.editRateTable && <div className="row">
                     <div className="clearfix" />
                     <form>
@@ -163,7 +164,12 @@ function mapDispatchToProps(dispatch, props) {
                     dispatch(formUpdate({ editRateTable: true }));
                     hashHistory.push('rate-table/form/');
                 } else {
+                    dispatch(formInit());
                     dispatch(getRates(value));
+                    dispatch(getRateTables())
+                    .then((rate_tables) => {
+                        dispatch(formUpdate({ rate_tables: rate_tables.response, editRateTable: false }));
+                    });
                     hashHistory.push(`rate-table/form/${value}`);
                 }
             };
@@ -179,6 +185,8 @@ function mapDispatchToProps(dispatch, props) {
                         };
                         dispatch(formUpdate(table_update));
                     });
+            } else {
+                dispatch(clearRates());
             }
             dispatch(formUpdate({ editRateTable: true }));
         },

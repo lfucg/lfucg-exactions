@@ -11,7 +11,11 @@ class RateCategoryTable extends React.Component {
         const zone_list = map((zone, index) => {
             return (
                 <div key={index}>
-                    <RateZoneRow category={this.props.category} zone={zone} />
+                    <RateZoneRow
+                      category={this.props.category}
+                      zone={zone}
+                      selectedRateTable={this.props.selectedRateTable}
+                    />
                 </div>
             );
         })(ZONES);
@@ -63,6 +67,7 @@ class RateCategoryTable extends React.Component {
 
 RateCategoryTable.propTypes = {
     category: PropTypes.string,
+    selectedRateTable: PropTypes.string,
 };
 
 export default RateCategoryTable;
