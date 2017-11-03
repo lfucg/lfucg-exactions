@@ -3,6 +3,7 @@ import {
     FORM_INIT,
     FORM_UPDATE,
     FORM_RESET,
+    CLEAR_RATES,
 } from '../constants/actionTypes';
 
 
@@ -22,5 +23,11 @@ export function formUpdate(update) {
 export function formReset() {
     return {
         type: FORM_RESET,
+    };
+}
+
+export function clearRates() {
+    return {
+        type: CLEAR_RATES,
     };
 }
