@@ -651,20 +651,11 @@ export function putPermitIdOnLot(selectedLot) {
 export function getNoteContent(
     content_type,
     object_id,
-    parent_content_type,
-    parent_object_id,
-    grandparent_content_type,
-    grandparent_object_id,
     ) {
     return {
         type: API_CALL,
         endpoint: GET_NOTE_CONTENT,
-        url: () => {
-            const no_grandparent_notes = (parent_content_type && parent_object_id !== null) ? `/note/?content_type=${content_type}&object_id=${object_id}&parent_content_type=${parent_content_type}&parent_object_id=${parent_object_id}` : `/note/?content_type=${content_type}&object_id=${object_id}`;
-            const related_notes = (grandparent_content_type && grandparent_object_id !== null) ? `/note/?content_type=${content_type}&object_id=${object_id}&parent_content_type=${parent_content_type}&parent_object_id=${parent_object_id}&grandparent_content_type=${grandparent_content_type}&grandparent_object_id=${grandparent_object_id}` : no_grandparent_notes;
-
-            return related_notes;
-        },
+        url: `/note/?content_type=${content_type}&object_id=${object_id}`,
     };
 }
 
