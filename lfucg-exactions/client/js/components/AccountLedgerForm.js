@@ -283,10 +283,6 @@ class AccountLedgerForm extends React.Component {
                                             <Notes
                                               content_type="plats_lot"
                                               object_id={lot.id}
-                                              parent_content_type="plats_plat"
-                                              parent_object_id={lot.plat.id}
-                                              grandparent_content_type="plats_subdivision"
-                                              grandparent_object_id={lot.plat.subdivision && lot.plat.subdivision.id}
                                               ariaExpanded="true"
                                               panelClass="panel-collapse collapse row in"
                                               permission="lot"
@@ -301,8 +297,6 @@ class AccountLedgerForm extends React.Component {
                                             <Notes
                                               content_type="plats_plat"
                                               object_id={plat.id}
-                                              parent_content_type="plats_subdivision"
-                                              parent_object_id={plat.subdivision && plat.subdivision.id}
                                               ariaExpanded="true"
                                               panelClass="panel-collapse collapse row in"
                                               permission="plat"

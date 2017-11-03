@@ -142,7 +142,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch, props) {
     return {
         onComponentDidMount() {
-            dispatch(getNoteContent(props.content_type, props.object_id, props.parent_content_type, props.parent_object_id, props.grandparent_content_type, props.grandparent_object_id));
+            dispatch(getNoteContent(props.content_type, props.object_id));
         },
         onSubmit() {
             dispatch(postNote(props.content_type, props.object_id))
@@ -151,7 +151,7 @@ function mapDispatchToProps(dispatch, props) {
                     note: '',
                 };
                 dispatch(formUpdate(clear_note));
-                dispatch(getNoteContent(props.content_type, props.object_id, props.parent_content_type, props.parent_object_id, props.grandparent_content_type, props.grandparent_object_id));
+                dispatch(getNoteContent(props.content_type, props.object_id));
             });
         },
     };
