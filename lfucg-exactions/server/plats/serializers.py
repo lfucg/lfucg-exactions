@@ -13,6 +13,12 @@ class SubdivisionSerializer(serializers.ModelSerializer):
         set_acreage = str(obj.gross_acreage).rstrip('0').rstrip('.')
         return set_acreage
 
+    # EXAMPLE FOR FIELD VALIDATION
+    # def validate_name(self, data):
+    #     if 'new' in data:
+    #         raise serializers.ValidationError('This field has the word new in it.')
+    #     return data
+
     class Meta:
         model = Subdivision
         fields = (
