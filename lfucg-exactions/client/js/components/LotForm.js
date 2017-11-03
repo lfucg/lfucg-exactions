@@ -12,6 +12,7 @@ import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
 import Notes from './Notes';
 import Uploads from './Uploads';
+
 import FormGroup from './FormGroup';
 import DeclineDelete from './DeclineDelete';
 
@@ -140,7 +141,6 @@ class LotForm extends React.Component {
                                                         <option value="start_account">Developer Account</option>
                                                         {accountsList}
                                                     </select>
-
                                                 </div>
                                             </div>
                                             <div className="row form-subheading">
