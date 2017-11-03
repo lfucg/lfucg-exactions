@@ -78,17 +78,17 @@ const mapDispatch = (dispatch, props) => {
 
                     dispatch(putRate(selectedRate, rate));
                 } else {
-                    const split_field = field.id.split(', ');
-
                     const rate_table_id = props.selectedRateTable;
+                    const split_field = field.id.split(', ');
+                    if (split_field.length === 3) {
+                        const category = split_field[0];
+                        const zone = split_field[1];
+                        const expansion_area = split_field[2];
 
-                    const category = split_field[0];
-                    const zone = split_field[1];
-                    const expansion_area = split_field[2];
+                        const rate = field.rate;
 
-                    const rate = field.rate;
-
-                    dispatch(postRate(rate_table_id, category, zone, expansion_area, rate));
+                        dispatch(postRate(rate_table_id, category, zone, expansion_area, rate));
+                    }
                 }
             };
         },
