@@ -521,8 +521,8 @@ function mapDispatchToProps(dispatch, params) {
                 dispatch(getLotID(selectedLot))
                 .then((data_lot) => {
                     const update = {
-                        plat: data_lot.response.plat ? data_lot.response.plat.id : null,
-                        plat_show: data_lot.response.plat ? `${data_lot.response.plat.id},${data_lot.response.plat.name}` : '',
+                        plat: data_lot.response && data_lot.response.plat ? data_lot.response.plat.id : null,
+                        plat_show: data_lot.response && data_lot.response.plat ? `${data_lot.response.plat.id},${data_lot.response.plat.name}` : '',
                         address_number: data_lot.response.address_number,
                         address_street: data_lot.response.address_street,
                         address_direction: data_lot.response.address_direction,
