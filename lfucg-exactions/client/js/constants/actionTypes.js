@@ -13,6 +13,7 @@ export const CURRENT_JOB_UPDATE = 'CURRENT_JOB_UPDATE';
 // Flash Messages
 export const FLASH_MESSAGE_SET = 'FLASH_MESSAGE_SET';
 export const FLASH_MESSAGE_CLEAR = 'FLASH_MESSAGE_CLEAR';
+export const ERROR_MESSAGE_SET = 'ERROR_MESSAGE_SET';
 
 // Process Queue
 export const PROCESS_QUEUE = 'PROCESS_QUEUE';
