@@ -72,13 +72,6 @@ class AccountLedgerForm extends React.Component {
                 });
             })(lots);
         }
-        // const lotsList = lots.length > 0 && (map((lot) => {
-        //     return (
-        //         <option key={lot.id} value={[lot.id, lot.address_full, lot.lot_exactions.non_sewer_due, lot.lot_exactions.sewer_due]} >
-        //             {lot.address_full}
-        //         </option>
-        //     );
-        // })(lots));
 
         const accountsList = accounts.length > 0 && (map((account) => {
             return (
@@ -173,7 +166,7 @@ class AccountLedgerForm extends React.Component {
                                             <label htmlFor="lot" className="form-label" id="lot" aria-label="Lot" >Lot</label>
                                             <Typeahead
                                               onChange={e => lotFormChange(e, 'lot')}
-                                              id="account"
+                                              id="lot"
                                               options={lotsList}
                                               placeholder="Lot"
                                               disabled={activeForm.entry_type !== 'USE' || activeForm.plat_lot !== 'lot'}
