@@ -204,8 +204,8 @@ function mapDispatchToProps(dispatch, params) {
                 dispatch(getProjectCostID(selectedProjectCost))
                 .then((data_project_cost) => {
                     const update = {
-                        project_id: data_project_cost.response.project_id ? data_project_cost.response.project_id.id : null,
-                        project_id_show: data_project_cost.response.project_id ? `${data_project_cost.response.project_id.id},${data_project_cost.response.project_id.name}` : '',
+                        project_id: data_project_cost.response && data_project_cost.response.project_id ? data_project_cost.response.project_id.id : null,
+                        project_id_show: data_project_cost.response && data_project_cost.response.project_id ? `${data_project_cost.response.project_id.id},${data_project_cost.response.project_id.name}` : '',
                         estimate_type: data_project_cost.response.estimate_type,
                         land_cost: data_project_cost.response.land_cost,
                         design_cost: data_project_cost.response.design_cost,

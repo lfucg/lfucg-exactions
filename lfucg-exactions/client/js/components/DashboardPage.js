@@ -1,7 +1,9 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import {
     Link,
 } from 'react-router';
+import PropTypes from 'prop-types';
 
 import Navbar from './Navbar';
 import Footer from './Footer';
@@ -9,6 +11,9 @@ import FlashMessage from './FlashMessage';
 
 class DashboardPage extends React.Component {
     render() {
+        const {
+            currentUser,
+        } = this.props;
         return (
             <div className="dashboard">
                 <Navbar />
@@ -54,6 +59,12 @@ class DashboardPage extends React.Component {
                                 <Link to="project-cost" role="link"><h2 className="in-page-link">Project Costs</h2></Link>
                                 <p>Lexington project costs.</p>
                             </div>
+                            {currentUser && currentUser.is_superuser &&
+                                <div className="col-md-4 col-sm-6">
+                                    <Link to="rate-table/form/" role="link"><h2 className="in-page-link">Rate Tables</h2></Link>
+                                    <p>Update or create rate tables.</p>
+                                </div>
+                            }
                         </div>
                     </div>
                 </div>
@@ -63,5 +74,15 @@ class DashboardPage extends React.Component {
     }
 }
 
-export default (DashboardPage);
+DashboardPage.propTypes = {
+    currentUser: PropTypes.object,
+};
+
+function mapStateToProps(state) {
+    return {
+        currentUser: state.currentUser,
+    };
+}
+
+export default connect(mapStateToProps)(DashboardPage);
 
