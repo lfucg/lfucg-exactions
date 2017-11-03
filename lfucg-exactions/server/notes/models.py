@@ -7,6 +7,33 @@ from django.contrib.auth.models import User
 
 from simple_history.models import HistoricalRecords
 
+ZONES = (
+    ('EAR-1', 'EAR-1'),
+    ('EAR-1SRA', 'EAR-1SRA'),
+    ('EAR-2', 'EAR-2'),
+    ('EAR-3', 'EAR-3'),
+    ('CC(RES)', 'CC(RES)'),
+    ('CC(NONR)', 'CC(NONR)'),
+    ('ED', 'ED'),
+)
+
+CATEGORIES = (
+    ('ROADS', 'Roads'),
+    ('OPEN_SPACE', 'Open Space'),
+    ('SEWER_CAP', 'Sewer Capacity'),
+    ('SEWER_TRANS', 'Sewer Trans.'),
+    ('PARK', 'Park'),
+    ('STORM_WATER', 'Storm Water'),
+)
+
+EXPANSION_AREAS = (
+    ('EA-1', 'EA-1'),
+    ('EA-2A', 'EA-2A'),
+    ('EA-2B', 'EA-2B'),
+    ('EA-2C', 'EA-2C'),
+    ('EA-3', 'EA-3'),
+)
+
 class Note(models.Model):
     is_active = models.BooleanField(default=True)
 
@@ -46,33 +73,6 @@ class RateTable(models.Model):
 class Rate(models.Model):
     is_active = models.BooleanField(default=True)
     
-    ZONES = (
-        ('EAR-1', 'EAR-1'),
-        ('EAR-1SRA', 'EAR-1SRA'),
-        ('EAR-2', 'EAR-2'),
-        ('EAR-3', 'EAR-3'),
-        ('CC(RES)', 'CC(RES)'),
-        ('CC(NONR)', 'CC(NONR)'),
-        ('ED', 'ED'),
-    )
-
-    CATEGORIES = (
-        ('ROADS', 'Roads'),
-        ('OPEN_SPACE', 'Open Space'),
-        ('SEWER_CAP', 'Sewer Capacity'),
-        ('SEWER_TRANS', 'Sewer Trans.'),
-        ('PARK', 'Park'),
-        ('STORM_WATER', 'Storm Water'),
-    )
-
-    EXPANSION_AREAS = (
-        ('EA-1', 'EA-1'),
-        ('EA-2A', 'EA-2A'),
-        ('EA-2B', 'EA-2B'),
-        ('EA-2C', 'EA-2C'),
-        ('EA-3', 'EA-3'),
-    )
-
     date_created = models.DateField(auto_now_add=True)
     date_modified = models.DateField(auto_now=True)
 
@@ -93,6 +93,9 @@ class Rate(models.Model):
 
     def __str__(self):
         return self.zone + ': ' + self.category
+
+def expose_rate_total(self):
+    return len(ZONES) * len(CATEGORIES) * len(EXPANSION_AREAS)
 
 class MediaStorage(S3Boto3Storage):
     location = 'media'
