@@ -143,6 +143,7 @@ class LotForm extends React.Component {
                                                     </select>
                                                 </div>
                                             </div>
+                                            
                                             <div className="row form-subheading">
                                                 <h3>Address</h3>
                                             </div>
