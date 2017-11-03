@@ -134,12 +134,22 @@ class AccountLedgerHistoryAdmin(SimpleHistoryAdmin):
         return obj.lot.address_full
     lot.short_description = 'Lot'
 
-UserAdmin.list_display += ('last_login',)
+class ProfileInline(admin.TabularInline):
+    model = Profile
+    fields = ('is_supervisor',)
 
+class UserAdmin(admin.ModelAdmin):
+    list_display = ('username', 'email', 'first_name', 'is_staff', 'last_login',)
+    inlines = (
+            ProfileInline,
+        )
+
+
+admin.site.unregister(User)
+admin.site.register(User, UserAdmin)
 admin.site.register(Account, AccountHistoryAdmin)
 admin.site.register(Agreement, AgreementHistoryAdmin)
 admin.site.register(Payment, PaymentHistoryAdmin)
 admin.site.register(Project, ProjectHistoryAdmin)
 admin.site.register(ProjectCostEstimate, ProjectCostEstimateHistoryAdmin)
 admin.site.register(AccountLedger, AccountLedgerHistoryAdmin)
-admin.site.register(Profile, SimpleHistoryAdmin)

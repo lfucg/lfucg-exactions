@@ -18,6 +18,7 @@ class RateTableHistoryAdmin(SimpleHistoryAdmin):
         'resolution_number',
         'begin_effective_date',
         'end_effective_date',
+        'is_active',
         'id',
     )
     readonly_fields = (
@@ -28,8 +29,9 @@ class RateTableHistoryAdmin(SimpleHistoryAdmin):
     )
 
 class RateHistoryAdmin(SimpleHistoryAdmin):
+    search_fields = ['rate_table_id__resolution_number', 'expansion_area', 'zone', 'category']
     list_display = (
-        'rate_table',
+        'rate_table_id',
         'expansion_area',
         'zone',
         'category',

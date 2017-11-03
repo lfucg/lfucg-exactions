@@ -1,14 +1,17 @@
-from rest_framework import viewsets, status, generics
+from rest_framework import viewsets, status, generics, filters
 from django.db.models import Q
 from rest_framework.response import Response
+from rest_framework import status
 from django.contrib.contenttypes.models import ContentType
 
 from rest_framework.parsers import FileUploadParser, MultiPartParser
+from django_filters.rest_framework import DjangoFilterBackend
 
-from .models import *
+from .models import Note, FileUpload, MediaStorage, Rate, RateTable, expose_rate_total
 from .serializers import *
 from plats.models import Lot, Plat, Subdivision
 from .permissions import CanAdminister
+from .utils import update_entry
 
 class NoteViewSet(viewsets.ModelViewSet):
     serializer_class = NoteSerializer
@@ -98,23 +101,46 @@ class RateTableViewSet(viewsets.ModelViewSet):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def update(self, request, pk):
-        existing_object  = self.get_object()
-        setattr(existing_object, 'modified_by', request.user)
-        for key, value in request.data.items():
-            for existing_object_key, existing_object_value in existing_object.__dict__.items():
-                if key == existing_object_key:
-                    if value != existing_object_value:
-                        setattr(existing_object, existing_object_key, value)
-        try:
-            existing_object.save()
-            return Response(status=status.HTTP_200_OK)
-        except Exception as e:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+        self_table = request.data
+
+        if self_table['is_active'] == True:
+            all_true_tables = RateTable.objects.filter(is_active=True)
+            rate_count = Rate.objects.filter(rate_table_id=request.data['id']).count()
+
+            exposed = expose_rate_total(self)
+            total_rate_entries_per_table = exposed
+            if rate_count == total_rate_entries_per_table:
+                for rate_table in all_true_tables:
+                    if self != rate_table:
+                        rate_table.is_active = False
+                        rate_table.save()
+                
+                self_table['is_active'] = True
+                return update_entry(self, request, pk)
+            else:
+                return Response('You must enter a rate for each of the 210 rate types, zones, expansion areas.', status=status.HTTP_406_NOT_ACCEPTABLE)
+        else:
+            return update_entry(self, request, pk)
 
 class RateViewSet(viewsets.ModelViewSet):
     serializer_class = RateSerializer
     queryset = Rate.objects.all()
     permission_classes = (CanAdminister,)
+    filter_backends = (DjangoFilterBackend, filters.SearchFilter,)
+    filter_fields = ('rate_table_id__id',)
+
+    def get_queryset(self):
+        queryset = Rate.objects.all()
+
+        rate_table = self.request.query_params.get('rate_table_id', None)
+        if rate_table is not None:
+            queryset = queryset.filter(rate_table_id=rate_table)
+
+        category_set = self.request.query_params.get('category', None)
+        if category_set is not None:
+            queryset = queryset.filter(category=category_set)
+
+        return queryset.order_by('expansion_area')
 
     def create(self, request):
         data_set = request.data
@@ -130,18 +156,7 @@ class RateViewSet(viewsets.ModelViewSet):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def update(self, request, pk):
-        existing_object  = self.get_object()
-        setattr(existing_object, 'modified_by', request.user)
-        for key, value in request.data.items():
-            for existing_object_key, existing_object_value in existing_object.__dict__.items():
-                if key == existing_object_key:
-                    if value != existing_object_value:
-                        setattr(existing_object, existing_object_key, value)
-        try:
-            existing_object.save()
-            return Response(status=status.HTTP_200_OK)
-        except Exception as e:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+        return update_entry(self, request, pk)
 
 class FileUploadViewSet(viewsets.ModelViewSet):
     serializer_class = FileUploadSerializer
