@@ -467,12 +467,18 @@ function mapDispatchToProps(dispatch, params) {
         onSubmit(event) {
             event.preventDefault();
             if (selectedPayment) {
-                dispatch(putPayment(selectedPayment));
-                hashHistory.push(`payment/summary/${selectedPayment}`);
+                dispatch(putPayment(selectedPayment))
+                .then((data) => {
+                    if (data.response) {
+                        hashHistory.push(`payment/summary/${selectedPayment}`);
+                    }
+                });
             } else {
                 dispatch(postPayment())
                 .then((data_post) => {
-                    hashHistory.push(`payment/summary/${data_post.response.id}`);
+                    if (data_post.response) {
+                        hashHistory.push(`payment/summary/${data_post.response.id}`);
+                    }
                 });
             }
         },
