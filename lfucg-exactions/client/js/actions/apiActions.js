@@ -1393,7 +1393,7 @@ export function getPagination(page) {
     };
 }
 
-export function searchQuery(isCSV) {
+export function searchQuery() {
     return {
         type: API_CALL,
         endpoint: SEARCH_QUERY,
@@ -1403,7 +1403,7 @@ export function searchQuery(isCSV) {
             } = getState();
 
 
-            let query_all = isCSV ? `${activeForm.currentPage}?` : `${activeForm.currentPage}?paginatePage`;
+            let query_all = `${activeForm.currentPage}?paginatePage`;
 
             if (activeForm.currentPage === '/credit-transfer/') {
                 query_all = '/ledger/?paginatePage';
@@ -1422,7 +1422,6 @@ export function searchQuery(isCSV) {
                 }),
                 filter(key_name => activeForm[key_name] && (key_name.indexOf('filter_') !== -1)),
             )(Object.keys(activeForm));
-
             return queryString;
         },
         meta: {
