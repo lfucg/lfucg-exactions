@@ -75,6 +75,53 @@
     /*background-color: green;*/
 }
 
+.rate-panel-group {
+    .rate-panel-heading {
+        text-align: center;
+        color: white;
+        background-color: #001A49;
+        border: 2px solid #585858;
+        border-radius: 4px;
+        margin-top: 10px;
+        h3 {
+            margin-top: 10px;
+        }
+    }
+    [aria-expanded="false"] {
+        .caret-indicator:before {
+            font-family: FontAwesome;
+            /*fa-caret-right*/
+            content: "\f0da";
+            font-size: 2.5em;
+            margin: 20px 0px 0px 20px;
+            color: #858585;
+        }
+    }
+    [aria-expanded="true"] {
+        .caret-indicator:before {
+            font-family: FontAwesome;
+            /*fa-caret-down*/
+            content: "\f0d7";
+            font-size: 2.5em;
+            color: white;
+        }
+    }
+    /*background-color: green;*/
+}
+
+.form-subheading {
+    background-color: #001A49;
+    color: white;
+    border-radius: 3px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    h3 {
+        margin: 8px 0px 8px 8px;
+    }
+}
+
 .panel-collapse {
     border: 2px solid #585858;
     border-top: 0;
@@ -98,8 +145,13 @@
         margin-bottom: 0.5em;
     }
 }
+
 .reduced-form-label {
     margin-top: -20px;
+}
+
+.inline-label {
+    margin-top: 2px;
 }
 
 .dues-table-heading {
@@ -198,4 +250,16 @@
     }
 }
 
+.rate-table {
+    text-align: center;
+}
 
+.rate-form-group {
+    font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+    .form-group {
+        color: black;
+        font-weight: normal;
+        margin-bottom: 0.5em;
+        width: 125%;
+    }
+}
