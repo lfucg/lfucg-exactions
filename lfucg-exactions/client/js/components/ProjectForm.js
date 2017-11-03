@@ -266,8 +266,8 @@ function mapDispatchToProps(dispatch, params) {
                 .then((data_project) => {
                     const update = {
                         name: data_project.response.name,
-                        agreement_id: data_project.response.agreement_id ? data_project.response.agreement_id.id : null,
-                        agreement_id_show: data_project.response.agreement_id ? `${data_project.response.agreement_id.id},${data_project.response.agreement_id.resolution_number}` : '',
+                        agreement_id: data_project.response && data_project.response.agreement_id ? data_project.response.agreement_id.id : null,
+                        agreement_id_show: data_project.response && data_project.response.agreement_id ? `${data_project.response.agreement_id.id},${data_project.response.agreement_id.resolution_number}` : '',
                         expansion_area: data_project.response.expansion_area,
                         expansion_area_show: `${data_project.response.expansion_area},${data_project.response.expansion_area}`,
                         project_category: data_project.response.project_category,
