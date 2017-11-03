@@ -79,13 +79,13 @@ class RateTableViewSet(viewsets.ModelViewSet):
 
     def update(self, request, pk):
         self_table = request.data
-        self_table_is_active = self_table['is_active']
 
-        if self_table_is_active == True:
+        if self_table['is_active'] == True:
             all_true_tables = RateTable.objects.filter(is_active=True)
             rate_count = Rate.objects.filter(rate_table_id=request.data['id']).count()
 
-            if rate_count == 210:
+            total_rate_entries_per_table = 210
+            if rate_count == total_rate_entries_per_table:
                 for rate_table in all_true_tables:
                     if self != rate_table:
                         rate_table.is_active = False
