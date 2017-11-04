@@ -41,6 +41,7 @@ import {
     PUT_ACCOUNT,
 
     GET_NOTE_CONTENT,
+    GET_SECONDARY_NOTE_CONTENT,
     POST_NOTE,
 
     GET_UPLOAD_CONTENT,
@@ -665,6 +666,17 @@ export function getNoteContent(
     return {
         type: API_CALL,
         endpoint: GET_NOTE_CONTENT,
+        url: `/note/?content_type=${content_type}&object_id=${object_id}`,
+    };
+}
+
+export function getSecondaryNoteContent(
+    content_type,
+    object_id,
+    ) {
+    return {
+        type: API_CALL,
+        endpoint: GET_SECONDARY_NOTE_CONTENT,
         url: `/note/?content_type=${content_type}&object_id=${object_id}`,
     };
 }

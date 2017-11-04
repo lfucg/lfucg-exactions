@@ -8,6 +8,7 @@ import Navbar from './Navbar';
 import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
 import Uploads from './Uploads';
+import Notes from './Notes';
 
 import {
     getProjectID,
@@ -128,6 +129,15 @@ class ProjectSummary extends React.Component {
                                     </div>
                                 </div>
                             </div>
+                            {projects && projects.id &&
+                                <Notes
+                                  content_type="accounts_project"
+                                  object_id={projects.id}
+                                  ariaExpanded="false"
+                                  panelClass="panel-collapse collapse row"
+                                  permission="project"
+                                />
+                            }
 
                             {projectCostEstimates ? (
                                 <div>

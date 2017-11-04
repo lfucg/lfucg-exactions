@@ -11,6 +11,7 @@ import Footer from './Footer';
 import FormGroup from './FormGroup';
 import Breadcrumbs from './Breadcrumbs';
 import Uploads from './Uploads';
+import Notes from './Notes';
 
 import DeclineDelete from './DeclineDelete';
 
@@ -217,6 +218,15 @@ class ProjectForm extends React.Component {
                                 <Uploads
                                   file_content_type="accounts_project"
                                   file_object_id={projects.id}
+                                  ariaExpanded="true"
+                                  panelClass="panel-collapse collapse row in"
+                                  permission="project"
+                                />
+                            }
+                            {selectedProject &&
+                                <Notes
+                                  content_type="accounts_project"
+                                  object_id={selectedProject}
                                   ariaExpanded="true"
                                   panelClass="panel-collapse collapse row in"
                                   permission="project"

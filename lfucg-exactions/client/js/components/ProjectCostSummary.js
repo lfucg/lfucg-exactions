@@ -7,6 +7,7 @@ import Navbar from './Navbar';
 import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
 import Uploads from './Uploads';
+import Notes from './Notes';
 
 import {
     getProjectCostID,
@@ -147,6 +148,15 @@ class ProjectCostSummary extends React.Component {
                             </div> : <div className="row section-heading" role="tab" id="headingProjectInfo">
                                 <h3>Project - None</h3>
                             </div>}
+                            {projectCosts && projectCosts.id &&
+                                <Notes
+                                  content_type="accounts_projectcostestimate"
+                                  object_id={projectCosts.id}
+                                  ariaExpanded="false"
+                                  panelClass="panel-collapse collapse row"
+                                  permission="projectcostestimate"
+                                />
+                            }
                             {projectCosts.id &&
                                 <Uploads
                                   file_content_type="accounts_projectcostestimate"

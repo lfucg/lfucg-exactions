@@ -8,6 +8,7 @@ import Navbar from './Navbar';
 import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
 import Uploads from './Uploads';
+import Notes from './Notes';
 
 import {
     getAgreementID,
@@ -217,6 +218,15 @@ class AgreementSummary extends React.Component {
                                     </div>
                                 </div>
                             </div>
+                            {agreements && agreements.id &&
+                                <Notes
+                                  content_type="accounts_agreement"
+                                  object_id={agreements.id}
+                                  ariaExpanded="false"
+                                  panelClass="panel-collapse collapse row"
+                                  permission="agreement"
+                                />
+                            }
 
                             {agreements && agreements.account_id && agreements.account_id.id ?
                                 <div>

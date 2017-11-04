@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
+import Notes from './Notes';
 
 import {
     getAccountID,
@@ -293,6 +294,15 @@ class AccountSummary extends React.Component {
                                     </div>
                                 </div>
                             </div>
+                            {accounts && accounts.id &&
+                                <Notes
+                                  content_type="accounts_account"
+                                  object_id={accounts.id}
+                                  ariaExpanded="false"
+                                  panelClass="panel-collapse collapse row"
+                                  permission="account"
+                                />
+                            }
                             {plats_list ? (
                                 <div>
                                     <a

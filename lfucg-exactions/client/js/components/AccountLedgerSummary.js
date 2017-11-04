@@ -6,6 +6,7 @@ import { Link } from 'react-router';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
+import Notes from './Notes';
 
 import {
     getAccountLedgerID,
@@ -81,6 +82,15 @@ class AccountLedgerSummary extends React.Component {
                                     </div>
                                 </div>
                             </div>
+                            {accountLedgers && accountLedgers.id &&
+                                <Notes
+                                  content_type="accounts_accountledger"
+                                  object_id={accountLedgers.id}
+                                  ariaExpanded="false"
+                                  panelClass="panel-collapse collapse row"
+                                  permission="accountledger"
+                                />
+                            }
 
                             {(accountLedgers.lot && accountLedgers.lot.id) ?
                                 <div>

@@ -6,6 +6,7 @@ import { Link } from 'react-router';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
+import Notes from './Notes';
 
 import {
     getPaymentID,
@@ -88,6 +89,15 @@ class PaymentSummary extends React.Component {
                                     </div>
                                 </div>
                             </div>
+                            {payments && payments.id &&
+                                <Notes
+                                  content_type="accounts_payment"
+                                  object_id={payments.id}
+                                  ariaExpanded="false"
+                                  panelClass="panel-collapse collapse row"
+                                  permission="payment"
+                                />
+                            }
 
                             {payments && payments.lot_id ? <div>
                                 <a
