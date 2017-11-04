@@ -1,5 +1,6 @@
 import Promise from 'bluebird';
 import axios from 'axios';
+import { map } from 'ramda';
 
 import {
   API_CALL,
@@ -10,6 +11,9 @@ import {
 import {
     BASE_URL,
 } from '../constants/apiConstants';
+import {
+    errorMessageSet,
+} from '../actions/flashMessageActions';
 
 export default function api({ getState, dispatch }) {
     return next => (action) => {
@@ -92,6 +96,13 @@ export default function api({ getState, dispatch }) {
         })
         .catch((error) => {
             console.log(error);  // eslint-disable-line no-console
+            const error_obj = error.response.data;
+            const error_message = {};
+            map((one_error) => {
+                error_message[one_error] = error_obj[one_error][0];
+            })(Object.keys(error_obj));
+
+            dispatch(errorMessageSet(error_message));
             return dispatch({
                 type: API_CALL_ERROR,
                 error,

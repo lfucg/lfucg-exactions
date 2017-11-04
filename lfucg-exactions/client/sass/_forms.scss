@@ -133,6 +133,9 @@
 
 .form-group {
     font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+    .label-error {
+        color: red !important;
+    }
     label {
         color: #585858;
         font-size: 1.5em;
@@ -143,6 +146,10 @@
         color: black;
         font-weight: normal;
         margin-bottom: 0.5em;
+    }
+    .help-block {
+        font-size: 1em;
+        color: red;
     }
 }
 
