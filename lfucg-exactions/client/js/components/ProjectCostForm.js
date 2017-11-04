@@ -10,6 +10,7 @@ import Navbar from './Navbar';
 import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
 import Uploads from './Uploads';
+import Notes from './Notes';
 
 import FormGroup from './FormGroup';
 import DeclineDelete from './DeclineDelete';
@@ -156,6 +157,15 @@ class ProjectCostForm extends React.Component {
                                 <Uploads
                                   file_content_type="accounts_projectcostestimate"
                                   file_object_id={projectCosts.id}
+                                  ariaExpanded="true"
+                                  panelClass="panel-collapse collapse row in"
+                                  permission="projectcostestimate"
+                                />
+                            }
+                            {selectedProjectCost &&
+                                <Notes
+                                  content_type="accounts_projectcostestimate"
+                                  object_id={selectedProjectCost}
                                   ariaExpanded="true"
                                   panelClass="panel-collapse collapse row in"
                                   permission="projectcostestimate"

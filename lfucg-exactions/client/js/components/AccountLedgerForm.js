@@ -276,34 +276,62 @@ class AccountLedgerForm extends React.Component {
                             </div>
                             }
                             <div className="clearfix" />
-                            {
-                                lots && lots.length > 0 &&
-                                    map((lot =>
-                                        (lot.id === parseInt(activeForm.lot, 10)) ?
-                                            <Notes
-                                              content_type="plats_lot"
-                                              object_id={lot.id}
-                                              ariaExpanded="true"
-                                              panelClass="panel-collapse collapse row in"
-                                              permission="lot"
-                                            />
-                                        : null
-                                ))(lots)
-                            }
-                            {
-                                plats && plats.length > 0 &&
-                                    map((plat =>
-                                        (plat.id === parseInt(activeForm.plat, 10)) ?
-                                            <Notes
-                                              content_type="plats_plat"
-                                              object_id={plat.id}
-                                              ariaExpanded="true"
-                                              panelClass="panel-collapse collapse row in"
-                                              permission="plat"
-                                            />
-                                        : null
-                                ))(plats)
-                            }
+                            {activeForm.lot || activeForm.plat ? <div>
+                                {
+                                    selectedAccountLedger ?
+                                        lots && lots.length > 0 &&
+                                            map((lot =>
+                                                (lot.id === parseInt(activeForm.lot, 10)) ?
+                                                    <Notes
+                                                      secondary_content_type="plats_lot"
+                                                      secondary_object_id={lot.id}
+                                                      content_type={selectedAccountLedger && 'accounts_accountledger'}
+                                                      object_id={selectedAccountLedger && selectedAccountLedger}
+                                                      ariaExpanded="true"
+                                                      panelClass="panel-collapse collapse row in"
+                                                      permission="accountledger"
+                                                    />
+                                                : null
+                                        ))(lots)
+                                    :
+                                        lots && lots.length > 0 &&
+                                            map((lot =>
+                                                (lot.id === parseInt(activeForm.lot, 10)) ?
+                                                    <Notes
+                                                      content_type="plats_lot"
+                                                      object_id={lot.id}
+                                                      ariaExpanded="true"
+                                                      panelClass="panel-collapse collapse row in"
+                                                      permission="accountledger"
+                                                    />
+                                                : null
+                                        ))(lots)
+                                }
+                                {
+                                    plats && plats.length > 0 &&
+                                        map((plat =>
+                                            (plat.id === parseInt(activeForm.plat, 10)) ?
+                                                <Notes
+                                                  content_type="plats_plat"
+                                                  object_id={plat.id}
+                                                  ariaExpanded="true"
+                                                  panelClass="panel-collapse collapse row in"
+                                                  permission="plat"
+                                                />
+                                            : null
+                                    ))(plats)
+                                }
+                            </div> : <div>
+                                {selectedAccountLedger &&
+                                    <Notes
+                                      content_type="accounts_accountledger"
+                                      object_id={selectedAccountLedger}
+                                      ariaExpanded="true"
+                                      panelClass="panel-collapse collapse row in"
+                                      permission="accountledger"
+                                    />
+                                }
+                            </div>}
                         </div>
                     </div>
                 </div>

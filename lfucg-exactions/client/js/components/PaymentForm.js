@@ -319,15 +319,38 @@ class PaymentForm extends React.Component {
                                 </div>
                             </form>
                             <div className="clearfix" />
-                            {currentLot && currentLot.id &&
-                                <Notes
-                                  content_type="plats_lot"
-                                  object_id={currentLot.id}
-                                  ariaExpanded="true"
-                                  panelClass="panel-collapse collapse row in"
-                                  permission="lot"
-                                />
-                            }
+                            {currentLot && currentLot.id ? <div>
+                                {selectedPayment ?
+                                    <Notes
+                                      secondary_content_type="plats_lot"
+                                      secondary_object_id={currentLot.id}
+                                      content_type={selectedPayment && 'accounts_payment'}
+                                      object_id={selectedPayment && selectedPayment}
+                                      ariaExpanded="true"
+                                      panelClass="panel-collapse collapse row in"
+                                      permission="payment"
+                                    />
+                                :
+                                    <Notes
+                                      content_type="plats_lot"
+                                      object_id={currentLot.id}
+                                      ariaExpanded="true"
+                                      panelClass="panel-collapse collapse row in"
+                                      permission="lot"
+                                    />
+                                }
+                            </div>
+                            : <div>
+                                {selectedPayment &&
+                                    <Notes
+                                      content_type="accounts_payment"
+                                      object_id={selectedPayment}
+                                      ariaExpanded="true"
+                                      panelClass="panel-collapse collapse row in"
+                                      permission="payment"
+                                    />
+                                }
+                            </div>}
                         </div>
                     </div>
                 </div>

@@ -10,6 +10,7 @@ import Navbar from './Navbar';
 import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
 import Uploads from './Uploads';
+import Notes from './Notes';
 
 import FormGroup from './FormGroup';
 
@@ -143,6 +144,15 @@ class AgreementForm extends React.Component {
                                 <Uploads
                                   file_content_type="accounts_agreement"
                                   file_object_id={agreements.id}
+                                  ariaExpanded="true"
+                                  panelClass="panel-collapse collapse row in"
+                                  permission="agreement"
+                                />
+                            }
+                            {selectedAgreement &&
+                                <Notes
+                                  content_type="accounts_agreement"
+                                  object_id={selectedAgreement}
                                   ariaExpanded="true"
                                   panelClass="panel-collapse collapse row in"
                                   permission="agreement"

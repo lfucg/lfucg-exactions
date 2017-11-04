@@ -7,6 +7,7 @@ import FormGroup from './FormGroup';
 
 import {
     getNoteContent,
+    getSecondaryNoteContent,
     postNote,
 } from '../actions/apiActions';
 
@@ -142,7 +143,12 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch, props) {
     return {
         onComponentDidMount() {
-            dispatch(getNoteContent(props.content_type, props.object_id));
+            if (props.secondary_content_type) {
+                dispatch(getNoteContent(props.content_type, props.object_id));
+                dispatch(getSecondaryNoteContent(props.secondary_content_type, props.secondary_object_id));
+            } else {
+                dispatch(getNoteContent(props.content_type, props.object_id));
+            }
         },
         onSubmit() {
             dispatch(postNote(props.content_type, props.object_id))
@@ -151,7 +157,12 @@ function mapDispatchToProps(dispatch, props) {
                     note: '',
                 };
                 dispatch(formUpdate(clear_note));
-                dispatch(getNoteContent(props.content_type, props.object_id));
+                if (props.secondary_content_type) {
+                    dispatch(getNoteContent(props.content_type, props.object_id));
+                    dispatch(getSecondaryNoteContent(props.secondary_content_type, props.secondary_object_id));
+                } else {
+                    dispatch(getNoteContent(props.content_type, props.object_id));
+                }
             });
         },
     };
