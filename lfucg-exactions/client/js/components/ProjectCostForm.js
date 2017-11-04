@@ -254,12 +254,18 @@ function mapDispatchToProps(dispatch, params) {
         onSubmit(event) {
             event.preventDefault();
             if (selectedProjectCost) {
-                dispatch(putProjectCost(selectedProjectCost));
-                hashHistory.push(`project-cost/summary/${selectedProjectCost}`);
+                dispatch(putProjectCost(selectedProjectCost))
+                .then((data) => {
+                    if (data.response) {
+                        hashHistory.push(`project-cost/summary/${selectedProjectCost}`);
+                    }
+                });
             } else {
                 dispatch(postProjectCost())
                 .then((data_post) => {
-                    hashHistory.push(`project-cost/summary/${data_post.response.id}`);
+                    if (data_post.response) {
+                        hashHistory.push(`project-cost/summary/${data_post.response.id}`);
+                    }
                 });
             }
         },

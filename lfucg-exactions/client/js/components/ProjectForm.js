@@ -323,12 +323,18 @@ function mapDispatchToProps(dispatch, params) {
         onSubmit(event) {
             event.preventDefault();
             if (selectedProject) {
-                dispatch(putProject(selectedProject));
-                hashHistory.push(`project/summary/${selectedProject}`);
+                dispatch(putProject(selectedProject))
+                .then((data) => {
+                    if (data.response) {
+                        hashHistory.push(`project/summary/${selectedProject}`);
+                    }
+                });
             } else {
                 dispatch(postProject())
                 .then((data_post) => {
-                    hashHistory.push(`project/summary/${data_post.response.id}`);
+                    if (data_post.response) {
+                        hashHistory.push(`project/summary/${data_post.response.id}`);
+                    }
                 });
             }
         },
