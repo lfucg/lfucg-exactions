@@ -4,16 +4,22 @@ import {
     Link,
 } from 'react-router';
 import PropTypes from 'prop-types';
+import { map, filter } from 'ramda';
 
 import Navbar from './Navbar';
 import Footer from './Footer';
 import FlashMessage from './FlashMessage';
+
+import ReportsAdditional from './ReportsAdditional';
 
 class DashboardPage extends React.Component {
     render() {
         const {
             currentUser,
         } = this.props;
+
+        const userGroup = currentUser && currentUser.groups &&
+            filter(user => user.name === 'Finance')(currentUser.groups);
         return (
             <div className="dashboard">
                 <Navbar />
@@ -23,6 +29,11 @@ class DashboardPage extends React.Component {
                     <div className="container">
                         <FlashMessage />
                         <div className="row">
+                            {userGroup && userGroup.length > 0 &&
+                                <div className="col-xs-12">
+                                    <ReportsAdditional />
+                                </div>
+                            }
                             <div className="col-md-4 col-sm-6">
                                 <Link to="subdivision" role="link"><h2 className="in-page-link">Subdivisions</h2></Link>
                                 <p>Lexington subdivisions.</p>
