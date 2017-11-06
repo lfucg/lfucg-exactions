@@ -8,6 +8,7 @@ import PropTypes from 'prop-types';
 import Navbar from './Navbar';
 import Footer from './Footer';
 
+import Notes from './Notes';
 import FormGroup from './FormGroup';
 import Breadcrumbs from './Breadcrumbs';
 import DeclineDelete from './DeclineDelete';
@@ -82,6 +83,17 @@ class SubdivisionForm extends React.Component {
                                     <DeclineDelete currentForm="/subdivision/" selectedEntry={selectedSubdivision} parentRoute="subdivision" />
                                 </div>
                             </form>
+                            <div className="clearfix" />
+                            <hr aria-hidden="true" />
+                            {selectedSubdivision &&
+                                <Notes
+                                  content_type="plats_subdivision"
+                                  object_id={selectedSubdivision}
+                                  ariaExpanded="true"
+                                  panelClass="panel-collapse collapse row in"
+                                  permission="subdivision"
+                                />
+                            }
                         </div>
                     </div>
                 </div>
