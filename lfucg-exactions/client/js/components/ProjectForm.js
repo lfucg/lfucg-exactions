@@ -266,8 +266,8 @@ function mapDispatchToProps(dispatch, params) {
                 .then((data_project) => {
                     const update = {
                         name: data_project.response.name,
-                        agreement_id: data_project.response.agreement_id ? data_project.response.agreement_id.id : null,
-                        agreement_id_show: data_project.response.agreement_id ? `${data_project.response.agreement_id.id},${data_project.response.agreement_id.resolution_number}` : '',
+                        agreement_id: data_project.response && data_project.response.agreement_id ? data_project.response.agreement_id.id : null,
+                        agreement_id_show: data_project.response && data_project.response.agreement_id ? `${data_project.response.agreement_id.id},${data_project.response.agreement_id.resolution_number}` : '',
                         expansion_area: data_project.response.expansion_area,
                         expansion_area_show: `${data_project.response.expansion_area},${data_project.response.expansion_area}`,
                         project_category: data_project.response.project_category,
@@ -313,12 +313,18 @@ function mapDispatchToProps(dispatch, params) {
         onSubmit(event) {
             event.preventDefault();
             if (selectedProject) {
-                dispatch(putProject(selectedProject));
-                hashHistory.push(`project/summary/${selectedProject}`);
+                dispatch(putProject(selectedProject))
+                .then((data) => {
+                    if (data.response) {
+                        hashHistory.push(`project/summary/${selectedProject}`);
+                    }
+                });
             } else {
                 dispatch(postProject())
                 .then((data_post) => {
-                    hashHistory.push(`project/summary/${data_post.response.id}`);
+                    if (data_post.response) {
+                        hashHistory.push(`project/summary/${data_post.response.id}`);
+                    }
                 });
             }
         },

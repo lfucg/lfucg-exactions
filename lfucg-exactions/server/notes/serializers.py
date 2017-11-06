@@ -53,6 +53,11 @@ class NoteSerializer(serializers.ModelSerializer):
         )
 
 class RateSerializer(serializers.ModelSerializer):
+    table_identifier = serializers.SerializerMethodField(read_only=True)
+
+    def get_table_identifier(self, obj):
+        return obj.category + ', ' + obj.zone + ', ' + obj.expansion_area
+
     class Meta:
         model = Rate
         fields = (
@@ -67,6 +72,7 @@ class RateSerializer(serializers.ModelSerializer):
             'zone',
             'category',
             'rate',
+            'table_identifier',
         )
 
 class RateTableSerializer(serializers.ModelSerializer):

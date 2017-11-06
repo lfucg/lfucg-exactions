@@ -363,12 +363,12 @@ function mapDispatchToProps(dispatch, params) {
                 dispatch(getPaymentID(selectedPayment))
                 .then((data_payment) => {
                     const update = {
-                        credit_account: data_payment.response.credit_account ? data_payment.response.credit_account.id : null,
-                        credit_account_show: data_payment.response.credit_account ? `${data_payment.response.credit_account.id},${data_payment.response.credit_account.account_name}` : '',
-                        credit_source: data_payment.response.credit_source ? data_payment.response.credit_source.id : null,
-                        credit_source_show: data_payment.response.credit_source ? `${data_payment.response.credit_source.id},${data_payment.response.credit_source.resolution_number}` : '',
-                        lot_id: data_payment.response.lot_id ? data_payment.response.lot_id.id : null,
-                        lot_id_show: data_payment.response.lot_id ? `${data_payment.response.lot_id.id},${data_payment.response.lot_id.address_full}` : '',
+                        credit_account: data_payment.response && data_payment.response.credit_account ? data_payment.response.credit_account.id : null,
+                        credit_account_show: data_payment.response && data_payment.response.credit_account ? `${data_payment.response.credit_account.id},${data_payment.response.credit_account.account_name}` : '',
+                        credit_source: data_payment.response && data_payment.response.credit_source ? data_payment.response.credit_source.id : null,
+                        credit_source_show: data_payment.response && data_payment.response.credit_source ? `${data_payment.response.credit_source.id},${data_payment.response.credit_source.resolution_number}` : '',
+                        lot_id: data_payment.response && data_payment.response.lot_id ? data_payment.response.lot_id.id : null,
+                        lot_id_show: data_payment.response && data_payment.response.lot_id ? `${data_payment.response.lot_id.id},${data_payment.response.lot_id.address_full}` : '',
                         paid_by: data_payment.response.paid_by,
                         paid_by_type: data_payment.response.paid_by_type,
                         paid_by_type_show: `${data_payment.response.paid_by_type},${data_payment.response.paid_by_type_display}`,
@@ -467,12 +467,18 @@ function mapDispatchToProps(dispatch, params) {
         onSubmit(event) {
             event.preventDefault();
             if (selectedPayment) {
-                dispatch(putPayment(selectedPayment));
-                hashHistory.push(`payment/summary/${selectedPayment}`);
+                dispatch(putPayment(selectedPayment))
+                .then((data) => {
+                    if (data.response) {
+                        hashHistory.push(`payment/summary/${selectedPayment}`);
+                    }
+                });
             } else {
                 dispatch(postPayment())
                 .then((data_post) => {
-                    hashHistory.push(`payment/summary/${data_post.response.id}`);
+                    if (data_post.response) {
+                        hashHistory.push(`payment/summary/${data_post.response.id}`);
+                    }
                 });
             }
         },
