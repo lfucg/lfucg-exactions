@@ -299,8 +299,6 @@ class PaymentSerializer(serializers.ModelSerializer):
 
     dollar_values = serializers.SerializerMethodField(read_only=True)
 
-    lot_id = LotField()
-
     def get_total_paid(self,obj):
         total = (
             obj.paid_roads +

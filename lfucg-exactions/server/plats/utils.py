@@ -3,11 +3,9 @@ from accounts.models import *
 from rest_framework.response import Response
 from rest_framework import status
 
-def calculate_lot_balance(lot_id):
-    lot = Lot.objects.filter(id=lot_id)[0]
-
+def calculate_lot_balance(lot):
     # PAYMENTS
-    payments = Payment.objects.exclude(is_active=False).filter(lot_id=lot_id)
+    payments = Payment.objects.exclude(is_active=False).filter(lot_id=lot.id)
 
     sewer_payment = 0
     non_sewer_payment = 0
@@ -65,7 +63,7 @@ def calculate_lot_balance(lot_id):
             non_sewer_payment += non_sewer_payment_paid
 
     # ACCOUNT LEDGERS
-    account_ledgers = AccountLedger.objects.filter(lot=lot_id, entry_type='USE')
+    account_ledgers = AccountLedger.objects.filter(lot=lot.id, entry_type='USE')
 
     sewer_credits_applied = 0
     non_sewer_credits_applied = 0
@@ -117,19 +115,14 @@ def calculate_lot_balance(lot_id):
 
     return all_exactions
 
-def calculate_plat_balance(plat_id):
-    plat_object = Plat.objects.filter(id=plat_id)
-    if plat_object.exists():
-        plat = plat_object[0]
-
-    lots_on_plat = Lot.objects.filter(plat=plat_id)
+def calculate_plat_balance(plat):
+    lots_on_plat = Lot.objects.filter(plat=plat.id)
 
     lots_sewer_paid = 0
     lots_non_sewer_paid = 0
-
     if lots_on_plat.exists():
         for lot in lots_on_plat:
-            calculated_lot = calculate_lot_balance(lot.id)
+            calculated_lot = calculate_lot_balance(lot)
             lots_non_sewer_paid += calculated_lot['non_sewer_payment'] + calculated_lot['non_sewer_credits_applied']
             lots_sewer_paid += calculated_lot['sewer_payment'] + calculated_lot['sewer_credits_applied']
 
