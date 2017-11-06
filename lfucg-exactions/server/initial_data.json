@@ -1570,7 +1570,7 @@
       "modified_by": 1,
       "rate_table_id": 1,
       "expansion_area": "EA-1",
-      "zone": "EAR1-SRA",
+      "zone": "EAR-1SRA",
       "category": "ROADS",
       "rate": "0.00"
     }
@@ -1586,7 +1586,7 @@
       "modified_by": 1,
       "rate_table_id": 1,
       "expansion_area": "EA-2A",
-      "zone": "EAR1-SRA",
+      "zone": "EAR-1SRA",
       "category": "ROADS",
       "rate": "2275.19"
     }
@@ -1602,7 +1602,7 @@
       "modified_by": 1,
       "rate_table_id": 1,
       "expansion_area": "EA-2B",
-      "zone": "EAR1-SRA",
+      "zone": "EAR-1SRA",
       "category": "ROADS",
       "rate": "2275.19"
     }
@@ -1618,7 +1618,7 @@
       "modified_by": 1,
       "rate_table_id": 1,
       "expansion_area": "EA-2C",
-      "zone": "EAR1-SRA",
+      "zone": "EAR-1SRA",
       "category": "ROADS",
       "rate": "0.00"
     }
@@ -1634,7 +1634,7 @@
       "modified_by": 1,
       "rate_table_id": 1,
       "expansion_area": "EA-3",
-      "zone": "EAR1-SRA",
+      "zone": "EAR-1SRA",
       "category": "ROADS",
       "rate": "0.00"
     }
@@ -2130,7 +2130,7 @@
       "modified_by": 1,
       "rate_table_id": 1,
       "expansion_area": "EA-1",
-      "zone": "EAR1-SRA",
+      "zone": "EAR-1SRA",
       "category": "PARK",
       "rate": "0.00"
     }
@@ -2146,7 +2146,7 @@
       "modified_by": 1,
       "rate_table_id": 1,
       "expansion_area": "EA-2A",
-      "zone": "EAR1-SRA",
+      "zone": "EAR-1SRA",
       "category": "PARK",
       "rate": "710.28"
     }
@@ -2162,7 +2162,7 @@
       "modified_by": 1,
       "rate_table_id": 1,
       "expansion_area": "EA-2B",
-      "zone": "EAR1-SRA",
+      "zone": "EAR-1SRA",
       "category": "PARK",
       "rate": "710.28"
     }
@@ -2178,7 +2178,7 @@
       "modified_by": 1,
       "rate_table_id": 1,
       "expansion_area": "EA-2C",
-      "zone": "EAR1-SRA",
+      "zone": "EAR-1SRA",
       "category": "PARK",
       "rate": "0.00"
     }
@@ -2194,7 +2194,7 @@
       "modified_by": 1,
       "rate_table_id": 1,
       "expansion_area": "EA-3",
-      "zone": "EAR1-SRA",
+      "zone": "EAR-1SRA",
       "category": "PARK",
       "rate": "0.00"
     }
@@ -2690,7 +2690,7 @@
       "modified_by": 1,
       "rate_table_id": 1,
       "expansion_area": "EA-1",
-      "zone": "EAR1-SRA",
+      "zone": "EAR-1SRA",
       "category": "STORM_WATER",
       "rate": "0.00"
     }
@@ -2706,7 +2706,7 @@
       "modified_by": 1,
       "rate_table_id": 1,
       "expansion_area": "EA-2A",
-      "zone": "EAR1-SRA",
+      "zone": "EAR-1SRA",
       "category": "STORM_WATER",
       "rate": "701.81"
     }
@@ -2722,7 +2722,7 @@
       "modified_by": 1,
       "rate_table_id": 1,
       "expansion_area": "EA-2B",
-      "zone": "EAR1-SRA",
+      "zone": "EAR-1SRA",
       "category": "STORM_WATER",
       "rate": "1016.92"
     }
@@ -2738,7 +2738,7 @@
       "modified_by": 1,
       "rate_table_id": 1,
       "expansion_area": "EA-2C",
-      "zone": "EAR1-SRA",
+      "zone": "EAR-1SRA",
       "category": "STORM_WATER",
       "rate": "0.00"
     }
@@ -2754,7 +2754,7 @@
       "modified_by": 1,
       "rate_table_id": 1,
       "expansion_area": "EA-3",
-      "zone": "EAR1-SRA",
+      "zone": "EAR-1SRA",
       "category": "STORM_WATER",
       "rate": "0.00"
     }
@@ -3250,7 +3250,7 @@
       "modified_by": 1,
       "rate_table_id": 1,
       "expansion_area": "EA-1",
-      "zone": "EAR1-SRA",
+      "zone": "EAR-1SRA",
       "category": "OPEN_SPACE",
       "rate": "0.00"
     }
@@ -3266,7 +3266,7 @@
       "modified_by": 1,
       "rate_table_id": 1,
       "expansion_area": "EA-2A",
-      "zone": "EAR1-SRA",
+      "zone": "EAR-1SRA",
       "category": "OPEN_SPACE",
       "rate": "1000.00"
     }
@@ -3282,7 +3282,7 @@
       "modified_by": 1,
       "rate_table_id": 1,
       "expansion_area": "EA-2B",
-      "zone": "EAR1-SRA",
+      "zone": "EAR-1SRA",
       "category": "OPEN_SPACE",
       "rate": "1000.00"
     }
@@ -3298,7 +3298,7 @@
       "modified_by": 1,
       "rate_table_id": 1,
       "expansion_area": "EA-2C",
-      "zone": "EAR1-SRA",
+      "zone": "EAR-1SRA",
       "category": "OPEN_SPACE",
       "rate": "0.00"
     }
@@ -3314,7 +3314,7 @@
       "modified_by": 1,
       "rate_table_id": 1,
       "expansion_area": "EA-3",
-      "zone": "EAR1-SRA",
+      "zone": "EAR-1SRA",
       "category": "OPEN_SPACE",
       "rate": "0.00"
     }
@@ -3810,7 +3810,7 @@
       "modified_by": 1,
       "rate_table_id": 1,
       "expansion_area": "EA-1",
-      "zone": "EAR1-SRA",
+      "zone": "EAR-1SRA",
       "category": "SEWER_TRANS",
       "rate": "0.00"
     }
@@ -3826,7 +3826,7 @@
       "modified_by": 1,
       "rate_table_id": 1,
       "expansion_area": "EA-2A",
-      "zone": "EAR1-SRA",
+      "zone": "EAR-1SRA",
       "category": "SEWER_TRANS",
       "rate": "636.92"
     }
@@ -3842,7 +3842,7 @@
       "modified_by": 1,
       "rate_table_id": 1,
       "expansion_area": "EA-2B",
-      "zone": "EAR1-SRA",
+      "zone": "EAR-1SRA",
       "category": "SEWER_TRANS",
       "rate": "733.69"
     }
@@ -3858,7 +3858,7 @@
       "modified_by": 1,
       "rate_table_id": 1,
       "expansion_area": "EA-2C",
-      "zone": "EAR1-SRA",
+      "zone": "EAR-1SRA",
       "category": "SEWER_TRANS",
       "rate": "0.00"
     }
@@ -3874,7 +3874,7 @@
       "modified_by": 1,
       "rate_table_id": 1,
       "expansion_area": "EA-3",
-      "zone": "EAR1-SRA",
+      "zone": "EAR-1SRA",
       "category": "SEWER_TRANS",
       "rate": "0.00"
     }
@@ -4370,7 +4370,7 @@
       "modified_by": 1,
       "rate_table_id": 1,
       "expansion_area": "EA-1",
-      "zone": "EAR1-SRA",
+      "zone": "EAR-1SRA",
       "category": "SEWER_CAP",
       "rate": "0.00"
     }
@@ -4386,7 +4386,7 @@
       "modified_by": 1,
       "rate_table_id": 1,
       "expansion_area": "EA-2A",
-      "zone": "EAR1-SRA",
+      "zone": "EAR-1SRA",
       "category": "SEWER_CAP",
       "rate": "624.48"
     }
@@ -4402,7 +4402,7 @@
       "modified_by": 1,
       "rate_table_id": 1,
       "expansion_area": "EA-2B",
-      "zone": "EAR1-SRA",
+      "zone": "EAR-1SRA",
       "category": "SEWER_CAP",
       "rate": "624.48"
     }
@@ -4418,7 +4418,7 @@
       "modified_by": 1,
       "rate_table_id": 1,
       "expansion_area": "EA-2C",
-      "zone": "EAR1-SRA",
+      "zone": "EAR-1SRA",
       "category": "SEWER_CAP",
       "rate": "0.00"
     }
@@ -4434,7 +4434,7 @@
       "modified_by": 1,
       "rate_table_id": 1,
       "expansion_area": "EA-3",
-      "zone": "EAR1-SRA",
+      "zone": "EAR-1SRA",
       "category": "SEWER_CAP",
       "rate": "0.00"
     }
