@@ -24,7 +24,11 @@ class ContentTypeField(serializers.Field):
             return ContentType.objects.get(app_label=content_type_app_label, model=content_type_model)
 
     def to_representation(self, obj):
-        return obj.name.title()
+        if obj and obj.name:
+            return obj.name.title()
+        else:
+            return 'Unknown'
+
 
 class CleanedDateField(serializers.Field):
     def to_representation(self, obj):

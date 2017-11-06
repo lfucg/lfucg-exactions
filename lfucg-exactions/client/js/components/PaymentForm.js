@@ -324,8 +324,8 @@ class PaymentForm extends React.Component {
                                     <Notes
                                       secondary_content_type="plats_lot"
                                       secondary_object_id={currentLot.id}
-                                      content_type={selectedPayment && 'accounts_payment'}
-                                      object_id={selectedPayment && selectedPayment}
+                                      content_type={'accounts_payment'}
+                                      object_id={selectedPayment}
                                       ariaExpanded="true"
                                       panelClass="panel-collapse collapse row in"
                                       permission="payment"
