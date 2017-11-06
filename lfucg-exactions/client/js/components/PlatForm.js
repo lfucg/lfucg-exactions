@@ -158,7 +158,7 @@ class PlatForm extends React.Component {
                                 <div className="row section-heading" role="tab" id="headingPlat">
                                     <div className="col-xs-1 caret-indicator" />
                                     <div className="col-xs-10">
-                                        <h2>General Plat Information</h2>
+                                        <h3>General Plat Information</h3>
                                     </div>
                                 </div>
                             </a>
@@ -334,7 +334,7 @@ class PlatForm extends React.Component {
                                                 <div className="row section-heading" role="tab" id="headingPlatZone">
                                                     <div className="col-xs-1 caret-indicator" />
                                                     <div className="col-sm-10">
-                                                        <h2>Plat Zones</h2>
+                                                        <h3>Plat Zones</h3>
                                                     </div>
                                                 </div>
                                             </a>
@@ -375,7 +375,7 @@ class PlatForm extends React.Component {
                                                 <div className="row section-heading" role="tab" id="headingPlatExactions">
                                                     <div className="col-xs-1 caret-indicator" />
                                                     <div className="col-xs-10">
-                                                        <h2>Plat Exactions</h2>
+                                                        <h3>Plat Exactions</h3>
                                                     </div>
                                                 </div>
                                             </a>
@@ -470,7 +470,7 @@ class PlatForm extends React.Component {
                                     ) : (
                                         <div>
                                             <div className="row section-heading">
-                                                <h2>Plat Zone</h2>
+                                                <h3>Plat Zone</h3>
                                             </div>
                                             <PlatZoneForm
                                               props={this.props}
@@ -481,49 +481,25 @@ class PlatForm extends React.Component {
                                     )}
                                 </div>
                             ) : null }
-                            {plats.id &&
-                                <div>
-                                    <a
-                                      role="button"
-                                      data-toggle="collapse"
-                                      data-parent="#accordion"
-                                      href="#collapseNotes"
-                                      aria-expanded="true"
-                                      aria-controls="collapseNotes"
-                                    >
-                                        <div className="row section-heading" role="tab" id="headingNotes">
-                                            <div className="col-xs-1 caret-indicator" />
-                                            <div className="col-xs-10">
-                                                <h2>Notes</h2>
-                                            </div>
-                                        </div>
-                                    </a>
-                                    <div
-                                      id="collapseNotes"
-                                      className="panel-collapse collapse in row"
-                                      role="tabpanel"
-                                      aria-labelledby="#headingNotes"
-                                    >
-                                        <div className="panel-body">
-                                            <div className="col-xs-12">
-                                                {plats.id &&
-                                                    <Notes content_type="plats_plat" object_id={plats.id} />
-                                                }
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                            {plats && plats.id &&
+                                <Notes
+                                  content_type="plats_plat"
+                                  object_id={plats.id}
+                                  ariaExpanded="true"
+                                  panelClass="panel-collapse collapse row in"
+                                  permission="plat"
+                                />
+                            }
+                            {plats && plats.id &&
+                                <Uploads
+                                  file_content_type="plats_plat"
+                                  file_object_id={plats.id}
+                                  ariaExpanded="true"
+                                  panelClass="panel-collapse collapse row in"
+                                  permission="plat"
+                                />
                             }
                         </div>
-                        {plats.id &&
-                            <Uploads
-                              file_content_type="plats_plat"
-                              file_object_id={plats.id}
-                              ariaExpanded="true"
-                              panelClass="panel-collapse collapse row in"
-                              permission="plat"
-                            />
-                        }
                     </div>
                 </div>
 
