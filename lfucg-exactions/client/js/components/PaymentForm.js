@@ -403,7 +403,7 @@ function mapDispatchToProps(dispatch, params) {
         },
         lotChange(selected) {
             const value = selected[0] !== undefined ? selected[0].value : 'start_lot';
-            console.log('VALUE IS: ', value);
+
             if (value !== 'start_lot') {
                 const value_id = value[0];
                 const value_name = value[1];
