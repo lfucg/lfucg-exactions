@@ -24,6 +24,7 @@ const FormGroup = ({
                     },
                 )
             }
+            <p className="help-block hidden" id={`help-block-${id}`} />
         </div>
     );
 };

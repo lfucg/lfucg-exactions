@@ -336,14 +336,14 @@ function mapDispatchToProps(dispatch, params) {
                 dispatch(getAccountLedgerID(selectedAccountLedger))
                 .then((data_account_ledger) => {
                     const update = {
-                        lot: data_account_ledger.response.lot ? data_account_ledger.response.lot.id : null,
-                        lot_show: data_account_ledger.response.lot ? `${data_account_ledger.response.lot.id},${data_account_ledger.response.lot.address_full},${data_account_ledger.response.lot.lot_exactions.non_sewer_due},${data_account_ledger.response.lot.lot_exactions.sewer_due}` : '',
-                        account_from: data_account_ledger.response.account_from ? data_account_ledger.response.account_from.id : null,
-                        account_from_show: data_account_ledger.response.account_from ? `${data_account_ledger.response.account_from.id},${data_account_ledger.response.account_from.account_name},${data_account_ledger.response.account_from.balance.balance}` : '',
-                        account_to: data_account_ledger.response.account_to ? data_account_ledger.response.account_to.id : null,
-                        account_to_show: data_account_ledger.response.account_to ? `${data_account_ledger.response.account_to.id},${data_account_ledger.response.account_to.account_name},${data_account_ledger.response.account_to.balance.balance}` : '',
-                        agreement: data_account_ledger.response.agreement ? data_account_ledger.response.agreement.id : null,
-                        agreement_show: data_account_ledger.response.agreement ? `${data_account_ledger.response.agreement.id},${data_account_ledger.response.agreement.resolution_number}` : '',
+                        lot: data_account_ledger.response && data_account_ledger.response.lot ? data_account_ledger.response.lot.id : null,
+                        lot_show: data_account_ledger.response && data_account_ledger.response.lot ? `${data_account_ledger.response.lot.id},${data_account_ledger.response.lot.address_full},${data_account_ledger.response.lot.lot_exactions.non_sewer_due},${data_account_ledger.response.lot.lot_exactions.sewer_due}` : '',
+                        account_from: data_account_ledger.response && data_account_ledger.response.account_from ? data_account_ledger.response.account_from.id : null,
+                        account_from_show: data_account_ledger.response && data_account_ledger.response.account_from ? `${data_account_ledger.response.account_from.id},${data_account_ledger.response.account_from.account_name},${data_account_ledger.response.account_from.balance.balance}` : '',
+                        account_to: data_account_ledger.response && data_account_ledger.response.account_to ? data_account_ledger.response.account_to.id : null,
+                        account_to_show: data_account_ledger.response && data_account_ledger.response.account_to ? `${data_account_ledger.response.account_to.id},${data_account_ledger.response.account_to.account_name},${data_account_ledger.response.account_to.balance.balance}` : '',
+                        agreement: data_account_ledger.response && data_account_ledger.response.agreement ? data_account_ledger.response.agreement.id : null,
+                        agreement_show: data_account_ledger.response && data_account_ledger.response.agreement ? `${data_account_ledger.response.agreement.id},${data_account_ledger.response.agreement.resolution_number}` : '',
                         entry_date: data_account_ledger.response.entry_date,
                         entry_type: data_account_ledger.response.entry_type,
                         entry_type_show: `${data_account_ledger.response.entry_type},${data_account_ledger.response.entry_type_display}`,
@@ -508,15 +508,21 @@ function mapDispatchToProps(dispatch, params) {
         },
         onSubmit(event) {
             if (selectedAccountLedger) {
-                dispatch(putAccountLedger(selectedAccountLedger));
-                hashHistory.push(`credit-transfer/summary/${selectedAccountLedger}`);
+                dispatch(putAccountLedger(selectedAccountLedger))
+                .then((data) => {
+                    if (data.response) {
+                        hashHistory.push(`credit-transfer/summary/${selectedAccountLedger}`);
+                    }
+                });
             } else {
                 dispatch(postAccountLedger())
                 .then((data_post) => {
-                    if (event === 'plat') {
-                        hashHistory.push('credit-transfer');
-                    } else {
-                        hashHistory.push(`credit-transfer/summary/${data_post.response.id}`);
+                    if (data_post.response) {
+                        if (event === 'plat') {
+                            hashHistory.push('credit-transfer');
+                        } else {
+                            hashHistory.push(`credit-transfer/summary/${data_post.response.id}`);
+                        }
                     }
                 });
             }
