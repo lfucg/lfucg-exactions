@@ -171,6 +171,9 @@ class AccountLedgerForm extends React.Component {
                                               placeholder="Lot"
                                               disabled={activeForm.entry_type !== 'USE' || activeForm.plat_lot !== 'lot'}
                                               emptyLabel={lots.length > 0 ? 'No Results Found.' : 'Results loading...'}
+                                              selected={activeForm.lot ? (
+                                                filter(lot => lot.id === activeForm.lot)(lotsList)
+                                                ) : []}
                                             />
                                         </div>
                                     </div>
@@ -333,6 +336,8 @@ function mapDispatchToProps(dispatch, params) {
             dispatch(getAccounts());
             dispatch(getAgreements());
             if (selectedAccountLedger) {
+                dispatch(getPlats());
+                dispatch(getLots());
                 dispatch(getAccountLedgerID(selectedAccountLedger))
                 .then((data_account_ledger) => {
                     const update = {
@@ -452,15 +457,11 @@ function mapDispatchToProps(dispatch, params) {
         lotFormChange(selected, field) {
             const value = selected[0] !== undefined ? selected[0].value : 'start_lot';
 
-            const comma_index = value.indexOf(',');
-            const dollar_index = value.indexOf('$');
-            const second_dollar_index = value.indexOf(',$', dollar_index + 1);
-
-            if (comma_index !== -1 && dollar_index !== -1 && second_dollar_index !== -1) {
-                const value_id = value.substring(0, comma_index);
-                const value_name = value.substring(comma_index + 1, dollar_index);
-                const value_non_sewer = value.substring(dollar_index, second_dollar_index);
-                const value_sewer = value.substring(second_dollar_index + 1, value.length);
+            if (value !== 'start_lot') {
+                const value_id = value[0];
+                const value_name = value[1];
+                const value_non_sewer = value[2];
+                const value_sewer = value[3];
 
                 const field_name = `${[field]}_name`;
                 const field_show = `${[field]}_show`;
