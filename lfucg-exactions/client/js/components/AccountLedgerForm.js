@@ -336,7 +336,6 @@ function mapDispatchToProps(dispatch, params) {
             dispatch(getAccounts());
             dispatch(getAgreements());
             if (selectedAccountLedger) {
-                dispatch(getPlats());
                 dispatch(getLots());
                 dispatch(getAccountLedgerID(selectedAccountLedger))
                 .then((data_account_ledger) => {
