@@ -481,7 +481,7 @@ class PlatForm extends React.Component {
                                     )}
                                 </div>
                             ) : null }
-                            {plats.id &&
+                            {plats && plats.id &&
                                 <Notes
                                   content_type="plats_plat"
                                   object_id={plats.id}
@@ -490,7 +490,7 @@ class PlatForm extends React.Component {
                                   permission="plat"
                                 />
                             }
-                            {plats.id &&
+                            {plats && plats.id &&
                                 <Uploads
                                   file_content_type="plats_plat"
                                   file_object_id={plats.id}

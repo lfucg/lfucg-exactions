@@ -92,7 +92,7 @@ class AccountLedgerSummary extends React.Component {
                                 />
                             }
 
-                            {(accountLedgers.lot && accountLedgers.lot.id) ?
+                            {accountLedgers && accountLedgers.lot && accountLedgers.lot.id ?
                                 <div>
                                     <a
                                       role="button"

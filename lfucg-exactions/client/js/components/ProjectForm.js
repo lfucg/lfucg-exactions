@@ -214,7 +214,7 @@ class ProjectForm extends React.Component {
                                 </div>
                             </form>
                             <div className="clearfix" />
-                            {projects.id &&
+                            {projects && projects.id &&
                                 <Uploads
                                   file_content_type="accounts_project"
                                   file_object_id={projects.id}
@@ -223,10 +223,10 @@ class ProjectForm extends React.Component {
                                   permission="project"
                                 />
                             }
-                            {selectedProject &&
+                            {projects && projects.id &&
                                 <Notes
                                   content_type="accounts_project"
-                                  object_id={selectedProject}
+                                  object_id={projects.id}
                                   ariaExpanded="true"
                                   panelClass="panel-collapse collapse row in"
                                   permission="project"

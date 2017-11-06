@@ -157,7 +157,7 @@ class ProjectCostSummary extends React.Component {
                                   permission="projectcostestimate"
                                 />
                             }
-                            {projectCosts.id &&
+                            {projectCosts && projectCosts.id &&
                                 <Uploads
                                   file_content_type="accounts_projectcostestimate"
                                   file_object_id={projectCosts.id}

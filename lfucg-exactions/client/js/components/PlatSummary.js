@@ -329,7 +329,7 @@ class PlatSummary extends React.Component {
                                     </div>
                                 </div>
                             }
-                            {plats.id &&
+                            {plats && plats.id &&
                                 <Notes
                                   content_type="plats_plat"
                                   object_id={plats.id}
@@ -438,7 +438,7 @@ class PlatSummary extends React.Component {
                                     <h3>Account - None</h3>
                                 </div>
                             }
-                            {plats.id &&
+                            {plats && plats.id &&
                                 <Uploads
                                   file_content_type="plats_plat"
                                   file_object_id={plats.id}

@@ -285,8 +285,8 @@ class AccountLedgerForm extends React.Component {
                                                     <Notes
                                                       secondary_content_type="plats_lot"
                                                       secondary_object_id={lot.id}
-                                                      content_type={selectedAccountLedger && 'accounts_accountledger'}
-                                                      object_id={selectedAccountLedger && selectedAccountLedger}
+                                                      content_type={'accounts_accountledger'}
+                                                      object_id={selectedAccountLedger}
                                                       ariaExpanded="true"
                                                       panelClass="panel-collapse collapse row in"
                                                       permission="accountledger"

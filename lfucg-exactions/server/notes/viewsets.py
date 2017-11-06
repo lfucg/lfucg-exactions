@@ -31,54 +31,44 @@ class NoteViewSet(viewsets.ModelViewSet):
                 child_content_type_app_label = split_child_content[0]
                 child_content_type_model = split_child_content[1]
                 child_content_type = ContentType.objects.get(app_label=child_content_type_app_label, model=child_content_type_model)
+
                 parent_content_type = None
                 parent_object_id = None
                 grandparent_content_type = None
                 grandparent_object_id = None
                 if child_content_type_model == 'lot':
-                    content_lot = Lot.objects.filter(id=child_object_id)
-                    if content_lot.count() > 0 and content_lot[0].plat:
-                        chosen_lot = content_lot[0]
-                        content_plat = Plat.objects.filter(id=chosen_lot.plat.id)
-                        chosen_plat = content_plat[0]
-                        parent_object_id = chosen_plat.id
-                        parent_content_type = ContentType.objects.get_for_model(Plat)
-                        if chosen_plat and chosen_plat.subdivision:
-                            grandparent_content_type = ContentType.objects.get_for_model(Subdivision)
-                            grandparent_object_id = chosen_plat.subdivision.id
-                        else:
-                            grandparent_content_type = None
-                            grandparent_object_id = None
-                    else:
-                        parent_content_type = None
-                        parent_object_id = None
-                        grandparent_content_type = None
-                        grandparent_object_id = None
+                    content_lot = Lot.objects.filter(id=child_object_id).first()
+                    if content_lot is not None and content_lot.plat:
+                        content_plat = Plat.objects.filter(id=content_lot.plat.id).first()
+                        if content_plat is not None:
+                            parent_object_id = content_plat.id
+                            parent_content_type = ContentType.objects.get_for_model(Plat)
+                            if content_plat and content_plat.subdivision:
+                                grandparent_content_type = ContentType.objects.get_for_model(Subdivision)
+                                grandparent_object_id = content_plat.subdivision.id
                 elif child_content_type_model == 'plat':
-                    content_plat = Plat.objects.filter(id=child_object_id)
-                    if content_plat.count() > 0 and content_plat[0].subdivision:
-                        chosen_plat = content_plat[0]
+                    content_plat = Plat.objects.filter(id=child_object_id).first()
+                    if content_plat is not None and content_plat.subdivision:
                         parent_content_type = ContentType.objects.get_for_model(Subdivision)
-                        parent_object_id = chosen_plat.subdivision.id
-                    else:
-                        parent_content_type = None
-                        parent_object_id = None
+                        parent_object_id = content_plat.subdivision.id
 
-                if grandparent_content_type is not None and parent_content_type is not None and child_content_type:
+                if grandparent_content_type is not None and parent_content_type is not None and child_content_type is not None:
                     queryset = queryset.filter(
                         Q(content_type=grandparent_content_type, object_id=grandparent_object_id) |
                         Q(content_type=parent_content_type, object_id=parent_object_id) |
                         Q(content_type=child_content_type, object_id=child_object_id))
 
-                elif parent_content_type is not None and child_content_type:
+                elif parent_content_type is not None and child_content_type is not None:
                     queryset = queryset.filter(
                         Q(content_type=parent_content_type, object_id=parent_object_id) |
                         Q(content_type=child_content_type, object_id=child_object_id))
-                else:
+                elif child_content_type is not None:
                     queryset = queryset.filter(content_type=child_content_type, object_id=child_object_id)
+                else:
+                    return Response('No Notes chosen', status=status.HTTP_404_NOT_FOUND)
 
         else:
-            return Response('No Notes chosen', status=status.HTTP_406_NOT_ACCEPTABLE)
+            return Response('No Notes chosen', status=status.HTTP_404_NOT_FOUND)
 
         return queryset.order_by('-date')
 
@@ -118,7 +108,7 @@ class RateTableViewSet(viewsets.ModelViewSet):
                 self_table['is_active'] = True
                 return update_entry(self, request, pk)
             else:
-                return Response('You must enter a rate for each of the 210 rate types, zones, expansion areas.', status=status.HTTP_406_NOT_ACCEPTABLE)
+                return Response('You must enter a rate for each of the 210 rate types, zones, expansion areas.', status=status.HTTP_404_NOT_FOUND)
         else:
             return update_entry(self, request, pk)
 

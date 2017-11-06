@@ -149,10 +149,10 @@ class AgreementForm extends React.Component {
                                   permission="agreement"
                                 />
                             }
-                            {selectedAgreement &&
+                            {agreements && agreements.id &&
                                 <Notes
                                   content_type="accounts_agreement"
-                                  object_id={selectedAgreement}
+                                  object_id={agreements.id}
                                   ariaExpanded="true"
                                   panelClass="panel-collapse collapse row in"
                                   permission="agreement"
