@@ -5,7 +5,7 @@ import {
 } from 'react-router';
 import { map, filter } from 'ramda';
 import PropTypes from 'prop-types';
-
+import { Typeahead } from 'react-bootstrap-typeahead';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
@@ -61,13 +61,17 @@ class AccountLedgerForm extends React.Component {
             );
         })(plats));
 
-        const lotsList = lots.length > 0 && (map((lot) => {
-            return (
-                <option key={lot.id} value={[lot.id, lot.address_full, lot.lot_exactions.non_sewer_due, lot.lot_exactions.sewer_due]} >
-                    {lot.address_full}
-                </option>
-            );
-        })(lots));
+        const lotsList = [];
+
+        if (lots.length > 0) {
+            map((lot) => {
+                lotsList.push({
+                    id: lot.id,
+                    value: [lot.id, lot.address_full, lot.lot_exactions.non_sewer_due, lot.lot_exactions.sewer_due],
+                    label: lot.address_full,
+                });
+            })(lots);
+        }
 
         const accountsList = accounts.length > 0 && (map((account) => {
             return (
@@ -160,10 +164,17 @@ class AccountLedgerForm extends React.Component {
                                         </div>
                                         <div className="col-sm-6 form-group">
                                             <label htmlFor="lot" className="form-label" id="lot" aria-label="Lot" >Lot</label>
-                                            <select className="form-control" id="lot" onChange={lotFormChange('lot')} value={activeForm.lot_show} disabled={activeForm.entry_type !== 'USE' || activeForm.plat_lot !== 'lot'}>
-                                                <option value="start_lot">Lot</option>
-                                                {lotsList}
-                                            </select>
+                                            <Typeahead
+                                              onChange={e => lotFormChange(e, 'lot')}
+                                              id="lot"
+                                              options={lotsList}
+                                              placeholder="Lot"
+                                              disabled={activeForm.entry_type !== 'USE' || activeForm.plat_lot !== 'lot'}
+                                              emptyLabel={lots.length > 0 ? 'No Results Found.' : 'Results loading...'}
+                                              selected={activeForm.lot ? (
+                                                filter(lot => lot.id === activeForm.lot)(lotsList)
+                                                ) : []}
+                                            />
                                         </div>
                                     </div>
                                     <div className="row">
@@ -324,9 +335,9 @@ function mapDispatchToProps(dispatch, params) {
             dispatch(formInit());
             dispatch(getAccounts());
             dispatch(getAgreements());
-            dispatch(getLots());
-            dispatch(getPlats());
             if (selectedAccountLedger) {
+                dispatch(getPlats());
+                dispatch(getLots());
                 dispatch(getAccountLedgerID(selectedAccountLedger))
                 .then((data_account_ledger) => {
                     const update = {
@@ -443,34 +454,28 @@ function mapDispatchToProps(dispatch, params) {
                 }
             };
         },
-        lotFormChange(field) {
-            return (e, ...args) => {
-                const value = typeof e.target.value !== 'undefined' ? e.target.value : args[1];
+        lotFormChange(selected, field) {
+            const value = selected[0] !== undefined ? selected[0].value : 'start_lot';
 
-                const comma_index = value.indexOf(',');
-                const dollar_index = value.indexOf('$');
-                const second_dollar_index = value.indexOf(',$', dollar_index + 1);
+            if (value !== 'start_lot') {
+                const value_id = value[0];
+                const value_name = value[1];
+                const value_non_sewer = value[2];
+                const value_sewer = value[3];
 
-                if (comma_index !== -1 && dollar_index !== -1 && second_dollar_index !== -1) {
-                    const value_id = value.substring(0, comma_index);
-                    const value_name = value.substring(comma_index + 1, dollar_index);
-                    const value_non_sewer = value.substring(dollar_index, second_dollar_index);
-                    const value_sewer = value.substring(second_dollar_index + 1, value.length);
+                const field_name = `${[field]}_name`;
+                const field_show = `${[field]}_show`;
 
-                    const field_name = `${[field]}_name`;
-                    const field_show = `${[field]}_show`;
+                const lot_update = {
+                    [field]: value_id,
+                    [field_name]: value_name,
+                    [field_show]: value,
+                    non_sewer_exactions: value_non_sewer,
+                    sewer_exactions: value_sewer,
+                };
 
-                    const lot_update = {
-                        [field]: value_id,
-                        [field_name]: value_name,
-                        [field_show]: value,
-                        non_sewer_exactions: value_non_sewer,
-                        sewer_exactions: value_sewer,
-                    };
-
-                    dispatch(formUpdate(lot_update));
-                }
-            };
+                dispatch(formUpdate(lot_update));
+            }
         },
         accountFormChange(field) {
             return (e, ...args) => {

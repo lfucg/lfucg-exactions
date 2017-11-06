@@ -3,9 +3,9 @@ import { connect } from 'react-redux';
 import {
     hashHistory,
 } from 'react-router';
-import { map } from 'ramda';
+import { map, filter } from 'ramda';
 import PropTypes from 'prop-types';
-
+import { Typeahead } from 'react-bootstrap-typeahead';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
@@ -51,14 +51,17 @@ class PaymentForm extends React.Component {
 
         const currentParam = this.props.params.id;
 
-        const lotsList = lots.length > 0 &&
-            (map((lot) => {
-                return (
-                    <option key={lot.id} value={[lot.id, lot.address_full]} >
-                        {lot.address_full}
-                    </option>
-                );
-            })(lots));
+        const lotsList = [];
+
+        if (lots.length > 0) {
+            map((lot) => {
+                lotsList.push({
+                    id: lot.id,
+                    value: [lot.id, lot.address_full],
+                    label: lot.address_full,
+                });
+            })(lots);
+        }
 
         const accountsList = accounts.length > 0 &&
             (map((account) => {
@@ -109,13 +112,16 @@ class PaymentForm extends React.Component {
                                     <div className="row">
                                         <div className="col-sm-6 form-group">
                                             <label htmlFor="lot_id" className="form-label" id="lot_id" aria-label="Lot" aria-required="true">* Lot</label>
-                                            <select className="form-control" id="lot_id" onChange={lotChange('lot_id')} value={activeForm.lot_id_show} >
-                                                {activeForm.lot_id ?
-                                                    <option value="lot_id">{activeForm.address_full}</option> :
-                                                    <option value="start_lot">Lot</option>
-                                                }
-                                                {lotsList}
-                                            </select>
+                                            <Typeahead
+                                              onChange={e => lotChange(e)}
+                                              id="lot_id"
+                                              options={lotsList}
+                                              placeholder="Lot"
+                                              emptyLabel={lots.length > 0 ? 'No Results Found.' : 'Results loading...'}
+                                              selected={activeForm.lot_id ? (
+                                                filter(lot => lot.id === activeForm.lot_id)(lotsList)
+                                                ) : []}
+                                            />
                                         </div>
                                         <div className="col-sm-6">
                                             {activeForm.lot_exactions &&
@@ -395,13 +401,12 @@ function mapDispatchToProps(dispatch, params) {
                 dispatch(formUpdate(initial_constants));
             }
         },
-        lotChange() {
-            return (e, ...args) => {
-                const value = typeof e.target.value !== 'undefined' ? e.target.value : args[1];
+        lotChange(selected) {
+            const value = selected[0] !== undefined ? selected[0].value : 'start_lot';
 
-                const comma_index = value.indexOf(',');
-                const value_id = value.substring(0, comma_index);
-                const value_name = value.substring(comma_index + 1, value.length);
+            if (value !== 'start_lot') {
+                const value_id = value[0];
+                const value_name = value[1];
 
                 dispatch(getLotID(value_id))
                 .then((lot_id) => {
@@ -444,7 +449,7 @@ function mapDispatchToProps(dispatch, params) {
                         dispatch(formUpdate(update));
                     }
                 });
-            };
+            }
         },
         formChange(field) {
             return (e, ...args) => {
