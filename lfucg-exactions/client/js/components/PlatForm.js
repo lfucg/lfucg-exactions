@@ -671,21 +671,25 @@ function mapDispatchToProps(dispatch, params) {
             event.preventDefault();
             if (selectedPlat) {
                 dispatch(putPlat(selectedPlat))
-                .then(() => {
-                    hashHistory.push(`plat/summary/${selectedPlat}`);
+                .then((data) => {
+                    if (data.response) {
+                        hashHistory.push(`plat/summary/${selectedPlat}`);
+                    }
                 });
             } else {
                 dispatch(postPlat())
                 .then((data_post) => {
-                    const zone_update = {
-                        plat: data_post.response.id,
-                        plat_name: data_post.response.name,
-                        acres: data_post.response.total_acreage,
-                        first_section: true,
-                        plat_show: `${data_post.response.id},${data_post.response.name}`,
-                    };
-                    dispatch(formUpdate(zone_update));
-                    hashHistory.push(`plat/form/${data_post.response.id}`);
+                    if (data_post.response) {
+                        const zone_update = {
+                            plat: data_post.response.id,
+                            plat_name: data_post.response.name,
+                            acres: data_post.response.total_acreage,
+                            first_section: true,
+                            plat_show: `${data_post.response.id},${data_post.response.name}`,
+                        };
+                        dispatch(formUpdate(zone_update));
+                        hashHistory.push(`plat/form/${data_post.response.id}`);
+                    }
                 });
             }
         },
@@ -703,8 +707,12 @@ function mapDispatchToProps(dispatch, params) {
         },
         onPlatAndCreateLot() {
             if (selectedPlat) {
-                dispatch(putPlat(selectedPlat));
-                hashHistory.push(`plat/${selectedPlat}/lot/form`);
+                dispatch(putPlat(selectedPlat))
+                .then((data) => {
+                    if (data.response) {
+                        hashHistory.push(`plat/${selectedPlat}/lot/form`);
+                    }
+                });
             }
         },
         selectedPlat,

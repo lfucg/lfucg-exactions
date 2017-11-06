@@ -80,6 +80,16 @@ import {
     POST_ACCOUNT_LEDGER,
     PUT_ACCOUNT_LEDGER,
 
+    GET_RATE_TABLES,
+    GET_RATE_TABLE_ID,
+    POST_RATE_TABLE,
+    PUT_RATE_TABLE,
+    PUT_RATE_TABLE_ACTIVE,
+
+    GET_RATES,
+    POST_RATE,
+    PUT_RATE,
+
     GET_PAGINATION,
     SEARCH_QUERY,
 
@@ -1361,6 +1371,119 @@ export function putAccountLedger(selectedAccountLedger) {
     };
 }
 
+export function getRateTables() {
+    return {
+        type: API_CALL,
+        endpoint: GET_RATE_TABLES,
+        url: '/rateTable/',
+    };
+}
+
+export function getRateTableID(selectedRateTable) {
+    return {
+        type: API_CALL,
+        endpoint: GET_RATE_TABLE_ID,
+        url: `/rateTable/${selectedRateTable}`,
+    };
+}
+
+export function postRateTable() {
+    return {
+        type: API_CALL,
+        endpoint: POST_RATE_TABLE,
+        url: '/rateTable/',
+        method: 'POST',
+        body: (getState) => {
+            const {
+                activeForm,
+            } = getState();
+            const {
+                resolution_number,
+                begin_effective_date,
+                end_effective_date,
+            } = activeForm;
+            return {
+                resolution_number,
+                begin_effective_date,
+                end_effective_date,
+            };
+        },
+    };
+}
+
+export function putRateTable(selectedRateTable) {
+    return {
+        type: API_CALL,
+        endpoint: PUT_RATE_TABLE,
+        url: `/rateTable/${selectedRateTable}/`,
+        method: 'PUT',
+        body: (getState) => {
+            const {
+                activeForm,
+            } = getState();
+            const {
+                resolution_number,
+                begin_effective_date,
+                end_effective_date,
+            } = activeForm;
+            return {
+                resolution_number,
+                begin_effective_date,
+                end_effective_date,
+            };
+        },
+    };
+}
+
+export function putRateTableActive(selectedRateTable) {
+    return {
+        type: API_CALL,
+        endpoint: PUT_RATE_TABLE_ACTIVE,
+        url: `/rateTable/${selectedRateTable}/`,
+        method: 'PUT',
+        body: {
+            is_active: true,
+            id: selectedRateTable,
+        },
+    };
+}
+
+export function getRates(selectedRateTable) {
+    return {
+        type: API_CALL,
+        endpoint: GET_RATES,
+        url: `/rate/?rate_table_id=${selectedRateTable}`,
+    };
+}
+
+export function postRate(rate_table_id, category, zone, expansion_area, rate) {
+    return {
+        type: API_CALL,
+        endpoint: POST_RATE,
+        url: '/rate/',
+        method: 'POST',
+        body: {
+            rate_table_id,
+            category,
+            zone,
+            expansion_area,
+            rate,
+        },
+    };
+}
+
+export function putRate(selectedRate, rate) {
+    return {
+        type: API_CALL,
+        endpoint: PUT_RATE,
+        url: `/rate/${selectedRate}/`,
+        method: 'PUT',
+        body: {
+            rate,
+        },
+    };
+}
+
 export function getPagination(page) {
     return {
         type: API_CALL,
@@ -1373,7 +1496,7 @@ export function getPagination(page) {
                 currentPage,
                 page_size,
             } = activeForm;
-            
+
             if (!page) {
                 if (currentPage === '/credit-transfer/') {
                     return '/ledger/?paginatePage';

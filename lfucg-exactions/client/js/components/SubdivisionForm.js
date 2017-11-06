@@ -17,6 +17,7 @@ import {
     formUpdate,
 } from '../actions/formActions';
 
+
 import {
     getSubdivisionID,
     postSubdivision,
@@ -30,9 +31,7 @@ class SubdivisionForm extends React.Component {
 
     render() {
         const {
-            currentUser,
             activeForm,
-            subdivisions,
             onSubmit,
             selectedSubdivision,
         } = this.props;
@@ -94,9 +93,7 @@ class SubdivisionForm extends React.Component {
 }
 
 SubdivisionForm.propTypes = {
-    currentUser: PropTypes.object,
     activeForm: PropTypes.object,
-    subdivisions: PropTypes.array,
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
     onSubmit: PropTypes.func,
@@ -105,9 +102,7 @@ SubdivisionForm.propTypes = {
 
 function mapStateToProps(state) {
     return {
-        currentUser: state.currentUser,
         activeForm: state.activeForm,
-        subdivisions: state.subdivisions,
     };
 }
 
@@ -132,12 +127,18 @@ function mapDispatchToProps(dispatch, params) {
         onSubmit(event) {
             event.preventDefault();
             if (selectedSubdivision) {
-                dispatch(putSubdivision(selectedSubdivision));
-                hashHistory.push(`subdivision/summary/${selectedSubdivision}`);
+                dispatch(putSubdivision(selectedSubdivision))
+                    .then((data) => {
+                        if (data.response) {
+                            hashHistory.push(`subdivision/summary/${selectedSubdivision}`);
+                        }
+                    });
             } else {
                 dispatch(postSubdivision())
                 .then((data_sub_post) => {
-                    hashHistory.push(`subdivision/summary/${data_sub_post.response.id}`);
+                    if (data_sub_post.response) {
+                        hashHistory.push(`subdivision/summary/${data_sub_post.response.id}`);
+                    }
                 });
             }
         },

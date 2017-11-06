@@ -504,15 +504,21 @@ function mapDispatchToProps(dispatch, params) {
         },
         onSubmit(event) {
             if (selectedAccountLedger) {
-                dispatch(putAccountLedger(selectedAccountLedger));
-                hashHistory.push(`credit-transfer/summary/${selectedAccountLedger}`);
+                dispatch(putAccountLedger(selectedAccountLedger))
+                .then((data) => {
+                    if (data.response) {
+                        hashHistory.push(`credit-transfer/summary/${selectedAccountLedger}`);
+                    }
+                });
             } else {
                 dispatch(postAccountLedger())
                 .then((data_post) => {
-                    if (event === 'plat') {
-                        hashHistory.push('credit-transfer');
-                    } else {
-                        hashHistory.push(`credit-transfer/summary/${data_post.response.id}`);
+                    if (data_post.response) {
+                        if (event === 'plat') {
+                            hashHistory.push('credit-transfer');
+                        } else {
+                            hashHistory.push(`credit-transfer/summary/${data_post.response.id}`);
+                        }
                     }
                 });
             }
