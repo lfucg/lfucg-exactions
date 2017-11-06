@@ -108,7 +108,7 @@ class RateTableViewSet(viewsets.ModelViewSet):
                 self_table['is_active'] = True
                 return update_entry(self, request, pk)
             else:
-                return Response('You must enter a rate for each of the 210 rate types, zones, expansion areas.', status=status.HTTP_404_NOT_FOUND)
+                return Response('You must enter a rate for each of the rate types, zones, expansion areas.', status=status.HTTP_404_NOT_FOUND)
         else:
             return update_entry(self, request, pk)
 
