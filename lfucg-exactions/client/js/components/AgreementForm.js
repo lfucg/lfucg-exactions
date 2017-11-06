@@ -233,12 +233,18 @@ function mapDispatchToProps(dispatch, params) {
         onSubmit(event) {
             event.preventDefault();
             if (selectedAgreement) {
-                dispatch(putAgreement(selectedAgreement));
-                hashHistory.push(`agreement/summary/${selectedAgreement}`);
+                dispatch(putAgreement(selectedAgreement))
+                .then((data) => {
+                    if (data.response) {
+                        hashHistory.push(`agreement/summary/${selectedAgreement}`);
+                    }
+                });
             } else {
                 dispatch(postAgreement())
                 .then((data_post) => {
-                    hashHistory.push(`agreement/summary/${data_post.response.id}`);
+                    if (data_post.response) {
+                        hashHistory.push(`agreement/summary/${data_post.response.id}`);
+                    }
                 });
             }
         },
