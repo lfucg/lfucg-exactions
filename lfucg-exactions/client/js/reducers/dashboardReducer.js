@@ -19,6 +19,7 @@ import projectCostsReducer from './projectCostsReducer';
 import accountLedgersReducer from './accountLedgersReducer';
 
 import notesReducer from './notesReducer';
+import ratesReducer from './ratesReducer';
 import uploadReducer from './uploadReducer';
 
 const dashboardReducer = combineReducers({
@@ -42,6 +43,7 @@ const dashboardReducer = combineReducers({
     accountLedgers: accountLedgersReducer,
 
     notes: notesReducer,
+    rates: ratesReducer,
     uploads: uploadReducer,
 });
 

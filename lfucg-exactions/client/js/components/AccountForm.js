@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import {
-    Link,
     hashHistory,
 } from 'react-router';
 import PropTypes from 'prop-types';
@@ -278,12 +277,18 @@ function mapDispatchToProps(dispatch, params) {
         onSubmit(event) {
             event.preventDefault();
             if (selectedAccount) {
-                dispatch(putAccount(selectedAccount));
-                hashHistory.push(`account/summary/${selectedAccount}`);
+                dispatch(putAccount(selectedAccount))
+                .then((data) => {
+                    if (data.response) {
+                        hashHistory.push(`account/summary/${selectedAccount}`);
+                    }
+                });
             } else {
                 dispatch(postAccount())
                 .then((data_post) => {
-                    hashHistory.push(`account/summary/${data_post.response.id}`);
+                    if (data_post.response) {
+                        hashHistory.push(`account/summary/${data_post.response.id}`);
+                    }
                 });
             }
         },

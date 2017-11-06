@@ -52,6 +52,8 @@ import AccountLedgerExisting from './components/AccountLedgerExisting';
 import AccountLedgerSummary from './components/AccountLedgerSummary';
 import AccountLedgerForm from './components/AccountLedgerForm';
 
+import RateTableForm from './components/Rates/RateTableForm';
+
 global.reduxStore = dashboardStore;
 
 const history = syncHistoryWithStore(hashHistory, dashboardStore);
@@ -117,6 +119,9 @@ ReactDOM.render(
             <Route path="credit-transfer/summary/:id" component={AccountLedgerSummary} name="Credit Transfer Summary" />
             <Route path="credit-transfer/form" component={AccountLedgerForm} name="Credit Transfer Form" />
             <Route path="credit-transfer/form/:id" component={AccountLedgerForm} name="Current Credit Transfer Form" />
+
+            <Route path="rate-table/form" component={RateTableForm} name="Rate Table Form" />
+            <Route path="rate-table/form/:id" component={RateTableForm} name="Rate Table Form" />
 
         </Router>
     </Provider>,

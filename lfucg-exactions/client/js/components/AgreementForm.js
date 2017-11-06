@@ -191,8 +191,8 @@ function mapDispatchToProps(dispatch, params) {
                 dispatch(getAgreementID(selectedAgreement))
                 .then((data_agreement) => {
                     const update = {
-                        account_id: data_agreement.response.account_id ? data_agreement.response.account_id.id : null,
-                        account_id_show: data_agreement.response.account_id ? `${data_agreement.response.account_id.id},${data_agreement.response.account_id.account_name}` : '',
+                        account_id: data_agreement.response && data_agreement.response.account_id && data_agreement.response.account_id.id,
+                        account_id_show: data_agreement.response && data_agreement.response.account_id ? `${data_agreement.response.account_id.id},${data_agreement.response.account_id.account_name}` : '',
                         agreement_name: data_agreement.response.agreement_name,
                         date_executed: data_agreement.response.date_executed,
                         resolution_number: data_agreement.response.resolution_number,
@@ -233,12 +233,18 @@ function mapDispatchToProps(dispatch, params) {
         onSubmit(event) {
             event.preventDefault();
             if (selectedAgreement) {
-                dispatch(putAgreement(selectedAgreement));
-                hashHistory.push(`agreement/summary/${selectedAgreement}`);
+                dispatch(putAgreement(selectedAgreement))
+                .then((data) => {
+                    if (data.response) {
+                        hashHistory.push(`agreement/summary/${selectedAgreement}`);
+                    }
+                });
             } else {
                 dispatch(postAgreement())
                 .then((data_post) => {
-                    hashHistory.push(`agreement/summary/${data_post.response.id}`);
+                    if (data_post.response) {
+                        hashHistory.push(`agreement/summary/${data_post.response.id}`);
+                    }
                 });
             }
         },
