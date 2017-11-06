@@ -114,7 +114,7 @@ class PlatSerializer(serializers.ModelSerializer):
         return obj.get_plat_type_display()
 
     def get_plat_exactions(self, obj):
-        calculated_exactions = calculate_plat_balance(obj.id)
+        calculated_exactions = calculate_plat_balance(obj)
         return {
             'plat_sewer_due': '${:,.2f}'.format(calculated_exactions['plat_sewer_due']),
             'plat_non_sewer_due': '${:,.2f}'.format(calculated_exactions['plat_non_sewer_due']),
@@ -179,8 +179,7 @@ class LotSerializer(serializers.ModelSerializer):
     lot_exactions = serializers.SerializerMethodField(read_only=True)
 
     def get_lot_exactions(self, obj):
-        calculated_exactions = calculate_lot_balance(obj.id)
-
+        calculated_exactions = calculate_lot_balance(obj)
         return {
             'total_exactions': '${:,.2f}'.format(calculated_exactions['total_exactions']),
             'sewer_exactions': '${:,.2f}'.format(calculated_exactions['sewer_exactions']),
