@@ -252,7 +252,7 @@ class LotForm extends React.Component {
                                             </div>
                                             <div className="row">
                                                 <div className="col-xs-12">
-                                                    {activeForm.show_exactions && currentLot.lot_exactions && currentLot.lot_exactions.current_exactions_number > 0 &&
+                                                    {activeForm.show_exactions && currentLot && currentLot.lot_exactions && currentLot.lot_exactions.current_exactions_number > 0 &&
                                                         <h3 className="help-block alert alert-danger text-center">&nbsp;There are still {currentLot.lot_exactions.current_exactions} in exactions due on this lot.</h3>
                                                     }
                                                 </div>
@@ -446,7 +446,7 @@ class LotForm extends React.Component {
                                                         </div>
                                                     </div>
                                                 </fieldset>
-                                                <div className="col-xs-8">
+                                                <div className="col-xs-6 text-center">
                                                     <button disabled={!submitEnabled} className="btn btn-lex" onClick={onLotDues} >Submit</button>
                                                     {!submitEnabled ? (
                                                         <div>
@@ -456,7 +456,7 @@ class LotForm extends React.Component {
                                                     ) : null
                                                     }
                                                 </div>
-                                                <div className="col-xs-4">
+                                                <div className="col-xs-6 text-center">
                                                     <DeclineDelete currentForm="/lot/" selectedEntry={selectedLot} parentRoute="lot" />
                                                 </div>
                                             </form>
