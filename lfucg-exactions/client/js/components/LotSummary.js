@@ -365,7 +365,7 @@ class LotSummary extends React.Component {
                                             <div className="col-xs-12">
                                                 <h3 className="col-xs-12">Plat: {currentLot.plat.cabinet}-{currentLot.plat.slide}</h3>
                                                 <p className="col-xs-6">Expansion Area: {currentLot.plat.expansion_area}</p>
-                                                <p className="col-xs-6">Cabinet-Slide: {currentLot.plat.cabinet}-{currentLot.plat.slide}</p>
+                                                <p className="col-xs-6">Gross Acreage: {currentLot.plat.cleaned_total_acreage}</p>
                                                 <p className="col-xs-6">Buildable Lots: {currentLot.plat.buildable_lots}</p>
                                                 <p className="col-xs-6">Non-Buildable Lots: {currentLot.plat.non_buildable_lots}</p>
                                                 <p className="col-sm-6 col-xs-12">Sewer Exactions: {currentLot.plat.plat_exactions && currentLot.plat.plat_exactions.plat_sewer_due}</p>

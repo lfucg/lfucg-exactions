@@ -281,7 +281,7 @@ class PlatForm extends React.Component {
                                                     </select>
                                                 </div>
                                                 <div className="col-sm-6">
-                                                    <FormGroup label="Section" id="section" aria-required="true">
+                                                    <FormGroup label="Section" id="section">
                                                         <input type="text" className="form-control" placeholder="Section" />
                                                     </FormGroup>
                                                 </div>
@@ -293,7 +293,7 @@ class PlatForm extends React.Component {
                                                     </FormGroup>
                                                 </div>
                                                 <div className="col-sm-6">
-                                                    <FormGroup label="Block" id="block" aria-required="true">
+                                                    <FormGroup label="Block" id="block">
                                                         <input type="text" className="form-control" placeholder="Block" />
                                                     </FormGroup>
                                                 </div>

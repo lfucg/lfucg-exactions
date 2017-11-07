@@ -172,11 +172,11 @@ class PlatSummary extends React.Component {
                                     <div className="col-xs-12">
                                         <h3 className="col-xs-6">Plat: {plats.cabinet}-{plats.slide}</h3>
                                         <h3 className="col-xs-6">{plats.is_approved ? 'Approved' : 'Not Approved'}</h3>
-                                        <p className="col-xs-6">Name: {plats.name ? plats.name : null}</p>
+                                        <p className="col-xs-6">Name: {plats.name}</p>
                                         <p className="col-xs-6">Subdivision: {plats.subdivision ? plats.subdivision.name : null}</p>
                                         <p className="col-xs-6">Plat Type: {plats.plat_type_display}</p>
                                         <p className="col-xs-6">Expansion Area: {plats.expansion_area}</p>
-                                        <p className="col-xs-6">Cabinet-Slide: {plats.cabinet}-{plats.slide}</p>
+                                        <p className="col-xs-6">Gross Acreage: {plats.cleaned_total_acreage}</p>
                                         <p className="col-xs-6">Unit: {plats.unit}</p>
                                         <p className="col-xs-6">Section: {plats.section}</p>
                                         <p className="col-xs-6">Block: {plats.block}</p>

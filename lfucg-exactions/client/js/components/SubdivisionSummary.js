@@ -65,7 +65,7 @@ class SubdivisionSummary extends React.Component {
                         <div className="row">
                             <p className="col-xs-6"><strong>{plat.is_approved ? 'Approved' : 'Not Approved'}</strong></p>
                             <p className="col-xs-6">Gross Acreage: {plat.cleaned_total_acreage}</p>
-                            <p className="col-xs-6">Cabinet-Slide: {plat.cabinet}-{plat.slide}</p>
+                            <p className="col-xs-6">Name: {plat.name}</p>
                             <p className="col-xs-6">Expansion Area: {plat.expansion_area}</p>
                             <p className="col-xs-6">Sewer Exactions: {plat.plat_exactions && plat.plat_exactions.plat_sewer_due}</p>
                             <p className="col-xs-6">Non-Sewer Exactions: {plat.plat_exactions && plat.plat_exactions.plat_non_sewer_due}</p>
