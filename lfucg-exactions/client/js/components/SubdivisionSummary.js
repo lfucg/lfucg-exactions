@@ -35,7 +35,7 @@ class SubdivisionSummary extends React.Component {
                     <div key={plat.id} className="col-xs-12">
                         <div className="row form-subheading">
                             <div className="col-sm-7 col-md-9">
-                                <h3>{plat.name}</h3>
+                                <h3>{plat.slide} - {plat.cabinet}</h3>
                             </div>
                         </div>
                         <div className="row link-row">

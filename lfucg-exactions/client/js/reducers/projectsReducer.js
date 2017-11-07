@@ -23,11 +23,7 @@ const projectsReducer = (state = [], action) => {
         return {};
     case GET_PAGINATION:
     case SEARCH_QUERY:
-        const next = action.response.next;
-        const prev = action.response.prev;
-        if ((next != null && next.substr(0, next.length) === '/project') ||
-            (prev != null && prev.substr(0, prev.length) === '/project') ||
-            (window.location.hash === '#/project')) {
+        if (action.response.endpoint === '/project') {
             return action.response;
         }
         return state;
