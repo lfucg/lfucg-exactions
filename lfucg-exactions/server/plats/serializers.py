@@ -225,6 +225,7 @@ class LotSerializer(serializers.ModelSerializer):
             'permit_id',
             'latitude',
             'longitude',
+
             'address_number',
             'address_direction',
             'address_street',
@@ -234,6 +235,9 @@ class LotSerializer(serializers.ModelSerializer):
             'address_state',
             'address_zip',
             'address_full',
+
+            'alternative_address_number',
+            'alternative_address_street',
 
             'dues_roads_dev',
             'dues_roads_own',
