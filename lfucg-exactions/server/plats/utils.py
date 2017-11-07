@@ -63,7 +63,7 @@ def calculate_lot_balance(lot):
             non_sewer_payment += non_sewer_payment_paid
 
     # ACCOUNT LEDGERS
-    account_ledgers = AccountLedger.objects.filter(lot=lot.id, entry_type='USE')
+    account_ledgers = AccountLedger.objects.exclude(is_active=False).filter(lot=lot.id, entry_type='USE')
     
     sewer_credits_applied = 0
     non_sewer_credits_applied = 0
