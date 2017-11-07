@@ -280,6 +280,13 @@ class AccountLedgerSerializer(serializers.ModelSerializer):
             'non_sewer_credits',
             'sewer_credits',
 
+            'sewer_trans',
+            'sewer_cap',
+            'roads',
+            'parks',
+            'storm',
+            'open_space',
+
             'entry_type_display',
             'dollar_values',
         )
