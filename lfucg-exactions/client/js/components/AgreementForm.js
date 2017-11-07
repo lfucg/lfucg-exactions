@@ -10,6 +10,7 @@ import Navbar from './Navbar';
 import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
 import Uploads from './Uploads';
+import Notes from './Notes';
 
 import FormGroup from './FormGroup';
 
@@ -138,17 +139,26 @@ class AgreementForm extends React.Component {
                                     <DeclineDelete currentForm="/agreement/" selectedEntry={selectedAgreement} parentRoute="agreement" />
                                 </div>
                             </form>
+                            <div className="clearfix" />
+                            {agreements.id &&
+                                <Uploads
+                                  file_content_type="accounts_agreement"
+                                  file_object_id={agreements.id}
+                                  ariaExpanded="true"
+                                  panelClass="panel-collapse collapse row in"
+                                  permission="agreement"
+                                />
+                            }
+                            {agreements && agreements.id &&
+                                <Notes
+                                  content_type="accounts_agreement"
+                                  object_id={agreements.id}
+                                  ariaExpanded="true"
+                                  panelClass="panel-collapse collapse row in"
+                                  permission="agreement"
+                                />
+                            }
                         </div>
-                        <div className="clearfix" />
-                        {agreements.id &&
-                            <Uploads
-                              file_content_type="accounts_agreement"
-                              file_object_id={agreements.id}
-                              ariaExpanded="true"
-                              panelClass="panel-collapse collapse row in"
-                              permission="agreement"
-                            />
-                        }
                     </div>
                 </div>
 
