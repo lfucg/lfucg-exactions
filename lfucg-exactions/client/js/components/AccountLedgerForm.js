@@ -582,7 +582,7 @@ function mapDispatchToProps(dispatch, params) {
             } else {
                 dispatch(postAccountLedger())
                 .then((data_post) => {
-                    if (data_post.response) {
+                    if (data_post.response && data_post.response.id) {
                         if (event === 'plat') {
                             hashHistory.push('credit-transfer');
                         } else {
