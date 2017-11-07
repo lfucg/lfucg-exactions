@@ -2,6 +2,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
+import Navbar from './Navbar';
+import Footer from './Footer';
+import Breadcrumbs from './Breadcrumbs';
 import FormGroup from './FormGroup';
 
 import {
@@ -17,14 +20,24 @@ class ReportsAdditional extends React.Component {
     render() {
         const {
             activeForm,
+            route,
             onReportChange,
         } = this.props;
 
         return (
-            <div>
-                <div className="row reports-additional">
-                    <form onChange={onReportChange}>
-                        <div className="row">
+            <div className="row reports-additional">
+                <Navbar />
+
+                <div className="form-header">
+                    <div className="container">
+                        <h1>ADDITIONAL REPORTS</h1>
+                    </div>
+                </div>
+
+                <Breadcrumbs route={this.props.route} />
+                <div className="inside-body">
+                    <div className="container">
+                        <form onChange={onReportChange}>
                             <div className="col-sm-3"><h3>Transaction Report</h3></div>
                             <div className="col-sm-3">
                                 <FormGroup label="* Starting Date" id="starting_date" aria-required="true" >
@@ -43,9 +56,10 @@ class ReportsAdditional extends React.Component {
                                   href={`../api/transactions_csv/?starting_date=${activeForm.starting_date}&ending_date=${activeForm.ending_date}`}
                                 >Transaction CSV</a>
                             </div>
-                        </div>
-                    </form>
+                        </form>
+                    </div>
                 </div>
+                <Footer />
             </div>
         );
     }
@@ -53,6 +67,7 @@ class ReportsAdditional extends React.Component {
 
 ReportsAdditional.propTypes = {
     activeForm: PropTypes.object,
+    route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
     onReportChange: PropTypes.func,
 };

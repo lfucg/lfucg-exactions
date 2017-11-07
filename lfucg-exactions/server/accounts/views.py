@@ -156,7 +156,7 @@ class TransactionCSVExportView(View):
                             'Lot Address': lot['address_full'],
                             'Permit ID': lot['permit_id'],
                             'Alt. Address': alt_address,
-                            'Transaction Type': 'credits',
+                            'Transaction Type': 'Credits',
                             'Paid By': ledger['account_from']['account_name'],
                             'Sewer Trans.': ledger['sewer_trans'],
                             'Sewer Cap.': ledger['sewer_cap'],
