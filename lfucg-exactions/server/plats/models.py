@@ -92,7 +92,7 @@ class Plat(models.Model):
     cabinet = models.CharField(max_length=200)
     slide = models.CharField(max_length=200)
 
-    calculation_note = models.TextField(default='None')
+    calculation_note = models.TextField(null=True, blank=True)
 
     sewer_due = models.DecimalField(max_digits=20, decimal_places=2, default=0)
     non_sewer_due = models.DecimalField(max_digits=20, decimal_places=2, default=0)
@@ -185,6 +185,8 @@ class Lot(models.Model):
 
     dues_open_space_dev = models.DecimalField(max_digits=20, decimal_places=2, default=0)
     dues_open_space_own = models.DecimalField(max_digits=20, decimal_places=2, default=0)
+
+    certificate_of_occupancy = models.DateField(blank=True, null=True)
 
     history = HistoricalRecords()
 
