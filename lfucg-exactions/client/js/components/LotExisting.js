@@ -31,9 +31,11 @@ class LotExisting extends React.Component {
 
         const platsList = plats && plats.length > 0 &&
             (map((single_plat) => {
+                const cabinet = single_plat.cabinet ? `${single_plat.cabinet}-` : '';
+                const slide = single_plat.slide ? single_plat.slide : single_plat.name;
                 return {
                     id: single_plat.id,
-                    name: `${single_plat.cabinet} - ${single_plat.slide}`,
+                    name: `${cabinet}${slide}`,
                 };
             })(plats));
 

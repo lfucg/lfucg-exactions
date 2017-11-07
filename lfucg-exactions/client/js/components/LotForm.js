@@ -59,9 +59,11 @@ class LotForm extends React.Component {
 
         const platsList = plats && plats.length > 0 &&
             (map((single_plat) => {
+                const cabinet = single_plat.cabinet ? `${single_plat.cabinet}-` : '';
+                const slide = single_plat.slide ? single_plat.slide : single_plat.name;
                 return (
                     <option key={single_plat.id} value={[single_plat.id, single_plat.name]} >
-                        {single_plat.cabinet}-{single_plat.slide}
+                        {cabinet}{slide}
                     </option>
                 );
             })(plats));
