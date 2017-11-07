@@ -4,6 +4,7 @@ import {
     Link,
 } from 'react-router';
 import PropTypes from 'prop-types';
+import { map, filter } from 'ramda';
 
 import Navbar from './Navbar';
 import Footer from './Footer';
@@ -14,6 +15,9 @@ class DashboardPage extends React.Component {
         const {
             currentUser,
         } = this.props;
+
+        const userGroup = currentUser && currentUser.groups &&
+            filter(user => user.name === 'Finance')(currentUser.groups);
         return (
             <div className="dashboard">
                 <Navbar />
@@ -59,6 +63,12 @@ class DashboardPage extends React.Component {
                                 <Link to="project-cost" role="link"><h2 className="in-page-link">Project Costs</h2></Link>
                                 <p>Lexington project costs.</p>
                             </div>
+                            {((currentUser && currentUser.is_superuser) || (userGroup && userGroup.length > 0)) &&
+                                <div className="col-md-4 col-sm-6">
+                                    <Link to="reports-additional" role="link"><h2 className="in-page-link">Transaction Report</h2></Link>
+                                    <p>Create transaction reports for a chosen time frame.</p>
+                                </div>
+                            }
                             {currentUser && currentUser.is_superuser &&
                                 <div className="col-md-4 col-sm-6">
                                     <Link to="rate-table/form/" role="link"><h2 className="in-page-link">Rate Tables</h2></Link>

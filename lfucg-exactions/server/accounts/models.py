@@ -306,6 +306,14 @@ class AccountLedger(models.Model):
     non_sewer_credits = models.DecimalField(max_digits=20, decimal_places=2)
     sewer_credits = models.DecimalField(max_digits=20, decimal_places=2)
 
+    roads = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True, default=0)
+    sewer_trans = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True, default=0)
+    sewer_cap = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True, default=0)
+    parks = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True, default=0)
+    storm = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True, default=0)
+    open_space = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True, default=0)
+
+
     history = HistoricalRecords()
 
     def __str__(self):
