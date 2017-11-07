@@ -71,7 +71,7 @@ class AccountLedgerExisting extends React.Component {
                                 </div>
                             </div>
                             <div className={accountLedger.is_approved ? 'row link-row' : 'row link-row-approval-pending'}>
-                                <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
+                                <div className="col-xs-12 col-sm-5 col-sm-offset-7">
                                     <div className="col-xs-5">
                                         {currentUser && currentUser.permissions && currentUser.permissions.accountledger &&
                                             <Link to={`credit-transfer/form/${accountLedger.id}`} aria-label="Edit">

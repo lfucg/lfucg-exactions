@@ -35,10 +35,10 @@ class AccountSummary extends React.Component {
                 return (
                     <div key={plat.id} className="col-xs-12">
                         <div className="row form-subheading">
-                            <h3>{plat.name}</h3>
+                            <h3>{plat.cabinet}-{plat.slide}</h3>
                         </div>
                         <div className="row link-row">
-                            <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
+                            <div className="col-xs-12 col-sm-5 col-sm-offset-7">
                                 <div className="col-xs-5">
                                     {currentUser && currentUser.permissions && currentUser.permissions.plat &&
                                         <Link to={`plat/form/${plat.id}`} aria-label="Edit">
@@ -60,12 +60,11 @@ class AccountSummary extends React.Component {
                             </div>
                         </div>
                         <div className="row">
-                            <p className="col-sm-4 col-xs-6">Gross Acreage: {plat.cleaned_total_acreage}</p>
-                            <p className="col-sm-4 col-xs-6">Approval: {plat.is_approved ? 'Approved' : 'Not Approved'}</p>
-                            <p className="col-sm-4 col-xs-6">Expansion Area: {plat.expansion_area}</p>
-                            <p className="col-sm-4 col-xs-6">Slide: {plat.slide}</p>
-                            <p className="col-sm-4 col-xs-6">Sewer Exactions: {plat.plat_exactions && plat.plat_exactions.plat_sewer_due}</p>
-                            <p className="col-sm-4 col-xs-6">Non-Sewer Exactions: {plat.plat_exactions && plat.plat_exactions.plat_non_sewer_due}</p>
+                            <p className="col-xs-12"><strong>{plat.is_approved ? 'Approved' : 'Not Approved'}</strong></p>
+                            <p className="col-sm-6 col-xs-12">Sewer Exactions: {plat.plat_exactions && plat.plat_exactions.plat_sewer_due}</p>
+                            <p className="col-sm-6 col-xs-12">Non-Sewer Exactions: {plat.plat_exactions && plat.plat_exactions.plat_non_sewer_due}</p>
+                            <p className="col-xs-6">Gross Acreage: {plat.cleaned_total_acreage}</p>
+                            <p className="col-xs-6">Expansion Area: {plat.expansion_area}</p>
                         </div>
                     </div>
                 );
@@ -79,7 +78,7 @@ class AccountSummary extends React.Component {
                             <h3>{lot.address_full}</h3>
                         </div>
                         <div className="row link-row">
-                            <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
+                            <div className="col-xs-12 col-sm-5 col-sm-offset-7">
                                 <div className="col-xs-5">
                                     {currentUser && currentUser.permissions && currentUser.permissions.lot &&
                                         <Link to={`lot/form/${lot.id}`} aria-label="Edit">
@@ -101,10 +100,10 @@ class AccountSummary extends React.Component {
                             </div>
                         </div>
                         <div className="row">
-                            <p className="col-sm-4 col-xs-6">Current Exactions: {lot.lot_exactions && lot.lot_exactions.current_exactions}</p>
-                            <p className="col-sm-4 col-xs-6">Approval: {lot.is_approved ? 'Approved' : 'Not Approved'}</p>
-                            <p className="col-sm-4 col-xs-6">Lot Number: {lot.lot_number}</p>
-                            <p className="col-sm-4 col-xs-6">Parcel ID: {lot.parcel_id}</p>
+                            <p className="col-xs-6">Current Exactions: {lot.lot_exactions && lot.lot_exactions.current_exactions}</p>
+                            <p className="col-xs-6"><strong>{lot.is_approved ? 'Approved' : 'Not Approved'}</strong></p>
+                            <p className="col-xs-6">Lot Number: {lot.lot_number}</p>
+                            <p className="col-xs-6">Parcel ID: {lot.parcel_id}</p>
                         </div>
                     </div>
                 );
@@ -118,7 +117,7 @@ class AccountSummary extends React.Component {
                             <h3>Resolution: {agreement.resolution_number}</h3>
                         </div>
                         <div className="row link-row">
-                            <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
+                            <div className="col-xs-12 col-sm-5 col-sm-offset-7">
                                 <div className="col-xs-5">
                                     {currentUser && currentUser.permissions && currentUser.permissions.agreement &&
                                         <Link to={`agreement/form/${agreement.id}`} aria-label="Edit">
@@ -140,10 +139,10 @@ class AccountSummary extends React.Component {
                             </div>
                         </div>
                         <div className="row">
-                            <p className="col-sm-4 col-xs-6">Current Balance: {agreement.agreement_balance && agreement.agreement_balance.total}</p>
-                            <p className="col-sm-4 col-xs-6">Expansion Area: {agreement.expansion_area}</p>
-                            <p className="col-sm-4 col-xs-6">Agreement Type: {agreement.agreement_type_display}</p>
-                            <p className="col-sm-4 col-xs-6">Date Executed: {agreement.date_executed}</p>
+                            <p className="col-xs-6">Current Balance: {agreement.agreement_balance && agreement.agreement_balance.total}</p>
+                            <p className="col-xs-6">Agreement Type: {agreement.agreement_type_display}</p>
+                            <p className="col-xs-6">Date Executed: {agreement.date_executed}</p>
+                            <p className="col-xs-6">Expansion Area: {agreement.expansion_area}</p>
                         </div>
                     </div>
                 );
@@ -157,7 +156,7 @@ class AccountSummary extends React.Component {
                             <h3>Agreement Resolution: {payment.credit_source && payment.credit_source.resolution_number}</h3>
                         </div>
                         <div className="row link-row">
-                            <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
+                            <div className="col-xs-12 col-sm-5 col-sm-offset-7">
                                 <div className="col-xs-5">
                                     {currentUser && currentUser.permissions && currentUser.permissions.payment &&
                                         <Link to={`payment/form/${payment.id}`} aria-label="Edit">
@@ -197,7 +196,7 @@ class AccountSummary extends React.Component {
                             <h3>{accountLedger.entry_type_display}</h3>
                         </div>
                         <div className="row link-row">
-                            <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
+                            <div className="col-xs-12 col-sm-5 col-sm-offset-7">
                                 <div className="col-xs-5">
                                     {currentUser && currentUser.permissions && currentUser.permissions.accountledger &&
                                         <Link to={`credit-transfer/form/${accountLedger.id}`} aria-label="Edit">
@@ -268,7 +267,7 @@ class AccountSummary extends React.Component {
                             >
                                 <div className="panel-body">
                                     <div className="row link-row">
-                                        <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
+                                        <div className="col-xs-12 col-sm-5 col-sm-offset-7">
                                             <div className="col-xs-5 col-xs-offset-5">
                                                 {currentUser && currentUser.permissions && currentUser.permissions.account &&
                                                     <Link to={`account/form/${accounts.id}`} aria-label="Edit">
@@ -282,13 +281,13 @@ class AccountSummary extends React.Component {
                                         </div>
                                     </div>
                                     <div className="col-xs-12">
-                                        <p className="col-md-4 col-xs-6">Developer Account Name: {accounts.account_name}</p>
-                                        {accounts.balance && <p className="col-md-4 col-xs-6">{accounts.balance.credit_availability}</p>}
+                                        <p className="col-xs-6">Developer Account Name: {accounts.account_name}</p>
+                                        {accounts.balance && <p className="col-xs-6"><strong>{accounts.balance.credit_availability}</strong></p>}
                                         {currentUser && currentUser.username && <div>
-                                            {accounts.balance && <p className="col-md-4 col-xs-6">Account Balance: {accounts.balance.balance}</p>}
-                                            <p className="col-md-4 col-xs-6">Contact Name: {accounts.contact_full_name}</p>
-                                            <p className="col-md-4 col-xs-6 ">Phone: {accounts.phone}</p>
-                                            <p className="col-md-4 col-xs-6">Email: {accounts.email}</p>
+                                            <p className="col-xs-6">Contact Name: {accounts.contact_full_name}</p>
+                                            {accounts.balance && <p className="col-xs-6">Account Balance: {accounts.balance.balance}</p>}
+                                            <p className="col-xs-6 ">Phone: {accounts.phone}</p>
+                                            <p className="col-xs-6">Email: {accounts.email}</p>
                                             <p className="col-xs-12">Address: {accounts.address_full}</p>
                                         </div>}
                                     </div>
