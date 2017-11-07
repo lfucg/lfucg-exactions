@@ -29,7 +29,7 @@ class DashboardPage extends React.Component {
                     <div className="container">
                         <FlashMessage />
                         <div className="row">
-                            {userGroup && userGroup.length > 0 &&
+                            {((currentUser && currentUser.is_superuser) || (userGroup && userGroup.length > 0)) &&
                                 <div className="col-xs-12">
                                     <ReportsAdditional />
                                 </div>
