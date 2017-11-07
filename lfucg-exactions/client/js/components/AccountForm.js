@@ -10,6 +10,7 @@ import Footer from './Footer';
 
 import FormGroup from './FormGroup';
 import Breadcrumbs from './Breadcrumbs';
+import Notes from './Notes';
 
 import DeclineDelete from './DeclineDelete';
 
@@ -199,6 +200,17 @@ class AccountForm extends React.Component {
                                     <DeclineDelete currentForm="/account/" selectedEntry={selectedAccount} parentRoute="account" />
                                 </div>
                             </form>
+                            <div className="clearfix" />
+                            <hr aria-hidden="true" />
+                            {selectedAccount &&
+                                <Notes
+                                  content_type="accounts_account"
+                                  object_id={selectedAccount}
+                                  ariaExpanded="true"
+                                  panelClass="panel-collapse collapse row in"
+                                  permission="account"
+                                />
+                            }
                         </div>
                     </div>
                 </div>
