@@ -271,10 +271,15 @@ class AccountLedgerViewSet(viewsets.ModelViewSet):
         data_set['created_by'] = self.request.user.id
         data_set['modified_by'] = self.request.user.id
 
-        if 'plat' in self.request.data:
+        if 'lot' in self.request.data:
+            serializer = AccountLedgerSerializer(data=data_set)
+            if serializer.is_valid(raise_exception=True):
+                self.perform_create(serializer)
+                return Response(serializer.data)
+
+        elif 'plat' in self.request.data:
             chosen_plat = self.request.data['plat']
             plat_set = Plat.objects.filter(id=chosen_plat)
-            
             non_sewer_credits_per_lot = 0
             sewer_credits_per_lot = 0
 
@@ -298,12 +303,6 @@ class AccountLedgerViewSet(viewsets.ModelViewSet):
                     self.perform_create(serializer)
             return Response('Success')
 
-        elif 'lot' in self.request.data:
-            chosen_lot = self.request.data['lot']
-            serializer = AccountLedgerSerializer(data=data_set)
-            if serializer.is_valid(raise_exception=True):
-                self.perform_create(serializer)
-                return Response(serializer.data)
         else:
             serializer = AccountLedgerSerializer(data=data_set)
             if serializer.is_valid(raise_exception=True):
