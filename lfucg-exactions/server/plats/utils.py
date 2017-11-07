@@ -64,26 +64,15 @@ def calculate_lot_balance(lot):
 
     # ACCOUNT LEDGERS
     account_ledgers = AccountLedger.objects.filter(lot=lot.id, entry_type='USE')
-
+    
     sewer_credits_applied = 0
     non_sewer_credits_applied = 0
-    sewer_due = sewer_exactions - sewer_payment
-    non_sewer_due = non_sewer_exactions - non_sewer_payment
 
     if account_ledgers is not None:
         for ledger in account_ledgers:
             sewer_credits_applied += ledger.sewer_credits
             non_sewer_credits_applied += ledger.non_sewer_credits
-            if sewer_due > 0:
-                dues_sewer_cap_dev -= ((dues_sewer_cap_dev / sewer_due) * ledger.sewer_credits)
-                dues_sewer_trans_dev -= ((dues_sewer_trans_dev / sewer_due) * ledger.sewer_credits)
-            if non_sewer_due > 0:
-                dues_roads_dev -= ((dues_roads_dev / non_sewer_due) * ledger.non_sewer_credits)
-                dues_parks_dev -= ((dues_parks_dev / non_sewer_due) * ledger.non_sewer_credits)
-                dues_storm_dev -= ((dues_storm_dev / non_sewer_due) * ledger.non_sewer_credits)
-                dues_open_space_dev -= ((dues_open_space_dev / non_sewer_due) * ledger.non_sewer_credits)
-            sewer_due -= ledger.sewer_credits
-            non_sewer_due -= ledger.non_sewer_credits
+
 
     all_exactions = {
         'total_exactions': total_exactions,
@@ -97,8 +86,8 @@ def calculate_lot_balance(lot):
         'non_sewer_credits_applied': non_sewer_credits_applied,
 
         'current_exactions': total_exactions - sewer_payment - non_sewer_payment - sewer_credits_applied - non_sewer_credits_applied,
-        'sewer_due': sewer_due,
-        'non_sewer_due': non_sewer_due,
+        'sewer_due': sewer_exactions - sewer_payment - sewer_credits_applied,
+        'non_sewer_due': non_sewer_exactions - non_sewer_payment - non_sewer_credits_applied,
         'dues_roads_dev': dues_roads_dev,
         'dues_roads_own': dues_roads_own,
         'dues_sewer_trans_dev': dues_sewer_trans_dev,
@@ -125,7 +114,6 @@ def calculate_plat_balance(plat):
             calculated_lot = calculate_lot_balance(lot)
             lots_non_sewer_paid += calculated_lot['non_sewer_payment'] + calculated_lot['non_sewer_credits_applied']
             lots_sewer_paid += calculated_lot['sewer_payment'] + calculated_lot['sewer_credits_applied']
-
 
     plat_exactions = {
         'plat_sewer_due': plat.sewer_due - lots_sewer_paid,
