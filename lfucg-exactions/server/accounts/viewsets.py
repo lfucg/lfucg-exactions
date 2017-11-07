@@ -272,7 +272,6 @@ class AccountLedgerViewSet(viewsets.ModelViewSet):
         data_set['modified_by'] = self.request.user.id
 
         if 'lot' in self.request.data:
-            chosen_lot = self.request.data['lot']
             serializer = AccountLedgerSerializer(data=data_set)
             if serializer.is_valid(raise_exception=True):
                 self.perform_create(serializer)
