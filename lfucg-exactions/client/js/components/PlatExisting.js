@@ -59,13 +59,15 @@ class PlatExisting extends React.Component {
 
         const plats_list = plats && plats.length > 0 ? (
             map((plat) => {
+                const cabinet = plat.cabinet ? `${plat.cabinet}-` : '';
+                const slide = plat.slide ? plat.slide : plat.name;
                 return (
                     <div key={plat.id} className="col-xs-12">
                         {(currentUser.id || plat.is_approved) && <div>
                             <div className={plat.is_approved ? 'row form-subheading' : 'row unapproved-heading'}>
                                 <div className="col-sm-11">
                                     <h3>
-                                        {plat.cabinet}-{plat.slide}
+                                        {cabinet}{slide}
                                         {!plat.is_approved && <span className="pull-right">Approval Pending</span>}
                                     </h3>
                                 </div>

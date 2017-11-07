@@ -32,9 +32,10 @@ class AccountExisting extends React.Component {
 
         const platsList = plats && plats.length > 0 &&
             (map((single_plat) => {
+                const cabinet = single_plat.cabinet ? `${single_plat.cabinet}-` : '';
                 return {
                     id: single_plat.id,
-                    name: `${single_plat.cabinet} - ${single_plat.slide}`,
+                    name: `${cabinet}${single_plat.slide}`,
                 };
             })(plats));
 
