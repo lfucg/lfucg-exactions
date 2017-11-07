@@ -34,7 +34,7 @@ class AccountExisting extends React.Component {
             (map((single_plat) => {
                 return {
                     id: single_plat.id,
-                    name: single_plat.name,
+                    name: `${single_plat.cabinet} - ${single_plat.slide}`,
                 };
             })(plats));
 
@@ -56,7 +56,7 @@ class AccountExisting extends React.Component {
                             </div>
                         </div>
                         <div className="row link-row">
-                            <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
+                            <div className="col-xs-12 col-sm-5 col-sm-offset-7">
                                 <div className="col-xs-5">
                                     {currentUser && currentUser.permissions && currentUser.permissions.account &&
                                         <Link to={`account/form/${account.id}`} aria-label="Edit">
@@ -79,11 +79,11 @@ class AccountExisting extends React.Component {
                         </div>
                         <div className="row">
                             <div className="col-sm-offset-1">
-                                <p className="col-md-4 col-xs-6">Developer Account Name: {account.account_name}</p>
-                                {account.balance && <p className="col-md-4 col-xs-6">{account.balance.credit_availability}</p>}
+                                <p className="col-xs-6">Developer Account Name: {account.account_name}</p>
+                                {account.balance && <p className="col-xs-6"><strong>{account.balance.credit_availability}</strong></p>}
                                 {currentUser && currentUser.username && <div>
-                                    {account.balance && <p className="col-md-4 col-xs-6">Account Balance: {account.balance.balance}</p>}
-                                    <p className="col-md-4 col-xs-6">Contact Name: {account.contact_full_name}</p>
+                                    <p className="col-xs-6">Contact Name: {account.contact_full_name}</p>
+                                    {account.balance && <p className="col-xs-6">Account Balance: {account.balance.balance}</p>}
                                 </div>}
                             </div>
                         </div>

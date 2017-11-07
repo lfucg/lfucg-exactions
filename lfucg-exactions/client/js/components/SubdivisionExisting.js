@@ -33,7 +33,7 @@ class SubdivisionExisting extends React.Component {
             (map((single_plat) => {
                 return {
                     id: single_plat.id,
-                    name: single_plat.name,
+                    name: `${single_plat.cabinet} - ${single_plat.slide}`,
                 };
             })(plats));
 
@@ -47,7 +47,7 @@ class SubdivisionExisting extends React.Component {
                             </div>
                         </div>
                         <div className="row link-row">
-                            <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
+                            <div className="col-xs-12 col-sm-5 col-sm-offset-7">
                                 <div className="col-xs-5">
                                     {currentUser && currentUser.permissions && currentUser.permissions.subdivision &&
                                         <Link to={`subdivision/form/${subdivision.id}`} aria-label="Edit">

@@ -65,7 +65,7 @@ class PlatExisting extends React.Component {
                             <div className={plat.is_approved ? 'row form-subheading' : 'row unapproved-heading'}>
                                 <div className="col-sm-11">
                                     <h3>
-                                        {plat.name}
+                                        {plat.cabinet}-{plat.slide}
                                         {!plat.is_approved && <span className="pull-right">Approval Pending</span>}
                                     </h3>
                                 </div>
@@ -104,13 +104,12 @@ class PlatExisting extends React.Component {
                             </div>
                             <div className="row">
                                 <div className="col-sm-offset-1">
-                                    <p className="col-xs-6">Sewer Remaining: {plat.plat_exactions && plat.plat_exactions.plat_sewer_due}</p>
-                                    <p className="col-xs-6">Non-Sewer Remaining: {plat.plat_exactions && plat.plat_exactions.plat_non_sewer_due}</p>
-                                    <p className="col-sm-4 col-xs-6">Slide: {plat.slide}</p>
-                                    <p className="col-sm-4 col-xs-6">Cabinet: {plat.cabinet}</p>
-                                    <p className="col-sm-4 col-xs-6">Section: {plat.section}</p>
-                                    <p className="col-sm-4 col-xs-6">Block: {plat.block}</p>
-                                    <p className="col-sm-4 col-xs-6">Expansion Area: {plat.expansion_area}</p>
+                                    <p className="col-xs-12 col-sm-6">Sewer Due: {plat.plat_exactions && plat.plat_exactions.plat_sewer_due}</p>
+                                    <p className="col-xs-12 col-sm-6">Non-Sewer Due: {plat.plat_exactions && plat.plat_exactions.plat_non_sewer_due}</p>
+                                    <p className="col-xs-6">Cabinet-Slide: {plat.cabinet}-{plat.slide}</p>
+                                    <p className="col-xs-6">Section: {plat.section}</p>
+                                    <p className="col-xs-6">Block: {plat.block}</p>
+                                    <p className="col-xs-6">Expansion Area: {plat.expansion_area}</p>
                                 </div>
                             </div>
                         </div>}

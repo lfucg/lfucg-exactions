@@ -56,7 +56,7 @@ class AccountLedgerForm extends React.Component {
         const platsList = plats.length > 0 && (map((plat) => {
             return (
                 <option key={plat.id} value={[plat.id, plat.name, plat.plat_exactions.plat_non_sewer_due, plat.plat_exactions.plat_sewer_due]} >
-                    {plat.name}
+                    {plat.cabinet}-{plat.slide}
                 </option>
             );
         })(plats));

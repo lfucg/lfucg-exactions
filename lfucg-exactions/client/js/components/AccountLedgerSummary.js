@@ -62,7 +62,7 @@ class AccountLedgerSummary extends React.Component {
                             >
                                 <div className="panel-body">
                                     <div className="row link-row">
-                                        <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
+                                        <div className="col-xs-12 col-sm-5 col-sm-offset-7">
                                             <div className="col-xs-5 col-xs-offset-5">
                                                 {currentUser && currentUser.permissions && currentUser.permissions.accountledger &&
                                                     <Link to={`credit-transfer/form/${accountLedgers.id}`} aria-label="Edit">
@@ -117,7 +117,7 @@ class AccountLedgerSummary extends React.Component {
                                     >
                                         <div className="panel-body">
                                             <div className="row link-row">
-                                                <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
+                                                <div className="col-xs-12 col-sm-5 col-sm-offset-7">
                                                     <div className="col-xs-5">
                                                         {currentUser && currentUser.permissions && currentUser.permissions.lot &&
                                                             <Link to={`lot/form/${accountLedgers.lot.id}`} aria-label="Edit">
@@ -178,7 +178,7 @@ class AccountLedgerSummary extends React.Component {
                                     >
                                         <div className="panel-body">
                                             <div className="row link-row">
-                                                <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
+                                                <div className="col-xs-12 col-sm-5 col-sm-offset-7">
                                                     <div className="col-xs-5">
                                                         {currentUser && currentUser.permissions && currentUser.permissions.account &&
                                                             <Link to={`account/form/${accountLedgers.account_from.id}`} aria-label="Edit">
@@ -244,7 +244,7 @@ class AccountLedgerSummary extends React.Component {
                                     >
                                         <div className="panel-body">
                                             <div className="row link-row">
-                                                <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
+                                                <div className="col-xs-12 col-sm-5 col-sm-offset-7">
                                                     <div className="col-xs-5">
                                                         {currentUser && currentUser.permissions && currentUser.permissions.account &&
                                                             <Link to={`account/form/${accountLedgers.account_to.id}`} aria-label="Edit">
@@ -310,7 +310,7 @@ class AccountLedgerSummary extends React.Component {
                                     >
                                         <div className="panel-body">
                                             <div className="row link-row">
-                                                <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
+                                                <div className="col-xs-12 col-sm-5 col-sm-offset-7">
                                                     <div className="col-xs-5">
                                                         {currentUser && currentUser.permissions && currentUser.permissions.agreement &&
                                                             <Link to={`agreement/form/${accountLedgers.agreement.id}`} aria-label="Edit">
