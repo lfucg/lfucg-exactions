@@ -33,10 +33,11 @@ class AccountSummary extends React.Component {
         const plats_list = accounts.plat_account && accounts.plat_account.length > 0 &&
             map((plat) => {
                 const cabinet = plat.cabinet ? `${plat.cabinet}-` : '';
+                const slide = plat.slide ? plat.slide : plat.name;
                 return (
                     <div key={plat.id} className="col-xs-12">
                         <div className="row form-subheading">
-                            <h3>{plat.slide ? `${cabinet}${plat.slide}` : plat.name}</h3>
+                            <h3>{cabinet}{slide}</h3>
                         </div>
                         <div className="row link-row">
                             <div className="col-xs-12 col-sm-5 col-sm-offset-7">
