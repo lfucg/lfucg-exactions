@@ -76,7 +76,7 @@ class AgreementReport extends React.Component {
 
                 <div className="form-header">
                     <div className="container">
-                        <h1>PLATS - {agreements.resolution_number} - REPORT</h1>
+                        <h1>AGREEMENTS - {agreements.resolution_number} - REPORT</h1>
                     </div>
                 </div>
 
@@ -156,6 +156,7 @@ class AgreementReport extends React.Component {
                         <a
                           className="btn btn-lex col-sm-3"
                           href={`../api/export_agreement_csv/?agreement=${agreements.id}`}
+                          disabled={!agreements.id}
                         >Export CSV</a>
                     </div>
                 </div>
