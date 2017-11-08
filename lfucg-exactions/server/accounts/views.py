@@ -102,14 +102,11 @@ class AccountCSVExportView(View):
                         )
 
                         for j, plat_zone in zip(range(plat_zone_queryset.count()), plat_zone_serializer.data):
-                            print('PLAT ZONE', ('Zone -%s-%s' %((i+1), (j+1))))
-                            print('PLAT ZONE', ('Acres -%s-%s' %((i+1), (j+1))))
-                            print('PLAT ZONE', plat_zone['id'])
                             headers.extend(['Zone -%s-%s' %((i+1), (j+1))])
                             headers.extend(['Acres -%s-%s' %((i+1), (j+1))])
 
-                            row['Zone -%s' %(j+1)] = plat_zone['zone']
-                            row['Acres -%s' %(j+1)] = plat_zone['acres']
+                            row['Zone -%s-%s' %((i+1), (j+1))] = plat_zone['zone']
+                            row['Acres -%s-%s' %((i+1), (j+1))] = plat_zone['acres']
  
             lot_queryset = Lot.objects.filter(account=account_value)
             if lot_queryset is not None:
