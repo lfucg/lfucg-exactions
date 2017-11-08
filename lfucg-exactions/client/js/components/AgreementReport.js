@@ -9,7 +9,9 @@ import Breadcrumbs from './Breadcrumbs';
 
 import {
     getAgreementID,
-    getAccountID,
+    getAgreementProjects,
+    getAgreementPayments,
+    getAgreementAccountLedgers,
 } from '../actions/apiActions';
 
 class AgreementReport extends React.Component {
@@ -17,66 +19,56 @@ class AgreementReport extends React.Component {
         this.props.onComponentDidMount();
     }
 
-                            // <div className="row report-header">
-                            //     <h5 className="col-sm-3">Subdivision</h5>
-                            //     <h5 className="col-sm-3">Total Acreage</h5>
-                            //     <h5 className="col-sm-3">Buildable Lots</h5>
-                            //     <h5 className="col-sm-3 right-border">Non-Buildable Lots</h5>
-                            // </div>
-                            // <div className="row">
-                            //     <div className="col-sm-3 report-data">{agreements.subdivision && agreements.subdivision.name}</div>
-                            //     <div className="col-sm-3 report-data">{agreements.total_acreage}</div>
-                            //     <div className="col-sm-3 report-data">{agreements.buildable_lots}</div>
-                            //     <div className="col-sm-3 report-data right-border">{agreements.non_buildable_lots}</div>
-                            // </div>
-                            // <div className="row" />
-                            // <div className="row">
-                            //     <h3 className="col-sm-6">Developer Account</h3>
-                            // </div>
-                            // <div className="row report-header">
-                            //     <h5 className="col-sm-3 right-border">Developer Name</h5>
-                            // </div>
-                            // <div className="row">
-                            //     <div className="col-sm-3 report-data right-border">{accounts.id && accounts.account_name}</div>
-                            // </div>
-                            // <div className="row" />
-                            // <div className="row">
-                            //     <h3 className="col-sm-6">Agreement Zones</h3>
-                            // </div>
-                            // <div className="row report-header">
-                            //     <h5 className="col-sm-3">Zone</h5>
-                            //     <h5 className="col-sm-3 right-border">Acres</h5>
-                            // </div>
-                            // {agreementZones}
-                            // <div className="row" />
-                            // <div className="row">
-                            //     <h3>
-                            //         <div className="col-sm-6">
-                            //             Lots
-                            //         </div>
-                            //         <div className="col-sm-6">
-                            //             Remaining Lots: {agreements.agreement_exactions && agreements.agreement_exactions.remaining_lots}
-                            //         </div>
-                            //     </h3>
-                            // </div>
-                            // <div className="row report-header">
-                            //     <h5 className="col-sm-5">Lot Address</h5>
-                            //     <div className="col-sm-7">
-                            //         <h5>
-                            //             <div className="col-sm-3">Parcel ID</div>
-                            //             <div className="col-sm-3 report-wrap-header">Current Exactions Due</div>
-                            //             <div className="col-sm-3 report-wrap-header">Non-Sewer Exactions Due</div>
-                            //             <div className="col-sm-3 report-wrap-header right-border">Sewer Exactions Due</div>
-                            //         </h5>
-                            //     </div>
-                            // </div>
-                            // {agreementLots}
 
     render() {
         const {
             agreements,
-            accounts,
+            projects,
+            payments,
+            accountLedgers,
         } = this.props;
+
+        const projectsList = projects && projects.length > 0 && (map((project) => {
+            return (
+                <div className="row" key={project.id}>
+                    <div className="col-sm-3 report-data">{project.project_category_display}</div>
+                    <div className="col-sm-3 report-data">{project.project_type_display}</div>
+                    <div className="col-sm-3 report-data right-border">{project.project_status_display}</div>
+                </div>
+            );
+        })(projects));
+
+        const paymentsList = payments && payments.length > 0 && (map((payment) => {
+            return (
+                <div className="row" key={payment.id}>
+                    <div className="col-sm-2 report-data right-border">{payment.payment_type_display}</div>
+                    <div className="col-sm-10">
+                        <div className="col-sm-2 report-data">{payment.paid_roads}</div>
+                        <div className="col-sm-2 report-data">{payment.paid_parks}</div>
+                        <div className="col-sm-2 report-data">{payment.paid_storm}</div>
+                        <div className="col-sm-2 report-data">{payment.paid_open_space}</div>
+                        <div className="col-sm-2 report-data">{payment.paid_sewer_trans}</div>
+                        <div className="col-sm-2 report-data right-border">{payment.paid_sewer_cap}</div>
+                    </div>
+                </div>
+            );
+        })(payments));
+
+        const ledgersList = accountLedgers && accountLedgers.length > 0 && (map((ledger) => {
+            return (
+                <div className="row" key={ledger.id}>
+                    <div className="col-sm-2 report-data right-border">{ledger.entry_type_display}</div>
+                    <div className="col-sm-10">
+                        <div className="col-sm-2 report-data">{ledger.roads}</div>
+                        <div className="col-sm-2 report-data">{ledger.parks}</div>
+                        <div className="col-sm-2 report-data">{ledger.storm}</div>
+                        <div className="col-sm-2 report-data">{ledger.open_space}</div>
+                        <div className="col-sm-2 report-data">{ledger.sewer_trans}</div>
+                        <div className="col-sm-2 report-data right-border">{ledger.sewer_cap}</div>
+                    </div>
+                </div>
+            );
+        })(accountLedgers));
 
         return (
             <div className="agreement-report">
@@ -98,6 +90,67 @@ class AgreementReport extends React.Component {
                             <div className="row">
                                 <h3 className="col-sm-6">Agreement</h3>
                             </div>
+                            <div className="row report-header">
+                                <h5 className="col-sm-6">Resolution</h5>
+                                <h5 className="col-sm-6 right-border">Account</h5>
+                            </div>
+                            <div className="row">
+                                <div className="col-sm-6 report-data">{agreements.resolution_number}</div>
+                                <div className="col-sm-6 report-data right-border">{agreements.account_id && agreements.account_id.account_name}</div>
+                            </div>
+                            <div className="row" />
+
+                            <div className="row">
+                                <h3 className="col-sm-6">Projects</h3>
+                            </div>
+                            <div className="row report-header">
+                                <h5 className="col-sm-3">Category</h5>
+                                <h5 className="col-sm-3">Type</h5>
+                                <h5 className="col-sm-3 right-border">Status</h5>
+                            </div>
+                            {projectsList}
+                            <div className="row" />
+
+                            <div className="row">
+                                <h3>
+                                    <div className="col-sm-6">
+                                        Payments
+                                    </div>
+                                </h3>
+                            </div>
+                            <div className="row report-header">
+                                <h5 className="col-sm-2 right-border">Payment Type</h5>
+                                <div className="col-sm-10">
+                                    <h5 className="col-sm-2">Roads</h5>
+                                    <h5 className="col-sm-2">Parks</h5>
+                                    <h5 className="col-sm-2">Stormwater</h5>
+                                    <h5 className="col-sm-2">Open Space</h5>
+                                    <h5 className="col-sm-2">Sewer Trans</h5>
+                                    <h5 className="col-sm-2 right-border">Sewer Cap</h5>
+                                </div>
+                            </div>
+                            {paymentsList}
+                            <div className="row" />
+
+                            <div className="row">
+                                <h3>
+                                    <div className="col-sm-6">
+                                        Credit Transfers
+                                    </div>
+                                </h3>
+                            </div>
+                            <div className="row report-header">
+                                <h5 className="col-sm-2 right-border">Entry Type</h5>
+                                <div className="col-sm-10">
+                                    <h5 className="col-sm-2">Roads</h5>
+                                    <h5 className="col-sm-2">Parks</h5>
+                                    <h5 className="col-sm-2">Stormwater</h5>
+                                    <h5 className="col-sm-2">Open Space</h5>
+                                    <h5 className="col-sm-2">Sewer Trans</h5>
+                                    <h5 className="col-sm-2 right-border">Sewer Cap</h5>
+                                </div>
+                            </div>
+                            {ledgersList}
                         </div>
 
                         <a
@@ -114,7 +167,9 @@ class AgreementReport extends React.Component {
 
 AgreementReport.propTypes = {
     agreements: PropTypes.array,
-    accounts: PropTypes.array,
+    projects: PropTypes.array,
+    payments: PropTypes.array,
+    accountLedgers: PropTypes.array,
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
 };
@@ -122,7 +177,9 @@ AgreementReport.propTypes = {
 function mapStateToProps(state) {
     return {
         agreements: state.agreements,
-        accounts: state.accounts,
+        projects: state.projects,
+        payments: state.payments,
+        accountLedgers: state.accountLedgers,
     };
 }
 
@@ -131,12 +188,10 @@ function mapDispatchToProps(dispatch, params) {
 
     return {
         onComponentDidMount() {
-            dispatch(getAgreementID(selectedAgreement))
-            .then((agreement_data) => {
-                if (agreement_data.response.account) {
-                    dispatch(getAccountID(agreement_data.response.account));
-                }
-            });
+            dispatch(getAgreementID(selectedAgreement));
+            dispatch(getAgreementProjects(selectedAgreement));
+            dispatch(getAgreementPayments(selectedAgreement));
+            dispatch(getAgreementAccountLedgers(selectedAgreement));
         },
     };
 }
