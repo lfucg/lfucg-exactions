@@ -67,23 +67,18 @@ def calculate_lot_balance(lot):
 
     sewer_credits_applied = 0
     non_sewer_credits_applied = 0
-    sewer_due = sewer_exactions - sewer_payment
-    non_sewer_due = non_sewer_exactions - non_sewer_payment
 
     if account_ledgers is not None:
         for ledger in account_ledgers:
             sewer_credits_applied += ledger.sewer_credits
             non_sewer_credits_applied += ledger.non_sewer_credits
-            if sewer_due > 0:
-                dues_sewer_cap_dev -= ((dues_sewer_cap_dev / sewer_due) * ledger.sewer_credits)
-                dues_sewer_trans_dev -= ((dues_sewer_trans_dev / sewer_due) * ledger.sewer_credits)
-            if non_sewer_due > 0:
-                dues_roads_dev -= ((dues_roads_dev / non_sewer_due) * ledger.non_sewer_credits)
-                dues_parks_dev -= ((dues_parks_dev / non_sewer_due) * ledger.non_sewer_credits)
-                dues_storm_dev -= ((dues_storm_dev / non_sewer_due) * ledger.non_sewer_credits)
-                dues_open_space_dev -= ((dues_open_space_dev / non_sewer_due) * ledger.non_sewer_credits)
-            sewer_due -= ledger.sewer_credits
-            non_sewer_due -= ledger.non_sewer_credits
+            dues_roads_dev -= ledger.roads
+            dues_sewer_trans_dev -= ledger.sewer_trans
+            dues_sewer_cap_dev -= ledger.sewer_cap
+            dues_parks_dev -= ledger.parks
+            dues_storm_dev -= ledger.storm
+            dues_open_space_dev -= ledger.open_space
+
 
     all_exactions = {
         'total_exactions': total_exactions,
@@ -97,8 +92,8 @@ def calculate_lot_balance(lot):
         'non_sewer_credits_applied': non_sewer_credits_applied,
 
         'current_exactions': total_exactions - sewer_payment - non_sewer_payment - sewer_credits_applied - non_sewer_credits_applied,
-        'sewer_due': sewer_due,
-        'non_sewer_due': non_sewer_due,
+        'sewer_due': sewer_exactions - sewer_payment - sewer_credits_applied,
+        'non_sewer_due': non_sewer_exactions - non_sewer_payment - non_sewer_credits_applied,
         'dues_roads_dev': dues_roads_dev,
         'dues_roads_own': dues_roads_own,
         'dues_sewer_trans_dev': dues_sewer_trans_dev,
