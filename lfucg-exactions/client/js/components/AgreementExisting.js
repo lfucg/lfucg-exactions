@@ -51,8 +51,8 @@ class AgreementExisting extends React.Component {
                                 </div>
                             </div>
                             <div className={agreement.is_approved ? 'row link-row' : 'row link-row-approval-pending'}>
-                                <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
-                                    <div className="col-xs-5">
+                                <div className="col-xs-9 pull-right">
+                                    <div className="col-xs-3">
                                         {currentUser && currentUser.permissions && currentUser.permissions.agreement &&
                                             <Link to={`agreement/form/${agreement.id}`} aria-label="Edit">
                                                 <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
@@ -62,7 +62,17 @@ class AgreementExisting extends React.Component {
                                             </Link>
                                         }
                                     </div>
-                                    <div className="col-xs-5 ">
+                                    <div className="col-xs-4">
+                                        {currentUser && currentUser.permissions && currentUser.permissions.agreement &&
+                                            <Link to={`agreement/report/${agreement.id}`} aria-label="Report">
+                                                <i className="fa fa-line-chart link-icon col-xs-4" aria-hidden="true" />
+                                                <div className="col-xs-7 link-label">
+                                                    Report
+                                                </div>
+                                            </Link>
+                                        }
+                                    </div>
+                                    <div className="col-xs-4 ">
                                         <Link to={`agreement/summary/${agreement.id}`} aria-label="Summary">
                                             <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
                                             <div className="col-xs-7 link-label">
