@@ -56,7 +56,7 @@ class AccountExisting extends React.Component {
                             </div>
                         </div>
                         <div className="row link-row">
-                            <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
+                            <div className="col-xs-9 pull-right">
                                 <div className="col-xs-3">
                                     {currentUser && currentUser.permissions && currentUser.permissions.account &&
                                         <Link to={`account/form/${account.id}`} aria-label="Edit">
