@@ -71,7 +71,7 @@ class PlatExisting extends React.Component {
                                 </div>
                             </div>
                             <div className={plat.is_approved ? 'row link-row' : 'row link-row-approval-pending'}>
-                                <div className="col-xs-12 col-sm-7 col-md-5 col-sm-offset-5 col-md-offset-7">
+                                <div className="col-xs-9 pull-right">
                                     <div className="col-xs-3">
                                         {currentUser && currentUser.permissions && currentUser.permissions.plat &&
                                             <Link to={`plat/form/${plat.id}`} aria-label="Edit">
