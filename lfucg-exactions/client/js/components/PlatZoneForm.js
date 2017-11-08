@@ -34,6 +34,7 @@ class PlatZoneForm extends React.Component {
             formChange,
             onPlatZoneSubmit,
             currentUser,
+            calculationWarning,
         } = this.props;
 
         const submitEnabled =
@@ -58,9 +59,9 @@ class PlatZoneForm extends React.Component {
                         <div className="row">
                             <div className="col-sm-6 form-group">
                                 <label htmlFor={this.props.zone_id} className="form-label">* Zone</label>
-                                <select className="form-control" id={this.props.zone_id} onChange={formChange('zone')} >
+                                <select className="form-control" id={this.props.zone_id} onChange={formChange('zone')} onFocus={() => this.props.zone_value ? calculationWarning(`${this.props.zone_id}_warning`) : null}>
                                     {this.props.zone_value ? (
-                                        <option value="zone_name" aria-label={this.props.zone_value}>{this.props.zone_value}</option>
+                                        <option value={[`${this.props.zone_value}`, `${this.props.zone_value}`]} aria-label={this.props.zone_value}>{this.props.zone_value}</option>
                                     ) : (
                                         <option value="start_zone" aria-label="Zone">Zone</option>
                                     )}
@@ -75,8 +76,13 @@ class PlatZoneForm extends React.Component {
                             </div>
                             <div className="col-sm-6">
                                 <FormGroup label="* Gross Acreage" id={this.props.acre_id}>
-                                    <input type="number" step="0.01" className="form-control" placeholder="Gross Acreage" />
+                                    <input type="number" step="0.01" className="form-control" placeholder="Gross Acreage" onFocus={() => this.props.zone_value ? calculationWarning(`${this.props.zone_id}_warning`) : null} />
                                 </FormGroup>
+                            </div>
+                        </div>
+                        <div className="row alert alert-danger hidden" id={`${this.props.zone_id}_warning`}>
+                            <div className="col-xs-8 col-xs-offset-2 text-center">
+                                Calculations for this plat were made based on the original zone.<br />Any changes made to the zone now will <strong>NOT</strong> result in new calculations being made.<br />Changes can be made manually in the form below.
                             </div>
                         </div>
                     </fieldset>
@@ -106,7 +112,7 @@ class PlatZoneForm extends React.Component {
 
 PlatZoneForm.propTypes = {
     activeForm: PropTypes.object,
-    plats: PropTypes.array,
+    plats: PropTypes.object,
     plat_zone_id: PropTypes.string,
     plat_zone_value: PropTypes.number,
     acre_id: PropTypes.string,
@@ -117,6 +123,7 @@ PlatZoneForm.propTypes = {
     formChange: PropTypes.func,
     onPlatZoneSubmit: PropTypes.func,
     currentUser: PropTypes.object,
+    calculationWarning: PropTypes.func,
 };
 
 function mapStateToProps(state) {
@@ -201,6 +208,11 @@ function mapDispatchToProps(dispatch, props) {
                     });
                 }
             };
+        },
+        calculationWarning(warning_id) {
+            console.log('hello world');
+            console.log(warning_id);
+            document.getElementById(warning_id).classList.remove('hidden');
         },
     };
 }
