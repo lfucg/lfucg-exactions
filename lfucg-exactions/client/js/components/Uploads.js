@@ -109,7 +109,7 @@ class Uploads extends React.Component {
 Uploads.propTypes = {
     currentUser: PropTypes.object,
     activeForm: PropTypes.object,
-    uploads: PropTypes.object,
+    uploads: PropTypes.array,
     onComponentDidMount: PropTypes.func,
     file_content_type: PropTypes.string,
     file_object_id: PropTypes.number,

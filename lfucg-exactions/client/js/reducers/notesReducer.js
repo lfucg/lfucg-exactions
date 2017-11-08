@@ -4,7 +4,7 @@ import {
     POST_NOTE,
 } from '../constants/apiConstants';
 
-const notesReducer = (state = {}, action) => {
+const notesReducer = (state = [], action) => {
     const {
         endpoint,
     } = action;
