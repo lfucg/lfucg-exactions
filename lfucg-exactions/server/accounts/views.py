@@ -38,7 +38,7 @@ class AccountCSVExportView(View):
             'Balance',
         ]
 
-        account_value = request.GET.get('account')
+        account_value = request.GET.get('account', None)
 
         if account_value is not None:
             account_queryset = Account.objects.filter(id=account_value).first()
@@ -216,7 +216,7 @@ class AgreementCSVExportView(View):
             'Account',
         ]
 
-        agreement_value = request.GET.get('agreement')
+        agreement_value = request.GET.get('agreement', None)
 
         if agreement_value is not None:
             agreement_queryset = Agreement.objects.filter(id=agreement_value).first()
