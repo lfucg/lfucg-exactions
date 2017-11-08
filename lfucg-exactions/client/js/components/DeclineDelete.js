@@ -58,7 +58,7 @@ DeclineDelete.propTypes = {
     onComponentDidMount: PropTypes.func,
     onDelete: PropTypes.func,
     currentForm: PropTypes.string,
-    selectedEntry: PropTypes.number,
+    selectedEntry: PropTypes.string,
     parentRoute: PropTypes.string,
 };
 
