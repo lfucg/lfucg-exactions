@@ -61,9 +61,11 @@ class AgreementSummary extends React.Component {
                             </div>
                         </div>
                         <div className="row">
-                            <p className="col-sm-4 col-xs-6">Total Paid: {payment.total_paid}</p>
-                            <p className="col-sm-4 col-xs-6">Payment Type: {payment.payment_type_display}</p>
-                            <p className="col-sm-4 col-xs-6">Paid By Type: {payment.paid_by_type_display}</p>
+                            <h3 className="col-xs-12">Payment Total: {payment.total_paid}</h3>
+                            <p className="col-xs-6">Paid Sewer: ${(parseFloat(payment.paid_sewer_cap) + parseFloat(payment.paid_sewer_trans)).toLocaleString('en')}</p>
+                            <p className="col-xs-6">Paid Non-Sewer: ${(parseFloat(payment.paid_open_space) + parseFloat(payment.paid_parks) + parseFloat(payment.paid_roads) + parseFloat(payment.paid_storm)).toLocaleString('en')}</p>
+                            <p className="col-xs-6">Agreement Resolution: {payment.credit_source && payment.credit_source.resolution_number}</p>
+                            <p className="col-xs-6">Payment Type: {payment.payment_type_display} {payment.check_number ? `(#${payment.check_number})` : null}</p>
                             <p className="col-xs-12">Lot: {payment.lot_id.address_full}</p>
                         </div>
                     </div>
