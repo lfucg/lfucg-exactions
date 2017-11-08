@@ -3,7 +3,7 @@ import {
     POST_UPLOAD,
 } from '../constants/apiConstants';
 
-const uploadReducer = (state = {}, action) => {
+const uploadReducer = (state = [], action) => {
     const {
         endpoint,
     } = action;
