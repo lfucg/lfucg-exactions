@@ -62,7 +62,7 @@ class ProjectCostSummary extends React.Component {
                             >
                                 <div className="panel-body">
                                     <div className="row link-row">
-                                        <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
+                                        <div className="col-xs-12 col-sm-5 col-sm-offset-7">
                                             <div className="col-xs-5 col-xs-offset-5">
                                                 {currentUser && currentUser.permissions && currentUser.permissions.projectcostestimate &&
                                                     <Link to={`project-cost/form/${projectCosts.id}`} aria-label="Edit">
@@ -76,15 +76,15 @@ class ProjectCostSummary extends React.Component {
                                         </div>
                                     </div>
                                     <div className="col-xs-12">
-                                        <p className="col-md-3 col-sm-4 col-xs-6">Estimate Type: {projectCosts.estimate_type}</p>
-                                        <p className="col-md-3 col-sm-4 col-xs-6">Total Costs: {projectCosts.total_costs}</p>
-                                        <p className="col-md-3 col-sm-4 col-xs-6 ">Credits Available: {projectCosts.dollar_values && projectCosts.dollar_values.credits_available}</p>
-                                        <p className="col-md-3 col-sm-4 col-xs-6">Land Cost: {projectCosts.dollar_values && projectCosts.dollar_values.land_cost}</p>
-                                        <p className="col-md-3 col-sm-4 col-xs-6">Design Cost: {projectCosts.dollar_values && projectCosts.dollar_values.design_cost}</p>
-                                        <p className="col-md-3 col-sm-4 col-xs-6">Construction Cost: {projectCosts.dollar_values && projectCosts.dollar_values.construction_cost}</p>
-                                        <p className="col-md-3 col-sm-4 col-xs-6">Administrative Cost: {projectCosts.dollar_values && projectCosts.dollar_values.admin_cost}</p>
-                                        <p className="col-md-3 col-sm-4 col-xs-6">Management Cost: {projectCosts.dollar_values && projectCosts.dollar_values.management_cost}</p>
-                                        <p className="col-md-3 col-sm-4 col-xs-6">Other Costs: {projectCosts.dollar_values && projectCosts.dollar_values.other_cost}</p>
+                                        <p className="col-xs-12">Estimate Type: {projectCosts.estimate_type}</p>
+                                        <p className="col-xs-6">Total Costs: {projectCosts.total_costs}</p>
+                                        <p className="col-xs-6">Credits Available: {projectCosts.dollar_values && projectCosts.dollar_values.credits_available}</p>
+                                        <p className="col-xs-6">Land Cost: {projectCosts.dollar_values && projectCosts.dollar_values.land_cost}</p>
+                                        <p className="col-xs-6">Design Cost: {projectCosts.dollar_values && projectCosts.dollar_values.design_cost}</p>
+                                        <p className="col-xs-6">Construction Cost: {projectCosts.dollar_values && projectCosts.dollar_values.construction_cost}</p>
+                                        <p className="col-xs-6">Administrative Cost: {projectCosts.dollar_values && projectCosts.dollar_values.admin_cost}</p>
+                                        <p className="col-xs-6">Management Cost: {projectCosts.dollar_values && projectCosts.dollar_values.management_cost}</p>
+                                        <p className="col-xs-6">Other Costs: {projectCosts.dollar_values && projectCosts.dollar_values.other_cost}</p>
                                     </div>
                                 </div>
                             </div>
@@ -113,7 +113,7 @@ class ProjectCostSummary extends React.Component {
                                 >
                                     <div className="panel-body">
                                         <div className="row link-row">
-                                            <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
+                                            <div className="col-xs-12 col-sm-5 col-sm-offset-7">
                                                 <div className="col-xs-5">
                                                     {currentUser && currentUser.permissions && currentUser.permissions.project &&
                                                         <Link to={`project/form/${projectCosts.project_id.id}`} aria-label="Edit">
@@ -135,9 +135,9 @@ class ProjectCostSummary extends React.Component {
                                             </div>
                                         </div>
                                         <div className="col-xs-12">
-                                            <p className="col-md-3 col-sm-4 col-xs-6">Project Name: {projectCosts.project_id.name}</p>
+                                            <p className="col-xs-12">Project Name: {projectCosts.project_id.name}</p>
                                             <p className="col-sm-4 col-xs-6">Project Category: {projectCosts.project_id.project_category_display}</p>
-                                            <p className="col-sm-4 col-xs-6">Project Type: {projectCosts.project_id.project_type_display}</p>
+                                            <p className="col-sm-8 col-xs-6">Project Type: {projectCosts.project_id.project_type_display}</p>
                                             <p className="col-sm-4 col-xs-6">Expansion Area: {projectCosts.project_id.expansion_area}</p>
                                             <p className="col-sm-4 col-xs-6 ">Project Status: {projectCosts.project_id.project_status_display}</p>
                                             <p className="col-sm-4 col-xs-6 ">Status Date: {projectCosts.project_id.status_date}</p>

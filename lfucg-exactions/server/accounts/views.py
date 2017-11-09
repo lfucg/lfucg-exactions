@@ -48,7 +48,6 @@ class AgreementCSVExportView(View):
             )
 
             for agreement in agreement_serializer.data:
-            # agreement = agreement_serializer.data
 
                 filename = agreement['resolution_number'] + '_agreement_report.csv'
                 response = HttpResponse(content_type='text/csv')

@@ -62,7 +62,7 @@ class AccountLedgerSummary extends React.Component {
                             >
                                 <div className="panel-body">
                                     <div className="row link-row">
-                                        <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
+                                        <div className="col-xs-12 col-sm-5 col-sm-offset-7">
                                             <div className="col-xs-5 col-xs-offset-5">
                                                 {currentUser && currentUser.permissions && currentUser.permissions.accountledger &&
                                                     <Link to={`credit-transfer/form/${accountLedgers.id}`} aria-label="Edit">
@@ -117,7 +117,7 @@ class AccountLedgerSummary extends React.Component {
                                     >
                                         <div className="panel-body">
                                             <div className="row link-row">
-                                                <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
+                                                <div className="col-xs-12 col-sm-5 col-sm-offset-7">
                                                     <div className="col-xs-5">
                                                         {currentUser && currentUser.permissions && currentUser.permissions.lot &&
                                                             <Link to={`lot/form/${accountLedgers.lot.id}`} aria-label="Edit">
@@ -178,7 +178,7 @@ class AccountLedgerSummary extends React.Component {
                                     >
                                         <div className="panel-body">
                                             <div className="row link-row">
-                                                <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
+                                                <div className="col-xs-12 col-sm-5 col-sm-offset-7">
                                                     <div className="col-xs-5">
                                                         {currentUser && currentUser.permissions && currentUser.permissions.account &&
                                                             <Link to={`account/form/${accountLedgers.account_from.id}`} aria-label="Edit">
@@ -200,13 +200,13 @@ class AccountLedgerSummary extends React.Component {
                                                 </div>
                                             </div>
                                             <div className="col-xs-12">
-                                                <p className="col-md-4 col-xs-6">Account From Name: {accountLedgers.account_from.account_name}</p>
-                                                <p className="col-md-4 col-xs-6">{accountLedgers.account_from.balance && accountLedgers.account_from.balance.credit_availability}</p>
+                                                <p className="col-xs-6">Account From Name: {accountLedgers.account_from.account_name}</p>
+                                                <p className="col-xs-6"><strong>{accountLedgers.account_from.balance && accountLedgers.account_from.balance.credit_availability}</strong></p>
                                                 {currentUser && currentUser.username && <div>
-                                                    <p className="col-md-4 col-xs-6">Account Balance: {accountLedgers.account_from.balance && accountLedgers.account_from.balance.balance}</p>
-                                                    <p className="col-md-4 col-xs-6">Account From Contact Name: {accountLedgers.account_from.contact_full_name}</p>
-                                                    <p className="col-md-4 col-xs-6 ">Account From Phone: {accountLedgers.account_from.phone}</p>
-                                                    <p className="col-md-4 col-xs-6">Account From Email: {accountLedgers.account_from.email}</p>
+                                                    <p className="col-xs-6">Account From Contact Name: {accountLedgers.account_from.contact_full_name}</p>
+                                                    <p className="col-xs-6">Account Balance: {accountLedgers.account_from.balance && accountLedgers.account_from.balance.balance}</p>
+                                                    <p className="col-xs-6 ">Account From Phone: {accountLedgers.account_from.phone}</p>
+                                                    <p className="col-xs-6">Account From Email: {accountLedgers.account_from.email}</p>
                                                     <p className="col-xs-12">Account From Address: {accountLedgers.account_from.address_full}</p>
                                                 </div>}
                                             </div>
@@ -244,7 +244,7 @@ class AccountLedgerSummary extends React.Component {
                                     >
                                         <div className="panel-body">
                                             <div className="row link-row">
-                                                <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
+                                                <div className="col-xs-12 col-sm-5 col-sm-offset-7">
                                                     <div className="col-xs-5">
                                                         {currentUser && currentUser.permissions && currentUser.permissions.account &&
                                                             <Link to={`account/form/${accountLedgers.account_to.id}`} aria-label="Edit">
@@ -266,13 +266,13 @@ class AccountLedgerSummary extends React.Component {
                                                 </div>
                                             </div>
                                             <div className="col-xs-12">
-                                                <p className="col-md-4 col-xs-6">Account To Name: {accountLedgers.account_to.account_name}</p>
-                                                <p className="col-md-4 col-xs-6">{accountLedgers.account_to.balance && accountLedgers.account_to.balance.credit_availability}</p>
+                                                <p className="col-xs-6">Account To Name: {accountLedgers.account_to.account_name}</p>
+                                                <p className="col-xs-6"><strong>{accountLedgers.account_to.balance && accountLedgers.account_to.balance.credit_availability}</strong></p>
                                                 {currentUser && currentUser.username && <div>
-                                                    <p className="col-md-4 col-xs-6">Account Balance: {accountLedgers.account_to.balance && accountLedgers.account_to.balance.balance}</p>
-                                                    <p className="col-md-4 col-xs-6">Account To Contact Name: {accountLedgers.account_to.contact_full_name}</p>
-                                                    <p className="col-md-4 col-xs-6 ">Account To Phone: {accountLedgers.account_to.phone}</p>
-                                                    <p className="col-md-4 col-xs-6">Account To Email: {accountLedgers.account_to.email}</p>
+                                                    <p className="col-xs-6">Account To Contact Name: {accountLedgers.account_to.contact_full_name}</p>
+                                                    <p className="col-xs-6">Account Balance: {accountLedgers.account_to.balance && accountLedgers.account_to.balance.balance}</p>
+                                                    <p className="col-xs-6 ">Account To Phone: {accountLedgers.account_to.phone}</p>
+                                                    <p className="col-xs-6">Account To Email: {accountLedgers.account_to.email}</p>
                                                     <p className="col-xs-12">Account To Address: {accountLedgers.account_to.address_full}</p>
                                                 </div>}
                                             </div>
@@ -310,7 +310,7 @@ class AccountLedgerSummary extends React.Component {
                                     >
                                         <div className="panel-body">
                                             <div className="row link-row">
-                                                <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
+                                                <div className="col-xs-12 col-sm-5 col-sm-offset-7">
                                                     <div className="col-xs-5">
                                                         {currentUser && currentUser.permissions && currentUser.permissions.agreement &&
                                                             <Link to={`agreement/form/${accountLedgers.agreement.id}`} aria-label="Edit">
@@ -332,11 +332,11 @@ class AccountLedgerSummary extends React.Component {
                                                 </div>
                                             </div>
                                             <div className="col-xs-12">
-                                                <p className="col-md-4 col-xs-6">Current Balance: {accountLedgers.agreement.agreement_balance && accountLedgers.agreement.agreement_balance.total}</p>
-                                                <p className="col-md-4 col-xs-6">Resolution Number: {accountLedgers.agreement.resolution_number}</p>
-                                                <p className="col-md-4 col-xs-6">Expansion Area: {accountLedgers.agreement.expansion_area}</p>
-                                                <p className="col-md-4 col-xs-6">Agreement Type: {accountLedgers.agreement.agreement_type_display}</p>
-                                                <p className="col-md-4 col-xs-6">Date Executed: {accountLedgers.agreement.date_executed}</p>
+                                                <p className="col-xs-6">Current Balance: {accountLedgers.agreement.agreement_balance && accountLedgers.agreement.agreement_balance.total}</p>
+                                                <p className="col-xs-6">Resolution Number: {accountLedgers.agreement.resolution_number}</p>
+                                                <p className="col-xs-6">Expansion Area: {accountLedgers.agreement.expansion_area}</p>
+                                                <p className="col-xs-6">Agreement Type: {accountLedgers.agreement.agreement_type_display}</p>
+                                                <p className="col-xs-6">Date Executed: {accountLedgers.agreement.date_executed}</p>
                                             </div>
                                         </div>
                                     </div>
