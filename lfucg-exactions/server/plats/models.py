@@ -193,7 +193,6 @@ class Lot(models.Model):
 
     def save(self, *args, **kwargs):
         plat = Plat.objects.get(id=self.plat.id)
-
         try:
             existing_lot = Lot.objects.get(id=self.id)
             if existing_lot is not None:
@@ -278,27 +277,29 @@ class PlatZone(models.Model):
             self.dues_parks == 0 and
             self.dues_storm_water == 0
         ):
-            road_rate = Rate.objects.get(expansion_area=self.plat.expansion_area, zone=self.zone, category='ROADS')
+            current_rate_table = RateTable.objects.filter(is_active=True).first()
+
+            road_rate = Rate.objects.get(expansion_area=self.plat.expansion_area, zone=self.zone, category='ROADS', rate_table_id=current_rate_table.id)
             if road_rate is not None:
                 self.dues_roads = (self.acres * road_rate.rate)
 
-            open_space_rate = Rate.objects.get(expansion_area=self.plat.expansion_area, zone=self.zone, category='OPEN_SPACE')
+            open_space_rate = Rate.objects.get(expansion_area=self.plat.expansion_area, zone=self.zone, category='OPEN_SPACE', rate_table_id=current_rate_table.id)
             if open_space_rate is not None:
                 self.dues_open_spaces = (self.acres * open_space_rate.rate)
 
-            sewer_cap_rate = Rate.objects.get(expansion_area=self.plat.expansion_area, zone=self.zone, category='SEWER_CAP')
+            sewer_cap_rate = Rate.objects.get(expansion_area=self.plat.expansion_area, zone=self.zone, category='SEWER_CAP', rate_table_id=current_rate_table.id)
             if sewer_cap_rate is not None:
                 self.dues_sewer_cap = (self.acres * sewer_cap_rate.rate)
 
-            sewer_trans_rate = Rate.objects.get(expansion_area=self.plat.expansion_area, zone=self.zone, category='SEWER_TRANS')
+            sewer_trans_rate = Rate.objects.get(expansion_area=self.plat.expansion_area, zone=self.zone, category='SEWER_TRANS', rate_table_id=current_rate_table.id)
             if sewer_trans_rate is not None:
                 self.dues_sewer_trans = (self.acres * sewer_trans_rate.rate)
 
-            parks_rate = Rate.objects.get(expansion_area=self.plat.expansion_area, zone=self.zone, category='PARK')
+            parks_rate = Rate.objects.get(expansion_area=self.plat.expansion_area, zone=self.zone, category='PARK', rate_table_id=current_rate_table.id)
             if parks_rate is not None:
                 self.dues_parks = (self.acres * parks_rate.rate)
 
-            storm_water_rate = Rate.objects.get(expansion_area=self.plat.expansion_area, zone=self.zone, category='STORM_WATER')
+            storm_water_rate = Rate.objects.get(expansion_area=self.plat.expansion_area, zone=self.zone, category='STORM_WATER', rate_table_id=current_rate_table.id)
             if storm_water_rate is not None:
                 self.dues_storm_water = (self.acres * storm_water_rate.rate)
 
