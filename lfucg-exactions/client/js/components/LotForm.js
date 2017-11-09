@@ -59,9 +59,11 @@ class LotForm extends React.Component {
 
         const platsList = plats && plats.length > 0 &&
             (map((single_plat) => {
+                const cabinet = single_plat.cabinet ? `${single_plat.cabinet}-` : '';
+                const slide = single_plat.slide ? single_plat.slide : single_plat.name;
                 return (
                     <option key={single_plat.id} value={[single_plat.id, single_plat.name]} >
-                        {single_plat.name}
+                        {cabinet}{slide}
                     </option>
                 );
             })(plats));
@@ -237,13 +239,27 @@ class LotForm extends React.Component {
                                                 </div>
                                                 <div className="col-sm-6">
                                                     <FormGroup label="Permit ID" id="permit_id">
-                                                        <input type="text" className="form-control" placeholder="Permit ID" onFocus={showExactions} onBlur={hideExactions}/>
+                                                        <input type="text" className="form-control" placeholder="Permit ID" onFocus={showExactions} onBlur={hideExactions} />
                                                     </FormGroup>
+                                                </div>
+                                            </div>
+                                            <div className="row">
+                                                <div className="col-sm-6">
+                                                    <FormGroup label="Certificate of Occupancy" id="certificate_of_occupancy">
+                                                        <input type="date" className="form-control" placeholder="Certificate of Occupancy" onFocus={showExactions} onBlur={hideExactions} />
+                                                    </FormGroup>
+                                                </div>
+                                            </div>
+                                            <div className="row">
+                                                <div className="col-xs-12">
+                                                    {activeForm.show_exactions && currentLot && currentLot.lot_exactions && currentLot.lot_exactions.current_exactions_number > 0 &&
+                                                        <h3 className="help-block alert alert-danger text-center">&nbsp;There are still {currentLot.lot_exactions.current_exactions} in exactions due on this lot.</h3>
+                                                    }
                                                 </div>
                                             </div>
                                         </fieldset>
                                         <div className="row">
-                                            <div className="col-sm-4 col-xs-6">
+                                            <div className="col-xs-6 text-center">
                                                 <button disabled={!submitEnabled} className="btn btn-lex" onClick={onLotSubmit} >
                                                     {currentUser.is_superuser || (currentUser.profile && currentUser.profile.is_supervisor) ? <div>Submit / Approve</div> : <div>Submit</div>}
                                                 </button>
@@ -255,12 +271,7 @@ class LotForm extends React.Component {
                                                 ) : null
                                                 }
                                             </div>
-                                            <div className="col-sm-4 col-xs-6">
-                                                {activeForm.show_exactions && currentLot.lot_exactions && currentLot.lot_exactions.current_exactions_number > 0 &&
-                                                    <h3 className="help-block alert alert-danger">&nbsp;There are still {currentLot.lot_exactions.current_exactions} in exactions due on this lot.</h3>
-                                                }
-                                            </div>
-                                            <div className="col-sm-4 col-xs-6">
+                                            <div className="col-xs-6 text-center">
                                                 <DeclineDelete currentForm="/lot/" selectedEntry={selectedLot} parentRoute="lot" />
                                             </div>
                                         </div>
@@ -435,7 +446,7 @@ class LotForm extends React.Component {
                                                         </div>
                                                     </div>
                                                 </fieldset>
-                                                <div className="col-xs-8">
+                                                <div className="col-xs-6 text-center">
                                                     <button disabled={!submitEnabled} className="btn btn-lex" onClick={onLotDues} >Submit</button>
                                                     {!submitEnabled ? (
                                                         <div>
@@ -445,7 +456,7 @@ class LotForm extends React.Component {
                                                     ) : null
                                                     }
                                                 </div>
-                                                <div className="col-xs-4">
+                                                <div className="col-xs-6 text-center">
                                                     <DeclineDelete currentForm="/lot/" selectedEntry={selectedLot} parentRoute="lot" />
                                                 </div>
                                             </form>
@@ -535,6 +546,7 @@ function mapDispatchToProps(dispatch, params) {
                         lot_number: data_lot.response.lot_number,
                         parcel_id: data_lot.response.parcel_id,
                         permit_id: data_lot.response.permit_id,
+                        certificate_of_occupancy: data_lot.response.certificate_of_occupancy,
                         latitude: data_lot.response.latitude,
                         longitude: data_lot.response.longitude,
                         dues_roads_dev: data_lot.response.dues_roads_dev,
