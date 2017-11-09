@@ -368,8 +368,8 @@ class LotSummary extends React.Component {
                                                 <p className="col-md-4 col-xs-6">Slide: {currentLot.plat.slide}</p>
                                                 <p className="col-md-4 col-xs-6">Buildable Lots: {currentLot.plat.buildable_lots}</p>
                                                 <p className="col-md-4 col-xs-6">Non-Buildable Lots: {currentLot.plat.non_buildable_lots}</p>
-                                                <p className="col-md-4 col-xs-6">Sewer Exactions: {currentLot.plat.plat_exactions && currentLot.plat.plat_exactions.plat_sewer_due}</p>
-                                                <p className="col-md-4 col-xs-6">Non-Sewer Exactions: {currentLot.plat.plat_exactions && currentLot.plat.plat_exactions.plat_non_sewer_due}</p>
+                                                <p className="col-md-4 col-xs-6">Sewer Exactions: {plats && plats.plat_exactions && plats.plat_exactions.plat_sewer_due}</p>
+                                                <p className="col-md-4 col-xs-6">Non-Sewer Exactions: {plats && plats.plat_exactions && plats.plat_exactions.plat_non_sewer_due}</p>
                                             </div>
                                         </div>
                                     </div>
@@ -564,6 +564,7 @@ function mapDispatchToProps(dispatch, params) {
             dispatch(getLots());
             dispatch(getLotID(selectedLot))
             .then((lot_data) => {
+                dispatch(getPlatID(lot_data.response.plat.id));
                 if (lot_data.response.account) {
                     dispatch(getAccountID(lot_data.response.account));
                 }
