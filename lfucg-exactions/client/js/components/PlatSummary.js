@@ -124,7 +124,7 @@ class PlatSummary extends React.Component {
 
                 <div className="form-header">
                     <div className="container">
-                        <h1>PLATS - {plats.name}</h1>
+                        <h1>PLATS - {plats.cabinet}-{plats.slide}</h1>
                     </div>
                 </div>
 
@@ -156,7 +156,7 @@ class PlatSummary extends React.Component {
                             >
                                 <div className="panel-body">
                                     <div className="row link-row">
-                                        <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
+                                        <div className="col-xs-12 col-sm-5 col-sm-offset-7">
                                             <div className="col-xs-5 col-xs-offset-5">
                                                 {currentUser && currentUser.permissions && currentUser.permissions.plat &&
                                                     <Link to={`plat/form/${plats.id}`} aria-label="Edit">
@@ -170,20 +170,20 @@ class PlatSummary extends React.Component {
                                         </div>
                                     </div>
                                     <div className="col-xs-12">
-                                        <p className="col-md-3 col-sm-4 col-xs-6">Plat Name: {plats.name}</p>
-                                        <p className="col-md-3 col-sm-4 col-xs-6">Plat Type: {plats.plat_type_display}</p>
-                                        <p className="col-md-3 col-sm-4 col-xs-6">Subdivision: {plats.subdivision ? plats.subdivision.name : null}</p>
-                                        <p className="col-md-3 col-sm-4 col-xs-6">Approval: {plats.is_approved ? 'Approved' : 'Not Approved'}</p>
-                                        <p className="col-md-3 col-sm-4 col-xs-6">Expansion Area: {plats.expansion_area}</p>
-                                        <p className="col-md-3 col-sm-4 col-xs-6">Unit: {plats.unit}</p>
-                                        <p className="col-md-3 col-sm-4 col-xs-6">Section: {plats.section}</p>
-                                        <p className="col-md-3 col-sm-4 col-xs-6">Block: {plats.block}</p>
-                                        <p className="col-md-3 col-sm-4 col-xs-6">Cabinet: {plats.cabinet}</p>
-                                        <p className="col-md-3 col-sm-4 col-xs-6">Slide: {plats.slide}</p>
-                                        <p className="col-md-3 col-sm-4 col-xs-6">Buildable Lots: {plats.buildable_lots}</p>
-                                        <p className="col-md-3 col-sm-4 col-xs-6">Non-Buildable Lots: {plats.non_buildable_lots}</p>
-                                        <p className="col-sm-4 col-xs-6">Current Sewer Due: {plats.plat_exactions && plats.plat_exactions.plat_sewer_due}</p>
-                                        <p className="col-sm-4 col-xs-6">Current Non-Sewer Due: {plats.plat_exactions && plats.plat_exactions.plat_non_sewer_due}</p>
+                                        <h3 className="col-xs-6">Plat: {plats.cabinet}-{plats.slide}</h3>
+                                        <h3 className="col-xs-6">{plats.is_approved ? 'Approved' : 'Not Approved'}</h3>
+                                        <p className="col-xs-6">Name: {plats.name}</p>
+                                        <p className="col-xs-6">Subdivision: {plats.subdivision ? plats.subdivision.name : null}</p>
+                                        <p className="col-xs-6">Plat Type: {plats.plat_type_display}</p>
+                                        <p className="col-xs-6">Expansion Area: {plats.expansion_area}</p>
+                                        <p className="col-xs-6">Gross Acreage: {plats.cleaned_total_acreage}</p>
+                                        <p className="col-xs-6">Unit: {plats.unit}</p>
+                                        <p className="col-xs-6">Section: {plats.section}</p>
+                                        <p className="col-xs-6">Block: {plats.block}</p>
+                                        <p className="col-xs-6">Buildable Lots: {plats.buildable_lots}</p>
+                                        <p className="col-xs-6">Non-Buildable Lots: {plats.non_buildable_lots}</p>
+                                        <p className="col-xs-6">Current Sewer Due: {plats.plat_exactions && plats.plat_exactions.plat_sewer_due}</p>
+                                        <p className="col-xs-6">Current Non-Sewer Due: {plats.plat_exactions && plats.plat_exactions.plat_non_sewer_due}</p>
                                         <p className="col-xs-12">Calculation Note: {plats.calculation_note}</p>
                                     </div>
                                 </div>
@@ -213,7 +213,7 @@ class PlatSummary extends React.Component {
                                 >
                                     <div className="panel-body">
                                         <div className="row link-row">
-                                            <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
+                                            <div className="col-xs-12 col-sm-5 col-sm-offset-7">
                                                 <div className="col-xs-5 col-xs-offset-5">
                                                     {currentUser && currentUser.permissions && currentUser.permissions.plat &&
                                                         <Link to={`plat/form/${plats.id}`} aria-label="Edit">
@@ -260,7 +260,7 @@ class PlatSummary extends React.Component {
                                     >
                                         <div className="panel-body">
                                             <div className="row link-row">
-                                                <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
+                                                <div className="col-xs-12 col-sm-5 col-sm-offset-7">
                                                     <div className="col-xs-5 col-xs-offset-5">
                                                         {currentUser && currentUser.permissions && currentUser.permissions.plat &&
                                                             <Link to={`plat/form/${plats.id}`} aria-label="Edit">
@@ -292,7 +292,7 @@ class PlatSummary extends React.Component {
                                                             <p>Sewer Capacity</p>
                                                         </div>
                                                         <div className="col-xs-12 table-border">
-                                                            <p>Sewer Transmmission</p>
+                                                            <p>Sewer Trans.</p>
                                                         </div>
                                                         <div className="col-xs-12 table-border">
                                                             <p>Parks</p>
@@ -310,10 +310,10 @@ class PlatSummary extends React.Component {
                                                         <h3>Plat Exactions</h3>
                                                     </div>
                                                     <div className="row">
-                                                        <div className="col-sm-offset-2 col-sm-5">
+                                                        <div className="col-xs-6 text-center">
                                                             <p>Sewer Dues: {plats.plat_exactions && plats.plat_exactions.plat_sewer_due}</p>
                                                         </div>
-                                                        <div className="col-sm-5">
+                                                        <div className="col-xs-6 text-center">
                                                             <p>Non-Sewer Dues: {plats.plat_exactions && plats.plat_exactions.plat_non_sewer_due}</p>
                                                         </div>
                                                     </div>
@@ -398,7 +398,7 @@ class PlatSummary extends React.Component {
                                     >
                                         <div className="panel-body">
                                             <div className="row link-row">
-                                                <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
+                                                <div className="col-xs-12 col-sm-5 col-sm-offset-7">
                                                     <div className="col-xs-5">
                                                         {currentUser && currentUser.permissions && currentUser.permissions.account &&
                                                             <Link to={`account/form/${accounts.id}`} aria-label="Edit">
@@ -420,14 +420,14 @@ class PlatSummary extends React.Component {
                                                 </div>
                                             </div>
                                             <div className="col-xs-12">
-                                                <p className="col-md-4 col-xs-6">Developer Account Name: {accounts.account_name}</p>
-                                                <p className="col-md-4 col-xs-6">{accounts.balance && accounts.balance.credit_availability}</p>
+                                                <p className="col-xs-6">Developer Account Name: {accounts.account_name}</p>
+                                                <p className="col-xs-6"><strong>{accounts.balance && accounts.balance.credit_availability}</strong></p>
                                                 {currentUser && currentUser.username &&
                                                     <div>
-                                                        <p className="col-md-4 col-xs-6">Account Balance: {accounts.balance && accounts.balance.balance}</p>
-                                                        <p className="col-md-4 col-xs-6">Contact Name: {accounts.contact_full_name}</p>
-                                                        <p className="col-md-4 col-xs-6 ">Phone: {accounts.phone}</p>
-                                                        <p className="col-md-4 col-xs-6">Email: {accounts.email}</p>
+                                                        <p className="col-xs-6">Contact Name: {accounts.contact_full_name}</p>
+                                                        <p className="col-xs-6">Account Balance: {accounts.balance && accounts.balance.balance}</p>
+                                                        <p className="col-xs-6 ">Phone: {accounts.phone}</p>
+                                                        <p className="col-xs-6">Email: {accounts.email}</p>
                                                         <p className="col-xs-12">Address: {accounts.address_full}</p>
                                                     </div>
                                                 }

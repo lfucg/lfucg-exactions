@@ -39,7 +39,7 @@ class AgreementSummary extends React.Component {
                             <h3>Account: {payment.credit_account.account_name}</h3>
                         </div>
                         <div className="row link-row">
-                            <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
+                            <div className="col-xs-12 col-sm-5 col-sm-offset-7">
                                 <div className="col-xs-5">
                                     {currentUser && currentUser.permissions && currentUser.permissions.payment &&
                                         <Link to={`payment/form/${payment.id}`} aria-label="Edit">
@@ -61,9 +61,11 @@ class AgreementSummary extends React.Component {
                             </div>
                         </div>
                         <div className="row">
-                            <p className="col-md-3 col-sm-4 col-xs-6">Total Paid: {payment.total_paid}</p>
-                            <p className="col-md-3 col-sm-4 col-xs-6">Payment Type: {payment.payment_type_display}</p>
-                            <p className="col-md-3 col-sm-4 col-xs-6">Paid By Type: {payment.paid_by_type_display}</p>
+                            <h3 className="col-xs-12">Payment Total: {payment.total_paid}</h3>
+                            <p className="col-xs-6">Paid Sewer: ${(parseFloat(payment.paid_sewer_cap) + parseFloat(payment.paid_sewer_trans)).toLocaleString('en')}</p>
+                            <p className="col-xs-6">Paid Non-Sewer: ${(parseFloat(payment.paid_open_space) + parseFloat(payment.paid_parks) + parseFloat(payment.paid_roads) + parseFloat(payment.paid_storm)).toLocaleString('en')}</p>
+                            <p className="col-xs-6">Agreement Resolution: {payment.credit_source && payment.credit_source.resolution_number}</p>
+                            <p className="col-xs-6">Payment Type: {payment.payment_type_display} {payment.check_number ? `(#${payment.check_number})` : null}</p>
                             <p className="col-xs-12">Lot: {payment.lot_id.address_full}</p>
                         </div>
                     </div>
@@ -78,7 +80,7 @@ class AgreementSummary extends React.Component {
                             <h3>{project.name}</h3>
                         </div>
                         <div className="row link-row">
-                            <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
+                            <div className="col-xs-12 col-sm-5 col-sm-offset-7">
                                 <div className="col-xs-5">
                                     {currentUser && currentUser.permissions && currentUser.permissions.project &&
                                         <Link to={`project/form/${project.id}`} aria-label="Edit">
@@ -100,11 +102,11 @@ class AgreementSummary extends React.Component {
                             </div>
                         </div>
                         <div className="row">
-                            <p className="col-md-3 col-sm-4 col-xs-6">Project Category: {project.project_category}</p>
-                            <p className="col-md-3 col-sm-4 col-xs-6">Expansion Area: {project.expansion_area}</p>
-                            <p className="col-md-3 col-sm-4 col-xs-6">Project Type: {project.project_type_display}</p>
-                            <p className="col-md-3 col-sm-4 col-xs-6">Project Status: {project.project_status_display}</p>
-                            <p className="col-md-3 col-sm-4 col-xs-6">Status Date: {project.status_date}</p>
+                            <p className="col-sm-4 col-xs-6">Project Category: {project.project_category}</p>
+                            <p className="col-sm-4 col-xs-6">Expansion Area: {project.expansion_area}</p>
+                            <p className="col-sm-4 col-xs-6">Project Type: {project.project_type_display}</p>
+                            <p className="col-sm-4 col-xs-6">Project Status: {project.project_status_display}</p>
+                            <p className="col-sm-4 col-xs-6">Status Date: {project.status_date}</p>
                             <p className="col-xs-12">Project Description: {project.project_description}</p>
                         </div>
                     </div>
@@ -119,7 +121,7 @@ class AgreementSummary extends React.Component {
                             <h3>{accountLedger.entry_date}</h3>
                         </div>
                         <div className="row link-row">
-                            <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
+                            <div className="col-xs-12 col-sm-5 col-sm-offset-7">
                                 <div className="col-xs-5">
                                     {currentUser && currentUser.permissions && currentUser.permissions.accountledger &&
                                         <Link to={`credit-transfer/form/${accountLedger.id}`} aria-label="Edit">
@@ -141,18 +143,22 @@ class AgreementSummary extends React.Component {
                             </div>
                         </div>
                         <div className="row">
+                            { accountLedger.lot ? (
+                                <div>
+                                    <p className="col-xs-6">Entry Type: {accountLedger.entry_type_display}</p>
+                                    <p className="col-xs-6">Lot: {accountLedger.lot.address_full}</p>
+                                </div>
+                                ) : (<p className="col-xs-12">Entry Type: {accountLedger.entry_type_display}</p>)
+                            }
+
                             { accountLedger.account_from &&
-                                <p className="col-md-3 col-sm-4 col-xs-6">Account From: {accountLedger.account_from.account_name}</p>
+                                <p className="col-xs-6">Account From: {accountLedger.account_from.account_name}</p>
                             }
+                            <p className="col-xs-6">Non-Sewer Credits: {accountLedger.non_sewer_credits}</p>
                             { accountLedger.account_to &&
-                                <p className="col-md-3 col-sm-4 col-xs-6">Account To: {accountLedger.account_to.account_name}</p>
+                                <p className="col-xs-6">Account To: {accountLedger.account_to.account_name}</p>
                             }
-                            { accountLedger.lot &&
-                                <p className="col-xs-12">Lot: {accountLedger.lot.address_full}</p>
-                            }
-                            <p className="col-md-3 col-sm-4 col-xs-6">Entry Type: {accountLedger.entry_type_display}</p>
-                            <p className="col-md-3 col-sm-4 col-xs-6">Non-Sewer Credits: {accountLedger.non_sewer_credits}</p>
-                            <p className="col-md-3 col-sm-4 col-xs-6">Sewer Credits: {accountLedger.sewer_credits}</p>
+                            <p className="col-xs-6">Sewer Credits: {accountLedger.sewer_credits}</p>
                         </div>
                     </div>
                 );
@@ -196,7 +202,7 @@ class AgreementSummary extends React.Component {
                             >
                                 <div className="panel-body">
                                     <div className="row link-row">
-                                        <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
+                                        <div className="col-xs-12 col-sm-5 col-sm-offset-7">
                                             <div className="col-xs-5">
                                                 {currentUser && currentUser.permissions && currentUser.permissions.agreement &&
                                                     <Link to={`agreement/form/${agreements.id}`} aria-label="Edit">
@@ -210,11 +216,11 @@ class AgreementSummary extends React.Component {
                                         </div>
                                     </div>
                                     <div className="col-xs-12">
-                                        <p className="col-md-4 col-xs-6">Current Balance: {agreements.agreement_balance && agreements.agreement_balance.total}</p>
-                                        <p className="col-md-4 col-xs-6">Resolution Number: {agreements.resolution_number}</p>
-                                        <p className="col-md-4 col-xs-6">Expansion Area: {agreements.expansion_area}</p>
-                                        <p className="col-md-4 col-xs-6">Agreement Type: {agreements.agreement_type_display}</p>
-                                        <p className="col-md-4 col-xs-6">Date Executed: {agreements.date_executed}</p>
+                                        <p className="col-xs-6">Resolution Number: {agreements.resolution_number}</p>
+                                        <p className="col-xs-6">Current Balance: {agreements.agreement_balance && agreements.agreement_balance.total}</p>
+                                        <p className="col-xs-6">Agreement Type: {agreements.agreement_type_display}</p>
+                                        <p className="col-xs-6">Expansion Area: {agreements.expansion_area}</p>
+                                        <p className="col-xs-6">Date Executed: {agreements.date_executed}</p>
                                     </div>
                                 </div>
                             </div>
@@ -253,7 +259,7 @@ class AgreementSummary extends React.Component {
                                     >
                                         <div className="panel-body">
                                             <div className="row link-row">
-                                                <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
+                                                <div className="col-xs-12 col-sm-5 col-sm-offset-7">
                                                     <div className="col-xs-5">
                                                         {currentUser && currentUser.permissions && currentUser.permissions.account &&
                                                             <Link to={`account/form/${agreements.account_id.id}`} aria-label="Edit">
@@ -275,14 +281,14 @@ class AgreementSummary extends React.Component {
                                                 </div>
                                             </div>
                                             <div className="col-xs-12">
-                                                <p className="col-md-4 col-xs-6">Developer Account Name: {agreements.account_id.account_name}</p>
-                                                <p className="col-md-4 col-xs-6">{agreements.account_id.balance && agreements.account_id.balance.credit_availability}</p>
+                                                <p className="col-xs-6">Developer Account Name: {agreements.account_id.account_name}</p>
+                                                <p className="col-xs-6"><strong>{agreements.account_id.balance && agreements.account_id.balance.credit_availability}</strong></p>
                                                 {currentUser && currentUser.username &&
                                                     <div>
-                                                        <p className="col-md-4 col-xs-6">Account Balance: {agreements.account_id.balance && agreements.account_id.balance.balance}</p>
-                                                        <p className="col-md-4 col-xs-6">Contact Name: {agreements.account_id.contact_full_name}</p>
-                                                        <p className="col-md-4 col-xs-6 ">Phone: {agreements.account_id.phone}</p>
-                                                        <p className="col-md-4 col-xs-6">Email: {agreements.account_id.email}</p>
+                                                        <p className="col-xs-6">Contact Name: {agreements.account_id.contact_full_name}</p>
+                                                        <p className="col-xs-6">Account Balance: {agreements.account_id.balance && agreements.account_id.balance.balance}</p>
+                                                        <p className="col-xs-6 ">Phone: {agreements.account_id.phone}</p>
+                                                        <p className="col-xs-6">Email: {agreements.account_id.email}</p>
                                                         <p className="col-xs-12">Address: {agreements.account_id.address_full}</p>
                                                     </div>}
                                             </div>

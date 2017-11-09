@@ -50,7 +50,7 @@ class ProjectCostExisting extends React.Component {
                                 </div>
                             </div>
                             <div className={projectCost.is_approved ? 'row link-row' : 'row link-row-approval-pending'}>
-                                <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
+                                <div className="col-xs-12 col-sm-5 col-sm-offset-7">
                                     <div className="col-xs-5">
                                         {currentUser && currentUser.permissions && currentUser.permissions.projectcostestimate &&
                                             <Link to={`project-cost/form/${projectCost.id}`} aria-label="Edit">
@@ -73,9 +73,9 @@ class ProjectCostExisting extends React.Component {
                             </div>
                             <div className="row">
                                 <div className="col-sm-offset-1">
-                                    <p className="col-md-4 col-xs-6">Project: {projectCost.project_id.name}</p>
-                                    <p className="col-md-4 col-xs-6">Total Costs: {projectCost.total_costs}</p>
-                                    <p className="col-md-4 col-xs-6 ">Credits Available: {projectCost.dollar_values && projectCost.dollar_values.credits_available}</p>
+                                    <p className="col-xs-12">Project: {projectCost.project_id.name}</p>
+                                    <p className="col-xs-6">Total Costs: {projectCost.total_costs}</p>
+                                    <p className="col-xs-6 ">Credits Available: {projectCost.dollar_values && projectCost.dollar_values.credits_available}</p>
                                 </div>
                             </div>
                         </div>}
