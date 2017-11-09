@@ -34,6 +34,7 @@ import AccountForm from './components/AccountForm';
 import AgreementExisting from './components/AgreementExisting';
 import AgreementSummary from './components/AgreementSummary';
 import AgreementForm from './components/AgreementForm';
+import AgreementReport from './components/AgreementReport';
 
 import PaymentExisting from './components/PaymentExisting';
 import PaymentSummary from './components/PaymentSummary';
@@ -98,6 +99,7 @@ ReactDOM.render(
             <Route path="agreement/summary/:id" component={AgreementSummary} name="Agreement Summary" />
             <Route path="agreement/form" component={AgreementForm} name="Agreement Form" />
             <Route path="agreement/form/:id" component={AgreementForm} name="Current Agreement Form" />
+            <Route path="agreement/report/:id" component={AgreementReport} name="Agreement Report" />
 
             <Route path="payment" component={PaymentExisting} name="Existing Payments" />
             <Route path="payment/summary/:id" component={PaymentSummary} name="Payment Summary" />
