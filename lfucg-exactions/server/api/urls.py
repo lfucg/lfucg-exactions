@@ -7,7 +7,7 @@ from plats.viewsets import *
 from plats.views import PlatCSVExportView, LotSearchCSVExportView
 from notes.viewsets import *
 from accounts.viewsets import *
-from accounts.views import CurrentUserDetails
+from accounts.views import CurrentUserDetails, TransactionCSVExportView
 
 router = routers.DefaultRouter()
 
@@ -43,6 +43,7 @@ urlpatterns = [
     url(r'^upload/create/$', FileUploadCreate.as_view(), name="document-upload"),
     url(r'^export_plat_csv/$', PlatCSVExportView.as_view()),
     url(r'^lot_search_csv/$', LotSearchCSVExportView.as_view()),
+    url(r'^transactions_csv/$', TransactionCSVExportView.as_view()),
     url(r'^reset/(?P<uidb36>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$', auth_views.password_reset_confirm, name='password_reset_confirm'),
     url(r'^', include(router.urls)),
 ]
