@@ -7,13 +7,24 @@ from django.db.models import Count, Max, Q
 from .models import *
 from .serializers import *
 from accounts.models import *
+from accounts.serializers import PaymentSerializer, AccountLedgerSerializer
 from .utils import calculate_lot_balance
 from .serializers import *
 
 class PlatCSVExportView(View):
-     def get(self, request, *args, **kwargs):
-        headers = ['Subdivision',
-            'Developer Account',
+    def get_serializer_class(self, serializer_class):
+        return serializer_class
+
+    def list(self, queryset, serializer_class, many):
+        serializer_class = self.get_serializer_class(serializer_class)
+        serializer = serializer_class(queryset, many=many)
+        return serializer
+
+    def get(self, request, *args, **kwargs):
+        headers = [
+            'Subdivision',
+            'Cabinet',
+            'Slide',
             'Total Acreage',
             'Buildable Lots',
             'Non-Buildable Lots',
@@ -22,163 +33,292 @@ class PlatCSVExportView(View):
             'Unit',
             'Block',
             'Section',
-            'Cabinet',
-            'Slide Number',
             'Non-Sewer Exactions',
             'Sewer Exactions',
+            'Account',
         ]
 
-        plat = request.GET.get('plat')
+        plat_value = request.GET.get('plat', None)
 
-        plat_queryset = Plat.objects.filter(id=plat)
+        if plat_value is not None:
+            plat_queryset = Plat.objects.filter(id=plat_value)
+            plat_serializer = self.list(
+                plat_queryset,
+                PlatSerializer,
+                many=True
+            )
 
-        if plat_queryset is not None:
-            plat_object = plat_queryset[0]
-        else:
-            return HttpResponse('No Plat found')
-        
-        plat_filename = plat_object.name + '_plat_report.csv'
+            if plat_queryset.count() == 1:
+                filename = plat_queryset[0].cabinet + '-' + plat_queryset[0].slide + '_plat_report.csv'
+            else:
+                filename = 'plat_report_' + datetime.datetime.now().strftime("%Y-%m-%d") + '.csv'
+                
+            response = HttpResponse(content_type='text/csv')
+            response['Content-Disposition'] = 'attachment; filename=%s'%filename
+            
+            for plat in plat_serializer.data:
+                subdivision = ''
+                account = ''
 
-        response = HttpResponse(content_type='text')
-        response['Content-Disposition'] = 'attachment; filename=%s'%plat_filename
+                if plat['subdivision']:
+                    subdivision = plat['subdivision']['name']
+                if plat['account']:
+                    plat_account = Account.objects.filter(id=plat['account']).first()
+                    account = plat_account.account_name
 
-        writer = csv.writer(response)
+                row = {
+                    'Subdivision': subdivision,
+                    'Cabinet': plat['cabinet'],
+                    'Slide': plat['slide'],
+                    'Total Acreage': plat['total_acreage'],
+                    'Buildable Lots': plat['buildable_lots'],
+                    'Non-Buildable Lots': plat['non_buildable_lots'],
+                    'Plat Type': plat['plat_type_display'],
+                    'Expansion Area': plat['expansion_area'],
+                    'Unit': plat['unit'],
+                    'Block': plat['block'],
+                    'Section': plat['section'],
+                    'Non-Sewer Exactions': plat['non_sewer_due'],
+                    'Sewer Exactions': plat['sewer_due'],
+                    'Account': account,
+                }
 
-        if plat_object.subdivision is not None:
-            sub_name = plat_object.subdivision.name
-        else:
-            sub_name = ''
+                # writer = csv.writer(response)
 
-        plat_csv_data = [ sub_name,
-            plat_object.account,
-            plat_object.total_acreage,
-            plat_object.buildable_lots,
-            plat_object.non_buildable_lots,
-            plat_object.plat_type,
-            plat_object.expansion_area,
-            plat_object.unit,
-            plat_object.block,
-            plat_object.section,
-            plat_object.cabinet,
-            plat_object.slide,
-            plat_object.non_sewer_due,
-            plat_object.sewer_due,
-        ]
+                # if plat.subdivision is not None:
+                #     sub_name = plat.subdivision.name
+                # else:
+                #     sub_name = ''
 
-        # PLAT ZONE
-        plat_zone_queryset = PlatZone.objects.filter(plat=plat)
+                # plat_csv_data = [ sub_name,
+                #     plat.account,
+                #     plat.total_acreage,
+                #     plat.buildable_lots,
+                #     plat.non_buildable_lots,
+                #     plat.plat_type,
+                #     plat.expansion_area,
+                #     plat.unit,
+                #     plat.block,
+                #     plat.section,
+                #     plat.cabinet,
+                #     plat.slide,
+                #     plat.non_sewer_due,
+                #     plat.sewer_due,
+                # ]
 
-        if plat_zone_queryset.exists():
-            number_of_plat_zones = 0
-            current_zone_data = []
-            for zone in plat_zone_queryset:
-                headers.extend(['Zone', 'Acres'])
-                number_of_plat_zones = number_of_plat_zones + 1
+                # PLAT ZONE
+                plat_zone_queryset = PlatZone.objects.filter(plat=plat['id'])
+                if plat_zone_queryset is not None:
+                    plat_zone_serializer = self.list (
+                        plat_zone_queryset,
+                        PlatZoneSerializer,
+                        many=True
+                    )
 
-                current_zone_data.extend([
-                    zone.zone,
-                    zone.acres,
-                ])
+                    for i, plat_zone in zip(range(plat_zone_queryset.count()), plat_zone_serializer.data):
+                        headers.extend(['Zone -%s' %((i+1))])
+                        headers.extend(['Acres -%s' %((i+1))])
 
-            zone_csv_data = plat_csv_data + current_zone_data
-                        
-        # LOTS AND LOT DETAILS
-        lot_queryset = Lot.objects.filter(plat=plat)
+                        row['Zone -%s' %((i+1))] = plat_zone['zone']
+                        row['Acres -%s' %((i+1))] = plat_zone['acres']
 
-        if lot_queryset.exists():
-            headers.extend([
-                'Address',
-                'Lot Number',
-                'Parcel ID',
-                'Permit ID', 
-                'Latitude',
-                'Longitude',
-                'Roads',
-                'Parks',
-                'Storm Water',
-                'Open Spaces',
-                'Sewer Cap.',
-                'Sewer Trans.',
-                'Total Exactions',
-                'Sewer Exactions',
-                'Non-Sewer Exactions',
-                'Current  Exactions',
-                'Current Sewer Exactions',
-                'Current Non-Sewer Exactions',
-            ])
-        
-            payment_length_per_lot = 0
-            ledger_length_per_lot = 0
+                # if plat_zone_queryset.exists():
+                #     number_of_plat_zones = 0
+                #     current_zone_data = []
+                #     for zone in plat_zone_queryset:
+                #         headers.extend(['Zone', 'Acres'])
+                #         number_of_plat_zones = number_of_plat_zones + 1
 
-            for single_lot in lot_queryset:
-                payment_queryset = Payment.objects.filter(lot_id=single_lot.id)
-                while len(payment_queryset) > payment_length_per_lot:
-                    headers.extend(['Payment Total',])
-                    payment_length_per_lot = payment_length_per_lot + 1
+                #         current_zone_data.extend([
+                #             zone.zone,
+                #             zone.acres,
+                #         ])
 
-            for single_lot in lot_queryset:
-                ledger_from_queryset = AccountLedger.objects.filter(account_from=single_lot.account)
-                while len(ledger_from_queryset) > ledger_length_per_lot:
-                    headers.extend(['Credits Applied'])
-                    ledger_length_per_lot = ledger_length_per_lot + 1
+                #     zone_csv_data = plat_csv_data + current_zone_data
+                                
+                # LOTS AND LOT DETAILS
+                lot_queryset = Lot.objects.filter(plat=plat['id'])
+                if lot_queryset is not None:
+                    lot_serializer = self.list (
+                        lot_queryset,
+                        LotSerializer,
+                        many=True
+                    )
 
-            writer.writerow(headers)
+                    for i, lot in zip(range(lot_queryset.count()), lot_serializer.data):
+                        headers.extend(['Address -%s' %(i+1)])
+                        headers.extend(['Permit ID -%s' %(i+1)])
+                        headers.extend(['Lot Number -%s' %(i+1)])
+                        headers.extend(['Parcel ID -%s' %(i+1)])
+                        headers.extend(['Total Exactions -%s' %(i+1)])
+                        headers.extend(['Current Exactions -%s' %(i+1)])
 
-            for single_lot in lot_queryset:
-                current_lot_data = []
+                        row['Address -%s' %(i+1)] = lot['address_full']
+                        row['Permit ID -%s' %(i+1)] = lot['permit_id']
+                        row['Lot Number -%s' %(i+1)] = lot['lot_number']
+                        row['Parcel ID -%s' %(i+1)] = lot['parcel_id']
+                        row['Total Exactions -%s' %(i+1)] = lot['lot_exactions']['total_exactions']
+                        row['Current Exactions -%s' %(i+1)] = lot['lot_exactions']['current_exactions']
 
-                current_lot_data.extend([
-                    single_lot.address_full,
-                    single_lot.lot_number,
-                    single_lot.parcel_id,
-                    single_lot.permit_id,
-                    single_lot.latitude,
-                    single_lot.longitude,
-                    single_lot.dues_roads_dev,
-                    single_lot.dues_parks_dev,
-                    single_lot.dues_storm_dev,
-                    single_lot.dues_open_space_dev,
-                    single_lot.dues_sewer_cap_dev,
-                    single_lot.dues_sewer_trans_dev,
-                ])
+                        payment_queryset = Payment.objects.filter(lot_id=lot['id'])
+                        if payment_queryset is not None:
+                            payment_serializer = self.list (
+                                payment_queryset,
+                                PaymentSerializer,
+                                many=True
+                            )
 
-                lot_balance = calculate_lot_balance(single_lot.id)
+                            for j, payment in zip(range(payment_queryset.count()), payment_serializer.data):
+                                headers.extend(['Payment Type -%s-%s' %((i+1), (j+1))])
+                                headers.extend(['Roads Paid -%s-%s' %((i+1), (j+1))])
+                                headers.extend(['Parks Paid -%s-%s' %((i+1), (j+1))])
+                                headers.extend(['Storm Paid -%s-%s' %((i+1), (j+1))])
+                                headers.extend(['Open Space Paid -%s-%s' %((i+1), (j+1))])
+                                headers.extend(['Sewer Trans. Paid -%s-%s' %((i+1), (j+1))])
+                                headers.extend(['Sewer Cap. Paid -%s-%s' %((i+1), (j+1))])
 
-                current_lot_data.extend([
-                    '${:,.2f}'.format(lot_balance['total_exactions']),
-                    '${:,.2f}'.format(lot_balance['sewer_exactions']),
-                    '${:,.2f}'.format(lot_balance['non_sewer_exactions']),
-                    '${:,.2f}'.format(lot_balance['current_exactions']),
-                    '${:,.2f}'.format(lot_balance['sewer_due']),
-                    '${:,.2f}'.format(lot_balance['non_sewer_due']),
-                ])
+                                row['Payment Type -%s-%s' %((i+1), (j+1))] = payment['payment_type_display']
+                                row['Roads Paid -%s-%s' %((i+1), (j+1))] = payment['paid_roads']
+                                row['Parks Paid -%s-%s' %((i+1), (j+1))] = payment['paid_parks']
+                                row['Storm Paid -%s-%s' %((i+1), (j+1))] = payment['paid_storm']
+                                row['Open Space Paid -%s-%s' %((i+1), (j+1))] = payment['paid_open_space']
+                                row['Sewer Trans. Paid -%s-%s' %((i+1), (j+1))] = payment['paid_sewer_trans']
+                                row['Sewer Cap. Paid -%s-%s' %((i+1), (j+1))] = payment['paid_sewer_cap']
 
-                # LOT PAYMENTS
-                payment_queryset = Payment.objects.filter(lot_id=single_lot.id)
-                if payment_queryset is not None:
-                    for single_payment in payment_queryset:
-                        current_lot_data.extend([
-                            single_payment.calculate_payment_total(),
-                        ])
+                        ledger_queryset = AccountLedger.objects.filter(lot=lot['id'])
+                        if ledger_queryset is not None:
+                            ledger_serializer = self.list (
+                                ledger_queryset,
+                                AccountLedgerSerializer,
+                                many=True
+                            )
+                            
+                            for j, ledger in zip(range(ledger_queryset.count()), ledger_serializer.data):
+                                headers.extend(['Ledger Type -%s-%s' %((i+1), (j+1))])
+                                headers.extend(['Roads Credits -%s-%s' %((i+1), (j+1))])
+                                headers.extend(['Parks Credits -%s-%s' %((i+1), (j+1))])
+                                headers.extend(['Storm Credits -%s-%s' %((i+1), (j+1))])
+                                headers.extend(['Open Space Credits -%s-%s' %((i+1), (j+1))])
+                                headers.extend(['Non-Sewer Credits -%s-%s' %((i+1), (j+1))])
+                                headers.extend(['Sewer Trans. Credits -%s-%s' %((i+1), (j+1))])
+                                headers.extend(['Sewer Cap. Credits -%s-%s' %((i+1), (j+1))])
+                                headers.extend(['Sewer Credits -%s-%s' %((i+1), (j+1))])
 
-                ledger_from_queryset = AccountLedger.objects.filter(account_from=single_lot.account)
-                for account_from in ledger_from_queryset:
-                    current_lot_data.extend([account_from.calculate_credits(),])
+                                row['Ledger Type -%s-%s' %((i+1), (j+1))] = ledger['entry_type_display']
+                                row['Roads Credits -%s-%s' %((i+1), (j+1))] = ledger['roads']
+                                row['Parks Credits -%s-%s' %((i+1), (j+1))] = ledger['parks']
+                                row['Storm Credits -%s-%s' %((i+1), (j+1))] = ledger['storm']
+                                row['Open Space Credits -%s-%s' %((i+1), (j+1))] = ledger['open_space']
+                                row['Non-Sewer Credits -%s-%s' %((i+1), (j+1))] = ledger['non_sewer_credits']
+                                row['Sewer Trans. Credits -%s-%s' %((i+1), (j+1))] = ledger['sewer_trans']
+                                row['Sewer Cap. Credits -%s-%s' %((i+1), (j+1))] = ledger['sewer_cap']
+                                row['Sewer Credits -%s-%s' %((i+1), (j+1))] = ledger['sewer_credits']
+                # if lot_queryset.exists():
+                #     headers.extend([
+                #         'Address',
+                #         'Lot Number',
+                #         'Parcel ID',
+                #         'Permit ID', 
+                #         'Latitude',
+                #         'Longitude',
+                #         'Roads',
+                #         'Parks',
+                #         'Storm Water',
+                #         'Open Spaces',
+                #         'Sewer Cap.',
+                #         'Sewer Trans.',
+                #         'Total Exactions',
+                #         'Sewer Exactions',
+                #         'Non-Sewer Exactions',
+                #         'Current  Exactions',
+                #         'Current Sewer Exactions',
+                #         'Current Non-Sewer Exactions',
+                #     ])
+                
+                #     payment_length_per_lot = 0
+                #     ledger_length_per_lot = 0
 
-                if len(zone_csv_data) > 0:
-                    lot_csv_data = zone_csv_data + current_lot_data
-                else:
-                    lot_csv_data = plat_csv_data + current_lot_data
-                        
-                writer.writerow(lot_csv_data)
-        elif len(zone_csv_data) > 0:
-            writer.writerow(headers)
-            writer.writerow(zone_csv_data)
-        else:
-            writer.writerow(headers)
-            writer.writerow(plat_csv_data)
+                #     for single_lot in lot_queryset:
+                #         payment_queryset = Payment.objects.filter(lot_id=single_lot.id)
+                #         while len(payment_queryset) > payment_length_per_lot:
+                #             headers.extend(['Payment Total',])
+                #             payment_length_per_lot = payment_length_per_lot + 1
 
-        return response
+                #     for single_lot in lot_queryset:
+                #         ledger_from_queryset = AccountLedger.objects.filter(account_from=single_lot.account)
+                #         while len(ledger_from_queryset) > ledger_length_per_lot:
+                #             headers.extend(['Credits Applied'])
+                #             ledger_length_per_lot = ledger_length_per_lot + 1
+
+                #     writer.writerow(headers)
+
+                #     for single_lot in lot_queryset:
+                #         current_lot_data = []
+
+                #         current_lot_data.extend([
+                #             single_lot.address_full,
+                #             single_lot.lot_number,
+                #             single_lot.parcel_id,
+                #             single_lot.permit_id,
+                #             single_lot.latitude,
+                #             single_lot.longitude,
+                #             single_lot.dues_roads_dev,
+                #             single_lot.dues_parks_dev,
+                #             single_lot.dues_storm_dev,
+                #             single_lot.dues_open_space_dev,
+                #             single_lot.dues_sewer_cap_dev,
+                #             single_lot.dues_sewer_trans_dev,
+                #         ])
+
+                #         lot_balance = calculate_lot_balance(single_lot.id)
+
+                #         current_lot_data.extend([
+                #             '${:,.2f}'.format(lot_balance['total_exactions']),
+                #             '${:,.2f}'.format(lot_balance['sewer_exactions']),
+                #             '${:,.2f}'.format(lot_balance['non_sewer_exactions']),
+                #             '${:,.2f}'.format(lot_balance['current_exactions']),
+                #             '${:,.2f}'.format(lot_balance['sewer_due']),
+                #             '${:,.2f}'.format(lot_balance['non_sewer_due']),
+                #         ])
+
+                #         # LOT PAYMENTS
+                #         payment_queryset = Payment.objects.filter(lot_id=single_lot.id)
+                #         if payment_queryset is not None:
+                #             for single_payment in payment_queryset:
+                #                 current_lot_data.extend([
+                #                     single_payment.calculate_payment_total(),
+                #                 ])
+
+                #         ledger_from_queryset = AccountLedger.objects.filter(account_from=single_lot.account)
+                #         for account_from in ledger_from_queryset:
+                #             current_lot_data.extend([account_from.calculate_credits(),])
+
+                #         if len(zone_csv_data) > 0:
+                #             lot_csv_data = zone_csv_data + current_lot_data
+                #         else:
+                #             lot_csv_data = plat_csv_data + current_lot_data
+                                
+                #         writer.writerow(lot_csv_data)
+                # elif len(zone_csv_data) > 0:
+                #     writer.writerow(headers)
+                #     writer.writerow(zone_csv_data)
+                # else:
+                #     writer.writerow(headers)
+                #     writer.writerow(plat_csv_data)
+
+                # return response
+
+            unique_fieldnames = []
+            for name in headers:
+                if name not in unique_fieldnames:
+                    unique_fieldnames.append(name)
+
+            writer = csv.DictWriter(response, fieldnames=unique_fieldnames, extrasaction='ignore')
+            writer.writeheader()
+            writer.writerow(row)
+
+
+            return response
 
 class LotSearchCSVExportView(View):
     serializer_class = LotSerializer
