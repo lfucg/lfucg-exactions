@@ -62,7 +62,17 @@ class AgreementExisting extends React.Component {
                                             </Link>
                                         }
                                     </div>
-                                    <div className="col-xs-5 ">
+                                    <div className="col-xs-4">
+                                        {currentUser && currentUser.permissions && currentUser.permissions.agreement &&
+                                            <Link to={`agreement/report/${agreement.id}`} aria-label="Report">
+                                                <i className="fa fa-line-chart link-icon col-xs-4" aria-hidden="true" />
+                                                <div className="col-xs-7 link-label">
+                                                    Report
+                                                </div>
+                                            </Link>
+                                        }
+                                    </div>
+                                    <div className="col-xs-4 ">
                                         <Link to={`agreement/summary/${agreement.id}`} aria-label="Summary">
                                             <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
                                             <div className="col-xs-7 link-label">
