@@ -8,34 +8,49 @@ import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
 
 import {
-    getAgreementID,
-    getAgreementProjects,
-    getAgreementPayments,
-    getAgreementAccountLedgers,
+    getAccountID,
+    getAccountPayments,
+    getAccountAccountLedgers,
 } from '../actions/apiActions';
 
-class AgreementReport extends React.Component {
+class AccountReport extends React.Component {
     componentDidMount() {
         this.props.onComponentDidMount();
     }
 
+
     render() {
         const {
-            agreements,
-            projects,
+            accounts,
             payments,
             accountLedgers,
         } = this.props;
 
-        const projectsList = projects && projects.length > 0 && (map((project) => {
+        const platsList = accounts && accounts.plat_account && accounts.plat_account.length > 0 && (map((plat) => {
             return (
-                <div className="row" key={project.id}>
-                    <div className="col-sm-3 report-data">{project.project_category_display}</div>
-                    <div className="col-sm-3 report-data">{project.project_type_display}</div>
-                    <div className="col-sm-3 report-data right-border">{project.project_status_display}</div>
+                <div className="row" key={plat.id}>
+                    <div className="col-sm-3 report-data">{plat.subdivision && plat.subdivision.name}</div>
+                    <div className="col-sm-3 report-data">{plat.cabinet} - {plat.slide}</div>
+                    <div className="col-sm-2 report-data">{plat.total_acreage}</div>
+                    <div className="col-sm-2 report-data">{plat.buildable_lots}</div>
+                    <div className="col-sm-2 report-data right-border">{plat.non_buildable_lots}</div>
                 </div>
             );
-        })(projects));
+        })(accounts.plat_account));
+
+        const lotsList = accounts && accounts.lot_account && accounts.lot_account.length > 0 && (map((lot) => {
+            return (
+                <div className="row" key={lot.id}>
+                    <div className="col-sm-5 report-data right-border">{lot.address_full}</div>
+                    <div className="col-sm-7">
+                        <div className="col-sm-3 report-data">{lot.parcel_id}</div>
+                        <div className="col-sm-3 report-data">{lot.lot_exactions && lot.lot_exactions.current_exactions}</div>
+                        <div className="col-sm-3 report-data">{lot.lot_exactions && lot.lot_exactions.non_sewer_due}</div>
+                        <div className="col-sm-3 report-data right-border">{lot.lot_exactions && lot.lot_exactions.sewer_due}</div>
+                    </div>
+                </div>
+            );
+        })(accounts.lot_account));
 
         const paymentsList = payments && payments.length > 0 && (map((payment) => {
             return (
@@ -70,16 +85,16 @@ class AgreementReport extends React.Component {
         })(accountLedgers));
 
         return (
-            <div className="agreement-report">
+            <div className="account-report">
                 <Navbar />
 
                 <div className="form-header">
                     <div className="container">
-                        <h1>AGREEMENTS - {agreements.resolution_number} - REPORT</h1>
+                        <h1>ACCOUNTS - {accounts.account_name} - REPORT</h1>
                     </div>
                 </div>
 
-                <Breadcrumbs route={this.props.route} parent_link={'agreement'} parent_name={'Agreements'} />
+                <Breadcrumbs route={this.props.route} parent_link={'account'} parent_name={'Accounts'} />
 
                 <div className="inside-body">
                     <div className="container">
@@ -87,27 +102,48 @@ class AgreementReport extends React.Component {
                         <div className="clearfix" />
                         <div className="report-table">
                             <div className="row">
-                                <h3 className="col-sm-6">Agreement</h3>
+                                <h3 className="col-sm-6">Account</h3>
                             </div>
                             <div className="row report-header">
-                                <h5 className="col-sm-6">Resolution</h5>
-                                <h5 className="col-sm-6 right-border">Account</h5>
+                                <h5 className="col-sm-6">Account Name</h5>
+                                <h5 className="col-sm-6 right-border">Balance</h5>
                             </div>
                             <div className="row">
-                                <div className="col-sm-6 report-data">{agreements.resolution_number}</div>
-                                <div className="col-sm-6 report-data right-border">{agreements.account_id && agreements.account_id.account_name}</div>
+                                <div className="col-sm-6 report-data">{accounts.account_name}</div>
+                                <div className="col-sm-6 report-data right-border">{accounts.balance && accounts.balance.balance}</div>
                             </div>
                             <div className="row" />
 
                             <div className="row">
-                                <h3 className="col-sm-6">Projects</h3>
+                                <h3 className="col-sm-6">Plats</h3>
                             </div>
                             <div className="row report-header">
-                                <h5 className="col-sm-3">Category</h5>
-                                <h5 className="col-sm-3">Type</h5>
-                                <h5 className="col-sm-3 right-border">Status</h5>
+                                <h5 className="col-sm-3">Subdivision</h5>
+                                <h5 className="col-sm-3">Cabinet - Slide</h5>
+                                <h5 className="col-sm-2 report-wrap-header">Total Acreage</h5>
+                                <h5 className="col-sm-2 report-wrap-header">Buildable Lots</h5>
+                                <h5>
+                                    <div className="col-sm-2 report-wrap-header right-border">Non-Buildable Lots</div>
+                                </h5>
                             </div>
-                            {projectsList}
+                            {platsList}
+                            <div className="row" />
+
+                            <div className="row">
+                                <h3 className="col-sm-6">Lots</h3>
+                            </div>
+                            <div className="row report-header">
+                                <h5 className="col-sm-5 right-border">Lot Address</h5>
+                                <div className="col-sm-7">
+                                    <h5 className="col-sm-3">Parcel ID</h5>
+                                    <h5>
+                                        <div className="col-sm-3 report-wrap-header">Current Exactions Due</div>
+                                        <div className="col-sm-3 report-wrap-header">Non-Sewer Exactions Due</div>
+                                        <div className="col-sm-3 report-wrap-header right-border">Sewer Exactions Due</div>
+                                    </h5>
+                                </div>
+                            </div>
+                            {lotsList}
                             <div className="row" />
 
                             <div className="row">
@@ -123,9 +159,9 @@ class AgreementReport extends React.Component {
                                     <h5 className="col-sm-2">Roads</h5>
                                     <h5 className="col-sm-2">Parks</h5>
                                     <h5 className="col-sm-2">Stormwater</h5>
-                                    <h5 className="col-sm-2">Open Space</h5>
-                                    <h5 className="col-sm-2">Sewer Trans</h5>
-                                    <h5 className="col-sm-2 right-border">Sewer Cap</h5>
+                                    <h5 className="col-sm-2 report-wrap-header">Open Space</h5>
+                                    <h5 className="col-sm-2 report-wrap-header">Sewer Trans</h5>
+                                    <h5 className="col-sm-2 report-wrap-header right-border">Sewer Cap</h5>
                                 </div>
                             </div>
                             {paymentsList}
@@ -154,8 +190,8 @@ class AgreementReport extends React.Component {
 
                         <a
                           className="btn btn-lex col-sm-3"
-                          href={`../api/export_agreement_csv/?agreement=${agreements.id}`}
-                          disabled={!agreements.id}
+                          href={`../api/export_account_csv/?account=${accounts.id}`}
+                          disabled={!accounts.id}
                         >Export CSV</a>
                     </div>
                 </div>
@@ -165,9 +201,8 @@ class AgreementReport extends React.Component {
     }
 }
 
-AgreementReport.propTypes = {
-    agreements: PropTypes.array,
-    projects: PropTypes.array,
+AccountReport.propTypes = {
+    accounts: PropTypes.array,
     payments: PropTypes.array,
     accountLedgers: PropTypes.array,
     route: PropTypes.object,
@@ -176,24 +211,23 @@ AgreementReport.propTypes = {
 
 function mapStateToProps(state) {
     return {
-        agreements: state.agreements,
-        projects: state.projects,
+        accounts: state.accounts,
         payments: state.payments,
         accountLedgers: state.accountLedgers,
     };
 }
 
 function mapDispatchToProps(dispatch, params) {
-    const selectedAgreement = params.params.id;
+    const selectedAccount = params.params.id;
 
     return {
         onComponentDidMount() {
-            dispatch(getAgreementID(selectedAgreement));
-            dispatch(getAgreementProjects(selectedAgreement));
-            dispatch(getAgreementPayments(selectedAgreement));
-            dispatch(getAgreementAccountLedgers(selectedAgreement));
+            dispatch(getAccountID(selectedAccount));
+            dispatch(getAccountPayments(selectedAccount));
+            dispatch(getAccountAccountLedgers(selectedAccount));
         },
     };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(AgreementReport);
+
+export default connect(mapStateToProps, mapDispatchToProps)(AccountReport);
