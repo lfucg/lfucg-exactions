@@ -11,7 +11,7 @@ import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
 
 import FormGroup from './FormGroup';
-
+import Notes from './Notes';
 import DeclineDelete from './DeclineDelete';
 
 import {
@@ -286,6 +286,63 @@ class AccountLedgerForm extends React.Component {
                                 </div>
                             </div>
                             }
+                            <div className="clearfix" />
+                            {activeForm.lot || activeForm.plat ? <div>
+                                {
+                                    selectedAccountLedger ?
+                                        lots && lots.length > 0 &&
+                                            map((lot =>
+                                                (lot.id === parseInt(activeForm.lot, 10)) ?
+                                                    <Notes
+                                                      secondary_content_type="plats_lot"
+                                                      secondary_object_id={lot.id}
+                                                      content_type={'accounts_accountledger'}
+                                                      object_id={selectedAccountLedger}
+                                                      ariaExpanded="true"
+                                                      panelClass="panel-collapse collapse row in"
+                                                      permission="accountledger"
+                                                    />
+                                                : null
+                                        ))(lots)
+                                    :
+                                        lots && lots.length > 0 &&
+                                            map((lot =>
+                                                (lot.id === parseInt(activeForm.lot, 10)) ?
+                                                    <Notes
+                                                      content_type="plats_lot"
+                                                      object_id={lot.id}
+                                                      ariaExpanded="true"
+                                                      panelClass="panel-collapse collapse row in"
+                                                      permission="accountledger"
+                                                    />
+                                                : null
+                                        ))(lots)
+                                }
+                                {
+                                    plats && plats.length > 0 &&
+                                        map((plat =>
+                                            (plat.id === parseInt(activeForm.plat, 10)) ?
+                                                <Notes
+                                                  content_type="plats_plat"
+                                                  object_id={plat.id}
+                                                  ariaExpanded="true"
+                                                  panelClass="panel-collapse collapse row in"
+                                                  permission="plat"
+                                                />
+                                            : null
+                                    ))(plats)
+                                }
+                            </div> : <div>
+                                {selectedAccountLedger &&
+                                    <Notes
+                                      content_type="accounts_accountledger"
+                                      object_id={selectedAccountLedger}
+                                      ariaExpanded="true"
+                                      panelClass="panel-collapse collapse row in"
+                                      permission="accountledger"
+                                    />
+                                }
+                            </div>}
                         </div>
                     </div>
                 </div>
@@ -417,8 +474,20 @@ function mapDispatchToProps(dispatch, params) {
                 if (field === 'plat_lot') {
                     if (value_id === 'plat') {
                         dispatch(getPlats());
+                        const remove_lot = {
+                            lot: '',
+                            lot_show: '',
+                            lot_name: '',
+                        };
+                        dispatch(formUpdate(remove_lot));
                     } else if (value_id === 'lot') {
                         dispatch(getLots());
+                        const remove_plat = {
+                            plat: '',
+                            plat_show: '',
+                            plat_name: '',
+                        };
+                        dispatch(formUpdate(remove_plat));
                     }
                 }
             };
@@ -517,7 +586,7 @@ function mapDispatchToProps(dispatch, params) {
             } else {
                 dispatch(postAccountLedger())
                 .then((data_post) => {
-                    if (data_post.response) {
+                    if (data_post.response && data_post.response.id) {
                         if (event === 'plat') {
                             hashHistory.push('credit-transfer');
                         } else {

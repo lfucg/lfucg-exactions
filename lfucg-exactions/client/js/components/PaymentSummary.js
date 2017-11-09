@@ -6,6 +6,7 @@ import { Link } from 'react-router';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
+import Notes from './Notes';
 
 import {
     getPaymentID,
@@ -48,7 +49,7 @@ class PaymentSummary extends React.Component {
                                 <div className="row section-heading" role="tab" id="headingPaymentInfo">
                                     <div className="col-xs-1 caret-indicator" />
                                     <div className="col-xs-10">
-                                        <h2>Payment Information</h2>
+                                        <h3>Payment Information</h3>
                                     </div>
                                 </div>
                             </a>
@@ -88,6 +89,15 @@ class PaymentSummary extends React.Component {
                                     </div>
                                 </div>
                             </div>
+                            {payments && payments.id &&
+                                <Notes
+                                  content_type="accounts_payment"
+                                  object_id={payments.id}
+                                  ariaExpanded="false"
+                                  panelClass="panel-collapse collapse row"
+                                  permission="payment"
+                                />
+                            }
 
                             {payments && payments.lot_id ? <div>
                                 <a
@@ -101,7 +111,7 @@ class PaymentSummary extends React.Component {
                                     <div className="row section-heading" role="tab" id="headingLotInfo">
                                         <div className="col-xs-1 caret-indicator" />
                                         <div className="col-xs-10">
-                                            <h2>Lot</h2>
+                                            <h3>Lot</h3>
                                         </div>
                                     </div>
                                 </a>
@@ -144,7 +154,7 @@ class PaymentSummary extends React.Component {
                                     </div>
                                 </div>
                             </div> : <div className="row section-heading" role="tab" id="headingLotInfo">
-                                <h2>Lot - None</h2>
+                                <h3>Lot - None</h3>
                             </div>}
 
                             {payments.credit_account ? <div>
@@ -159,7 +169,7 @@ class PaymentSummary extends React.Component {
                                     <div className="row section-heading" role="tab" id="headingAccountInfo">
                                         <div className="col-xs-1 caret-indicator" />
                                         <div className="col-xs-10">
-                                            <h2>Developer Credit Account</h2>
+                                            <h3>Developer Credit Account</h3>
                                         </div>
                                     </div>
                                 </a>
@@ -208,7 +218,7 @@ class PaymentSummary extends React.Component {
                                     </div>
                                 </div>
                             </div> : <div className="row section-heading" role="tab" id="headingAccountInfo">
-                                <h2>Developer Account - None</h2>
+                                <h3>Developer Account - None</h3>
                             </div>}
 
                             {payments.credit_source ? <div>
@@ -223,7 +233,7 @@ class PaymentSummary extends React.Component {
                                     <div className="row section-heading" role="tab" id="headingAgreementInfo">
                                         <div className="col-xs-1 caret-indicator" />
                                         <div className="col-xs-10">
-                                            <h2>Agreement</h2>
+                                            <h3>Agreement</h3>
                                         </div>
                                     </div>
                                 </a>
@@ -266,7 +276,7 @@ class PaymentSummary extends React.Component {
                                     </div>
                                 </div>
                             </div> : <div className="row section-heading" role="tab" id="headingAgreementInfo">
-                                <h2>Agreements - None</h2>
+                                <h3>Agreements - None</h3>
                             </div>}
                         </div>
                     </div>

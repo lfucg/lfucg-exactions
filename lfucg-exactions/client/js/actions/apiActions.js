@@ -41,6 +41,7 @@ import {
     PUT_ACCOUNT,
 
     GET_NOTE_CONTENT,
+    GET_SECONDARY_NOTE_CONTENT,
     POST_NOTE,
 
     GET_UPLOAD_CONTENT,
@@ -658,28 +659,29 @@ export function putPermitIdOnLot(selectedLot) {
 }
 
 // NOTES
-export function getNoteContent() {
+export function getNoteContent(
+    content_type,
+    object_id,
+    ) {
     return {
         type: API_CALL,
         endpoint: GET_NOTE_CONTENT,
-        url: (getState) => {
-            const {
-                activeForm,
-            } = getState();
-            const {
-                content_type,
-                object_id,
-                parent_content_type,
-                parent_object_id,
-            } = activeForm;
-
-            const related_notes = parent_content_type ? `/note/?content_type=${content_type}&object_id=${object_id}&parent_content_type=${parent_content_type}&parent_object_id=${parent_object_id}` : `/note/?content_type=${content_type}&object_id=${object_id}`;
-            return related_notes;
-        },
+        url: `/note/?content_type=${content_type}&object_id=${object_id}`,
     };
 }
 
-export function postNote() {
+export function getSecondaryNoteContent(
+    content_type,
+    object_id,
+    ) {
+    return {
+        type: API_CALL,
+        endpoint: GET_SECONDARY_NOTE_CONTENT,
+        url: `/note/?content_type=${content_type}&object_id=${object_id}`,
+    };
+}
+
+export function postNote(content_type, object_id) {
     return {
         type: API_CALL,
         endpoint: POST_NOTE,
@@ -692,8 +694,6 @@ export function postNote() {
             } = getState();
             const {
                 note,
-                content_type,
-                object_id,
             } = activeForm;
             const {
                 id,

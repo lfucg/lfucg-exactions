@@ -7,6 +7,7 @@ import Navbar from './Navbar';
 import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
 import Uploads from './Uploads';
+import Notes from './Notes';
 
 import {
     getProjectCostID,
@@ -49,7 +50,7 @@ class ProjectCostSummary extends React.Component {
                                 <div className="row section-heading" role="tab" id="headingProjectCostInfo">
                                     <div className="col-xs-1 caret-indicator" />
                                     <div className="col-xs-10">
-                                        <h2>Project Cost Information</h2>
+                                        <h3>Project Cost Information</h3>
                                     </div>
                                 </div>
                             </a>
@@ -100,7 +101,7 @@ class ProjectCostSummary extends React.Component {
                                     <div className="row section-heading" role="tab" id="headingProjectInfo">
                                         <div className="col-xs-1 caret-indicator" />
                                         <div className="col-xs-10">
-                                            <h2>Project</h2>
+                                            <h3>Project</h3>
                                         </div>
                                     </div>
                                 </a>
@@ -145,18 +146,27 @@ class ProjectCostSummary extends React.Component {
                                     </div>
                                 </div>
                             </div> : <div className="row section-heading" role="tab" id="headingProjectInfo">
-                                <h2>Project - None</h2>
+                                <h3>Project - None</h3>
                             </div>}
+                            {projectCosts && projectCosts.id &&
+                                <Notes
+                                  content_type="accounts_projectcostestimate"
+                                  object_id={projectCosts.id}
+                                  ariaExpanded="false"
+                                  panelClass="panel-collapse collapse row"
+                                  permission="projectcostestimate"
+                                />
+                            }
+                            {projectCosts && projectCosts.id &&
+                                <Uploads
+                                  file_content_type="accounts_projectcostestimate"
+                                  file_object_id={projectCosts.id}
+                                  ariaExpanded="false"
+                                  panelClass="panel-collapse collapse row"
+                                  permission="projectcostestimate"
+                                />
+                            }
                         </div>
-                        {projectCosts.id &&
-                            <Uploads
-                              file_content_type="accounts_projectcostestimate"
-                              file_object_id={projectCosts.id}
-                              ariaExpanded="false"
-                              panelClass="panel-collapse collapse row"
-                              permission="projectcostestimate"
-                            />
-                        }
                     </div>
                 </div>
                 <Footer />
