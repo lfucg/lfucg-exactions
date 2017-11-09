@@ -267,12 +267,19 @@ class PlatCSVExportView(View):
                     headers.extend(['Total Exactions -%s' %(i+1)])
                     headers.extend(['Current Exactions -%s' %(i+1)])
 
+                    total_exactions = ''
+                    current_exactions = ''
+
+                    if lot['lot_exactions']:
+                        total_exactions = lot['lot_exactions']['total_exactions']
+                        current_exactions = lot['lot_exactions']['current_exactions']
+
                     row['Address -%s' %(i+1)] = lot['address_full']
                     row['Permit ID -%s' %(i+1)] = lot['permit_id']
                     row['Lot Number -%s' %(i+1)] = lot['lot_number']
                     row['Parcel ID -%s' %(i+1)] = lot['parcel_id']
-                    row['Total Exactions -%s' %(i+1)] = lot['lot_exactions']['total_exactions']
-                    row['Current Exactions -%s' %(i+1)] = lot['lot_exactions']['current_exactions']
+                    row['Total Exactions -%s' %(i+1)] = total_exactions
+                    row['Current Exactions -%s' %(i+1)] = current_exactions
 
                     payment_queryset = Payment.objects.filter(lot_id=lot['id'])
                     if payment_queryset is not None:
@@ -443,6 +450,36 @@ class LotSearchCSVExportView(View):
 
         # ROWS
         for lot in serializer.data:
+            plat_name = ''
+            plat_type = ''
+
+            if lot['plat']:
+                plat_name = lot['plat']['name']
+                plat_type = lot['plat']['plat_type_display']
+
+            total_exactions = ''
+            sewer = ''
+            non_sewer = ''
+            sewer_trans = ''
+            sewer_cap = ''
+            roads = ''
+            parks = ''
+            storm = ''
+            open_space = ''
+            current_exactions = ''
+
+            if lot['lot_exactions']:
+                total_exactions = lot['lot_exactions']['total_exactions']
+                sewer = lot['lot_exactions']['sewer_due']
+                non_sewer = lot['lot_exactions']['non_sewer_due']
+                sewer_trans = lot['lot_exactions']['dues_sewer_trans_dev']
+                sewer_cap = lot['lot_exactions']['dues_sewer_cap_dev']
+                roads = lot['lot_exactions']['dues_roads_dev']
+                parks = lot['lot_exactions']['dues_parks_dev']
+                storm = lot['lot_exactions']['dues_storm_dev']
+                open_space = lot['lot_exactions']['dues_open_space_dev']
+                current_exactions = lot['lot_exactions']['current_exactions']
+
             row = {
                 'Address': lot['address_full'],
                 'Date Modified': lot['date_modified'],
@@ -451,18 +488,18 @@ class LotSearchCSVExportView(View):
                 'Lot Number': lot['lot_number'],
                 'Parcel ID': lot['parcel_id'],
                 'Permit ID': lot['permit_id'],
-                'Plat Name': lot['plat']['name'],
-                'Plat Type': lot['plat']['plat_type_display'],
-                'Total Exactions': lot['lot_exactions']['total_exactions'],
-                'Sewer Due': lot['lot_exactions']['sewer_due'],
-                'Non-Sewer Due': lot['lot_exactions']['non_sewer_due'],
-                'Sewer Trans.': lot['lot_exactions']['dues_sewer_trans_dev'],
-                'Sewer Cap.': lot['lot_exactions']['dues_sewer_cap_dev'],
-                'Roads': lot['lot_exactions']['dues_roads_dev'],
-                'Parks': lot['lot_exactions']['dues_parks_dev'],
-                'Storm': lot['lot_exactions']['dues_storm_dev'],
-                'Open Space': lot['lot_exactions']['dues_open_space_dev'],
-                'Current Total Due': lot['lot_exactions']['current_exactions'],
+                'Plat Name': plat_name,
+                'Plat Type': plat_type,
+                'Total Exactions': total_exactions,
+                'Sewer Due': sewer,
+                'Non-Sewer Due': non_sewer,
+                'Sewer Trans.': sewer_trans,
+                'Sewer Cap.': sewer_cap,
+                'Roads': roads,
+                'Parks': parks,
+                'Storm': storm,
+                'Open Space': open_space,
+                'Current Total Due': current_exactions,
             }
 
             payment_queryset = Payment.objects.filter(lot_id=lot['id'])
