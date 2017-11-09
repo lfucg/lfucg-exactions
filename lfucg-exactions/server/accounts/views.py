@@ -41,149 +41,150 @@ class AccountCSVExportView(View):
         account_value = request.GET.get('account', None)
 
         if account_value is not None:
-            account_queryset = Account.objects.filter(id=account_value).first()
+            account_queryset = Account.objects.filter(id=account_value)
             account_serializer = self.list(
                 account_queryset,
                 AccountSerializer,
-                many=False
+                many=True
             )
-            account = account_serializer.data
 
-            filename = account['account_name'] + '_account_report.csv'
-            response = HttpResponse(content_type='text/csv')
-            response['Content-Disposition'] = 'attachment; filename='+filename
+            for account in account_serializer.data:
 
-            row = {
-                'Account Name': account['account_name'],
-                'Contact Name': account['contact_full_name'],
-                'Address': account['address_full'],
-                'Email': account['email'],
-                'Phone': account['phone'],
-                'Balance': account['balance']['balance'],
-            }
+                filename = account['account_name'] + '_account_report.csv'
+                response = HttpResponse(content_type='text/csv')
+                response['Content-Disposition'] = 'attachment; filename='+filename
 
-            plat_queryset = Plat.objects.filter(account=account_value)
-            if plat_queryset is not None:
-                plat_serializer = self.list (
-                    plat_queryset,
-                    PlatSerializer,
-                    many=True
-                )
+                row = {
+                    'Account Name': account['account_name'],
+                    'Contact Name': account['contact_full_name'],
+                    'Address': account['address_full'],
+                    'Email': account['email'],
+                    'Phone': account['phone'],
+                    'Balance': account['balance']['balance'],
+                }
 
-                for i, plat in zip(range(plat_queryset.count()), plat_serializer.data):
-                    headers.extend(['Subdivision -%s' %(i+1)])
-                    headers.extend(['Cabinet -%s' %(i+1)])
-                    headers.extend(['Slide -%s' %(i+1)])
-                    headers.extend(['Acreage -%s' %(i+1)])
-                    headers.extend(['Buildable Lots -%s' %(i+1)])
-                    headers.extend(['Non-Buildable Lots -%s' %(i+1)])
-                    headers.extend(['Plat Type -%s' %(i+1)])
-                    headers.extend(['Section -%s' %(i+1)])
-                    headers.extend(['Block -%s' %(i+1)])
-                    headers.extend(['Unit -%s' %(i+1)])
+                plat_queryset = Plat.objects.filter(account=account_value)
+                if plat_queryset is not None:
+                    plat_serializer = self.list (
+                        plat_queryset,
+                        PlatSerializer,
+                        many=True
+                    )
 
-                    row['Subdivision -%s' %(i+1)] = plat['subdivision']['name']
-                    row['Cabinet -%s' %(i+1)] = plat['cabinet']
-                    row['Slide -%s' %(i+1)] = plat['slide']
-                    row['Acreage -%s' %(i+1)] = plat['total_acreage']
-                    row['Buildable Lots -%s' %(i+1)] = plat['buildable_lots']
-                    row['Non-Buildable Lots -%s' %(i+1)] = plat['non_buildable_lots']
-                    row['Plat Type -%s' %(i+1)] = plat['plat_type_display']
-                    row['Section -%s' %(i+1)] = plat['section']
-                    row['Block -%s' %(i+1)] = plat['block']
-                    row['Unit -%s' %(i+1)] = plat['unit']
+                    for i, plat in zip(range(plat_queryset.count()), plat_serializer.data):
+                        headers.extend(['Subdivision -%s' %(i+1)])
+                        headers.extend(['Cabinet -%s' %(i+1)])
+                        headers.extend(['Slide -%s' %(i+1)])
+                        headers.extend(['Acreage -%s' %(i+1)])
+                        headers.extend(['Buildable Lots -%s' %(i+1)])
+                        headers.extend(['Non-Buildable Lots -%s' %(i+1)])
+                        headers.extend(['Plat Type -%s' %(i+1)])
+                        headers.extend(['Section -%s' %(i+1)])
+                        headers.extend(['Block -%s' %(i+1)])
+                        headers.extend(['Unit -%s' %(i+1)])
 
-                    plat_zone_queryset = PlatZone.objects.filter(plat=plat['id'])
-                    if plat_zone_queryset is not None:
-                        plat_zone_serializer = self.list (
-                            plat_zone_queryset,
-                            PlatZoneSerializer,
-                            many=True
-                        )
+                        row['Subdivision -%s' %(i+1)] = plat['subdivision']['name']
+                        row['Cabinet -%s' %(i+1)] = plat['cabinet']
+                        row['Slide -%s' %(i+1)] = plat['slide']
+                        row['Acreage -%s' %(i+1)] = plat['total_acreage']
+                        row['Buildable Lots -%s' %(i+1)] = plat['buildable_lots']
+                        row['Non-Buildable Lots -%s' %(i+1)] = plat['non_buildable_lots']
+                        row['Plat Type -%s' %(i+1)] = plat['plat_type_display']
+                        row['Section -%s' %(i+1)] = plat['section']
+                        row['Block -%s' %(i+1)] = plat['block']
+                        row['Unit -%s' %(i+1)] = plat['unit']
 
-                        for j, plat_zone in zip(range(plat_zone_queryset.count()), plat_zone_serializer.data):
-                            headers.extend(['Zone -%s-%s' %((i+1), (j+1))])
-                            headers.extend(['Acres -%s-%s' %((i+1), (j+1))])
+                        plat_zone_queryset = PlatZone.objects.filter(plat=plat['id'])
+                        if plat_zone_queryset is not None:
+                            plat_zone_serializer = self.list (
+                                plat_zone_queryset,
+                                PlatZoneSerializer,
+                                many=True
+                            )
 
-                            row['Zone -%s-%s' %((i+1), (j+1))] = plat_zone['zone']
-                            row['Acres -%s-%s' %((i+1), (j+1))] = plat_zone['acres']
- 
-            lot_queryset = Lot.objects.filter(account=account_value)
-            if lot_queryset is not None:
-                lot_serializer = self.list (
-                    lot_queryset,
-                    LotSerializer,
-                    many=True
-                )
+                            for j, plat_zone in zip(range(plat_zone_queryset.count()), plat_zone_serializer.data):
+                                headers.extend(['Zone -%s-%s' %((i+1), (j+1))])
+                                headers.extend(['Acres -%s-%s' %((i+1), (j+1))])
 
-                for i, lot in zip(range(lot_queryset.count()), lot_serializer.data):
-                    headers.extend(['Address -%s' %(i+1)])
-                    headers.extend(['Permit ID -%s' %(i+1)])
-                    headers.extend(['Lot Number -%s' %(i+1)])
-                    headers.extend(['Parcel ID -%s' %(i+1)])
-                    headers.extend(['Total Exactions -%s' %(i+1)])
-                    headers.extend(['Current Exactions -%s' %(i+1)])
+                                row['Zone -%s-%s' %((i+1), (j+1))] = plat_zone['zone']
+                                row['Acres -%s-%s' %((i+1), (j+1))] = plat_zone['acres']
+     
+                lot_queryset = Lot.objects.filter(account=account_value)
+                if lot_queryset is not None:
+                    lot_serializer = self.list (
+                        lot_queryset,
+                        LotSerializer,
+                        many=True
+                    )
 
-                    row['Address -%s' %(i+1)] = lot['address_full']
-                    row['Permit ID -%s' %(i+1)] = lot['permit_id']
-                    row['Lot Number -%s' %(i+1)] = lot['lot_number']
-                    row['Parcel ID -%s' %(i+1)] = lot['parcel_id']
-                    row['Total Exactions -%s' %(i+1)] = lot['lot_exactions']['total_exactions']
-                    row['Current Exactions -%s' %(i+1)] = lot['lot_exactions']['current_exactions']
+                    for i, lot in zip(range(lot_queryset.count()), lot_serializer.data):
+                        headers.extend(['Address -%s' %(i+1)])
+                        headers.extend(['Permit ID -%s' %(i+1)])
+                        headers.extend(['Lot Number -%s' %(i+1)])
+                        headers.extend(['Parcel ID -%s' %(i+1)])
+                        headers.extend(['Total Exactions -%s' %(i+1)])
+                        headers.extend(['Current Exactions -%s' %(i+1)])
 
-            payment_queryset = Payment.objects.filter(credit_account=account_value)
-            if payment_queryset is not None:
-                payment_serializer = self.list (
-                    payment_queryset,
-                    PaymentSerializer,
-                    many=True
-                )
+                        row['Address -%s' %(i+1)] = lot['address_full']
+                        row['Permit ID -%s' %(i+1)] = lot['permit_id']
+                        row['Lot Number -%s' %(i+1)] = lot['lot_number']
+                        row['Parcel ID -%s' %(i+1)] = lot['parcel_id']
+                        row['Total Exactions -%s' %(i+1)] = lot['lot_exactions']['total_exactions']
+                        row['Current Exactions -%s' %(i+1)] = lot['lot_exactions']['current_exactions']
 
-                for i, payment in zip(range(payment_queryset.count()), payment_serializer.data):
-                    headers.extend(['Payment Type -%s' %(i+1)])
-                    headers.extend(['Roads Paid -%s' %(i+1)])
-                    headers.extend(['Parks Paid -%s' %(i+1)])
-                    headers.extend(['Storm Paid -%s' %(i+1)])
-                    headers.extend(['Open Space Paid -%s' %(i+1)])
-                    headers.extend(['Sewer Trans. Paid -%s' %(i+1)])
-                    headers.extend(['Sewer Cap. Paid -%s' %(i+1)])
+                payment_queryset = Payment.objects.filter(credit_account=account_value)
+                if payment_queryset is not None:
+                    payment_serializer = self.list (
+                        payment_queryset,
+                        PaymentSerializer,
+                        many=True
+                    )
 
-                    row['Payment Type -%s' %(i+1)] = payment['payment_type_display']
-                    row['Roads Paid -%s' %(i+1)] = payment['paid_roads']
-                    row['Parks Paid -%s' %(i+1)] = payment['paid_parks']
-                    row['Storm Paid -%s' %(i+1)] = payment['paid_storm']
-                    row['Open Space Paid -%s' %(i+1)] = payment['paid_open_space']
-                    row['Sewer Trans. Paid -%s' %(i+1)] = payment['paid_sewer_trans']
-                    row['Sewer Cap. Paid -%s' %(i+1)] = payment['paid_sewer_cap']
+                    for i, payment in zip(range(payment_queryset.count()), payment_serializer.data):
+                        headers.extend(['Payment Type -%s' %(i+1)])
+                        headers.extend(['Roads Paid -%s' %(i+1)])
+                        headers.extend(['Parks Paid -%s' %(i+1)])
+                        headers.extend(['Storm Paid -%s' %(i+1)])
+                        headers.extend(['Open Space Paid -%s' %(i+1)])
+                        headers.extend(['Sewer Trans. Paid -%s' %(i+1)])
+                        headers.extend(['Sewer Cap. Paid -%s' %(i+1)])
 
-            ledger_queryset = AccountLedger.objects.filter(account_from=account_value, account_to=account_value)
-            if ledger_queryset is not None:
-                ledger_serializer = self.list (
-                    ledger_queryset,
-                    AccountLedgerSerializer,
-                    many=True
-                )
-                
-                for i, ledger in zip(range(ledger_queryset.count()), ledger_serializer.data):
-                    headers.extend(['Ledger Type -%s' %(i+1)])
-                    headers.extend(['Roads Credits -%s' %(i+1)])
-                    headers.extend(['Parks Credits -%s' %(i+1)])
-                    headers.extend(['Storm Credits -%s' %(i+1)])
-                    headers.extend(['Open Space Credits -%s' %(i+1)])
-                    headers.extend(['Non-Sewer Credits -%s' %(i+1)])
-                    headers.extend(['Sewer Trans. Credits -%s' %(i+1)])
-                    headers.extend(['Sewer Cap. Credits -%s' %(i+1)])
-                    headers.extend(['Sewer Credits -%s' %(i+1)])
+                        row['Payment Type -%s' %(i+1)] = payment['payment_type_display']
+                        row['Roads Paid -%s' %(i+1)] = payment['paid_roads']
+                        row['Parks Paid -%s' %(i+1)] = payment['paid_parks']
+                        row['Storm Paid -%s' %(i+1)] = payment['paid_storm']
+                        row['Open Space Paid -%s' %(i+1)] = payment['paid_open_space']
+                        row['Sewer Trans. Paid -%s' %(i+1)] = payment['paid_sewer_trans']
+                        row['Sewer Cap. Paid -%s' %(i+1)] = payment['paid_sewer_cap']
 
-                    row['Ledger Type -%s' %(i+1)] = ledger['entry_type_display']
-                    row['Roads Credits -%s' %(i+1)] = ledger['roads']
-                    row['Parks Credits -%s' %(i+1)] = ledger['parks']
-                    row['Storm Credits -%s' %(i+1)] = ledger['storm']
-                    row['Open Space Credits -%s' %(i+1)] = ledger['open_space']
-                    row['Non-Sewer Credits -%s' %(i+1)] = ledger['non_sewer_credits']
-                    row['Sewer Trans. Credits -%s' %(i+1)] = ledger['sewer_trans']
-                    row['Sewer Cap. Credits -%s' %(i+1)] = ledger['sewer_cap']
-                    row['Sewer Credits -%s' %(i+1)] = ledger['sewer_credits']
+                ledger_queryset = AccountLedger.objects.filter(account_from=account_value, account_to=account_value)
+                if ledger_queryset is not None:
+                    ledger_serializer = self.list (
+                        ledger_queryset,
+                        AccountLedgerSerializer,
+                        many=True
+                    )
+                    
+                    for i, ledger in zip(range(ledger_queryset.count()), ledger_serializer.data):
+                        headers.extend(['Ledger Type -%s' %(i+1)])
+                        headers.extend(['Roads Credits -%s' %(i+1)])
+                        headers.extend(['Parks Credits -%s' %(i+1)])
+                        headers.extend(['Storm Credits -%s' %(i+1)])
+                        headers.extend(['Open Space Credits -%s' %(i+1)])
+                        headers.extend(['Non-Sewer Credits -%s' %(i+1)])
+                        headers.extend(['Sewer Trans. Credits -%s' %(i+1)])
+                        headers.extend(['Sewer Cap. Credits -%s' %(i+1)])
+                        headers.extend(['Sewer Credits -%s' %(i+1)])
+
+                        row['Ledger Type -%s' %(i+1)] = ledger['entry_type_display']
+                        row['Roads Credits -%s' %(i+1)] = ledger['roads']
+                        row['Parks Credits -%s' %(i+1)] = ledger['parks']
+                        row['Storm Credits -%s' %(i+1)] = ledger['storm']
+                        row['Open Space Credits -%s' %(i+1)] = ledger['open_space']
+                        row['Non-Sewer Credits -%s' %(i+1)] = ledger['non_sewer_credits']
+                        row['Sewer Trans. Credits -%s' %(i+1)] = ledger['sewer_trans']
+                        row['Sewer Cap. Credits -%s' %(i+1)] = ledger['sewer_cap']
+                        row['Sewer Credits -%s' %(i+1)] = ledger['sewer_credits']
 
 
             unique_fieldnames = []
