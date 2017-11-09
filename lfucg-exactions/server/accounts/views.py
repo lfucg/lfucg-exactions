@@ -54,11 +54,11 @@ class AccountCSVExportView(View):
         else:
             account_queryset = Account.objects.all()
 
-            plat_set = self.request.GET.get('plat__id', None)
+            plat_set = self.request.GET.get('plat_account__id', None)
             if plat_set is not None:
                 account_queryset = account_queryset.filter(plat_account=plat_set)
 
-            lot_set = self.request.GET.get('lot__id', None)
+            lot_set = self.request.GET.get('lot_account__id', None)
             if lot_set is not None:
                 account_queryset = account_queryset.filter(lot_account=lot_set)
 
