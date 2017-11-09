@@ -142,6 +142,7 @@ class PlatExisting extends React.Component {
                     { filterField: 'filter_lot__id', displayName: 'Lot', list: lotsList },
                     { filterField: 'filter_is_approved', displayName: 'Approval', list: [{ id: true, name: 'Approved' }, { id: false, name: 'Unapproved' }] },
                   ]}
+                  csvEndpoint="../api/export_plat_csv/?"
                 />
 
                 <div className="inside-body">
