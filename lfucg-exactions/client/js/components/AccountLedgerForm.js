@@ -50,6 +50,7 @@ class AccountLedgerForm extends React.Component {
             accountFormChange,
             closeModal,
             selectedAccountLedger,
+            creditCalculation,
             currentUser,
         } = this.props;
 
@@ -90,9 +91,9 @@ class AccountLedgerForm extends React.Component {
             activeForm.account_to &&
             activeForm.agreement &&
             activeForm.entry_type &&
-            activeForm.non_sewer_credits &&
-            activeForm.sewer_credits &&
-            activeForm.entry_date;
+            ((activeForm.non_sewer_credits && activeForm.sewer_credits) || activeForm.credits_applied) &&
+            activeForm.entry_date &&
+            parseFloat(activeForm.balance.replace(/\$|,/g, '')) - activeForm.credits_applied > 0;
 
         const currentPlat = plats && plats.length > 0 &&
             filter(plat => plat.id === parseInt(activeForm.plat, 10))(plats)[0];
@@ -160,7 +161,7 @@ class AccountLedgerForm extends React.Component {
                                         </div>
                                         <div className="col-sm-6 form-group">
                                             <label htmlFor="lot" className="form-label" id="lot" aria-label="Lot" >Lot</label>
-                                            <select className="form-control" id="lot" onChange={lotFormChange('lot')} value={activeForm.lot_show} disabled={activeForm.entry_type !== 'USE' || activeForm.plat_lot !== 'lot'}>
+                                            <select className="form-control" id="lot" onChange={lotFormChange('lot', lots)} value={activeForm.lot_show} disabled={activeForm.entry_type !== 'USE' || activeForm.plat_lot !== 'lot'}>
                                                 <option value="start_lot">Lot</option>
                                                 {lotsList}
                                             </select>
@@ -184,8 +185,15 @@ class AccountLedgerForm extends React.Component {
                                         <div className="white-box">
                                             {activeForm.balance &&
                                                 <div className="row text-center">
-                                                    <h4>Credits Available:</h4>
-                                                    <h5>{activeForm.balance}</h5>
+                                                    <h4>Credits Available: {activeForm.balance}</h4>
+                                                </div>
+                                            }
+                                            {activeForm.credits_applied && activeForm.balance &&
+                                                <div className="row text-center">
+                                                    <h4>Credits Applied: {`$${activeForm.credits_applied.toLocaleString('en')}`}</h4>
+                                                    <h4 className={parseFloat(activeForm.balance.replace(/\$|,/g, '')) - activeForm.credits_applied > 0 ? 'text-success' : 'text-danger'}>
+                                                        Credits Remaining: {`$${(parseFloat(activeForm.balance.replace(/\$|,/g, '')) - activeForm.credits_applied).toLocaleString('en')}`}
+                                                    </h4>
                                                 </div>
                                             }
                                             {activeForm.sewer_exactions || activeForm.non_sewer_exactions ?
@@ -194,11 +202,35 @@ class AccountLedgerForm extends React.Component {
                                                         <h4>Exactions Due</h4>
                                                     </div>
                                                     <div className="row">
-                                                        <div className="col-sm-6">
-                                                            <h5>Non-Sewer Due: {activeForm.non_sewer_exactions}</h5>
+                                                        <div className="col-xs-6">
+                                                            <h4>Non-Sewer Due: {activeForm.non_sewer_exactions}</h4>
                                                         </div>
-                                                        <div className="col-sm-6">
-                                                            <h5>Sewer Due: {activeForm.sewer_exactions}</h5>
+                                                        <div className="col-xs-6">
+                                                            <h4>Sewer Due: {activeForm.sewer_exactions}</h4>
+                                                        </div>
+                                                    </div>
+                                                    <div className="row">
+                                                        <div className="col-xs-6">
+                                                            <h5>Roads: {activeForm.dues_roads_dev}</h5>
+                                                        </div>
+                                                        <div className="col-xs-6">
+                                                            <h5>Parks: {activeForm.dues_parks_dev}</h5>
+                                                        </div>
+                                                    </div>
+                                                    <div className="row">
+                                                        <div className="col-xs-6">
+                                                            <h5>Sewer Capacity: {activeForm.dues_sewer_cap_dev}</h5>
+                                                        </div>
+                                                        <div className="col-xs-6">
+                                                            <h5>Sewer Transmission: {activeForm.dues_sewer_trans_dev}</h5>
+                                                        </div>
+                                                    </div>
+                                                    <div className="row">
+                                                        <div className="col-xs-6">
+                                                            <h5>Storm: {activeForm.dues_storm_dev}</h5>
+                                                        </div>
+                                                        <div className="col-xs-6">
+                                                            <h5>Open Spaces: {activeForm.dues_open_space_dev}</h5>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -207,23 +239,109 @@ class AccountLedgerForm extends React.Component {
                                     : null}
                                     <div className="row">
                                         <div className="col-sm-6">
-                                            <FormGroup label="* Non-Sewer Credits" id="non_sewer_credits" aria-required="true" >
+                                            <FormGroup label="Non-Sewer Credits" id="non_sewer_credits" aria-required="true" >
                                                 <input
                                                   type="number"
+                                                  value="0.00"
                                                   className="form-control"
                                                   placeholder="Non-Sewer Credits"
-                                                  disabled={!activeForm.entry_type}
+                                                  disabled={!activeForm.entry_type || activeForm.entry_type !== 'TRANSFER'}
                                                   step="0.01"
                                                 />
                                             </FormGroup>
                                         </div>
                                         <div className="col-sm-6">
-                                            <FormGroup label="* Sewer Credits" id="sewer_credits" aria-required="true" >
+                                            <FormGroup label="Sewer Credits" id="sewer_credits" aria-required="true" >
                                                 <input
                                                   type="number"
+                                                  value="0.00"
                                                   className="form-control"
                                                   placeholder="Sewer Credits"
-                                                  disabled={!activeForm.entry_type}
+                                                  disabled={!activeForm.entry_type || activeForm.entry_type !== 'TRANSFER'}
+                                                  step="0.01"
+                                                />
+                                            </FormGroup>
+                                        </div>
+                                    </div>
+                                    <div className="row">
+                                        <div className="col-sm-6">
+                                            <FormGroup label="Roads" id="roads">
+                                                <input
+                                                  type="number"
+                                                  value="0.00"
+                                                  className="form-control non-sewer"
+                                                  placeholder="Roads"
+                                                  disabled={!activeForm.entry_type || activeForm.entry_type === 'TRANSFER'}
+                                                  onBlur={creditCalculation}
+                                                  step="0.01"
+                                                />
+                                            </FormGroup>
+                                        </div>
+                                        <div className="col-sm-6">
+                                            <FormGroup label="Parks" id="parks">
+                                                <input
+                                                  type="number"
+                                                  value="0.00"
+                                                  className="form-control non-sewer"
+                                                  placeholder="Parks"
+                                                  disabled={!activeForm.entry_type || activeForm.entry_type === 'TRANSFER'}
+                                                  onBlur={creditCalculation}
+                                                  step="0.01"
+                                                />
+                                            </FormGroup>
+                                        </div>
+                                    </div>
+                                    <div className="row">
+                                        <div className="col-sm-6">
+                                            <FormGroup label="Sewer Capacity" id="sewer_cap">
+                                                <input
+                                                  type="number"
+                                                  value="0.00"
+                                                  className="form-control sewer"
+                                                  placeholder="Sewer Capacity"
+                                                  disabled={!activeForm.entry_type || activeForm.entry_type === 'TRANSFER'}
+                                                  onBlur={creditCalculation}
+                                                  step="0.01"
+                                                />
+                                            </FormGroup>
+                                        </div>
+                                        <div className="col-sm-6">
+                                            <FormGroup label="Sewer Transmission" id="sewer_trans">
+                                                <input
+                                                  type="number"
+                                                  value="0.00"
+                                                  className="form-control sewer"
+                                                  placeholder="Sewer Transmission"
+                                                  disabled={!activeForm.entry_type || activeForm.entry_type === 'TRANSFER'}
+                                                  onBlur={creditCalculation}
+                                                  step="0.01"
+                                                />
+                                            </FormGroup>
+                                        </div>
+                                    </div>
+                                    <div className="row">
+                                        <div className="col-sm-6">
+                                            <FormGroup label="Storm" id="storm">
+                                                <input
+                                                  type="number"
+                                                  value="0.00"
+                                                  className="form-control non-sewer"
+                                                  placeholder="Storm"
+                                                  disabled={!activeForm.entry_type || activeForm.entry_type === 'TRANSFER'}
+                                                  onBlur={creditCalculation}
+                                                  step="0.01"
+                                                />
+                                            </FormGroup>
+                                        </div>
+                                        <div className="col-sm-6">
+                                            <FormGroup label="Open Spaces" id="open_space">
+                                                <input
+                                                  type="number"
+                                                  value="0.00"
+                                                  className="form-control non-sewer"
+                                                  placeholder="Open Spaces"
+                                                  disabled={!activeForm.entry_type || activeForm.entry_type === 'TRANSFER'}
+                                                  onBlur={creditCalculation}
                                                   step="0.01"
                                                 />
                                             </FormGroup>
@@ -356,6 +474,7 @@ AccountLedgerForm.propTypes = {
     platFormChange: PropTypes.func,
     lotFormChange: PropTypes.func,
     accountFormChange: PropTypes.func,
+    creditCalculation: PropTypes.func,
     closeModal: PropTypes.func,
     selectedAccountLedger: PropTypes.string,
     currentUser: PropTypes.object,
@@ -512,7 +631,7 @@ function mapDispatchToProps(dispatch, params) {
                 }
             };
         },
-        lotFormChange(field) {
+        lotFormChange(field, lots) {
             return (e, ...args) => {
                 const value = typeof e.target.value !== 'undefined' ? e.target.value : args[1];
 
@@ -525,7 +644,7 @@ function mapDispatchToProps(dispatch, params) {
                     const value_name = value.substring(comma_index + 1, dollar_index);
                     const value_non_sewer = value.substring(dollar_index, second_dollar_index);
                     const value_sewer = value.substring(second_dollar_index + 1, value.length);
-
+                    const current_lot = filter(lot => lot.id === parseInt(value_id, 10))(lots)[0];
                     const field_name = `${[field]}_name`;
                     const field_show = `${[field]}_show`;
 
@@ -535,6 +654,12 @@ function mapDispatchToProps(dispatch, params) {
                         [field_show]: value,
                         non_sewer_exactions: value_non_sewer,
                         sewer_exactions: value_sewer,
+                        dues_roads_dev: current_lot.lot_exactions.dues_roads_dev,
+                        dues_parks_dev: current_lot.lot_exactions.dues_parks_dev,
+                        dues_open_space_dev: current_lot.lot_exactions.dues_open_space_dev,
+                        dues_storm_dev: current_lot.lot_exactions.dues_storm_dev,
+                        dues_sewer_cap_dev: current_lot.lot_exactions.dues_sewer_cap_dev,
+                        dues_sewer_trans_dev: current_lot.lot_exactions.dues_sewer_trans_dev,
                     };
 
                     dispatch(formUpdate(lot_update));
@@ -594,6 +719,33 @@ function mapDispatchToProps(dispatch, params) {
         },
         closeModal() {
             dispatch(formUpdate({ openModal: false }));
+        },
+        creditCalculation() {
+            let sewerTotal = 0;
+            let nonSewerTotal = 0;
+            const sewerFields = document.getElementsByClassName('sewer');
+            const nonSewerFields = document.getElementsByClassName('non-sewer');
+
+            map((field) => {
+                const value = parseFloat(field.value) || 0;
+                sewerTotal += value;
+            })(sewerFields);
+
+            map((field) => {
+                const value = parseFloat(field.value) || 0;
+                nonSewerTotal += value;
+            })(nonSewerFields);
+
+            document.getElementById('sewer_credits').value = sewerTotal;
+            document.getElementById('non_sewer_credits').value = nonSewerTotal;
+
+            const update = {
+                sewer_credits: sewerTotal,
+                non_sewer_credits: nonSewerTotal,
+                credits_applied: sewerTotal + nonSewerTotal,
+            };
+
+            dispatch(formUpdate(update));
         },
         selectedAccountLedger,
     };
