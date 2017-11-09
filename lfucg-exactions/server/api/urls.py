@@ -7,7 +7,7 @@ from plats.viewsets import *
 from plats.views import PlatCSVExportView, LotSearchCSVExportView
 from notes.viewsets import *
 from accounts.viewsets import *
-from accounts.views import CurrentUserDetails, TransactionCSVExportView
+from accounts.views import CurrentUserDetails, TransactionCSVExportView, AgreementCSVExportView, AccountCSVExportView
 
 router = routers.DefaultRouter()
 
@@ -40,10 +40,14 @@ urlpatterns = [
     url(r'^password_reset/$', reset_password),
     url(r'^forgot-username/$', forgot_username),
     url(r'^delete_token/', Logout.as_view()),
+    url(r'^reset/(?P<uidb36>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$', auth_views.password_reset_confirm, name='password_reset_confirm'),
+
     url(r'^upload/create/$', FileUploadCreate.as_view(), name="document-upload"),
     url(r'^export_plat_csv/$', PlatCSVExportView.as_view()),
     url(r'^lot_search_csv/$', LotSearchCSVExportView.as_view()),
     url(r'^transactions_csv/$', TransactionCSVExportView.as_view()),
-    url(r'^reset/(?P<uidb36>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$', auth_views.password_reset_confirm, name='password_reset_confirm'),
+    url(r'^export_account_csv/$', AccountCSVExportView.as_view()),
+    url(r'^export_agreement_csv/$', AgreementCSVExportView.as_view()),
+
     url(r'^', include(router.urls)),
 ]

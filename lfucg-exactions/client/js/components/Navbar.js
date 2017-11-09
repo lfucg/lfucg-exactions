@@ -42,7 +42,7 @@ class Navbar extends React.Component {
                                 <span className="icon-bar" />
                             </button>
                         </div>
-                        <div id="navbar-header-collapse" className="collapse navbar-collapse">
+                        <div id="navbar-header-collapse" className="text-center collapse navbar-collapse">
                             <div className="pull-right">
                                 <ul className="nav navbar-nav pull-right navbar-menu">
                                     <li>

@@ -59,19 +59,21 @@ class PlatExisting extends React.Component {
 
         const plats_list = plats && plats.length > 0 ? (
             map((plat) => {
+                const cabinet = plat.cabinet ? `${plat.cabinet}-` : '';
+                const slide = plat.slide ? plat.slide : plat.name;
                 return (
                     <div key={plat.id} className="col-xs-12">
                         {(currentUser.id || plat.is_approved) && <div>
                             <div className={plat.is_approved ? 'row form-subheading' : 'row unapproved-heading'}>
                                 <div className="col-sm-11">
                                     <h3>
-                                        {plat.name}
+                                        {cabinet}{slide}
                                         {!plat.is_approved && <span className="pull-right">Approval Pending</span>}
                                     </h3>
                                 </div>
                             </div>
                             <div className={plat.is_approved ? 'row link-row' : 'row link-row-approval-pending'}>
-                                <div className="col-xs-12 col-sm-7 col-md-5 col-sm-offset-5 col-md-offset-7">
+                                <div className="col-xs-9 pull-right">
                                     <div className="col-xs-3">
                                         {currentUser && currentUser.permissions && currentUser.permissions.plat &&
                                             <Link to={`plat/form/${plat.id}`} aria-label="Edit">
@@ -104,13 +106,12 @@ class PlatExisting extends React.Component {
                             </div>
                             <div className="row">
                                 <div className="col-sm-offset-1">
-                                    <p className="col-xs-6">Sewer Remaining: {plat.plat_exactions && plat.plat_exactions.plat_sewer_due}</p>
-                                    <p className="col-xs-6">Non-Sewer Remaining: {plat.plat_exactions && plat.plat_exactions.plat_non_sewer_due}</p>
-                                    <p className="col-sm-4 col-xs-6">Slide: {plat.slide}</p>
-                                    <p className="col-sm-4 col-xs-6">Cabinet: {plat.cabinet}</p>
-                                    <p className="col-sm-4 col-xs-6">Section: {plat.section}</p>
-                                    <p className="col-sm-4 col-xs-6">Block: {plat.block}</p>
-                                    <p className="col-sm-4 col-xs-6">Expansion Area: {plat.expansion_area}</p>
+                                    <p className="col-xs-12 col-sm-6">Sewer Due: {plat.plat_exactions && plat.plat_exactions.plat_sewer_due}</p>
+                                    <p className="col-xs-12 col-sm-6">Non-Sewer Due: {plat.plat_exactions && plat.plat_exactions.plat_non_sewer_due}</p>
+                                    <p className="col-xs-6">Name: {plat.name}</p>
+                                    <p className="col-xs-6">Section: {plat.section}</p>
+                                    <p className="col-xs-6">Block: {plat.block}</p>
+                                    <p className="col-xs-6">Expansion Area: {plat.expansion_area}</p>
                                 </div>
                             </div>
                         </div>}

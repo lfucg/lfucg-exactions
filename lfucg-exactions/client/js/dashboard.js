@@ -30,10 +30,12 @@ import LotSummary from './components/LotSummary';
 import AccountExisting from './components/AccountExisting';
 import AccountSummary from './components/AccountSummary';
 import AccountForm from './components/AccountForm';
+import AccountReport from './components/AccountReport';
 
 import AgreementExisting from './components/AgreementExisting';
 import AgreementSummary from './components/AgreementSummary';
 import AgreementForm from './components/AgreementForm';
+import AgreementReport from './components/AgreementReport';
 
 import PaymentExisting from './components/PaymentExisting';
 import PaymentSummary from './components/PaymentSummary';
@@ -93,11 +95,13 @@ ReactDOM.render(
             <Route path="account/summary/:id" component={AccountSummary} name="Developer Account Summary" />
             <Route path="account/form" component={AccountForm} name="Developer Account Form" />
             <Route path="account/form/:id" component={AccountForm} name="Current Developer Account Form" />
+            <Route path="account/report/:id" component={AccountReport} name="Account Report" />
 
             <Route path="agreement" component={AgreementExisting} name="Existing Agreements" />
             <Route path="agreement/summary/:id" component={AgreementSummary} name="Agreement Summary" />
             <Route path="agreement/form" component={AgreementForm} name="Agreement Form" />
             <Route path="agreement/form/:id" component={AgreementForm} name="Current Agreement Form" />
+            <Route path="agreement/report/:id" component={AgreementReport} name="Agreement Report" />
 
             <Route path="payment" component={PaymentExisting} name="Existing Payments" />
             <Route path="payment/summary/:id" component={PaymentSummary} name="Payment Summary" />

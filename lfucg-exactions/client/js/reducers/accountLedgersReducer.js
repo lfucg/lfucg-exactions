@@ -27,11 +27,7 @@ const accountLedgersReducer = (state = [], action) => {
         return {};
     case GET_PAGINATION:
     case SEARCH_QUERY:
-        const next = action.response.next;
-        const prev = action.response.prev;
-        if ((next != null && next.substr(0, next.length) === '/ledger') ||
-            (prev != null && prev.substr(0, prev.length) === '/ledger') ||
-            (window.location.hash === '#/credit-transfer')) {
+        if (action.response.endpoint === '/ledger') {
             return action.response;
         }
         return state;

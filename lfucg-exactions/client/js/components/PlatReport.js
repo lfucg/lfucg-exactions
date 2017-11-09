@@ -55,7 +55,7 @@ class PlatReport extends React.Component {
 
                 <div className="form-header">
                     <div className="container">
-                        <h1>PLATS - {plats.name} - REPORT</h1>
+                        <h1>PLATS - {plats.cabinet}-{plats.slide} - REPORT</h1>
                     </div>
                 </div>
 

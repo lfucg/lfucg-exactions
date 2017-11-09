@@ -1,8 +1,8 @@
+import { map, reduce, filter, compose } from 'ramda';
+
 import {
   API_CALL,
 } from '../constants/actionTypes';
-
-import { map, reduce, filter, compose } from 'ramda';
 
 import {
     ME,
@@ -528,6 +528,7 @@ export function postLot() {
                 dues_open_space_dev,
                 dues_open_space_own,
                 account,
+                certificate_of_occupancy,
             } = activeForm;
             return {
                 plat,
@@ -558,6 +559,7 @@ export function postLot() {
                 dues_open_space_dev,
                 dues_open_space_own,
                 account,
+                certificate_of_occupancy,
             };
         },
     };
@@ -601,6 +603,7 @@ export function putLot(selectedLot) {
                 dues_open_space_dev,
                 dues_open_space_own,
                 account,
+                certificate_of_occupancy,
                 // payment,
             } = activeForm;
             return {
@@ -632,6 +635,7 @@ export function putLot(selectedLot) {
                 dues_open_space_dev,
                 dues_open_space_own,
                 account,
+                certificate_of_occupancy,
                 // payment,
             };
         },

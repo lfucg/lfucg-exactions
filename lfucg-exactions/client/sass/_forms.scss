@@ -72,7 +72,6 @@
             color: white;
         }
     }
-    /*background-color: green;*/
 }
 
 .rate-panel-group {
@@ -106,7 +105,6 @@
             color: white;
         }
     }
-    /*background-color: green;*/
 }
 
 .form-subheading {
@@ -215,11 +213,6 @@
             border-top: 1px solid black;
             border-bottom: 1px solid black;
             border-left: 1px solid black;
-        }
-    }
-    .col-sm-7 {
-        padding: 0px;
-        h5 {
             .report-wrap-header {
                 line-height: 20px;
                 height: 60px;
@@ -228,6 +221,10 @@
             }
         }
     }
+    .col-sm-7, .col-sm-10 {
+        padding: 0px;
+    }
+
     .report-data {
         padding-top: 10px;
         height: 36px;
