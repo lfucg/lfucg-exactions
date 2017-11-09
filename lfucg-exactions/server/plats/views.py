@@ -11,6 +11,112 @@ from accounts.serializers import PaymentSerializer, AccountLedgerSerializer
 from .utils import calculate_lot_balance
 from .serializers import *
 
+class SubdivisionCSVExportView(View):
+    def get_serializer_class(self, serializer_class):
+        return serializer_class
+
+    def list(self, queryset, serializer_class, many):
+        serializer_class = self.get_serializer_class(serializer_class)
+        serializer = serializer_class(queryset, many=many)
+        return serializer
+
+    def get(self, request, *args, **kwargs):
+        headers = [
+            'Name',
+            'Acres',
+        ]
+
+        all_rows = []
+
+        subdivision_value = request.GET.get('subdivision', None)
+
+        if subdivision_value is not None:
+            subdivision_queryset = Subdivision.objects.filter(id=subdivision_value)
+            subdivision_serializer = self.list(
+                subdivision_queryset,
+                SubdivisionSerializer,
+                many=False
+            )
+            filename = subdivision_queryset[0].cabinet + '-' + subdivision_queryset[0].slide + '_subdivision_report.csv'
+        else:
+            subdivision_queryset = Subdivision.objects.all()
+
+            plat_set = self.request.GET.get('plat__id', None)
+            if plat_set is not None:
+                subdivision_queryset = subdivision_queryset.filter(plat=plat_set)
+
+            search_set = self.request.GET.get('search', None)
+            if search_set is not None:
+                subdivision_queryset = subdivision_queryset.filter(
+                        Q(name__icontains=search_set)
+                    )
+
+            subdivision_serializer = self.list(
+                subdivision_queryset,
+                SubdivisionSerializer,
+                many=True
+            )
+            filename = 'subdivision_report_' + datetime.datetime.now().strftime("%Y-%m-%d") + '.csv'
+
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename=%s'%filename
+        
+        for subdivision in subdivision_serializer.data:
+            row = {
+                'Name': subdivision['name'],
+                'Acres': subdivision['gross_acreage'],
+            }
+
+            plat_queryset = Plat.objects.filter(subdivision=subdivision['id'])
+            if plat_queryset is not None:
+                plat_serializer = self.list (
+                    plat_queryset,
+                    PlatSerializer,
+                    many=True
+                )
+
+                for i, plat in zip(range(plat_queryset.count()), plat_serializer.data):
+                    headers.extend(['Cabinet -%s' %(i+1)])
+                    headers.extend(['Slide -%s' %(i+1)])
+                    headers.extend(['Total Acreage -%s' %(i+1)])
+                    headers.extend(['Buildable Lots -%s' %(i+1)])
+                    headers.extend(['Non-Buildable Lots -%s' %(i+1)])
+                    headers.extend(['Plat Type -%s' %(i+1)])
+                    headers.extend(['Slide -%s' %(i+1)])
+                    headers.extend(['Unit -%s' %(i+1)])
+                    headers.extend(['Block -%s' %(i+1)])
+                    headers.extend(['Section -%s' %(i+1)])
+                    headers.extend(['Non-Sewer Exactions -%s' %(i+1)])
+                    headers.extend(['Sewer Exactions -%s' %(i+1)])
+
+                    row['Cabinet -%s' %(i+1)] = plat['cabinet']
+                    row['Slide -%s' %(i+1)] = plat['slide']
+                    row['Total Acreage -%s' %(i+1)] = plat['total_acreage']
+                    row['Buildable Lots -%s' %(i+1)] = plat['buildable_lots']
+                    row['Non-Buildable Lots -%s' %(i+1)] = plat['non_buildable_lots']
+                    row['Plat Type -%s' %(i+1)] = plat['plat_type_display']
+                    row['Expansion Area -%s' %(i+1)] = plat['expansion_area']
+                    row['Unit -%s' %(i+1)] = plat['unit']
+                    row['Blocks -%s' %(i+1)] = plat['block']
+                    row['Section -%s' %(i+1)] = plat['section']
+                    row['Non-Sewer Exactions -%s' %(i+1)] = plat['non_sewer_due']
+                    row['Sewer Exactions -%s' %(i+1)] = plat['sewer_due']
+
+            all_rows.append(row)
+
+        unique_fieldnames = []
+        for name in headers:
+            if name not in unique_fieldnames:
+                unique_fieldnames.append(name)
+
+        writer = csv.DictWriter(response, fieldnames=unique_fieldnames, extrasaction='ignore')
+        writer.writeheader()
+
+        for row in all_rows:
+            writer.writerow(row)
+
+        return response
+
 class PlatCSVExportView(View):
     def get_serializer_class(self, serializer_class):
         return serializer_class
@@ -66,7 +172,7 @@ class PlatCSVExportView(View):
             if account_set is not None:
                 plat_queryset = plat_queryset.filter(account=account_set)
 
-            lot_set = self.request.GET.get('lot', None)
+            lot_set = self.request.GET.get('lot__id', None)
             if lot_set is not None:
                 plat_queryset = plat_queryset.filter(lot=lot_set)
 
