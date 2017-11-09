@@ -210,8 +210,6 @@ function mapDispatchToProps(dispatch, props) {
             };
         },
         calculationWarning(warning_id) {
-            console.log('hello world');
-            console.log(warning_id);
             document.getElementById(warning_id).classList.remove('hidden');
         },
     };

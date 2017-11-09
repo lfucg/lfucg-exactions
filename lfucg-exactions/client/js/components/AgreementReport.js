@@ -19,7 +19,6 @@ class AgreementReport extends React.Component {
         this.props.onComponentDidMount();
     }
 
-
     render() {
         const {
             agreements,
@@ -196,6 +195,5 @@ function mapDispatchToProps(dispatch, params) {
         },
     };
 }
-
 
 export default connect(mapStateToProps, mapDispatchToProps)(AgreementReport);
