@@ -59,7 +59,7 @@ class AccountExisting extends React.Component {
                         </div>
                         <div className="row link-row">
                             <div className="col-xs-12 col-sm-5 col-sm-offset-7">
-                                <div className="col-xs-5">
+                                <div className="col-xs-3">
                                     {currentUser && currentUser.permissions && currentUser.permissions.account &&
                                         <Link to={`account/form/${account.id}`} aria-label="Edit">
                                             <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
@@ -69,7 +69,17 @@ class AccountExisting extends React.Component {
                                         </Link>
                                     }
                                 </div>
-                                <div className="col-xs-5 ">
+                                <div className="col-xs-4">
+                                    {currentUser && currentUser.permissions && currentUser.permissions.account &&
+                                        <Link to={`account/report/${account.id}`} aria-label="Report">
+                                            <i className="fa fa-line-chart link-icon col-xs-4" aria-hidden="true" />
+                                            <div className="col-xs-7 link-label">
+                                                Report
+                                            </div>
+                                        </Link>
+                                    }
+                                </div>
+                                <div className="col-xs-4">
                                     <Link to={`account/summary/${account.id}`} aria-label="Summary">
                                         <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
                                         <div className="col-xs-7 link-label">

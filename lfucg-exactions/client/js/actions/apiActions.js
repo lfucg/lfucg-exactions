@@ -1,8 +1,8 @@
+import { map, reduce, filter, compose } from 'ramda';
+
 import {
   API_CALL,
 } from '../constants/actionTypes';
-
-import { map, reduce, filter, compose } from 'ramda';
 
 import {
     ME,
