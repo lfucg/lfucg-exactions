@@ -31,15 +31,17 @@ class SubdivisionSummary extends React.Component {
 
         const subdivisionPlats = plats && plats.length > 0 &&
             map((plat) => {
+                const cabinet = plat.cabinet ? `${plat.cabinet}-` : '';
+                const slide = plat.slide ? plat.slide : plat.name;
                 return (
                     <div key={plat.id} className="col-xs-12">
                         <div className="row form-subheading">
                             <div className="col-sm-7 col-md-9">
-                                <h3>{plat.name}</h3>
+                                <h3>{cabinet}{slide}</h3>
                             </div>
                         </div>
                         <div className="row link-row">
-                            <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
+                            <div className="col-xs-12 col-sm-5 col-sm-offset-7">
                                 <div className="col-xs-5">
                                     {currentUser && currentUser.permissions && currentUser.permissions.plat &&
                                         <Link to={`plat/form/${plat.id}`} aria-label="Edit">
@@ -61,12 +63,12 @@ class SubdivisionSummary extends React.Component {
                             </div>
                         </div>
                         <div className="row">
-                            <p className="col-md-3 col-sm-4 col-xs-6">Gross Acreage: {plat.cleaned_total_acreage}</p>
-                            <p className="col-md-3 col-sm-4 col-xs-6">Approval: {plat.is_approved ? 'Approved' : 'Not Approved'}</p>
-                            <p className="col-md-3 col-sm-4 col-xs-6">Expansion Area: {plat.expansion_area}</p>
-                            <p className="col-md-3 col-sm-4 col-xs-6">Slide: {plat.slide}</p>
-                            <p className="col-md-3 col-sm-4 col-xs-6">Sewer Exactions: {plat.plat_exactions && plat.plat_exactions.plat_sewer_due}</p>
-                            <p className="col-md-3 col-sm-4 col-xs-6">Non-Sewer Exactions: {plat.plat_exactions && plat.plat_exactions.plat_non_sewer_due}</p>
+                            <p className="col-xs-6"><strong>{plat.is_approved ? 'Approved' : 'Not Approved'}</strong></p>
+                            <p className="col-xs-6">Gross Acreage: {plat.cleaned_total_acreage}</p>
+                            <p className="col-xs-6">Name: {plat.name}</p>
+                            <p className="col-xs-6">Expansion Area: {plat.expansion_area}</p>
+                            <p className="col-xs-6">Sewer Exactions: {plat.plat_exactions && plat.plat_exactions.plat_sewer_due}</p>
+                            <p className="col-xs-6">Non-Sewer Exactions: {plat.plat_exactions && plat.plat_exactions.plat_non_sewer_due}</p>
                         </div>
                     </div>
                 );
@@ -82,7 +84,7 @@ class SubdivisionSummary extends React.Component {
                                 <h3>{lot.address_full}</h3>
                             </div>
                             <div className="row link-row">
-                                <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
+                                <div className="col-xs-12 col-sm-5 col-sm-offset-7">
                                     <div className="col-xs-5">
                                         {currentUser && currentUser.permissions && currentUser.permissions.lot &&
                                             <Link to={`lot/form/${lot.id}`} aria-label="Edit">
@@ -154,7 +156,7 @@ class SubdivisionSummary extends React.Component {
                             >
                                 <div className="panel-body">
                                     <div className="row link-row">
-                                        <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
+                                        <div className="col-xs-12 col-sm-5 col-sm-offset-7">
                                             <div className="col-xs-5 col-xs-offset-5">
                                                 {currentUser && currentUser.permissions && currentUser.permissions.subdivision &&
                                                     <Link to={`subdivision/form/${subdivisions.id}`} aria-label="Edit">

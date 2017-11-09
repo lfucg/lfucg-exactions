@@ -124,8 +124,6 @@ class PlatForm extends React.Component {
             activeForm.total_acreage &&
             activeForm.plat_type &&
             activeForm.expansion_area &&
-            activeForm.section &&
-            activeForm.block &&
             activeForm.buildable_lots &&
             activeForm.non_buildable_lots &&
             activeForm.cabinet &&
@@ -262,6 +260,18 @@ class PlatForm extends React.Component {
                                                 </div>
                                             </div>
                                             <div className="row">
+                                                <div className="col-sm-6">
+                                                    <FormGroup label="* Cabinet" id="cabinet" aria-required="true">
+                                                        <input type="text" className="form-control" placeholder="Cabinet" />
+                                                    </FormGroup>
+                                                </div>
+                                                <div className="col-sm-6">
+                                                    <FormGroup label="* Slide" id="slide" aria-required="true">
+                                                        <input type="text" className="form-control" placeholder="Slide" />
+                                                    </FormGroup>
+                                                </div>
+                                            </div>
+                                            <div className="row">
                                                 <div className="col-sm-6 form-group">
                                                     <label htmlFor="plat_type" className="form-label" id="plat_type" aria-label="Plat Type" aria-required="true">* Plat Type</label>
                                                     <select className="form-control" id="plat_type" onChange={formChange('plat_type')} value={activeForm.plat_type_show} >
@@ -271,7 +281,7 @@ class PlatForm extends React.Component {
                                                     </select>
                                                 </div>
                                                 <div className="col-sm-6">
-                                                    <FormGroup label="* Section" id="section" aria-required="true">
+                                                    <FormGroup label="Section" id="section">
                                                         <input type="text" className="form-control" placeholder="Section" />
                                                     </FormGroup>
                                                 </div>
@@ -283,20 +293,8 @@ class PlatForm extends React.Component {
                                                     </FormGroup>
                                                 </div>
                                                 <div className="col-sm-6">
-                                                    <FormGroup label="* Block" id="block" aria-required="true">
+                                                    <FormGroup label="Block" id="block">
                                                         <input type="text" className="form-control" placeholder="Block" />
-                                                    </FormGroup>
-                                                </div>
-                                            </div>
-                                            <div className="row">
-                                                <div className="col-sm-6">
-                                                    <FormGroup label="* Cabinet" id="cabinet" aria-required="true">
-                                                        <input type="text" className="form-control" placeholder="Cabinet" />
-                                                    </FormGroup>
-                                                </div>
-                                                <div className="col-sm-6">
-                                                    <FormGroup label="* Slide" id="slide" aria-required="true">
-                                                        <input type="text" className="form-control" placeholder="Slide" />
                                                     </FormGroup>
                                                 </div>
                                             </div>

@@ -63,8 +63,8 @@ def calculate_lot_balance(lot):
             non_sewer_payment += non_sewer_payment_paid
 
     # ACCOUNT LEDGERS
-    account_ledgers = AccountLedger.objects.filter(lot=lot.id, entry_type='USE')
-
+    account_ledgers = AccountLedger.objects.exclude(is_active=False).filter(lot=lot.id, entry_type='USE')
+    
     sewer_credits_applied = 0
     non_sewer_credits_applied = 0
 
@@ -120,7 +120,6 @@ def calculate_plat_balance(plat):
             calculated_lot = calculate_lot_balance(lot)
             lots_non_sewer_paid += calculated_lot['non_sewer_payment'] + calculated_lot['non_sewer_credits_applied']
             lots_sewer_paid += calculated_lot['sewer_payment'] + calculated_lot['sewer_credits_applied']
-
 
     plat_exactions = {
         'plat_sewer_due': plat.sewer_due - lots_sewer_paid,
