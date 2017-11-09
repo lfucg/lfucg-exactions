@@ -21,11 +21,7 @@ const subdivisionsReducer = (state = [], action) => {
         return {};
     case GET_PAGINATION:
     case SEARCH_QUERY:
-        const next = action.response.next;
-        const prev = action.response.prev;
-        if ((next != null && next.substr(0, next.length) === '/subdivision') ||
-            (prev != null && prev.substr(0, prev.length) === '/subdivision') ||
-            (window.location.hash === '#/subdivision')) {
+        if (action.response.endpoint === '/subdivision') {
             return action.response;
         }
         return state;

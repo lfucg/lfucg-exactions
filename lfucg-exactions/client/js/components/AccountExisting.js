@@ -32,9 +32,11 @@ class AccountExisting extends React.Component {
 
         const platsList = plats && plats.length > 0 &&
             (map((single_plat) => {
+                const cabinet = single_plat.cabinet ? `${single_plat.cabinet}-` : '';
+                const slide = single_plat.slide ? single_plat.slide : single_plat.name;
                 return {
                     id: single_plat.id,
-                    name: single_plat.name,
+                    name: `${cabinet}${slide}`,
                 };
             })(plats));
 
@@ -56,8 +58,8 @@ class AccountExisting extends React.Component {
                             </div>
                         </div>
                         <div className="row link-row">
-                            <div className="col-xs-9 pull-right">
-                                <div className="col-xs-3">
+                            <div className="col-xs-12 col-sm-5 col-sm-offset-7">
+                                <div className="col-xs-5">
                                     {currentUser && currentUser.permissions && currentUser.permissions.account &&
                                         <Link to={`account/form/${account.id}`} aria-label="Edit">
                                             <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
@@ -89,11 +91,11 @@ class AccountExisting extends React.Component {
                         </div>
                         <div className="row">
                             <div className="col-sm-offset-1">
-                                <p className="col-md-4 col-xs-6">Developer Account Name: {account.account_name}</p>
-                                {account.balance && <p className="col-md-4 col-xs-6">{account.balance.credit_availability}</p>}
+                                <p className="col-xs-6">Developer Account Name: {account.account_name}</p>
+                                {account.balance && <p className="col-xs-6"><strong>{account.balance.credit_availability}</strong></p>}
                                 {currentUser && currentUser.username && <div>
-                                    {account.balance && <p className="col-md-4 col-xs-6">Account Balance: {account.balance.balance}</p>}
-                                    <p className="col-md-4 col-xs-6">Contact Name: {account.contact_full_name}</p>
+                                    <p className="col-xs-6">Contact Name: {account.contact_full_name}</p>
+                                    {account.balance && <p className="col-xs-6">Account Balance: {account.balance.balance}</p>}
                                 </div>}
                             </div>
                         </div>

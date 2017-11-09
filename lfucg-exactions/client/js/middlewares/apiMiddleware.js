@@ -77,10 +77,16 @@ export default function api({ getState, dispatch }) {
             }
 
             if (response.data.results) {
+                const api_index = response.request.responseURL.indexOf('api') + 3;
+                const qmark_index = response.request.responseURL.indexOf('?') - 1;
+                const api_endpoint = response.request.responseURL.slice(api_index, qmark_index);
+
                 const adjustedResponse = response.data.results;
                 adjustedResponse.next = response.data.next ? response.data.next.slice(response.data.next.indexOf('api') + 3, response.data.next.length) : null;
                 adjustedResponse.prev = response.data.previous ? response.data.previous.slice(response.data.previous.indexOf('api') + 3, response.data.previous.length) : null;
                 adjustedResponse.count = response.data.count;
+                adjustedResponse.endpoint = api_endpoint;
+
                 return dispatch({
                     type: API_CALL_SUCCESS,
                     response: adjustedResponse,
