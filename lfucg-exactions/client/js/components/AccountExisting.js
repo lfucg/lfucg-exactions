@@ -122,6 +122,7 @@ class AccountExisting extends React.Component {
                     { filterField: 'filter_plat_account__id', displayName: 'Plat', list: platsList },
                     { filterField: 'filter_lot_account__id', displayName: 'Lot', list: lotsList },
                   ]}
+                  csvEndpoint="../api/export_account_csv/?"
                 />
 
                 <div className="inside-body">
