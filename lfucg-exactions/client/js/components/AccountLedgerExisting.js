@@ -71,7 +71,7 @@ class AccountLedgerExisting extends React.Component {
                                 </div>
                             </div>
                             <div className={accountLedger.is_approved ? 'row link-row' : 'row link-row-approval-pending'}>
-                                <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
+                                <div className="col-xs-12 col-sm-5 col-sm-offset-7">
                                     <div className="col-xs-5">
                                         {currentUser && currentUser.permissions && currentUser.permissions.accountledger &&
                                             <Link to={`credit-transfer/form/${accountLedger.id}`} aria-label="Edit">
@@ -95,16 +95,16 @@ class AccountLedgerExisting extends React.Component {
                             <div className="row">
                                 <div className="col-sm-offset-1">
                                     { accountLedger.account_from &&
-                                        <p className="col-md-4 col-xs-6">Account From: {accountLedger.account_from.account_name}</p>
+                                        <p className="col-xs-6">Account From: {accountLedger.account_from.account_name}</p>
                                     }
                                     { accountLedger.account_to &&
-                                        <p className="col-md-4 col-xs-6">Account To: {accountLedger.account_to.account_name}</p>
+                                        <p className="col-xs-6">Account To: {accountLedger.account_to.account_name}</p>
                                     }
+                                    <p className="col-xs-6">Non-Sewer: {accountLedger.dollar_values && accountLedger.dollar_values.dollar_non_sewer}</p>
+                                    <p className="col-xs-6">Sewer: {accountLedger.dollar_values && accountLedger.dollar_values.dollar_sewer}</p>
                                     { accountLedger.agreement &&
-                                        <p className="col-md-4 col-xs-6">Agreement: {accountLedger.agreement.resolution_number}</p>
+                                        <p className="col-xs-6">Agreement: {accountLedger.agreement.resolution_number}</p>
                                     }
-                                    <p className="col-md-4 col-xs-6">Non-Sewer: {accountLedger.dollar_values && accountLedger.dollar_values.dollar_non_sewer}</p>
-                                    <p className="col-md-4 col-xs-6">Sewer: {accountLedger.dollar_values && accountLedger.dollar_values.dollar_sewer}</p>
                                     { accountLedger.lot &&
                                         <p className="col-xs-12">Lot: {accountLedger.lot.address_full}</p>
                                     }

@@ -31,9 +31,11 @@ class LotExisting extends React.Component {
 
         const platsList = plats && plats.length > 0 &&
             (map((single_plat) => {
+                const cabinet = single_plat.cabinet ? `${single_plat.cabinet}-` : '';
+                const slide = single_plat.slide ? single_plat.slide : single_plat.name;
                 return {
                     id: single_plat.id,
-                    name: single_plat.name,
+                    name: `${cabinet}${slide}`,
                 };
             })(plats));
 
@@ -59,7 +61,7 @@ class LotExisting extends React.Component {
                                 </div>
                             </div>
                             <div className={lot.is_approved ? 'row link-row' : 'row link-row-approval-pending'}>
-                                <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
+                                <div className="col-xs-12 col-sm-5 col-sm-offset-7">
                                     <div className="col-xs-5">
                                         {currentUser && currentUser.permissions && currentUser.permissions.lot &&
                                             <Link to={`lot/form/${lot.id}`} aria-label="Edit">
@@ -83,7 +85,7 @@ class LotExisting extends React.Component {
                             <div className="row">
                                 <div className="col-sm-offset-1">
                                     <h3 className="col-xs-12">Current Exactions: {lot.lot_exactions && lot.lot_exactions.current_exactions}</h3>
-                                    <p className="col-md-4 col-xs-6">Plat Name: {lot.plat.name}</p>
+                                    <p className="col-md-4 col-xs-6">Plat: {lot.plat.cabinet}-{lot.plat.slide}</p>
                                     <p className="col-md-4 col-xs-6">Lot Number: {lot.lot_number}</p>
                                     <p className="col-md-4 col-xs-6 ">Permit ID: {lot.permit_id}</p>
                                 </div>

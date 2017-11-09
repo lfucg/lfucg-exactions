@@ -27,11 +27,7 @@ const paymentReducer = (state = [], action) => {
         return {};
     case GET_PAGINATION:
     case SEARCH_QUERY:
-        const next = action.response.next;
-        const prev = action.response.prev;
-        if ((next != null && next.substr(0, next.length) === '/payment') ||
-            (prev != null && prev.substr(0, prev.length) === '/payment') ||
-            (window.location.hash === '#/payment')) {
+        if (action.response.endpoint === '/payment') {
             return action.response;
         }
         return state;
