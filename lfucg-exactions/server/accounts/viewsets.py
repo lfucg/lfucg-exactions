@@ -271,13 +271,13 @@ class AccountLedgerViewSet(viewsets.ModelViewSet):
         data_set['created_by'] = self.request.user.id
         data_set['modified_by'] = self.request.user.id
 
-        if 'lot' in self.request.data:
+        if data_set['lot']:
             serializer = AccountLedgerSerializer(data=data_set)
             if serializer.is_valid(raise_exception=True):
                 self.perform_create(serializer)
                 return Response(serializer.data)
 
-        elif 'plat' in self.request.data:
+        elif data_set['plat']:
             chosen_plat = self.request.data['plat']
             plat_set = Plat.objects.filter(id=chosen_plat)
             non_sewer_credits_per_lot = 0
@@ -293,10 +293,22 @@ class AccountLedgerViewSet(viewsets.ModelViewSet):
                     return Response('Invalid credit entry', status=status.HTTP_400_BAD_REQUEST)
 
             chosen_lots = Lot.objects.filter(plat=chosen_plat)
+            sewer_cap_credits_per_lot = 0
+            sewer_trans_credits_per_lot = 0
+            roads_credits_per_lot = 0
+            storm_credits_per_lot = 0
+            parks_credits_per_lot = 0
+            open_space_credits_per_lot = 0
             for lot in chosen_lots:
                 data_set['lot'] = lot.id
                 data_set['non_sewer_credits'] = non_sewer_credits_per_lot
                 data_set['sewer_credits'] = sewer_credits_per_lot
+                data_set['sewer_cap'] = sewer_credits_per_lot / 2
+                data_set['sewer_trans'] = sewer_credits_per_lot / 2
+                data_set['roads'] = non_sewer_credits_per_lot * .75
+                data_set['storm'] = non_sewer_credits_per_lot * .025
+                data_set['parks'] = non_sewer_credits_per_lot * .2
+                data_set['open_space'] = non_sewer_credits_per_lot * .025
 
                 serializer = AccountLedgerSerializer(data=data_set)
                 if serializer.is_valid(raise_exception=True):
