@@ -52,7 +52,7 @@ class AgreementExisting extends React.Component {
                             </div>
                             <div className={agreement.is_approved ? 'row link-row' : 'row link-row-approval-pending'}>
                                 <div className="col-xs-12 col-sm-5 col-sm-offset-7">
-                                    <div className="col-xs-5">
+                                    <div className="col-xs-3">
                                         {currentUser && currentUser.permissions && currentUser.permissions.agreement &&
                                             <Link to={`agreement/form/${agreement.id}`} aria-label="Edit">
                                                 <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
