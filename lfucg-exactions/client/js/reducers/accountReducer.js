@@ -21,11 +21,7 @@ const accountReducer = (state = [], action) => {
         return {};
     case SEARCH_QUERY:
     case GET_PAGINATION:
-        const next = action.response.next;
-        const prev = action.response.prev;
-        if ((next != null && next.substr(0, next.length) === '/account') ||
-            (prev != null && prev.substr(0, prev.length) === '/account') ||
-            (window.location.hash === '#/account')) {
+        if (action.response.endpoint === '/account') {
             return action.response;
         }
         return state;
