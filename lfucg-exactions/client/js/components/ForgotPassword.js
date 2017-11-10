@@ -48,7 +48,7 @@ class ForgotPassword extends React.Component {
                                     <div className="row">
                                         <div className="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
                                             <FormGroup label="Email" id="email_forgot_password">
-                                                <input type="email" className="form-control" placeholder="Email" aria-label="Email" />
+                                                <input type="email" className="form-control" placeholder="Email" aria-label="Email" autoFocus />
                                             </FormGroup>
                                         </div>
                                     </div>
