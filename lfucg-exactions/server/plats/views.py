@@ -37,7 +37,7 @@ class SubdivisionCSVExportView(View):
                 SubdivisionSerializer,
                 many=False
             )
-            filename = subdivision_queryset[0].cabinet + '-' + subdivision_queryset[0].slide + '_subdivision_report.csv'
+            filename = subdivision_queryset[0].name + '_subdivision_report.csv'
         else:
             subdivision_queryset = Subdivision.objects.all()
 
