@@ -8,6 +8,7 @@ import Navbar from './Navbar';
 import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
 import Notes from './Notes';
+import PlatsMiniSummary from './PlatsMiniSummary';
 
 import {
     getSubdivisionID,
@@ -28,51 +29,6 @@ class SubdivisionSummary extends React.Component {
             plats,
             lots,
         } = this.props;
-
-        const subdivisionPlats = plats && plats.length > 0 &&
-            map((plat) => {
-                const cabinet = plat.cabinet ? `${plat.cabinet}-` : '';
-                const slide = plat.slide ? plat.slide : plat.name;
-                return (
-                    <div key={plat.id} className="col-xs-12">
-                        <div className="row form-subheading">
-                            <div className="col-sm-7 col-md-9">
-                                <h3>{cabinet}{slide}</h3>
-                            </div>
-                        </div>
-                        <div className="row link-row">
-                            <div className="col-xs-12 col-sm-5 col-sm-offset-7">
-                                <div className="col-xs-5">
-                                    {currentUser && currentUser.permissions && currentUser.permissions.plat &&
-                                        <Link to={`plat/form/${plat.id}`} aria-label="Edit">
-                                            <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
-                                            <div className="col-xs-7 link-label">
-                                                Edit
-                                            </div>
-                                        </Link>
-                                    }
-                                </div>
-                                <div className="col-xs-5 ">
-                                    <Link to={`plat/summary/${plat.id}`} aria-label="Summary">
-                                        <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
-                                        <div className="col-xs-7 link-label">
-                                            Summary
-                                        </div>
-                                    </Link>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="row">
-                            <p className="col-xs-6"><strong>{plat.is_approved ? 'Approved' : 'Not Approved'}</strong></p>
-                            <p className="col-xs-6">Gross Acreage: {plat.cleaned_total_acreage}</p>
-                            <p className="col-xs-6">Name: {plat.name}</p>
-                            <p className="col-xs-6">Expansion Area: {plat.expansion_area}</p>
-                            <p className="col-xs-6">Sewer Exactions: {plat.plat_exactions && plat.plat_exactions.plat_sewer_due}</p>
-                            <p className="col-xs-6">Non-Sewer Exactions: {plat.plat_exactions && plat.plat_exactions.plat_non_sewer_due}</p>
-                        </div>
-                    </div>
-                );
-            })(plats);
 
         const platIds = plats && plats.length > 0 && map(plat => plat.id)(plats);
 
@@ -185,41 +141,11 @@ class SubdivisionSummary extends React.Component {
                                 />
                             }
 
-                            {subdivisionPlats ? (
-                                <div>
-                                    <a
-                                      role="button"
-                                      data-toggle="collapse"
-                                      data-parent="#accordion"
-                                      href="#collapsePlats"
-                                      aria-expanded="false"
-                                      aria-controls="collapsePlats"
-                                    >
-                                        <div className="row section-heading" role="tab" id="headingPlats">
-                                            <div className="col-xs-1 caret-indicator" />
-                                            <div className="col-xs-8 col-xs-offset-1">
-                                                <h3>Plats</h3>
-                                            </div>
-                                        </div>
-                                    </a>
-                                    <div
-                                      id="collapsePlats"
-                                      className="panel-collapse collapse row"
-                                      role="tabpanel"
-                                      aria-labelledby="#headingPlats"
-                                    >
-                                        <div className="panel-body">
-                                            <div className="col-xs-12">
-                                                {subdivisionPlats}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            ) : (
-                                <div className="row section-heading" role="tab" id="headingAccountPlats">
-                                    <h3>Plats - None</h3>
-                                </div>
-                            )}
+                            <PlatsMiniSummary
+                              mapSet={plats}
+                              mapQualifier={plats && plats.length > 0}
+                            />
+
                             {subdivisionLots ?
                                 <div>
                                     <a
