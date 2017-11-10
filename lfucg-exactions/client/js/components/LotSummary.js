@@ -9,6 +9,7 @@ import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
 import Notes from './Notes';
 import Uploads from './Uploads';
+import PlatsMiniSummary from './PlatsMiniSummary';
 
 import FormGroup from './FormGroup';
 
@@ -318,65 +319,11 @@ class LotSummary extends React.Component {
                                     />
                                 }
 
-                                {currentLot.plat ? <div>
-                                    <a
-                                      role="button"
-                                      data-toggle="collapse"
-                                      data-parent="#accordion"
-                                      href="#collapsePlat"
-                                      aria-expanded="false"
-                                      aria-controls="collapsePlat"
-                                    >
-                                        <div className="row section-heading" role="tab" id="headingPlat">
-                                            <div className="col-xs-1 caret-indicator" />
-                                            <div className="col-xs-10">
-                                                <h3>Plat Information</h3>
-                                            </div>
-                                        </div>
-                                    </a>
-                                    <div
-                                      id="collapsePlat"
-                                      className="panel-collapse collapse row"
-                                      role="tabpanel"
-                                      aria-labelledby="#headingPlat"
-                                    >
-                                        <div className="panel-body">
-                                            <div className="row link-row">
-                                                <div className="col-xs-12 col-sm-5 col-sm-offset-7">
-                                                    <div className="col-xs-5">
-                                                        {currentUser && currentUser.permissions && currentUser.permissions.plat &&
-                                                            <Link to={`plat/form/${currentLot.plat.id}`} aria-label="Edit">
-                                                                <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
-                                                                <div className="col-xs-7 link-label">
-                                                                    Edit
-                                                                </div>
-                                                            </Link>
-                                                        }
-                                                    </div>
-                                                    <div className="col-xs-5 ">
-                                                        <Link to={`plat/summary/${currentLot.plat.id}`} aria-label="Summary">
-                                                            <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
-                                                            <div className="col-xs-7 link-label">
-                                                                Summary
-                                                            </div>
-                                                        </Link>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="col-xs-12">
-                                                <h3 className="col-xs-12">Plat: {currentLot.plat.cabinet}-{currentLot.plat.slide}</h3>
-                                                <p className="col-xs-6">Expansion Area: {currentLot.plat.expansion_area}</p>
-                                                <p className="col-xs-6">Gross Acreage: {currentLot.plat.cleaned_total_acreage}</p>
-                                                <p className="col-xs-6">Buildable Lots: {currentLot.plat.buildable_lots}</p>
-                                                <p className="col-xs-6">Non-Buildable Lots: {currentLot.plat.non_buildable_lots}</p>
-                                                <p className="col-sm-6 col-xs-12">Sewer Exactions: {currentLot.plat.plat_exactions && currentLot.plat.plat_exactions.plat_sewer_due}</p>
-                                                <p className="col-sm-6 col-xs-12">Non-Sewer Exactions: {currentLot.plat.plat_exactions && currentLot.plat.plat_exactions.plat_non_sewer_due}</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div> : <div className="row section-heading" role="tab" id="headingAccountPayments">
-                                    <h3>Plat - None</h3>
-                                </div>}
+                                <PlatsMiniSummary
+                                  mapSet={currentLot.plat}
+                                  mapQualifier={currentLot && currentLot.plat}
+                                  singlePlat={true}
+                                />
 
                                 {currentLot.account && accounts ?
                                     <div>

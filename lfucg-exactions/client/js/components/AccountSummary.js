@@ -8,6 +8,7 @@ import Navbar from './Navbar';
 import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
 import Notes from './Notes';
+import PlatsMiniSummary from './PlatsMiniSummary';
 
 import {
     getAccountID,
@@ -29,48 +30,6 @@ class AccountSummary extends React.Component {
             payments,
             accountLedgers,
         } = this.props;
-
-        const plats_list = accounts.plat_account && accounts.plat_account.length > 0 &&
-            map((plat) => {
-                const cabinet = plat.cabinet ? `${plat.cabinet}-` : '';
-                const slide = plat.slide ? plat.slide : plat.name;
-                return (
-                    <div key={plat.id} className="col-xs-12">
-                        <div className="row form-subheading">
-                            <h3>{cabinet}{slide}</h3>
-                        </div>
-                        <div className="row link-row">
-                            <div className="col-xs-12 col-sm-5 col-sm-offset-7">
-                                <div className="col-xs-5">
-                                    {currentUser && currentUser.permissions && currentUser.permissions.plat &&
-                                        <Link to={`plat/form/${plat.id}`} aria-label="Edit">
-                                            <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
-                                            <div className="col-xs-7 link-label">
-                                                Edit
-                                            </div>
-                                        </Link>
-                                    }
-                                </div>
-                                <div className="col-xs-5 ">
-                                    <Link to={`plat/summary/${plat.id}`} aria-label="Summary">
-                                        <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
-                                        <div className="col-xs-7 link-label">
-                                            Summary
-                                        </div>
-                                    </Link>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="row">
-                            <p className="col-xs-12"><strong>{plat.is_approved ? 'Approved' : 'Not Approved'}</strong></p>
-                            <p className="col-sm-6 col-xs-12">Sewer Exactions: {plat.plat_exactions && plat.plat_exactions.plat_sewer_due}</p>
-                            <p className="col-sm-6 col-xs-12">Non-Sewer Exactions: {plat.plat_exactions && plat.plat_exactions.plat_non_sewer_due}</p>
-                            <p className="col-xs-6">Gross Acreage: {plat.cleaned_total_acreage}</p>
-                            <p className="col-xs-6">Expansion Area: {plat.expansion_area}</p>
-                        </div>
-                    </div>
-                );
-            })(accounts.plat_account);
 
         const lots_list = accounts.lot_account && accounts.lot_account.length > 0 &&
             map((lot) => {
@@ -305,41 +264,11 @@ class AccountSummary extends React.Component {
                                   permission="account"
                                 />
                             }
-                            {plats_list ? (
-                                <div>
-                                    <a
-                                      role="button"
-                                      data-toggle="collapse"
-                                      data-parent="#accordion"
-                                      href="#collapseAccountPlats"
-                                      aria-expanded="false"
-                                      aria-controls="collapseAccountPlats"
-                                    >
-                                        <div className="row section-heading" role="tab" id="headingAccountPlats">
-                                            <div className="col-xs-1 caret-indicator" />
-                                            <div className="col-xs-10">
-                                                <h3>Plats</h3>
-                                            </div>
-                                        </div>
-                                    </a>
-                                    <div
-                                      id="collapseAccountPlats"
-                                      className="panel-collapse collapse row"
-                                      role="tabpanel"
-                                      aria-labelledby="#headingAccountPlats"
-                                    >
-                                        <div className="panel-body">
-                                            <div className="col-xs-12">
-                                                {plats_list}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            ) : (
-                                <div className="row section-heading" role="tab" id="headingAccountPlats">
-                                    <h3>Plats - None</h3>
-                                </div>
-                            )}
+
+                            <PlatsMiniSummary
+                              mapSet={accounts.plat_account}
+                              mapQualifier={accounts.plat_account && accounts.plat_account.length > 0}
+                            />
 
                             {lots_list ? (
                                 <div>

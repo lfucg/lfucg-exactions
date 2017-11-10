@@ -36,7 +36,7 @@ class ExistingPageLinks extends React.Component {
                         {this.props.uniqueReport &&
                             <div className="col-xs-4">
                                 {currentUser && currentUser.permissions && modelPermission &&
-                                    <Link to={`${this.props.linkStart}/report/${this.props.instanceID}`} aria-label={`Report ${this.props.title}`}>
+                                    <Link to={`${this.props.linkStart}/report/${this.props.instanceID}`} aria-label={`${this.props.title} Report`}>
                                         <i className="fa fa-line-chart link-icon col-xs-4 col-sm-3" aria-hidden="true" />
                                         <div className="col-xs-7 col-sm-8 link-label">
                                             Report
@@ -46,7 +46,7 @@ class ExistingPageLinks extends React.Component {
                             </div>
                         }
                         <div className="col-xs-4 ">
-                            <Link to={`${this.props.linkStart}/summary/${this.props.instanceID}`} aria-label={`Summary ${this.props.title}`}>
+                            <Link to={`${this.props.linkStart}/summary/${this.props.instanceID}`} aria-label={`${this.props.title} Summary`}>
                                 <i className="fa fa-file-text link-icon col-xs-4 col-sm-3" aria-hidden="true" />
                                 <div className="col-xs-7 col-sm-8 link-label">
                                     Summary
@@ -76,10 +76,4 @@ function mapStateToProps(state) {
     };
 }
 
-function mapDispatchToProps(dispatch) {
-    return {
-    };
-}
-
-
-export default connect(mapStateToProps, mapDispatchToProps)(ExistingPageLinks);
+export default connect(mapStateToProps)(ExistingPageLinks);
