@@ -825,6 +825,143 @@ class ProjectCostEstimateCSVExportView(View):
 
         return response
 
+class AccountLedgerCSVExportView(View):
+    def get_serializer_class(self, serializer_class):
+        return serializer_class
+
+    def list(self, queryset, serializer_class, many):
+        serializer_class = self.get_serializer_class(serializer_class)
+        serializer = serializer_class(queryset, many=many)
+        return serializer
+
+    def get(self, request, *args, **kwargs):
+        headers = [
+            'Lot',
+            'Account From',
+            'Account To',
+            'Agreement',
+            'Entry Type',
+            'Entry Date',
+            'Roads',
+            'Parks',
+            'Stormwater',
+            'Open Space',
+            'Non-Sewer',
+            'Sewer Trans.',
+            'Sewer Cap.',
+            'Sewer',
+        ]
+
+        all_rows = []
+
+        ledger_value = request.GET.get('ledger', None)
+
+        if ledger_value is not None:
+            ledger_queryset = AccountLedger.objects.filter(id=ledger_value)
+            ledger_serializer = self.list(
+                ledger_queryset,
+                AccountLedgerSerializer,
+                many=False
+            )
+            filename = ledger_queryset[0].entry_type_display + '-' + ledger_queryset[0].entry_date + '_ledger_report.csv'
+        else:
+            ledger_queryset = AccountLedger.objects.all()
+
+            lot_set = self.request.GET.get('lot', None)
+            if lot_set is not None:
+                ledger_queryset = ledger_queryset.filter(lot=lot_set)
+
+            is_approved_set = self.request.GET.get('is_approved', None)
+            if is_approved_set is not None:
+                is_approved_set = True if is_approved_set == 'true' else False
+                ledger_queryset = ledger_queryset.filter(is_approved=is_approved_set)
+
+            account_from_set = self.request.GET.get('account_from', None)
+            if account_from_set is not None:
+                ledger_queryset = ledger_queryset.filter(account_from=account_from_set)
+
+            account_to_set = self.request.GET.get('account_to', None)
+            if account_to_set is not None:
+                ledger_queryset = ledger_queryset.filter(account_to=account_to_set)
+
+            agreement_set = self.request.GET.get('agreement', None)
+            if agreement_set is not None:
+                ledger_queryset = ledger_queryset.filter(agreement=agreement_set)
+
+            entry_type_set = self.request.GET.get('entry_type', None)
+            if entry_type_set is not None:
+                ledger_queryset = ledger_queryset.filter(entry_type=entry_type_set)
+
+            search_set = self.request.GET.get('search', None)
+            if search_set is not None:
+                ledger_queryset = ledger_queryset.filter(
+                        Q(entry_type__icontains=search_set) |
+                        Q(agreement__resolution_number__icontains=search_set) |
+                        Q(lot__address_full__icontains=search_set) |
+                        Q(account_to__account_name__icontains=search_set) |
+                        Q(account_from__account_name__icontains=search_set)
+                    )
+
+            ledger_serializer = self.list(
+                ledger_queryset,
+                AccountLedgerSerializer,
+                many=True
+            )
+            filename = 'ledger_report_' + datetime.datetime.now().strftime("%Y-%m-%d") + '.csv'
+
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename=%s'%filename
+        
+        for ledger in ledger_serializer.data:
+            lot_address = ''
+            account_from = ''
+            account_to = ''
+            agreement_number = ''
+
+            if ledger['lot']:
+                lot_address = ledger['lot']['address_full']
+
+            if ledger['account_from']:
+                account_from = ledger['account_from']['account_name']
+
+            if ledger['account_to']:
+                account_to = ledger['account_to']['account_name']
+
+            if ledger['agreement']:
+                agreement_number = ledger['agreement']['resolution_number']
+
+            row = {
+                'Lot': lot_address,
+                'Account From': account_from,
+                'Account To': account_to,
+                'Agreement': agreement_number,
+                'Entry Type': ledger['entry_type_display'],
+                'Entry Date': ledger['entry_date'],
+                'Roads': ledger['roads'],
+                'Parks': ledger['parks'],
+                'Stormwater': ledger['storm'],
+                'Open Space': ledger['open_space'],
+                'Non-Sewer': ledger['non_sewer_credits'],
+                'Sewer Trans.': ledger['sewer_trans'],
+                'Sewer Cap.': ledger['sewer_cap'],
+                'Sewer': ledger['sewer_credits'],
+            }
+
+            all_rows.append(row)
+
+        unique_fieldnames = []
+        for name in headers:
+            if name not in unique_fieldnames:
+                unique_fieldnames.append(name)
+
+        writer = csv.DictWriter(response, fieldnames=unique_fieldnames, extrasaction='ignore')
+        writer.writeheader()
+
+        for row in all_rows:
+            writer.writerow(row)
+
+        return response
+
 class TransactionCSVExportView(View):
     def get_serializer_class(self, serializer_class):
         return serializer_class
