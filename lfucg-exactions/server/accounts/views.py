@@ -274,7 +274,7 @@ class AgreementCSVExportView(View):
                 many=False
             )
 
-            filename = agreement['resolution_number'] + '_agreement_report.csv'
+            filename = agreement[0]['resolution_number'] + '_agreement_report.csv'
         else:
             agreement_queryset = Agreement.objects.all()
 
@@ -478,7 +478,7 @@ class PaymentCSVExportView(View):
                 PaymentSerializer,
                 many=False
             )
-            filename = payment_queryset[0].cabinet + '-' + payment_queryset[0].slide + '_payment_report.csv'
+            filename = payment_queryset[0].payment_type + '-' + payment_queryset[0].paid_by + '_payment_report.csv'
         else:
             payment_queryset = Payment.objects.all()
 
@@ -558,6 +558,256 @@ class PaymentCSVExportView(View):
                 'Total Paid': payment['total_paid'],
                 'Developer Account': account_name,
                 'Agreement': agreement_number,
+            }
+
+            all_rows.append(row)
+
+        unique_fieldnames = []
+        for name in headers:
+            if name not in unique_fieldnames:
+                unique_fieldnames.append(name)
+
+        writer = csv.DictWriter(response, fieldnames=unique_fieldnames, extrasaction='ignore')
+        writer.writeheader()
+
+        for row in all_rows:
+            writer.writerow(row)
+
+        return response
+
+class ProjectCSVExportView(View):
+    def get_serializer_class(self, serializer_class):
+        return serializer_class
+
+    def list(self, queryset, serializer_class, many):
+        serializer_class = self.get_serializer_class(serializer_class)
+        serializer = serializer_class(queryset, many=many)
+        return serializer
+
+    def get(self, request, *args, **kwargs):
+        headers = [
+            'Project Name',
+            'Category',
+            'Project Type',
+            'Status',
+            'Status Date',
+            'Expansion Area',
+            'Agreement Number',
+        ]
+
+        all_rows = []
+
+        project_value = request.GET.get('project', None)
+
+        if project_value is not None:
+            project_queryset = Project.objects.filter(id=project_value)
+            project_serializer = self.list(
+                project_queryset,
+                ProjectSerializer,
+                many=False
+            )
+            filename = project_queryset[0].name + '_project_report.csv'
+        else:
+            project_queryset = Project.objects.all()
+
+            agreement_set = self.request.GET.get('agreement_id', None)
+            if agreement_set is not None:
+                project_queryset = project_queryset.filter(agreement_id=agreement_set)
+
+            is_approved_set = self.request.GET.get('is_approved', None)
+            if is_approved_set is not None:
+                is_approved_set = True if is_approved_set == 'true' else False
+                project_queryset = project_queryset.filter(is_approved=is_approved_set)
+
+            status_set = self.request.GET.get('project_status', None)
+            if status_set is not None:
+                project_queryset = project_queryset.filter(project_status=status_set)
+
+            category_set = self.request.GET.get('project_category', None)
+            if category_set is not None:
+                project_queryset = project_queryset.filter(project_category=category_set)
+
+            expansion_area_set = self.request.GET.get('expansion_area', None)
+            if expansion_area_set is not None:
+                project_queryset = project_queryset.filter(expansion_area=expansion_area_set)
+
+            project_type_set = self.request.GET.get('project_type', None)
+            if project_type_set is not None:
+                project_queryset = project_queryset.filter(project_type=project_type_set)
+
+            search_set = self.request.GET.get('search', None)
+            if search_set is not None:
+                project_queryset = project_queryset.filter(
+                        Q(name__icontains=search_set) |
+                        Q(agreement_id__resolution_number__icontains=search_set) |
+                        Q(project_category__icontains=search_set) |
+                        Q(project_description__icontains=search_set)
+                    )
+
+            project_serializer = self.list(
+                project_queryset,
+                ProjectSerializer,
+                many=True
+            )
+            filename = 'project_report_' + datetime.datetime.now().strftime("%Y-%m-%d") + '.csv'
+
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename=%s'%filename
+        
+        for project in project_serializer.data:
+            agreement = ''
+
+            if project['agreement_id']:
+                agreement = project['agreement_id']['resolution_number']
+
+            row = {
+                'Project Name': project['name'],
+                'Category': project['project_category_display'],
+                'Project Type': project['project_type_display'],
+                'Status': project['project_status_display'],
+                'Status Date': project['status_date'],
+                'Expansion Area': project['expansion_area'],
+                'Agreement Number': agreement,
+            }
+
+            # PLAT ZONE
+            project_estimate_queryset = ProjectCostEstimate.objects.filter(project_id=project['id'])
+            if project_estimate_queryset is not None:
+                project_estimate_serializer = self.list (
+                    project_estimate_queryset,
+                    ProjectCostEstimateSerializer,
+                    many=True
+                )
+
+                for i, project_estimate in zip(range(project_estimate_queryset.count()), project_estimate_serializer.data):
+                    headers.extend(['Estimate Type -%s' %((i+1))])
+                    headers.extend(['Land Cost -%s' %(i+1)])
+                    headers.extend(['Design -%s' %(i+1)])
+                    headers.extend(['Construction -%s' %(i+1)])
+                    headers.extend(['Admin -%s' %(i+1)])
+                    headers.extend(['Management -%s' %(i+1)])
+                    headers.extend(['Other -%s' %(i+1)])
+
+                    row['Estimate Type -%s' %((i+1))] = project_estimate['estimate_type']
+                    row['Land Cost -%s' %(i+1)] = project_estimate['land_cost']
+                    row['Design -%s' %(i+1)] = project_estimate['design_cost']
+                    row['Construction -%s' %(i+1)] = project_estimate['construction_cost']
+                    row['Admin -%s' %(i+1)] = project_estimate['admin_cost']
+                    row['Management -%s' %(i+1)] = project_estimate['management_cost']
+                    row['Other -%s' %(i+1)] = project_estimate['other_cost']
+                            
+            all_rows.append(row)
+
+        unique_fieldnames = []
+        for name in headers:
+            if name not in unique_fieldnames:
+                unique_fieldnames.append(name)
+
+        writer = csv.DictWriter(response, fieldnames=unique_fieldnames, extrasaction='ignore')
+        writer.writeheader()
+
+        for row in all_rows:
+            writer.writerow(row)
+
+        return response
+
+class ProjectCostEstimateCSVExportView(View):
+    def get_serializer_class(self, serializer_class):
+        return serializer_class
+
+    def list(self, queryset, serializer_class, many):
+        serializer_class = self.get_serializer_class(serializer_class)
+        serializer = serializer_class(queryset, many=many)
+        return serializer
+
+    def get(self, request, *args, **kwargs):
+        headers = [
+            'Project Name',
+            'Category',
+            'Project Type',
+            'Status',
+            'Status Date',
+            'Expansion Area',
+            'Estimate Type',
+            'Land Cost',
+            'Design',
+            'Construction',
+            'Admin',
+            'Management',
+            'Other',
+        ]
+
+        all_rows = []
+
+        project_estimate_value = request.GET.get('project_estimate', None)
+
+        if project_estimate_value is not None:
+            project_estimate_queryset = ProjectCostEstimate.objects.filter(id=project_estimate_value)
+            project_estimate_serializer = self.list(
+                project_estimate_queryset,
+                ProjectCostEstimateSerializer,
+                many=False
+            )
+            filename = project_estimate_queryset[0].estimate_type + '_project_estimate_report.csv'
+        else:
+            project_estimate_queryset = ProjectCostEstimate.objects.all()
+
+            project_set = self.request.GET.get('project_id', None)
+            if project_set is not None:
+                project_estimate_queryset = project_estimate_queryset.filter(project_id=project_set)
+
+            is_approved_set = self.request.GET.get('is_approved', None)
+            if is_approved_set is not None:
+                is_approved_set = True if is_approved_set == 'true' else False
+                project_estimate_queryset = project_estimate_queryset.filter(is_approved=is_approved_set)
+
+            search_set = self.request.GET.get('search', None)
+            if search_set is not None:
+                project_estimate_queryset = project_estimate_queryset.filter(
+                        Q(project_id__name__icontains=search_set) |
+                        Q(estimate_type__icontains=search_set)
+                    )
+
+            project_estimate_serializer = self.list(
+                project_estimate_queryset,
+                ProjectCostEstimateSerializer,
+                many=True
+            )
+            filename = 'project_estimate_report_' + datetime.datetime.now().strftime("%Y-%m-%d") + '.csv'
+
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename=%s'%filename
+        
+        for project_estimate in project_estimate_serializer.data:
+            project_name = ''
+            project_category = ''
+            project_type = ''
+            project_status = ''
+            project_status_date = ''
+            project_expansion = ''
+ 
+            if project_estimate['project_id']:
+                project_name = project_estimate['project_id']['name']
+                project_category = project_estimate['project_id']['project_category_display']
+                project_type = project_estimate['project_id']['project_type_display']
+                project_status = project_estimate['project_id']['project_status_display']
+                project_status_date = project_estimate['project_id']['status_date']
+                project_expansion = project_estimate['project_id']['expansion_area']
+
+            row = {
+                'Project Name': project_name,
+                'Category': project_category,
+                'Project Type': project_type,
+                'Status': project_status,
+                'Status Date': project_status_date,
+                'Expansion Area': project_expansion,
+                'Estimate Type': project_estimate['estimate_type'],
+                'Land Cost': project_estimate['land_cost'],
+                'Design': project_estimate['design_cost'],
+                'Construction': project_estimate['construction_cost'],
+                'Admin': project_estimate['admin_cost'],
+                'Management': project_estimate['management_cost'],
+                'Other': project_estimate['other_cost'],
             }
 
             all_rows.append(row)

@@ -7,7 +7,7 @@ from plats.viewsets import *
 from plats.views import SubdivisionCSVExportView, PlatCSVExportView, LotSearchCSVExportView
 from notes.viewsets import *
 from accounts.viewsets import *
-from accounts.views import CurrentUserDetails, TransactionCSVExportView, AgreementCSVExportView, AccountCSVExportView, PaymentCSVExportView
+from accounts.views import CurrentUserDetails, TransactionCSVExportView, AgreementCSVExportView, AccountCSVExportView, PaymentCSVExportView, ProjectCSVExportView, ProjectCostEstimateCSVExportView
 
 router = routers.DefaultRouter()
 
@@ -51,6 +51,8 @@ urlpatterns = [
     url(r'^export_account_csv/$', AccountCSVExportView.as_view()),
     url(r'^export_agreement_csv/$', AgreementCSVExportView.as_view()),
     url(r'^payment_search_csv/$', PaymentCSVExportView.as_view()),
+    url(r'^project_search_csv/$', ProjectCSVExportView.as_view()),
+    url(r'^project_estimate_search_csv/$', ProjectCostEstimateCSVExportView.as_view()),
 
     url(r'^', include(router.urls)),
 ]
