@@ -283,7 +283,7 @@ class AgreementCSVExportView(View):
                 is_approved_set = True if is_approved_set == 'true' else False
                 agreement_queryset = agreement_queryset.filter(is_approved=is_approved_set)
 
-            account_set = self.request.GET.get('account', None)
+            account_set = self.request.GET.get('account_id', None)
             if account_set is not None:
                 agreement_queryset = agreement_queryset.filter(account_id=account_set)
 
@@ -423,6 +423,142 @@ class AgreementCSVExportView(View):
                     row['Sewer Trans. Credits -%s' %(i+1)] = ledger['sewer_trans']
                     row['Sewer Cap. Credits -%s' %(i+1)] = ledger['sewer_cap']
                     row['Sewer Credits -%s' %(i+1)] = ledger['sewer_credits']
+
+            all_rows.append(row)
+
+        unique_fieldnames = []
+        for name in headers:
+            if name not in unique_fieldnames:
+                unique_fieldnames.append(name)
+
+        writer = csv.DictWriter(response, fieldnames=unique_fieldnames, extrasaction='ignore')
+        writer.writeheader()
+
+        for row in all_rows:
+            writer.writerow(row)
+
+        return response
+
+class PaymentCSVExportView(View):
+    def get_serializer_class(self, serializer_class):
+        return serializer_class
+
+    def list(self, queryset, serializer_class, many):
+        serializer_class = self.get_serializer_class(serializer_class)
+        serializer = serializer_class(queryset, many=many)
+        return serializer
+
+    def get(self, request, *args, **kwargs):
+        headers = [
+            'Lot',
+            'Payment Type',
+            'Payer Type',
+            'Payer',
+            'Check Number',
+            'Date',
+            'Roads Paid',
+            'Parks Paid',
+            'Stormwater',
+            'Open Space',
+            'Sewer Trans.',
+            'Sewer Cap.',
+            'Total Paid',
+            'Developer Account',
+            'Agreement',
+        ]
+
+        all_rows = []
+
+        payment_value = request.GET.get('payment', None)
+
+        if payment_value is not None:
+            payment_queryset = Payment.objects.filter(id=payment_value)
+            payment_serializer = self.list(
+                payment_queryset,
+                PaymentSerializer,
+                many=False
+            )
+            filename = payment_queryset[0].cabinet + '-' + payment_queryset[0].slide + '_payment_report.csv'
+        else:
+            payment_queryset = Payment.objects.all()
+
+            lot_set = self.request.GET.get('lot_id', None)
+            if lot_set is not None:
+                payment_queryset = payment_queryset.filter(lot_id=lot_set)
+
+            is_approved_set = self.request.GET.get('is_approved', None)
+            if is_approved_set is not None:
+                is_approved_set = True if is_approved_set == 'true' else False
+                payment_queryset = payment_queryset.filter(is_approved=is_approved_set)
+
+            account_set = self.request.GET.get('credit_account', None)
+            if account_set is not None:
+                payment_queryset = payment_queryset.filter(credit_account=account_set)
+
+            agreement_set = self.request.GET.get('credit_source', None)
+            if agreement_set is not None:
+                payment_queryset = payment_queryset.filter(credit_source=agreement_set)
+
+            paid_by_type_set = self.request.GET.get('paid_by_type', None)
+            if paid_by_type_set is not None:
+                payment_queryset = payment_queryset.filter(paid_by_type=paid_by_type_set)
+
+            payment_type_set = self.request.GET.get('payment_type', None)
+            if payment_type_set is not None:
+                payment_queryset = payment_queryset.filter(payment_type=payment_type_set)
+
+            search_set = self.request.GET.get('search', None)
+            if search_set is not None:
+                payment_queryset = payment_queryset.filter(
+                        Q(lot_id__address_full__icontains=search_set) |
+                        Q(payment_type__icontains=search_set) |
+                        Q(check_number__icontains=search_set) |
+                        Q(credit_account__account_name__icontains=search_set) |
+                        Q(paid_by__icontains=search_set) |
+                        Q(credit_source__resolution_number__icontains=search_set)
+                    )
+
+            payment_serializer = self.list(
+                payment_queryset,
+                PaymentSerializer,
+                many=True
+            )
+            filename = 'payment_report_' + datetime.datetime.now().strftime("%Y-%m-%d") + '.csv'
+
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename=%s'%filename
+        
+        for payment in payment_serializer.data:
+            lot_address = ''
+            account_name = ''
+            agreement_number = ''
+
+            if payment['lot_id']:
+                lot_address = payment['lot_id']['address_full']
+
+            if payment['credit_account']:
+                account_name = payment['credit_account']['account_name']
+
+            if payment['credit_source']:
+                agreement_number = payment['credit_source']['resolution_number']
+
+            row = {
+                'Lot': lot_address,
+                'Payment Type': payment['payment_type_display'],
+                'Payer Type': payment['paid_by_type_display'],
+                'Payer': payment['paid_by'],
+                'Check Number': payment['check_number'],
+                'Date': payment['date_created'],
+                'Roads Paid': payment['paid_roads'],
+                'Parks Paid': payment['paid_parks'],
+                'Stormwater': payment['paid_storm'],
+                'Open Space': payment['paid_open_space'],
+                'Sewer Trans.': payment['paid_sewer_trans'],
+                'Sewer Cap.': payment['paid_sewer_cap'],
+                'Total Paid': payment['total_paid'],
+                'Developer Account': account_name,
+                'Agreement': agreement_number,
+            }
 
             all_rows.append(row)
 
