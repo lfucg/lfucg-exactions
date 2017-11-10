@@ -9,6 +9,7 @@ import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
 import Pagination from './Pagination';
 import SearchBar from './SearchBar';
+import ExistingPageLinks from './ExistingPageLinks';
 
 import {
     getPagination,
@@ -64,46 +65,14 @@ class PlatExisting extends React.Component {
                 return (
                     <div key={plat.id} className="col-xs-12">
                         {(currentUser.id || plat.is_approved) && <div>
-                            <div className={plat.is_approved ? 'row form-subheading' : 'row unapproved-heading'}>
-                                <div className="col-sm-11">
-                                    <h3>
-                                        {cabinet}{slide}
-                                        {!plat.is_approved && <span className="pull-right">Approval Pending</span>}
-                                    </h3>
-                                </div>
-                            </div>
-                            <div className={plat.is_approved ? 'row link-row' : 'row link-row-approval-pending'}>
-                                <div className="col-xs-9 pull-right">
-                                    <div className="col-xs-3">
-                                        {currentUser && currentUser.permissions && currentUser.permissions.plat &&
-                                            <Link to={`plat/form/${plat.id}`} aria-label="Edit">
-                                                <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
-                                                <div className="col-xs-7 link-label">
-                                                    Edit
-                                                </div>
-                                            </Link>
-                                        }
-                                    </div>
-                                    <div className="col-xs-4">
-                                        {currentUser && currentUser.permissions && currentUser.permissions.plat &&
-                                            <Link to={`plat/report/${plat.id}`} aria-label="Report">
-                                                <i className="fa fa-line-chart link-icon col-xs-4" aria-hidden="true" />
-                                                <div className="col-xs-7 link-label">
-                                                    Report
-                                                </div>
-                                            </Link>
-                                        }
-                                    </div>
-                                    <div className="col-xs-4 ">
-                                        <Link to={`plat/summary/${plat.id}`} aria-label="Summary">
-                                            <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
-                                            <div className="col-xs-7 link-label">
-                                                Summary
-                                            </div>
-                                        </Link>
-                                    </div>
-                                </div>
-                            </div>
+                            <ExistingPageLinks
+                              linkStart="plat"
+                              approval={plat.is_approved}
+                              title={`${cabinet}${slide}`}
+                              permissionModel="plat"
+                              instanceID={plat.id}
+                              uniqueReport={true}
+                            />
                             <div className="row">
                                 <div className="col-sm-offset-1">
                                     <p className="col-xs-12 col-sm-6">Sewer Due: {plat.plat_exactions && plat.plat_exactions.plat_sewer_due}</p>
