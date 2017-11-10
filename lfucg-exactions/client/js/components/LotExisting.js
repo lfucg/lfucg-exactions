@@ -117,6 +117,7 @@ class LotExisting extends React.Component {
                     { filterField: 'filter_is_approved', displayName: 'Approval', list: [{ id: true, name: 'Approved' }, { id: false, name: 'Unapproved' }] },
                   ]}
                   csvEndpoint="../api/lot_search_csv/?"
+                  currentPage="Lots"
                 />
 
                 <div className="inside-body">
