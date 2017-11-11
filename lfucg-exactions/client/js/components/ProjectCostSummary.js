@@ -9,6 +9,8 @@ import Breadcrumbs from './Breadcrumbs';
 import Uploads from './Uploads';
 import Notes from './Notes';
 
+import ProjectsMiniSummary from './ProjectsMiniSummary';
+
 import {
     getProjectCostID,
 } from '../actions/apiActions';
@@ -89,65 +91,12 @@ class ProjectCostSummary extends React.Component {
                                 </div>
                             </div>
 
-                            {projectCosts.project_id ? <div>
-                                <a
-                                  role="button"
-                                  data-toggle="collapse"
-                                  data-parent="#accordion"
-                                  href="#collapseProjectInfo"
-                                  aria-expanded="false"
-                                  aria-controls="collapseProjectInfo"
-                                >
-                                    <div className="row section-heading" role="tab" id="headingProjectInfo">
-                                        <div className="col-xs-1 caret-indicator" />
-                                        <div className="col-xs-10">
-                                            <h3>Project</h3>
-                                        </div>
-                                    </div>
-                                </a>
-                                <div
-                                  id="collapseProjectInfo"
-                                  className="panel-collapse collapse row"
-                                  role="tabpanel"
-                                  aria-labelledby="#headingProjectInfo"
-                                >
-                                    <div className="panel-body">
-                                        <div className="row link-row">
-                                            <div className="col-xs-12 col-sm-5 col-sm-offset-7">
-                                                <div className="col-xs-5">
-                                                    {currentUser && currentUser.permissions && currentUser.permissions.project &&
-                                                        <Link to={`project/form/${projectCosts.project_id.id}`} aria-label="Edit">
-                                                            <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
-                                                            <div className="col-xs-7 link-label">
-                                                                Edit
-                                                            </div>
-                                                        </Link>
-                                                    }
-                                                </div>
-                                                <div className="col-xs-5 ">
-                                                    <Link to={`project/summary/${projectCosts.project_id.id}`} aria-label="Summary">
-                                                        <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
-                                                        <div className="col-xs-7 link-label">
-                                                            Summary
-                                                        </div>
-                                                    </Link>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="col-xs-12">
-                                            <p className="col-xs-12">Project Name: {projectCosts.project_id.name}</p>
-                                            <p className="col-sm-4 col-xs-6">Project Category: {projectCosts.project_id.project_category_display}</p>
-                                            <p className="col-sm-8 col-xs-6">Project Type: {projectCosts.project_id.project_type_display}</p>
-                                            <p className="col-sm-4 col-xs-6">Expansion Area: {projectCosts.project_id.expansion_area}</p>
-                                            <p className="col-sm-4 col-xs-6 ">Project Status: {projectCosts.project_id.project_status_display}</p>
-                                            <p className="col-sm-4 col-xs-6 ">Status Date: {projectCosts.project_id.status_date}</p>
-                                            <p className="col-xs-12">Project Description: {projectCosts.project_id.project_description}</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div> : <div className="row section-heading" role="tab" id="headingProjectInfo">
-                                <h3>Project - None</h3>
-                            </div>}
+                            <ProjectsMiniSummary
+                              mapSet={projectCosts && projectCosts.project_id}
+                              mapQualifier={projectCosts && projectCosts.project_id}
+                              singleProject={true}
+                            />
+
                             {projectCosts && projectCosts.id &&
                                 <Notes
                                   content_type="accounts_projectcostestimate"
