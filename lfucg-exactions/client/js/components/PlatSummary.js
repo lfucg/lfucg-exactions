@@ -11,6 +11,7 @@ import Notes from './Notes';
 import Uploads from './Uploads';
 
 import LotsMiniSummary from './LotsMiniSummary';
+import AccountsMiniSummary from './AccountsMiniSummary';
 
 import {
     getPlatID,
@@ -80,45 +81,6 @@ class PlatSummary extends React.Component {
                 </div>
             );
         })(plats.plat_zone));
-
-        const platLots = lots && lots.length > 0 && (map((lot) => {
-            return (
-                <div key={lot.id}>
-                    <div className="row form-subheading">
-                        <h3>{lot.address_full}</h3>
-                    </div>
-                    <div className="row link-row">
-                        <div className="pull-right">
-                            <div className="col-xs-5">
-                                {currentUser && currentUser.permissions && currentUser.permissions.lot &&
-                                    <Link to={`lot/form/${lot.id}`} aria-label="Edit">
-                                        <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
-                                        <div className="col-xs-7 link-label">
-                                            Edit
-                                        </div>
-                                    </Link>
-                                }
-                            </div>
-                            <div className="col-xs-5 ">
-                                <Link to={`lot/summary/${lot.id}`} aria-label="Summary">
-                                    <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
-                                    <div className="col-xs-7 link-label">
-                                        Summary
-                                    </div>
-                                </Link>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="row">
-                        <div className="col-sm-offset-1">
-                            <p className="col-md-4 col-xs-6">Lot Number: {lot.lot_number}</p>
-                            <p className="col-md-4 col-xs-6 ">Permit ID: {lot.permit_id}</p>
-                            <p className="col-md-4 col-xs-6 ">Parcel ID: {lot.parcel_id}</p>
-                        </div>
-                    </div>
-                </div>
-            );
-        })(lots));
 
         return (
             <div className="plat-summary">
@@ -346,71 +308,14 @@ class PlatSummary extends React.Component {
                               mapQualifier={lots && lots.length > 0}
                             />
 
-                            {plats.account && accounts ?
-                                <div>
-                                    <a
-                                      role="button"
-                                      data-toggle="collapse"
-                                      data-parent="#accordion"
-                                      href="#collapseAccounts"
-                                      aria-expanded="false"
-                                      aria-controls="collapseAccounts"
-                                    >
-                                        <div className="row section-heading" role="tab" id="headingAccount">
-                                            <div className="col-xs-1 caret-indicator" />
-                                            <div className="col-xs-10">
-                                                <h3>Developer Account</h3>
-                                            </div>
-                                        </div>
-                                    </a>
-                                    <div
-                                      id="collapseAccounts"
-                                      className="panel-collapse collapse row"
-                                      role="tabpanel"
-                                      aria-labelledby="#headingAccounts"
-                                    >
-                                        <div className="panel-body">
-                                            <div className="row link-row">
-                                                <div className="col-xs-12 col-sm-5 col-sm-offset-7">
-                                                    <div className="col-xs-5">
-                                                        {currentUser && currentUser.permissions && currentUser.permissions.account &&
-                                                            <Link to={`account/form/${accounts.id}`} aria-label="Edit">
-                                                                <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
-                                                                <div className="col-xs-7 link-label">
-                                                                    Edit
-                                                                </div>
-                                                            </Link>
-                                                        }
-                                                    </div>
-                                                    <div className="col-xs-5 ">
-                                                        <Link to={`account/summary/${accounts.id}`} aria-label="Summary">
-                                                            <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
-                                                            <div className="col-xs-7 link-label">
-                                                                Summary
-                                                            </div>
-                                                        </Link>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="col-xs-12">
-                                                <p className="col-xs-6">Developer Account Name: {accounts.account_name}</p>
-                                                <p className="col-xs-6"><strong>{accounts.balance && accounts.balance.credit_availability}</strong></p>
-                                                {currentUser && currentUser.username &&
-                                                    <div>
-                                                        <p className="col-xs-6">Contact Name: {accounts.contact_full_name}</p>
-                                                        <p className="col-xs-6">Account Balance: {accounts.balance && accounts.balance.balance}</p>
-                                                        <p className="col-xs-6 ">Phone: {accounts.phone}</p>
-                                                        <p className="col-xs-6">Email: {accounts.email}</p>
-                                                        <p className="col-xs-12">Address: {accounts.address_full}</p>
-                                                    </div>
-                                                }
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div> : <div className="row section-heading" role="tab" id="headingAccountPlats">
-                                    <h3>Account - None</h3>
-                                </div>
-                            }
+                            <AccountsMiniSummary
+                              mapSet={accounts}
+                              mapQualifier={plats.account && accounts}
+                              singleAccount={true}
+                              title="Developer Account"
+                              accordionID="Account"
+                            />
+
                             {plats && plats.id &&
                                 <Uploads
                                   file_content_type="plats_plat"

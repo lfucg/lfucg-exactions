@@ -11,6 +11,7 @@ import Notes from './Notes';
 
 import PlatsMiniSummary from './PlatsMiniSummary';
 import LotsMiniSummary from './LotsMiniSummary';
+import AgreementsMiniSummary from './AgreementsMiniSummary';
 
 import {
     getAccountID,
@@ -32,45 +33,6 @@ class AccountSummary extends React.Component {
             payments,
             accountLedgers,
         } = this.props;
-
-        const agreements_list = agreements && agreements.length > 0 &&
-            map((agreement) => {
-                return (
-                    <div key={agreement.id} className="col-xs-12">
-                        <div className="row form-subheading">
-                            <h3>Resolution: {agreement.resolution_number}</h3>
-                        </div>
-                        <div className="row link-row">
-                            <div className="col-xs-12 col-sm-5 col-sm-offset-7">
-                                <div className="col-xs-5">
-                                    {currentUser && currentUser.permissions && currentUser.permissions.agreement &&
-                                        <Link to={`agreement/form/${agreement.id}`} aria-label="Edit">
-                                            <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
-                                            <div className="col-xs-7 link-label">
-                                                Edit
-                                            </div>
-                                        </Link>
-                                    }
-                                </div>
-                                <div className="col-xs-5 ">
-                                    <Link to={`agreement/summary/${agreement.id}`} aria-label="Summary">
-                                        <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
-                                        <div className="col-xs-7 link-label">
-                                            Summary
-                                        </div>
-                                    </Link>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="row">
-                            <p className="col-xs-6">Current Balance: {agreement.agreement_balance && agreement.agreement_balance.total}</p>
-                            <p className="col-xs-6">Agreement Type: {agreement.agreement_type_display}</p>
-                            <p className="col-xs-6">Date Executed: {agreement.date_executed}</p>
-                            <p className="col-xs-6">Expansion Area: {agreement.expansion_area}</p>
-                        </div>
-                    </div>
-                );
-            })(agreements);
 
         const payments_list = payments && payments.length > 0 &&
             map((payment) => {
@@ -238,41 +200,10 @@ class AccountSummary extends React.Component {
                               mapQualifier={accounts.lot_account && accounts.lot_account.length > 0}
                             />
 
-                            {agreements_list ? (
-                                <div>
-                                    <a
-                                      role="button"
-                                      data-toggle="collapse"
-                                      data-parent="#accordion"
-                                      href="#collapseAccountAgreements"
-                                      aria-expanded="false"
-                                      aria-controls="collapseAccountAgreements"
-                                    >
-                                        <div className="row section-heading" role="tab" id="headingAccountAgreements">
-                                            <div className="col-xs-1 caret-indicator" />
-                                            <div className="col-xs-10">
-                                                <h3>Agreements</h3>
-                                            </div>
-                                        </div>
-                                    </a>
-                                    <div
-                                      id="collapseAccountAgreements"
-                                      className="panel-collapse collapse row"
-                                      role="tabpanel"
-                                      aria-labelledby="#headingAccountAgreements"
-                                    >
-                                        <div className="panel-body">
-                                            <div className="col-xs-12">
-                                                {agreements_list}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            ) : (
-                                <div className="row section-heading" role="tab" id="headingAccountAgreements">
-                                    <h3>Agreements - None</h3>
-                                </div>
-                            )}
+                            <AgreementsMiniSummary
+                              mapSet={agreements}
+                              mapQualifier={agreements && agreements.length > 0}
+                            />
 
                             {payments_list ? (
                                 <div>

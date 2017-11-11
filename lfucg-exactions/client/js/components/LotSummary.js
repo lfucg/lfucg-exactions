@@ -9,7 +9,9 @@ import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
 import Notes from './Notes';
 import Uploads from './Uploads';
+
 import PlatsMiniSummary from './PlatsMiniSummary';
+import AccountsMiniSummary from './AccountsMiniSummary';
 
 import FormGroup from './FormGroup';
 
@@ -325,68 +327,13 @@ class LotSummary extends React.Component {
                                   singlePlat={true}
                                 />
 
-                                {currentLot.account && accounts ?
-                                    <div>
-                                        <a
-                                          role="button"
-                                          data-toggle="collapse"
-                                          data-parent="#accordion"
-                                          href="#collapseAccounts"
-                                          aria-expanded="false"
-                                          aria-controls="collapseAccounts"
-                                        >
-                                            <div className="row section-heading" role="tab" id="headingAccount">
-                                                <div className="col-xs-1 caret-indicator" />
-                                                <div className="col-xs-10">
-                                                    <h3>Developer Account</h3>
-                                                </div>
-                                            </div>
-                                        </a>
-                                        <div
-                                          id="collapseAccounts"
-                                          className="panel-collapse collapse row"
-                                          role="tabpanel"
-                                          aria-labelledby="#headingAccounts"
-                                        >
-                                            <div className="panel-body">
-                                                <div className="row link-row">
-                                                    <div className="col-xs-12 col-sm-5 col-sm-offset-7">
-                                                        <div className="col-xs-5">
-                                                            {currentUser && currentUser.permissions && currentUser.permissions.account &&
-                                                                <Link to={`account/form/${accounts.id}`} aria-label="Edit">
-                                                                    <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
-                                                                    <div className="col-xs-7 link-label">
-                                                                        Edit
-                                                                    </div>
-                                                                </Link>
-                                                            }
-                                                        </div>
-                                                        <div className="col-xs-5 ">
-                                                            <Link to={`account/summary/${accounts.id}`} aria-label="Summary">
-                                                                <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
-                                                                <div className="col-xs-7 link-label">
-                                                                    Summary
-                                                                </div>
-                                                            </Link>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div className="col-xs-12">
-                                                    <p className="col-xs-6">Developer Account Name: {accounts.account_name}</p>
-                                                    <p className="col-xs-6"><strong>{accounts.balance && accounts.balance.credit_availability}</strong></p>
-                                                    {currentUser && currentUser.username &&
-                                                        <div>
-                                                            <p className="col-xs-6">Account Balance: {accounts.balance && accounts.balance.balance}</p>
-                                                            <p className="col-xs-6">Contact Name: {accounts.contact_full_name}</p>
-                                                        </div>
-                                                    }
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div> : <div className="row section-heading" role="tab" id="headingAccountPayments">
-                                        <h3>Account - None</h3>
-                                    </div>
-                                }
+                                <AccountsMiniSummary
+                                  mapSet={accounts}
+                                  mapQualifier={currentLot.account && accounts}
+                                  singleAccount={true}
+                                  title="Developer Account"
+                                  accordionID="Account"
+                                />
 
                                 {payments_list ? (
                                     <div>

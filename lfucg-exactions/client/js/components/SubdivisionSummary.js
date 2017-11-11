@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
-import { map, filter, compose } from 'ramda';
 import PropTypes from 'prop-types';
 
 import Navbar from './Navbar';
@@ -22,7 +21,6 @@ class SubdivisionSummary extends React.Component {
     componentDidMount() {
         this.props.onComponentDidMount();
     }
-
 
     render() {
         const {
