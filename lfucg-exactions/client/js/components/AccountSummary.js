@@ -8,7 +8,9 @@ import Navbar from './Navbar';
 import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
 import Notes from './Notes';
+
 import PlatsMiniSummary from './PlatsMiniSummary';
+import LotsMiniSummary from './LotsMiniSummary';
 
 import {
     getAccountID,
@@ -30,45 +32,6 @@ class AccountSummary extends React.Component {
             payments,
             accountLedgers,
         } = this.props;
-
-        const lots_list = accounts.lot_account && accounts.lot_account.length > 0 &&
-            map((lot) => {
-                return (
-                    <div key={lot.id} className="col-xs-12">
-                        <div className="row form-subheading">
-                            <h3>{lot.address_full}</h3>
-                        </div>
-                        <div className="row link-row">
-                            <div className="col-xs-12 col-sm-5 col-sm-offset-7">
-                                <div className="col-xs-5">
-                                    {currentUser && currentUser.permissions && currentUser.permissions.lot &&
-                                        <Link to={`lot/form/${lot.id}`} aria-label="Edit">
-                                            <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
-                                            <div className="col-xs-7 link-label">
-                                                Edit
-                                            </div>
-                                        </Link>
-                                    }
-                                </div>
-                                <div className="col-xs-5 ">
-                                    <Link to={`lot/summary/${lot.id}`} aria-label="Summary">
-                                        <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
-                                        <div className="col-xs-7 link-label">
-                                            Summary
-                                        </div>
-                                    </Link>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="row">
-                            <p className="col-xs-6">Current Exactions: {lot.lot_exactions && lot.lot_exactions.current_exactions}</p>
-                            <p className="col-xs-6"><strong>{lot.is_approved ? 'Approved' : 'Not Approved'}</strong></p>
-                            <p className="col-xs-6">Lot Number: {lot.lot_number}</p>
-                            <p className="col-xs-6">Parcel ID: {lot.parcel_id}</p>
-                        </div>
-                    </div>
-                );
-            })(accounts.lot_account);
 
         const agreements_list = agreements && agreements.length > 0 &&
             map((agreement) => {
@@ -270,41 +233,10 @@ class AccountSummary extends React.Component {
                               mapQualifier={accounts.plat_account && accounts.plat_account.length > 0}
                             />
 
-                            {lots_list ? (
-                                <div>
-                                    <a
-                                      role="button"
-                                      data-toggle="collapse"
-                                      data-parent="#accordion"
-                                      href="#collapseAccountLots"
-                                      aria-expanded="false"
-                                      aria-controls="collapseAccountLots"
-                                    >
-                                        <div className="row section-heading" role="tab" id="headingAccountLots">
-                                            <div className="col-xs-1 caret-indicator" />
-                                            <div className="col-xs-10">
-                                                <h3>Lots</h3>
-                                            </div>
-                                        </div>
-                                    </a>
-                                    <div
-                                      id="collapseAccountLots"
-                                      className="panel-collapse collapse row"
-                                      role="tabpanel"
-                                      aria-labelledby="#headingAccountLots"
-                                    >
-                                        <div className="panel-body">
-                                            <div className="col-xs-12">
-                                                {lots_list}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            ) : (
-                                <div className="row section-heading" role="tab" id="headingAccountLots">
-                                    <h3>Lots - None</h3>
-                                </div>
-                            )}
+                            <LotsMiniSummary
+                              mapSet={accounts.lot_account}
+                              mapQualifier={accounts.lot_account && accounts.lot_account.length > 0}
+                            />
 
                             {agreements_list ? (
                                 <div>

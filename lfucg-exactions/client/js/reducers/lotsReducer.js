@@ -2,6 +2,7 @@ import {
     GET_LOTS,
     GET_LOT_ID,
     SEARCH_QUERY,
+    GET_SUBDIVISION_LOTS,
     GET_PLAT_LOTS,
     POST_LOT,
     PUT_LOT,
@@ -18,6 +19,7 @@ const lotsReducer = (state = [], action) => {
     case GET_LOT_ID:
         return [...state];
     case GET_LOTS:
+    case GET_SUBDIVISION_LOTS:
     case GET_PLAT_LOTS:
     case POST_LOT:
     case PUT_LOT:
