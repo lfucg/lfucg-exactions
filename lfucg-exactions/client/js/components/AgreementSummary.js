@@ -13,6 +13,7 @@ import Notes from './Notes';
 import AccountsMiniSummary from './AccountsMiniSummary';
 import AccountLedgersMiniSummary from './AccountLedgersMiniSummary';
 import PaymentsMiniSummary from './PaymentsMiniSummary';
+import ProjectsMiniSummary from './ProjectsMiniSummary';
 
 import {
     getAgreementID,
@@ -34,47 +35,6 @@ class AgreementSummary extends React.Component {
             projects,
             accountLedgers,
         } = this.props;
-
-        const projects_list = projects && projects.length > 0 &&
-            map((project) => {
-                return (
-                    <div key={project.id} className="col-xs-12">
-                        <div className="row form-subheading">
-                            <h3>{project.name}</h3>
-                        </div>
-                        <div className="row link-row">
-                            <div className="col-xs-12 col-sm-5 col-sm-offset-7">
-                                <div className="col-xs-5">
-                                    {currentUser && currentUser.permissions && currentUser.permissions.project &&
-                                        <Link to={`project/form/${project.id}`} aria-label="Edit">
-                                            <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
-                                            <div className="col-xs-7 link-label">
-                                                Edit
-                                            </div>
-                                        </Link>
-                                    }
-                                </div>
-                                <div className="col-xs-5 ">
-                                    <Link to={`project/summary/${project.id}`} aria-label="Summary">
-                                        <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
-                                        <div className="col-xs-7 link-label">
-                                            Summary
-                                        </div>
-                                    </Link>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="row">
-                            <p className="col-sm-4 col-xs-6">Project Category: {project.project_category}</p>
-                            <p className="col-sm-4 col-xs-6">Expansion Area: {project.expansion_area}</p>
-                            <p className="col-sm-4 col-xs-6">Project Type: {project.project_type_display}</p>
-                            <p className="col-sm-4 col-xs-6">Project Status: {project.project_status_display}</p>
-                            <p className="col-sm-4 col-xs-6">Status Date: {project.status_date}</p>
-                            <p className="col-xs-12">Project Description: {project.project_description}</p>
-                        </div>
-                    </div>
-                );
-            })(projects);
 
         return (
             <div className="agreement-summary">
@@ -159,41 +119,10 @@ class AgreementSummary extends React.Component {
                               mapQualifier={payments && payments.length > 0}
                             />
 
-                            {projects_list ? (
-                                <div>
-                                    <a
-                                      role="button"
-                                      data-toggle="collapse"
-                                      data-parent="#accordion"
-                                      href="#collapseAccountProjects"
-                                      aria-expanded="false"
-                                      aria-controls="collapseAccountProjects"
-                                    >
-                                        <div className="row section-heading" role="tab" id="headingAccountProjects">
-                                            <div className="col-xs-1 caret-indicator" />
-                                            <div className="col-xs-10">
-                                                <h3>Projects</h3>
-                                            </div>
-                                        </div>
-                                    </a>
-                                    <div
-                                      id="collapseAccountProjects"
-                                      className="panel-collapse collapse row"
-                                      role="tabpanel"
-                                      aria-labelledby="#headingAccountProjects"
-                                    >
-                                        <div className="panel-body">
-                                            <div className="col-xs-12">
-                                                {projects_list}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            ) : (
-                                <div className="row section-heading" role="tab" id="headingAccountProjects">
-                                    <h3>Projects - None</h3>
-                                </div>
-                            )}
+                            <ProjectsMiniSummary
+                              mapSet={projects}
+                              mapQualifier={projects && projects.length > 0}
+                            />
 
                             <AccountLedgersMiniSummary
                               mapSet={accountLedgers}
