@@ -10,6 +10,8 @@ import Breadcrumbs from './Breadcrumbs';
 import Uploads from './Uploads';
 import Notes from './Notes';
 
+import AgreementsMiniSummary from './AgreementsMiniSummary';
+
 import {
     getProjectID,
     getProjectProjectCosts,
@@ -175,66 +177,12 @@ class ProjectSummary extends React.Component {
                                 </div>
                             )}
 
-                            {projects.agreement_id ? <div>
-                                <a
-                                  role="button"
-                                  data-toggle="collapse"
-                                  data-parent="#accordion"
-                                  href="#collapseAgreementInfo"
-                                  aria-expanded="false"
-                                  aria-controls="collapseAgreementInfo"
-                                >
-                                    <div className="row section-heading" role="tab" id="headingAgreementInfo">
-                                        <div className="col-xs-1 caret-indicator" />
-                                        <div className="col-xs-10">
-                                            <h3>Agreement</h3>
-                                        </div>
-                                    </div>
-                                </a>
-                                <div
-                                  id="collapseAgreementInfo"
-                                  className="panel-collapse collapse row"
-                                  role="tabpanel"
-                                  aria-labelledby="#headingAgreementInfo"
-                                >
-                                    <div className="panel-body">
-                                        <div className="row link-row">
-                                            <div className="col-xs-12 col-sm-5 col-sm-offset-7">
-                                                <div className="col-xs-5">
-                                                    {currentUser && currentUser.permissions && currentUser.permissions.agreement &&
-                                                        <Link to={`agreement/form/${projects.agreement_id.id}`} aria-label="Edit">
-                                                            <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
-                                                            <div className="col-xs-7 link-label">
-                                                                Edit
-                                                            </div>
-                                                        </Link>
-                                                    }
-                                                </div>
-                                                <div className="col-xs-5 ">
-                                                    <Link to={`agreement/summary/${projects.agreement_id.id}`} aria-label="Summary">
-                                                        <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
-                                                        <div className="col-xs-7 link-label">
-                                                            Summary
-                                                        </div>
-                                                    </Link>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="col-xs-12">
-                                            <p className="col-md-4 col-xs-6">Resolution Number: {projects.agreement_id.resolution_number}</p>
-                                            <p className="col-md-4 col-xs-6">Current Balance: {projects.agreement_id.agreement_balance && projects.agreement_id.agreement_balance.total}</p>
-                                            {projects.agreement_id.account_id &&
-                                                <p className="col-md-4 col-xs-6">Account: {projects.agreement_id.account_id && projects.agreement_id.account_id.account_name}</p>
-                                            }
-                                            <p className="col-md-4 col-xs-6">Expansion Area: {projects.agreement_id.expansion_area}</p>
-                                            <p className="col-md-4 col-xs-6">Agreement Type: {projects.agreement_id.agreement_type_display}</p>
-                                            <p className="col-md-4 col-xs-6">Date Executed: {projects.agreement_id.date_executed}</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div> : <div className="row section-heading" role="tab" id="headingCostEstimates">
-                                <h3>Agreement - None</h3>
-                            </div>}
+                            <AgreementsMiniSummary
+                              mapSet={projects.agreement_id}
+                              mapQualifier={projects.agreement_id}
+                              singleAgreement={true}
+                            />
+
                             {projects.id &&
                                 <Uploads
                                   file_content_type="accounts_project"

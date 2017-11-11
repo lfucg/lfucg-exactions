@@ -10,6 +10,8 @@ import Breadcrumbs from './Breadcrumbs';
 import Uploads from './Uploads';
 import Notes from './Notes';
 
+import AccountsMiniSummary from './AccountsMiniSummary';
+
 import {
     getAgreementID,
     getAgreementPayments,
@@ -234,70 +236,13 @@ class AgreementSummary extends React.Component {
                                 />
                             }
 
-                            {agreements && agreements.account_id && agreements.account_id.id ?
-                                <div>
-                                    <a
-                                      role="button"
-                                      data-toggle="collapse"
-                                      data-parent="#accordion"
-                                      href="#collapseAccountInfo"
-                                      aria-expanded="false"
-                                      aria-controls="collapseAccountInfo"
-                                    >
-                                        <div className="row section-heading" role="tab" id="headingAccountInfo">
-                                            <div className="col-xs-1 caret-indicator" />
-                                            <div className="col-xs-10">
-                                                <h3>Developer Account Information</h3>
-                                            </div>
-                                        </div>
-                                    </a>
-                                    <div
-                                      id="collapseAccountInfo"
-                                      className="panel-collapse collapse row"
-                                      role="tabpanel"
-                                      aria-labelledby="#headingAccountInfo"
-                                    >
-                                        <div className="panel-body">
-                                            <div className="row link-row">
-                                                <div className="col-xs-12 col-sm-5 col-sm-offset-7">
-                                                    <div className="col-xs-5">
-                                                        {currentUser && currentUser.permissions && currentUser.permissions.account &&
-                                                            <Link to={`account/form/${agreements.account_id.id}`} aria-label="Edit">
-                                                                <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
-                                                                <div className="col-xs-7 link-label">
-                                                                    Edit
-                                                                </div>
-                                                            </Link>
-                                                        }
-                                                    </div>
-                                                    <div className="col-xs-5 ">
-                                                        <Link to={`account/summary/${agreements.account_id.id}`} aria-label="Summary">
-                                                            <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
-                                                            <div className="col-xs-7 link-label">
-                                                                Summary
-                                                            </div>
-                                                        </Link>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="col-xs-12">
-                                                <p className="col-xs-6">Developer Account Name: {agreements.account_id.account_name}</p>
-                                                <p className="col-xs-6"><strong>{agreements.account_id.balance && agreements.account_id.balance.credit_availability}</strong></p>
-                                                {currentUser && currentUser.username &&
-                                                    <div>
-                                                        <p className="col-xs-6">Contact Name: {agreements.account_id.contact_full_name}</p>
-                                                        <p className="col-xs-6">Account Balance: {agreements.account_id.balance && agreements.account_id.balance.balance}</p>
-                                                        <p className="col-xs-6 ">Phone: {agreements.account_id.phone}</p>
-                                                        <p className="col-xs-6">Email: {agreements.account_id.email}</p>
-                                                        <p className="col-xs-12">Address: {agreements.account_id.address_full}</p>
-                                                    </div>}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div> : <div className="row section-heading" role="tab" id="headingAccountInfo">
-                                    <h3>Developer Account - None</h3>
-                                </div>
-                            }
+                            <AccountsMiniSummary
+                              mapSet={agreements.account_id}
+                              mapQualifier={agreements && agreements.account_id && agreements.account_id.id}
+                              singleAccount={true}
+                              title="Developer Account"
+                              accordionID="Account"
+                            />
 
                             {payments_list ? (
                                 <div>
