@@ -11,6 +11,8 @@ import Uploads from './Uploads';
 import Notes from './Notes';
 
 import AccountsMiniSummary from './AccountsMiniSummary';
+import AccountLedgersMiniSummary from './AccountLedgersMiniSummary';
+import PaymentsMiniSummary from './PaymentsMiniSummary';
 
 import {
     getAgreementID,
@@ -32,47 +34,6 @@ class AgreementSummary extends React.Component {
             projects,
             accountLedgers,
         } = this.props;
-
-        const payments_list = payments && payments.length > 0 &&
-            map((payment) => {
-                return (
-                    <div key={payment.id} className="col-xs-12">
-                        <div className="row form-subheading">
-                            <h3>Account: {payment.credit_account.account_name}</h3>
-                        </div>
-                        <div className="row link-row">
-                            <div className="col-xs-12 col-sm-5 col-sm-offset-7">
-                                <div className="col-xs-5">
-                                    {currentUser && currentUser.permissions && currentUser.permissions.payment &&
-                                        <Link to={`payment/form/${payment.id}`} aria-label="Edit">
-                                            <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
-                                            <div className="col-xs-7 link-label">
-                                                Edit
-                                            </div>
-                                        </Link>
-                                    }
-                                </div>
-                                <div className="col-xs-5 ">
-                                    <Link to={`payment/summary/${payment.id}`} aria-label="Summary">
-                                        <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
-                                        <div className="col-xs-7 link-label">
-                                            Summary
-                                        </div>
-                                    </Link>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="row">
-                            <h3 className="col-xs-12">Payment Total: {payment.total_paid}</h3>
-                            <p className="col-xs-6">Paid Sewer: ${(parseFloat(payment.paid_sewer_cap) + parseFloat(payment.paid_sewer_trans)).toLocaleString('en')}</p>
-                            <p className="col-xs-6">Paid Non-Sewer: ${(parseFloat(payment.paid_open_space) + parseFloat(payment.paid_parks) + parseFloat(payment.paid_roads) + parseFloat(payment.paid_storm)).toLocaleString('en')}</p>
-                            <p className="col-xs-6">Agreement Resolution: {payment.credit_source && payment.credit_source.resolution_number}</p>
-                            <p className="col-xs-6">Payment Type: {payment.payment_type_display} {payment.check_number ? `(#${payment.check_number})` : null}</p>
-                            <p className="col-xs-12">Lot: {payment.lot_id.address_full}</p>
-                        </div>
-                    </div>
-                );
-            })(payments);
 
         const projects_list = projects && projects.length > 0 &&
             map((project) => {
@@ -114,57 +75,6 @@ class AgreementSummary extends React.Component {
                     </div>
                 );
             })(projects);
-
-        const account_ledgers_list = accountLedgers && accountLedgers.length > 0 &&
-            map((accountLedger) => {
-                return (
-                    <div key={accountLedger.id} className="col-xs-12">
-                        <div className="row form-subheading">
-                            <h3>{accountLedger.entry_date}</h3>
-                        </div>
-                        <div className="row link-row">
-                            <div className="col-xs-12 col-sm-5 col-sm-offset-7">
-                                <div className="col-xs-5">
-                                    {currentUser && currentUser.permissions && currentUser.permissions.accountledger &&
-                                        <Link to={`credit-transfer/form/${accountLedger.id}`} aria-label="Edit">
-                                            <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
-                                            <div className="col-xs-7 link-label">
-                                                Edit
-                                            </div>
-                                        </Link>
-                                    }
-                                </div>
-                                <div className="col-xs-5 ">
-                                    <Link to={`credit-transfer/summary/${accountLedger.id}`} aria-label="Summary">
-                                        <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
-                                        <div className="col-xs-7 link-label">
-                                            Summary
-                                        </div>
-                                    </Link>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="row">
-                            { accountLedger.lot ? (
-                                <div>
-                                    <p className="col-xs-6">Entry Type: {accountLedger.entry_type_display}</p>
-                                    <p className="col-xs-6">Lot: {accountLedger.lot.address_full}</p>
-                                </div>
-                                ) : (<p className="col-xs-12">Entry Type: {accountLedger.entry_type_display}</p>)
-                            }
-
-                            { accountLedger.account_from &&
-                                <p className="col-xs-6">Account From: {accountLedger.account_from.account_name}</p>
-                            }
-                            <p className="col-xs-6">Non-Sewer Credits: {accountLedger.non_sewer_credits}</p>
-                            { accountLedger.account_to &&
-                                <p className="col-xs-6">Account To: {accountLedger.account_to.account_name}</p>
-                            }
-                            <p className="col-xs-6">Sewer Credits: {accountLedger.sewer_credits}</p>
-                        </div>
-                    </div>
-                );
-            })(accountLedgers);
 
         return (
             <div className="agreement-summary">
@@ -244,41 +154,10 @@ class AgreementSummary extends React.Component {
                               accordionID="Account"
                             />
 
-                            {payments_list ? (
-                                <div>
-                                    <a
-                                      role="button"
-                                      data-toggle="collapse"
-                                      data-parent="#accordion"
-                                      href="#collapseAccountPayments"
-                                      aria-expanded="false"
-                                      aria-controls="collapseAccountPayments"
-                                    >
-                                        <div className="row section-heading" role="tab" id="headingAccountPayments">
-                                            <div className="col-xs-1 caret-indicator" />
-                                            <div className="col-xs-10">
-                                                <h3>Payments</h3>
-                                            </div>
-                                        </div>
-                                    </a>
-                                    <div
-                                      id="collapseAccountPayments"
-                                      className="panel-collapse collapse row"
-                                      role="tabpanel"
-                                      aria-labelledby="#headingAccountPayments"
-                                    >
-                                        <div className="panel-body">
-                                            <div className="col-xs-12">
-                                                {payments_list}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            ) : (
-                                <div className="row section-heading" role="tab" id="headingAccountPayments">
-                                    <h3>Payments - None</h3>
-                                </div>
-                            )}
+                            <PaymentsMiniSummary
+                              mapSet={payments}
+                              mapQualifier={payments && payments.length > 0}
+                            />
 
                             {projects_list ? (
                                 <div>
@@ -316,41 +195,10 @@ class AgreementSummary extends React.Component {
                                 </div>
                             )}
 
-                            {account_ledgers_list ? (
-                                <div>
-                                    <a
-                                      role="button"
-                                      data-toggle="collapse"
-                                      data-parent="#accordion"
-                                      href="#collapseAccountLedgers"
-                                      aria-expanded="false"
-                                      aria-controls="collapseAccountLedgers"
-                                    >
-                                        <div className="row section-heading" role="tab" id="headingAccountLedgers">
-                                            <div className="col-xs-1 caret-indicator" />
-                                            <div className="col-xs-10">
-                                                <h3>Credit Transfers</h3>
-                                            </div>
-                                        </div>
-                                    </a>
-                                    <div
-                                      id="collapseAccountLedgers"
-                                      className="panel-collapse collapse row"
-                                      role="tabpanel"
-                                      aria-labelledby="#headingAccountLedgers"
-                                    >
-                                        <div className="panel-body">
-                                            <div className="col-xs-12">
-                                                {account_ledgers_list}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            ) : (
-                                <div className="row section-heading" role="tab" id="headingAccountLedgers">
-                                    <h3>Credit Transfers - None</h3>
-                                </div>
-                            )}
+                            <AccountLedgersMiniSummary
+                              mapSet={accountLedgers}
+                              mapQualifier={accountLedgers && accountLedgers.length > 0}
+                            />
 
                             {agreements && agreements.id &&
                                 <Uploads
