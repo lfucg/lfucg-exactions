@@ -8,6 +8,8 @@ import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
 import Notes from './Notes';
 
+import LotsMiniSummary from './LotsMiniSummary';
+
 import {
     getPaymentID,
 } from '../actions/apiActions';
@@ -98,63 +100,11 @@ class PaymentSummary extends React.Component {
                                 />
                             }
 
-                            {payments && payments.lot_id ? <div>
-                                <a
-                                  role="button"
-                                  data-toggle="collapse"
-                                  data-parent="#accordion"
-                                  href="#collapseLotInfo"
-                                  aria-expanded="false"
-                                  aria-controls="collapseLotInfo"
-                                >
-                                    <div className="row section-heading" role="tab" id="headingLotInfo">
-                                        <div className="col-xs-1 caret-indicator" />
-                                        <div className="col-xs-10">
-                                            <h3>Lot</h3>
-                                        </div>
-                                    </div>
-                                </a>
-                                <div
-                                  id="collapseLotInfo"
-                                  className="panel-collapse collapse row"
-                                  role="tabpanel"
-                                  aria-labelledby="#headingLotInfo"
-                                >
-                                    <div className="panel-body">
-                                        <div className="row link-row">
-                                            <div className="col-xs-12 col-sm-5 col-sm-offset-7">
-                                                <div className="col-xs-5">
-                                                    {currentUser && currentUser.permissions && currentUser.permissions.lot &&
-                                                        <Link to={`lot/form/${payments.lot_id.id}`} aria-label="Edit">
-                                                            <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
-                                                            <div className="col-xs-7 link-label">
-                                                                Edit
-                                                            </div>
-                                                        </Link>
-                                                    }
-                                                </div>
-                                                <div className="col-xs-5 ">
-                                                    <Link to={`lot/summary/${payments.lot_id.id}`} aria-label="Summary">
-                                                        <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
-                                                        <div className="col-xs-7 link-label">
-                                                            Summary
-                                                        </div>
-                                                    </Link>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="col-xs-12">
-                                            <p className="col-xs-12">Lot Address: {payments.lot_id.address_full}</p>
-                                            <p className="col-xs-6">Current Exactions: {payments.lot_id && payments.lot_id.lot_exactions && payments.lot_id.lot_exactions.current_exactions}</p>
-                                            <p className="col-xs-6">Plat: {payments.lot_id.plat.cabinet}-{payments.lot_id.plat.slide}</p>
-                                            <p className="col-xs-6 ">Lot Number: {payments.lot_id.lot_number}</p>
-                                            <p className="col-xs-6">Permit ID: {payments.lot_id.permit_id}</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div> : <div className="row section-heading" role="tab" id="headingLotInfo">
-                                <h3>Lot - None</h3>
-                            </div>}
+                            <LotsMiniSummary
+                              mapSet={payments.lot_id}
+                              mapQualifier={payments && payments.lot_id}
+                              singleLot={true}
+                            />
 
                             {payments.credit_account ? <div>
                                 <a

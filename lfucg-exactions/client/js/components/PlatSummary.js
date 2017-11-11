@@ -10,6 +10,8 @@ import Breadcrumbs from './Breadcrumbs';
 import Notes from './Notes';
 import Uploads from './Uploads';
 
+import LotsMiniSummary from './LotsMiniSummary';
+
 import {
     getPlatID,
     getPlatLots,
@@ -339,39 +341,10 @@ class PlatSummary extends React.Component {
                                 />
                             }
 
-                            {platLots ?
-                                <div>
-                                    <a
-                                      role="button"
-                                      data-toggle="collapse"
-                                      data-parent="#accordion"
-                                      href="#collapseLots"
-                                      aria-expanded="false"
-                                      aria-controls="collapseLots"
-                                    >
-                                        <div className="row section-heading" role="tab" id="headingLots">
-                                            <div className="col-xs-1 caret-indicator" />
-                                            <div className="col-xs-8 col-xs-offset-1">
-                                                <h3>Lots</h3>
-                                            </div>
-                                        </div>
-                                    </a>
-                                    <div
-                                      id="collapseLots"
-                                      className="panel-collapse collapse row"
-                                      role="tabpanel"
-                                      aria-labelledby="#headingLots"
-                                    >
-                                        <div className="panel-body">
-                                            <div className="col-xs-12">
-                                                {platLots}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div> : <div className="row section-heading" role="tab" id="headingAccountPlats">
-                                    <h3>Lots - None</h3>
-                                </div>
-                            }
+                            <LotsMiniSummary
+                              mapSet={lots}
+                              mapQualifier={lots && lots.length > 0}
+                            />
 
                             {plats.account && accounts ?
                                 <div>

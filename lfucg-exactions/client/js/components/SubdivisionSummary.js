@@ -8,12 +8,14 @@ import Navbar from './Navbar';
 import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
 import Notes from './Notes';
+
 import PlatsMiniSummary from './PlatsMiniSummary';
+import LotsMiniSummary from './LotsMiniSummary';
 
 import {
     getSubdivisionID,
     getSubdivisionPlats,
-    getLots,
+    getSubdivisionLots,
 } from '../actions/apiActions';
 
 class SubdivisionSummary extends React.Component {
@@ -29,50 +31,6 @@ class SubdivisionSummary extends React.Component {
             plats,
             lots,
         } = this.props;
-
-        const platIds = plats && plats.length > 0 && map(plat => plat.id)(plats);
-
-        const subdivisionLots = lots && plats && plats.length > 0 && compose(
-                map((lot) => {
-                    return (
-                        <div key={lot.id}>
-                            <div className="row form-subheading">
-                                <h3>{lot.address_full}</h3>
-                            </div>
-                            <div className="row link-row">
-                                <div className="col-xs-12 col-sm-5 col-sm-offset-7">
-                                    <div className="col-xs-5">
-                                        {currentUser && currentUser.permissions && currentUser.permissions.lot &&
-                                            <Link to={`lot/form/${lot.id}`} aria-label="Edit">
-                                                <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
-                                                <div className="col-xs-7 link-label">
-                                                    Edit
-                                                </div>
-                                            </Link>
-                                        }
-                                    </div>
-                                    <div className="col-xs-5 ">
-                                        <Link to={`lot/summary/${lot.id}`} aria-label="Summary">
-                                            <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
-                                            <div className="col-xs-7 link-label">
-                                                Summary
-                                            </div>
-                                        </Link>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="row">
-                                <div className="col-sm-offset-1">
-                                    <p className="col-md-4 col-xs-6">Lot Number: {lot.lot_number}</p>
-                                    <p className="col-md-4 col-xs-6 ">Permit ID: {lot.permit_id}</p>
-                                    <p className="col-md-4 col-xs-6 ">Parcel ID: {lot.parcel_id}</p>
-                                </div>
-                            </div>
-                        </div>
-                    );
-                }),
-                filter(lot => (platIds.indexOf(lot.plat.id) !== -1)),
-            )(lots);
 
         return (
             <div className="subdivision-summary">
@@ -146,39 +104,11 @@ class SubdivisionSummary extends React.Component {
                               mapQualifier={plats && plats.length > 0}
                             />
 
-                            {subdivisionLots ?
-                                <div>
-                                    <a
-                                      role="button"
-                                      data-toggle="collapse"
-                                      data-parent="#accordion"
-                                      href="#collapseLots"
-                                      aria-expanded="false"
-                                      aria-controls="collapseLots"
-                                    >
-                                        <div className="row section-heading" role="tab" id="headingLots">
-                                            <div className="col-xs-1 caret-indicator" />
-                                            <div className="col-xs-8 col-xs-offset-1">
-                                                <h3>Lots</h3>
-                                            </div>
-                                        </div>
-                                    </a>
-                                    <div
-                                      id="collapseLots"
-                                      className="panel-collapse collapse row"
-                                      role="tabpanel"
-                                      aria-labelledby="#headingLots"
-                                    >
-                                        <div className="panel-body">
-                                            <div className="col-xs-12">
-                                                {subdivisionLots}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div> : <div className="row section-heading" role="tab" id="headingAccountPlats">
-                                    <h3>Lots - None</h3>
-                                </div>
-                            }
+                            <LotsMiniSummary
+                              mapSet={lots}
+                              mapQualifier={lots && lots.length > 0}
+                            />
+
                         </div>
                     </div>
                 </div>
@@ -213,7 +143,7 @@ function mapDispatchToProps(dispatch, params) {
         onComponentDidMount() {
             dispatch(getSubdivisionID(selectedSubdivision));
             dispatch(getSubdivisionPlats(selectedSubdivision));
-            dispatch(getLots());
+            dispatch(getSubdivisionLots(selectedSubdivision));
         },
     };
 }
