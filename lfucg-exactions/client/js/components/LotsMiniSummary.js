@@ -117,7 +117,7 @@ class LotsMiniSummary extends React.Component {
                     </div>
                 ) : (
                     <div className="row section-heading" role="tab" id="headingAccountLots">
-                        <h3>Lots - None</h3>
+                        <h3 tabIndex="0">Lots - None</h3>
                     </div>
                 )}
             </div>

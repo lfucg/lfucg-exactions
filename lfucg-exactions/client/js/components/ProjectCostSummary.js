@@ -32,7 +32,7 @@ class ProjectCostSummary extends React.Component {
 
                 <div className="form-header">
                     <div className="container">
-                        <h1>PROJECT COST - SUMMARY</h1>
+                        <h1>PROJECT COST SUMMARY - {projectCosts.estimate_type}</h1>
                     </div>
                 </div>
 
@@ -67,7 +67,7 @@ class ProjectCostSummary extends React.Component {
                                         <div className="col-xs-12 col-sm-5 col-sm-offset-7">
                                             <div className="col-xs-5 col-xs-offset-5">
                                                 {currentUser && currentUser.permissions && currentUser.permissions.projectcostestimate &&
-                                                    <Link to={`project-cost/form/${projectCosts.id}`} aria-label="Edit">
+                                                    <Link to={`project-cost/form/${projectCosts.id}`} aria-label={`Edit ${projectCosts.estimate_type}`}>
                                                         <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
                                                         <div className="col-xs-7 link-label">
                                                             Edit

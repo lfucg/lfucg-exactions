@@ -40,7 +40,7 @@ class ProjectSummary extends React.Component {
                             <div className="col-xs-12 col-sm-5 col-sm-offset-7">
                                 <div className="col-xs-5">
                                     {currentUser && currentUser.permissions && currentUser.permissions.projectcostestimate &&
-                                        <Link to={`project-cost/form/${projectCost.id}`} aria-label="Edit">
+                                        <Link to={`project-cost/form/${projectCost.id}`} aria-label={`Edit ${projectCost.estimate_type}`}>
                                             <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
                                             <div className="col-xs-7 link-label">
                                                 Edit
@@ -49,7 +49,7 @@ class ProjectSummary extends React.Component {
                                     }
                                 </div>
                                 <div className="col-xs-5 ">
-                                    <Link to={`project-cost/summary/${projectCost.id}`} aria-label="Summary">
+                                    <Link to={`project-cost/summary/${projectCost.id}`} aria-label={`${projectCost.estimate_type} Summary`}>
                                         <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
                                         <div className="col-xs-7 link-label">
                                             Summary
@@ -75,7 +75,7 @@ class ProjectSummary extends React.Component {
 
                 <div className="form-header">
                     <div className="container">
-                        <h1>PROJECT - SUMMARY</h1>
+                        <h1>PROJECT SUMMARY - {projects.name}</h1>
                     </div>
                 </div>
 
@@ -110,7 +110,7 @@ class ProjectSummary extends React.Component {
                                         <div className="col-xs-12 col-sm-5 col-sm-offset-7">
                                             <div className="col-xs-5 col-xs-offset-5">
                                                 {currentUser && currentUser.permissions && currentUser.permissions.project &&
-                                                    <Link to={`project/form/${projects.id}`} aria-label="Edit">
+                                                    <Link to={`project/form/${projects.id}`} aria-label={`Edit ${projects.name}`}>
                                                         <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
                                                         <div className="col-xs-7 link-label">
                                                             Edit

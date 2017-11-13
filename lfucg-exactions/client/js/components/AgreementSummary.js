@@ -42,7 +42,7 @@ class AgreementSummary extends React.Component {
 
                 <div className="form-header">
                     <div className="container">
-                        <h1>AGREEMENT - SUMMARY</h1>
+                        <h1>AGREEMENT SUMMARY - {agreements.resolution_number}</h1>
                     </div>
                 </div>
 
@@ -77,7 +77,7 @@ class AgreementSummary extends React.Component {
                                         <div className="col-xs-12 col-sm-5 col-sm-offset-7">
                                             <div className="col-xs-5">
                                                 {currentUser && currentUser.permissions && currentUser.permissions.agreement &&
-                                                    <Link to={`agreement/form/${agreements.id}`} aria-label="Edit">
+                                                    <Link to={`agreement/form/${agreements.id}`} aria-label={`Edit ${agreements.resolution_number}`}>
                                                         <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
                                                         <div className="col-xs-7 link-label">
                                                             Edit

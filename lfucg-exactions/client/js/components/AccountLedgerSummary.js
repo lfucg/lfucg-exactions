@@ -34,7 +34,7 @@ class AccountLedgerSummary extends React.Component {
 
                 <div className="form-header">
                     <div className="container">
-                        <h1>CREDIT TRANSFER - SUMMARY</h1>
+                        <h1>CREDIT TRANSFER SUMMARY - {accountLedgers.entry_date}</h1>
                     </div>
                 </div>
 
@@ -69,7 +69,7 @@ class AccountLedgerSummary extends React.Component {
                                         <div className="col-xs-12 col-sm-5 col-sm-offset-7">
                                             <div className="col-xs-5 col-xs-offset-5">
                                                 {currentUser && currentUser.permissions && currentUser.permissions.accountledger &&
-                                                    <Link to={`credit-transfer/form/${accountLedgers.id}`} aria-label="Edit">
+                                                    <Link to={`credit-transfer/form/${accountLedgers.id}`} aria-label={`Edit ${accountLedgers.entry_date}`}>
                                                         <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
                                                         <div className="col-xs-7 link-label">
                                                             Edit

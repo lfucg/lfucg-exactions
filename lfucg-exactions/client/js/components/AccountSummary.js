@@ -41,7 +41,7 @@ class AccountSummary extends React.Component {
 
                 <div className="form-header">
                     <div className="container">
-                        <h1>ACCOUNTS - SUMMARY</h1>
+                        <h1>ACCOUNT SUMMARY - {accounts.account_name}</h1>
                     </div>
                 </div>
 
@@ -76,7 +76,7 @@ class AccountSummary extends React.Component {
                                         <div className="col-xs-12 col-sm-5 col-sm-offset-7">
                                             <div className="col-xs-5 col-xs-offset-5">
                                                 {currentUser && currentUser.permissions && currentUser.permissions.account &&
-                                                    <Link to={`account/form/${accounts.id}`} aria-label="Edit">
+                                                    <Link to={`account/form/${accounts.id}`} aria-label={`Edit ${accounts.account_name}`}>
                                                         <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
                                                         <div className="col-xs-7 link-label">
                                                             Edit

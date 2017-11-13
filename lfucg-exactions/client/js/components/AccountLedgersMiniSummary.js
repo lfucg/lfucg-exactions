@@ -120,7 +120,7 @@ class AccountLedgersMiniSummary extends React.Component {
                     </div>
                 ) : (
                     <div className="row section-heading" role="tab" id="headingAccountAccountLedgers">
-                        <h3>Credit Transfers - None</h3>
+                        <h3 tabIndex="0">Credit Transfers - None</h3>
                     </div>
                 )}
             </div>
