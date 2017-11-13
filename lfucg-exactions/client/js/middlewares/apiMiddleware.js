@@ -102,13 +102,15 @@ export default function api({ getState, dispatch }) {
         })
         .catch((error) => {
             console.log(error);  // eslint-disable-line no-console
-            const error_obj = error.response.data;
-            const error_message = {};
-            map((one_error) => {
-                error_message[one_error] = error_obj[one_error][0];
-            })(Object.keys(error_obj));
+            if (error.response.status !== 500) {
+                const error_obj = error.response.data;
+                const error_message = {};
+                map((one_error) => {
+                    error_message[one_error] = error_obj[one_error][0];
+                })(Object.keys(error_obj));
 
-            dispatch(errorMessageSet(error_message));
+                dispatch(errorMessageSet(error_message));
+            }
             return dispatch({
                 type: API_CALL_ERROR,
                 error,
