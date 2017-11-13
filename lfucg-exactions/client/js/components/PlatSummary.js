@@ -88,7 +88,7 @@ class PlatSummary extends React.Component {
 
                 <div className="form-header">
                     <div className="container">
-                        <h1>PLATS - {plats.cabinet}-{plats.slide}</h1>
+                        <h1>PLAT SUMMARY - {plats.cabinet}-{plats.slide}</h1>
                     </div>
                 </div>
 
@@ -123,7 +123,7 @@ class PlatSummary extends React.Component {
                                         <div className="col-xs-12 col-sm-5 col-sm-offset-7">
                                             <div className="col-xs-5 col-xs-offset-5">
                                                 {currentUser && currentUser.permissions && currentUser.permissions.plat &&
-                                                    <Link to={`plat/form/${plats.id}`} aria-label="Edit">
+                                                    <Link to={`plat/form/${plats.id}`} aria-label={`Edit ${plats.cabinet} ${plats.slide}`}>
                                                         <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
                                                         <div className="col-xs-7 link-label">
                                                             Edit
@@ -180,7 +180,7 @@ class PlatSummary extends React.Component {
                                             <div className="col-xs-12 col-sm-5 col-sm-offset-7">
                                                 <div className="col-xs-5 col-xs-offset-5">
                                                     {currentUser && currentUser.permissions && currentUser.permissions.plat &&
-                                                        <Link to={`plat/form/${plats.id}`} aria-label="Edit">
+                                                        <Link to={`plat/form/${plats.id}`} aria-label="Edit plat zones">
                                                             <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
                                                             <div className="col-xs-7 link-label">
                                                                 Edit
@@ -227,7 +227,7 @@ class PlatSummary extends React.Component {
                                                 <div className="col-xs-12 col-sm-5 col-sm-offset-7">
                                                     <div className="col-xs-5 col-xs-offset-5">
                                                         {currentUser && currentUser.permissions && currentUser.permissions.plat &&
-                                                            <Link to={`plat/form/${plats.id}`} aria-label="Edit">
+                                                            <Link to={`plat/form/${plats.id}`} aria-label={`Edit ${plats.cabinet} ${plats.slide} plat exactions`}>
                                                                 <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
                                                                 <div className="col-xs-7 link-label">
                                                                     Edit

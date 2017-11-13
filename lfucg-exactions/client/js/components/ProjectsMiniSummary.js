@@ -121,7 +121,7 @@ class ProjectsMiniSummary extends React.Component {
                     </div>
                 ) : (
                     <div className="row section-heading" role="tab" id="headingAccountProjects">
-                        <h3>Projects - None</h3>
+                        <h3 tabIndex="0">Projects - None</h3>
                     </div>
                 )}
             </div>

@@ -36,7 +36,7 @@ class SubdivisionSummary extends React.Component {
 
                 <div className="form-header">
                     <div className="container">
-                        <h1>SUBDIVISIONS - {subdivisions.name}</h1>
+                        <h1>SUBDIVISION SUMMARY - {subdivisions.name}</h1>
                     </div>
                 </div>
 
@@ -71,7 +71,7 @@ class SubdivisionSummary extends React.Component {
                                         <div className="col-xs-12 col-sm-5 col-sm-offset-7">
                                             <div className="col-xs-5 col-xs-offset-5">
                                                 {currentUser && currentUser.permissions && currentUser.permissions.subdivision &&
-                                                    <Link to={`subdivision/form/${subdivisions.id}`} aria-label="Edit">
+                                                    <Link to={`subdivision/form/${subdivisions.id}`} aria-label={`Edit ${subdivisions.name}`}>
                                                         <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
                                                         <div className="col-xs-7 link-label">
                                                             Edit

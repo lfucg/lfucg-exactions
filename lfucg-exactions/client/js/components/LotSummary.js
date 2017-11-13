@@ -54,7 +54,7 @@ class LotSummary extends React.Component {
                 <Navbar />
                 <div className="form-header">
                     <div className="container">
-                        <h1>LOTS - {currentLot && currentLot.address_full}</h1>
+                        <h1>LOT SUMMARY - {currentLot && currentLot.address_full}</h1>
                     </div>
                 </div>
                 <Breadcrumbs route={this.props.route} parent_link={'lot'} parent_name={'Lots'} />
@@ -156,7 +156,7 @@ class LotSummary extends React.Component {
                                             <div className="col-xs-12 col-sm-5 col-sm-offset-7">
                                                 <div className="col-xs-5 col-xs-offset-5">
                                                     {currentUser && currentUser.permissions && currentUser.permissions.lot && currentLot &&
-                                                        <Link to={`lot/form/${currentLot.id}`} aria-label="Edit">
+                                                        <Link to={`lot/form/${currentLot.id}`} aria-label={`Edit ${lots.address_full}`}>
                                                             <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
                                                             <div className="col-xs-7 link-label">
                                                                 Edit
@@ -203,7 +203,7 @@ class LotSummary extends React.Component {
                                             <div className="col-xs-12 col-sm-5 col-sm-offset-7">
                                                 <div className="col-xs-5 col-xs-offset-5">
                                                     {currentUser && currentUser.permissions && currentUser.permissions.lot && currentLot &&
-                                                        <Link to={`lot/form/${currentLot.id}`} aria-label="Edit">
+                                                        <Link to={`lot/form/${currentLot.id}`} aria-label={`Edit ${lots.address_full} lot exactions`}>
                                                             <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
                                                             <div className="col-xs-7 link-label">
                                                                 Edit

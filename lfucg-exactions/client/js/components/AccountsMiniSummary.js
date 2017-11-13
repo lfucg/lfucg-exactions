@@ -130,7 +130,7 @@ class AccountsMiniSummary extends React.Component {
                     </div>
                 ) : (
                     <div className="row section-heading" role="tab" id="headingAccountAccounts">
-                        <h3>Accounts - None</h3>
+                        <h3 tabIndex="0">Accounts - None</h3>
                     </div>
                 )}
             </div>
