@@ -20,8 +20,6 @@ export default function flashMiddleware({ dispatch }) {
         if (action.type === ERROR_MESSAGE_SET) {
             map((error) => {
                 if (error !== 'non_field_errors') {
-                    console.log('hey why are we in here?');
-                    console.log('ERROR FIELD TYPE IS: ', typeof error);
                     document.getElementById(error).classList.add('error');
                     document.querySelector(`label[for='${error}']`).classList.add('label-error');
                     const help_text = document.getElementById(`help-block-${error}`);
