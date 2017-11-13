@@ -2,7 +2,6 @@ import { map } from 'ramda';
 
 import {
     flashMessageClear,
-    flashMessageSet,
 } from '../actions/flashMessageActions';
 
 import {
