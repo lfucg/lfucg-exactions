@@ -385,7 +385,7 @@ class AccountLedgerForm extends React.Component {
                                                 <div className="clearfix" />
                                                 <span> * All required fields must be filled.</span>
                                             </div>
-                                            { (activeForm.entry_type !== 'NEW' && (parsedBalance - activeForm.credits_applied > 0)) &&
+                                            { (activeForm.entry_type !== 'NEW' && (parsedBalance - activeForm.non_sewer_credits - activeForm.sewer_credits <= 0)) &&
                                                 <div>
                                                     <div className="clearfix" />
                                                     <span> * Current credits would result in a negative balance.</span>
