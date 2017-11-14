@@ -131,7 +131,7 @@ class AccountLedgersMiniSummary extends React.Component {
 AccountLedgersMiniSummary.propTypes = {
     currentUser: PropTypes.object,
     mapSet: PropTypes.object,
-    mapQualifier: PropTypes.string,
+    mapQualifier: PropTypes.object,
     singleAccountLedger: PropTypes.bool,
 };
 

@@ -245,13 +245,13 @@ class LotSummary extends React.Component {
                                 <PlatsMiniSummary
                                   mapSet={currentLot.plat}
                                   mapQualifier={currentLot && currentLot.plat}
-                                  singlePlat={true}
+                                  singlePlat
                                 />
 
                                 <AccountsMiniSummary
                                   mapSet={accounts}
                                   mapQualifier={currentLot.account && accounts}
-                                  singleAccount={true}
+                                  singleAccount
                                   title="Developer Account"
                                   accordionID="Account"
                                 />

@@ -141,7 +141,7 @@ class AccountsMiniSummary extends React.Component {
 AccountsMiniSummary.propTypes = {
     currentUser: PropTypes.object,
     mapSet: PropTypes.object,
-    mapQualifier: PropTypes.string,
+    mapQualifier: PropTypes.object,
     singleAccount: PropTypes.bool,
     title: PropTypes.string,
     accordionID: PropTypes.string,
