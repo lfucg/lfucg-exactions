@@ -300,13 +300,6 @@ class AccountLedgerViewSet(viewsets.ModelViewSet):
                 parks_credits_per_lot = 0
                 open_space_credits_per_lot = 0
                 for lot in chosen_lots:
-                    from pprint import pprint 
-                    pprint(lot.values())
-                    lot_serializer = LotSerializer(data=lot)
-                    if lot_serializer.is_valid():
-                        print('hello')
-                        pprint(vars(lot_serializer.data))
-                    return
                     data_set['lot'] = lot.id
                     data_set['non_sewer_credits'] = non_sewer_credits_per_lot
                     data_set['sewer_credits'] = sewer_credits_per_lot
