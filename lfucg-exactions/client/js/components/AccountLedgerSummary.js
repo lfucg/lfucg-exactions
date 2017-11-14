@@ -99,13 +99,13 @@ class AccountLedgerSummary extends React.Component {
                             <LotsMiniSummary
                               mapSet={accountLedgers.lot}
                               mapQualifier={accountLedgers && accountLedgers.lot && accountLedgers.lot.id}
-                              singleLot={true}
+                              singleLot
                             />
 
                             <AccountsMiniSummary
                               mapSet={accountLedgers.account_from}
                               mapQualifier={accountLedgers && accountLedgers.account_from && accountLedgers.account_from.id}
-                              singleAccount={true}
+                              singleAccount
                               title="Developer Account From"
                               accordionID="AccountFrom"
                             />
@@ -113,7 +113,7 @@ class AccountLedgerSummary extends React.Component {
                             <AccountsMiniSummary
                               mapSet={accountLedgers.account_to}
                               mapQualifier={accountLedgers && accountLedgers.account_to && accountLedgers.account_to.id}
-                              singleAccount={true}
+                              singleAccount
                               title="Developer Account To"
                               accordionID="AccountTo"
                             />
@@ -121,7 +121,7 @@ class AccountLedgerSummary extends React.Component {
                             <AgreementsMiniSummary
                               mapSet={accountLedgers.agreement}
                               mapQualifier={accountLedgers && accountLedgers.agreement && accountLedgers.agreement.id}
-                              singleAgreement={true}
+                              singleAgreement
                             />
 
                         </div>

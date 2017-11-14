@@ -133,7 +133,7 @@ class PlatsMiniSummary extends React.Component {
 PlatsMiniSummary.propTypes = {
     currentUser: PropTypes.object,
     mapSet: PropTypes.object,
-    mapQualifier: PropTypes.string,
+    mapQualifier: PropTypes.object,
     singlePlat: PropTypes.bool,
 };
 

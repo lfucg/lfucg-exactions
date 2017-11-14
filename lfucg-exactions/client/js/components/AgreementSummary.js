@@ -109,7 +109,7 @@ class AgreementSummary extends React.Component {
                             <AccountsMiniSummary
                               mapSet={agreements.account_id}
                               mapQualifier={agreements && agreements.account_id && agreements.account_id.id}
-                              singleAccount={true}
+                              singleAccount
                               title="Developer Account"
                               accordionID="Account"
                             />

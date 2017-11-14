@@ -105,13 +105,13 @@ class PaymentSummary extends React.Component {
                             <LotsMiniSummary
                               mapSet={payments.lot_id}
                               mapQualifier={payments && payments.lot_id}
-                              singleLot={true}
+                              singleLot
                             />
 
                             <AccountsMiniSummary
                               mapSet={payments.credit_account}
                               mapQualifier={payments.credit_account}
-                              singleAccount={true}
+                              singleAccount
                               title="Developer Account"
                               accordionID="Account"
                             />
@@ -119,7 +119,7 @@ class PaymentSummary extends React.Component {
                             <AgreementsMiniSummary
                               mapSet={payments.credit_source}
                               mapQualifier={payments.credit_source}
-                              singleAgreement={true}
+                              singleAgreement
                             />
 
                         </div>

@@ -135,7 +135,7 @@ class PaymentsMiniSummary extends React.Component {
 PaymentsMiniSummary.propTypes = {
     currentUser: PropTypes.object,
     mapSet: PropTypes.object,
-    mapQualifier: PropTypes.string,
+    mapQualifier: PropTypes.object,
     singlePayment: PropTypes.bool,
 };
 
