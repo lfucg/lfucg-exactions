@@ -261,7 +261,7 @@ class AccountLedgerForm extends React.Component {
                                             <FormGroup label="Non-Sewer Credits" id="non_sewer_credits" aria-required="true" >
                                                 <input
                                                   type="number"
-                                                  defaultValue="0"
+                                                  value="0"
                                                   className="form-control"
                                                   placeholder="Non-Sewer Credits"
                                                   disabled={!activeForm.entry_type || activeForm.lot_show}
@@ -273,7 +273,7 @@ class AccountLedgerForm extends React.Component {
                                             <FormGroup label="Sewer Credits" id="sewer_credits" aria-required="true" >
                                                 <input
                                                   type="number"
-                                                  defaultValue="0"
+                                                  value="0"
                                                   className="form-control"
                                                   placeholder="Sewer Credits"
                                                   disabled={!activeForm.entry_type || activeForm.lot_show}
@@ -287,7 +287,7 @@ class AccountLedgerForm extends React.Component {
                                             <FormGroup label="Roads" id="roads">
                                                 <input
                                                   type="number"
-                                                  defaultValue="0"
+                                                  value="0"
                                                   className="form-control non-sewer"
                                                   placeholder="Roads"
                                                   disabled={!activeForm.entry_type || !activeForm.lot_show}
@@ -300,7 +300,7 @@ class AccountLedgerForm extends React.Component {
                                             <FormGroup label="Parks" id="parks">
                                                 <input
                                                   type="number"
-                                                  defaultValue="0"
+                                                  value="0"
                                                   className="form-control non-sewer"
                                                   placeholder="Parks"
                                                   disabled={!activeForm.entry_type || !activeForm.lot_show}
@@ -315,7 +315,7 @@ class AccountLedgerForm extends React.Component {
                                             <FormGroup label="Sewer Capacity" id="sewer_cap">
                                                 <input
                                                   type="number"
-                                                  defaultValue="0"
+                                                  value="0"
                                                   className="form-control sewer"
                                                   placeholder="Sewer Capacity"
                                                   disabled={!activeForm.entry_type || !activeForm.lot_show}
@@ -328,7 +328,7 @@ class AccountLedgerForm extends React.Component {
                                             <FormGroup label="Sewer Transmission" id="sewer_trans">
                                                 <input
                                                   type="number"
-                                                  defaultValue="0"
+                                                  value="0"
                                                   className="form-control sewer"
                                                   placeholder="Sewer Transmission"
                                                   disabled={!activeForm.entry_type || !activeForm.lot_show}
@@ -343,7 +343,7 @@ class AccountLedgerForm extends React.Component {
                                             <FormGroup label="Storm" id="storm">
                                                 <input
                                                   type="number"
-                                                  defaultValue="0"
+                                                  value="0"
                                                   className="form-control non-sewer"
                                                   placeholder="Storm"
                                                   disabled={!activeForm.entry_type || !activeForm.lot_show}
@@ -356,7 +356,7 @@ class AccountLedgerForm extends React.Component {
                                             <FormGroup label="Open Spaces" id="open_space">
                                                 <input
                                                   type="number"
-                                                  defaultValue="0"
+                                                  value="0"
                                                   className="form-control non-sewer"
                                                   placeholder="Open Spaces"
                                                   disabled={!activeForm.entry_type || !activeForm.lot_show}

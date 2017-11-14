@@ -293,22 +293,24 @@ class AccountLedgerViewSet(viewsets.ModelViewSet):
                         return Response('Invalid credit entry', status=status.HTTP_400_BAD_REQUEST)
 
                 chosen_lots = Lot.objects.filter(plat=chosen_plat)
-                sewer_cap_credits_per_lot = 0
-                sewer_trans_credits_per_lot = 0
-                roads_credits_per_lot = 0
-                storm_credits_per_lot = 0
-                parks_credits_per_lot = 0
-                open_space_credits_per_lot = 0
                 for lot in chosen_lots:
+                    lot_serialized = LotSerializer(lot).data['lot_exactions']
+                    sewer_cap_percent = round(float(lot_serialized['dues_sewer_cap_dev'] / lot_serialized['sewer_due']), 2)
+                    sewer_trans_percent = round(float(lot_serialized['dues_sewer_trans_dev'] / lot_serialized['sewer_due']), 2)
+                    roads_percent = round(float(lot_serialized['dues_roads_dev'] / lot_serialized['non_sewer_due']), 2)
+                    storm_percent = round(float(lot_serialized['dues_storm_dev'] / lot_serialized['non_sewer_due']), 2)
+                    parks_percent = round(float(lot_serialized['dues_parks_dev'] / lot_serialized['non_sewer_due']), 2)
+                    open_space_percent = round(float(lot_serialized['dues_open_space_dev'] / lot_serialized['non_sewer_due']), 2)
+
                     data_set['lot'] = lot.id
                     data_set['non_sewer_credits'] = non_sewer_credits_per_lot
                     data_set['sewer_credits'] = sewer_credits_per_lot
-                    data_set['sewer_cap'] = round(sewer_credits_per_lot / 2, 2)
-                    data_set['sewer_trans'] = round(sewer_credits_per_lot / 2, 2)
-                    data_set['roads'] = round(non_sewer_credits_per_lot * .75, 2)
-                    data_set['storm'] = round(non_sewer_credits_per_lot * .025, 2)
-                    data_set['parks'] = round(non_sewer_credits_per_lot * .2, 2)
-                    data_set['open_space'] = round(non_sewer_credits_per_lot * .025, 2)
+                    data_set['sewer_cap'] = round(sewer_credits_per_lot * sewer_cap_percent, 2)
+                    data_set['sewer_trans'] = round(sewer_credits_per_lot * sewer_trans_percent, 2)
+                    data_set['roads'] = round(non_sewer_credits_per_lot * roads_percent, 2)
+                    data_set['storm'] = round(non_sewer_credits_per_lot * storm_percent, 2)
+                    data_set['parks'] = round(non_sewer_credits_per_lot * parks_percent, 2)
+                    data_set['open_space'] = round(non_sewer_credits_per_lot * open_space_percent, 2)
 
                     serializer = AccountLedgerSerializer(data=data_set)
                     if serializer.is_valid(raise_exception=True):

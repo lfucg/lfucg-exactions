@@ -262,6 +262,25 @@ class AccountLedgerSerializer(serializers.ModelSerializer):
             'dollar_sewer': '${:,.2f}'.format(obj.sewer_credits),
         }
 
+    def validate(self, obj):
+        lot = LotSerializer(obj['lot']).data['lot_exactions']
+        errors = {}
+        if lot['dues_sewer_cap_dev'] - obj['sewer_cap'] < 0:
+            errors['sewer_cap'] = ['The amount entered would result in negative exactions on this category']
+        if lot['dues_sewer_trans_dev'] - obj['sewer_trans'] < 0:
+            errors['sewer_trans'] = ['The amount entered would result in negative exactions on this category']
+        if lot['dues_roads_dev'] - obj['roads'] < 0:
+            errors['roads'] = ['The amount entered would result in negative exactions on this category']
+        if lot['dues_storm_dev'] - obj['storm'] < 0:
+            errors['storm'] = ['The amount entered would result in negative exactions on this category']
+        if lot['dues_parks_dev'] - obj['parks'] < 0:
+            errors['parks'] = ['The amount entered would result in negative exactions on this category']
+        if lot['dues_open_space_dev'] - obj['open_space'] < 0:
+            errors['open_space'] = ['The amount entered would result in negative exactions on this category']
+
+        if len(errors) > 0:
+            raise serializers.ValidationError(errors)
+
     class Meta:
         model = AccountLedger
         fields = (
