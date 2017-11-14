@@ -29,10 +29,23 @@ class SubdivisionSummary extends React.Component {
             lots,
         } = this.props;
 
+        let subdivision_acreage_used = 0;
         const subdivisionPlats = plats && plats.length > 0 &&
             map((plat) => {
+                subdivision_acreage_used += parseFloat(plat.cleaned_total_acreage);
                 const cabinet = plat.cabinet ? `${plat.cabinet}-` : '';
                 const slide = plat.slide ? plat.slide : plat.name;
+                let plat_zone_number = 0;
+                const plat_zone_list =
+                    map((plat_zone) => {
+                        plat_zone_number += 1;
+                        return (
+                            <div key={`${plat_zone.zone}_${plat_zone_number}`}>
+                                <p className="col-xs-6">Zone {plat_zone_number}: {plat_zone.zone}</p>
+                                <p className="col-xs-6">Zone {plat_zone_number} Acreage: {plat_zone.cleaned_acres}</p>
+                            </div>
+                        );
+                    })(plat.plat_zone);
                 return (
                     <div key={plat.id} className="col-xs-12">
                         <div className="row form-subheading">
@@ -69,6 +82,7 @@ class SubdivisionSummary extends React.Component {
                             <p className="col-xs-6">Expansion Area: {plat.expansion_area}</p>
                             <p className="col-xs-6">Sewer Exactions: {plat.plat_exactions && plat.plat_exactions.plat_sewer_due}</p>
                             <p className="col-xs-6">Non-Sewer Exactions: {plat.plat_exactions && plat.plat_exactions.plat_non_sewer_due}</p>
+                            {plat_zone_list}
                         </div>
                     </div>
                 );
@@ -172,6 +186,8 @@ class SubdivisionSummary extends React.Component {
                                     <div className="col-xs-12">
                                         <p className="col-xs-6">Subdivision Name: {subdivisions.name}</p>
                                         <p className="col-xs-6">Gross Acreage: {subdivisions.cleaned_gross_acreage}</p>
+                                        <p className="col-xs-6">Acreage Used: {subdivision_acreage_used}</p>
+                                        <p className="col-xs-6">Acreage Available: {subdivisions.cleaned_gross_acreage - subdivision_acreage_used}</p>
                                     </div>
                                 </div>
                             </div>
