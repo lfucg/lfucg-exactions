@@ -29,6 +29,7 @@ import {
 
     GET_LOTS,
     GET_LOT_ID,
+    GET_SUBDIVISION_LOTS,
     GET_PLAT_LOTS,
     POST_LOT,
     PUT_LOT,
@@ -479,6 +480,14 @@ export function getLotID(selectedLot) {
         type: API_CALL,
         endpoint: GET_LOT_ID,
         url: `/lot/${selectedLot}`,
+    };
+}
+
+export function getSubdivisionLots(selectedSubdivision) {
+    return {
+        type: API_CALL,
+        endpoint: GET_SUBDIVISION_LOTS,
+        url: `/lot/?plat__subdivision=${selectedSubdivision}`,
     };
 }
 

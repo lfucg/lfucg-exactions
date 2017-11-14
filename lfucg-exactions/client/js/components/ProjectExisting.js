@@ -9,6 +9,7 @@ import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
 import Pagination from './Pagination';
 import SearchBar from './SearchBar';
+import ExistingPageLinks from './ExistingPageLinks';
 
 import { project_statuses, project_types, project_categories, expansion_areas } from '../constants/searchBarConstants';
 
@@ -42,36 +43,14 @@ class ProjectExisting extends React.Component {
                 return (
                     <div key={project.id} className="col-xs-12">
                         {(currentUser.id || project.is_approved) && <div>
-                            <div className={project.is_approved ? 'row form-subheading' : 'row unapproved-heading'}>
-                                <div className="col-sm-11">
-                                    <h3>
-                                        {project.name}
-                                        {!project.is_approved && <span className="pull-right">Approval Pending</span>}
-                                    </h3>
-                                </div>
-                            </div>
-                            <div className={project.is_approved ? 'row link-row' : 'row link-row-approval-pending'}>
-                                <div className="col-xs-12 col-sm-5 col-sm-offset-7">
-                                    <div className="col-xs-5">
-                                        {currentUser && currentUser.permissions && currentUser.permissions.project &&
-                                            <Link to={`project/form/${project.id}`} aria-label="Edit">
-                                                <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
-                                                <div className="col-xs-7 link-label">
-                                                    Edit
-                                                </div>
-                                            </Link>
-                                        }
-                                    </div>
-                                    <div className="col-xs-5 ">
-                                        <Link to={`project/summary/${project.id}`} aria-label="Summary">
-                                            <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
-                                            <div className="col-xs-7 link-label">
-                                                Summary
-                                            </div>
-                                        </Link>
-                                    </div>
-                                </div>
-                            </div>
+                            <ExistingPageLinks
+                              linkStart="project"
+                              approval={project.is_approved}
+                              title={project.name}
+                              permissionModel="project"
+                              instanceID={project.id}
+                              uniqueReport={false}
+                            />
                             <div className="row">
                                 <div className="col-sm-offset-1">
                                     {project.agreement_id &&
@@ -110,6 +89,7 @@ class ProjectExisting extends React.Component {
                     { filterField: 'filter_expansion_area', displayName: 'EA', list: expansion_areas },
                     { filterField: 'filter_is_approved', displayName: 'Approval', list: [{ id: true, name: 'Approved' }, { id: false, name: 'Unapproved' }] },
                   ]}
+                  currentPage="Projects"
                 />
 
                 <div className="inside-body">

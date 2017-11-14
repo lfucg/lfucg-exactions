@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
-import { map, filter, compose } from 'ramda';
+import { filter } from 'ramda';
 import PropTypes from 'prop-types';
 
 import Navbar from './Navbar';
@@ -9,6 +9,11 @@ import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
 import Notes from './Notes';
 import Uploads from './Uploads';
+
+import PlatsMiniSummary from './PlatsMiniSummary';
+import AccountsMiniSummary from './AccountsMiniSummary';
+import AccountLedgersMiniSummary from './AccountLedgersMiniSummary';
+import PaymentsMiniSummary from './PaymentsMiniSummary';
 
 import FormGroup from './FormGroup';
 
@@ -44,93 +49,12 @@ class LotSummary extends React.Component {
         const currentLot = lots && lots.length > 0 &&
             filter(lot => lot.id === parseInt(selectedLot, 10))(lots)[0];
 
-        const payments_list = payments && payments.length > 0 &&
-            map((payment) => {
-                return (
-                    <div key={payment.id} className="col-xs-12">
-                        <div className="row form-subheading">
-                            <h3>Developer Account: {payment.credit_account.account_name}</h3>
-                        </div>
-                        <div className="row link-row">
-                            <div className="col-xs-12 col-sm-5 col-sm-offset-7">
-                                <div className="col-xs-5">
-                                    {currentUser && currentUser.permissions && currentUser.permissions.payment &&
-                                        <Link to={`payment/form/${payment.id}`} aria-label="Edit">
-                                            <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
-                                            <div className="col-xs-7 link-label">
-                                                Edit
-                                            </div>
-                                        </Link>
-                                    }
-                                </div>
-                                <div className="col-xs-5 ">
-                                    <Link to={`payment/summary/${payment.id}`} aria-label="Summary">
-                                        <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
-                                        <div className="col-xs-7 link-label">
-                                            Summary
-                                        </div>
-                                    </Link>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="row">
-                            <h3 className="col-xs-12">Payment Total: {payment.total_paid}</h3>
-                            <p className="col-xs-6">Paid Sewer: ${(parseFloat(payment.paid_sewer_cap) + parseFloat(payment.paid_sewer_trans)).toLocaleString('en')}</p>
-                            <p className="col-xs-6">Paid Non-Sewer: ${(parseFloat(payment.paid_open_space) + parseFloat(payment.paid_parks) + parseFloat(payment.paid_roads) + parseFloat(payment.paid_storm)).toLocaleString('en')}</p>
-                            <p className="col-xs-6">Paid By: {payment.paid_by} ({payment.paid_by_type_display})</p>
-                            <p className="col-xs-6">Payment Type: {payment.payment_type_display} {payment.check_number ? `(#${payment.check_number})` : null}</p>
-                        </div>
-                    </div>
-                );
-            })(payments);
-
-        const account_ledgers_list = accountLedgers && accountLedgers.length > 0 &&
-            map((accountLedger) => {
-                return (
-                    <div key={accountLedger.id} className="col-xs-12">
-                        <div className="row form-subheading">
-                            <h3>{accountLedger.entry_date}</h3>
-                        </div>
-                        <div className="row link-row">
-                            <div className="col-xs-12 col-sm-5 col-sm-offset-7">
-                                <div className="col-xs-5">
-                                    {currentUser && currentUser.permissions && currentUser.permissions.accountledger &&
-                                        <Link to={`credit-transfer/form/${accountLedger.id}`} aria-label="Edit">
-                                            <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
-                                            <div className="col-xs-7 link-label">
-                                                Edit
-                                            </div>
-                                        </Link>
-                                    }
-                                </div>
-                                <div className="col-xs-5 ">
-                                    <Link to={`credit-transfer/summary/${accountLedger.id}`} aria-label="Summary">
-                                        <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
-                                        <div className="col-xs-7 link-label">
-                                            Summary
-                                        </div>
-                                    </Link>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="row">
-                            <p className="col-xs-6">Entry Type: {accountLedger.entry_type_display}</p>
-                            <p className="col-xs-6">Agreement Resolution: {accountLedger.agreement.resolution_number}</p>
-                            <p className="col-xs-6">Account From: {accountLedger.account_from.account_name}</p>
-                            <p className="col-xs-6">Account To: {accountLedger.account_to.account_name}</p>
-                            <p className="col-xs-6">Non-Sewer Credits: {accountLedger.dollar_values && accountLedger.dollar_values.dollar_non_sewer}</p>
-                            <p className="col-xs-6">Sewer Credits: {accountLedger.dollar_values && accountLedger.dollar_values.dollar_sewer}</p>
-                        </div>
-                    </div>
-                );
-            })(accountLedgers);
-
         return (
             <div className="lot-summary">
                 <Navbar />
                 <div className="form-header">
                     <div className="container">
-                        <h1>LOTS - {currentLot && currentLot.address_full}</h1>
+                        <h1>LOT SUMMARY - {currentLot && currentLot.address_full}</h1>
                     </div>
                 </div>
                 <Breadcrumbs route={this.props.route} parent_link={'lot'} parent_name={'Lots'} />
@@ -232,7 +156,7 @@ class LotSummary extends React.Component {
                                             <div className="col-xs-12 col-sm-5 col-sm-offset-7">
                                                 <div className="col-xs-5 col-xs-offset-5">
                                                     {currentUser && currentUser.permissions && currentUser.permissions.lot && currentLot &&
-                                                        <Link to={`lot/form/${currentLot.id}`} aria-label="Edit">
+                                                        <Link to={`lot/form/${currentLot.id}`} aria-label={`Edit ${lots.address_full}`}>
                                                             <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
                                                             <div className="col-xs-7 link-label">
                                                                 Edit
@@ -279,7 +203,7 @@ class LotSummary extends React.Component {
                                             <div className="col-xs-12 col-sm-5 col-sm-offset-7">
                                                 <div className="col-xs-5 col-xs-offset-5">
                                                     {currentUser && currentUser.permissions && currentUser.permissions.lot && currentLot &&
-                                                        <Link to={`lot/form/${currentLot.id}`} aria-label="Edit">
+                                                        <Link to={`lot/form/${currentLot.id}`} aria-label={`Edit ${lots.address_full} lot exactions`}>
                                                             <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
                                                             <div className="col-xs-7 link-label">
                                                                 Edit
@@ -318,200 +242,30 @@ class LotSummary extends React.Component {
                                     />
                                 }
 
-                                {currentLot.plat ? <div>
-                                    <a
-                                      role="button"
-                                      data-toggle="collapse"
-                                      data-parent="#accordion"
-                                      href="#collapsePlat"
-                                      aria-expanded="false"
-                                      aria-controls="collapsePlat"
-                                    >
-                                        <div className="row section-heading" role="tab" id="headingPlat">
-                                            <div className="col-xs-1 caret-indicator" />
-                                            <div className="col-xs-10">
-                                                <h3>Plat Information</h3>
-                                            </div>
-                                        </div>
-                                    </a>
-                                    <div
-                                      id="collapsePlat"
-                                      className="panel-collapse collapse row"
-                                      role="tabpanel"
-                                      aria-labelledby="#headingPlat"
-                                    >
-                                        <div className="panel-body">
-                                            <div className="row link-row">
-                                                <div className="col-xs-12 col-sm-5 col-sm-offset-7">
-                                                    <div className="col-xs-5">
-                                                        {currentUser && currentUser.permissions && currentUser.permissions.plat &&
-                                                            <Link to={`plat/form/${currentLot.plat.id}`} aria-label="Edit">
-                                                                <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
-                                                                <div className="col-xs-7 link-label">
-                                                                    Edit
-                                                                </div>
-                                                            </Link>
-                                                        }
-                                                    </div>
-                                                    <div className="col-xs-5 ">
-                                                        <Link to={`plat/summary/${currentLot.plat.id}`} aria-label="Summary">
-                                                            <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
-                                                            <div className="col-xs-7 link-label">
-                                                                Summary
-                                                            </div>
-                                                        </Link>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="col-xs-12">
-                                                <p className="col-md-4 col-xs-6">Plat Name: {currentLot.plat.name}</p>
-                                                <p className="col-md-4 col-xs-6">Expansion Area: {currentLot.plat.expansion_area}</p>
-                                                <p className="col-md-4 col-xs-6">Slide: {currentLot.plat.slide}</p>
-                                                <p className="col-md-4 col-xs-6">Buildable Lots: {currentLot.plat.buildable_lots}</p>
-                                                <p className="col-md-4 col-xs-6">Non-Buildable Lots: {currentLot.plat.non_buildable_lots}</p>
-                                                <p className="col-md-4 col-xs-6">Sewer Exactions: {plats && plats.plat_exactions && plats.plat_exactions.plat_sewer_due}</p>
-                                                <p className="col-md-4 col-xs-6">Non-Sewer Exactions: {plats && plats.plat_exactions && plats.plat_exactions.plat_non_sewer_due}</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div> : <div className="row section-heading" role="tab" id="headingAccountPayments">
-                                    <h3>Plat - None</h3>
-                                </div>}
+                                <PlatsMiniSummary
+                                  mapSet={currentLot.plat}
+                                  mapQualifier={currentLot && currentLot.plat}
+                                  singlePlat={true}
+                                />
 
-                                {currentLot.account && accounts ?
-                                    <div>
-                                        <a
-                                          role="button"
-                                          data-toggle="collapse"
-                                          data-parent="#accordion"
-                                          href="#collapseAccounts"
-                                          aria-expanded="false"
-                                          aria-controls="collapseAccounts"
-                                        >
-                                            <div className="row section-heading" role="tab" id="headingAccount">
-                                                <div className="col-xs-1 caret-indicator" />
-                                                <div className="col-xs-10">
-                                                    <h3>Developer Account</h3>
-                                                </div>
-                                            </div>
-                                        </a>
-                                        <div
-                                          id="collapseAccounts"
-                                          className="panel-collapse collapse row"
-                                          role="tabpanel"
-                                          aria-labelledby="#headingAccounts"
-                                        >
-                                            <div className="panel-body">
-                                                <div className="row link-row">
-                                                    <div className="col-xs-12 col-sm-5 col-sm-offset-7">
-                                                        <div className="col-xs-5">
-                                                            {currentUser && currentUser.permissions && currentUser.permissions.account &&
-                                                                <Link to={`account/form/${accounts.id}`} aria-label="Edit">
-                                                                    <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
-                                                                    <div className="col-xs-7 link-label">
-                                                                        Edit
-                                                                    </div>
-                                                                </Link>
-                                                            }
-                                                        </div>
-                                                        <div className="col-xs-5 ">
-                                                            <Link to={`account/summary/${accounts.id}`} aria-label="Summary">
-                                                                <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
-                                                                <div className="col-xs-7 link-label">
-                                                                    Summary
-                                                                </div>
-                                                            </Link>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div className="col-xs-12">
-                                                    <p className="col-xs-6">Developer Account Name: {accounts.account_name}</p>
-                                                    <p className="col-xs-6"><strong>{accounts.balance && accounts.balance.credit_availability}</strong></p>
-                                                    {currentUser && currentUser.username &&
-                                                        <div>
-                                                            <p className="col-xs-6">Account Balance: {accounts.balance && accounts.balance.balance}</p>
-                                                            <p className="col-xs-6">Contact Name: {accounts.contact_full_name}</p>
-                                                        </div>
-                                                    }
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div> : <div className="row section-heading" role="tab" id="headingAccountPayments">
-                                        <h3>Account - None</h3>
-                                    </div>
-                                }
+                                <AccountsMiniSummary
+                                  mapSet={accounts}
+                                  mapQualifier={currentLot.account && accounts}
+                                  singleAccount={true}
+                                  title="Developer Account"
+                                  accordionID="Account"
+                                />
 
-                                {payments_list ? (
-                                    <div>
-                                        <a
-                                          role="button"
-                                          data-toggle="collapse"
-                                          data-parent="#accordion"
-                                          href="#collapseAccountPayments"
-                                          aria-expanded="false"
-                                          aria-controls="collapseAccountPayments"
-                                        >
-                                            <div className="row section-heading" role="tab" id="headingAccountPayments">
-                                                <div className="col-xs-1 caret-indicator" />
-                                                <div className="col-xs-10">
-                                                    <h3>Payments</h3>
-                                                </div>
-                                            </div>
-                                        </a>
-                                        <div
-                                          id="collapseAccountPayments"
-                                          className="panel-collapse collapse row"
-                                          role="tabpanel"
-                                          aria-labelledby="#headingAccountPayments"
-                                        >
-                                            <div className="panel-body">
-                                                <div className="col-xs-12">
-                                                    {payments_list}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                ) : (
-                                    <div className="row section-heading" role="tab" id="headingAccountPayments">
-                                        <h3>Payments - None</h3>
-                                    </div>
-                                )}
+                                <PaymentsMiniSummary
+                                  mapSet={payments}
+                                  mapQualifier={payments && payments.length > 0}
+                                />
 
-                                {account_ledgers_list ? (
-                                    <div>
-                                        <a
-                                          role="button"
-                                          data-toggle="collapse"
-                                          data-parent="#accordion"
-                                          href="#collapseAccountLedgers"
-                                          aria-expanded="false"
-                                          aria-controls="collapseAccountLedgers"
-                                        >
-                                            <div className="row section-heading" role="tab" id="headingAccountLedgers">
-                                                <div className="col-xs-1 caret-indicator" />
-                                                <div className="col-xs-10">
-                                                    <h3>Credit Transfers</h3>
-                                                </div>
-                                            </div>
-                                        </a>
-                                        <div
-                                          id="collapseAccountLedgers"
-                                          className="panel-collapse collapse row"
-                                          role="tabpanel"
-                                          aria-labelledby="#headingAccountLedgers"
-                                        >
-                                            <div className="panel-body">
-                                                <div className="col-xs-12">
-                                                    {account_ledgers_list}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                ) : (
-                                    <div className="row section-heading" role="tab" id="headingAccountLedgers">
-                                        <h3>Credit Transfers - None</h3>
-                                    </div>
-                                )}
+                                <AccountLedgersMiniSummary
+                                  mapSet={accountLedgers}
+                                  mapQualifier={accountLedgers && accountLedgers.length > 0}
+                                />
+
                                 {currentLot.id &&
                                     <Uploads
                                       file_content_type="plats_lot"

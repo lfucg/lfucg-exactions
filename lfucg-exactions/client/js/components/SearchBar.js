@@ -82,8 +82,9 @@ class SearchBar extends React.Component {
                                 <input
                                   type="text"
                                   className="form-control"
-                                  placeholder="Enter search..."
+                                  placeholder={`Enter ${this.props.currentPage} search...`}
                                   id="query"
+                                  aria-label={`Enter ${this.props.currentPage} search...`}
                                 />
                             </div>
                         </fieldset>
@@ -150,6 +151,7 @@ SearchBar.propTypes = {
     apiCalls: PropTypes.array,
     advancedSearch: PropTypes.array,
     csvEndpoint: PropTypes.string,
+    currentPage: PropTypes.string,
 };
 
 function mapStateToProps(state) {
