@@ -128,7 +128,7 @@ class LotsMiniSummary extends React.Component {
 LotsMiniSummary.propTypes = {
     currentUser: PropTypes.object,
     mapSet: PropTypes.object,
-    mapQualifier: PropTypes.string,
+    mapQualifier: PropTypes.object,
     singleLot: PropTypes.bool,
 };
 

@@ -128,7 +128,7 @@ class AgreementsMiniSummary extends React.Component {
 AgreementsMiniSummary.propTypes = {
     currentUser: PropTypes.object,
     mapSet: PropTypes.object,
-    mapQualifier: PropTypes.string,
+    mapQualifier: PropTypes.object,
     singleAgreement: PropTypes.bool,
 };
 

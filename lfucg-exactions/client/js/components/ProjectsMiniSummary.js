@@ -132,7 +132,7 @@ class ProjectsMiniSummary extends React.Component {
 ProjectsMiniSummary.propTypes = {
     currentUser: PropTypes.object,
     mapSet: PropTypes.object,
-    mapQualifier: PropTypes.string,
+    mapQualifier: PropTypes.object,
     singleProject: PropTypes.bool,
 };
 

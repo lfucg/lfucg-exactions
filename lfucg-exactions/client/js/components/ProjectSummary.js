@@ -180,7 +180,7 @@ class ProjectSummary extends React.Component {
                             <AgreementsMiniSummary
                               mapSet={projects.agreement_id}
                               mapQualifier={projects.agreement_id}
-                              singleAgreement={true}
+                              singleAgreement
                             />
 
                             {projects.id &&

@@ -311,7 +311,7 @@ class PlatSummary extends React.Component {
                             <AccountsMiniSummary
                               mapSet={accounts}
                               mapQualifier={plats.account && accounts}
-                              singleAccount={true}
+                              singleAccount
                               title="Developer Account"
                               accordionID="Account"
                             />

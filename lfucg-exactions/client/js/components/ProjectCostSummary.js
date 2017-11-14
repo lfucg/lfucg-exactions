@@ -94,7 +94,7 @@ class ProjectCostSummary extends React.Component {
                             <ProjectsMiniSummary
                               mapSet={projectCosts && projectCosts.project_id}
                               mapQualifier={projectCosts && projectCosts.project_id}
-                              singleProject={true}
+                              singleProject
                             />
 
                             {projectCosts && projectCosts.id &&
