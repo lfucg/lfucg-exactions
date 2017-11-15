@@ -20,7 +20,7 @@ class FlashMessage extends React.Component {
 
         if (flashMessage.message) {
             return (
-                <div className={flashClass} data-dismiss="alert">
+                <div className={flashClass} data-dismiss="alert" role="alert" aria-live="assertive" >
                     {message}
                 </div>
             );

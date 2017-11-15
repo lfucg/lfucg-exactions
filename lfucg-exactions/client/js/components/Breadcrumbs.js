@@ -18,15 +18,15 @@ class Breadcrumbs extends React.Component {
                     <div className={route.name && (route.name.indexOf('Existing') > -1) ? 'col-xs-8 col-md-9' : 'col-xs-12'}>
                         <h4>
                             <Link to="/" role="link">Home</Link>
-                            <span> / </span>
+                            <span aria-hidden="true"> / </span>
                             {this.props.parent_link &&
                                 <span>
                                     <Link to={this.props.parent_link} role="link">{this.props.parent_name}</Link>
-                                    <span> / </span>
+                                    <span aria-hidden="true"> / </span>
                                 </span>
                             }
                             <Link to={route.path}>{route.name}</Link>
-                            <span> / </span>
+                            <span aria-hidden="true"> / </span>
                         </h4>
                     </div>
                     {route.name && (route.name.indexOf('Existing') > -1) &&
@@ -51,6 +51,8 @@ Breadcrumbs.propTypes = {
     currentUser: PropTypes.object,
     route: PropTypes.object,
     route_permission: PropTypes.string,
+    parent_link: PropTypes.string,
+    parent_name: PropTypes.string,
 };
 
 function mapStateToProps(state) {
