@@ -77,6 +77,7 @@ class SubdivisionExisting extends React.Component {
                     { filterField: 'filter_plat__id', displayName: 'Plat', list: platsList },
                   ]}
                   currentPage="Subdivisions"
+                  csvEndpoint="../api/subdivision_search_csv/?"
                 />
 
                 <div className="inside-body">
