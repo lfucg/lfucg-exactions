@@ -128,6 +128,7 @@ class PlatReport extends React.Component {
                         <a
                           className="btn btn-lex col-sm-3"
                           href={`../api/export_plat_csv/?plat=${plats.id}`}
+                          disabled={!plats.id}
                         >Export CSV</a>
                     </div>
                 </div>

@@ -118,6 +118,7 @@ class AccountLedgerExisting extends React.Component {
                     { filterField: 'filter_is_approved', displayName: 'Approval', list: [{ id: true, name: 'Approved' }, { id: false, name: 'Unapproved' }] },
                   ]}
                   currentPage="Credit Transfers"
+                  csvEndpoint="../api/ledger_search_csv/?"
                 />
 
                 <div className="inside-body">

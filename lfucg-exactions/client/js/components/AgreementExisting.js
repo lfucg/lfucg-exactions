@@ -87,6 +87,7 @@ class AgreementExisting extends React.Component {
                     { filterField: 'filter_is_approved', displayName: 'Approval', list: [{ id: true, name: 'Approved' }, { id: false, name: 'Unapproved' }] },
                   ]}
                   currentPage="Agreements"
+                  csvEndpoint="../api/export_agreement_csv/?"
                 />
 
                 <div className="inside-body">
