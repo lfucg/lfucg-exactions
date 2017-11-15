@@ -42,12 +42,12 @@ class AgreementReport extends React.Component {
                 <div className="row" key={payment.id}>
                     <div className="col-sm-2 report-data right-border">{payment.payment_type_display}</div>
                     <div className="col-sm-10">
-                        <div className="col-sm-2 report-data">{payment.paid_roads}</div>
-                        <div className="col-sm-2 report-data">{payment.paid_parks}</div>
-                        <div className="col-sm-2 report-data">{payment.paid_storm}</div>
-                        <div className="col-sm-2 report-data">{payment.paid_open_space}</div>
-                        <div className="col-sm-2 report-data">{payment.paid_sewer_trans}</div>
-                        <div className="col-sm-2 report-data right-border">{payment.paid_sewer_cap}</div>
+                        <div className="col-sm-2 report-data">{parseFloat(payment.paid_roads).toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</div>
+                        <div className="col-sm-2 report-data">{parseFloat(payment.paid_parks).toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</div>
+                        <div className="col-sm-2 report-data">{parseFloat(payment.paid_storm).toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</div>
+                        <div className="col-sm-2 report-data">{parseFloat(payment.paid_open_space).toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</div>
+                        <div className="col-sm-2 report-data">{parseFloat(payment.paid_sewer_trans).toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</div>
+                        <div className="col-sm-2 report-data right-border">{parseFloat(payment.paid_sewer_cap).toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</div>
                     </div>
                 </div>
             );
@@ -58,12 +58,12 @@ class AgreementReport extends React.Component {
                 <div className="row" key={ledger.id}>
                     <div className="col-sm-2 report-data right-border">{ledger.entry_type_display}</div>
                     <div className="col-sm-10">
-                        <div className="col-sm-2 report-data">{ledger.roads}</div>
-                        <div className="col-sm-2 report-data">{ledger.parks}</div>
-                        <div className="col-sm-2 report-data">{ledger.storm}</div>
-                        <div className="col-sm-2 report-data">{ledger.open_space}</div>
-                        <div className="col-sm-2 report-data">{ledger.sewer_trans}</div>
-                        <div className="col-sm-2 report-data right-border">{ledger.sewer_cap}</div>
+                        <div className="col-sm-2 report-data">{parseFloat(ledger.roads).toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</div>
+                        <div className="col-sm-2 report-data">{parseFloat(ledger.parks).toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</div>
+                        <div className="col-sm-2 report-data">{parseFloat(ledger.storm).toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</div>
+                        <div className="col-sm-2 report-data">{parseFloat(ledger.open_space).toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</div>
+                        <div className="col-sm-2 report-data">{parseFloat(ledger.sewer_trans).toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</div>
+                        <div className="col-sm-2 report-data right-border">{parseFloat(ledger.sewer_cap).toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</div>
                     </div>
                 </div>
             );

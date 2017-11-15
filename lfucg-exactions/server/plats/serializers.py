@@ -171,6 +171,15 @@ class PlatField(serializers.Field):
             'slide': obj.slide,
             'buildable_lots': obj.buildable_lots,
             'non_buildable_lots': obj.non_buildable_lots,
+            'plat_type_display': obj.get_plat_type_display(),
+            'subdivision': {
+                'name': obj.subdivision.name,
+            },
+            'cabinet': obj.cabinet,
+            'slide': obj.slide,
+            'unit': obj.unit,
+            'section': obj.section,
+            'block': obj.block,
         }
 
 class LotSerializer(serializers.ModelSerializer):

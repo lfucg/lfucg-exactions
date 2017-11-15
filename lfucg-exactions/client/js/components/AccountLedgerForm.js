@@ -542,6 +542,7 @@ function mapDispatchToProps(dispatch, params) {
                         account_from_show: data_account_ledger.response && data_account_ledger.response.account_from ? `${data_account_ledger.response.account_from.id},${data_account_ledger.response.account_from.account_name},${data_account_ledger.response.account_from.balance.balance}` : '',
                         account_to: data_account_ledger.response && data_account_ledger.response.account_to ? data_account_ledger.response.account_to.id : null,
                         account_to_show: data_account_ledger.response && data_account_ledger.response.account_to ? `${data_account_ledger.response.account_to.id},${data_account_ledger.response.account_to.account_name},${data_account_ledger.response.account_to.balance.balance}` : '',
+                        balance: data_account_ledger.response && data_account_ledger.response.account_from ? data_account_ledger.response.account_from.balance.balance : '',
                         agreement: data_account_ledger.response && data_account_ledger.response.agreement ? data_account_ledger.response.agreement.id : null,
                         agreement_show: data_account_ledger.response && data_account_ledger.response.agreement ? `${data_account_ledger.response.agreement.id},${data_account_ledger.response.agreement.resolution_number}` : '',
                         entry_date: data_account_ledger.response.entry_date,

@@ -60,7 +60,7 @@ class AccountCSVExportView(View):
                     'Address': account['address_full'],
                     'Email': account['email'],
                     'Phone': account['phone'],
-                    'Balance': account['balance']['balance'],
+                    'Balance': '${:,.2f}'.format(float(account['balance']['balance'])),
                 }
 
                 plat_queryset = Plat.objects.filter(account=account_value)
@@ -129,8 +129,8 @@ class AccountCSVExportView(View):
                         row['Permit ID -%s' %(i+1)] = lot['permit_id']
                         row['Lot Number -%s' %(i+1)] = lot['lot_number']
                         row['Parcel ID -%s' %(i+1)] = lot['parcel_id']
-                        row['Total Exactions -%s' %(i+1)] = lot['lot_exactions']['total_exactions']
-                        row['Current Exactions -%s' %(i+1)] = lot['lot_exactions']['current_exactions']
+                        row['Total Exactions -%s' %(i+1)] = '${:,.2f}'.format(float(lot['lot_exactions']['total_exactions']))
+                        row['Current Exactions -%s' %(i+1)] = '${:,.2f}'.format(float(lot['lot_exactions']['current_exactions']))
 
                 payment_queryset = Payment.objects.filter(credit_account=account_value)
                 if payment_queryset is not None:
@@ -150,12 +150,12 @@ class AccountCSVExportView(View):
                         headers.extend(['Sewer Cap. Paid -%s' %(i+1)])
 
                         row['Payment Type -%s' %(i+1)] = payment['payment_type_display']
-                        row['Roads Paid -%s' %(i+1)] = payment['paid_roads']
-                        row['Parks Paid -%s' %(i+1)] = payment['paid_parks']
-                        row['Storm Paid -%s' %(i+1)] = payment['paid_storm']
-                        row['Open Space Paid -%s' %(i+1)] = payment['paid_open_space']
-                        row['Sewer Trans. Paid -%s' %(i+1)] = payment['paid_sewer_trans']
-                        row['Sewer Cap. Paid -%s' %(i+1)] = payment['paid_sewer_cap']
+                        row['Roads Paid -%s' %(i+1)] = '${:,.2f}'.format(float(payment['paid_roads']))
+                        row['Parks Paid -%s' %(i+1)] = '${:,.2f}'.format(float(payment['paid_parks']))
+                        row['Storm Paid -%s' %(i+1)] = '${:,.2f}'.format(float(payment['paid_storm']))
+                        row['Open Space Paid -%s' %(i+1)] = '${:,.2f}'.format(float(payment['paid_open_space']))
+                        row['Sewer Trans. Paid -%s' %(i+1)] = '${:,.2f}'.format(float(payment['paid_sewer_trans']))
+                        row['Sewer Cap. Paid -%s' %(i+1)] = '${:,.2f}'.format(float(payment['paid_sewer_cap']))
 
                 ledger_queryset = AccountLedger.objects.filter(account_from=account_value, account_to=account_value)
                 if ledger_queryset is not None:
@@ -177,14 +177,14 @@ class AccountCSVExportView(View):
                         headers.extend(['Sewer Credits -%s' %(i+1)])
 
                         row['Ledger Type -%s' %(i+1)] = ledger['entry_type_display']
-                        row['Roads Credits -%s' %(i+1)] = ledger['roads']
-                        row['Parks Credits -%s' %(i+1)] = ledger['parks']
-                        row['Storm Credits -%s' %(i+1)] = ledger['storm']
-                        row['Open Space Credits -%s' %(i+1)] = ledger['open_space']
-                        row['Non-Sewer Credits -%s' %(i+1)] = ledger['non_sewer_credits']
-                        row['Sewer Trans. Credits -%s' %(i+1)] = ledger['sewer_trans']
-                        row['Sewer Cap. Credits -%s' %(i+1)] = ledger['sewer_cap']
-                        row['Sewer Credits -%s' %(i+1)] = ledger['sewer_credits']
+                        row['Roads Credits -%s' %(i+1)] = '${:,.2f}'.format(float(ledger['roads']))
+                        row['Parks Credits -%s' %(i+1)] = '${:,.2f}'.format(float(ledger['parks']))
+                        row['Storm Credits -%s' %(i+1)] = '${:,.2f}'.format(float(ledger['storm']))
+                        row['Open Space Credits -%s' %(i+1)] = '${:,.2f}'.format(float(ledger['open_space']))
+                        row['Non-Sewer Credits -%s' %(i+1)] = '${:,.2f}'.format(float(ledger['non_sewer_credits']))
+                        row['Sewer Trans. Credits -%s' %(i+1)] = '${:,.2f}'.format(float(ledger['sewer_trans']))
+                        row['Sewer Cap. Credits -%s' %(i+1)] = '${:,.2f}'.format(float(ledger['sewer_cap']))
+                        row['Sewer Credits -%s' %(i+1)] = '${:,.2f}'.format(float(ledger['sewer_credits']))
 
 
             unique_fieldnames = []
@@ -276,12 +276,12 @@ class AgreementCSVExportView(View):
                         headers.extend(['Other Cost -%s' %(i+1)])
 
                         row['Estimate Type -%s' %(i+1)] = project_estimate['estimate_type']
-                        row['Land Cost -%s' %(i+1)] = project_estimate['land_cost']
-                        row['Design Cost -%s' %(i+1)] = project_estimate['design_cost']
-                        row['Constr. Cost -%s' %(i+1)] = project_estimate['construction_cost']
-                        row['Admin Cost -%s' %(i+1)] = project_estimate['admin_cost']
-                        row['Mgmt. Cost -%s' %(i+1)] = project_estimate['management_cost']
-                        row['Other Cost -%s' %(i+1)] = project_estimate['other_cost']
+                        row['Land Cost -%s' %(i+1)] = '${:,.2f}'.format(float(project_estimate['land_cost']))
+                        row['Design Cost -%s' %(i+1)] = '${:,.2f}'.format(float(project_estimate['design_cost']))
+                        row['Constr. Cost -%s' %(i+1)] = '${:,.2f}'.format(float(project_estimate['construction_cost']))
+                        row['Admin Cost -%s' %(i+1)] = '${:,.2f}'.format(float(project_estimate['admin_cost']))
+                        row['Mgmt. Cost -%s' %(i+1)] = '${:,.2f}'.format(float(project_estimate['management_cost']))
+                        row['Other Cost -%s' %(i+1)] = '${:,.2f}'.format(float(project_estimate['other_cost']))
 
                 payment_queryset = Payment.objects.filter(credit_source=agreement_value)
                 if payment_queryset is not None:
@@ -301,12 +301,12 @@ class AgreementCSVExportView(View):
                         headers.extend(['Sewer Cap. Paid -%s' %(i+1)])
 
                         row['Payment Type -%s' %(i+1)] = payment['payment_type_display']
-                        row['Roads Paid -%s' %(i+1)] = payment['paid_roads']
-                        row['Parks Paid -%s' %(i+1)] = payment['paid_parks']
-                        row['Storm Paid -%s' %(i+1)] = payment['paid_storm']
-                        row['Open Space Paid -%s' %(i+1)] = payment['paid_open_space']
-                        row['Sewer Trans. Paid -%s' %(i+1)] = payment['paid_sewer_trans']
-                        row['Sewer Cap. Paid -%s' %(i+1)] = payment['paid_sewer_cap']
+                        row['Roads Paid -%s' %(i+1)] = '${:,.2f}'.format(float(payment['paid_roads']))
+                        row['Parks Paid -%s' %(i+1)] = '${:,.2f}'.format(float(payment['paid_parks']))
+                        row['Storm Paid -%s' %(i+1)] = '${:,.2f}'.format(float(payment['paid_storm']))
+                        row['Open Space Paid -%s' %(i+1)] = '${:,.2f}'.format(float(payment['paid_open_space']))
+                        row['Sewer Trans. Paid -%s' %(i+1)] = '${:,.2f}'.format(float(payment['paid_sewer_trans']))
+                        row['Sewer Cap. Paid -%s' %(i+1)] = '${:,.2f}'.format(float(payment['paid_sewer_cap']))
 
                 ledger_queryset = AccountLedger.objects.filter(agreement=agreement_value)
                 if ledger_queryset is not None:
@@ -328,14 +328,14 @@ class AgreementCSVExportView(View):
                         headers.extend(['Sewer Credits -%s' %(i+1)])
 
                         row['Ledger Type -%s' %(i+1)] = ledger['entry_type_display']
-                        row['Roads Credits -%s' %(i+1)] = ledger['roads']
-                        row['Parks Credits -%s' %(i+1)] = ledger['parks']
-                        row['Storm Credits -%s' %(i+1)] = ledger['storm']
-                        row['Open Space Credits -%s' %(i+1)] = ledger['open_space']
-                        row['Non-Sewer Credits -%s' %(i+1)] = ledger['non_sewer_credits']
-                        row['Sewer Trans. Credits -%s' %(i+1)] = ledger['sewer_trans']
-                        row['Sewer Cap. Credits -%s' %(i+1)] = ledger['sewer_cap']
-                        row['Sewer Credits -%s' %(i+1)] = ledger['sewer_credits']
+                        row['Roads Credits -%s' %(i+1)] = '${:,.2f}'.format(float(ledger['roads']))
+                        row['Parks Credits -%s' %(i+1)] = '${:,.2f}'.format(float(ledger['parks']))
+                        row['Storm Credits -%s' %(i+1)] = '${:,.2f}'.format(float(ledger['storm']))
+                        row['Open Space Credits -%s' %(i+1)] = '${:,.2f}'.format(float(ledger['open_space']))
+                        row['Non-Sewer Credits -%s' %(i+1)] = '${:,.2f}'.format(float(ledger['non_sewer_credits']))
+                        row['Sewer Trans. Credits -%s' %(i+1)] = '${:,.2f}'.format(float(ledger['sewer_trans']))
+                        row['Sewer Cap. Credits -%s' %(i+1)] = '${:,.2f}'.format(float(ledger['sewer_cap']))
+                        row['Sewer Credits -%s' %(i+1)] = '${:,.2f}'.format(float(ledger['sewer_credits']))
 
             unique_fieldnames = []
             for name in headers:
@@ -460,15 +460,15 @@ class TransactionCSVExportView(View):
                             'Alt. Address': alt_address,
                             'Transaction Type': payment['payment_type_display'],
                             'Paid By': payment['paid_by'],
-                            'Sewer Trans.': payment['paid_sewer_trans'],
-                            'Sewer Cap.': payment['paid_sewer_cap'],
-                            'SEWER SUBTL': sewer_sub,
-                            'Roads': payment['paid_roads'],
-                            'Parks': payment['paid_parks'],
-                            'Stormwater': payment['paid_storm'],
-                            'Open Space': payment['paid_open_space'],
-                            'NONSWR SUBTL': non_sewer_sub,
-                            'Total': total,
+                            'Sewer Trans.': '${:,.2f}'.format(float(payment['paid_sewer_trans'])),
+                            'Sewer Cap.': '${:,.2f}'.format(float(payment['paid_sewer_cap'])),
+                            'SEWER SUBTL': '${:,.2f}'.format(float(sewer_sub)),
+                            'Roads': '${:,.2f}'.format(float(payment['paid_roads'])),
+                            'Parks': '${:,.2f}'.format(float(payment['paid_parks'])),
+                            'Stormwater': '${:,.2f}'.format(float(payment['paid_storm'])),
+                            'Open Space': '${:,.2f}'.format(float(payment['paid_open_space'])),
+                            'NONSWR SUBTL': '${:,.2f}'.format(float(non_sewer_sub)),
+                            'Total': '${:,.2f}'.format(float(total)),
                         }
 
                         writer.writerow(row)
@@ -495,15 +495,15 @@ class TransactionCSVExportView(View):
                             'Alt. Address': alt_address,
                             'Transaction Type': 'Credits',
                             'Paid By': ledger['account_from']['account_name'],
-                            'Sewer Trans.': ledger['sewer_trans'],
-                            'Sewer Cap.': ledger['sewer_cap'],
-                            'SEWER SUBTL': ledger['sewer_credits'],
-                            'Roads': ledger['roads'],
-                            'Parks': ledger['parks'],
-                            'Stormwater': ledger['storm'],
-                            'Open Space': ledger['open_space'],
-                            'NONSWR SUBTL': ledger['non_sewer_credits'],
-                            'Total': total,
+                            'Sewer Trans.': '${:,.2f}'.format(float(ledger['sewer_trans'])),
+                            'Sewer Cap.': '${:,.2f}'.format(float(ledger['sewer_cap'])),
+                            'SEWER SUBTL': '${:,.2f}'.format(float(ledger['sewer_credits'])),
+                            'Roads': '${:,.2f}'.format(float(ledger['roads'])),
+                            'Parks': '${:,.2f}'.format(float(ledger['parks'])),
+                            'Stormwater': '${:,.2f}'.format(float(ledger['storm'])),
+                            'Open Space': '${:,.2f}'.format(float(ledger['open_space'])),
+                            'NONSWR SUBTL': '${:,.2f}'.format(float(ledger['non_sewer_credits'])),
+                            'Total': '${:,.2f}'.format(float(total)),
                         }
 
                         writer.writerow(row)

@@ -32,9 +32,9 @@ class PlatReport extends React.Component {
                     <div className="col-sm-5 report-data">{lot.address_full}</div>
                     <div className="col-sm-7">
                         <div className="col-sm-3 report-data">{lot.parcel_id}</div>
-                        <div className="col-sm-3 report-data">{lot.lot_exactions && lot.lot_exactions.current_exactions}</div>
-                        <div className="col-sm-3 report-data">{lot.lot_exactions && lot.lot_exactions.non_sewer_due}</div>
-                        <div className="col-sm-3 report-data right-border">{lot.lot_exactions && lot.lot_exactions.sewer_due}</div>
+                        <div className="col-sm-3 report-data">{lot.lot_exactions && lot.lot_exactions.current_exactions.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</div>
+                        <div className="col-sm-3 report-data">{lot.lot_exactions && lot.lot_exactions.non_sewer_due.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</div>
+                        <div className="col-sm-3 report-data right-border">{lot.lot_exactions && lot.lot_exactions.sewer_due.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</div>
                     </div>
                 </div>
             );

@@ -61,8 +61,8 @@ class PlatCSVExportView(View):
             plat_object.section,
             plat_object.cabinet,
             plat_object.slide,
-            plat_object.non_sewer_due,
-            plat_object.sewer_due,
+            '${:,.2f}'.format(plat_object.non_sewer_due),
+            '${:,.2f}'.format(plat_object.sewer_due),
         ]
 
         # PLAT ZONE
@@ -134,15 +134,15 @@ class PlatCSVExportView(View):
                     single_lot.permit_id,
                     single_lot.latitude,
                     single_lot.longitude,
-                    single_lot.dues_roads_dev,
-                    single_lot.dues_parks_dev,
-                    single_lot.dues_storm_dev,
-                    single_lot.dues_open_space_dev,
-                    single_lot.dues_sewer_cap_dev,
-                    single_lot.dues_sewer_trans_dev,
+                    '${:,.2f}'.format(single_lot.dues_roads_dev),
+                    '${:,.2f}'.format(single_lot.dues_parks_dev),
+                    '${:,.2f}'.format(single_lot.dues_storm_dev),
+                    '${:,.2f}'.format(single_lot.dues_open_space_dev),
+                    '${:,.2f}'.format(single_lot.dues_sewer_cap_dev),
+                    '${:,.2f}'.format(single_lot.dues_sewer_trans_dev),
                 ])
 
-                lot_balance = calculate_lot_balance(single_lot.id)
+                lot_balance = calculate_lot_balance(single_lot)
 
                 current_lot_data.extend([
                     '${:,.2f}'.format(lot_balance['total_exactions']),
@@ -158,12 +158,12 @@ class PlatCSVExportView(View):
                 if payment_queryset is not None:
                     for single_payment in payment_queryset:
                         current_lot_data.extend([
-                            single_payment.calculate_payment_total(),
+                            '${:,.2f}'.format(single_payment.calculate_payment_total()),
                         ])
 
                 ledger_from_queryset = AccountLedger.objects.filter(account_from=single_lot.account)
                 for account_from in ledger_from_queryset:
-                    current_lot_data.extend([account_from.calculate_credits(),])
+                    current_lot_data.extend(['${:,.2f}'.format(account_from.calculate_credits()),])
 
                 if len(zone_csv_data) > 0:
                     lot_csv_data = zone_csv_data + current_lot_data
@@ -290,16 +290,16 @@ class LotSearchCSVExportView(View):
                 'Permit ID': lot['permit_id'],
                 'Plat Name': lot['plat']['name'],
                 'Plat Type': lot['plat']['plat_type_display'],
-                'Total Exactions': lot['lot_exactions']['total_exactions'],
-                'Sewer Due': lot['lot_exactions']['sewer_due'],
-                'Non-Sewer Due': lot['lot_exactions']['non_sewer_due'],
-                'Sewer Trans.': lot['lot_exactions']['dues_sewer_trans_dev'],
-                'Sewer Cap.': lot['lot_exactions']['dues_sewer_cap_dev'],
-                'Roads': lot['lot_exactions']['dues_roads_dev'],
-                'Parks': lot['lot_exactions']['dues_parks_dev'],
-                'Storm': lot['lot_exactions']['dues_storm_dev'],
-                'Open Space': lot['lot_exactions']['dues_open_space_dev'],
-                'Current Total Due': lot['lot_exactions']['current_exactions'],
+                'Total Exactions': '${:,.2f}'.format(lot['lot_exactions']['total_exactions']),
+                'Sewer Due': '${:,.2f}'.format(lot['lot_exactions']['sewer_due']),
+                'Non-Sewer Due': '${:,.2f}'.format(lot['lot_exactions']['non_sewer_due']),
+                'Sewer Trans.': '${:,.2f}'.format(lot['lot_exactions']['dues_sewer_trans_dev']),
+                'Sewer Cap.': '${:,.2f}'.format(lot['lot_exactions']['dues_sewer_cap_dev']),
+                'Roads': '${:,.2f}'.format(lot['lot_exactions']['dues_roads_dev']),
+                'Parks': '${:,.2f}'.format(lot['lot_exactions']['dues_parks_dev']),
+                'Storm': '${:,.2f}'.format(lot['lot_exactions']['dues_storm_dev']),
+                'Open Space': '${:,.2f}'.format(lot['lot_exactions']['dues_open_space_dev']),
+                'Current Total Due': '${:,.2f}'.format(lot['lot_exactions']['current_exactions']),
             }
 
             payment_queryset = Payment.objects.filter(lot_id=lot['id'])
