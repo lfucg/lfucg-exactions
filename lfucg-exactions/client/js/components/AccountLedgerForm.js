@@ -92,7 +92,7 @@ class AccountLedgerForm extends React.Component {
             );
         })(agreements));
 
-        const parsedBalance = activeForm.balance && parseFloat(activeForm.balance.replace(/\$|,/g, ''));
+        const parsedBalance = activeForm.balance && parseFloat(activeForm.balance, 2);
 
         const submitEnabled =
             activeForm.account_from &&
@@ -162,7 +162,12 @@ class AccountLedgerForm extends React.Component {
                                     <div className="row">
                                         <div className="col-sm-6 form-group">
                                             <label htmlFor="plat" className="form-label" id="plat" aria-label="Plat" >Plat</label>
-                                            <select className="form-control" id="plat" onChange={platFormChange('plat')} value={activeForm.plat_show} disabled={activeForm.entry_type !== 'USE' || activeForm.plat_lot !== 'plat'}>
+                                            <select
+                                              className="form-control"
+                                              id="plat"
+                                              onChange={e => platFormChange(e, 'plat')}
+                                              disabled={activeForm.entry_type !== 'USE' || activeForm.plat_lot !== 'plat'}
+                                            >
                                                 <option value="start_plat">Plat</option>
                                                 {platsList}
                                             </select>
@@ -200,14 +205,14 @@ class AccountLedgerForm extends React.Component {
                                         <div className="white-box">
                                             {activeForm.balance &&
                                                 <div className="row text-center">
-                                                    <h4>Credits Available: {activeForm.balance}</h4>
+                                                    <h4>Credits Available: {activeForm.balance.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</h4>
                                                 </div>
                                             }
                                             {activeForm.credits_applied && activeForm.balance &&
                                                 <div className="row text-center">
-                                                    <h4>Credits Applied: {`$${activeForm.credits_applied.toLocaleString('en')}`}</h4>
+                                                    <h4>Credits Applied: {`${activeForm.credits_applied.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}`}</h4>
                                                     <h4 className={parsedBalance - activeForm.credits_applied >= 0 ? 'text-success' : 'text-danger'}>
-                                                        Credits Remaining: {`$${(parsedBalance - activeForm.credits_applied).toLocaleString('en')}`}
+                                                        Credits Remaining: {`${(parsedBalance - activeForm.credits_applied).toLocaleString('en-US', { style: 'currency', currency: 'USD' })}`}
                                                     </h4>
                                                 </div>
                                             }
@@ -218,36 +223,36 @@ class AccountLedgerForm extends React.Component {
                                                     </div>
                                                     <div className="row">
                                                         <div className="col-xs-6">
-                                                            <h4>Non-Sewer Due: {activeForm.non_sewer_exactions}</h4>
+                                                            <h4>Non-Sewer Due: {activeForm.non_sewer_exactions.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</h4>
                                                         </div>
                                                         <div className="col-xs-6">
-                                                            <h4>Sewer Due: {activeForm.sewer_exactions}</h4>
+                                                            <h4>Sewer Due: {activeForm.sewer_exactions.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</h4>
                                                         </div>
                                                     </div>
                                                     {activeForm.lot_show &&
                                                         <div>
                                                             <div className="row">
                                                                 <div className="col-xs-6">
-                                                                    <h5>Roads: {activeForm.dues_roads_dev}</h5>
+                                                                    <h5>Roads: {activeForm.dues_roads_dev.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</h5>
                                                                 </div>
                                                                 <div className="col-xs-6">
-                                                                    <h5>Parks: {activeForm.dues_parks_dev}</h5>
-                                                                </div>
-                                                            </div>
-                                                            <div className="row">
-                                                                <div className="col-xs-6">
-                                                                    <h5>Sewer Capacity: {activeForm.dues_sewer_cap_dev}</h5>
-                                                                </div>
-                                                                <div className="col-xs-6">
-                                                                    <h5>Sewer Transmission: {activeForm.dues_sewer_trans_dev}</h5>
+                                                                    <h5>Parks: {activeForm.dues_parks_dev.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</h5>
                                                                 </div>
                                                             </div>
                                                             <div className="row">
                                                                 <div className="col-xs-6">
-                                                                    <h5>Storm: {activeForm.dues_storm_dev}</h5>
+                                                                    <h5>Sewer Capacity: {activeForm.dues_sewer_cap_dev.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</h5>
                                                                 </div>
                                                                 <div className="col-xs-6">
-                                                                    <h5>Open Spaces: {activeForm.dues_open_space_dev}</h5>
+                                                                    <h5>Sewer Transmission: {activeForm.dues_sewer_trans_dev.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</h5>
+                                                                </div>
+                                                            </div>
+                                                            <div className="row">
+                                                                <div className="col-xs-6">
+                                                                    <h5>Storm: {activeForm.dues_storm_dev.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</h5>
+                                                                </div>
+                                                                <div className="col-xs-6">
+                                                                    <h5>Open Spaces: {activeForm.dues_open_space_dev.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</h5>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -650,35 +655,30 @@ function mapDispatchToProps(dispatch, params) {
                 }
             };
         },
-        platFormChange(field) {
-            return (e, ...args) => {
-                const value = typeof e.target.value !== 'undefined' ? e.target.value : args[1];
+        platFormChange(selected, field) {
+            const value = selected.target.value !== undefined ? selected.target.value : 'start_plat';
+            const value_array = value.split(',');
 
-                const comma_index = value.indexOf(',');
-                const dollar_index = value.indexOf('$');
-                const second_dollar_index = value.indexOf(',$', dollar_index + 1);
+            if (value !== 'start_plat') {
+                const value_id = value_array[0];
+                const value_name = value_array[1];
+                const value_non_sewer = value_array[2];
+                const value_sewer = value_array[3];
 
-                if (comma_index !== -1 && dollar_index !== -1 && second_dollar_index !== -1) {
-                    const value_id = value.substring(0, comma_index);
-                    const value_name = value.substring(comma_index + 1, dollar_index);
-                    const value_non_sewer = value.substring(dollar_index, second_dollar_index);
-                    const value_sewer = value.substring(second_dollar_index + 1, value.length);
+                const field_name = `${[field]}_name`;
+                const field_show = `${[field]}_show`;
 
-                    const field_name = `${[field]}_name`;
-                    const field_show = `${[field]}_show`;
+                const plat_update = {
+                    [field]: value_id,
+                    [field_name]: value_name,
+                    [field_show]: value,
+                    non_sewer_exactions: parseFloat(value_non_sewer),
+                    sewer_exactions: parseFloat(value_sewer),
+                    openModal: true,
+                };
 
-                    const plat_update = {
-                        [field]: value_id,
-                        [field_name]: value_name,
-                        [field_show]: value,
-                        non_sewer_exactions: value_non_sewer,
-                        sewer_exactions: value_sewer,
-                        openModal: true,
-                    };
-
-                    dispatch(formUpdate(plat_update));
-                }
-            };
+                dispatch(formUpdate(plat_update));
+            }
         },
         lotFormChange(selected, field, lots) {
             const value = selected[0] !== undefined ? selected[0].value : 'start_lot';
@@ -715,12 +715,12 @@ function mapDispatchToProps(dispatch, params) {
                 const value = typeof e.target.value !== 'undefined' ? e.target.value : args[1];
 
                 const comma_index = value.indexOf(',');
-                const dollar_index = value.indexOf('$');
+                const second_comma_index = value.lastIndexOf(',');
 
-                if (comma_index !== -1 && dollar_index !== -1) {
+                if (comma_index !== -1 && second_comma_index !== -1) {
                     const value_id = value.substring(0, comma_index);
-                    const value_name = value.substring(comma_index + 1, dollar_index);
-                    const value_balance = value.substring(dollar_index, value.length);
+                    const value_name = value.substring(comma_index + 1, second_comma_index);
+                    const value_balance = value.substring(second_comma_index + 1, value.length);
 
                     const field_name = `${[field]}_name`;
                     const field_show = `${[field]}_show`;
@@ -733,7 +733,7 @@ function mapDispatchToProps(dispatch, params) {
                     dispatch(formUpdate(account_update));
                     if (field === 'account_from' && (value_name.indexOf('LFUCG') === -1)) {
                         const balance_update = {
-                            balance: value_balance,
+                            balance: parseFloat(value_balance),
                         };
                         dispatch(formUpdate(balance_update));
                     }

@@ -40,7 +40,7 @@ class AccountsMiniSummary extends React.Component {
                     {currentUser && currentUser.username &&
                         <div>
                             <p className="col-xs-6">Contact Name: {this.props.mapSet.contact_full_name}</p>
-                            <p className="col-xs-6">Account Balance: {this.props.mapSet.balance && this.props.mapSet.balance.balance}</p>
+                            <p className="col-xs-6">Account Balance: {this.props.mapSet.balance && this.props.mapSet.balance.balance.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</p>
                             <p className="col-xs-6 ">Phone: {this.props.mapSet.phone}</p>
                             <p className="col-xs-6">Email: {this.props.mapSet.email}</p>
                             <p className="col-xs-12">Address: {this.props.mapSet.address_full}</p>

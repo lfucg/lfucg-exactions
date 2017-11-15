@@ -35,9 +35,9 @@ class PaymentsMiniSummary extends React.Component {
                     </div>
                 </div>
                 <div className="col-xs-12">
-                    <h3 className="col-xs-12">Payment Total: {this.props.mapSet.total_paid}</h3>
-                    <p className="col-xs-6">Paid Sewer: ${(parseFloat(this.props.mapSet.paid_sewer_cap) + parseFloat(this.props.mapSet.paid_sewer_trans)).toLocaleString('en')}</p>
-                    <p className="col-xs-6">Paid Non-Sewer: ${(parseFloat(this.props.mapSet.paid_open_space) + parseFloat(this.props.mapSet.paid_parks) + parseFloat(this.props.mapSet.paid_roads) + parseFloat(this.props.mapSet.paid_storm)).toLocaleString('en')}</p>
+                    <h3 className="col-xs-12">Payment Total: {this.props.mapSet.total_paid.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</h3>
+                    <p className="col-xs-6">Paid Sewer: {(parseFloat(this.props.mapSet.paid_sewer_cap) + parseFloat(this.props.mapSet.paid_sewer_trans)).toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</p>
+                    <p className="col-xs-6">Paid Non-Sewer: {(parseFloat(this.props.mapSet.paid_open_space) + parseFloat(this.props.mapSet.paid_parks) + parseFloat(this.props.mapSet.paid_roads) + parseFloat(this.props.mapSet.paid_storm)).toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</p>
                     <p className="col-xs-6">Paid By: {this.props.mapSet.paid_by} ({this.props.mapSet.paid_by_type_display})</p>
                     <p className="col-xs-6">Payment Type: {this.props.mapSet.this.props.mapSet_type_display} {this.props.mapSet.check_number ? `(#${this.props.mapSet.check_number})` : null}</p>
                     <p className="col-xs-6">Developer Account: {this.props.mapSet.credit_account.account_name}</p>
@@ -74,9 +74,9 @@ class PaymentsMiniSummary extends React.Component {
                                 </div>
                             </div>
                             <div className="row">
-                                <h3 className="col-xs-12">Payment Total: {payment.total_paid}</h3>
-                                <p className="col-xs-6">Paid Sewer: ${(parseFloat(payment.paid_sewer_cap) + parseFloat(payment.paid_sewer_trans)).toLocaleString('en')}</p>
-                                <p className="col-xs-6">Paid Non-Sewer: ${(parseFloat(payment.paid_open_space) + parseFloat(payment.paid_parks) + parseFloat(payment.paid_roads) + parseFloat(payment.paid_storm)).toLocaleString('en')}</p>
+                                <h3 className="col-xs-12">Payment Total: {payment.total_paid.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</h3>
+                                <p className="col-xs-6">Paid Sewer: {(parseFloat(payment.paid_sewer_cap) + parseFloat(payment.paid_sewer_trans)).toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</p>
+                                <p className="col-xs-6">Paid Non-Sewer: {(parseFloat(payment.paid_open_space) + parseFloat(payment.paid_parks) + parseFloat(payment.paid_roads) + parseFloat(payment.paid_storm)).toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</p>
                                 <p className="col-xs-6">Paid By: {payment.paid_by} ({payment.paid_by_type_display})</p>
                                 <p className="col-xs-6">Payment Type: {payment.payment_type_display} {payment.check_number ? `(#${payment.check_number})` : null}</p>
                                 <p className="col-xs-6">Developer Account: {payment.credit_account.account_name}</p>

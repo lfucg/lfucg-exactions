@@ -35,7 +35,7 @@ class AgreementsMiniSummary extends React.Component {
                     </div>
                 </div>
                 <div className="col-xs-12">
-                    <p className="col-xs-6">Current Balance: {this.props.mapSet.agreement_balance && this.props.mapSet.agreement_balance.total}</p>
+                    <p className="col-xs-6">Current Balance: {this.props.mapSet.agreement_balance && this.props.mapSet.agreement_balance.total.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</p>
                     <p className="col-xs-6">Resolution Number: {this.props.mapSet.resolution_number}</p>
                     <p className="col-xs-6">Expansion Area: {this.props.mapSet.expansion_area}</p>
                     <p className="col-xs-6">Agreement Type: {this.props.mapSet.agreement_type_display}</p>
@@ -71,7 +71,7 @@ class AgreementsMiniSummary extends React.Component {
                                 </div>
                             </div>
                             <div className="row">
-                                <p className="col-xs-6">Current Balance: {agreement.agreement_balance && agreement.agreement_balance.total}</p>
+                                <p className="col-xs-6">Current Balance: {agreement.agreement_balance && agreement.agreement_balance.total.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</p>
                                 <p className="col-xs-6">Agreement Type: {agreement.agreement_type_display}</p>
                                 <p className="col-xs-6">Date Executed: {agreement.date_executed}</p>
                                 <p className="col-xs-6">Expansion Area: {agreement.expansion_area}</p>

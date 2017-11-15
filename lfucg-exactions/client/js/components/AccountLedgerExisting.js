@@ -79,8 +79,8 @@ class AccountLedgerExisting extends React.Component {
                                     { accountLedger.account_to &&
                                         <p className="col-xs-6">Account To: {accountLedger.account_to.account_name}</p>
                                     }
-                                    <p className="col-xs-6">Non-Sewer: {accountLedger.dollar_values && accountLedger.dollar_values.dollar_non_sewer}</p>
-                                    <p className="col-xs-6">Sewer: {accountLedger.dollar_values && accountLedger.dollar_values.dollar_sewer}</p>
+                                    <p className="col-xs-6">Non-Sewer: {accountLedger.dollar_values && accountLedger.dollar_values.dollar_non_sewer.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</p>
+                                    <p className="col-xs-6">Sewer: {accountLedger.dollar_values && accountLedger.dollar_values.dollar_sewer.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</p>
                                     { accountLedger.agreement &&
                                         <p className="col-xs-6">Agreement: {accountLedger.agreement.resolution_number}</p>
                                     }

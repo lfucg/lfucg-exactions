@@ -75,8 +75,8 @@ class PlatExisting extends React.Component {
                             />
                             <div className="row">
                                 <div className="col-sm-offset-1">
-                                    <p className="col-xs-12 col-sm-6">Sewer Due: {plat.plat_exactions && plat.plat_exactions.plat_sewer_due}</p>
-                                    <p className="col-xs-12 col-sm-6">Non-Sewer Due: {plat.plat_exactions && plat.plat_exactions.plat_non_sewer_due}</p>
+                                    <p className="col-xs-12 col-sm-6">Sewer Due: {plat.plat_exactions && plat.plat_exactions.plat_sewer_due.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</p>
+                                    <p className="col-xs-12 col-sm-6">Non-Sewer Due: {plat.plat_exactions && plat.plat_exactions.plat_non_sewer_due.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</p>
                                     <p className="col-xs-6">Name: {plat.name}</p>
                                     <p className="col-xs-6">Section: {plat.section}</p>
                                     <p className="col-xs-6">Block: {plat.block}</p>

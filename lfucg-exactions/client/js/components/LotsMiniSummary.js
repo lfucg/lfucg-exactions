@@ -36,7 +36,7 @@ class LotsMiniSummary extends React.Component {
                 </div>
                 <div className="col-xs-12">
                     <p className="col-xs-12">Lot Address: {this.props.mapSet.address_full}</p>
-                    <p className="col-xs-6">Current Exactions: {this.props.mapSet && this.props.mapSet.lot_exactions && this.props.mapSet.lot_exactions.current_exactions}</p>
+                    <p className="col-xs-6">Current Exactions: {this.props.mapSet && this.props.mapSet.lot_exactions && this.props.mapSet.lot_exactions.current_exactions.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</p>
                     <p className="col-xs-6">Plat: {this.props.mapSet.plat.cabinet}-{this.props.mapSet.plat.slide}</p>
                     <p className="col-xs-6 ">Lot Number: {this.props.mapSet.lot_number}</p>
                     <p className="col-xs-6">Permit ID: {this.props.mapSet.permit_id}</p>
@@ -71,7 +71,7 @@ class LotsMiniSummary extends React.Component {
                                 </div>
                             </div>
                             <div className="row">
-                                <p className="col-xs-6">Current Exactions: {lot.lot_exactions && lot.lot_exactions.current_exactions}</p>
+                                <p className="col-xs-6">Current Exactions: {lot.lot_exactions && lot.lot_exactions.current_exactions.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</p>
                                 <p className="col-xs-6"><strong>{lot.is_approved ? 'Approved' : 'Not Approved'}</strong></p>
                                 <p className="col-xs-6">Lot Number: {lot.lot_number}</p>
                                 <p className="col-xs-6">Parcel ID: {lot.parcel_id}</p>

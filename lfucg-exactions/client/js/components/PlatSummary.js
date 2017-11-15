@@ -60,22 +60,22 @@ class PlatSummary extends React.Component {
                             <p className="table-data">{plat_exaction.cleaned_acres}</p>
                         </div>
                         <div className="row table-border">
-                            <p className="table-data">{plat_exaction.dollar_values && plat_exaction.dollar_values.dollar_roads}</p>
+                            <p className="table-data">{plat_exaction.dollar_values && plat_exaction.dollar_values.dollar_roads.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</p>
                         </div>
                         <div className="row table-border">
-                            <p className="table-data">{plat_exaction.dollar_values && plat_exaction.dollar_values.dollar_open_spaces}</p>
+                            <p className="table-data">{plat_exaction.dollar_values && plat_exaction.dollar_values.dollar_open_spaces.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</p>
                         </div>
                         <div className="row table-border">
-                            <p className="table-data">{plat_exaction.dollar_values && plat_exaction.dollar_values.dollar_sewer_cap}</p>
+                            <p className="table-data">{plat_exaction.dollar_values && plat_exaction.dollar_values.dollar_sewer_cap.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</p>
                         </div>
                         <div className="row table-border">
-                            <p className="table-data">{plat_exaction.dollar_values && plat_exaction.dollar_values.dollar_sewer_trans}</p>
+                            <p className="table-data">{plat_exaction.dollar_values && plat_exaction.dollar_values.dollar_sewer_trans.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</p>
                         </div>
                         <div className="row table-border">
-                            <p className="table-data">{plat_exaction.dollar_values && plat_exaction.dollar_values.dollar_parks}</p>
+                            <p className="table-data">{plat_exaction.dollar_values && plat_exaction.dollar_values.dollar_parks.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</p>
                         </div>
                         <div className="row table-border">
-                            <p className="table-data">{plat_exaction.dollar_values && plat_exaction.dollar_values.dollar_storm_water}</p>
+                            <p className="table-data">{plat_exaction.dollar_values && plat_exaction.dollar_values.dollar_storm_water.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</p>
                         </div>
                     </div>
                 </div>
@@ -146,8 +146,8 @@ class PlatSummary extends React.Component {
                                         <p className="col-xs-6">Block: {plats.block}</p>
                                         <p className="col-xs-6">Buildable Lots: {plats.buildable_lots}</p>
                                         <p className="col-xs-6">Non-Buildable Lots: {plats.non_buildable_lots}</p>
-                                        <p className="col-xs-6">Current Sewer Due: {plats.plat_exactions && plats.plat_exactions.plat_sewer_due}</p>
-                                        <p className="col-xs-6">Current Non-Sewer Due: {plats.plat_exactions && plats.plat_exactions.plat_non_sewer_due}</p>
+                                        <p className="col-xs-6">Current Sewer Due: {plats.plat_exactions && plats.plat_exactions.plat_sewer_due.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</p>
+                                        <p className="col-xs-6">Current Non-Sewer Due: {plats.plat_exactions && plats.plat_exactions.plat_non_sewer_due.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</p>
                                         <p className="col-xs-12">Calculation Note: {plats.calculation_note}</p>
                                     </div>
                                 </div>
@@ -275,10 +275,10 @@ class PlatSummary extends React.Component {
                                                     </div>
                                                     <div className="row">
                                                         <div className="col-xs-6 text-center">
-                                                            <p>Sewer Dues: {plats.plat_exactions && plats.plat_exactions.plat_sewer_due}</p>
+                                                            <p>Sewer Dues: {plats.plat_exactions && plats.plat_exactions.plat_sewer_due.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</p>
                                                         </div>
                                                         <div className="col-xs-6 text-center">
-                                                            <p>Non-Sewer Dues: {plats.plat_exactions && plats.plat_exactions.plat_non_sewer_due}</p>
+                                                            <p>Non-Sewer Dues: {plats.plat_exactions && plats.plat_exactions.plat_non_sewer_due.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</p>
                                                         </div>
                                                     </div>
                                                 </div>

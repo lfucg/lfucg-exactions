@@ -81,8 +81,8 @@ class AccountLedgerSummary extends React.Component {
                                     </div>
                                     <div className="col-xs-12">
                                         <p className="col-md-4 col-xs-6">Entry Type: {accountLedgers.entry_type_display}</p>
-                                        <p className="col-md-4 col-xs-6">Sewer Credits: {accountLedgers.dollar_values && accountLedgers.dollar_values.dollar_sewer}</p>
-                                        <p className="col-md-4 col-xs-6">Non-Sewer Credits: {accountLedgers.dollar_values && accountLedgers.dollar_values.dollar_non_sewer}</p>
+                                        <p className="col-md-4 col-xs-6">Sewer Credits: {accountLedgers.dollar_values && accountLedgers.dollar_values.dollar_sewer.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</p>
+                                        <p className="col-md-4 col-xs-6">Non-Sewer Credits: {accountLedgers.dollar_values && accountLedgers.dollar_values.dollar_non_sewer.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</p>
                                     </div>
                                 </div>
                             </div>

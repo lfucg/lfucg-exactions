@@ -132,7 +132,7 @@ class PaymentForm extends React.Component {
                                             {activeForm.lot_exactions &&
                                                 <div>
                                                     <h3 htmlFor="lot_exactions" className="text-center" aria-label="Current Exactions">Current Lot Exactions Due:</h3>
-                                                    <h4 className="text-center" >{activeForm.lot_exactions}</h4>
+                                                    <h4 className="text-center" >{activeForm.lot_exactions.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</h4>
                                                 </div>
                                             }
                                         </div>
@@ -207,34 +207,34 @@ class PaymentForm extends React.Component {
                                                     </div>
                                                     <div className="row">
                                                         <div className="col-xs-6 col-sm-4 col-sm-offset-2">
-                                                            <h4>Sewer: {activeForm.sewer_exactions}</h4>
+                                                            <h4>Sewer: {activeForm.sewer_exactions.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</h4>
                                                         </div>
                                                         <div className="col-xs-6 col-sm-4">
-                                                            <h4>Non-sewer: {activeForm.non_sewer_exactions}</h4>
+                                                            <h4>Non-sewer: {activeForm.non_sewer_exactions.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</h4>
                                                         </div>
                                                     </div>
                                                     <div className="row">
                                                         <div className="col-xs-6 col-sm-4 col-sm-offset-2">
-                                                            <h5>Roads: {activeForm.dues_roads_dev}</h5>
+                                                            <h5>Roads: {activeForm.dues_roads_dev.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</h5>
                                                         </div>
                                                         <div className="col-xs-6 col-sm-4">
-                                                            <h5>Parks: {activeForm.dues_parks_dev}</h5>
+                                                            <h5>Parks: {activeForm.dues_parks_dev.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</h5>
                                                         </div>
                                                     </div>
                                                     <div className="row">
                                                         <div className="col-xs-6 col-sm-4 col-sm-offset-2">
-                                                            <h5>Sewer Capacity: {activeForm.dues_sewer_cap_dev}</h5>
+                                                            <h5>Sewer Capacity: {activeForm.dues_sewer_cap_dev.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</h5>
                                                         </div>
                                                         <div className="col-xs-6 col-sm-4">
-                                                            <h5>Sewer Transmission: {activeForm.dues_sewer_trans_dev}</h5>
+                                                            <h5>Sewer Transmission: {activeForm.dues_sewer_trans_dev.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</h5>
                                                         </div>
                                                     </div>
                                                     <div className="row">
                                                         <div className="col-xs-6 col-sm-4 col-sm-offset-2">
-                                                            <h5>Storm: {activeForm.dues_storm_dev}</h5>
+                                                            <h5>Storm: {activeForm.dues_storm_dev.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</h5>
                                                         </div>
                                                         <div className="col-xs-6 col-sm-4">
-                                                            <h5>Open Spaces: {activeForm.dues_open_space_dev}</h5>
+                                                            <h5>Open Spaces: {activeForm.dues_open_space_dev.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</h5>
                                                         </div>
                                                     </div>
                                                 </div>

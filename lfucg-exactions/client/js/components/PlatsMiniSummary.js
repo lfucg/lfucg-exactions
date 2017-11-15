@@ -40,8 +40,8 @@ class PlatsMiniSummary extends React.Component {
                     <p className="col-xs-6">Gross Acreage: {this.props.mapSet.cleaned_total_acreage}</p>
                     <p className="col-xs-6">Buildable Lots: {this.props.mapSet.buildable_lots}</p>
                     <p className="col-xs-6">Non-Buildable Lots: {this.props.mapSet.non_buildable_lots}</p>
-                    <p className="col-sm-6 col-xs-12">Sewer Exactions: {this.props.mapSet.plat_exactions && this.props.mapSet.plat_exactions.plat_sewer_due}</p>
-                    <p className="col-sm-6 col-xs-12">Non-Sewer Exactions: {this.props.mapSet.plat_exactions && this.props.mapSet.plat_exactions.plat_non_sewer_due}</p>
+                    <p className="col-sm-6 col-xs-12">Sewer Exactions: {this.props.mapSet.plat_exactions && this.props.mapSet.plat_exactions.plat_sewer_due.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</p>
+                    <p className="col-sm-6 col-xs-12">Non-Sewer Exactions: {this.props.mapSet.plat_exactions && this.props.mapSet.plat_exactions.plat_non_sewer_due.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</p>
                 </div>
             </div>) : (
                 this.props.mapQualifier && map((plat) => {
@@ -76,8 +76,8 @@ class PlatsMiniSummary extends React.Component {
                             </div>
                             <div className="row">
                                 <p className="col-xs-12"><strong>{plat.is_approved ? 'Approved' : 'Not Approved'}</strong></p>
-                                <p className="col-sm-6 col-xs-12">Sewer Exactions: {plat.plat_exactions && plat.plat_exactions.plat_sewer_due}</p>
-                                <p className="col-sm-6 col-xs-12">Non-Sewer Exactions: {plat.plat_exactions && plat.plat_exactions.plat_non_sewer_due}</p>
+                                <p className="col-sm-6 col-xs-12">Sewer Exactions: {plat.plat_exactions && plat.plat_exactions.plat_sewer_due.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</p>
+                                <p className="col-sm-6 col-xs-12">Non-Sewer Exactions: {plat.plat_exactions && plat.plat_exactions.plat_non_sewer_due.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</p>
                                 <p className="col-xs-6">Gross Acreage: {plat.cleaned_total_acreage}</p>
                                 <p className="col-xs-6">Expansion Area: {plat.expansion_area}</p>
                             </div>

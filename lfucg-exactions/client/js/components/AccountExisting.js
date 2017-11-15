@@ -67,7 +67,7 @@ class AccountExisting extends React.Component {
                                 {account.balance && <p className="col-xs-6"><strong>{account.balance.credit_availability}</strong></p>}
                                 {currentUser && currentUser.username && <div>
                                     <p className="col-xs-6">Contact Name: {account.contact_full_name}</p>
-                                    {account.balance && <p className="col-xs-6">Account Balance: {account.balance.balance}</p>}
+                                    {account.balance && <p className="col-xs-6">Account Balance: {account.balance.balance.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</p>}
                                 </div>}
                             </div>
                         </div>
