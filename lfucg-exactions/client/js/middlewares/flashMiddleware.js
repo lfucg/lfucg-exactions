@@ -18,6 +18,23 @@ export default function flashMiddleware({ dispatch }) {
         }
         if (action.type === ERROR_MESSAGE_SET) {
             map((error) => {
+                if (document.getElementsByClassName('error').length > 0) {
+                    let errorElements = document.getElementsByClassName('error');
+                    while (errorElements.length) {
+                        errorElements[0].classList.remove('error');
+                    }
+
+                    errorElements = document.getElementsByClassName('label-error');
+                    while (errorElements.length) {
+                        errorElements[0].classList.remove('label-error');
+                    }
+
+                    errorElements = document.querySelectorAll('.help-block:not(.hidden)');
+                    map((el) => {
+                        el.classList.add('hidden');
+                    })(errorElements);
+                }
+
                 if (error !== 'non_field_errors') {
                     document.getElementById(error).classList.add('error');
                     document.querySelector(`label[for='${error}']`).classList.add('label-error');
