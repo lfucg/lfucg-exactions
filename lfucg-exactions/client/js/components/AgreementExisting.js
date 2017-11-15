@@ -117,6 +117,7 @@ class AgreementExisting extends React.Component {
                     { filterField: 'filter_expansion_area', displayName: 'EA', list: expansion_areas },
                     { filterField: 'filter_is_approved', displayName: 'Approval', list: [{ id: true, name: 'Approved' }, { id: false, name: 'Unapproved' }] },
                   ]}
+                  csvEndpoint="../api/export_agreement_csv/?"
                 />
 
                 <div className="inside-body">
