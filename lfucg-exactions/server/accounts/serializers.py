@@ -34,16 +34,16 @@ class AccountSerializer(serializers.ModelSerializer):
 
         if calculated_balance['current_account_balance'] > 0:
             return {
-                'balance': '${:,.2f}'.format(calculated_balance['current_account_balance']),
-                'sewer_balance': '${:,.2f}'.format(calculated_balance['current_sewer_balance']),
-                'non_sewer_balance': '${:,.2f}'.format(calculated_balance['current_non_sewer_balance']),
+                'balance': calculated_balance['current_account_balance'],
+                'sewer_balance': calculated_balance['current_sewer_balance'],
+                'non_sewer_balance': calculated_balance['current_non_sewer_balance'],
                 'credit_availability': 'Credit Available'
             }
         else:
             return {
-                'balance': '${:,.2f}'.format(calculated_balance['current_account_balance']),
-                'sewer_balance': '${:,.2f}'.format(calculated_balance['current_sewer_balance']),
-                'non_sewer_balance': '${:,.2f}'.format(calculated_balance['current_non_sewer_balance']),
+                'balance': calculated_balance['current_account_balance'],
+                'sewer_balance': calculated_balance['current_sewer_balance'],
+                'non_sewer_balance': calculated_balance['current_non_sewer_balance'],
                 'credit_availability': 'No Credit Available'
             }
 
@@ -101,7 +101,7 @@ class AgreementSerializer(serializers.ModelSerializer):
 
     def get_agreement_balance(self, obj):
         return {
-            'total': '${:,.2f}'.format(calculate_agreement_balance(obj.id)),
+            'total': calculate_agreement_balance(obj.id),
         }
 
     class Meta:
@@ -205,17 +205,17 @@ class ProjectCostEstimateSerializer(serializers.ModelSerializer):
             obj.admin_cost +
             obj.management_cost
         )
-        return '${:,.2f}'.format(total)
+        return total
 
     def get_dollar_values(self, obj):
         return {
-            'land_cost': '${:,.2f}'.format(obj.land_cost),
-            'design_cost': '${:,.2f}'.format(obj.design_cost),
-            'construction_cost': '${:,.2f}'.format(obj.construction_cost),
-            'admin_cost': '${:,.2f}'.format(obj.admin_cost),
-            'management_cost': '${:,.2f}'.format(obj.management_cost),
-            'other_cost': '${:,.2f}'.format(obj.other_cost),
-            'credits_available': '${:,.2f}'.format(obj.credits_available),
+            'land_cost': obj.land_cost,
+            'design_cost': obj.design_cost,
+            'construction_cost': obj.construction_cost,
+            'admin_cost': obj.admin_cost,
+            'management_cost': obj.management_cost,
+            'other_cost': obj.other_cost,
+            'credits_available': obj.credits_available,
         }
 
     class Meta:
@@ -258,25 +258,25 @@ class AccountLedgerSerializer(serializers.ModelSerializer):
 
     def get_dollar_values(self, obj):
         return {
-            'dollar_non_sewer': '${:,.2f}'.format(obj.non_sewer_credits),
-            'dollar_sewer': '${:,.2f}'.format(obj.sewer_credits),
+            'dollar_non_sewer': obj.non_sewer_credits,
+            'dollar_sewer': obj.sewer_credits,
         }
 
     def validate(self, obj):
-        lot = LotSerializer(obj['lot']).data['lot_exactions']
+        lot = LotSerializer(obj['lot']).data
         errors = {}
-        if lot['dues_sewer_cap_dev'] - obj['sewer_cap'] < 0:
-            errors['sewer_cap'] = ['The amount entered would result in negative exactions on this category']
-        if lot['dues_sewer_trans_dev'] - obj['sewer_trans'] < 0:
-            errors['sewer_trans'] = ['The amount entered would result in negative exactions on this category']
-        if lot['dues_roads_dev'] - obj['roads'] < 0:
-            errors['roads'] = ['The amount entered would result in negative exactions on this category']
-        if lot['dues_storm_dev'] - obj['storm'] < 0:
-            errors['storm'] = ['The amount entered would result in negative exactions on this category']
-        if lot['dues_parks_dev'] - obj['parks'] < 0:
-            errors['parks'] = ['The amount entered would result in negative exactions on this category']
-        if lot['dues_open_space_dev'] - obj['open_space'] < 0:
-            errors['open_space'] = ['The amount entered would result in negative exactions on this category']
+        if lot['lot_exactions']['dues_sewer_cap_dev'] - obj['sewer_cap'] < 0:
+            errors['sewer_cap'] = ['The amount entered would result in negative exactions in this category on: %s' % lot['address_full']]
+        if lot['lot_exactions']['dues_sewer_trans_dev'] - obj['sewer_trans'] < 0:
+            errors['sewer_trans'] = ['The amount entered would result in negative exactions in this category on: %s' % lot['address_full']]
+        if lot['lot_exactions']['dues_roads_dev'] - obj['roads'] < 0:
+            errors['roads'] = ['The amount entered would result in negative exactions in this category on: %s' % lot['address_full']]
+        if lot['lot_exactions']['dues_storm_dev'] - obj['storm'] < 0:
+            errors['storm'] = ['The amount entered would result in negative exactions in this category on: %s' % lot['address_full']]
+        if lot['lot_exactions']['dues_parks_dev'] - obj['parks'] < 0:
+            errors['parks'] = ['The amount entered would result in negative exactions in this category on: %s' % lot['address_full']]
+        if lot['lot_exactions']['dues_open_space_dev'] - obj['open_space'] < 0:
+            errors['open_space'] = ['The amount entered would result in negative exactions in this category on: %s' % lot['address_full']]
 
         if len(errors) > 0:
             raise serializers.ValidationError(errors)
@@ -333,7 +333,7 @@ class PaymentSerializer(serializers.ModelSerializer):
             obj.paid_storm +
             obj.paid_open_space
         )
-        return '${:,.2f}'.format(total)
+        return total
 
     def get_payment_type_display(self, obj):
         return obj.get_payment_type_display()
@@ -343,13 +343,34 @@ class PaymentSerializer(serializers.ModelSerializer):
 
     def get_dollar_values(self, obj):
         return {
-            'paid_roads': '${:,.2f}'.format(obj.paid_roads),
-            'paid_sewer_trans': '${:,.2f}'.format(obj.paid_sewer_trans),
-            'paid_sewer_cap': '${:,.2f}'.format(obj.paid_sewer_cap),
-            'paid_parks': '${:,.2f}'.format(obj.paid_parks),
-            'paid_storm': '${:,.2f}'.format(obj.paid_storm),
-            'paid_open_space': '${:,.2f}'.format(obj.paid_open_space),
+            'paid_roads': obj.paid_roads,
+            'paid_sewer_trans': obj.paid_sewer_trans,
+            'paid_sewer_cap': obj.paid_sewer_cap,
+            'paid_parks': obj.paid_parks,
+            'paid_storm': obj.paid_storm,
+            'paid_open_space': obj.paid_open_space,
         }
+
+    def validate(self, obj):
+        from pprint import pprint
+        pprint(obj)
+        lot = LotSerializer(obj['lot_id']).data
+        errors = {}
+        if lot['lot_exactions']['dues_sewer_cap_dev'] - obj['paid_sewer_cap'] < 0:
+            errors['paid_sewer_cap'] = ['The amount entered would result in negative exactions in this category on: %s' % lot['address_full']]
+        if lot['lot_exactions']['dues_sewer_trans_dev'] - obj['paid_sewer_trans'] < 0:
+            errors['paid_sewer_trans'] = ['The amount entered would result in negative exactions in this category on: %s' % lot['address_full']]
+        if lot['lot_exactions']['dues_roads_dev'] - obj['paid_roads'] < 0:
+            errors['paid_roads'] = ['The amount entered would result in negative exactions in this category on: %s' % lot['address_full']]
+        if lot['lot_exactions']['dues_storm_dev'] - obj['paid_storm'] < 0:
+            errors['paid_storm'] = ['The amount entered would result in negative exactions in this category on: %s' % lot['address_full']]
+        if lot['lot_exactions']['dues_parks_dev'] - obj['paid_parks'] < 0:
+            errors['paid_parks'] = ['The amount entered would result in negative exactions in this category on: %s' % lot['address_full']]
+        if lot['lot_exactions']['dues_open_space_dev'] - obj['paid_open_space'] < 0:
+            errors['paid_open_space'] = ['The amount entered would result in negative exactions in this category on: %s' % lot['address_full']]
+
+        if len(errors) > 0:
+            raise serializers.ValidationError(errors)
 
     class Meta:
         model = Payment

@@ -50,12 +50,12 @@ class PlatZoneSerializer(serializers.ModelSerializer):
 
     def get_dollar_values(self, obj):
         return {
-            'dollar_roads': '${:,.2f}'.format(obj.dues_roads),
-            'dollar_open_spaces': '${:,.2f}'.format(obj.dues_open_spaces),
-            'dollar_sewer_cap': '${:,.2f}'.format(obj.dues_sewer_cap),
-            'dollar_sewer_trans': '${:,.2f}'.format(obj.dues_sewer_trans),
-            'dollar_parks': '${:,.2f}'.format(obj.dues_parks),
-            'dollar_storm_water': '${:,.2f}'.format(obj.dues_storm_water),
+            'dollar_roads': obj.dues_roads,
+            'dollar_open_spaces': obj.dues_open_spaces,
+            'dollar_sewer_cap': obj.dues_sewer_cap,
+            'dollar_sewer_trans': obj.dues_sewer_trans,
+            'dollar_parks': obj.dues_parks,
+            'dollar_storm_water': obj.dues_storm_water,
         }
 
     class Meta:
@@ -110,8 +110,8 @@ class PlatSerializer(serializers.ModelSerializer):
     def get_plat_exactions(self, obj):
         calculated_exactions = calculate_plat_balance(obj)
         return {
-            'plat_sewer_due': '${:,.2f}'.format(calculated_exactions['plat_sewer_due']),
-            'plat_non_sewer_due': '${:,.2f}'.format(calculated_exactions['plat_non_sewer_due']),
+            'plat_sewer_due': calculated_exactions['plat_sewer_due'],
+            'plat_non_sewer_due': calculated_exactions['plat_non_sewer_due'],
             'remaining_lots': calculated_exactions['remaining_lots'],
         }
 
