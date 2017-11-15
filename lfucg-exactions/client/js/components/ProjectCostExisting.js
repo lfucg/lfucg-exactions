@@ -102,6 +102,7 @@ class ProjectCostExisting extends React.Component {
                     { filterField: 'filter_project_id', displayName: 'Project', list: projectsList },
                     { filterField: 'filter_is_approved', displayName: 'Approval', list: [{ id: true, name: 'Approved' }, { id: false, name: 'Unapproved' }] },
                   ]}
+                  csvEndpoint="../api/project_estimate_search_csv/?"
                 />
 
                 <div className="inside-body">

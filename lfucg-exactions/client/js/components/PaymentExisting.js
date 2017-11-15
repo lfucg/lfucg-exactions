@@ -129,6 +129,7 @@ class PaymentExisting extends React.Component {
                     { filterField: 'filter_credit_source', displayName: 'Agreement', list: agreementsList },
                     { filterField: 'filter_is_approved', displayName: 'Approval', list: [{ id: true, name: 'Approved' }, { id: false, name: 'Unapproved' }] },
                   ]}
+                  csvEndpoint="../api/payment_search_csv/?"
                 />
 
                 <div className="inside-body">

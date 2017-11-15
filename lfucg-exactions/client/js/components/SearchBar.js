@@ -31,7 +31,7 @@ class SearchBar extends React.Component {
         } = this.props;
 
         const queryString = compose(
-            reduce((acc, value) => acc + value, '../api/lot_search_csv/?'),
+            reduce((acc, value) => acc + value, this.props.csvEndpoint),
             map((key_name) => {
                 const filter_index = key_name.indexOf('filter_') + 'filter_'.length;
                 const field = key_name.slice(filter_index, key_name.length);

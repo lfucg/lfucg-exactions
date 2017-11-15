@@ -138,6 +138,7 @@ class AccountLedgerExisting extends React.Component {
                     { filterField: 'filter_lot', displayName: 'Lots', list: lotsList },
                     { filterField: 'filter_is_approved', displayName: 'Approval', list: [{ id: true, name: 'Approved' }, { id: false, name: 'Unapproved' }] },
                   ]}
+                  csvEndpoint="../api/ledger_search_csv/?"
                 />
 
                 <div className="inside-body">
