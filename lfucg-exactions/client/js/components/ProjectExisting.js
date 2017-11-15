@@ -90,6 +90,7 @@ class ProjectExisting extends React.Component {
                     { filterField: 'filter_is_approved', displayName: 'Approval', list: [{ id: true, name: 'Approved' }, { id: false, name: 'Unapproved' }] },
                   ]}
                   currentPage="Projects"
+                  csvEndpoint="../api/project_search_csv/?"
                 />
 
                 <div className="inside-body">
