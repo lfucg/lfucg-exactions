@@ -1384,7 +1384,7 @@ export function putAccountLedger(selectedAccountLedger) {
                 sewer_cap,
                 sewer_trans,
                 storm,
-                open_spaces,
+                open_space,
             } = activeForm;
             return {
                 entry_date,
@@ -1402,7 +1402,7 @@ export function putAccountLedger(selectedAccountLedger) {
                 sewer_cap,
                 sewer_trans,
                 storm,
-                open_spaces,
+                open_space,
             };
         },
     };

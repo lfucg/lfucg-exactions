@@ -264,22 +264,40 @@ class AccountLedgerSerializer(serializers.ModelSerializer):
 
     def validate(self, obj):
         lot = LotSerializer(obj['lot']).data
+        error_message= ['The amount entered would result in negative exactions in this category on: %s' % lot['address_full']]
         errors = {}
-        if lot['lot_exactions']['dues_sewer_cap_dev'] - obj['sewer_cap'] < 0:
-            errors['sewer_cap'] = ['The amount entered would result in negative exactions in this category on: %s' % lot['address_full']]
-        if lot['lot_exactions']['dues_sewer_trans_dev'] - obj['sewer_trans'] < 0:
-            errors['sewer_trans'] = ['The amount entered would result in negative exactions in this category on: %s' % lot['address_full']]
-        if lot['lot_exactions']['dues_roads_dev'] - obj['roads'] < 0:
-            errors['roads'] = ['The amount entered would result in negative exactions in this category on: %s' % lot['address_full']]
-        if lot['lot_exactions']['dues_storm_dev'] - obj['storm'] < 0:
-            errors['storm'] = ['The amount entered would result in negative exactions in this category on: %s' % lot['address_full']]
-        if lot['lot_exactions']['dues_parks_dev'] - obj['parks'] < 0:
-            errors['parks'] = ['The amount entered would result in negative exactions in this category on: %s' % lot['address_full']]
-        if lot['lot_exactions']['dues_open_space_dev'] - obj['open_space'] < 0:
-            errors['open_space'] = ['The amount entered would result in negative exactions in this category on: %s' % lot['address_full']]
+
+        if self.instance:
+            if lot['lot_exactions']['dues_sewer_cap_dev'] - (obj['sewer_cap'] - self.instance.sewer_cap) < 0:
+                errors['sewer_cap'] = error_message
+            if lot['lot_exactions']['dues_sewer_trans_dev'] - (obj['sewer_trans'] - self.instance.sewer_trans) < 0:
+                errors['sewer_trans'] = error_message
+            if lot['lot_exactions']['dues_roads_dev'] - (obj['roads'] - self.instance.roads) < 0:
+                errors['roads'] = error_message
+            if lot['lot_exactions']['dues_storm_dev'] - (obj['storm'] - self.instance.storm) < 0:
+                errors['storm'] = error_message
+            if lot['lot_exactions']['dues_parks_dev'] - (obj['parks'] - self.instance.parks) < 0:
+                errors['parks'] = error_message
+            if lot['lot_exactions']['dues_open_space_dev'] - (obj['open_space'] - self.instance.open_space) < 0:
+                errors['open_space'] = error_message
+        else:
+            if lot['lot_exactions']['dues_sewer_cap_dev'] - obj['sewer_cap'] < 0:
+                errors['sewer_cap'] = error_message
+            if lot['lot_exactions']['dues_sewer_trans_dev'] - obj['sewer_trans'] < 0:
+                errors['sewer_trans'] = error_message
+            if lot['lot_exactions']['dues_roads_dev'] - obj['roads'] < 0:
+                errors['roads'] = error_message
+            if lot['lot_exactions']['dues_storm_dev'] - obj['storm'] < 0:
+                errors['storm'] = error_message
+            if lot['lot_exactions']['dues_parks_dev'] - obj['parks'] < 0:
+                errors['parks'] = error_message
+            if lot['lot_exactions']['dues_open_space_dev'] - obj['open_space'] < 0:
+                errors['open_space'] = error_message
 
         if len(errors) > 0:
             raise serializers.ValidationError(errors)
+
+        return obj
 
     class Meta:
         model = AccountLedger
@@ -352,25 +370,41 @@ class PaymentSerializer(serializers.ModelSerializer):
         }
 
     def validate(self, obj):
-        from pprint import pprint
-        pprint(obj)
         lot = LotSerializer(obj['lot_id']).data
+        error_message= ['The amount entered would result in negative exactions in this category on: %s' % lot['address_full']]
         errors = {}
-        if lot['lot_exactions']['dues_sewer_cap_dev'] - obj['paid_sewer_cap'] < 0:
-            errors['paid_sewer_cap'] = ['The amount entered would result in negative exactions in this category on: %s' % lot['address_full']]
-        if lot['lot_exactions']['dues_sewer_trans_dev'] - obj['paid_sewer_trans'] < 0:
-            errors['paid_sewer_trans'] = ['The amount entered would result in negative exactions in this category on: %s' % lot['address_full']]
-        if lot['lot_exactions']['dues_roads_dev'] - obj['paid_roads'] < 0:
-            errors['paid_roads'] = ['The amount entered would result in negative exactions in this category on: %s' % lot['address_full']]
-        if lot['lot_exactions']['dues_storm_dev'] - obj['paid_storm'] < 0:
-            errors['paid_storm'] = ['The amount entered would result in negative exactions in this category on: %s' % lot['address_full']]
-        if lot['lot_exactions']['dues_parks_dev'] - obj['paid_parks'] < 0:
-            errors['paid_parks'] = ['The amount entered would result in negative exactions in this category on: %s' % lot['address_full']]
-        if lot['lot_exactions']['dues_open_space_dev'] - obj['paid_open_space'] < 0:
-            errors['paid_open_space'] = ['The amount entered would result in negative exactions in this category on: %s' % lot['address_full']]
+
+        if self.instance:
+            if lot['lot_exactions']['dues_sewer_cap_dev'] - (obj['paid_sewer_cap'] - self.instance.paid_sewer_cap) < 0:
+                errors['paid_sewer_cap'] = error_message
+            if lot['lot_exactions']['dues_sewer_trans_dev'] - (obj['paid_sewer_trans'] - self.instance.paid_sewer_trans) < 0:
+                errors['paid_sewer_trans'] = error_message
+            if lot['lot_exactions']['dues_roads_dev'] - (obj['paid_roads'] - self.instance.paid_roads) < 0:
+                errors['paid_roads'] = error_message
+            if lot['lot_exactions']['dues_storm_dev'] - (obj['paid_storm'] - self.instance.paid_storm) < 0:
+                errors['paid_storm'] = error_message
+            if lot['lot_exactions']['dues_parks_dev'] - (obj['paid_parks'] - self.instance.paid_parks) < 0:
+                errors['paid_parks'] = error_message
+            if lot['lot_exactions']['dues_open_space_dev'] - (obj['paid_open_space'] - self.instance.paid_open_space) < 0:
+                errors['paid_open_space'] = error_message
+        else:
+            if lot['lot_exactions']['dues_sewer_cap_dev'] - obj['paid_sewer_cap'] < 0:
+                errors['paid_sewer_cap'] = error_message
+            if lot['lot_exactions']['dues_sewer_trans_dev'] - obj['paid_sewer_trans'] < 0:
+                errors['paid_sewer_trans'] = error_message
+            if lot['lot_exactions']['dues_roads_dev'] - obj['paid_roads'] < 0:
+                errors['paid_roads'] = error_message
+            if lot['lot_exactions']['dues_storm_dev'] - obj['paid_storm'] < 0:
+                errors['paid_storm'] = error_message
+            if lot['lot_exactions']['dues_parks_dev'] - obj['paid_parks'] < 0:
+                errors['paid_parks'] = error_message
+            if lot['lot_exactions']['dues_open_space_dev'] - obj['paid_open_space'] < 0:
+                errors['paid_open_space'] = error_message
 
         if len(errors) > 0:
             raise serializers.ValidationError(errors)
+
+        return obj
 
     class Meta:
         model = Payment
