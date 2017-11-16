@@ -179,7 +179,6 @@ class ProjectSerializer(serializers.ModelSerializer):
             'project_status_display',
 
             'project_description',
-            'status_date',
         )
 
 class ProjectField(serializers.Field):
