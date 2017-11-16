@@ -1,13 +1,18 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
-import { map } from 'ramda';
 import PropTypes from 'prop-types';
 
 import Navbar from './Navbar';
 import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
 import Notes from './Notes';
+
+import PlatsMiniSummary from './PlatsMiniSummary';
+import LotsMiniSummary from './LotsMiniSummary';
+import AgreementsMiniSummary from './AgreementsMiniSummary';
+import AccountLedgersMiniSummary from './AccountLedgersMiniSummary';
+import PaymentsMiniSummary from './PaymentsMiniSummary';
 
 import {
     getAccountID,
@@ -30,215 +35,13 @@ class AccountSummary extends React.Component {
             accountLedgers,
         } = this.props;
 
-        const plats_list = accounts.plat_account && accounts.plat_account.length > 0 &&
-            map((plat) => {
-                const cabinet = plat.cabinet ? `${plat.cabinet}-` : '';
-                const slide = plat.slide ? plat.slide : plat.name;
-                return (
-                    <div key={plat.id} className="col-xs-12">
-                        <div className="row form-subheading">
-                            <h3>{cabinet}{slide}</h3>
-                        </div>
-                        <div className="row link-row">
-                            <div className="col-xs-12 col-sm-5 col-sm-offset-7">
-                                <div className="col-xs-5">
-                                    {currentUser && currentUser.permissions && currentUser.permissions.plat &&
-                                        <Link to={`plat/form/${plat.id}`} aria-label="Edit">
-                                            <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
-                                            <div className="col-xs-7 link-label">
-                                                Edit
-                                            </div>
-                                        </Link>
-                                    }
-                                </div>
-                                <div className="col-xs-5 ">
-                                    <Link to={`plat/summary/${plat.id}`} aria-label="Summary">
-                                        <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
-                                        <div className="col-xs-7 link-label">
-                                            Summary
-                                        </div>
-                                    </Link>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="row">
-                            <p className="col-xs-12"><strong>{plat.is_approved ? 'Approved' : 'Not Approved'}</strong></p>
-                            <p className="col-sm-6 col-xs-12">Sewer Exactions: {plat.plat_exactions && plat.plat_exactions.plat_sewer_due}</p>
-                            <p className="col-sm-6 col-xs-12">Non-Sewer Exactions: {plat.plat_exactions && plat.plat_exactions.plat_non_sewer_due}</p>
-                            <p className="col-xs-6">Gross Acreage: {plat.cleaned_total_acreage}</p>
-                            <p className="col-xs-6">Expansion Area: {plat.expansion_area}</p>
-                        </div>
-                    </div>
-                );
-            })(accounts.plat_account);
-
-        const lots_list = accounts.lot_account && accounts.lot_account.length > 0 &&
-            map((lot) => {
-                return (
-                    <div key={lot.id} className="col-xs-12">
-                        <div className="row form-subheading">
-                            <h3>{lot.address_full}</h3>
-                        </div>
-                        <div className="row link-row">
-                            <div className="col-xs-12 col-sm-5 col-sm-offset-7">
-                                <div className="col-xs-5">
-                                    {currentUser && currentUser.permissions && currentUser.permissions.lot &&
-                                        <Link to={`lot/form/${lot.id}`} aria-label="Edit">
-                                            <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
-                                            <div className="col-xs-7 link-label">
-                                                Edit
-                                            </div>
-                                        </Link>
-                                    }
-                                </div>
-                                <div className="col-xs-5 ">
-                                    <Link to={`lot/summary/${lot.id}`} aria-label="Summary">
-                                        <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
-                                        <div className="col-xs-7 link-label">
-                                            Summary
-                                        </div>
-                                    </Link>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="row">
-                            <p className="col-xs-6">Current Exactions: {lot.lot_exactions && lot.lot_exactions.current_exactions}</p>
-                            <p className="col-xs-6"><strong>{lot.is_approved ? 'Approved' : 'Not Approved'}</strong></p>
-                            <p className="col-xs-6">Lot Number: {lot.lot_number}</p>
-                            <p className="col-xs-6">Parcel ID: {lot.parcel_id}</p>
-                        </div>
-                    </div>
-                );
-            })(accounts.lot_account);
-
-        const agreements_list = agreements && agreements.length > 0 &&
-            map((agreement) => {
-                return (
-                    <div key={agreement.id} className="col-xs-12">
-                        <div className="row form-subheading">
-                            <h3>Resolution: {agreement.resolution_number}</h3>
-                        </div>
-                        <div className="row link-row">
-                            <div className="col-xs-12 col-sm-5 col-sm-offset-7">
-                                <div className="col-xs-5">
-                                    {currentUser && currentUser.permissions && currentUser.permissions.agreement &&
-                                        <Link to={`agreement/form/${agreement.id}`} aria-label="Edit">
-                                            <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
-                                            <div className="col-xs-7 link-label">
-                                                Edit
-                                            </div>
-                                        </Link>
-                                    }
-                                </div>
-                                <div className="col-xs-5 ">
-                                    <Link to={`agreement/summary/${agreement.id}`} aria-label="Summary">
-                                        <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
-                                        <div className="col-xs-7 link-label">
-                                            Summary
-                                        </div>
-                                    </Link>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="row">
-                            <p className="col-xs-6">Current Balance: {agreement.agreement_balance && agreement.agreement_balance.total}</p>
-                            <p className="col-xs-6">Agreement Type: {agreement.agreement_type_display}</p>
-                            <p className="col-xs-6">Date Executed: {agreement.date_executed}</p>
-                            <p className="col-xs-6">Expansion Area: {agreement.expansion_area}</p>
-                        </div>
-                    </div>
-                );
-            })(agreements);
-
-        const payments_list = payments && payments.length > 0 &&
-            map((payment) => {
-                return (
-                    <div key={payment.id} className="col-xs-12">
-                        <div className="row form-subheading">
-                            <h3>Agreement Resolution: {payment.credit_source && payment.credit_source.resolution_number}</h3>
-                        </div>
-                        <div className="row link-row">
-                            <div className="col-xs-12 col-sm-5 col-sm-offset-7">
-                                <div className="col-xs-5">
-                                    {currentUser && currentUser.permissions && currentUser.permissions.payment &&
-                                        <Link to={`payment/form/${payment.id}`} aria-label="Edit">
-                                            <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
-                                            <div className="col-xs-7 link-label">
-                                                Edit
-                                            </div>
-                                        </Link>
-                                    }
-                                </div>
-                                <div className="col-xs-5 ">
-                                    <Link to={`payment/summary/${payment.id}`} aria-label="Summary">
-                                        <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
-                                        <div className="col-xs-7 link-label">
-                                            Summary
-                                        </div>
-                                    </Link>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="row">
-                            <h3 className="col-xs-12">Payment Total: {payment.total_paid}</h3>
-                            <p className="col-xs-6">Paid Sewer: ${(parseFloat(payment.paid_sewer_cap) + parseFloat(payment.paid_sewer_trans)).toLocaleString('en')}</p>
-                            <p className="col-xs-6">Paid Non-Sewer: ${(parseFloat(payment.paid_open_space) + parseFloat(payment.paid_parks) + parseFloat(payment.paid_roads) + parseFloat(payment.paid_storm)).toLocaleString('en')}</p>
-                            <p className="col-xs-6">Paid By: {payment.paid_by} ({payment.paid_by_type_display})</p>
-                            <p className="col-xs-6">Payment Type: {payment.payment_type_display} {payment.check_number ? `(#${payment.check_number})` : null}</p>
-                            <p className="col-xs-12">Lot: {payment.lot_id.address_full}</p>
-                        </div>
-                    </div>
-                );
-            })(payments);
-
-        const accountLedgers_list = accountLedgers && accountLedgers.length > 0 &&
-            map((accountLedger) => {
-                return (
-                    <div key={accountLedger.id} className="col-xs-12">
-                        <div className="row form-subheading">
-                            <h3>{accountLedger.entry_type_display}</h3>
-                        </div>
-                        <div className="row link-row">
-                            <div className="col-xs-12 col-sm-5 col-sm-offset-7">
-                                <div className="col-xs-5">
-                                    {currentUser && currentUser.permissions && currentUser.permissions.accountledger &&
-                                        <Link to={`credit-transfer/form/${accountLedger.id}`} aria-label="Edit">
-                                            <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
-                                            <div className="col-xs-7 link-label">
-                                                Edit
-                                            </div>
-                                        </Link>
-                                    }
-                                </div>
-                                <div className="col-xs-5 ">
-                                    <Link to={`credit-transfer/summary/${accountLedger.id}`} aria-label="Summary">
-                                        <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
-                                        <div className="col-xs-7 link-label">
-                                            Summary
-                                        </div>
-                                    </Link>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="row">
-                            <p className="col-sm-4 col-xs-6">Account From: {accountLedger.account_from.account_name}</p>
-                            <p className="col-sm-4 col-xs-6">Account To: {accountLedger.account_to.account_name}</p>
-                            <p className="col-sm-4 col-xs-6">Agreement: {accountLedger.agreement.resolution_number}</p>
-                            <p className="col-md-3 col-sm-4 col-xs-6">Non-Sewer Credits: {accountLedger.dollar_values && accountLedger.dollar_values.dollar_non_sewer}</p>
-                            <p className="col-md-3 col-sm-4 col-xs-6">Sewer Credits: {accountLedger.dollar_values && accountLedger.dollar_values.dollar_sewer}</p>
-                            <p className="col-xs-12">Lot: {accountLedger.lot && accountLedger.lot.address_full}</p>
-                        </div>
-                    </div>
-                );
-            })(accountLedgers);
-
         return (
             <div className="account-summary">
                 <Navbar />
 
                 <div className="form-header">
                     <div className="container">
-                        <h1>ACCOUNTS - SUMMARY</h1>
+                        <h1>ACCOUNT SUMMARY - {accounts.account_name}</h1>
                     </div>
                 </div>
 
@@ -273,7 +76,7 @@ class AccountSummary extends React.Component {
                                         <div className="col-xs-12 col-sm-5 col-sm-offset-7">
                                             <div className="col-xs-5 col-xs-offset-5">
                                                 {currentUser && currentUser.permissions && currentUser.permissions.account &&
-                                                    <Link to={`account/form/${accounts.id}`} aria-label="Edit">
+                                                    <Link to={`account/form/${accounts.id}`} aria-label={`Edit ${accounts.account_name}`}>
                                                         <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
                                                         <div className="col-xs-7 link-label">
                                                             Edit
@@ -305,185 +108,31 @@ class AccountSummary extends React.Component {
                                   permission="account"
                                 />
                             }
-                            {plats_list ? (
-                                <div>
-                                    <a
-                                      role="button"
-                                      data-toggle="collapse"
-                                      data-parent="#accordion"
-                                      href="#collapseAccountPlats"
-                                      aria-expanded="false"
-                                      aria-controls="collapseAccountPlats"
-                                    >
-                                        <div className="row section-heading" role="tab" id="headingAccountPlats">
-                                            <div className="col-xs-1 caret-indicator" />
-                                            <div className="col-xs-10">
-                                                <h3>Plats</h3>
-                                            </div>
-                                        </div>
-                                    </a>
-                                    <div
-                                      id="collapseAccountPlats"
-                                      className="panel-collapse collapse row"
-                                      role="tabpanel"
-                                      aria-labelledby="#headingAccountPlats"
-                                    >
-                                        <div className="panel-body">
-                                            <div className="col-xs-12">
-                                                {plats_list}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            ) : (
-                                <div className="row section-heading" role="tab" id="headingAccountPlats">
-                                    <h3>Plats - None</h3>
-                                </div>
-                            )}
 
-                            {lots_list ? (
-                                <div>
-                                    <a
-                                      role="button"
-                                      data-toggle="collapse"
-                                      data-parent="#accordion"
-                                      href="#collapseAccountLots"
-                                      aria-expanded="false"
-                                      aria-controls="collapseAccountLots"
-                                    >
-                                        <div className="row section-heading" role="tab" id="headingAccountLots">
-                                            <div className="col-xs-1 caret-indicator" />
-                                            <div className="col-xs-10">
-                                                <h3>Lots</h3>
-                                            </div>
-                                        </div>
-                                    </a>
-                                    <div
-                                      id="collapseAccountLots"
-                                      className="panel-collapse collapse row"
-                                      role="tabpanel"
-                                      aria-labelledby="#headingAccountLots"
-                                    >
-                                        <div className="panel-body">
-                                            <div className="col-xs-12">
-                                                {lots_list}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            ) : (
-                                <div className="row section-heading" role="tab" id="headingAccountLots">
-                                    <h3>Lots - None</h3>
-                                </div>
-                            )}
+                            <PlatsMiniSummary
+                              mapSet={accounts.plat_account}
+                              mapQualifier={accounts.plat_account && accounts.plat_account.length > 0}
+                            />
 
-                            {agreements_list ? (
-                                <div>
-                                    <a
-                                      role="button"
-                                      data-toggle="collapse"
-                                      data-parent="#accordion"
-                                      href="#collapseAccountAgreements"
-                                      aria-expanded="false"
-                                      aria-controls="collapseAccountAgreements"
-                                    >
-                                        <div className="row section-heading" role="tab" id="headingAccountAgreements">
-                                            <div className="col-xs-1 caret-indicator" />
-                                            <div className="col-xs-10">
-                                                <h3>Agreements</h3>
-                                            </div>
-                                        </div>
-                                    </a>
-                                    <div
-                                      id="collapseAccountAgreements"
-                                      className="panel-collapse collapse row"
-                                      role="tabpanel"
-                                      aria-labelledby="#headingAccountAgreements"
-                                    >
-                                        <div className="panel-body">
-                                            <div className="col-xs-12">
-                                                {agreements_list}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            ) : (
-                                <div className="row section-heading" role="tab" id="headingAccountAgreements">
-                                    <h3>Agreements - None</h3>
-                                </div>
-                            )}
+                            <LotsMiniSummary
+                              mapSet={accounts.lot_account}
+                              mapQualifier={accounts.lot_account && accounts.lot_account.length > 0}
+                            />
 
-                            {payments_list ? (
-                                <div>
-                                    <a
-                                      role="button"
-                                      data-toggle="collapse"
-                                      data-parent="#accordion"
-                                      href="#collapseAccountPayments"
-                                      aria-expanded="false"
-                                      aria-controls="collapseAccountPayments"
-                                    >
-                                        <div className="row section-heading" role="tab" id="headingAccountPayments">
-                                            <div className="col-xs-1 caret-indicator" />
-                                            <div className="col-xs-10">
-                                                <h3>Payments</h3>
-                                            </div>
-                                        </div>
-                                    </a>
-                                    <div
-                                      id="collapseAccountPayments"
-                                      className="panel-collapse collapse row"
-                                      role="tabpanel"
-                                      aria-labelledby="#headingAccountPayments"
-                                    >
-                                        <div className="panel-body">
-                                            <div className="col-xs-12">
-                                                {payments_list}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            ) : (
-                                <div className="row section-heading" role="tab" id="headingAccountPayments">
-                                    <h3>Payments - None</h3>
-                                </div>
-                            )}
+                            <AgreementsMiniSummary
+                              mapSet={agreements}
+                              mapQualifier={agreements && agreements.length > 0}
+                            />
 
-                            {accountLedgers_list ? (
-                                <div>
-                                    <a
-                                      role="button"
-                                      data-toggle="collapse"
-                                      data-parent="#accordion"
-                                      href="#collapseAccountLedgers"
-                                      aria-expanded="false"
-                                      aria-controls="collapseAccountLedgers"
-                                    >
-                                        <div className="row section-heading" role="tab" id="headingAccountLedgers">
-                                            <div className="col-xs-1 caret-indicator" />
-                                            <div className="col-xs-10">
-                                                <h3>Credit Transfers</h3>
-                                            </div>
-                                        </div>
-                                    </a>
-                                    <div
-                                      id="collapseAccountLedgers"
-                                      className="panel-collapse collapse row"
-                                      role="tabpanel"
-                                      aria-labelledby="#headingAccountLedgers"
-                                    >
-                                        <div className="panel-body">
-                                            <div className="col-xs-12">
-                                                {accountLedgers_list}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            ) : (
-                                <div className="row section-heading" role="tab" id="headingAccountLedgers">
-                                    <h3>Credit Transfers - None</h3>
-                                </div>
-                            )}
+                            <PaymentsMiniSummary
+                              mapSet={payments}
+                              mapQualifier={payments && payments.length > 0}
+                            />
+
+                            <AccountLedgersMiniSummary
+                              mapSet={accountLedgers}
+                              mapQualifier={accountLedgers && accountLedgers.length > 0}
+                            />
 
                         </div>
                     </div>

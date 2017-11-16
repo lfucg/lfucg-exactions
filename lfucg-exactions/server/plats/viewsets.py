@@ -93,7 +93,7 @@ class LotViewSet(viewsets.ModelViewSet):
     permission_classes = (CanAdminister,)
     filter_backends = (DjangoFilterBackend, filters.SearchFilter,)
     search_fields = ('address_full', 'lot_number', 'parcel_id', 'permit_id', 'plat__expansion_area', 'plat__name', )
-    filter_fields = ('account', 'plat', 'is_approved',)
+    filter_fields = ('account', 'plat', 'is_approved', 'plat__subdivision')
 
 
     def get_queryset(self):

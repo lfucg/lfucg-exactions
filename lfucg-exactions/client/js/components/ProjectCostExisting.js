@@ -9,6 +9,7 @@ import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
 import Pagination from './Pagination';
 import SearchBar from './SearchBar';
+import ExistingPageLinks from './ExistingPageLinks';
 
 import {
     getPagination,
@@ -41,36 +42,14 @@ class ProjectCostExisting extends React.Component {
                 return (
                     <div key={projectCost.id} className="col-xs-12">
                         {(currentUser.id || projectCost.is_approved) && <div>
-                            <div className={projectCost.is_approved ? 'row form-subheading' : 'row unapproved-heading'}>
-                                <div className="col-sm-11">
-                                    <h3>
-                                        Project Cost Category: {projectCost.estimate_type}
-                                        {!projectCost.is_approved && <span className="pull-right">Approval Pending</span>}
-                                    </h3>
-                                </div>
-                            </div>
-                            <div className={projectCost.is_approved ? 'row link-row' : 'row link-row-approval-pending'}>
-                                <div className="col-xs-12 col-sm-5 col-sm-offset-7">
-                                    <div className="col-xs-5">
-                                        {currentUser && currentUser.permissions && currentUser.permissions.projectcostestimate &&
-                                            <Link to={`project-cost/form/${projectCost.id}`} aria-label="Edit">
-                                                <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
-                                                <div className="col-xs-7 link-label">
-                                                    Edit
-                                                </div>
-                                            </Link>
-                                        }
-                                    </div>
-                                    <div className="col-xs-5 ">
-                                        <Link to={`project-cost/summary/${projectCost.id}`} aria-label="Summary">
-                                            <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
-                                            <div className="col-xs-7 link-label">
-                                                Summary
-                                            </div>
-                                        </Link>
-                                    </div>
-                                </div>
-                            </div>
+                            <ExistingPageLinks
+                              linkStart="project-cost"
+                              approval={projectCost.is_approved}
+                              title={`Project Cost Category: ${projectCost.estimate_type}`}
+                              permissionModel="projectcostestimate"
+                              instanceID={projectCost.id}
+                              uniqueReport={false}
+                            />
                             <div className="row">
                                 <div className="col-sm-offset-1">
                                     <p className="col-xs-12">Project: {projectCost.project_id.name}</p>
@@ -102,6 +81,7 @@ class ProjectCostExisting extends React.Component {
                     { filterField: 'filter_project_id', displayName: 'Project', list: projectsList },
                     { filterField: 'filter_is_approved', displayName: 'Approval', list: [{ id: true, name: 'Approved' }, { id: false, name: 'Unapproved' }] },
                   ]}
+                  currentPage="Project Costs"
                   csvEndpoint="../api/project_estimate_search_csv/?"
                 />
 

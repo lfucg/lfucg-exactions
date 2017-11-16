@@ -10,6 +10,7 @@ import Breadcrumbs from './Breadcrumbs';
 import Pagination from './Pagination';
 import SearchBar from './SearchBar';
 import LoadingScreen from './LoadingScreen';
+import ExistingPageLinks from './ExistingPageLinks';
 
 import { entry_types } from '../constants/searchBarConstants';
 
@@ -68,36 +69,14 @@ class AccountLedgerExisting extends React.Component {
                 return (
                     <div key={accountLedger.id} className="col-xs-12">
                         {(currentUser.id || accountLedger.is_approved) && <div>
-                            <div className={accountLedger.is_approved ? 'row form-subheading' : 'row unapproved-heading'}>
-                                <div className="col-sm-11">
-                                    <h3>
-                                        {accountLedger.entry_type_display}
-                                        {!accountLedger.is_approved && <span className="pull-right">Approval Pending</span>}
-                                    </h3>
-                                </div>
-                            </div>
-                            <div className={accountLedger.is_approved ? 'row link-row' : 'row link-row-approval-pending'}>
-                                <div className="col-xs-12 col-sm-5 col-sm-offset-7">
-                                    <div className="col-xs-5">
-                                        {currentUser && currentUser.permissions && currentUser.permissions.accountledger &&
-                                            <Link to={`credit-transfer/form/${accountLedger.id}`} aria-label="Edit">
-                                                <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
-                                                <div className="col-xs-7 link-label">
-                                                    Edit
-                                                </div>
-                                            </Link>
-                                        }
-                                    </div>
-                                    <div className="col-xs-5 ">
-                                        <Link to={`credit-transfer/summary/${accountLedger.id}`} aria-label="Summary">
-                                            <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
-                                            <div className="col-xs-7 link-label">
-                                                Summary
-                                            </div>
-                                        </Link>
-                                    </div>
-                                </div>
-                            </div>
+                            <ExistingPageLinks
+                              linkStart="credit-transfer"
+                              approval={accountLedger.is_approved}
+                              title={accountLedger.entry_type_display}
+                              permissionModel="accountledger"
+                              instanceID={accountLedger.id}
+                              uniqueReport={false}
+                            />
                             <div className="row">
                                 <div className="col-sm-offset-1">
                                     { accountLedger.account_from &&
@@ -144,6 +123,7 @@ class AccountLedgerExisting extends React.Component {
                     { filterField: 'filter_lot', displayName: 'Lots', list: lotsList },
                     { filterField: 'filter_is_approved', displayName: 'Approval', list: [{ id: true, name: 'Approved' }, { id: false, name: 'Unapproved' }] },
                   ]}
+                  currentPage="Credit Transfers"
                   csvEndpoint="../api/ledger_search_csv/?"
                 />
 
