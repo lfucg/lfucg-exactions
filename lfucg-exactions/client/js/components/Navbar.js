@@ -32,7 +32,7 @@ class Navbar extends React.Component {
                                     <img className="navbar-brand" src={`${window.StaticURL}images/Lexington_Web_Color_Horse_Only.png`} alt="#" aria-hidden />
                                 </Link>
                             :
-                                <Link to="dashboard/" aria-label="Exactions Home" role="link" >
+                                <Link to="dashboard/" aria-label="Exactions Home" role="link" autoFocus >
                                     <img className="navbar-brand" src={`${window.StaticURL}images/lexington-logo.svg`} alt="#" aria-hidden />
                                 </Link>
                             }
