@@ -10,7 +10,7 @@ class LoadingScreen extends React.Component {
     render() {
         return (
             <div className="row text-center">
-                <h5 className="sr-only">Loading...</h5>
+                <h5>Loading...</h5>
                 <i className="fa fa-spinner fa-pulse fa-3x fa-fw" />
             </div>
         );
