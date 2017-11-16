@@ -9,6 +9,7 @@ import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
 import Pagination from './Pagination';
 import SearchBar from './SearchBar';
+import LoadingScreen from './LoadingScreen';
 
 import { entry_types } from '../constants/searchBarConstants';
 
@@ -18,6 +19,10 @@ import {
     getLots,
     getAccounts,
 } from '../actions/apiActions';
+
+import {
+    formUpdate,
+} from '../actions/formActions';
 
 class AccountLedgerExisting extends React.Component {
     componentDidMount() {
@@ -31,6 +36,7 @@ class AccountLedgerExisting extends React.Component {
             lots,
             agreements,
             accounts,
+            activeForm,
         } = this.props;
 
         const agreementsList = agreements && agreements.length > 0 &&
@@ -143,8 +149,13 @@ class AccountLedgerExisting extends React.Component {
 
                 <div className="inside-body">
                     <div className="container">
-                        {accountLedgers_list}
-                        {accountLedgers_list ? <Pagination /> : <h1>No Results Found</h1>}
+                        {activeForm.loading ? <LoadingScreen /> :
+                        (
+                            <div>
+                                {accountLedgers_list}
+                                {accountLedgers_list ? <Pagination /> : <h1>No Results Found</h1>}
+                            </div>
+                        )}
                     </div>
                 </div>
                 <Footer />
@@ -161,6 +172,7 @@ AccountLedgerExisting.propTypes = {
     agreements: PropTypes.array,
     lots: PropTypes.array,
     accounts: PropTypes.array,
+    activeForm: PropTypes.object,
 };
 
 function mapStateToProps(state) {
@@ -170,13 +182,17 @@ function mapStateToProps(state) {
         agreements: state.agreements,
         lots: state.lots,
         accounts: state.accounts,
+        activeForm: state.activeForm,
     };
 }
 
 function mapDispatchToProps(dispatch) {
     return {
         onComponentDidMount() {
-            dispatch(getPagination('/ledger/'));
+            dispatch(getPagination('/ledger/'))
+            .then(() => {
+                dispatch(formUpdate({ loading: false }));
+            });
         },
     };
 }
