@@ -11,6 +11,7 @@ import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
 import Uploads from './Uploads';
 import Notes from './Notes';
+import LoadingScreen from './LoadingScreen';
 
 import FormGroup from './FormGroup';
 import DeclineDelete from './DeclineDelete';
@@ -73,105 +74,108 @@ class ProjectCostForm extends React.Component {
 
                 <div className="inside-body">
                     <div className="container">
-                        <div className="col-sm-offset-1 col-sm-10">
-                            {currentParam && projectCosts.is_approved === false && <div className="row"><h1 className="approval-pending">Approval Pending</h1></div>}
-                            <form >
+                        {activeForm.loading ? <LoadingScreen /> :
+                        (
+                            <div className="col-sm-offset-1 col-sm-10">
+                                {currentParam && projectCosts.is_approved === false && <div className="row"><h1 className="approval-pending">Approval Pending</h1></div>}
+                                <form >
 
-                                <fieldset>
-                                    <div className="row">
-                                        <div className="col-sm-6 form-group">
-                                            <label htmlFor="project_id" className="form-label" id="project_id" aria-label="* Project" aria-required="true">* Project</label>
-                                            <select className="form-control" id="project_id" onChange={formChange('project_id')} value={activeForm.project_id_show} >
-                                                <option value="start_project">* Project</option>
-                                                {projectsList}
-                                            </select>
+                                    <fieldset>
+                                        <div className="row">
+                                            <div className="col-sm-6 form-group">
+                                                <label htmlFor="project_id" className="form-label" id="project_id" aria-label="* Project" aria-required="true">* Project</label>
+                                                <select className="form-control" id="project_id" onChange={formChange('project_id')} value={activeForm.project_id_show} >
+                                                    <option value="start_project">* Project</option>
+                                                    {projectsList}
+                                                </select>
+                                            </div>
+                                            <div className="col-sm-6">
+                                                <FormGroup label="* Estimate Type" id="estimate_type">
+                                                    <input type="text" className="form-control" placeholder="* Estimate Type" aria-required="true" />
+                                                </FormGroup>
+                                            </div>
                                         </div>
-                                        <div className="col-sm-6">
-                                            <FormGroup label="* Estimate Type" id="estimate_type">
-                                                <input type="text" className="form-control" placeholder="* Estimate Type" aria-required="true" />
-                                            </FormGroup>
+                                        <div className="row">
+                                            <div className="col-sm-6">
+                                                <FormGroup label="Land Cost" id="land_cost">
+                                                    <input type="number" step="0.01" className="form-control" placeholder="Land Cost" />
+                                                </FormGroup>
+                                            </div>
+                                            <div className="col-sm-6">
+                                                <FormGroup label="Design Cost" id="design_cost">
+                                                    <input type="number" step="0.01" className="form-control" placeholder="Design Cost" />
+                                                </FormGroup>
+                                            </div>
                                         </div>
+                                        <div className="row">
+                                            <div className="col-sm-6">
+                                                <FormGroup label="Construction Cost" id="construction_cost">
+                                                    <input type="number" step="0.01" className="form-control" placeholder="Construction Cost" />
+                                                </FormGroup>
+                                            </div>
+                                            <div className="col-sm-6">
+                                                <FormGroup label="Administrative Cost" id="admin_cost">
+                                                    <input type="number" step="0.01" className="form-control" placeholder="Administrative Cost" />
+                                                </FormGroup>
+                                            </div>
+                                        </div>
+                                        <div className="row">
+                                            <div className="col-sm-6">
+                                                <FormGroup label="Management Cost" id="management_cost">
+                                                    <input type="number" step="0.01" className="form-control" placeholder="Management Cost" />
+                                                </FormGroup>
+                                            </div>
+                                            <div className="col-sm-6">
+                                                <FormGroup label="Other Costs" id="other_cost">
+                                                    <input type="number" step="0.01" className="form-control" placeholder="Other Costs" />
+                                                </FormGroup>
+                                            </div>
+                                        </div>
+                                        <div className="row">
+                                            <div className="col-sm-6">
+                                                <FormGroup label="* Credits Available" id="credits_available">
+                                                    <input type="number" step="0.01" className="form-control" placeholder="* Credits Available" aria-required="true" />
+                                                </FormGroup>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                    <div className="col-xs-8">
+                                        <button disabled={!submitEnabled} className="btn btn-lex" onClick={onSubmit} >
+                                            {currentUser.is_superuser || (currentUser.profile && currentUser.profile.is_supervisor) ? <div>Submit / Approve</div> : <div>Submit</div>}
+                                        </button>
+                                        {!submitEnabled ? (
+                                            <div>
+                                                <div className="clearfix" />
+                                                <span> * All required fields must be filled.</span>
+                                            </div>
+                                        ) : null
+                                        }
                                     </div>
-                                    <div className="row">
-                                        <div className="col-sm-6">
-                                            <FormGroup label="Land Cost" id="land_cost">
-                                                <input type="number" step="0.01" className="form-control" placeholder="Land Cost" />
-                                            </FormGroup>
-                                        </div>
-                                        <div className="col-sm-6">
-                                            <FormGroup label="Design Cost" id="design_cost">
-                                                <input type="number" step="0.01" className="form-control" placeholder="Design Cost" />
-                                            </FormGroup>
-                                        </div>
+                                    <div className="col-xs-4">
+                                        <DeclineDelete currentForm="/estimate/" selectedEntry={selectedProjectCost} parentRoute="project-cost" />
                                     </div>
-                                    <div className="row">
-                                        <div className="col-sm-6">
-                                            <FormGroup label="Construction Cost" id="construction_cost">
-                                                <input type="number" step="0.01" className="form-control" placeholder="Construction Cost" />
-                                            </FormGroup>
-                                        </div>
-                                        <div className="col-sm-6">
-                                            <FormGroup label="Administrative Cost" id="admin_cost">
-                                                <input type="number" step="0.01" className="form-control" placeholder="Administrative Cost" />
-                                            </FormGroup>
-                                        </div>
-                                    </div>
-                                    <div className="row">
-                                        <div className="col-sm-6">
-                                            <FormGroup label="Management Cost" id="management_cost">
-                                                <input type="number" step="0.01" className="form-control" placeholder="Management Cost" />
-                                            </FormGroup>
-                                        </div>
-                                        <div className="col-sm-6">
-                                            <FormGroup label="Other Costs" id="other_cost">
-                                                <input type="number" step="0.01" className="form-control" placeholder="Other Costs" />
-                                            </FormGroup>
-                                        </div>
-                                    </div>
-                                    <div className="row">
-                                        <div className="col-sm-6">
-                                            <FormGroup label="* Credits Available" id="credits_available">
-                                                <input type="number" step="0.01" className="form-control" placeholder="* Credits Available" aria-required="true" />
-                                            </FormGroup>
-                                        </div>
-                                    </div>
-                                </fieldset>
-                                <div className="col-xs-8">
-                                    <button disabled={!submitEnabled} className="btn btn-lex" onClick={onSubmit} >
-                                        {currentUser.is_superuser || (currentUser.profile && currentUser.profile.is_supervisor) ? <div>Submit / Approve</div> : <div>Submit</div>}
-                                    </button>
-                                    {!submitEnabled ? (
-                                        <div>
-                                            <div className="clearfix" />
-                                            <span> * All required fields must be filled.</span>
-                                        </div>
-                                    ) : null
-                                    }
-                                </div>
-                                <div className="col-xs-4">
-                                    <DeclineDelete currentForm="/estimate/" selectedEntry={selectedProjectCost} parentRoute="project-cost" />
-                                </div>
-                            </form>
-                            <div className="clearfix" />
-                            {projectCosts.id &&
-                                <Uploads
-                                  file_content_type="accounts_projectcostestimate"
-                                  file_object_id={projectCosts.id}
-                                  ariaExpanded="true"
-                                  panelClass="panel-collapse collapse row in"
-                                  permission="projectcostestimate"
-                                />
-                            }
-                            {selectedProjectCost &&
-                                <Notes
-                                  content_type="accounts_projectcostestimate"
-                                  object_id={selectedProjectCost}
-                                  ariaExpanded="true"
-                                  panelClass="panel-collapse collapse row in"
-                                  permission="projectcostestimate"
-                                />
-                            }
-                        </div>
+                                </form>
+                                <div className="clearfix" />
+                                {projectCosts.id &&
+                                    <Uploads
+                                      file_content_type="accounts_projectcostestimate"
+                                      file_object_id={projectCosts.id}
+                                      ariaExpanded="true"
+                                      panelClass="panel-collapse collapse row in"
+                                      permission="projectcostestimate"
+                                    />
+                                }
+                                {selectedProjectCost &&
+                                    <Notes
+                                      content_type="accounts_projectcostestimate"
+                                      object_id={selectedProjectCost}
+                                      ariaExpanded="true"
+                                      panelClass="panel-collapse collapse row in"
+                                      permission="projectcostestimate"
+                                    />
+                                }
+                            </div>
+                        )}
                     </div>
                 </div>
 
@@ -209,6 +213,7 @@ function mapDispatchToProps(dispatch, params) {
     return {
         onComponentDidMount() {
             dispatch(formInit());
+            dispatch(formUpdate({ loading: true }));
             dispatch(getProjects());
             if (selectedProjectCost) {
                 dispatch(getProjectCostID(selectedProjectCost))
@@ -223,12 +228,14 @@ function mapDispatchToProps(dispatch, params) {
                         admin_cost: data_project_cost.response.admin_cost,
                         management_cost: data_project_cost.response.management_cost,
                         credits_available: data_project_cost.response.credits_available,
+                        loading: false,
                     };
                     dispatch(formUpdate(update));
                 });
             } else {
                 const initial_constants = {
                     project_id_show: '',
+                    loading: false,
                 };
                 dispatch(formUpdate(initial_constants));
             }
