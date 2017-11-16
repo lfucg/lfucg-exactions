@@ -29,6 +29,7 @@ import {
 
     GET_LOTS,
     GET_LOT_ID,
+    GET_SUBDIVISION_LOTS,
     GET_PLAT_LOTS,
     POST_LOT,
     PUT_LOT,
@@ -482,6 +483,14 @@ export function getLotID(selectedLot) {
     };
 }
 
+export function getSubdivisionLots(selectedSubdivision) {
+    return {
+        type: API_CALL,
+        endpoint: GET_SUBDIVISION_LOTS,
+        url: `/lot/?plat__subdivision=${selectedSubdivision}`,
+    };
+}
+
 export function getPlatLots(selectedPlat) {
     return {
         type: API_CALL,
@@ -545,7 +554,7 @@ export function postLot() {
                 address_city,
                 address_state,
                 address_zip,
-                address_full: `${address_number} ${address_direction ? address_direction : ''} ${address_street} ${address_suffix ? address_suffix : ''} ${address_unit ? address_unit : ''}, Lexington, KY ${address_zip}`,
+                address_full: `${address_number} ${address_direction ? address_direction : ''} ${address_street} ${address_suffix ? address_suffix : ''} ${address_unit ? address_unit : ''}, Lexington, KY ${address_zip ? address_zip : ''}`,
                 dues_roads_dev,
                 dues_roads_own,
                 dues_sewer_trans_dev,
@@ -621,7 +630,7 @@ export function putLot(selectedLot) {
                 address_city,
                 address_state,
                 address_zip,
-                address_full: `${address_number} ${address_direction ? address_direction : ''} ${address_street} ${address_suffix ? address_suffix : ''} ${address_unit ? address_unit : ''}, Lexington, KY ${address_zip}`,
+                address_full: `${address_number} ${address_direction ? address_direction : ''} ${address_street} ${address_suffix ? address_suffix : ''} ${address_unit ? address_unit : ''}, Lexington, KY ${address_zip ? address_zip : ''}`,
                 dues_roads_dev,
                 dues_roads_own,
                 dues_sewer_trans_dev,
