@@ -10,6 +10,11 @@ import Breadcrumbs from './Breadcrumbs';
 import Pagination from './Pagination';
 import SearchBar from './SearchBar';
 import ExistingPageLinks from './ExistingPageLinks';
+import LoadingScreen from './LoadingScreen';
+
+import {
+    formUpdate,
+} from '../actions/formActions';
 
 import {
     getPagination,
@@ -32,6 +37,7 @@ class PlatExisting extends React.Component {
             accounts,
             subdivisions,
             lots,
+            activeForm,
         } = this.props;
 
         const lotsList = lots && lots.length > 0 &&
@@ -117,8 +123,13 @@ class PlatExisting extends React.Component {
 
                 <div className="inside-body">
                     <div className="container">
-                        {plats_list}
-                        {plats_list ? <Pagination /> : <h1>No Results Found</h1>}
+                        {activeForm.loading ? <LoadingScreen /> :
+                        (
+                            <div>
+                                {plats_list}
+                                {plats_list ? <Pagination /> : <h1>No Results Found</h1>}
+                            </div>
+                        )}
                     </div>
                 </div>
                 <Footer />
@@ -134,6 +145,7 @@ PlatExisting.propTypes = {
     subdivisions: PropTypes.array,
     lots: PropTypes.array,
     route: PropTypes.object,
+    activeForm: PropTypes.object,
     onComponentDidMount: PropTypes.func,
 };
 
@@ -144,13 +156,17 @@ function mapStateToProps(state) {
         accounts: state.accounts,
         subdivisions: state.subdivisions,
         lots: state.lots,
+        activeForm: state.activeForm,
     };
 }
 
 function mapDispatchToProps(dispatch) {
     return {
         onComponentDidMount() {
-            dispatch(getPagination('/plat/'));
+            dispatch(getPagination('/plat/'))
+            .then(() => {
+                dispatch(formUpdate({ loading: false }));
+            });
         },
     };
 }

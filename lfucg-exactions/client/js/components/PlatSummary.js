@@ -12,6 +12,11 @@ import Uploads from './Uploads';
 
 import LotsMiniSummary from './LotsMiniSummary';
 import AccountsMiniSummary from './AccountsMiniSummary';
+import LoadingScreen from './LoadingScreen';
+
+import {
+    formUpdate,
+} from '../actions/formActions';
 
 import {
     getPlatID,
@@ -31,6 +36,7 @@ class PlatSummary extends React.Component {
             plats,
             lots,
             accounts,
+            activeForm,
         } = this.props;
 
         const platZonesList = plats.plat_zone && (map((single_plat_zone) => {
@@ -96,91 +102,36 @@ class PlatSummary extends React.Component {
 
                 <div className="inside-body">
                     <div className="container">
-                        <div className="col-md-offset-1 col-md-10 panel-group" id="accordion" role="tablist" aria-multiselectable="false">
-                            <a
-                              role="button"
-                              data-toggle="collapse"
-                              data-parent="#accordion"
-                              href="#collapseGeneralPlat"
-                              aria-expanded="false"
-                              aria-controls="collapseGeneralPlat"
-                            >
-                                <div className="row section-heading" role="tab" id="headingPlat">
-                                    <div className="col-xs-1 caret-indicator" />
-                                    <div className="col-xs-10">
-                                        <h3>General Plat Information</h3>
-                                    </div>
-                                </div>
-                            </a>
-                            <div
-                              id="collapseGeneralPlat"
-                              className="panel-collapse collapse row"
-                              role="tabpanel"
-                              aria-labelledby="#headingPlat"
-                            >
-                                <div className="panel-body">
-                                    <div className="row link-row">
-                                        <div className="col-xs-12 col-sm-5 col-sm-offset-7">
-                                            <div className="col-xs-5 col-xs-offset-5">
-                                                {currentUser && currentUser.permissions && currentUser.permissions.plat &&
-                                                    <Link to={`plat/form/${plats.id}`} aria-label={`Edit ${plats.cabinet} ${plats.slide}`}>
-                                                        <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
-                                                        <div className="col-xs-7 link-label">
-                                                            Edit
-                                                        </div>
-                                                    </Link>
-                                                }
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="col-xs-12">
-                                        <h3 className="col-xs-6">Plat: {plats.cabinet}-{plats.slide}</h3>
-                                        <h3 className="col-xs-6">{plats.is_approved ? 'Approved' : 'Not Approved'}</h3>
-                                        <p className="col-xs-6">Name: {plats.name}</p>
-                                        <p className="col-xs-6">Subdivision: {plats.subdivision ? plats.subdivision.name : null}</p>
-                                        <p className="col-xs-6">Plat Type: {plats.plat_type_display}</p>
-                                        <p className="col-xs-6">Expansion Area: {plats.expansion_area}</p>
-                                        <p className="col-xs-6">Gross Acreage: {plats.cleaned_total_acreage}</p>
-                                        <p className="col-xs-6">Unit: {plats.unit}</p>
-                                        <p className="col-xs-6">Section: {plats.section}</p>
-                                        <p className="col-xs-6">Block: {plats.block}</p>
-                                        <p className="col-xs-6">Buildable Lots: {plats.buildable_lots}</p>
-                                        <p className="col-xs-6">Non-Buildable Lots: {plats.non_buildable_lots}</p>
-                                        <p className="col-xs-6">Current Sewer Due: {plats.plat_exactions && plats.plat_exactions.plat_sewer_due}</p>
-                                        <p className="col-xs-6">Current Non-Sewer Due: {plats.plat_exactions && plats.plat_exactions.plat_non_sewer_due}</p>
-                                        <p className="col-xs-12">Calculation Note: {plats.calculation_note}</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            { platZonesList && <div>
+                        {activeForm.loading ? <LoadingScreen /> :
+                        (
+                            <div className="col-md-offset-1 col-md-10 panel-group" id="accordion" role="tablist" aria-multiselectable="false">
                                 <a
                                   role="button"
                                   data-toggle="collapse"
                                   data-parent="#accordion"
-                                  href="#collapsePlatZones"
+                                  href="#collapseGeneralPlat"
                                   aria-expanded="false"
-                                  aria-controls="collapsePlatZones"
+                                  aria-controls="collapseGeneralPlat"
                                 >
-                                    <div className="row section-heading" role="tab" id="headingPlatZone">
+                                    <div className="row section-heading" role="tab" id="headingPlat">
                                         <div className="col-xs-1 caret-indicator" />
                                         <div className="col-xs-10">
-                                            <h3>Plat Zones</h3>
+                                            <h3>General Plat Information</h3>
                                         </div>
                                     </div>
                                 </a>
                                 <div
-                                  id="collapsePlatZones"
+                                  id="collapseGeneralPlat"
                                   className="panel-collapse collapse row"
                                   role="tabpanel"
-                                  aria-labelledby="#headingPlatZone"
+                                  aria-labelledby="#headingPlat"
                                 >
                                     <div className="panel-body">
                                         <div className="row link-row">
                                             <div className="col-xs-12 col-sm-5 col-sm-offset-7">
                                                 <div className="col-xs-5 col-xs-offset-5">
                                                     {currentUser && currentUser.permissions && currentUser.permissions.plat &&
-                                                        <Link to={`plat/form/${plats.id}`} aria-label="Edit plat zones">
+                                                        <Link to={`plat/form/${plats.id}`} aria-label={`Edit ${plats.cabinet} ${plats.slide}`}>
                                                             <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
                                                             <div className="col-xs-7 link-label">
                                                                 Edit
@@ -191,43 +142,53 @@ class PlatSummary extends React.Component {
                                             </div>
                                         </div>
                                         <div className="col-xs-12">
-                                            <div className="col-xs-12">
-                                                { platZonesList }
-                                            </div>
+                                            <h3 className="col-xs-6">Plat: {plats.cabinet}-{plats.slide}</h3>
+                                            <h3 className="col-xs-6">{plats.is_approved ? 'Approved' : 'Not Approved'}</h3>
+                                            <p className="col-xs-6">Name: {plats.name}</p>
+                                            <p className="col-xs-6">Subdivision: {plats.subdivision ? plats.subdivision.name : null}</p>
+                                            <p className="col-xs-6">Plat Type: {plats.plat_type_display}</p>
+                                            <p className="col-xs-6">Expansion Area: {plats.expansion_area}</p>
+                                            <p className="col-xs-6">Gross Acreage: {plats.cleaned_total_acreage}</p>
+                                            <p className="col-xs-6">Unit: {plats.unit}</p>
+                                            <p className="col-xs-6">Section: {plats.section}</p>
+                                            <p className="col-xs-6">Block: {plats.block}</p>
+                                            <p className="col-xs-6">Buildable Lots: {plats.buildable_lots}</p>
+                                            <p className="col-xs-6">Non-Buildable Lots: {plats.non_buildable_lots}</p>
+                                            <p className="col-xs-6">Current Sewer Due: {plats.plat_exactions && plats.plat_exactions.plat_sewer_due}</p>
+                                            <p className="col-xs-6">Current Non-Sewer Due: {plats.plat_exactions && plats.plat_exactions.plat_non_sewer_due}</p>
+                                            <p className="col-xs-12">Calculation Note: {plats.calculation_note}</p>
                                         </div>
                                     </div>
                                 </div>
-                            </div>}
 
-                            { plats && plats.plat_zone &&
-                                <div>
+                                { platZonesList && <div>
                                     <a
                                       role="button"
                                       data-toggle="collapse"
                                       data-parent="#accordion"
-                                      href="#collapsePlatExactions"
+                                      href="#collapsePlatZones"
                                       aria-expanded="false"
-                                      aria-controls="collapsePlatExactions"
+                                      aria-controls="collapsePlatZones"
                                     >
-                                        <div className="row section-heading" role="tab" id="headingPlatExactions">
+                                        <div className="row section-heading" role="tab" id="headingPlatZone">
                                             <div className="col-xs-1 caret-indicator" />
                                             <div className="col-xs-10">
-                                                <h3>Plat Exactions</h3>
+                                                <h3>Plat Zones</h3>
                                             </div>
                                         </div>
                                     </a>
                                     <div
-                                      id="collapsePlatExactions"
+                                      id="collapsePlatZones"
                                       className="panel-collapse collapse row"
                                       role="tabpanel"
-                                      aria-labelledby="#headingPlatExactions"
+                                      aria-labelledby="#headingPlatZone"
                                     >
                                         <div className="panel-body">
                                             <div className="row link-row">
                                                 <div className="col-xs-12 col-sm-5 col-sm-offset-7">
                                                     <div className="col-xs-5 col-xs-offset-5">
                                                         {currentUser && currentUser.permissions && currentUser.permissions.plat &&
-                                                            <Link to={`plat/form/${plats.id}`} aria-label={`Edit ${plats.cabinet} ${plats.slide} plat exactions`}>
+                                                            <Link to={`plat/form/${plats.id}`} aria-label="Edit plat zones">
                                                                 <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
                                                                 <div className="col-xs-7 link-label">
                                                                     Edit
@@ -239,93 +200,141 @@ class PlatSummary extends React.Component {
                                             </div>
                                             <div className="col-xs-12">
                                                 <div className="col-xs-12">
-                                                    <div className="col-xs-6 col-sm-5 col-md-3">
-                                                        <div className="col-xs-12 table-border">
-                                                            <h4>Zone</h4>
-                                                        </div>
-                                                        <div className="col-xs-12 table-border">
-                                                            <p>Gross Acreage</p>
-                                                        </div>
-                                                        <div className="col-xs-12 table-border">
-                                                            <p>Roads</p>
-                                                        </div>
-                                                        <div className="col-xs-12 table-border">
-                                                            <p>Open Space</p>
-                                                        </div>
-                                                        <div className="col-xs-12 table-border">
-                                                            <p>Sewer Capacity</p>
-                                                        </div>
-                                                        <div className="col-xs-12 table-border">
-                                                            <p>Sewer Trans.</p>
-                                                        </div>
-                                                        <div className="col-xs-12 table-border">
-                                                            <p>Parks</p>
-                                                        </div>
-                                                        <div className="col-xs-12 table-border">
-                                                            <p>Storm Water</p>
-                                                        </div>
-                                                    </div>
-                                                    <div className="col-xs-6 col-sm-7 col-md-9">
-                                                        {platZoneExactions}
-                                                    </div>
-                                                </div>
-                                                <div className="col-xs-12">
-                                                    <div className="row">
-                                                        <h3>Plat Exactions</h3>
-                                                    </div>
-                                                    <div className="row">
-                                                        <div className="col-xs-6 text-center">
-                                                            <p>Sewer Dues: {plats.plat_exactions && plats.plat_exactions.plat_sewer_due}</p>
-                                                        </div>
-                                                        <div className="col-xs-6 text-center">
-                                                            <p>Non-Sewer Dues: {plats.plat_exactions && plats.plat_exactions.plat_non_sewer_due}</p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="col-xs-12">
-                                                <h4>Calculation Notes:</h4>
-                                                <div className="col-xs-12">
-                                                    <p>{plats.calculation_note}</p>
+                                                    { platZonesList }
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            }
-                            {plats && plats.id &&
-                                <Notes
-                                  content_type="plats_plat"
-                                  object_id={plats.id}
-                                  ariaExpanded="false"
-                                  panelClass="panel-collapse collapse row"
-                                  permission="plat"
+                                </div>}
+
+                                { plats && plats.plat_zone &&
+                                    <div>
+                                        <a
+                                          role="button"
+                                          data-toggle="collapse"
+                                          data-parent="#accordion"
+                                          href="#collapsePlatExactions"
+                                          aria-expanded="false"
+                                          aria-controls="collapsePlatExactions"
+                                        >
+                                            <div className="row section-heading" role="tab" id="headingPlatExactions">
+                                                <div className="col-xs-1 caret-indicator" />
+                                                <div className="col-xs-10">
+                                                    <h3>Plat Exactions</h3>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <div
+                                          id="collapsePlatExactions"
+                                          className="panel-collapse collapse row"
+                                          role="tabpanel"
+                                          aria-labelledby="#headingPlatExactions"
+                                        >
+                                            <div className="panel-body">
+                                                <div className="row link-row">
+                                                    <div className="col-xs-12 col-sm-5 col-sm-offset-7">
+                                                        <div className="col-xs-5 col-xs-offset-5">
+                                                            {currentUser && currentUser.permissions && currentUser.permissions.plat &&
+                                                                <Link to={`plat/form/${plats.id}`} aria-label={`Edit ${plats.cabinet} ${plats.slide} plat exactions`}>
+                                                                    <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
+                                                                    <div className="col-xs-7 link-label">
+                                                                        Edit
+                                                                    </div>
+                                                                </Link>
+                                                            }
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div className="col-xs-12">
+                                                    <div className="col-xs-12">
+                                                        <div className="col-xs-6 col-sm-5 col-md-3">
+                                                            <div className="col-xs-12 table-border">
+                                                                <h4>Zone</h4>
+                                                            </div>
+                                                            <div className="col-xs-12 table-border">
+                                                                <p>Gross Acreage</p>
+                                                            </div>
+                                                            <div className="col-xs-12 table-border">
+                                                                <p>Roads</p>
+                                                            </div>
+                                                            <div className="col-xs-12 table-border">
+                                                                <p>Open Space</p>
+                                                            </div>
+                                                            <div className="col-xs-12 table-border">
+                                                                <p>Sewer Capacity</p>
+                                                            </div>
+                                                            <div className="col-xs-12 table-border">
+                                                                <p>Sewer Trans.</p>
+                                                            </div>
+                                                            <div className="col-xs-12 table-border">
+                                                                <p>Parks</p>
+                                                            </div>
+                                                            <div className="col-xs-12 table-border">
+                                                                <p>Storm Water</p>
+                                                            </div>
+                                                        </div>
+                                                        <div className="col-xs-6 col-sm-7 col-md-9">
+                                                            {platZoneExactions}
+                                                        </div>
+                                                    </div>
+                                                    <div className="col-xs-12">
+                                                        <div className="row">
+                                                            <h3>Plat Exactions</h3>
+                                                        </div>
+                                                        <div className="row">
+                                                            <div className="col-xs-6 text-center">
+                                                                <p>Sewer Dues: {plats.plat_exactions && plats.plat_exactions.plat_sewer_due}</p>
+                                                            </div>
+                                                            <div className="col-xs-6 text-center">
+                                                                <p>Non-Sewer Dues: {plats.plat_exactions && plats.plat_exactions.plat_non_sewer_due}</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div className="col-xs-12">
+                                                    <h4>Calculation Notes:</h4>
+                                                    <div className="col-xs-12">
+                                                        <p>{plats.calculation_note}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                                {plats && plats.id &&
+                                    <Notes
+                                      content_type="plats_plat"
+                                      object_id={plats.id}
+                                      ariaExpanded="false"
+                                      panelClass="panel-collapse collapse row"
+                                      permission="plat"
+                                    />
+                                }
+
+                                <LotsMiniSummary
+                                  mapSet={lots}
+                                  mapQualifier={lots && lots.length > 0}
                                 />
-                            }
 
-                            <LotsMiniSummary
-                              mapSet={lots}
-                              mapQualifier={lots && lots.length > 0}
-                            />
-
-                            <AccountsMiniSummary
-                              mapSet={accounts}
-                              mapQualifier={plats.account && accounts}
-                              singleAccount
-                              title="Developer Account"
-                              accordionID="Account"
-                            />
-
-                            {plats && plats.id &&
-                                <Uploads
-                                  file_content_type="plats_plat"
-                                  file_object_id={plats.id}
-                                  ariaExpanded="false"
-                                  panelClass="panel-collapse collapse row"
-                                  permission="plat"
+                                <AccountsMiniSummary
+                                  mapSet={accounts}
+                                  mapQualifier={plats.account && accounts}
+                                  singleAccount
+                                  title="Developer Account"
+                                  accordionID="Account"
                                 />
-                            }
-                        </div>
+
+                                {plats && plats.id &&
+                                    <Uploads
+                                      file_content_type="plats_plat"
+                                      file_object_id={plats.id}
+                                      ariaExpanded="false"
+                                      panelClass="panel-collapse collapse row"
+                                      permission="plat"
+                                    />
+                                }
+                            </div>
+                        )}
                     </div>
                 </div>
                 <Footer />
@@ -340,6 +349,7 @@ PlatSummary.propTypes = {
     lots: PropTypes.array,
     accounts: PropTypes.array,
     route: PropTypes.object,
+    activeForm: PropTypes.object,
     onComponentDidMount: PropTypes.func,
 };
 
@@ -349,6 +359,7 @@ function mapStateToProps(state) {
         plats: state.plats,
         lots: state.lots,
         accounts: state.accounts,
+        activeForm: state.activeForm,
     };
 }
 
@@ -363,6 +374,7 @@ function mapDispatchToProps(dispatch, params) {
                 if (plat_data.response.account) {
                     dispatch(getAccountID(plat_data.response.account));
                 }
+                dispatch(formUpdate({ loading: false }));
             });
         },
     };
