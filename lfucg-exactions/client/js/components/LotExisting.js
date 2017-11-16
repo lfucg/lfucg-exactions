@@ -17,6 +17,11 @@ import {
     getAccounts,
 } from '../actions/apiActions';
 
+import LoadingScreen from './LoadingScreen';
+import {
+    formUpdate,
+} from '../actions/formActions';
+
 class LotExisting extends React.Component {
     componentDidMount() {
         this.props.onComponentDidMount();
@@ -28,6 +33,7 @@ class LotExisting extends React.Component {
             lots,
             plats,
             accounts,
+            activeForm,
         } = this.props;
 
         const platsList = plats && plats.length > 0 &&
@@ -101,8 +107,13 @@ class LotExisting extends React.Component {
 
                 <div className="inside-body">
                     <div className="container">
-                        {lots_list}
-                        {lots_list ? <Pagination /> : <h1>No Results Found</h1>}
+                        {activeForm.loading ? <LoadingScreen /> :
+                        (
+                            <div>
+                                {lots_list}
+                                {lots_list ? <Pagination /> : <h1>No Results Found</h1>}
+                            </div>
+                        )}
                     </div>
                 </div>
                 <Footer />
@@ -117,6 +128,7 @@ LotExisting.propTypes = {
     plats: PropTypes.array,
     accounts: PropTypes.array,
     route: PropTypes.object,
+    activeForm: PropTypes.object,
     onComponentDidMount: PropTypes.func,
 };
 
@@ -126,13 +138,17 @@ function mapStateToProps(state) {
         lots: state.lots,
         plats: state.plats,
         accounts: state.accounts,
+        activeForm: state.activeForm,
     };
 }
 
 function mapDispatchToProps(dispatch) {
     return {
         onComponentDidMount() {
-            dispatch(getPagination('/lot/'));
+            dispatch(getPagination('/lot/'))
+            .then(() => {
+                dispatch(formUpdate({ loading: false }));
+            });
         },
     };
 }

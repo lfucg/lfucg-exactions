@@ -9,7 +9,6 @@ import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
 import Pagination from './Pagination';
 import SearchBar from './SearchBar';
-import LoadingScreen from './LoadingScreen';
 import ExistingPageLinks from './ExistingPageLinks';
 
 import { entry_types } from '../constants/searchBarConstants';
@@ -21,6 +20,7 @@ import {
     getAccounts,
 } from '../actions/apiActions';
 
+import LoadingScreen from './LoadingScreen';
 import {
     formUpdate,
 } from '../actions/formActions';

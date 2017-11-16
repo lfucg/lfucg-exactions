@@ -10,6 +10,11 @@ import Breadcrumbs from './Breadcrumbs';
 import Pagination from './Pagination';
 import SearchBar from './SearchBar';
 import ExistingPageLinks from './ExistingPageLinks';
+import LoadingScreen from './LoadingScreen';
+
+import {
+    formUpdate,
+} from '../actions/formActions';
 
 import { payment_types, paid_by_types } from '../constants/searchBarConstants';
 
@@ -32,6 +37,7 @@ class PaymentExisting extends React.Component {
             accounts,
             lots,
             agreements,
+            activeForm,
         } = this.props;
 
         const accountsList = accounts && accounts.length > 0 &&
@@ -114,8 +120,13 @@ class PaymentExisting extends React.Component {
 
                 <div className="inside-body">
                     <div className="container">
-                        {payments_list}
-                        {payments_list ? <Pagination /> : <h1>No Results Found</h1>}
+                        {activeForm.loading ? <LoadingScreen /> :
+                        (
+                            <div>
+                                {payments_list}
+                                {payments_list ? <Pagination /> : <h1>No Results Found</h1>}
+                            </div>
+                        )}
                     </div>
                 </div>
                 <Footer />
@@ -128,6 +139,7 @@ PaymentExisting.propTypes = {
     currentUser: PropTypes.object,
     payments: PropTypes.array,
     route: PropTypes.object,
+    activeForm: PropTypes.object,
     accounts: PropTypes.array,
     lots: PropTypes.array,
     agreements: PropTypes.array,
@@ -141,13 +153,17 @@ function mapStateToProps(state) {
         accounts: state.accounts,
         lots: state.lots,
         agreements: state.agreements,
+        activeForm: state.activeForm,
     };
 }
 
 function mapDispatchToProps(dispatch) {
     return {
         onComponentDidMount() {
-            dispatch(getPagination('/payment/'));
+            dispatch(getPagination('/payment/'))
+            .then(() => {
+                dispatch(formUpdate({ loading: false }));
+            });
         },
     };
 }
