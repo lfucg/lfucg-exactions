@@ -9,6 +9,7 @@ import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
 import Pagination from './Pagination';
 import SearchBar from './SearchBar';
+import ExistingPageLinks from './ExistingPageLinks';
 
 import {
     getPagination,
@@ -52,43 +53,14 @@ class AccountExisting extends React.Component {
             map((account) => {
                 return (
                     <div key={account.id} className="col-xs-12">
-                        <div className="row form-subheading">
-                            <div className="col-sm-11">
-                                <h3>{account.account_name}</h3>
-                            </div>
-                        </div>
-                        <div className="row link-row">
-                            <div className="col-xs-12 col-sm-5 col-sm-offset-7">
-                                <div className="col-xs-3">
-                                    {currentUser && currentUser.permissions && currentUser.permissions.account &&
-                                        <Link to={`account/form/${account.id}`} aria-label="Edit">
-                                            <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
-                                            <div className="col-xs-7 link-label">
-                                                Edit
-                                            </div>
-                                        </Link>
-                                    }
-                                </div>
-                                <div className="col-xs-4">
-                                    {currentUser && currentUser.permissions && currentUser.permissions.account &&
-                                        <Link to={`account/report/${account.id}`} aria-label="Report">
-                                            <i className="fa fa-line-chart link-icon col-xs-4" aria-hidden="true" />
-                                            <div className="col-xs-7 link-label">
-                                                Report
-                                            </div>
-                                        </Link>
-                                    }
-                                </div>
-                                <div className="col-xs-4">
-                                    <Link to={`account/summary/${account.id}`} aria-label="Summary">
-                                        <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
-                                        <div className="col-xs-7 link-label">
-                                            Summary
-                                        </div>
-                                    </Link>
-                                </div>
-                            </div>
-                        </div>
+                        <ExistingPageLinks
+                          linkStart="account"
+                          approval={true}
+                          title={account.account_name}
+                          permissionModel="account"
+                          instanceID={account.id}
+                          uniqueReport={true}
+                        />
                         <div className="row">
                             <div className="col-sm-offset-1">
                                 <p className="col-xs-6">Developer Account Name: {account.account_name}</p>
@@ -122,6 +94,8 @@ class AccountExisting extends React.Component {
                     { filterField: 'filter_plat_account__id', displayName: 'Plat', list: platsList },
                     { filterField: 'filter_lot_account__id', displayName: 'Lot', list: lotsList },
                   ]}
+                  currentPage="Accounts"
+                  csvEndpoint="../api/export_account_csv/?"
                 />
 
                 <div className="inside-body">

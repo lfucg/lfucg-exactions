@@ -9,6 +9,7 @@ import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
 import Pagination from './Pagination';
 import SearchBar from './SearchBar';
+import ExistingPageLinks from './ExistingPageLinks';
 
 import {
     getPagination,
@@ -43,33 +44,14 @@ class SubdivisionExisting extends React.Component {
             map((subdivision) => {
                 return (
                     <div key={subdivision.id} className="col-xs-12">
-                        <div className="row form-subheading">
-                            <div className="col-sm-11">
-                                <h3>{subdivision.name}</h3>
-                            </div>
-                        </div>
-                        <div className="row link-row">
-                            <div className="col-xs-12 col-sm-5 col-sm-offset-7">
-                                <div className="col-xs-5">
-                                    {currentUser && currentUser.permissions && currentUser.permissions.subdivision &&
-                                        <Link to={`subdivision/form/${subdivision.id}`} aria-label="Edit">
-                                            <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
-                                            <div className="col-xs-7 link-label">
-                                                Edit
-                                            </div>
-                                        </Link>
-                                    }
-                                </div>
-                                <div className="col-xs-5 ">
-                                    <Link to={`subdivision/summary/${subdivision.id}`} aria-label="Summary">
-                                        <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
-                                        <div className="col-xs-7 link-label">
-                                            Summary
-                                        </div>
-                                    </Link>
-                                </div>
-                            </div>
-                        </div>
+                        <ExistingPageLinks
+                          linkStart="subdivision"
+                          approval={subdivision.is_approved}
+                          title={subdivision.name}
+                          permissionModel="subdivision"
+                          instanceID={subdivision.id}
+                          uniqueReport={false}
+                        />
                         <div className="row">
                             <p className="col-md-3 col-sm-offset-1 col-sm-4 col-xs-6">Acres: {subdivision.cleaned_gross_acreage}</p>
                         </div>
@@ -94,6 +76,8 @@ class SubdivisionExisting extends React.Component {
                   advancedSearch={[
                     { filterField: 'filter_plat__id', displayName: 'Plat', list: platsList },
                   ]}
+                  currentPage="Subdivisions"
+                  csvEndpoint="../api/subdivision_search_csv/?"
                 />
 
                 <div className="inside-body">
