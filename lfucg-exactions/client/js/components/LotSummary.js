@@ -319,6 +319,7 @@ function mapDispatchToProps(dispatch, params) {
             dispatch(getLots());
             dispatch(getLotID(selectedLot))
             .then((lot_data) => {
+                dispatch(getPlatID(lot_data.response.plat.id));
                 if (lot_data.response.account) {
                     dispatch(getAccountID(lot_data.response.account));
                 }

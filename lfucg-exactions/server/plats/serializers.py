@@ -171,7 +171,13 @@ class PlatField(serializers.Field):
             return None
 
     def to_representation(self, obj):
-        return PlatSerializer(obj).data
+        return {
+            'id': obj.id,
+            'name': obj.name,
+            'slide': obj.slide,
+            'buildable_lots': obj.buildable_lots,
+            'non_buildable_lots': obj.non_buildable_lots,
+        }
 
 class LotSerializer(serializers.ModelSerializer):
     plat = PlatField()

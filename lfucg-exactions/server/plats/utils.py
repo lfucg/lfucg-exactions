@@ -72,6 +72,12 @@ def calculate_lot_balance(lot):
         for ledger in account_ledgers:
             sewer_credits_applied += ledger.sewer_credits
             non_sewer_credits_applied += ledger.non_sewer_credits
+            dues_roads_dev -= ledger.roads
+            dues_sewer_trans_dev -= ledger.sewer_trans
+            dues_sewer_cap_dev -= ledger.sewer_cap
+            dues_parks_dev -= ledger.parks
+            dues_storm_dev -= ledger.storm
+            dues_open_space_dev -= ledger.open_space
 
 
     all_exactions = {
