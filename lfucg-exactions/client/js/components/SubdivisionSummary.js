@@ -37,6 +37,65 @@ class SubdivisionSummary extends React.Component {
             activeForm,
         } = this.props;
 
+        let subdivision_acreage_used = 0;
+        const subdivisionPlats = plats && plats.length > 0 &&
+            map((plat) => {
+                subdivision_acreage_used += parseFloat(plat.cleaned_total_acreage);
+                const cabinet = plat.cabinet ? `${plat.cabinet}-` : '';
+                const slide = plat.slide ? plat.slide : plat.name;
+                let plat_zone_number = 0;
+                const plat_zone_list =
+                    map((plat_zone) => {
+                        plat_zone_number += 1;
+                        return (
+                            <div key={`${plat_zone.zone}_${plat_zone_number}`}>
+                                <p className="col-xs-6">Zone {plat_zone_number}: {plat_zone.zone}</p>
+                                <p className="col-xs-6">Zone {plat_zone_number} Acreage: {plat_zone.cleaned_acres}</p>
+                            </div>
+                        );
+                    })(plat.plat_zone);
+                return (
+                    <div key={plat.id} className="col-xs-12">
+                        <div className="row form-subheading">
+                            <div className="col-sm-7 col-md-9">
+                                <h3>{cabinet}{slide}</h3>
+                            </div>
+                        </div>
+                        <div className="row link-row">
+                            <div className="col-xs-12 col-sm-5 col-sm-offset-7">
+                                <div className="col-xs-5">
+                                    {currentUser && currentUser.permissions && currentUser.permissions.plat &&
+                                        <Link to={`plat/form/${plat.id}`} aria-label="Edit">
+                                            <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
+                                            <div className="col-xs-7 link-label">
+                                                Edit
+                                            </div>
+                                        </Link>
+                                    }
+                                </div>
+                                <div className="col-xs-5 ">
+                                    <Link to={`plat/summary/${plat.id}`} aria-label="Summary">
+                                        <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
+                                        <div className="col-xs-7 link-label">
+                                            Summary
+                                        </div>
+                                    </Link>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="row">
+                            <p className="col-xs-6"><strong>{plat.is_approved ? 'Approved' : 'Not Approved'}</strong></p>
+                            <p className="col-xs-6">Gross Acreage: {plat.cleaned_total_acreage}</p>
+                            <p className="col-xs-6">Name: {plat.name}</p>
+                            <p className="col-xs-6">Expansion Area: {plat.expansion_area}</p>
+                            <p className="col-xs-6">Sewer Exactions: {plat.plat_exactions && plat.plat_exactions.plat_sewer_due}</p>
+                            <p className="col-xs-6">Non-Sewer Exactions: {plat.plat_exactions && plat.plat_exactions.plat_non_sewer_due}</p>
+                            {plat_zone_list}
+                        </div>
+                    </div>
+                );
+            })(plats);
+
         return (
             <div className="subdivision-summary">
                 <Navbar />
@@ -90,10 +149,12 @@ class SubdivisionSummary extends React.Component {
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="col-xs-12">
-                                            <p className="col-xs-6">Subdivision Name: {subdivisions.name}</p>
-                                            <p className="col-xs-6">Gross Acreage: {subdivisions.cleaned_gross_acreage}</p>
-                                        </div>
+                                    </div>
+                                    <div className="col-xs-12">
+                                        <p className="col-xs-6">Subdivision Name: {subdivisions.name}</p>
+                                        <p className="col-xs-6">Gross Acreage: {subdivisions.cleaned_gross_acreage}</p>
+                                        <p className="col-xs-6">Acreage Used: {subdivision_acreage_used}</p>
+                                        <p className="col-xs-6">Acreage Available: {subdivisions.cleaned_gross_acreage - subdivision_acreage_used}</p>
                                     </div>
                                 </div>
                                 {subdivisions && subdivisions.id &&
@@ -110,6 +171,46 @@ class SubdivisionSummary extends React.Component {
                                   mapSet={plats}
                                   mapQualifier={plats && plats.length > 0}
                                 />
+<<<<<<< HEAD
+=======
+                            }
+
+                            {subdivisionPlats ? (
+                                <div>
+                                    <a
+                                      role="button"
+                                      data-toggle="collapse"
+                                      data-parent="#accordion"
+                                      href="#collapsePlats"
+                                      aria-expanded="false"
+                                      aria-controls="collapsePlats"
+                                    >
+                                        <div className="row section-heading" role="tab" id="headingPlats">
+                                            <div className="col-xs-1 caret-indicator" />
+                                            <div className="col-xs-8 col-xs-offset-1">
+                                                <h3>Plats</h3>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <div
+                                      id="collapsePlats"
+                                      className="panel-collapse collapse row"
+                                      role="tabpanel"
+                                      aria-labelledby="#headingPlats"
+                                    >
+                                        <div className="panel-body">
+                                            <div className="col-xs-12">
+                                                {subdivisionPlats}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            ) : (
+                                <div className="row section-heading" role="tab" id="headingAccountPlats">
+                                    <h3>Plats - None</h3>
+                                </div>
+                            )}
+>>>>>>> 8be0c86bf3e99fefb31b465d75557f7ea0d3649d
 
                                 <LotsMiniSummary
                                   mapSet={lots}
