@@ -10,6 +10,11 @@ import Breadcrumbs from './Breadcrumbs';
 import Pagination from './Pagination';
 import SearchBar from './SearchBar';
 import ExistingPageLinks from './ExistingPageLinks';
+import LoadingScreen from './LoadingScreen';
+
+import {
+    formUpdate,
+} from '../actions/formActions';
 
 import {
     getPagination,
@@ -27,6 +32,7 @@ class ProjectCostExisting extends React.Component {
             currentUser,
             projectCosts,
             projects,
+            activeForm,
         } = this.props;
 
         const projectsList = projects && projects.length > 0 &&
@@ -87,8 +93,13 @@ class ProjectCostExisting extends React.Component {
 
                 <div className="inside-body">
                     <div className="container">
-                        {projectCosts_list}
-                        {projectCosts_list ? <Pagination /> : <h1>No Results Found</h1>}
+                        {activeForm.loading ? <LoadingScreen /> :
+                        (
+                            <div>
+                                {projectCosts_list}
+                                {projectCosts_list ? <Pagination /> : <h1>No Results Found</h1>}
+                            </div>
+                        )}
                     </div>
                 </div>
                 <Footer />
@@ -101,6 +112,7 @@ ProjectCostExisting.propTypes = {
     currentUser: PropTypes.object,
     projectCosts: PropTypes.array,
     route: PropTypes.object,
+    activeForm: PropTypes.object,
     onComponentDidMount: PropTypes.func,
     projects: PropTypes.array,
 };
@@ -110,13 +122,17 @@ function mapStateToProps(state) {
         currentUser: state.currentUser,
         projectCosts: state.projectCosts,
         projects: state.projects,
+        activeForm: state.activeForm,
     };
 }
 
 function mapDispatchToProps(dispatch) {
     return {
         onComponentDidMount() {
-            dispatch(getPagination('/estimate/'));
+            dispatch(getPagination('/estimate/'))
+            .then(() => {
+                dispatch(formUpdate({ loading: false }));
+            });
         },
     };
 }
