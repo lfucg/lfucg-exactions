@@ -26,7 +26,7 @@ class DeclineDelete extends React.Component {
 
         return (
             <div className="decline-delete">
-                {currentUser && (currentUser.is_superuser || (currentUser.profile && currentUser.profile.is_supervisor)) &&
+                {currentUser && (currentUser.is_superuser || (currentUser.profile && currentUser.profile.is_supervisor)) && this.props.selectedEntry &&
                     <button className="btn btn-danger btn-lex-danger" data-toggle="modal" data-target="#deleteConfirm">
                         Decline / Delete
                     </button>
