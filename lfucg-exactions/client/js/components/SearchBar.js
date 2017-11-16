@@ -31,7 +31,7 @@ class SearchBar extends React.Component {
         } = this.props;
 
         const queryString = compose(
-            reduce((acc, value) => acc + value, '../api/lot_search_csv/?'),
+            reduce((acc, value) => acc + value, this.props.csvEndpoint),
             map((key_name) => {
                 const filter_index = key_name.indexOf('filter_') + 'filter_'.length;
                 const field = key_name.slice(filter_index, key_name.length);
@@ -82,8 +82,9 @@ class SearchBar extends React.Component {
                                 <input
                                   type="text"
                                   className="form-control"
-                                  placeholder="Enter search..."
+                                  placeholder={`Enter ${this.props.currentPage} search...`}
                                   id="query"
+                                  aria-label={`Enter ${this.props.currentPage} search...`}
                                 />
                             </div>
                         </fieldset>
@@ -150,6 +151,7 @@ SearchBar.propTypes = {
     apiCalls: PropTypes.array,
     advancedSearch: PropTypes.array,
     csvEndpoint: PropTypes.string,
+    currentPage: PropTypes.string,
 };
 
 function mapStateToProps(state) {
