@@ -192,6 +192,7 @@ class LotSerializer(serializers.ModelSerializer):
         return {
             'total_exactions': calculated_exactions['total_exactions'],
             'sewer_exactions': calculated_exactions['sewer_exactions'],
+            'pending_exactions': calculated_exactions['pending_exactions'],
             'non_sewer_exactions': calculated_exactions['non_sewer_exactions'],
             'sewer_payment': calculated_exactions['sewer_payment'],
             'non_sewer_payment': calculated_exactions['non_sewer_payment'],
