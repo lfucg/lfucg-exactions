@@ -11,6 +11,7 @@ const FormGroup = ({
     activeForm,
     formChange,
     ariaRequired,
+    ariaLabel,
 }) => {
     return (
         <div className="form-group">
@@ -23,6 +24,7 @@ const FormGroup = ({
                         value: activeForm[id] || '',
                         onChange: formChange(id),
                         'aria-required': ariaRequired,
+                        'aria-label': ariaLabel,
                     },
                 )
             }
@@ -38,6 +40,7 @@ FormGroup.propTypes = {
     activeForm: PropTypes.object.isRequired,
     formChange: PropTypes.func.isRequired,
     ariaRequired: PropTypes.bool,
+    ariaLabel: PropTypes.string,
 };
 
 const mapState = ({ activeForm }) => {
