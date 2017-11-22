@@ -88,14 +88,14 @@ class AgreementForm extends React.Component {
                                             </select>
                                         </div>
                                         <div className="col-sm-6">
-                                            <FormGroup label="* Resolution / Memo Number" id="resolution_number" aria-required="true">
+                                            <FormGroup label="* Resolution / Memo Number" id="resolution_number" ariaRequired="true">
                                                 <input type="text" className="form-control" placeholder="Resolution / Memo Number" />
                                             </FormGroup>
                                         </div>
                                     </div>
                                     <div className="row">
                                         <div className="col-sm-6">
-                                            <FormGroup label="* Date Executed" id="date_executed" aria-required="true">
+                                            <FormGroup label="* Date Executed" id="date_executed" ariaRequired="true">
                                                 <input type="date" className="form-control" placeholder="Date Format YYYY-MM-DD" />
                                             </FormGroup>
                                         </div>

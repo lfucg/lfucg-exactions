@@ -88,7 +88,7 @@ class ProjectCostForm extends React.Component {
                                         </div>
                                         <div className="col-sm-6">
                                             <FormGroup label="* Estimate Type" id="estimate_type">
-                                                <input type="text" className="form-control" placeholder="* Estimate Type" aria-required="true" />
+                                                <input type="text" className="form-control" placeholder="* Estimate Type" ariaRequired="true"/>
                                             </FormGroup>
                                         </div>
                                     </div>
