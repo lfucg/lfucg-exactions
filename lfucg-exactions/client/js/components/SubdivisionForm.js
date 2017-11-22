@@ -59,12 +59,12 @@ class SubdivisionForm extends React.Component {
                             <form >
                                 <fieldset>
                                     <div className="row">
-                                        <FormGroup label="* Subdivision Name" id="name" aria-required="true">
+                                        <FormGroup label="* Subdivision Name" id="name" ariaRequired="true">
                                             <input type="text" className="form-control" placeholder="Subdivision Name" autoFocus />
                                         </FormGroup>
                                     </div>
                                     <div className="row">
-                                        <FormGroup label="* Gross Acreage" id="gross_acreage" aria-required="true">
+                                        <FormGroup label="* Gross Acreage" id="gross_acreage" ariaRequired="true">
                                             <input type="text" className="form-control" placeholder="Gross Acreage" />
                                         </FormGroup>
                                     </div>

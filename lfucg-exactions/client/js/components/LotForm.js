@@ -151,12 +151,12 @@ class LotForm extends React.Component {
                                             </div>
                                             <div className="row">
                                                 <div className="col-sm-4">
-                                                    <FormGroup label="* Address Number" id="address_number" aria-required="true">
+                                                    <FormGroup label="* Address Number" id="address_number" ariaRequired="true">
                                                         <input type="number" className="form-control" placeholder="Address Number" autoFocus />
                                                     </FormGroup>
                                                 </div>
                                                 <div className="col-sm-8">
-                                                    <FormGroup label="* Street" id="address_street" aria-required="true">
+                                                    <FormGroup label="* Street" id="address_street" ariaRequired="true">
                                                         <input type="text" className="form-control" placeholder="Street" />
                                                     </FormGroup>
                                                 </div>
@@ -214,7 +214,7 @@ class LotForm extends React.Component {
                                                     </select>
                                                 </div>
                                                 <div className="col-sm-6">
-                                                    <FormGroup label="* Lot Number" id="lot_number" aria-required="true">
+                                                    <FormGroup label="* Lot Number" id="lot_number" ariaRequired="true">
                                                         <input type="text" className="form-control" placeholder="Lot Number" />
                                                     </FormGroup>
                                                 </div>

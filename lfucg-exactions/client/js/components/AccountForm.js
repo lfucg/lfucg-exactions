@@ -68,7 +68,7 @@ class AccountForm extends React.Component {
                                 <fieldset>
                                     <div className="row">
                                         <div className="col-sm-12">
-                                            <FormGroup label="* Developer Account Name" id="account_name" aria-required="true">
+                                            <FormGroup label="* Developer Account Name" id="account_name" ariaRequired="true">
                                                 <input type="text" className="form-control" placeholder="Developer Account Name" autoFocus />
                                             </FormGroup>
                                         </div>
@@ -76,31 +76,31 @@ class AccountForm extends React.Component {
 
                                     <div className="row">
                                         <div className="col-sm-6">
-                                            <FormGroup label="* Contact First Name" id="contact_first_name" aria-required="true">
+                                            <FormGroup label="* Contact First Name" id="contact_first_name" ariaRequired="true">
                                                 <input type="text" className="form-control" placeholder="Contact First Name" />
                                             </FormGroup>
                                         </div>
                                         <div className="col-sm-6">
-                                            <FormGroup label="* Contact Last Name" id="contact_last_name" aria-required="true">
+                                            <FormGroup label="* Contact Last Name" id="contact_last_name" ariaRequired="true">
                                                 <input type="text" className="form-control" placeholder="Contact Last Name" />
                                             </FormGroup>
                                         </div>
                                     </div>
                                     <div className="row">
                                         <div className="col-sm-4">
-                                            <FormGroup label="* Address Number" id="address_number" aria-required="true">
+                                            <FormGroup label="* Address Number" id="address_number" ariaRequired="true">
                                                 <input type="number" className="form-control" placeholder="Address Number" />
                                             </FormGroup>
                                         </div>
                                         <div className="col-sm-8">
-                                            <FormGroup label="* Street" id="address_street" aria-required="true">
+                                            <FormGroup label="* Street" id="address_street" ariaRequired="true">
                                                 <input type="text" className="form-control" placeholder="Street" />
                                             </FormGroup>
                                         </div>
                                     </div>
                                     <div className="row">
                                         <div className="col-sm-5">
-                                            <FormGroup label="* City" id="address_city" aria-required="true">
+                                            <FormGroup label="* City" id="address_city" ariaRequired="true">
                                                 <input type="text" className="form-control" placeholder="City" />
                                             </FormGroup>
                                         </div>
@@ -175,12 +175,12 @@ class AccountForm extends React.Component {
                                     </div>
                                     <div className="row">
                                         <div className="col-sm-6">
-                                            <FormGroup label="* Phone" id="phone" aria-required="true">
+                                            <FormGroup label="* Phone" id="phone" ariaRequired="true">
                                                 <input type="text" className="form-control" placeholder="Phone Number" />
                                             </FormGroup>
                                         </div>
                                         <div className="col-sm-6">
-                                            <FormGroup label="* Email" id="email" aria-required="true">
+                                            <FormGroup label="* Email" id="email" ariaRequired="true">
                                                 <input type="email" className="form-control" placeholder="Email" />
                                             </FormGroup>
                                         </div>

@@ -176,6 +176,7 @@ class AccountLedgerForm extends React.Component {
                                               selected={activeForm.lot ? (
                                                 filter(lot => lot.id === activeForm.lot)(lotsList)
                                                 ) : []}
+                                              aria-required="true"
                                             />
                                         </div>
                                     </div>
@@ -188,7 +189,7 @@ class AccountLedgerForm extends React.Component {
                                             </select>
                                         </div>
                                         <div className="col-sm-6">
-                                            <FormGroup label="* Entry Date" id="entry_date" aria-required="true" >
+                                            <FormGroup label="* Entry Date" id="entry_date" ariaRequired="true">
                                                 <input type="date" className="form-control" placeholder="Date Format YYYY-MM-DD" disabled={!activeForm.entry_type} />
                                             </FormGroup>
                                         </div>
@@ -220,7 +221,7 @@ class AccountLedgerForm extends React.Component {
                                     : null}
                                     <div className="row">
                                         <div className="col-sm-6">
-                                            <FormGroup label="* Non-Sewer Credits" id="non_sewer_credits" aria-required="true" >
+                                            <FormGroup label="* Non-Sewer Credits" id="non_sewer_credits" ariaRequired="true">
                                                 <input
                                                   type="number"
                                                   className="form-control"
@@ -231,7 +232,7 @@ class AccountLedgerForm extends React.Component {
                                             </FormGroup>
                                         </div>
                                         <div className="col-sm-6">
-                                            <FormGroup label="* Sewer Credits" id="sewer_credits" aria-required="true" >
+                                            <FormGroup label="* Sewer Credits" id="sewer_credits" ariaRequired="true">
                                                 <input
                                                   type="number"
                                                   className="form-control"
