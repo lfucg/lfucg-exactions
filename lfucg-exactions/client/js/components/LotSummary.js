@@ -72,19 +72,19 @@ class LotSummary extends React.Component {
                                     }
                                 </div>
                             </div>
-                            <div className="modal fade" id="permitModal" tabIndex="-1" role="dialog" aria-labelledby="modalLabel">
+                            <div className="modal fade" id="permitModal" role="alertdialog" aria-labelledby="modalLabel">
                                 <div className="modal-dialog" role="document">
                                     <div className="modal-content">
                                         {currentLot.lot_exactions && currentLot.lot_exactions.current_exactions_number > 0 ? (
                                             <div>
                                                 <div className="modal-header">
-                                                    <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                                    <h3 className="modal-title text-center" id="modalLabel">Permit Addition</h3>
+                                                    <button type="button" className="close" data-dismiss="modal" aria-label="Close" autoFocus><span aria-hidden="true">&times;</span></button>
+                                                    <h3 className="modal-title text-center" id="modalLabel" tabIndex="0">Permit Addition</h3>
                                                 </div>
                                                 <div className="modal-body">
-                                                    <h4 className="text-center">Records indicate an outstanding exactions balance of</h4>
+                                                    <h4 className="text-center" tabIndex="0">Records indicate an outstanding exactions balance of</h4>
                                                     <div className="row text-center alert alert-danger">
-                                                        <h2><strong>{currentLot.lot_exactions.current_exactions}</strong></h2>
+                                                        <h2 tabIndex="0"><strong>{currentLot.lot_exactions.current_exactions}</strong></h2>
                                                     </div>
                                                     <h4 className="text-center">for {currentLot.address_full}.</h4>
                                                     <div className="row">
@@ -103,13 +103,13 @@ class LotSummary extends React.Component {
                                             ) : (
                                                 <div>
                                                     <div className="modal-header">
-                                                        <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                                        <h3 className="modal-title text-center" id="modalLabel">Permit Addition</h3>
+                                                        <button type="button" className="close" data-dismiss="modal" aria-label="Close" autoFocus><span aria-hidden="true">&times;</span></button>
+                                                        <h3 className="modal-title text-center" id="modalLabel" tabIndex="0">Permit Addition</h3>
                                                     </div>
                                                     <div className="modal-body">
-                                                        <h4 className="text-center">Records indicate this lot has no exactions to be paid. You may enter a permit ID for:</h4>
+                                                        <h4 className="text-center" tabIndex="0">Records indicate this lot has no exactions to be paid. You may enter a permit ID for:</h4>
                                                         <div className="row text-center alert alert-success">
-                                                            <h2><strong>{currentLot.address_full}</strong></h2>
+                                                            <h2 tabIndex="0"><strong>{currentLot.address_full}</strong></h2>
                                                         </div>
                                                         <div className="row">
                                                             <div className="text-center col-sm-4 col-sm-offset-4 col-xs-12">
