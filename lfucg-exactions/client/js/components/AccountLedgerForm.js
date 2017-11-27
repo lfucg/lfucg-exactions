@@ -180,6 +180,35 @@ class AccountLedgerForm extends React.Component {
                                             />
                                         </div>
                                     </div>
+                                    {activeForm.openModal && currentPlat.plat_exactions && (currentPlat.plat_exactions.remaining_lots > 0) &&
+                                    <div className={activeForm.openModal ? 'modal in' : 'modal'} role="alertdialog" aria-labelledby="modal-title" aria-describedby="modalDescription">
+                                        <div className="modal-dialog modal-lg" role="document">
+                                            <div className="modal-content">
+                                                <div className="modal-header">
+                                                    <button type="button" className="close" data-dismiss="modal" aria-label="Plat is Missing Lots Close modal" onClick={closeModal} autoFocus><span aria-hidden="true">&times;</span></button>
+                                                    <h4 className="modal-title" tabIndex="0">Plat is Missing Lots</h4>
+                                                </div>
+                                                <div className="modal-body">
+                                                    <div className="container">
+                                                        {currentPlat && <div role="document" tabIndex="0">
+                                                            <h4 className="row modalDescription">The number of buildable lots is greater than the number of lots in this system.</h4>
+                                                            <div className="col-xs-12">
+                                                                Buildable lots on plat: {currentPlat.buildable_lots}
+                                                            </div>
+                                                            <div className="col-xs-12">
+                                                                Lots in system: {currentPlat.buildable_lots - (currentPlat.plat_exactions && currentPlat.plat_exactions.remaining_lots)}
+                                                            </div>
+                                                            <h5>The credits used will only apply to the lots within the system.</h5>
+                                                        </div>}
+                                                    </div>
+                                                </div>
+                                                <div className="modal-footer">
+                                                    <button type="button" className="btn btn-default" data-dismiss="modal" onClick={closeModal} aria-label="Plat is Missing Lots Continue and close modal">Continue</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    }
                                     <div className="row">
                                         <div className="col-sm-6 form-group">
                                             <label htmlFor="agreement" className="form-label" id="agreement" aria-label="Agreement" aria-required="true">* Agreement</label>
@@ -260,35 +289,6 @@ class AccountLedgerForm extends React.Component {
                                     <DeclineDelete currentForm="/ledger/" selectedEntry={selectedAccountLedger} parentRoute="credit-transfer" />
                                 </div>
                             </form>
-                            {activeForm.openModal && currentPlat.plat_exactions && (currentPlat.plat_exactions.remaining_lots > 0) &&
-                            <div className={activeForm.openModal ? 'modal in' : 'modal'} tabIndex="-1" role="dialog">
-                                <div className="modal-dialog modal-lg" role="document">
-                                    <div className="modal-content">
-                                        <div className="modal-header">
-                                            <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={closeModal}><span aria-hidden="true">&times;</span></button>
-                                            <h4 className="modal-title">Plat is Missing Lots</h4>
-                                        </div>
-                                        <div className="modal-body">
-                                            <div className="container">
-                                                {currentPlat && <div>
-                                                    <h4 className="row">The number of buildable lots is greater than the number of lots in this system.</h4>
-                                                    <div className="col-xs-12">
-                                                        Buildable lots on plat: {currentPlat.buildable_lots}
-                                                    </div>
-                                                    <div className="col-xs-12">
-                                                        Lots in system: {currentPlat.buildable_lots - (currentPlat.plat_exactions && currentPlat.plat_exactions.remaining_lots)}
-                                                    </div>
-                                                    <h5>The credits used will only apply to the lots within the system.</h5>
-                                                </div>}
-                                            </div>
-                                        </div>
-                                        <div className="modal-footer">
-                                            <button type="button" className="btn btn-default" data-dismiss="modal" onClick={closeModal} >Continue</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            }
                             <div className="clearfix" />
                             {activeForm.lot || activeForm.plat ? <div>
                                 {
