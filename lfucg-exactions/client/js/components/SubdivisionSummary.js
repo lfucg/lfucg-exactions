@@ -171,46 +171,6 @@ class SubdivisionSummary extends React.Component {
                                   mapSet={plats}
                                   mapQualifier={plats && plats.length > 0}
                                 />
-<<<<<<< HEAD
-=======
-                            }
-
-                            {subdivisionPlats ? (
-                                <div>
-                                    <a
-                                      role="button"
-                                      data-toggle="collapse"
-                                      data-parent="#accordion"
-                                      href="#collapsePlats"
-                                      aria-expanded="false"
-                                      aria-controls="collapsePlats"
-                                    >
-                                        <div className="row section-heading" role="tab" id="headingPlats">
-                                            <div className="col-xs-1 caret-indicator" />
-                                            <div className="col-xs-8 col-xs-offset-1">
-                                                <h3>Plats</h3>
-                                            </div>
-                                        </div>
-                                    </a>
-                                    <div
-                                      id="collapsePlats"
-                                      className="panel-collapse collapse row"
-                                      role="tabpanel"
-                                      aria-labelledby="#headingPlats"
-                                    >
-                                        <div className="panel-body">
-                                            <div className="col-xs-12">
-                                                {subdivisionPlats}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            ) : (
-                                <div className="row section-heading" role="tab" id="headingAccountPlats">
-                                    <h3>Plats - None</h3>
-                                </div>
-                            )}
->>>>>>> 8be0c86bf3e99fefb31b465d75557f7ea0d3649d
 
                                 <LotsMiniSummary
                                   mapSet={lots}
