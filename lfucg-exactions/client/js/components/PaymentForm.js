@@ -9,6 +9,7 @@ import { Typeahead } from 'react-bootstrap-typeahead';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
+import LoadingScreen from './LoadingScreen';
 
 import FormGroup from './FormGroup';
 import DeclineDelete from './DeclineDelete';
@@ -106,258 +107,261 @@ class PaymentForm extends React.Component {
 
                 <div className="inside-body">
                     <div className="container">
-                        <div className="col-sm-offset-1 col-sm-10">
-                            {currentParam && payments.is_approved === false && <div className="row"><h1 className="approval-pending">Approval Pending</h1></div>}
-                            <form >
+                        {activeForm.loading ? <LoadingScreen /> :
+                        (
+                            <div className="col-sm-offset-1 col-sm-10">
+                                {currentParam && payments.is_approved === false && <div className="row"><h1 className="approval-pending">Approval Pending</h1></div>}
+                                <form >
 
-                                <fieldset>
-                                    <div className="row form-subheading">
-                                        <h3>Associated Files</h3>
-                                    </div>
-                                    <div className="row">
-                                        <div className="col-sm-6 form-group">
-                                            <label htmlFor="lot_id" className="form-label" id="lot_id" aria-label="Lot" aria-required="true">* Lot</label>
-                                            <Typeahead
-                                              onChange={e => lotChange(e)}
-                                              id="lot_id"
-                                              options={lotsList}
-                                              placeholder="Lot"
-                                              emptyLabel={lots.length > 0 ? 'No Results Found.' : 'Results loading...'}
-                                              selected={activeForm.lot_id ? (
-                                                filter(lot => lot.id === activeForm.lot_id)(lotsList)
-                                                ) : []}
-                                            />
+                                    <fieldset>
+                                        <div className="row form-subheading">
+                                            <h3>Associated Files</h3>
                                         </div>
-                                        <div className="col-sm-6">
-                                            {activeForm.lot_exactions &&
-                                                <div>
-                                                    <h3 htmlFor="lot_exactions" className="text-center" aria-label="Current Exactions">Current Lot Exactions Due:</h3>
-                                                    <h4 className="text-center" >{activeForm.lot_exactions}</h4>
-                                                </div>
-                                            }
-                                        </div>
-                                    </div>
-                                    <div className="row">
-                                        <div className="col-sm-6 form-group">
-                                            <label htmlFor="credit_account" className="form-label" id="credit_account" aria-label="Developer Account" aria-required="true">* Developer Account</label>
-                                            <select className="form-control" id="credit_account" onChange={formChange('credit_account')} value={activeForm.credit_account_show} >
-                                                {activeForm.credit_account_show ?
-                                                    <option value="credit_account">{activeForm.credit_account_show}</option> :
-                                                    <option value="start_account">Developer Account</option>
+                                        <div className="row">
+                                            <div className="col-sm-6 form-group">
+                                                <label htmlFor="lot_id" className="form-label" id="lot_id" aria-label="Lot" aria-required="true">* Lot</label>
+                                                <Typeahead
+                                                  onChange={e => lotChange(e)}
+                                                  id="lot_id"
+                                                  options={lotsList}
+                                                  placeholder="Lot"
+                                                  emptyLabel={lots.length > 0 ? 'No Results Found.' : 'Results loading...'}
+                                                  selected={activeForm.lot_id ? (
+                                                    filter(lot => lot.id === activeForm.lot_id)(lotsList)
+                                                    ) : []}
+                                                />
+                                            </div>
+                                            <div className="col-sm-6">
+                                                {activeForm.lot_exactions &&
+                                                    <div>
+                                                        <h3 htmlFor="lot_exactions" className="text-center" aria-label="Current Exactions">Current Lot Exactions Due:</h3>
+                                                        <h4 className="text-center" >{activeForm.lot_exactions}</h4>
+                                                    </div>
                                                 }
-                                                {accountsList}
-                                            </select>
+                                            </div>
                                         </div>
-                                        <div className="col-sm-6 form-group">
-                                            <label htmlFor="credit_source" className="form-label" id="credit_source" aria-label="Agreement">Agreement</label>
-                                            <select className="form-control" id="credit_source" onChange={formChange('credit_source')} value={activeForm.credit_source_show} >
-                                                {activeForm.credit_source_show ?
-                                                    <option value="credit_source">Resolution: {activeForm.credit_source_show}</option> :
-                                                    <option value="start_source">Agreement</option>
-                                                }
-                                                {agreementsList}
-                                            </select>
+                                        <div className="row">
+                                            <div className="col-sm-6 form-group">
+                                                <label htmlFor="credit_account" className="form-label" id="credit_account" aria-label="Developer Account" aria-required="true">* Developer Account</label>
+                                                <select className="form-control" id="credit_account" onChange={formChange('credit_account')} value={activeForm.credit_account_show} >
+                                                    {activeForm.credit_account_show ?
+                                                        <option value="credit_account">{activeForm.credit_account_show}</option> :
+                                                        <option value="start_account">Developer Account</option>
+                                                    }
+                                                    {accountsList}
+                                                </select>
+                                            </div>
+                                            <div className="col-sm-6 form-group">
+                                                <label htmlFor="credit_source" className="form-label" id="credit_source" aria-label="Agreement">Agreement</label>
+                                                <select className="form-control" id="credit_source" onChange={formChange('credit_source')} value={activeForm.credit_source_show} >
+                                                    {activeForm.credit_source_show ?
+                                                        <option value="credit_source">Resolution: {activeForm.credit_source_show}</option> :
+                                                        <option value="start_source">Agreement</option>
+                                                    }
+                                                    {agreementsList}
+                                                </select>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div className="row form-subheading">
-                                        <h3>Payment Information</h3>
-                                    </div>
-                                    <div className="row">
-                                        <div className="col-sm-6">
-                                            <FormGroup label="* Paid By" id="paid_by" aria-required="true">
-                                                <input type="text" className="form-control" placeholder="Paid By" />
-                                            </FormGroup>
+                                        <div className="row form-subheading">
+                                            <h3>Payment Information</h3>
                                         </div>
-                                        <div className="col-sm-6 form-group">
-                                            <label htmlFor="paid_by_type" className="form-label" id="paid_by_type" aria-label="Paid By Type" aria-required="true">* Paid By Type</label>
-                                            <select className="form-control" id="paid_by_type" onChange={formChange('paid_by_type')} value={activeForm.paid_by_type_show} >
-                                                <option value="start_paid_by_type">Paid By Type</option>
-                                                <option value={['DEVELOPER', 'Developer']}>Developer</option>
-                                                <option value={['BUILDER', 'Builder']}>Builder</option>
-                                                <option value={['OWNER', 'Home Owner']}>Home Owner</option>
-                                            </select>
+                                        <div className="row">
+                                            <div className="col-sm-6">
+                                                <FormGroup label="* Paid By" id="paid_by" aria-required="true">
+                                                    <input type="text" className="form-control" placeholder="Paid By" />
+                                                </FormGroup>
+                                            </div>
+                                            <div className="col-sm-6 form-group">
+                                                <label htmlFor="paid_by_type" className="form-label" id="paid_by_type" aria-label="Paid By Type" aria-required="true">* Paid By Type</label>
+                                                <select className="form-control" id="paid_by_type" onChange={formChange('paid_by_type')} value={activeForm.paid_by_type_show} >
+                                                    <option value="start_paid_by_type">Paid By Type</option>
+                                                    <option value={['DEVELOPER', 'Developer']}>Developer</option>
+                                                    <option value={['BUILDER', 'Builder']}>Builder</option>
+                                                    <option value={['OWNER', 'Home Owner']}>Home Owner</option>
+                                                </select>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div className="row">
-                                        <div className="col-sm-6 form-group">
-                                            <label htmlFor="payment_type" className="form-label" id="payment_type" aria-label="Payment Type" aria-required="true">* Payment Type</label>
-                                            <select className="form-control" id="payment_type" onChange={formChange('payment_type')} value={activeForm.payment_type_show} >
-                                                <option value="start_payment_type">Payment Type</option>
-                                                <option value={['CHECK', 'Check']}>Check</option>
-                                                <option value={['CREDIT_CARD', 'Credit Card']}>Credit Card</option>
-                                                <option value={['OTHER', 'Other']}>Other</option>
-                                            </select>
+                                        <div className="row">
+                                            <div className="col-sm-6 form-group">
+                                                <label htmlFor="payment_type" className="form-label" id="payment_type" aria-label="Payment Type" aria-required="true">* Payment Type</label>
+                                                <select className="form-control" id="payment_type" onChange={formChange('payment_type')} value={activeForm.payment_type_show} >
+                                                    <option value="start_payment_type">Payment Type</option>
+                                                    <option value={['CHECK', 'Check']}>Check</option>
+                                                    <option value={['CREDIT_CARD', 'Credit Card']}>Credit Card</option>
+                                                    <option value={['OTHER', 'Other']}>Other</option>
+                                                </select>
+                                            </div>
+                                            <div className="col-sm-6">
+                                                <FormGroup label="Check Number" id="check_number">
+                                                    <input type="text" className="form-control" placeholder="Check Number" />
+                                                </FormGroup>
+                                            </div>
                                         </div>
-                                        <div className="col-sm-6">
-                                            <FormGroup label="Check Number" id="check_number">
-                                                <input type="text" className="form-control" placeholder="Check Number" />
-                                            </FormGroup>
+                                        <div className="row form-subheading">
+                                            <h3>Exactions Payments</h3>
                                         </div>
-                                    </div>
-                                    <div className="row form-subheading">
-                                        <h3>Exactions Payments</h3>
-                                    </div>
-                                    {activeForm.sewer_exactions || activeForm.non_sewer_exactions ?
-                                        <div className="white-box">
-                                            {activeForm.sewer_exactions || activeForm.non_sewer_exactions ?
-                                                <div className="text-center">
-                                                    <div className="row">
-                                                        <h3>Exactions Due</h3>
-                                                        <hr />
+                                        {activeForm.sewer_exactions || activeForm.non_sewer_exactions ?
+                                            <div className="white-box">
+                                                {activeForm.sewer_exactions || activeForm.non_sewer_exactions ?
+                                                    <div className="text-center">
+                                                        <div className="row">
+                                                            <h3>Exactions Due</h3>
+                                                            <hr />
+                                                        </div>
+                                                        <div className="row">
+                                                            <div className="col-xs-6 col-sm-4 col-sm-offset-2">
+                                                                <h4>Sewer: {activeForm.sewer_exactions}</h4>
+                                                            </div>
+                                                            <div className="col-xs-6 col-sm-4">
+                                                                <h4>Non-sewer: {activeForm.non_sewer_exactions}</h4>
+                                                            </div>
+                                                        </div>
+                                                        <div className="row">
+                                                            <div className="col-xs-6 col-sm-4 col-sm-offset-2">
+                                                                <h5>Roads: {activeForm.dues_roads_dev}</h5>
+                                                            </div>
+                                                            <div className="col-xs-6 col-sm-4">
+                                                                <h5>Parks: {activeForm.dues_parks_dev}</h5>
+                                                            </div>
+                                                        </div>
+                                                        <div className="row">
+                                                            <div className="col-xs-6 col-sm-4 col-sm-offset-2">
+                                                                <h5>Sewer Capacity: {activeForm.dues_sewer_cap_dev}</h5>
+                                                            </div>
+                                                            <div className="col-xs-6 col-sm-4">
+                                                                <h5>Sewer Transmission: {activeForm.dues_sewer_trans_dev}</h5>
+                                                            </div>
+                                                        </div>
+                                                        <div className="row">
+                                                            <div className="col-xs-6 col-sm-4 col-sm-offset-2">
+                                                                <h5>Storm: {activeForm.dues_storm_dev}</h5>
+                                                            </div>
+                                                            <div className="col-xs-6 col-sm-4">
+                                                                <h5>Open Spaces: {activeForm.dues_open_space_dev}</h5>
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                    <div className="row">
-                                                        <div className="col-xs-6 col-sm-4 col-sm-offset-2">
-                                                            <h4>Sewer: {activeForm.sewer_exactions}</h4>
-                                                        </div>
-                                                        <div className="col-xs-6 col-sm-4">
-                                                            <h4>Non-sewer: {activeForm.non_sewer_exactions}</h4>
-                                                        </div>
-                                                    </div>
-                                                    <div className="row">
-                                                        <div className="col-xs-6 col-sm-4 col-sm-offset-2">
-                                                            <h5>Roads: {activeForm.dues_roads_dev}</h5>
-                                                        </div>
-                                                        <div className="col-xs-6 col-sm-4">
-                                                            <h5>Parks: {activeForm.dues_parks_dev}</h5>
-                                                        </div>
-                                                    </div>
-                                                    <div className="row">
-                                                        <div className="col-xs-6 col-sm-4 col-sm-offset-2">
-                                                            <h5>Sewer Capacity: {activeForm.dues_sewer_cap_dev}</h5>
-                                                        </div>
-                                                        <div className="col-xs-6 col-sm-4">
-                                                            <h5>Sewer Transmission: {activeForm.dues_sewer_trans_dev}</h5>
-                                                        </div>
-                                                    </div>
-                                                    <div className="row">
-                                                        <div className="col-xs-6 col-sm-4 col-sm-offset-2">
-                                                            <h5>Storm: {activeForm.dues_storm_dev}</h5>
-                                                        </div>
-                                                        <div className="col-xs-6 col-sm-4">
-                                                            <h5>Open Spaces: {activeForm.dues_open_space_dev}</h5>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            : null}
+                                                : null}
+                                            </div>
+                                        : null}
+                                        <div className="row">
+                                            <div className="col-sm-6">
+                                                <FormGroup label="Road Exactions" id="paid_roads">
+                                                    <input
+                                                      type="number"
+                                                      step="0.01"
+                                                      className="form-control"
+                                                      placeholder="Road Exactions Paid"
+                                                    />
+                                                </FormGroup>
+                                            </div>
+                                            <div className="col-sm-6">
+                                                <FormGroup label="Parks Exactions" id="paid_parks">
+                                                    <input
+                                                      type="number"
+                                                      step="0.01"
+                                                      className="form-control"
+                                                      placeholder="Parks Exactions Paid"
+                                                    />
+                                                </FormGroup>
+                                            </div>
                                         </div>
-                                    : null}
-                                    <div className="row">
-                                        <div className="col-sm-6">
-                                            <FormGroup label="Road Exactions" id="paid_roads">
-                                                <input
-                                                  type="number"
-                                                  step="0.01"
-                                                  className="form-control"
-                                                  placeholder="Road Exactions Paid"
-                                                />
-                                            </FormGroup>
+                                        <div className="row">
+                                            <div className="col-sm-6">
+                                                <FormGroup label="Sewer Capacity Exactions" id="paid_sewer_cap">
+                                                    <input
+                                                      type="number"
+                                                      step="0.01"
+                                                      className="form-control"
+                                                      placeholder="Sewer Capacity Exactions Paid"
+                                                    />
+                                                </FormGroup>
+                                            </div>
+                                            <div className="col-sm-6">
+                                                <FormGroup label="Sewer Transmission Exactions" id="paid_sewer_trans">
+                                                    <input
+                                                      type="number"
+                                                      step="0.01"
+                                                      className="form-control"
+                                                      placeholder="Sewer Transmission Exactions Paid"
+                                                    />
+                                                </FormGroup>
+                                            </div>
                                         </div>
-                                        <div className="col-sm-6">
-                                            <FormGroup label="Parks Exactions" id="paid_parks">
-                                                <input
-                                                  type="number"
-                                                  step="0.01"
-                                                  className="form-control"
-                                                  placeholder="Parks Exactions Paid"
-                                                />
-                                            </FormGroup>
+                                        <div className="row">
+                                            <div className="col-sm-6">
+                                                <FormGroup label="Storm Exactions" id="paid_storm">
+                                                    <input
+                                                      type="number"
+                                                      step="0.01"
+                                                      className="form-control"
+                                                      placeholder="Storm Exactions Paid"
+                                                    />
+                                                </FormGroup>
+                                            </div>
+                                            <div className="col-sm-6">
+                                                <FormGroup label="Open Spaces Exactions" id="paid_open_space">
+                                                    <input
+                                                      type="number"
+                                                      step="0.01"
+                                                      className="form-control"
+                                                      placeholder="Open Spaces Exactions Paid"
+                                                    />
+                                                </FormGroup>
+                                            </div>
                                         </div>
+                                    </fieldset>
+                                    <div className="col-xs-8">
+                                        <button disabled={!submitEnabled} className="btn btn-lex" onClick={onSubmit} >
+                                            {currentUser.is_superuser || (currentUser.profile && currentUser.profile.is_supervisor) ? <div>Submit / Approve</div> : <div>Submit</div>}
+                                        </button>
+                                        {!submitEnabled ? (
+                                            <div>
+                                                <div className="clearfix" />
+                                                <span> * All required fields must be filled.</span>
+                                            </div>
+                                        ) : null
+                                        }
                                     </div>
-                                    <div className="row">
-                                        <div className="col-sm-6">
-                                            <FormGroup label="Sewer Capacity Exactions" id="paid_sewer_cap">
-                                                <input
-                                                  type="number"
-                                                  step="0.01"
-                                                  className="form-control"
-                                                  placeholder="Sewer Capacity Exactions Paid"
-                                                />
-                                            </FormGroup>
-                                        </div>
-                                        <div className="col-sm-6">
-                                            <FormGroup label="Sewer Transmission Exactions" id="paid_sewer_trans">
-                                                <input
-                                                  type="number"
-                                                  step="0.01"
-                                                  className="form-control"
-                                                  placeholder="Sewer Transmission Exactions Paid"
-                                                />
-                                            </FormGroup>
-                                        </div>
+                                    <div className="col-xs-4">
+                                        <DeclineDelete currentForm="/payment/" selectedEntry={selectedPayment} parentRoute="payment" />
                                     </div>
-                                    <div className="row">
-                                        <div className="col-sm-6">
-                                            <FormGroup label="Storm Exactions" id="paid_storm">
-                                                <input
-                                                  type="number"
-                                                  step="0.01"
-                                                  className="form-control"
-                                                  placeholder="Storm Exactions Paid"
-                                                />
-                                            </FormGroup>
-                                        </div>
-                                        <div className="col-sm-6">
-                                            <FormGroup label="Open Spaces Exactions" id="paid_open_space">
-                                                <input
-                                                  type="number"
-                                                  step="0.01"
-                                                  className="form-control"
-                                                  placeholder="Open Spaces Exactions Paid"
-                                                />
-                                            </FormGroup>
-                                        </div>
-                                    </div>
-                                </fieldset>
-                                <div className="col-xs-8">
-                                    <button disabled={!submitEnabled} className="btn btn-lex" onClick={onSubmit} >
-                                        {currentUser.is_superuser || (currentUser.profile && currentUser.profile.is_supervisor) ? <div>Submit / Approve</div> : <div>Submit</div>}
-                                    </button>
-                                    {!submitEnabled ? (
-                                        <div>
-                                            <div className="clearfix" />
-                                            <span> * All required fields must be filled.</span>
-                                        </div>
-                                    ) : null
+                                </form>
+                                <div className="clearfix" />
+                                {currentLot && currentLot.id ? <div>
+                                    {selectedPayment ?
+                                        <Notes
+                                          secondary_content_type="plats_lot"
+                                          secondary_object_id={currentLot.id}
+                                          content_type={'accounts_payment'}
+                                          object_id={selectedPayment}
+                                          ariaExpanded="true"
+                                          panelClass="panel-collapse collapse row in"
+                                          permission="payment"
+                                        />
+                                    :
+                                        <Notes
+                                          content_type="plats_lot"
+                                          object_id={currentLot.id}
+                                          ariaExpanded="true"
+                                          panelClass="panel-collapse collapse row in"
+                                          permission="lot"
+                                        />
                                     }
                                 </div>
-                                <div className="col-xs-4">
-                                    <DeclineDelete currentForm="/payment/" selectedEntry={selectedPayment} parentRoute="payment" />
-                                </div>
-                            </form>
-                            <div className="clearfix" />
-                            {currentLot && currentLot.id ? <div>
-                                {selectedPayment ?
-                                    <Notes
-                                      secondary_content_type="plats_lot"
-                                      secondary_object_id={currentLot.id}
-                                      content_type={'accounts_payment'}
-                                      object_id={selectedPayment}
-                                      ariaExpanded="true"
-                                      panelClass="panel-collapse collapse row in"
-                                      permission="payment"
-                                    />
-                                :
-                                    <Notes
-                                      content_type="plats_lot"
-                                      object_id={currentLot.id}
-                                      ariaExpanded="true"
-                                      panelClass="panel-collapse collapse row in"
-                                      permission="lot"
-                                    />
-                                }
+                                : <div>
+                                    {selectedPayment &&
+                                        <Notes
+                                          content_type="accounts_payment"
+                                          object_id={selectedPayment}
+                                          ariaExpanded="true"
+                                          panelClass="panel-collapse collapse row in"
+                                          permission="payment"
+                                        />
+                                    }
+                                </div>}
                             </div>
-                            : <div>
-                                {selectedPayment &&
-                                    <Notes
-                                      content_type="accounts_payment"
-                                      object_id={selectedPayment}
-                                      ariaExpanded="true"
-                                      panelClass="panel-collapse collapse row in"
-                                      permission="payment"
-                                    />
-                                }
-                            </div>}
-                        </div>
+                        )}
                     </div>
                 </div>
 
@@ -400,9 +404,13 @@ function mapDispatchToProps(dispatch, params) {
     return {
         onComponentDidMount() {
             dispatch(formInit());
+            dispatch(formUpdate({ loading: true }));
             dispatch(getLots());
             dispatch(getAccounts());
-            dispatch(getAgreements());
+            dispatch(getAgreements())
+            .then(()=> {
+                dispatch(formUpdate({ loading: false }));
+            })
             if (selectedPayment) {
                 dispatch(getPaymentID(selectedPayment))
                 .then((data_payment) => {
