@@ -9,6 +9,11 @@ import {
     getMe,
 } from '../actions/apiActions';
 
+
+import {
+    formUpdate,
+} from '../actions/formActions';
+
 class Navbar extends React.Component {
     componentDidMount() {
         this.props.onComponentDidMount();
@@ -86,6 +91,7 @@ function mapDispatchToProps(dispatch) {
     return {
         onComponentDidMount() {
             dispatch(getMe());
+            dispatch(formUpdate({ loading: true }));
         },
         onLogout() {
             dispatch(logout());

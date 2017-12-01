@@ -12,6 +12,7 @@ import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
 import Notes from './Notes';
 import Uploads from './Uploads';
+import LoadingScreen from './LoadingScreen';
 
 import FormGroup from './FormGroup';
 import DeclineDelete from './DeclineDelete';
@@ -106,348 +107,166 @@ class LotForm extends React.Component {
 
                 <div className="inside-body">
                     <div className="container">
-                        <div className="col-md-offset-1 col-md-10 panel-group" id="accordion" role="tablist" aria-multiselectable="false">
-                            {currentParam && lots.is_approved === false && <div className="row"><h1 className="approval-pending">Approval Pending</h1></div>}
-                            <a
-                              role="button"
-                              data-toggle="collapse"
-                              data-parent="#accordion"
-                              href="#collapseGeneralLot"
-                              aria-expanded="false"
-                              aria-controls="collapseGeneralLot"
-                            >
-                                <div className="row section-heading" role="tab" id="headingLot">
-                                    <div className="col-xs-1 caret-indicator" />
-                                    <div className="col-xs-10">
-                                        <h3>General Lot Information</h3>
+                        {activeForm.loading ? <LoadingScreen /> :
+                        (
+
+                            <div className="col-md-offset-1 col-md-10 panel-group" id="accordion" role="tablist" aria-multiselectable="false">
+                                {currentParam && lots.is_approved === false && <div className="row"><h1 className="approval-pending">Approval Pending</h1></div>}
+                                <a
+                                  role="button"
+                                  data-toggle="collapse"
+                                  data-parent="#accordion"
+                                  href="#collapseGeneralLot"
+                                  aria-expanded="false"
+                                  aria-controls="collapseGeneralLot"
+                                >
+                                    <div className="row section-heading" role="tab" id="headingLot">
+                                        <div className="col-xs-1 caret-indicator" />
+                                        <div className="col-xs-10">
+                                            <h3>General Lot Information</h3>
+                                        </div>
                                     </div>
-                                </div>
-                            </a>
-                            <div
-                              id="collapseGeneralLot"
-                              className={activeForm.first_section ? 'panel-collapse collapse row' : 'panel-collapse row'}
-                              role="tabpanel"
-                              aria-labelledby="#headingLot"
-                            >
-                                <div className="panel-body">
-                                    <form >
+                                </a>
+                                <div
+                                  id="collapseGeneralLot"
+                                  className={activeForm.first_section ? 'panel-collapse collapse row' : 'panel-collapse row'}
+                                  role="tabpanel"
+                                  aria-labelledby="#headingLot"
+                                >
+                                    <div className="panel-body">
+                                        <form >
 
-                                        <fieldset>
-                                            <div className="row form-subheading">
-                                                <h3>Developer Account</h3>
-                                            </div>
-                                            <div className="row">
-                                                <div className="col-sm-6 form-group">
-                                                    <label htmlFor="account" className="form-label" id="account">Developer Account</label>
-                                                    <select className="form-control" id="account" onChange={formChange('account')} value={activeForm.account_show} >
-                                                        <option value="start_account">Developer Account</option>
-                                                        {accountsList}
-                                                    </select>
+                                            <fieldset>
+                                                <div className="row form-subheading">
+                                                    <h3>Developer Account</h3>
                                                 </div>
-                                            </div>
+                                                <div className="row">
+                                                    <div className="col-sm-6 form-group">
+                                                        <label htmlFor="account" className="form-label" id="account">Developer Account</label>
+                                                        <select className="form-control" id="account" onChange={formChange('account')} value={activeForm.account_show} >
+                                                            <option value="start_account">Developer Account</option>
+                                                            {accountsList}
+                                                        </select>
+                                                    </div>
+                                                </div>
 
-                                            <div className="row form-subheading">
-                                                <h3>Address</h3>
-                                            </div>
-                                            <div className="row">
-                                                <div className="col-sm-4">
-                                                    <FormGroup label="* Address Number" id="address_number" aria-required="true">
-                                                        <input type="number" className="form-control" placeholder="Address Number" autoFocus />
-                                                    </FormGroup>
+                                                <div className="row form-subheading">
+                                                    <h3>Address</h3>
                                                 </div>
-                                                <div className="col-sm-8">
-                                                    <FormGroup label="* Street" id="address_street" aria-required="true">
-                                                        <input type="text" className="form-control" placeholder="Street" />
-                                                    </FormGroup>
+                                                <div className="row">
+                                                    <div className="col-sm-4">
+                                                        <FormGroup label="* Address Number" id="address_number" aria-required="true">
+                                                            <input type="number" className="form-control" placeholder="Address Number" autoFocus />
+                                                        </FormGroup>
+                                                    </div>
+                                                    <div className="col-sm-8">
+                                                        <FormGroup label="* Street" id="address_street" aria-required="true">
+                                                            <input type="text" className="form-control" placeholder="Street" />
+                                                        </FormGroup>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div className="row">
-                                                <div className="col-sm-4">
-                                                    <FormGroup label="Street Direction" id="address_direction">
-                                                        <input type="text" className="form-control" placeholder="Street Direction" />
-                                                    </FormGroup>
+                                                <div className="row">
+                                                    <div className="col-sm-4">
+                                                        <FormGroup label="Street Direction" id="address_direction">
+                                                            <input type="text" className="form-control" placeholder="Street Direction" />
+                                                        </FormGroup>
+                                                    </div>
+                                                    <div className="col-sm-4">
+                                                        <FormGroup label="Unit" id="address_unit">
+                                                            <input type="text" className="form-control" placeholder="Unit" />
+                                                        </FormGroup>
+                                                    </div>
+                                                    <div className="col-sm-4">
+                                                        <FormGroup label="Street Suffix" id="address_suffix">
+                                                            <input type="text" className="form-control" placeholder="Street Suffix" />
+                                                        </FormGroup>
+                                                    </div>
                                                 </div>
-                                                <div className="col-sm-4">
-                                                    <FormGroup label="Unit" id="address_unit">
-                                                        <input type="text" className="form-control" placeholder="Unit" />
-                                                    </FormGroup>
+                                                <div className="row">
+                                                    <div className="col-sm-5">
+                                                        <FormGroup label="City" id="address_city">
+                                                            <input type="text" className="form-control" placeholder="Lexington" disabled value="Lexington" />
+                                                        </FormGroup>
+                                                    </div>
+                                                    <div className="col-sm-4 form-group">
+                                                        <FormGroup label="State" id="address_state">
+                                                            <input type="text" className="form-control" placeholder="Kentucky" disabled value="KY" />
+                                                        </FormGroup>
+                                                    </div>
+                                                    <div className="col-sm-3 form-group">
+                                                        <label htmlFor="address_zip" className="form-label" id="address_zip">Zipcode</label>
+                                                        <select className="form-control" id="address_zip" onChange={formChange('address_zip')} value={activeForm.address_zip_show} >
+                                                            <option value="start_zip">Zipcode</option>
+                                                            <option value={['40505', '40505']}>40505</option>
+                                                            <option value={['40509', '40509']}>40509</option>
+                                                            <option value={['40511', '40511']}>40511</option>
+                                                            <option value={['40515', '40515']}>40515</option>
+                                                            <option value={['40516', '40516']}>40516</option>
+                                                        </select>
+                                                    </div>
                                                 </div>
-                                                <div className="col-sm-4">
-                                                    <FormGroup label="Street Suffix" id="address_suffix">
-                                                        <input type="text" className="form-control" placeholder="Street Suffix" />
-                                                    </FormGroup>
-                                                </div>
-                                            </div>
-                                            <div className="row">
-                                                <div className="col-sm-5">
-                                                    <FormGroup label="City" id="address_city">
-                                                        <input type="text" className="form-control" placeholder="Lexington" disabled value="Lexington" />
-                                                    </FormGroup>
-                                                </div>
-                                                <div className="col-sm-4 form-group">
-                                                    <FormGroup label="State" id="address_state">
-                                                        <input type="text" className="form-control" placeholder="Kentucky" disabled value="KY" />
-                                                    </FormGroup>
-                                                </div>
-                                                <div className="col-sm-3 form-group">
-                                                    <label htmlFor="address_zip" className="form-label" id="address_zip">Zipcode</label>
-                                                    <select className="form-control" id="address_zip" onChange={formChange('address_zip')} value={activeForm.address_zip_show} >
-                                                        <option value="start_zip">Zipcode</option>
-                                                        <option value={['40505', '40505']}>40505</option>
-                                                        <option value={['40509', '40509']}>40509</option>
-                                                        <option value={['40511', '40511']}>40511</option>
-                                                        <option value={['40515', '40515']}>40515</option>
-                                                        <option value={['40516', '40516']}>40516</option>
-                                                    </select>
-                                                </div>
-                                            </div>
 
-                                            <div className="row form-subheading">
-                                                <h3>Location Identification</h3>
-                                            </div>
+                                                <div className="row form-subheading">
+                                                    <h3>Location Identification</h3>
+                                                </div>
+                                                <div className="row">
+                                                    <div className="col-sm-6 form-group">
+                                                        <label htmlFor="plat" className="form-label" id="plat" aria-required="true">* Plat</label>
+                                                        <select className="form-control" id="plat" onChange={formChange('plat')} value={activeForm.plat_show} >
+                                                            <option value="start_plat">Plat</option>
+                                                            {platsList}
+                                                        </select>
+                                                    </div>
+                                                    <div className="col-sm-6">
+                                                        <FormGroup label="* Lot Number" id="lot_number" aria-required="true">
+                                                            <input type="text" className="form-control" placeholder="Lot Number" />
+                                                        </FormGroup>
+                                                    </div>
+                                                </div>
+                                                <div className="row">
+                                                    <div className="col-sm-6">
+                                                        <FormGroup label="Latitude" id="latitude">
+                                                            <input type="text" className="form-control" placeholder="Latitude" />
+                                                        </FormGroup>
+                                                    </div>
+                                                    <div className="col-sm-6">
+                                                        <FormGroup label="Longitude" id="longitude">
+                                                            <input type="text" className="form-control" placeholder="Longitude" />
+                                                        </FormGroup>
+                                                    </div>
+                                                </div>
+                                                <div className="row">
+                                                    <div className="col-sm-6">
+                                                        <FormGroup label="Parcel ID" id="parcel_id">
+                                                            <input type="text" className="form-control" placeholder="Parcel ID" />
+                                                        </FormGroup>
+                                                    </div>
+                                                    <div className="col-sm-6">
+                                                        <FormGroup label="Permit ID" id="permit_id">
+                                                            <input type="text" className="form-control" placeholder="Permit ID" onFocus={showExactions} onBlur={hideExactions} />
+                                                        </FormGroup>
+                                                    </div>
+                                                </div>
+                                                <div className="row">
+                                                    <div className="col-sm-6">
+                                                        <FormGroup label="Certificate of Occupancy" id="certificate_of_occupancy">
+                                                            <input type="date" className="form-control" placeholder="Certificate of Occupancy" onFocus={showExactions} onBlur={hideExactions} />
+                                                        </FormGroup>
+                                                    </div>
+                                                </div>
+                                                <div className="row">
+                                                    <div className="col-xs-12">
+                                                        {activeForm.show_exactions && currentLot && currentLot.lot_exactions && currentLot.lot_exactions.current_exactions_number > 0 &&
+                                                            <h3 className="help-block alert alert-danger text-center">&nbsp;There are still {currentLot.lot_exactions.current_exactions} in exactions due on this lot.</h3>
+                                                        }
+                                                    </div>
+                                                </div>
+                                            </fieldset>
                                             <div className="row">
-                                                <div className="col-sm-6 form-group">
-                                                    <label htmlFor="plat" className="form-label" id="plat" aria-required="true">* Plat</label>
-                                                    <select className="form-control" id="plat" onChange={formChange('plat')} value={activeForm.plat_show} >
-                                                        <option value="start_plat">Plat</option>
-                                                        {platsList}
-                                                    </select>
-                                                </div>
-                                                <div className="col-sm-6">
-                                                    <FormGroup label="* Lot Number" id="lot_number" aria-required="true">
-                                                        <input type="text" className="form-control" placeholder="Lot Number" />
-                                                    </FormGroup>
-                                                </div>
-                                            </div>
-                                            <div className="row">
-                                                <div className="col-sm-6">
-                                                    <FormGroup label="Latitude" id="latitude">
-                                                        <input type="text" className="form-control" placeholder="Latitude" />
-                                                    </FormGroup>
-                                                </div>
-                                                <div className="col-sm-6">
-                                                    <FormGroup label="Longitude" id="longitude">
-                                                        <input type="text" className="form-control" placeholder="Longitude" />
-                                                    </FormGroup>
-                                                </div>
-                                            </div>
-                                            <div className="row">
-                                                <div className="col-sm-6">
-                                                    <FormGroup label="Parcel ID" id="parcel_id">
-                                                        <input type="text" className="form-control" placeholder="Parcel ID" />
-                                                    </FormGroup>
-                                                </div>
-                                                <div className="col-sm-6">
-                                                    <FormGroup label="Permit ID" id="permit_id">
-                                                        <input type="text" className="form-control" placeholder="Permit ID" onFocus={showExactions} onBlur={hideExactions} />
-                                                    </FormGroup>
-                                                </div>
-                                            </div>
-                                            <div className="row">
-                                                <div className="col-sm-6">
-                                                    <FormGroup label="Certificate of Occupancy" id="certificate_of_occupancy">
-                                                        <input type="date" className="form-control" placeholder="Certificate of Occupancy" onFocus={showExactions} onBlur={hideExactions} />
-                                                    </FormGroup>
-                                                </div>
-                                            </div>
-                                            <div className="row">
-                                                <div className="col-xs-12">
-                                                    {activeForm.show_exactions && currentLot && currentLot.lot_exactions && currentLot.lot_exactions.current_exactions_number > 0 &&
-                                                        <h3 className="help-block alert alert-danger text-center">&nbsp;There are still {currentLot.lot_exactions.current_exactions} in exactions due on this lot.</h3>
-                                                    }
-                                                </div>
-                                            </div>
-                                        </fieldset>
-                                        <div className="row">
-                                            <div className="col-xs-6 text-center">
-                                                <button disabled={!submitEnabled} className="btn btn-lex" onClick={onLotSubmit} >
-                                                    {currentUser.is_superuser || (currentUser.profile && currentUser.profile.is_supervisor) ? <div>Submit / Approve</div> : <div>Submit</div>}
-                                                </button>
-                                                {!submitEnabled ? (
-                                                    <div>
-                                                        <div className="clearfix" />
-                                                        <span> * All required fields must be filled.</span>
-                                                    </div>
-                                                ) : null
-                                                }
-                                            </div>
-                                            <div className="col-xs-6 text-center">
-                                                <DeclineDelete currentForm="/lot/" selectedEntry={selectedLot} parentRoute="lot" />
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                            { activeForm.first_section ? (
-                                <div>
-                                    <a
-                                      role="button"
-                                      data-toggle="collapse"
-                                      data-parent="#accordion"
-                                      href="#collapseLotExactions"
-                                      aria-expanded="false"
-                                      aria-controls="collapseLotExactions"
-                                    >
-                                        <div className="row section-heading" role="tab" id="headingLotExactions">
-                                            <div className="col-xs-1 caret-indicator" />
-                                            <div className="col-xs-10">
-                                                <h3>Lot Exactions</h3>
-                                            </div>
-                                        </div>
-                                    </a>
-                                    <div
-                                      id="collapseLotExactions"
-                                      className="panel-collapse collapse row"
-                                      role="tabpanel"
-                                      aria-labelledby="#headingLotExactions"
-                                    >
-                                        <div className="panel-body">
-                                            <form >
-                                                <fieldset>
-                                                    <div className="row form-subheading">
-                                                        <h3>Exactions</h3>
-                                                    </div>
-                                                    <div className="row">
-                                                        <div className="col-sm-6">
-                                                            <FormGroup label="Road Developer Exactions" id="dues_roads_dev">
-                                                                <input
-                                                                  type="number"
-                                                                  step="0.01"
-                                                                  className="form-control"
-                                                                  placeholder="Road Developer Exactions"
-                                                                />
-                                                            </FormGroup>
-                                                        </div>
-                                                        <div className="col-sm-6">
-                                                            <FormGroup label="Road Owner Exactions" id="dues_roads_own">
-                                                                <input
-                                                                  type="number"
-                                                                  step="0.01"
-                                                                  className="form-control"
-                                                                  placeholder="Road Owner Exactions"
-                                                                  disabled={ownerDisabled}
-                                                                />
-                                                            </FormGroup>
-                                                        </div>
-                                                    </div>
-                                                    <div className="row">
-                                                        <div className="col-sm-6">
-                                                            <FormGroup label="Sewer Transmission Developer Exactions" id="dues_sewer_trans_dev">
-                                                                <input
-                                                                  type="number"
-                                                                  step="0.01"
-                                                                  className="form-control"
-                                                                  placeholder="Sewer Transmission Developer Exactions"
-                                                                />
-                                                            </FormGroup>
-                                                        </div>
-                                                        <div className="col-sm-6">
-                                                            <FormGroup label="Sewer Transmission Owner Exactions" id="dues_sewer_trans_own">
-                                                                <input
-                                                                  type="number"
-                                                                  step="0.01"
-                                                                  className="form-control"
-                                                                  placeholder="Sewer Transmission Owner Exactions"
-                                                                  disabled={ownerDisabled}
-                                                                />
-                                                            </FormGroup>
-                                                        </div>
-                                                    </div>
-                                                    <div className="row">
-                                                        <div className="col-sm-6">
-                                                            <FormGroup label="Sewer Capacity Developer Exactions" id="dues_sewer_cap_dev">
-                                                                <input
-                                                                  type="number"
-                                                                  step="0.01"
-                                                                  className="form-control"
-                                                                  placeholder="Sewer Capacity Developer Exactions"
-                                                                />
-                                                            </FormGroup>
-                                                        </div>
-                                                        <div className="col-sm-6">
-                                                            <FormGroup label="Sewer Capacity Owner Exactions" id="dues_sewer_cap_own">
-                                                                <input
-                                                                  type="number"
-                                                                  step="0.01"
-                                                                  className="form-control"
-                                                                  placeholder="Sewer Capacity Owner Exactions"
-                                                                  disabled={ownerDisabled}
-                                                                />
-                                                            </FormGroup>
-                                                        </div>
-                                                    </div>
-                                                    <div className="row">
-                                                        <div className="col-sm-6">
-                                                            <FormGroup label="Parks Developer Exactions" id="dues_parks_dev">
-                                                                <input
-                                                                  type="number"
-                                                                  step="0.01"
-                                                                  className="form-control"
-                                                                  placeholder="Parks Developer Exactions"
-                                                                />
-                                                            </FormGroup>
-                                                        </div>
-                                                        <div className="col-sm-6">
-                                                            <FormGroup label="Parks Owner Exactions" id="dues_parks_own">
-                                                                <input
-                                                                  type="number"
-                                                                  step="0.01"
-                                                                  className="form-control"
-                                                                  placeholder="Parks Owner Exactions"
-                                                                  disabled={ownerDisabled}
-                                                                />
-                                                            </FormGroup>
-                                                        </div>
-                                                    </div>
-                                                    <div className="row">
-                                                        <div className="col-sm-6">
-                                                            <FormGroup label="Storm Developer Exactions" id="dues_storm_dev">
-                                                                <input
-                                                                  type="number"
-                                                                  step="0.01"
-                                                                  className="form-control"
-                                                                  placeholder="Storm Developer Exactions"
-                                                                />
-                                                            </FormGroup>
-                                                        </div>
-                                                        <div className="col-sm-6">
-                                                            <FormGroup label="Storm Owner Exactions" id="dues_storm_own">
-                                                                <input
-                                                                  type="number"
-                                                                  step="0.01"
-                                                                  className="form-control"
-                                                                  placeholder="Storm Owner Exactions"
-                                                                  disabled={ownerDisabled}
-                                                                />
-                                                            </FormGroup>
-                                                        </div>
-                                                    </div>
-                                                    <div className="row">
-                                                        <div className="col-sm-6">
-                                                            <FormGroup label="Open Space Developer Exactions" id="dues_open_space_dev">
-                                                                <input
-                                                                  type="number"
-                                                                  step="0.01"
-                                                                  className="form-control"
-                                                                  placeholder="Open Space Developer Exactions"
-                                                                />
-                                                            </FormGroup>
-                                                        </div>
-                                                        <div className="col-sm-6">
-                                                            <FormGroup label="Open Space Owner Exactions" id="dues_open_space_own">
-                                                                <input
-                                                                  type="number"
-                                                                  step="0.01"
-                                                                  className="form-control"
-                                                                  placeholder="Open Space Owner Exactions"
-                                                                  disabled={ownerDisabled}
-                                                                />
-                                                            </FormGroup>
-                                                        </div>
-                                                    </div>
-                                                </fieldset>
                                                 <div className="col-xs-6 text-center">
-                                                    <button disabled={!submitEnabled} className="btn btn-lex" onClick={onLotDues} >Submit</button>
+                                                    <button disabled={!submitEnabled} className="btn btn-lex" onClick={onLotSubmit} >
+                                                        {currentUser.is_superuser || (currentUser.profile && currentUser.profile.is_supervisor) ? <div>Submit / Approve</div> : <div>Submit</div>}
+                                                    </button>
                                                     {!submitEnabled ? (
                                                         <div>
                                                             <div className="clearfix" />
@@ -459,31 +278,217 @@ class LotForm extends React.Component {
                                                 <div className="col-xs-6 text-center">
                                                     <DeclineDelete currentForm="/lot/" selectedEntry={selectedLot} parentRoute="lot" />
                                                 </div>
-                                            </form>
-                                        </div>
+                                            </div>
+                                        </form>
                                     </div>
                                 </div>
-                            ) : null}
-                            {currentLot && currentLot.id &&
-                                <Notes
-                                  content_type="plats_lot"
-                                  object_id={currentLot.id}
-                                  ariaExpanded="true"
-                                  panelClass="panel-collapse collapse row in"
-                                  permission="lot"
-                                />
-                            }
-                            <div className="clearfix" />
-                            {currentLot && currentLot.id &&
-                                <Uploads
-                                  file_content_type="plats_lot"
-                                  file_object_id={currentLot.id}
-                                  ariaExpanded="true"
-                                  panelClass="panel-collapse collapse row in"
-                                  permission="lot"
-                                />
-                            }
-                        </div>
+                                { activeForm.first_section ? (
+                                    <div>
+                                        <a
+                                          role="button"
+                                          data-toggle="collapse"
+                                          data-parent="#accordion"
+                                          href="#collapseLotExactions"
+                                          aria-expanded="false"
+                                          aria-controls="collapseLotExactions"
+                                        >
+                                            <div className="row section-heading" role="tab" id="headingLotExactions">
+                                                <div className="col-xs-1 caret-indicator" />
+                                                <div className="col-xs-10">
+                                                    <h3>Lot Exactions</h3>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <div
+                                          id="collapseLotExactions"
+                                          className="panel-collapse collapse row"
+                                          role="tabpanel"
+                                          aria-labelledby="#headingLotExactions"
+                                        >
+                                            <div className="panel-body">
+                                                <form >
+                                                    <fieldset>
+                                                        <div className="row form-subheading">
+                                                            <h3>Exactions</h3>
+                                                        </div>
+                                                        <div className="row">
+                                                            <div className="col-sm-6">
+                                                                <FormGroup label="Road Developer Exactions" id="dues_roads_dev">
+                                                                    <input
+                                                                      type="number"
+                                                                      step="0.01"
+                                                                      className="form-control"
+                                                                      placeholder="Road Developer Exactions"
+                                                                    />
+                                                                </FormGroup>
+                                                            </div>
+                                                            <div className="col-sm-6">
+                                                                <FormGroup label="Road Owner Exactions" id="dues_roads_own">
+                                                                    <input
+                                                                      type="number"
+                                                                      step="0.01"
+                                                                      className="form-control"
+                                                                      placeholder="Road Owner Exactions"
+                                                                      disabled={ownerDisabled}
+                                                                    />
+                                                                </FormGroup>
+                                                            </div>
+                                                        </div>
+                                                        <div className="row">
+                                                            <div className="col-sm-6">
+                                                                <FormGroup label="Sewer Transmission Developer Exactions" id="dues_sewer_trans_dev">
+                                                                    <input
+                                                                      type="number"
+                                                                      step="0.01"
+                                                                      className="form-control"
+                                                                      placeholder="Sewer Transmission Developer Exactions"
+                                                                    />
+                                                                </FormGroup>
+                                                            </div>
+                                                            <div className="col-sm-6">
+                                                                <FormGroup label="Sewer Transmission Owner Exactions" id="dues_sewer_trans_own">
+                                                                    <input
+                                                                      type="number"
+                                                                      step="0.01"
+                                                                      className="form-control"
+                                                                      placeholder="Sewer Transmission Owner Exactions"
+                                                                      disabled={ownerDisabled}
+                                                                    />
+                                                                </FormGroup>
+                                                            </div>
+                                                        </div>
+                                                        <div className="row">
+                                                            <div className="col-sm-6">
+                                                                <FormGroup label="Sewer Capacity Developer Exactions" id="dues_sewer_cap_dev">
+                                                                    <input
+                                                                      type="number"
+                                                                      step="0.01"
+                                                                      className="form-control"
+                                                                      placeholder="Sewer Capacity Developer Exactions"
+                                                                    />
+                                                                </FormGroup>
+                                                            </div>
+                                                            <div className="col-sm-6">
+                                                                <FormGroup label="Sewer Capacity Owner Exactions" id="dues_sewer_cap_own">
+                                                                    <input
+                                                                      type="number"
+                                                                      step="0.01"
+                                                                      className="form-control"
+                                                                      placeholder="Sewer Capacity Owner Exactions"
+                                                                      disabled={ownerDisabled}
+                                                                    />
+                                                                </FormGroup>
+                                                            </div>
+                                                        </div>
+                                                        <div className="row">
+                                                            <div className="col-sm-6">
+                                                                <FormGroup label="Parks Developer Exactions" id="dues_parks_dev">
+                                                                    <input
+                                                                      type="number"
+                                                                      step="0.01"
+                                                                      className="form-control"
+                                                                      placeholder="Parks Developer Exactions"
+                                                                    />
+                                                                </FormGroup>
+                                                            </div>
+                                                            <div className="col-sm-6">
+                                                                <FormGroup label="Parks Owner Exactions" id="dues_parks_own">
+                                                                    <input
+                                                                      type="number"
+                                                                      step="0.01"
+                                                                      className="form-control"
+                                                                      placeholder="Parks Owner Exactions"
+                                                                      disabled={ownerDisabled}
+                                                                    />
+                                                                </FormGroup>
+                                                            </div>
+                                                        </div>
+                                                        <div className="row">
+                                                            <div className="col-sm-6">
+                                                                <FormGroup label="Storm Developer Exactions" id="dues_storm_dev">
+                                                                    <input
+                                                                      type="number"
+                                                                      step="0.01"
+                                                                      className="form-control"
+                                                                      placeholder="Storm Developer Exactions"
+                                                                    />
+                                                                </FormGroup>
+                                                            </div>
+                                                            <div className="col-sm-6">
+                                                                <FormGroup label="Storm Owner Exactions" id="dues_storm_own">
+                                                                    <input
+                                                                      type="number"
+                                                                      step="0.01"
+                                                                      className="form-control"
+                                                                      placeholder="Storm Owner Exactions"
+                                                                      disabled={ownerDisabled}
+                                                                    />
+                                                                </FormGroup>
+                                                            </div>
+                                                        </div>
+                                                        <div className="row">
+                                                            <div className="col-sm-6">
+                                                                <FormGroup label="Open Space Developer Exactions" id="dues_open_space_dev">
+                                                                    <input
+                                                                      type="number"
+                                                                      step="0.01"
+                                                                      className="form-control"
+                                                                      placeholder="Open Space Developer Exactions"
+                                                                    />
+                                                                </FormGroup>
+                                                            </div>
+                                                            <div className="col-sm-6">
+                                                                <FormGroup label="Open Space Owner Exactions" id="dues_open_space_own">
+                                                                    <input
+                                                                      type="number"
+                                                                      step="0.01"
+                                                                      className="form-control"
+                                                                      placeholder="Open Space Owner Exactions"
+                                                                      disabled={ownerDisabled}
+                                                                    />
+                                                                </FormGroup>
+                                                            </div>
+                                                        </div>
+                                                    </fieldset>
+                                                    <div className="col-xs-6 text-center">
+                                                        <button disabled={!submitEnabled} className="btn btn-lex" onClick={onLotDues} >Submit</button>
+                                                        {!submitEnabled ? (
+                                                            <div>
+                                                                <div className="clearfix" />
+                                                                <span> * All required fields must be filled.</span>
+                                                            </div>
+                                                        ) : null
+                                                        }
+                                                    </div>
+                                                    <div className="col-xs-6 text-center">
+                                                        <DeclineDelete currentForm="/lot/" selectedEntry={selectedLot} parentRoute="lot" />
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ) : null}
+                                {currentLot && currentLot.id &&
+                                    <Notes
+                                      content_type="plats_lot"
+                                      object_id={currentLot.id}
+                                      ariaExpanded="true"
+                                      panelClass="panel-collapse collapse row in"
+                                      permission="lot"
+                                    />
+                                }
+                                <div className="clearfix" />
+                                {currentLot && currentLot.id &&
+                                    <Uploads
+                                      file_content_type="plats_lot"
+                                      file_object_id={currentLot.id}
+                                      ariaExpanded="true"
+                                      panelClass="panel-collapse collapse row in"
+                                      permission="lot"
+                                    />
+                                }
+                            </div>
+                        )}
                     </div>
                 </div>
 
@@ -528,6 +533,7 @@ function mapDispatchToProps(dispatch, params) {
     return {
         onComponentDidMount() {
             dispatch(formInit());
+            dispatch(formUpdate({ loading: true }));
             if (selectedLot) {
                 dispatch(getLotID(selectedLot))
                 .then((data_lot) => {
@@ -598,6 +604,7 @@ function mapDispatchToProps(dispatch, params) {
             dispatch(getLots());
             dispatch(getPlats())
             .then((all_plats) => {
+                dispatch(formUpdate({ loading: false }));
                 if (plat_start) {
                     const plat_start_number = parseInt(plat_start, 10);
                     const matching_plats = all_plats.response.filter(plat => (plat.id === plat_start_number));

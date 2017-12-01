@@ -11,6 +11,11 @@ import Pagination from './Pagination';
 import SearchBar from './SearchBar';
 import ExistingPageLinks from './ExistingPageLinks';
 
+import LoadingScreen from './LoadingScreen';
+import {
+    formUpdate,
+} from '../actions/formActions';
+
 import { expansion_areas, agreement_types } from '../constants/searchBarConstants';
 
 import {
@@ -28,6 +33,7 @@ class AgreementExisting extends React.Component {
             currentUser,
             agreements,
             accounts,
+            activeForm,
         } = this.props;
 
         const accountsList = accounts && accounts.length > 0 &&
@@ -92,8 +98,13 @@ class AgreementExisting extends React.Component {
 
                 <div className="inside-body">
                     <div className="container">
-                        {agreements_list}
-                        {agreements_list ? <Pagination /> : <h1>No Results Found</h1>}
+                        {activeForm.loading ? <LoadingScreen /> :
+                        (
+                            <div>
+                                {agreements_list}
+                                {agreements_list ? <Pagination /> : <h1>No Results Found</h1>}
+                            </div>
+                        )}
                     </div>
                 </div>
                 <Footer />
@@ -107,6 +118,7 @@ AgreementExisting.propTypes = {
     agreements: PropTypes.array,
     accounts: PropTypes.array,
     route: PropTypes.object,
+    activeForm: PropTypes.object,
     onComponentDidMount: PropTypes.func,
 };
 
@@ -115,13 +127,17 @@ function mapStateToProps(state) {
         currentUser: state.currentUser,
         agreements: state.agreements,
         accounts: state.accounts,
+        activeForm: state.activeForm,
     };
 }
 
 function mapDispatchToProps(dispatch) {
     return {
         onComponentDidMount() {
-            dispatch(getPagination('/agreement/'));
+            dispatch(getPagination('/agreement/'))
+            .then(() => {
+                dispatch(formUpdate({ loading: false }));
+            });
         },
     };
 }
