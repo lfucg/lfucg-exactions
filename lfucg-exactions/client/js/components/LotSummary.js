@@ -17,6 +17,10 @@ import PaymentsMiniSummary from './PaymentsMiniSummary';
 
 import FormGroup from './FormGroup';
 
+import LoadingScreen from './LoadingScreen';
+import {
+    formUpdate,
+} from '../actions/formActions';
 
 import {
     getPlatID,
@@ -44,6 +48,7 @@ class LotSummary extends React.Component {
             accountLedgers,
             addPermitToLot,
             selectedLot,
+            activeForm,
         } = this.props;
 
         const currentLot = lots && lots.length > 0 &&
@@ -60,225 +65,230 @@ class LotSummary extends React.Component {
                 <Breadcrumbs route={this.props.route} parent_link={'lot'} parent_name={'Lots'} />
 
                 <div className="inside-body">
-                    {currentLot &&
-                    <div>
-                        <div className="container">
-                            <div className="row">
-                                <div className="col-xs-10 col-xs-offset-1">
-                                    {currentUser && currentUser.id && !currentLot.permit_id &&
-                                    <button type="button" className="btn pull-right button-modal-link" data-toggle="modal" data-target="#permitModal">
-                                        <i className="fa fa-clipboard button-modal-icon" aria-hidden="true" />&nbsp;Add Permit ID
-                                    </button>
-                                    }
-                                </div>
-                            </div>
-                            <div className="modal fade" id="permitModal" role="alertdialog" aria-labelledby="modalLabel">
-                                <div className="modal-dialog" role="document">
-                                    <div className="modal-content">
-                                        {currentLot.lot_exactions && currentLot.lot_exactions.current_exactions_number > 0 ? (
-                                            <div>
-                                                <div className="modal-header">
-                                                    <button type="button" className="close" data-dismiss="modal" aria-label="Close" autoFocus><span aria-hidden="true">&times;</span></button>
-                                                    <h3 className="modal-title text-center" id="modalLabel" tabIndex="0">Permit Addition</h3>
-                                                </div>
-                                                <div className="modal-body">
-                                                    <h4 className="text-center" tabIndex="0">Records indicate an outstanding exactions balance of</h4>
-                                                    <div className="row text-center alert alert-danger">
-                                                        <h2 tabIndex="0"><strong>{currentLot.lot_exactions.current_exactions}</strong></h2>
-                                                    </div>
-                                                    <h4 className="text-center">for {currentLot.address_full}.</h4>
-                                                    <div className="row">
-                                                        <div className="text-center col-sm-4 col-sm-offset-4 col-xs-12">
-                                                            <FormGroup label="Enter Permit ID" id="permit_id">
-                                                                <input type="text" className="form-control" placeholder="Permit ID" />
-                                                            </FormGroup>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div className="modal-footer">
-                                                    <button type="button" className="btn btn-primary" onClick={addPermitToLot} data-dismiss="modal">Save</button>
-                                                    <button type="button" className="btn btn-default" data-dismiss="modal">Close</button>
-                                                </div>
-                                            </div>
-                                            ) : (
-                                                <div>
-                                                    <div className="modal-header">
-                                                        <button type="button" className="close" data-dismiss="modal" aria-label="Close" autoFocus><span aria-hidden="true">&times;</span></button>
-                                                        <h3 className="modal-title text-center" id="modalLabel" tabIndex="0">Permit Addition</h3>
-                                                    </div>
-                                                    <div className="modal-body">
-                                                        <h4 className="text-center" tabIndex="0">Records indicate this lot has no exactions to be paid. You may enter a permit ID for:</h4>
-                                                        <div className="row text-center alert alert-success">
-                                                            <h2 tabIndex="0"><strong>{currentLot.address_full}</strong></h2>
-                                                        </div>
-                                                        <div className="row">
-                                                            <div className="text-center col-sm-4 col-sm-offset-4 col-xs-12">
-                                                                <FormGroup label="Enter Permit ID" id="permit_id">
-                                                                    <input type="text" className="form-control" placeholder="Permit ID" />
-                                                                </FormGroup>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div className="modal-footer">
-                                                        <button type="button" className="btn btn-primary" onClick={addPermitToLot} data-dismiss="modal">Save</button>
-                                                        <button type="button" className="btn btn-default" data-dismiss="modal">Close</button>
-                                                    </div>
-                                                </div>
-                                            )
-                                        }
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="col-md-offset-1 col-md-10 panel-group" id="accordion" role="tablist" aria-multiselectable="false">
-                                <a
-                                  role="button"
-                                  data-toggle="collapse"
-                                  data-parent="#accordion"
-                                  href="#collapseGeneralLot"
-                                  aria-expanded="false"
-                                  aria-controls="collapseGeneralLot"
-                                >
-                                    <div className="row section-heading" role="tab" id="headingLot">
-                                        <div className="col-xs-1 caret-indicator" />
-                                        <div className="col-xs-10">
-                                            <h3>General Lot Information</h3>
+                    {activeForm.loading ? <LoadingScreen /> :
+                    (
+                        <div>
+                            {currentLot &&
+                            <div>
+                                <div className="container">
+                                    <div className="row">
+                                        <div className="col-xs-10 col-xs-offset-1">
+                                            {currentUser && currentUser.id && !currentLot.permit_id &&
+                                            <button type="button" className="btn pull-right button-modal-link" data-toggle="modal" data-target="#permitModal">
+                                                <i className="fa fa-clipboard button-modal-icon" aria-hidden="true" />&nbsp;Add Permit ID
+                                            </button>
+                                            }
                                         </div>
                                     </div>
-                                </a>
-                                <div
-                                  id="collapseGeneralLot"
-                                  className="panel-collapse collapse row"
-                                  role="tabpanel"
-                                  aria-labelledby="#headingLot"
-                                >
-                                    <div className="panel-body">
-                                        <div className="row link-row">
-                                            <div className="col-xs-12 col-sm-5 col-sm-offset-7">
-                                                <div className="col-xs-5 col-xs-offset-5">
-                                                    {currentUser && currentUser.permissions && currentUser.permissions.lot && currentLot &&
-                                                        <Link to={`lot/form/${currentLot.id}`} aria-label={`Edit ${lots.address_full}`}>
-                                                            <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
-                                                            <div className="col-xs-7 link-label">
-                                                                Edit
+                                    <div className="modal fade" id="permitModal" role="alertdialog" aria-labelledby="modalLabel">
+                                        <div className="modal-dialog" role="document">
+                                            <div className="modal-content">
+                                                {currentLot.lot_exactions && currentLot.lot_exactions.current_exactions_number > 0 ? (
+                                                    <div>
+                                                        <div className="modal-header">
+                                                            <button type="button" className="close" data-dismiss="modal" aria-label="Close" autoFocus><span aria-hidden="true">&times;</span></button>
+                                                            <h3 className="modal-title text-center" id="modalLabel" tabIndex="0">Permit Addition</h3>
+                                                        </div>
+                                                        <div className="modal-body">
+                                                            <h4 className="text-center" tabIndex="0">Records indicate an outstanding exactions balance of</h4>
+                                                            <div className="row text-center alert alert-danger">
+                                                                <h2 tabIndex="0"><strong>{currentLot.lot_exactions.current_exactions}</strong></h2>
                                                             </div>
-                                                        </Link>
-                                                    }
-                                                </div>
+                                                            <h4 className="text-center">for {currentLot.address_full}.</h4>
+                                                            <div className="row">
+                                                                <div className="text-center col-sm-4 col-sm-offset-4 col-xs-12">
+                                                                    <FormGroup label="Enter Permit ID" id="permit_id">
+                                                                        <input type="text" className="form-control" placeholder="Permit ID" />
+                                                                    </FormGroup>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div className="modal-footer">
+                                                            <button type="button" className="btn btn-primary" onClick={addPermitToLot} data-dismiss="modal">Save</button>
+                                                            <button type="button" className="btn btn-default" data-dismiss="modal">Close</button>
+                                                        </div>
+                                                    </div>
+                                                    ) : (
+                                                        <div>
+                                                            <div className="modal-header">
+                                                                <button type="button" className="close" data-dismiss="modal" aria-label="Close" autoFocus><span aria-hidden="true">&times;</span></button>
+                                                                <h3 className="modal-title text-center" id="modalLabel" tabIndex="0">Permit Addition</h3>
+                                                            </div>
+                                                            <div className="modal-body">
+                                                                <h4 className="text-center" tabIndex="0">Records indicate this lot has no exactions to be paid. You may enter a permit ID for:</h4>
+                                                                <div className="row text-center alert alert-success">
+                                                                    <h2 tabIndex="0"><strong>{currentLot.address_full}</strong></h2> 
+                                                                </div>
+                                                                <div className="row">
+                                                                    <div className="text-center col-sm-4 col-sm-offset-4 col-xs-12">
+                                                                        <FormGroup label="Enter Permit ID" id="permit_id">
+                                                                            <input type="text" className="form-control" placeholder="Permit ID" />
+                                                                        </FormGroup>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div className="modal-footer">
+                                                                <button type="button" className="btn btn-primary" onClick={addPermitToLot} data-dismiss="modal">Save</button>
+                                                                <button type="button" className="btn btn-default" data-dismiss="modal">Close</button>
+                                                            </div>
+                                                        </div>
+                                                    )
+                                                }
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="col-xs-12">
-                                        <h3 className="col-xs-12 ">Current Exactions: {currentLot.lot_exactions && currentLot.lot_exactions.current_exactions}</h3>
-                                        <p className="col-md-8 col-xs-12">Address: {currentLot.address_full}</p>
-                                        <p className="col-md-4 col-xs-6">Lot Number: {currentLot.lot_number}</p>
-                                        <p className="col-md-4 col-xs-6 ">Permit ID: {currentLot.permit_id}</p>
-                                        <p className="col-md-4 col-xs-6">Latitude: {currentLot.latitude}</p>
-                                        <p className="col-md-4 col-xs-6">Longitude: {currentLot.longitude}</p>
-                                    </div>
-                                </div>
-
-                                <a
-                                  role="button"
-                                  data-toggle="collapse"
-                                  data-parent="#accordion"
-                                  href="#collapseLotExactions"
-                                  aria-expanded="false"
-                                  aria-controls="collapseLotExactions"
-                                >
-                                    <div className="row section-heading" role="tab" id="headingLotExactions">
-                                        <div className="col-xs-1 caret-indicator" />
-                                        <div className="col-xs-10">
-                                            <h3>Lot Exactions</h3>
-                                        </div>
-                                    </div>
-                                </a>
-                                <div
-                                  id="collapseLotExactions"
-                                  className="panel-collapse collapse row"
-                                  role="tabpanel"
-                                  aria-labelledby="#headingLotExactions"
-                                >
-                                    <div className="panel-body">
-                                        <div className="row link-row">
-                                            <div className="col-xs-12 col-sm-5 col-sm-offset-7">
-                                                <div className="col-xs-5 col-xs-offset-5">
-                                                    {currentUser && currentUser.permissions && currentUser.permissions.lot && currentLot &&
-                                                        <Link to={`lot/form/${currentLot.id}`} aria-label={`Edit ${lots.address_full} lot exactions`}>
-                                                            <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
-                                                            <div className="col-xs-7 link-label">
-                                                                Edit
-                                                            </div>
-                                                        </Link>
-                                                    }
+                                    <div className="col-md-offset-1 col-md-10 panel-group" id="accordion" role="tablist" aria-multiselectable="false">
+                                        <a
+                                          role="button"
+                                          data-toggle="collapse"
+                                          data-parent="#accordion"
+                                          href="#collapseGeneralLot"
+                                          aria-expanded="false"
+                                          aria-controls="collapseGeneralLot"
+                                        >
+                                            <div className="row section-heading" role="tab" id="headingLot">
+                                                <div className="col-xs-1 caret-indicator" />
+                                                <div className="col-xs-10">
+                                                    <h3>General Lot Information</h3>
                                                 </div>
                                             </div>
-                                        </div>
-                                        {currentLot.lot_exactions &&
+                                        </a>
+                                        <div
+                                          id="collapseGeneralLot"
+                                          className="panel-collapse collapse row"
+                                          role="tabpanel"
+                                          aria-labelledby="#headingLot"
+                                        >
+                                            <div className="panel-body">
+                                                <div className="row link-row">
+                                                    <div className="col-xs-12 col-sm-5 col-sm-offset-7">
+                                                        <div className="col-xs-5 col-xs-offset-5">
+                                                            {currentUser && currentUser.permissions && currentUser.permissions.lot && currentLot &&
+                                                                <Link to={`lot/form/${currentLot.id}`} aria-label={`Edit ${lots.address_full}`}>
+                                                                    <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
+                                                                    <div className="col-xs-7 link-label">
+                                                                        Edit
+                                                                    </div>
+                                                                </Link>
+                                                            }
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                             <div className="col-xs-12">
-                                                <h3 className="col-xs-12 ">Current Exactions: {currentLot.lot_exactions.current_exactions}</h3>
-                                                <p className="col-sm-6">Road Developer Exactions: {currentLot.lot_exactions.dues_roads_dev}</p>
-                                                <p className="col-sm-6">Road Owner Exactions: {currentLot.lot_exactions.dues_roads_own}</p>
-                                                <p className="col-sm-6">Sewer Transmission Developer Exactions: {currentLot.lot_exactions.dues_sewer_trans_dev}</p>
-                                                <p className="col-sm-6">Sewer Transmission Owner Exactions: {currentLot.lot_exactions.dues_sewer_trans_own}</p>
-                                                <p className="col-sm-6">Sewer Capacity Developer Exactions: {currentLot.lot_exactions.dues_sewer_cap_dev}</p>
-                                                <p className="col-sm-6">Sewer Capacity Owner Exactions: {currentLot.lot_exactions.dues_sewer_cap_own}</p>
-                                                <p className="col-sm-6">Parks Developer Exactions: {currentLot.lot_exactions.dues_parks_dev}</p>
-                                                <p className="col-sm-6">Parks Owner Exactions: {currentLot.lot_exactions.dues_parks_own}</p>
-                                                <p className="col-sm-6">Storm Developer Exactions: {currentLot.lot_exactions.dues_storm_dev}</p>
-                                                <p className="col-sm-6">Storm Owner Exactions: {currentLot.lot_exactions.dues_storm_own}</p>
-                                                <p className="col-sm-6">Open Space Developer Exactions: {currentLot.lot_exactions.dues_open_space_dev}</p>
-                                                <p className="col-sm-6">Open Space Owner Exactions: {currentLot.lot_exactions.dues_open_space_own}</p>
+                                                <h3 className="col-xs-12 ">Current Exactions: {currentLot.lot_exactions && currentLot.lot_exactions.current_exactions}</h3>
+                                                <p className="col-md-8 col-xs-12">Address: {currentLot.address_full}</p>
+                                                <p className="col-md-4 col-xs-6">Lot Number: {currentLot.lot_number}</p>
+                                                <p className="col-md-4 col-xs-6 ">Permit ID: {currentLot.permit_id}</p>
+                                                <p className="col-md-4 col-xs-6">Latitude: {currentLot.latitude}</p>
+                                                <p className="col-md-4 col-xs-6">Longitude: {currentLot.longitude}</p>
                                             </div>
+                                        </div>
+
+                                        <a
+                                          role="button"
+                                          data-toggle="collapse"
+                                          data-parent="#accordion"
+                                          href="#collapseLotExactions"
+                                          aria-expanded="false"
+                                          aria-controls="collapseLotExactions"
+                                        >
+                                            <div className="row section-heading" role="tab" id="headingLotExactions">
+                                                <div className="col-xs-1 caret-indicator" />
+                                                <div className="col-xs-10">
+                                                    <h3>Lot Exactions</h3>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <div
+                                          id="collapseLotExactions"
+                                          className="panel-collapse collapse row"
+                                          role="tabpanel"
+                                          aria-labelledby="#headingLotExactions"
+                                        >
+                                            <div className="panel-body">
+                                                <div className="row link-row">
+                                                    <div className="col-xs-12 col-sm-5 col-sm-offset-7">
+                                                        <div className="col-xs-5 col-xs-offset-5">
+                                                            {currentUser && currentUser.permissions && currentUser.permissions.lot && currentLot &&
+                                                                <Link to={`lot/form/${currentLot.id}`} aria-label={`Edit ${lots.address_full} lot exactions`}>
+                                                                    <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
+                                                                    <div className="col-xs-7 link-label">
+                                                                        Edit
+                                                                    </div>
+                                                                </Link>
+                                                            }
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                {currentLot.lot_exactions &&
+                                                    <div className="col-xs-12">
+                                                        <h3 className="col-xs-12 ">Current Exactions: {currentLot.lot_exactions.current_exactions}</h3>
+                                                        <p className="col-sm-6">Road Developer Exactions: {currentLot.lot_exactions.dues_roads_dev}</p>
+                                                        <p className="col-sm-6">Road Owner Exactions: {currentLot.lot_exactions.dues_roads_own}</p>
+                                                        <p className="col-sm-6">Sewer Transmission Developer Exactions: {currentLot.lot_exactions.dues_sewer_trans_dev}</p>
+                                                        <p className="col-sm-6">Sewer Transmission Owner Exactions: {currentLot.lot_exactions.dues_sewer_trans_own}</p>
+                                                        <p className="col-sm-6">Sewer Capacity Developer Exactions: {currentLot.lot_exactions.dues_sewer_cap_dev}</p>
+                                                        <p className="col-sm-6">Sewer Capacity Owner Exactions: {currentLot.lot_exactions.dues_sewer_cap_own}</p>
+                                                        <p className="col-sm-6">Parks Developer Exactions: {currentLot.lot_exactions.dues_parks_dev}</p>
+                                                        <p className="col-sm-6">Parks Owner Exactions: {currentLot.lot_exactions.dues_parks_own}</p>
+                                                        <p className="col-sm-6">Storm Developer Exactions: {currentLot.lot_exactions.dues_storm_dev}</p>
+                                                        <p className="col-sm-6">Storm Owner Exactions: {currentLot.lot_exactions.dues_storm_own}</p>
+                                                        <p className="col-sm-6">Open Space Developer Exactions: {currentLot.lot_exactions.dues_open_space_dev}</p>
+                                                        <p className="col-sm-6">Open Space Owner Exactions: {currentLot.lot_exactions.dues_open_space_own}</p>
+                                                    </div>
+                                                }
+                                            </div>
+                                        </div>
+                                        {currentLot.id &&
+                                            <Notes
+                                              content_type="plats_lot"
+                                              object_id={currentLot.id}
+                                              ariaExpanded="false"
+                                              panelClass="panel-collapse collapse row"
+                                              permission="lot"
+                                            />
+                                        }
+
+                                        <PlatsMiniSummary
+                                          mapSet={currentLot.plat}
+                                          mapQualifier={currentLot && currentLot.plat}
+                                          singlePlat
+                                        />
+
+                                        <AccountsMiniSummary
+                                          mapSet={accounts}
+                                          mapQualifier={currentLot.account && accounts}
+                                          singleAccount
+                                          title="Developer Account"
+                                          accordionID="Account"
+                                        />
+
+                                        <PaymentsMiniSummary
+                                          mapSet={payments}
+                                          mapQualifier={payments && payments.length > 0}
+                                        />
+
+                                        <AccountLedgersMiniSummary
+                                          mapSet={accountLedgers}
+                                          mapQualifier={accountLedgers && accountLedgers.length > 0}
+                                        />
+
+                                        {currentLot.id &&
+                                            <Uploads
+                                              file_content_type="plats_lot"
+                                              file_object_id={currentLot.id}
+                                              ariaExpanded="false"
+                                              panelClass="panel-collapse collapse row"
+                                              permission="lot"
+                                            />
                                         }
                                     </div>
                                 </div>
-                                {currentLot.id &&
-                                    <Notes
-                                      content_type="plats_lot"
-                                      object_id={currentLot.id}
-                                      ariaExpanded="false"
-                                      panelClass="panel-collapse collapse row"
-                                      permission="lot"
-                                    />
-                                }
-
-                                <PlatsMiniSummary
-                                  mapSet={currentLot.plat}
-                                  mapQualifier={currentLot && currentLot.plat}
-                                  singlePlat
-                                />
-
-                                <AccountsMiniSummary
-                                  mapSet={accounts}
-                                  mapQualifier={currentLot.account && accounts}
-                                  singleAccount
-                                  title="Developer Account"
-                                  accordionID="Account"
-                                />
-
-                                <PaymentsMiniSummary
-                                  mapSet={payments}
-                                  mapQualifier={payments && payments.length > 0}
-                                />
-
-                                <AccountLedgersMiniSummary
-                                  mapSet={accountLedgers}
-                                  mapQualifier={accountLedgers && accountLedgers.length > 0}
-                                />
-
-                                {currentLot.id &&
-                                    <Uploads
-                                      file_content_type="plats_lot"
-                                      file_object_id={currentLot.id}
-                                      ariaExpanded="false"
-                                      panelClass="panel-collapse collapse row"
-                                      permission="lot"
-                                    />
-                                }
                             </div>
+                            }
                         </div>
-                    </div>
-                    }
+                    )}
                 </div>
                 <Footer />
             </div>
@@ -294,6 +304,7 @@ LotSummary.propTypes = {
     payments: PropTypes.array,
     accountLedgers: PropTypes.array,
     route: PropTypes.object,
+    activeForm: PropTypes.object,
     onComponentDidMount: PropTypes.func,
     addPermitToLot: PropTypes.func,
     selectedLot: PropTypes.string,
@@ -307,6 +318,7 @@ function mapStateToProps(state) {
         accounts: state.accounts,
         payments: state.payments,
         accountLedgers: state.accountLedgers,
+        activeForm: state.activeForm,
     };
 }
 
@@ -315,7 +327,10 @@ function mapDispatchToProps(dispatch, params) {
     return {
         onComponentDidMount() {
             dispatch(getLotPayments(selectedLot));
-            dispatch(getLotAccountLedgers(selectedLot));
+            dispatch(getLotAccountLedgers(selectedLot))
+            .then(() => {
+                dispatch(formUpdate({ loading: false }));
+            });
             dispatch(getLots());
             dispatch(getLotID(selectedLot))
             .then((lot_data) => {
