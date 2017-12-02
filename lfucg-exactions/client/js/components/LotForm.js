@@ -134,8 +134,7 @@ class LotForm extends React.Component {
                                   aria-labelledby="#headingLot"
                                 >
                                     <div className="panel-body">
-                                        <form >
-
+                                        <form className="col-xs-12">
                                             <fieldset>
                                                 <div className="row form-subheading">
                                                     <h3>Developer Account</h3>
@@ -149,7 +148,6 @@ class LotForm extends React.Component {
                                                         </select>
                                                     </div>
                                                 </div>
-
                                                 <div className="row form-subheading">
                                                     <h3>Address</h3>
                                                 </div>
@@ -205,7 +203,6 @@ class LotForm extends React.Component {
                                                         </select>
                                                     </div>
                                                 </div>
-
                                                 <div className="row form-subheading">
                                                     <h3>Location Identification</h3>
                                                 </div>
@@ -218,7 +215,7 @@ class LotForm extends React.Component {
                                                         </select>
                                                     </div>
                                                     <div className="col-sm-6">
-                                                        <FormGroup label="* Lot Number" id="lot_number" aria-required="true">
+                                                        <FormGroup label="* Lot Number" id="lot_number" ariaRequired="true">
                                                             <input type="text" className="form-control" placeholder="Lot Number" />
                                                         </FormGroup>
                                                     </div>

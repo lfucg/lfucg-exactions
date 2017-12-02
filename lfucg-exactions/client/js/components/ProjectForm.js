@@ -81,11 +81,10 @@ class ProjectForm extends React.Component {
                             <div className="col-sm-offset-1 col-sm-10">
                                 {currentParam && projects.is_approved === false && <div className="row"><h1 className="approval-pending">Approval Pending</h1></div>}
                                 <form >
-
                                     <fieldset>
                                         <div className="row">
                                             <div className="col-sm-6">
-                                                <FormGroup label="* Project Name" id="name" >
+                                                <FormGroup label="* Project Name" id="name" ariaRequired="true">
                                                     <input type="text" className="form-control" placeholder="Name" />
                                                 </FormGroup>
                                             </div>
@@ -187,7 +186,7 @@ class ProjectForm extends React.Component {
                                                 </select>
                                             </div>
                                             <div className="col-sm-6">
-                                                <FormGroup label="* Status Date" id="status_date" >
+                                                <FormGroup label="* Status Date" id="status_date" ariaRequired="true">
                                                     <input type="date" className="form-control" placeholder="Date Format YYYY-MM-DD" />
                                                 </FormGroup>
                                             </div>

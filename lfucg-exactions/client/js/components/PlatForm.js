@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import {
     hashHistory,
 } from 'react-router';
-import { map } from 'ramda';
+import { map, sortBy, prop } from 'ramda';
 import PropTypes from 'prop-types';
 
 import Navbar from './Navbar';
@@ -90,7 +90,16 @@ class PlatForm extends React.Component {
                 );
             })(plats.plat_zone));
 
-        const platZoneDuesList = plats.plat_zone &&
+        const sortedPlatZones = plats && plats.plat_zone && plats.plat_zone.sort((a, b) => {
+            if (a.zone < b.zone) {
+                return -1;
+            } else if (a.zone > b.zone) {
+                return 1;
+            }
+            return 0;
+        });
+
+        const platZoneDuesList = plats && plats.plat_zone &&
             (map((single_plat_zone) => {
                 return (
                     <div key={single_plat_zone.id} >
@@ -119,7 +128,7 @@ class PlatForm extends React.Component {
                         </div>
                     </div>
                 );
-            })(plats.plat_zone));
+            })(sortedPlatZones));
 
         const submitEnabled =
             activeForm.total_acreage &&
@@ -214,9 +223,19 @@ class PlatForm extends React.Component {
                                                 </div>
                                                 <div className="row">
                                                     <div className="col-sm-6 form-group">
-                                                        <label htmlFor="expansion_area" className="form-label" id="expansion_area" aria-label="Expansion Area" aria-required="true">* Expansion Area</label>
-                                                        <select className="form-control" id="expansion_area" onChange={formChange('expansion_area')} value={activeForm.expansion_area_show} >
-                                                            <option value="start_expansion">Expansion Area</option>
+                                                        <label htmlFor="expansion_area" className="form-label" id="expansion_area" >
+                                                            * Expansion Area
+                                                        </label>
+                                                        <select
+                                                          className="form-control"
+                                                          id="expansion_area"
+                                                          onChange={formChange('expansion_area')}
+                                                          value={activeForm.expansion_area_show}
+                                                          aria-required="true"
+                                                          aria-label="* Expansion Area"
+                                                          required
+                                                        >
+                                                            <option value="">* Expansion Area</option>
                                                             <option value={['EA-1', 'EA-1']}>EA-1</option>
                                                             <option value={['EA-2A', 'EA-2A']}>EA-2A</option>
                                                             <option value={['EA-2B', 'EA-2B']}>EA-2B</option>
@@ -225,24 +244,24 @@ class PlatForm extends React.Component {
                                                         </select>
                                                     </div>
                                                     <div className="col-sm-6">
-                                                        <FormGroup label="* Gross Acreage" id="total_acreage" aria-required="true">
+                                                        <FormGroup label="* Gross Acreage" id="total_acreage" ariaRequired="true">
                                                             <input
                                                               type="number"
                                                               step="0.01"
                                                               className="form-control"
-                                                              placeholder="Gross Acreage"
+                                                              placeholder="* Gross Acreage"
                                                             />
                                                         </FormGroup>
                                                     </div>
                                                 </div>
                                                 <div className="row">
                                                     <div className="col-sm-6">
-                                                        <FormGroup label="* Buildable Lots" id="buildable_lots" aria-required="true">
+                                                        <FormGroup label="* Buildable Lots" id="buildable_lots" ariaRequired="true">
                                                             <input type="number" className="form-control" placeholder="Buildable Lots" />
                                                         </FormGroup>
                                                     </div>
                                                     <div className="col-sm-6">
-                                                        <FormGroup label="* Non-Buildable Lots" id="non_buildable_lots" aria-required="true">
+                                                        <FormGroup label="* Non-Buildable Lots" id="non_buildable_lots" ariaRequired="true">
                                                             <input type="number" className="form-control" placeholder="Non-Buildable Lots" />
                                                         </FormGroup>
                                                     </div>
@@ -252,24 +271,24 @@ class PlatForm extends React.Component {
                                                 </div>
                                                 <div className="row">
                                                     <div className="col-sm-6">
-                                                        <FormGroup label="* Name" id="name" aria-required="true">
+                                                        <FormGroup label="* Name" id="name" ariaRequired="true">
                                                             <input type="text" className="form-control" placeholder="Name" />
                                                         </FormGroup>
                                                     </div>
                                                     <div className="col-sm-6">
-                                                        <FormGroup label="* Date Recorded" id="date_recorded" aria-required="true">
+                                                        <FormGroup label="* Date Recorded" id="date_recorded" ariaRequired="true">
                                                             <input type="date" className="form-control" placeholder="Use YYYY-MM-DD Format for Date" />
                                                         </FormGroup>
                                                     </div>
                                                 </div>
                                                 <div className="row">
                                                     <div className="col-sm-6">
-                                                        <FormGroup label="* Cabinet" id="cabinet" aria-required="true">
+                                                        <FormGroup label="* Cabinet" id="cabinet" ariaRequired="true">
                                                             <input type="text" className="form-control" placeholder="Cabinet" />
                                                         </FormGroup>
                                                     </div>
                                                     <div className="col-sm-6">
-                                                        <FormGroup label="* Slide" id="slide" aria-required="true">
+                                                        <FormGroup label="* Slide" id="slide" ariaRequired="true">
                                                             <input type="text" className="form-control" placeholder="Slide" />
                                                         </FormGroup>
                                                     </div>

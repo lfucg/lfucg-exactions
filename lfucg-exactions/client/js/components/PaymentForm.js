@@ -112,7 +112,6 @@ class PaymentForm extends React.Component {
                             <div className="col-sm-offset-1 col-sm-10">
                                 {currentParam && payments.is_approved === false && <div className="row"><h1 className="approval-pending">Approval Pending</h1></div>}
                                 <form >
-
                                     <fieldset>
                                         <div className="row form-subheading">
                                             <h3>Associated Files</h3>
@@ -129,6 +128,7 @@ class PaymentForm extends React.Component {
                                                   selected={activeForm.lot_id ? (
                                                     filter(lot => lot.id === activeForm.lot_id)(lotsList)
                                                     ) : []}
+                                                  aria-required="true"
                                                 />
                                             </div>
                                             <div className="col-sm-6">
@@ -167,7 +167,7 @@ class PaymentForm extends React.Component {
                                         </div>
                                         <div className="row">
                                             <div className="col-sm-6">
-                                                <FormGroup label="* Paid By" id="paid_by" aria-required="true">
+                                                <FormGroup label="* Paid By" id="paid_by" ariaRequired="true">
                                                     <input type="text" className="form-control" placeholder="Paid By" />
                                                 </FormGroup>
                                             </div>
