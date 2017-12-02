@@ -77,7 +77,7 @@ class PlatExisting extends React.Component {
                               title={`${cabinet}${slide}`}
                               permissionModel="plat"
                               instanceID={plat.id}
-                              uniqueReport={true}
+                              uniqueReport
                             />
                             <div className="row">
                                 <div className="col-sm-offset-1">

@@ -179,9 +179,39 @@ class AccountLedgerForm extends React.Component {
                                                   selected={activeForm.lot ? (
                                                     filter(lot => lot.id === activeForm.lot)(lotsList)
                                                     ) : []}
+                                                  aria-required="true"
                                                 />
                                             </div>
                                         </div>
+                                        {activeForm.openModal && currentPlat.plat_exactions && (currentPlat.plat_exactions.remaining_lots > 0) &&
+                                        <div className={activeForm.openModal ? 'modal in' : 'modal'} role="alertdialog" aria-labelledby="modal-title" aria-describedby="modalDescription">
+                                            <div className="modal-dialog modal-lg" role="document">
+                                                <div className="modal-content">
+                                                    <div className="modal-header">
+                                                        <button type="button" className="close" data-dismiss="modal" aria-label="Plat is Missing Lots Close modal" onClick={closeModal} autoFocus><span aria-hidden="true">&times;</span></button>
+                                                        <h4 className="modal-title" tabIndex="0">Plat is Missing Lots</h4>
+                                                    </div>
+                                                    <div className="modal-body">
+                                                        <div className="container">
+                                                            {currentPlat && <div role="document" tabIndex="0">
+                                                                <h4 className="row modalDescription">The number of buildable lots is greater than the number of lots in this system.</h4>
+                                                                <div className="col-xs-12">
+                                                                    Buildable lots on plat: {currentPlat.buildable_lots}
+                                                                </div>
+                                                                <div className="col-xs-12">
+                                                                    Lots in system: {currentPlat.buildable_lots - (currentPlat.plat_exactions && currentPlat.plat_exactions.remaining_lots)}
+                                                                </div>
+                                                                <h5>The credits used will only apply to the lots within the system.</h5>
+                                                            </div>}
+                                                        </div>
+                                                    </div>
+                                                    <div className="modal-footer">
+                                                        <button type="button" className="btn btn-default" data-dismiss="modal" onClick={closeModal} aria-label="Plat is Missing Lots Continue and close modal">Continue</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        }
                                         <div className="row">
                                             <div className="col-sm-6 form-group">
                                                 <label htmlFor="agreement" className="form-label" id="agreement" aria-label="Agreement" aria-required="true">* Agreement</label>
@@ -191,58 +221,58 @@ class AccountLedgerForm extends React.Component {
                                                 </select>
                                             </div>
                                             <div className="col-sm-6">
-                                                <FormGroup label="* Entry Date" id="entry_date" aria-required="true" >
+                                                <FormGroup label="* Entry Date" id="entry_date" ariaRequired="true">
                                                     <input type="date" className="form-control" placeholder="Date Format YYYY-MM-DD" disabled={!activeForm.entry_type} />
                                                 </FormGroup>
                                             </div>
-                                        </div>
-                                        {activeForm.balance || activeForm.sewer_exactions || activeForm.non_sewer_exactions ?
-                                            <div className="white-box">
-                                                {activeForm.balance &&
-                                                    <div className="row text-center">
-                                                        <h4>Credits Available:</h4>
-                                                        <h5>{activeForm.balance}</h5>
-                                                    </div>
-                                                }
-                                                {activeForm.sewer_exactions || activeForm.non_sewer_exactions ?
-                                                    <div className="text-center">
-                                                        <div className="row">
-                                                            <h4>Exactions Due</h4>
+                                            {activeForm.balance || activeForm.sewer_exactions || activeForm.non_sewer_exactions ?
+                                                <div className="white-box">
+                                                    {activeForm.balance &&
+                                                        <div className="row text-center">
+                                                            <h4>Credits Available:</h4>
+                                                            <h5>{activeForm.balance}</h5>
                                                         </div>
-                                                        <div className="row">
-                                                            <div className="col-sm-6">
-                                                                <h5>Non-Sewer Due: {activeForm.non_sewer_exactions}</h5>
+                                                    }
+                                                    {activeForm.sewer_exactions || activeForm.non_sewer_exactions ?
+                                                        <div className="text-center">
+                                                            <div className="row">
+                                                                <h4>Exactions Due</h4>
                                                             </div>
-                                                            <div className="col-sm-6">
-                                                                <h5>Sewer Due: {activeForm.sewer_exactions}</h5>
+                                                            <div className="row">
+                                                                <div className="col-sm-6">
+                                                                    <h5>Non-Sewer Due: {activeForm.non_sewer_exactions}</h5>
+                                                                </div>
+                                                                <div className="col-sm-6">
+                                                                    <h5>Sewer Due: {activeForm.sewer_exactions}</h5>
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                : null}
-                                            </div>
-                                        : null}
-                                        <div className="row">
-                                            <div className="col-sm-6">
-                                                <FormGroup label="* Non-Sewer Credits" id="non_sewer_credits" aria-required="true" >
-                                                    <input
-                                                      type="number"
-                                                      className="form-control"
-                                                      placeholder="Non-Sewer Credits"
-                                                      disabled={!activeForm.entry_type}
-                                                      step="0.01"
-                                                    />
-                                                </FormGroup>
-                                            </div>
-                                            <div className="col-sm-6">
-                                                <FormGroup label="* Sewer Credits" id="sewer_credits" aria-required="true" >
-                                                    <input
-                                                      type="number"
-                                                      className="form-control"
-                                                      placeholder="Sewer Credits"
-                                                      disabled={!activeForm.entry_type}
-                                                      step="0.01"
-                                                    />
-                                                </FormGroup>
+                                                    : null}
+                                                </div>
+                                            : null}
+                                            <div className="row">
+                                                <div className="col-sm-6">
+                                                    <FormGroup label="* Non-Sewer Credits" id="non_sewer_credits" ariaRequired="true">
+                                                        <input
+                                                          type="number"
+                                                          className="form-control"
+                                                          placeholder="Non-Sewer Credits"
+                                                          disabled={!activeForm.entry_type}
+                                                          step="0.01"
+                                                        />
+                                                    </FormGroup>
+                                                </div>
+                                                <div className="col-sm-6">
+                                                    <FormGroup label="* Sewer Credits" id="sewer_credits" ariaRequired="true">
+                                                        <input
+                                                          type="number"
+                                                          className="form-control"
+                                                          placeholder="Sewer Credits"
+                                                          disabled={!activeForm.entry_type}
+                                                          step="0.01"
+                                                        />
+                                                    </FormGroup>
+                                                </div>
                                             </div>
                                         </div>
                                     </fieldset>
@@ -262,35 +292,6 @@ class AccountLedgerForm extends React.Component {
                                         <DeclineDelete currentForm="/ledger/" selectedEntry={selectedAccountLedger} parentRoute="credit-transfer" />
                                     </div>
                                 </form>
-                                {activeForm.openModal && currentPlat.plat_exactions && (currentPlat.plat_exactions.remaining_lots > 0) &&
-                                <div className={activeForm.openModal ? 'modal in' : 'modal'} tabIndex="-1" role="dialog">
-                                    <div className="modal-dialog modal-lg" role="document">
-                                        <div className="modal-content">
-                                            <div className="modal-header">
-                                                <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={closeModal}><span aria-hidden="true">&times;</span></button>
-                                                <h4 className="modal-title">Plat is Missing Lots</h4>
-                                            </div>
-                                            <div className="modal-body">
-                                                <div className="container">
-                                                    {currentPlat && <div>
-                                                        <h4 className="row">The number of buildable lots is greater than the number of lots in this system.</h4>
-                                                        <div className="col-xs-12">
-                                                            Buildable lots on plat: {currentPlat.buildable_lots}
-                                                        </div>
-                                                        <div className="col-xs-12">
-                                                            Lots in system: {currentPlat.buildable_lots - (currentPlat.plat_exactions && currentPlat.plat_exactions.remaining_lots)}
-                                                        </div>
-                                                        <h5>The credits used will only apply to the lots within the system.</h5>
-                                                    </div>}
-                                                </div>
-                                            </div>
-                                            <div className="modal-footer">
-                                                <button type="button" className="btn btn-default" data-dismiss="modal" onClick={closeModal} >Continue</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                }
                                 <div className="clearfix" />
                                 {activeForm.lot || activeForm.plat ? <div>
                                     {
@@ -310,44 +311,46 @@ class AccountLedgerForm extends React.Component {
                                                     : null
                                             ))(lots)
                                         :
-                                            lots && lots.length > 0 &&
-                                                map((lot =>
-                                                    (lot.id === parseInt(activeForm.lot, 10)) ?
-                                                        <Notes
-                                                          content_type="plats_lot"
-                                                          object_id={lot.id}
-                                                          ariaExpanded="true"
-                                                          panelClass="panel-collapse collapse row in"
-                                                          permission="accountledger"
-                                                        />
-                                                    : null
-                                            ))(lots)
-                                    }
-                                    {
-                                        plats && plats.length > 0 &&
-                                            map((plat =>
-                                                (plat.id === parseInt(activeForm.plat, 10)) ?
+                                        lots && lots.length > 0 &&
+                                            map((lot =>
+                                                (lot.id === parseInt(activeForm.lot, 10)) ?
                                                     <Notes
-                                                      content_type="plats_plat"
-                                                      object_id={plat.id}
+                                                      content_type="plats_lot"
+                                                      object_id={lot.id}
                                                       ariaExpanded="true"
                                                       panelClass="panel-collapse collapse row in"
-                                                      permission="plat"
+                                                      permission="accountledger"
                                                     />
                                                 : null
-                                        ))(plats)
+                                        ))(lots)
                                     }
-                                </div> : <div>
-                                    {selectedAccountLedger &&
-                                        <Notes
-                                          content_type="accounts_accountledger"
-                                          object_id={selectedAccountLedger}
-                                          ariaExpanded="true"
-                                          panelClass="panel-collapse collapse row in"
-                                          permission="accountledger"
-                                        />
+                                    {
+                                        selectedAccountLedger ?
+                                            <Notes
+                                              content_type="accounts_accountledger"
+                                              object_id={selectedAccountLedger}
+                                              ariaExpanded="true"
+                                              panelClass="panel-collapse collapse row in"
+                                              permission="accountledger"
+                                            />
+                                        : <div>
+                                            {
+                                            plats && plats.length > 0 &&
+                                                map((plat =>
+                                                    (plat.id === parseInt(activeForm.plat, 10)) ?
+                                                        <Notes
+                                                          content_type="plats_plat"
+                                                          object_id={plat.id}
+                                                          ariaExpanded="true"
+                                                          panelClass="panel-collapse collapse row in"
+                                                          permission="plat"
+                                                        />
+                                                    : null
+                                                    ))(plats)
+                                            }
+                                        </div>
                                     }
-                                </div>}
+                                </div> : null}
                             </div>
                         )}
                     </div>
