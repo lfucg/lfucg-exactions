@@ -10,6 +10,11 @@ import Breadcrumbs from './Breadcrumbs';
 import Pagination from './Pagination';
 import SearchBar from './SearchBar';
 import ExistingPageLinks from './ExistingPageLinks';
+import LoadingScreen from './LoadingScreen';
+
+import {
+    formUpdate,
+} from '../actions/formActions';
 
 import {
     getPagination,
@@ -28,6 +33,7 @@ class SubdivisionExisting extends React.Component {
             currentUser,
             subdivisions,
             plats,
+            activeForm,
         } = this.props;
 
         const platsList = plats && plats.length > 0 &&
@@ -82,8 +88,13 @@ class SubdivisionExisting extends React.Component {
 
                 <div className="inside-body">
                     <div className="container">
-                        {subdivisions_list}
-                        {subdivisions_list ? <Pagination /> : <h1>No Results Found</h1>}
+                        {activeForm.loading ? <LoadingScreen /> :
+                        (
+                            <div>
+                                {subdivisions_list}
+                                {subdivisions_list ? <Pagination /> : <h1>No Results Found</h1>}
+                            </div>
+                        )}
                     </div>
                 </div>
                 <Footer />
@@ -98,6 +109,7 @@ SubdivisionExisting.propTypes = {
     plats: PropTypes.array,
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
+    activeForm: PropTypes.object,
 };
 
 function mapStateToProps(state) {
@@ -105,13 +117,17 @@ function mapStateToProps(state) {
         currentUser: state.currentUser,
         subdivisions: state.subdivisions,
         plats: state.plats,
+        activeForm: state.activeForm,
     };
 }
 
 function mapDispatchToProps(dispatch) {
     return {
         onComponentDidMount() {
-            dispatch(getPagination('/subdivision/'));
+            dispatch(getPagination('/subdivision/'))
+            .then(() => {
+                dispatch(formUpdate({ loading: false }));
+            });
         },
     };
 }

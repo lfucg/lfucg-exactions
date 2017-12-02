@@ -15,6 +15,7 @@ import Notes from './Notes';
 import FormGroup from './FormGroup';
 
 import DeclineDelete from './DeclineDelete';
+import LoadingScreen from './LoadingScreen';
 
 import {
     formInit,
@@ -74,91 +75,94 @@ class AgreementForm extends React.Component {
 
                 <div className="inside-body">
                     <div className="container">
-                        <div className="col-sm-offset-1 col-sm-10">
-                            {currentParam && agreements.is_approved === false && <div className="row"><h1 className="approval-pending">Approval Pending</h1></div>}
-                            <form >
+                        {activeForm.loading ? <LoadingScreen /> :
+                        (
+                            <div className="col-sm-offset-1 col-sm-10">
+                                {currentParam && agreements.is_approved === false && <div className="row"><h1 className="approval-pending">Approval Pending</h1></div>}
+                                <form >
 
-                                <fieldset>
-                                    <div className="row">
-                                        <div className="col-sm-6 form-group">
-                                            <label htmlFor="account_id" className="form-label" id="account_id">* Developer Account</label>
-                                            <select className="form-control" id="account_id" onChange={formChange('account_id')} value={activeForm.account_id_show} aria-required="true">
-                                                <option value="start_account">Developer Account</option>
-                                                {accountsList}
-                                            </select>
+                                    <fieldset>
+                                        <div className="row">
+                                            <div className="col-sm-6 form-group">
+                                                <label htmlFor="account_id" className="form-label" id="account_id">* Developer Account</label>
+                                                <select className="form-control" id="account_id" onChange={formChange('account_id')} value={activeForm.account_id_show} aria-required="true">
+                                                    <option value="start_account">Developer Account</option>
+                                                    {accountsList}
+                                                </select>
+                                            </div>
+                                            <div className="col-sm-6">
+                                                <FormGroup label="* Resolution / Memo Number" id="resolution_number" ariaRequired="true">
+                                                    <input type="text" className="form-control" placeholder="Resolution / Memo Number" />
+                                                </FormGroup>
+                                            </div>
                                         </div>
-                                        <div className="col-sm-6">
-                                            <FormGroup label="* Resolution / Memo Number" id="resolution_number" ariaRequired="true">
-                                                <input type="text" className="form-control" placeholder="Resolution / Memo Number" />
-                                            </FormGroup>
+                                        <div className="row">
+                                            <div className="col-sm-6">
+                                                <FormGroup label="* Date Executed" id="date_executed" ariaRequired="true">
+                                                    <input type="date" className="form-control" placeholder="Date Format YYYY-MM-DD" />
+                                                </FormGroup>
+                                            </div>
+                                            <div className="col-sm-6 form-group">
+                                                <label htmlFor="expansion_area" className="form-label" id="expansion_area">* Expansion Area</label>
+                                                <select className="form-control" id="expansion_area" onChange={formChange('expansion_area')} value={activeForm.expansion_area_show} aria-required="true">
+                                                    <option value="start_area">Expansion Area</option>
+                                                    <option value={['EA-1', 'EA-1']}>EA-1</option>
+                                                    <option value={['EA-2A', 'EA-2A']}>EA-2A</option>
+                                                    <option value={['EA-2B', 'EA-2B']}>EA-2B</option>
+                                                    <option value={['EA-2C', 'EA-2C']}>EA-2C</option>
+                                                    <option value={['EA-3', 'EA-3']}>EA-3</option>
+                                                </select>
+                                            </div>
                                         </div>
+                                        <div className="row">
+                                            <div className="col-sm-6 form-group">
+                                                <label htmlFor="agreement_type" className="form-label" id="agreement_type" aria-label="Agreement Type">* Agreement Type</label>
+                                                <select className="form-control" id="agreement_type" onChange={formChange('agreement_type')} value={activeForm.agreement_type_show} aria-required="true">
+                                                    <option value="start_type">Agreement Type</option>
+                                                    <option value={['MEMO', 'Memo']}>Memo</option>
+                                                    <option value={['RESOLUTION', 'Resolution']}>Resolution</option>
+                                                    <option value={['OTHER', 'Other']}>Other</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                    <div className="col-xs-8">
+                                        <button disabled={!submitEnabled} className="btn btn-lex" onClick={onSubmit} >
+                                            {currentUser.is_superuser || (currentUser.profile && currentUser.profile.is_supervisor) ? <div>Submit / Approve</div> : <div>Submit</div>}
+                                        </button>
+                                        {!submitEnabled ? (
+                                            <div>
+                                                <div className="clearfix" />
+                                                <span> * All required fields must be filled.</span>
+                                            </div>
+                                        ) : null
+                                        }
                                     </div>
-                                    <div className="row">
-                                        <div className="col-sm-6">
-                                            <FormGroup label="* Date Executed" id="date_executed" ariaRequired="true">
-                                                <input type="date" className="form-control" placeholder="Date Format YYYY-MM-DD" />
-                                            </FormGroup>
-                                        </div>
-                                        <div className="col-sm-6 form-group">
-                                            <label htmlFor="expansion_area" className="form-label" id="expansion_area">* Expansion Area</label>
-                                            <select className="form-control" id="expansion_area" onChange={formChange('expansion_area')} value={activeForm.expansion_area_show} aria-required="true">
-                                                <option value="start_area">Expansion Area</option>
-                                                <option value={['EA-1', 'EA-1']}>EA-1</option>
-                                                <option value={['EA-2A', 'EA-2A']}>EA-2A</option>
-                                                <option value={['EA-2B', 'EA-2B']}>EA-2B</option>
-                                                <option value={['EA-2C', 'EA-2C']}>EA-2C</option>
-                                                <option value={['EA-3', 'EA-3']}>EA-3</option>
-                                            </select>
-                                        </div>
+                                    <div className="col-xs-4">
+                                        <DeclineDelete currentForm="/agreement/" selectedEntry={selectedAgreement} parentRoute="agreement" />
                                     </div>
-                                    <div className="row">
-                                        <div className="col-sm-6 form-group">
-                                            <label htmlFor="agreement_type" className="form-label" id="agreement_type" aria-label="Agreement Type">* Agreement Type</label>
-                                            <select className="form-control" id="agreement_type" onChange={formChange('agreement_type')} value={activeForm.agreement_type_show} aria-required="true">
-                                                <option value="start_type">Agreement Type</option>
-                                                <option value={['MEMO', 'Memo']}>Memo</option>
-                                                <option value={['RESOLUTION', 'Resolution']}>Resolution</option>
-                                                <option value={['OTHER', 'Other']}>Other</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </fieldset>
-                                <div className="col-xs-8">
-                                    <button disabled={!submitEnabled} className="btn btn-lex" onClick={onSubmit} >
-                                        {currentUser.is_superuser || (currentUser.profile && currentUser.profile.is_supervisor) ? <div>Submit / Approve</div> : <div>Submit</div>}
-                                    </button>
-                                    {!submitEnabled ? (
-                                        <div>
-                                            <div className="clearfix" />
-                                            <span> * All required fields must be filled.</span>
-                                        </div>
-                                    ) : null
-                                    }
-                                </div>
-                                <div className="col-xs-4">
-                                    <DeclineDelete currentForm="/agreement/" selectedEntry={selectedAgreement} parentRoute="agreement" />
-                                </div>
-                            </form>
-                            <div className="clearfix" />
-                            {agreements.id &&
-                                <Uploads
-                                  file_content_type="accounts_agreement"
-                                  file_object_id={agreements.id}
-                                  ariaExpanded="true"
-                                  panelClass="panel-collapse collapse row in"
-                                  permission="agreement"
-                                />
-                            }
-                            {agreements && agreements.id &&
-                                <Notes
-                                  content_type="accounts_agreement"
-                                  object_id={agreements.id}
-                                  ariaExpanded="true"
-                                  panelClass="panel-collapse collapse row in"
-                                  permission="agreement"
-                                />
-                            }
-                        </div>
+                                </form>
+                                <div className="clearfix" />
+                                {agreements.id &&
+                                    <Uploads
+                                      file_content_type="accounts_agreement"
+                                      file_object_id={agreements.id}
+                                      ariaExpanded="true"
+                                      panelClass="panel-collapse collapse row in"
+                                      permission="agreement"
+                                    />
+                                }
+                                {agreements && agreements.id &&
+                                    <Notes
+                                      content_type="accounts_agreement"
+                                      object_id={agreements.id}
+                                      ariaExpanded="true"
+                                      panelClass="panel-collapse collapse row in"
+                                      permission="agreement"
+                                    />
+                                }
+                            </div>
+                        )}
                     </div>
                 </div>
 
@@ -196,6 +200,7 @@ function mapDispatchToProps(dispatch, params) {
     return {
         onComponentDidMount() {
             dispatch(formInit());
+            dispatch(formUpdate({ loading: true }));
             dispatch(getAccounts());
             if (selectedAgreement) {
                 dispatch(getAgreementID(selectedAgreement))
@@ -210,6 +215,7 @@ function mapDispatchToProps(dispatch, params) {
                         expansion_area_show: `${data_agreement.response.expansion_area},${data_agreement.response.expansion_area}`,
                         agreement_type: data_agreement.response.agreement_type,
                         agreement_type_show: `${data_agreement.response.agreement_type},${data_agreement.response.agreement_type_display}`,
+                        loading: false,
                     };
                     dispatch(formUpdate(update));
                 });
@@ -218,6 +224,7 @@ function mapDispatchToProps(dispatch, params) {
                     account_id_show: '',
                     expansion_area_show: '',
                     agreement_type_show: '',
+                    loading: false,
                 };
                 dispatch(formUpdate(initial_constants));
             }

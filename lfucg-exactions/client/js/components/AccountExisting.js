@@ -11,6 +11,11 @@ import Pagination from './Pagination';
 import SearchBar from './SearchBar';
 import ExistingPageLinks from './ExistingPageLinks';
 
+import LoadingScreen from './LoadingScreen';
+import {
+    formUpdate,
+} from '../actions/formActions';
+
 import {
     getPagination,
     getPlats,
@@ -29,6 +34,7 @@ class AccountExisting extends React.Component {
             accounts,
             plats,
             lots,
+            activeForm,
         } = this.props;
 
         const platsList = plats && plats.length > 0 &&
@@ -100,8 +106,13 @@ class AccountExisting extends React.Component {
 
                 <div className="inside-body">
                     <div className="container">
-                        {accounts_list}
-                        {accounts_list ? <Pagination /> : <h1>No Results Found</h1>}
+                        {activeForm.loading ? <LoadingScreen /> :
+                        (
+                            <div>
+                                {accounts_list}
+                                {accounts_list ? <Pagination /> : <h1>No Results Found</h1>}
+                            </div>
+                        )}
                     </div>
                 </div>
                 <Footer />
@@ -116,13 +127,17 @@ function mapStateToProps(state) {
         accounts: state.accounts,
         plats: state.plats,
         lots: state.lots,
+        activeForm: state.activeForm,
     };
 }
 
 function mapDispatchToProps(dispatch) {
     return {
         onComponentDidMount() {
-            dispatch(getPagination('/account/'));
+            dispatch(getPagination('/account/'))
+            .then(() => {
+                dispatch(formUpdate({ loading: false }));
+            });
         },
     };
 }
@@ -133,6 +148,7 @@ AccountExisting.propTypes = {
     plats: PropTypes.array,
     lots: PropTypes.array,
     route: PropTypes.object,
+    activeForm: PropTypes.object,
     onComponentDidMount: PropTypes.func,
 };
 

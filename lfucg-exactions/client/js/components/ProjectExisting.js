@@ -10,6 +10,11 @@ import Breadcrumbs from './Breadcrumbs';
 import Pagination from './Pagination';
 import SearchBar from './SearchBar';
 import ExistingPageLinks from './ExistingPageLinks';
+import LoadingScreen from './LoadingScreen';
+
+import {
+    formUpdate,
+} from '../actions/formActions';
 
 import { project_statuses, project_types, project_categories, expansion_areas } from '../constants/searchBarConstants';
 
@@ -28,6 +33,7 @@ class ProjectExisting extends React.Component {
             currentUser,
             projects,
             agreements,
+            activeForm,
         } = this.props;
 
         const agreementsList = agreements && agreements.length > 0 &&
@@ -95,8 +101,13 @@ class ProjectExisting extends React.Component {
 
                 <div className="inside-body">
                     <div className="container">
-                        {projects_list}
-                        {projects_list ? <Pagination /> : <h1>No Results Found</h1>}
+                        {activeForm.loading ? <LoadingScreen /> :
+                        (
+                            <div>
+                                {projects_list}
+                                {projects_list ? <Pagination /> : <h1>No Results Found</h1>}
+                            </div>
+                        )}
                     </div>
                 </div>
                 <Footer />
@@ -109,6 +120,7 @@ ProjectExisting.propTypes = {
     currentUser: PropTypes.object,
     projects: PropTypes.array,
     route: PropTypes.object,
+    activeForm: PropTypes.object,
     onComponentDidMount: PropTypes.func,
     agreements: PropTypes.array,
 };
@@ -118,13 +130,17 @@ function mapStateToProps(state) {
         currentUser: state.currentUser,
         projects: state.projects,
         agreements: state.agreements,
+        activeForm: state.activeForm,
     };
 }
 
 function mapDispatchToProps(dispatch) {
     return {
         onComponentDidMount() {
-            dispatch(getPagination('/project/'));
+            dispatch(getPagination('/project/'))
+            .then(() => {
+                dispatch(formUpdate({ loading: false }));
+            });
         },
     };
 }
