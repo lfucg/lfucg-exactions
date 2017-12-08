@@ -221,7 +221,8 @@ class Lot(models.Model):
             storm_calc = 0
             open_space_calc = 0
 
-            if (self.dues_roads_dev == 0 and
+            if (self.date_created == self.date_modified and
+            self.dues_roads_dev == 0 and
             self.dues_sewer_cap_dev == 0 and
             self.dues_sewer_trans_dev == 0 and
             self.dues_parks_dev == 0 and
@@ -229,12 +230,12 @@ class Lot(models.Model):
             self.dues_open_space_dev ==0 and
             plat_buildable != 0):
                 for plat_zone in plat_zones:
-                    road_calc += (plat_zone.dues_roads / plat_buildable)
-                    sewer_cap_calc += (plat_zone.dues_sewer_cap / plat_buildable)
-                    sewer_trans_calc += (plat_zone.dues_sewer_trans / plat_buildable)
-                    park_calc += (plat_zone.dues_parks / plat_buildable)
-                    storm_calc += (plat_zone.dues_storm_water / plat_buildable)
-                    open_space_calc += (plat_zone.dues_open_spaces / plat_buildable)
+                    road_calc += (float(plat_zone.dues_roads) / plat_buildable)
+                    sewer_cap_calc += (float(plat_zone.dues_sewer_cap) / plat_buildable)
+                    sewer_trans_calc += (float(plat_zone.dues_sewer_trans) / plat_buildable)
+                    park_calc += (float(plat_zone.dues_parks) / plat_buildable)
+                    storm_calc += (float(plat_zone.dues_storm_water) / plat_buildable)
+                    open_space_calc += (float(plat_zone.dues_open_spaces) / plat_buildable)
 
                 self.dues_roads_dev = road_calc
                 self.dues_sewer_cap_dev = sewer_cap_calc
