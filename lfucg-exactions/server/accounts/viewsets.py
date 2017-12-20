@@ -287,8 +287,8 @@ class AccountLedgerViewSet(viewsets.ModelViewSet):
                 buildable_lots = plat_set[0].buildable_lots
 
                 try:
-                    non_sewer_credits_per_lot = round((int(data_set['non_sewer_credits']) / buildable_lots), 2)
-                    sewer_credits_per_lot = round((int(data_set['sewer_credits']) / buildable_lots), 2)
+                    non_sewer_credits_per_lot = round((float(data_set['non_sewer_credits']) / buildable_lots), 2)
+                    sewer_credits_per_lot = round((float(data_set['sewer_credits']) / buildable_lots), 2)
                 except Exception as exc:
                     return Response('Invalid credit entry', status=status.HTTP_400_BAD_REQUEST)
 
