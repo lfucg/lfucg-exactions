@@ -537,7 +537,7 @@ export function postLot() {
                 dues_open_space_dev,
                 dues_open_space_own,
                 account,
-                certificate_of_occupancy,
+                certificate_of_occupancy_final,
             } = activeForm;
             return {
                 plat,
@@ -568,7 +568,7 @@ export function postLot() {
                 dues_open_space_dev,
                 dues_open_space_own,
                 account,
-                certificate_of_occupancy,
+                certificate_of_occupancy_final,
             };
         },
     };
@@ -612,7 +612,7 @@ export function putLot(selectedLot) {
                 dues_open_space_dev,
                 dues_open_space_own,
                 account,
-                certificate_of_occupancy,
+                certificate_of_occupancy_final,
                 // payment,
             } = activeForm;
             return {
@@ -644,7 +644,7 @@ export function putLot(selectedLot) {
                 dues_open_space_dev,
                 dues_open_space_own,
                 account,
-                certificate_of_occupancy,
+                certificate_of_occupancy_final,
                 // payment,
             };
         },
