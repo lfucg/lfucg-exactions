@@ -246,7 +246,7 @@ class LotForm extends React.Component {
                                                 </div>
                                                 <div className="row">
                                                     <div className="col-sm-6">
-                                                        <FormGroup label="Certificate of Occupancy" id="certificate_of_occupancy">
+                                                        <FormGroup label="Certificate of Occupancy" id="certificate_of_occupancy_final">
                                                             <input type="date" className="form-control" placeholder="Certificate of Occupancy" onFocus={showExactions} onBlur={hideExactions} />
                                                         </FormGroup>
                                                     </div>
@@ -549,7 +549,7 @@ function mapDispatchToProps(dispatch, params) {
                         lot_number: data_lot.response.lot_number,
                         parcel_id: data_lot.response.parcel_id,
                         permit_id: data_lot.response.permit_id,
-                        certificate_of_occupancy: data_lot.response.certificate_of_occupancy,
+                        certificate_of_occupancy_final: data_lot.response.certificate_of_occupancy_final,
                         latitude: data_lot.response.latitude,
                         longitude: data_lot.response.longitude,
                         dues_roads_dev: data_lot.response.dues_roads_dev,

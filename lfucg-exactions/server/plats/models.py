@@ -9,8 +9,12 @@ from notes.models import *
 ZONES = (
     ('EAR-1', 'EAR-1'),
     ('EAR-1SRA', 'EAR-1SRA'),
+    ('EAR-1SDAO', 'EAR-1 (Special Design Area Overlay)'),
     ('EAR-2', 'EAR-2'),
+    ('EAR-2/TA', 'EAR-2 / TA'),
     ('EAR-3', 'EAR-3'),
+    ('A-R', 'A-R'),
+    ('B-5P', 'B-5P'),
     ('CC(RES)', 'CC(RES)'),
     ('CC(NONR)', 'CC(NONR)'),
     ('ED', 'ED'),
@@ -63,8 +67,14 @@ class Plat(models.Model):
         ('DEVELOPMENT_PLAN', 'Final Development Plan'),
     )
 
+    ACREAGE_TYPE = (
+        ('GROSS', 'gross'),
+        ('NET', 'net'),
+    )
+
     subdivision = models.ForeignKey(Subdivision, blank=True, null=True, related_name='plat')
     account = models.ForeignKey('accounts.Account', blank=True, null=True, related_name='plat_account')
+    amended_parent_plat = models.ForeignKey('plats.Plat', blank=True, null=True, related_name='plat_amend')
 
     date_recorded = models.DateField()
     date_created = models.DateField(auto_now_add=True)
@@ -74,9 +84,12 @@ class Plat(models.Model):
     modified_by = models.ForeignKey(User, related_name='plat_modified')
 
     name = models.CharField(max_length=300)    
-    total_acreage = models.DecimalField(max_digits=20, decimal_places=2)
     latitude = models.CharField(max_length=100, null=True, blank=True)
     longitude = models.CharField(max_length=100, null=True, blank=True)
+
+    total_acreage = models.DecimalField(max_digits=20, decimal_places=2)
+    right_of_way_acreage = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True)
+    acreage_type = models.CharField(max_length=100, choices=ACREAGE_TYPE, null=True, blank=True)
 
     # plan or development plan
     plat_type = models.CharField(max_length=100, choices=PLAT_TYPES)
@@ -85,6 +98,7 @@ class Plat(models.Model):
     unit = models.CharField(max_length=200, null=True, blank=True)
     section = models.CharField(max_length=200, null=True, blank=True)
     block = models.CharField(max_length=200, null=True, blank=True)
+    case_number = models.CharField(max_length=200, null=True, blank=True)
     
     buildable_lots = models.IntegerField()
     non_buildable_lots = models.IntegerField(default=0)
@@ -96,6 +110,9 @@ class Plat(models.Model):
 
     sewer_due = models.DecimalField(max_digits=20, decimal_places=2, default=0)
     non_sewer_due = models.DecimalField(max_digits=20, decimal_places=2, default=0)
+
+    amended = models.BooleanField(default=False)
+    signed_date = models.DateField(null=True, blank=True)
 
     history = HistoricalRecords()
 
@@ -186,7 +203,8 @@ class Lot(models.Model):
     dues_open_space_dev = models.DecimalField(max_digits=20, decimal_places=2, default=0)
     dues_open_space_own = models.DecimalField(max_digits=20, decimal_places=2, default=0)
 
-    certificate_of_occupancy = models.DateField(blank=True, null=True)
+    certificate_of_occupancy_final = models.DateField(blank=True, null=True)
+    certificate_of_occupancy_conditional = models.DateField(blank=True, null=True)
 
     history = HistoricalRecords()
 
