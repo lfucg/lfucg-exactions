@@ -252,7 +252,7 @@ class LotSerializer(serializers.ModelSerializer):
             'dues_open_space_dev',
             'dues_open_space_own',
 
-            'certificate_of_occupancy',
+            'certificate_of_occupancy_final',
 
             'lot_exactions',
         )
