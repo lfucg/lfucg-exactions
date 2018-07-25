@@ -15,11 +15,11 @@ class NoteHistoryAdmin(SimpleHistoryAdmin):
 
 class RateTableHistoryAdmin(SimpleHistoryAdmin):
     list_display = (
+        'id',
         'resolution_number',
         'begin_effective_date',
         'end_effective_date',
         'is_active',
-        'id',
     )
     readonly_fields = (
         'created_by',
@@ -31,12 +31,12 @@ class RateTableHistoryAdmin(SimpleHistoryAdmin):
 class RateHistoryAdmin(SimpleHistoryAdmin):
     search_fields = ['rate_table_id__resolution_number', 'expansion_area', 'zone', 'category']
     list_display = (
+        'id',
         'rate_table_id',
         'expansion_area',
         'zone',
         'category',
         'rate',
-        'id',
     )
     readonly_fields = (
         'created_by',

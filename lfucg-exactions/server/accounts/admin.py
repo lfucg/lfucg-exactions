@@ -6,12 +6,21 @@ from accounts.models import *
 
 class AccountHistoryAdmin(SimpleHistoryAdmin):
     list_display = (
+        'id',
         'account_name',
         'contact_full_name',
-        'id',
         'email',
         'phone',
         'address_full',
+        'is_active'
+    )
+    list_editable = (
+        'account_name',
+        'contact_full_name',
+        'email',
+        'phone',
+        'address_full',
+        'is_active'
     )
     readonly_fields = (
         'created_by',
@@ -19,14 +28,18 @@ class AccountHistoryAdmin(SimpleHistoryAdmin):
         'date_created',
         'date_modified',
     )
+    ordering = (
+        'account_name',
+    )
 
 class AgreementHistoryAdmin(SimpleHistoryAdmin):
     list_display = (
-        'resolution_number',
         'id',
+        'resolution_number',
         'account_name',
         'agreement_type',
         'expansion_area',
+        'date_executed'
     )
     readonly_fields = (
         'created_by',
@@ -34,6 +47,10 @@ class AgreementHistoryAdmin(SimpleHistoryAdmin):
         'date_created',
         'date_modified',
     )    
+    search_fields = (
+        'resolution_number',
+        'account_name'
+    )
 
     def account_name(self, obj):
         return obj.account_id.account_name
@@ -103,11 +120,11 @@ class ProjectCostEstimateHistoryAdmin(SimpleHistoryAdmin):
 
 class AccountLedgerHistoryAdmin(SimpleHistoryAdmin):
     list_display = (
-        'account_to',
-        'account_from',
-        'agreement',
-        'lot',
         'id',
+        'account_from',
+        'account_to',
+        'lot',
+        'agreement',
         'entry_type',
         'entry_date',
     )
@@ -116,6 +133,9 @@ class AccountLedgerHistoryAdmin(SimpleHistoryAdmin):
         'modified_by',
         'date_created',
         'date_modified',
+    )
+    raw_id_fields = (
+        'lot',
     )
 
     def account_from(self, obj):

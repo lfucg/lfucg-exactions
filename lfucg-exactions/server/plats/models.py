@@ -167,7 +167,7 @@ class Lot(models.Model):
     created_by = models.ForeignKey(User, related_name='lot_created')
     modified_by = models.ForeignKey(User, related_name='lot_modified')
 
-    lot_number = models.CharField(max_length=100)
+    lot_number = models.CharField(max_length=100, null=True, blank=True)
     permit_id = models.CharField(max_length=200, null=True, blank=True)
 
     latitude = models.CharField(max_length=100, null=True, blank=True)
@@ -209,7 +209,7 @@ class Lot(models.Model):
     history = HistoricalRecords()
 
     def __str__(self):
-        return self.address_full    
+        return self.address_full and self.address_full or '%s %s%s, %s, %s %s' % (self.address_number, self.address_street, str(self.address_unit and ' ' + self.address_unit or ''), self.address_city, self.address_state, str(self.address_zip and ' ' + self.address_zip or ''))
 
     def save(self, *args, **kwargs):
         plat = Plat.objects.get(id=self.plat.id)
@@ -325,7 +325,7 @@ class PlatZone(models.Model):
                 self.dues_storm_water = (self.acres * storm_water_rate.rate)
 
         super(PlatZone, self).save(*args, **kwargs)
-        
+
         plat_model = self.plat
         plat_model.save()
 

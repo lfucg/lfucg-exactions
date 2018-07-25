@@ -317,7 +317,7 @@ class AccountLedger(models.Model):
     history = HistoricalRecords()
 
     def __str__(self):
-        return self.entry_type
+        return str(self.lot)
 
     def calculate_credits(self):
         return self.non_sewer_credits + self.sewer_credits
