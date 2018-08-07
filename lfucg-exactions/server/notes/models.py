@@ -10,8 +10,12 @@ from simple_history.models import HistoricalRecords
 ZONES = (
     ('EAR-1', 'EAR-1'),
     ('EAR-1SRA', 'EAR-1SRA'),
+    ('EAR-1SDAO', 'EAR-1 (Special Design Area Overlay)'),
     ('EAR-2', 'EAR-2'),
+    ('EAR-2/TA', 'EAR-2 / TA'),
     ('EAR-3', 'EAR-3'),
+    ('A-R', 'A-R'),
+    ('B-5P', 'B-5P'),
     ('CC(RES)', 'CC(RES)'),
     ('CC(NONR)', 'CC(NONR)'),
     ('ED', 'ED'),
@@ -30,6 +34,7 @@ EXPANSION_AREAS = (
     ('EA-1', 'EA-1'),
     ('EA-2A', 'EA-2A'),
     ('EA-2B', 'EA-2B'),
+    ('EA-2A / 2B', 'EA-2A / 2B'),
     ('EA-2C', 'EA-2C'),
     ('EA-3', 'EA-3'),
 )
