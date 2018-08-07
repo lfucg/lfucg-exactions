@@ -63,6 +63,8 @@ class PaymentHistoryAdmin(SimpleHistoryAdmin):
         'id',
         'payment_type',
         'paid_by_type',
+        'paid_by',
+        'amount_paid'
     )
     readonly_fields = (
         'created_by',
@@ -70,14 +72,25 @@ class PaymentHistoryAdmin(SimpleHistoryAdmin):
         'date_created',
         'date_modified',
     )
+    list_filter = (
+        'credit_account__account_name',
+    )
+    search_fields = (
+        'lot_id__address_street', 
+        'lot_id__address_number'
+    )
 
     def account_name(self, obj):
         return obj.credit_account.account_name
     account_name.short_description = 'Account'
 
     def lot_address(self, obj):
-        return obj.lot_id.address_full
+        return obj.lot_id.address_full or str(obj.lot_id)
     lot_address.short_description = 'Lot'
+
+    def amount_paid(self, obj):
+        return obj.paid_roads + obj.paid_parks + obj.paid_storm + obj.paid_open_space + obj.paid_sewer_trans + obj.paid_sewer_cap
+    amount_paid.short_description = 'Amount Paid'
 
 class ProjectHistoryAdmin(SimpleHistoryAdmin):
     list_display = (
@@ -134,6 +147,18 @@ class AccountLedgerHistoryAdmin(SimpleHistoryAdmin):
         'date_created',
         'date_modified',
     )
+    list_filter = (
+        'account_from',
+        'account_to',
+        'lot__address_street',
+    )
+    search_fields = (
+        'account_from__account_name',
+        'account_to__account_name',
+        'lot__address_full',
+        'lot__address_street',
+        'agreement__resolution_number',
+    )
     raw_id_fields = (
         'lot',
     )
@@ -161,8 +186,8 @@ class ProfileInline(admin.TabularInline):
 class UserAdmin(admin.ModelAdmin):
     list_display = ('username', 'email', 'first_name', 'is_staff', 'last_login',)
     inlines = (
-            ProfileInline,
-        )
+        ProfileInline,
+    )
 
 
 admin.site.unregister(User)
