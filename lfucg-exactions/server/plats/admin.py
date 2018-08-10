@@ -54,7 +54,7 @@ class PlatHistoryAdmin(SimpleHistoryAdmin):
     search_fields = (
         'name',
         'account__account_name',
-        'account__contact_full_name'
+        'account__contact_full_name',
         'subdivision__name'
     )
     inlines = [PlatZoneInlineAdmin,]
