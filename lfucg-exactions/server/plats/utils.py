@@ -2,6 +2,7 @@ from .models import Lot, Plat
 from accounts.models import *
 from rest_framework.response import Response
 from rest_framework import status
+from decimal import Decimal
 
 def calculate_lot_balance(lot):
     # PAYMENTS
@@ -10,42 +11,46 @@ def calculate_lot_balance(lot):
     sewer_payment = 0
     non_sewer_payment = 0
 
-    sewer_exactions = (lot.dues_sewer_cap_own +
-        lot.dues_sewer_trans_dev +
-        lot.dues_sewer_trans_own +
-        lot.dues_sewer_cap_dev)
+    sewer_exactions = (
+        Decimal(lot.dues_sewer_cap_own) +
+        Decimal(lot.dues_sewer_trans_dev) +
+        Decimal(lot.dues_sewer_trans_own) +
+        Decimal(lot.dues_sewer_cap_dev)
+    )
 
-    non_sewer_exactions = (lot.dues_roads_own +
-        lot.dues_roads_dev +
-        lot.dues_parks_dev +
-        lot.dues_parks_own +
-        lot.dues_storm_dev +
-        lot.dues_storm_own +
-        lot.dues_open_space_dev +
-        lot.dues_open_space_own)
+    non_sewer_exactions = (
+        Decimal(lot.dues_roads_own) +
+        Decimal(lot.dues_roads_dev) +
+        Decimal(lot.dues_parks_dev) +
+        Decimal(lot.dues_parks_own) +
+        Decimal(lot.dues_storm_dev) +
+        Decimal(lot.dues_storm_own) +
+        Decimal(lot.dues_open_space_dev) +
+        Decimal(lot.dues_open_space_own)
+    )
 
-    dues_roads_dev = lot.dues_roads_dev
-    dues_roads_own = lot.dues_roads_own
-    dues_sewer_trans_dev = lot.dues_sewer_trans_dev
-    dues_sewer_trans_own = lot.dues_sewer_trans_own
-    dues_sewer_cap_dev = lot.dues_sewer_cap_dev
-    dues_sewer_cap_own = lot.dues_sewer_cap_own
-    dues_parks_dev = lot.dues_parks_dev
-    dues_parks_own = lot.dues_parks_own
-    dues_storm_dev = lot.dues_storm_dev
-    dues_storm_own = lot.dues_storm_own
-    dues_open_space_dev = lot.dues_open_space_dev
-    dues_open_space_own = lot.dues_open_space_own
+    dues_roads_dev = Decimal(lot.dues_roads_dev)
+    dues_roads_own = Decimal(lot.dues_roads_own)
+    dues_sewer_trans_dev = Decimal(lot.dues_sewer_trans_dev)
+    dues_sewer_trans_own = Decimal(lot.dues_sewer_trans_own)
+    dues_sewer_cap_dev = Decimal(lot.dues_sewer_cap_dev)
+    dues_sewer_cap_own = Decimal(lot.dues_sewer_cap_own)
+    dues_parks_dev = Decimal(lot.dues_parks_dev)
+    dues_parks_own = Decimal(lot.dues_parks_own)
+    dues_storm_dev = Decimal(lot.dues_storm_dev)
+    dues_storm_own = Decimal(lot.dues_storm_own)
+    dues_open_space_dev = Decimal(lot.dues_open_space_dev)
+    dues_open_space_own = Decimal(lot.dues_open_space_own)
 
     total_exactions = sewer_exactions + non_sewer_exactions
 
     if payments is not None:
         for payment in payments:
-            sewer_payment_paid = (
+            sewer_payment_paid = Decimal(
                 payment.paid_sewer_trans +
                 payment.paid_sewer_cap
             )
-            non_sewer_payment_paid = (
+            non_sewer_payment_paid = Decimal(
                 payment.paid_roads +
                 payment.paid_parks +
                 payment.paid_storm +
@@ -70,8 +75,8 @@ def calculate_lot_balance(lot):
 
     if account_ledgers is not None:
         for ledger in account_ledgers:
-            sewer_credits_applied += ledger.sewer_credits
-            non_sewer_credits_applied += ledger.non_sewer_credits
+            sewer_credits_applied += Decimal(ledger.sewer_credits)
+            non_sewer_credits_applied += Decimal(ledger.non_sewer_credits)
 
 
     all_exactions = {
@@ -85,7 +90,7 @@ def calculate_lot_balance(lot):
         'sewer_credits_applied': sewer_credits_applied,
         'non_sewer_credits_applied': non_sewer_credits_applied,
 
-        'current_exactions': total_exactions - sewer_payment - non_sewer_payment - sewer_credits_applied - non_sewer_credits_applied,
+        'current_exactions': round((total_exactions - sewer_payment - non_sewer_payment - sewer_credits_applied - non_sewer_credits_applied), 2),
         'sewer_due': sewer_exactions - sewer_payment - sewer_credits_applied,
         'non_sewer_due': non_sewer_exactions - non_sewer_payment - non_sewer_credits_applied,
         'dues_roads_dev': dues_roads_dev,

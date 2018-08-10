@@ -51,6 +51,7 @@ INSTALLED_APPS = (
     'django_filters',
     'rest_framework',
     'rest_framework.authtoken',
+    'django_extensions',
 
     # Third-party apps, patches, fixes
     'debug_toolbar',
