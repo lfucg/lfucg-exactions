@@ -54,12 +54,14 @@ class PlatViewSet(viewsets.ModelViewSet):
     permission_classes = (CanAdminister,)
     filter_backends = (DjangoFilterBackend, filters.SearchFilter,)
     search_fields = ('name', 'expansion_area', 'slide', 'subdivision__name', 'cabinet', 'unit', 'section', 'block',)
-    filter_fields = ('expansion_area', 'account', 'subdivision', 'plat_type', 'lot__id', 'is_approved',)
+    filter_fields = ('expansion_area', 'account', 'subdivision__id', 'subdivision', 'plat_type', 'lot__id', 'is_approved',)
 
     def get_queryset(self):
         queryset = Plat.objects.exclude(is_active=False)
+
         PageNumberPagination.page_size = 0
         paginatePage = self.request.query_params.get('paginatePage', None)
+
         pageSize = self.request.query_params.get('pageSize', settings.PAGINATION_SIZE)
 
         if self.request.user.is_anonymous(): 
