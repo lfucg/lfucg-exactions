@@ -46,7 +46,7 @@ class SubdivisionExisting extends React.Component {
                 };
             })(plats));
 
-        const subdivisions_list = subdivisions && subdivisions.length > 0 &&
+        const subdivisions_list = !!subdivisions && subdivisions.subdivisions.length > 0 &&
             map((subdivision) => {
                 return (
                     <div key={subdivision.id} className="col-xs-12">
@@ -63,7 +63,7 @@ class SubdivisionExisting extends React.Component {
                         </div>
                     </div>
                 );
-            })(subdivisions);
+            })(subdivisions.subdivisions);
 
         return (
             <div className="subdivision-existing">

@@ -262,6 +262,7 @@ export function getPlatID(selectedPlat) {
 }
 
 export function getSubdivisionPlats(selectedSubdivision) {
+    console.log('GET SUB PLAT ID', selectedSubdivision);
     return {
         type: API_CALL,
         endpoint: GET_SUBDIVISION_PLATS,
