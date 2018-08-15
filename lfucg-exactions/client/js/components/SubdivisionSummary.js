@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import PropTypes from 'prop-types';
-import { map } from 'ramda';
 
 import Navbar from './Navbar';
 import Footer from './Footer';
@@ -35,10 +34,7 @@ class SubdivisionSummary extends React.Component {
             subdivisions,
             plats,
             lots,
-            activeForm,
         } = this.props;
-
-        console.log('SUB SUM PLAT', plats);
 
         let subdivision_acreage_used = 0;
         
@@ -118,10 +114,10 @@ class SubdivisionSummary extends React.Component {
                                   mapQualifier={plats && plats.length > 0}
                                 />
 
-                                {/* <LotsMiniSummary
+                                <LotsMiniSummary
                                   mapSet={lots}
                                   mapQualifier={lots && lots.length > 0}
-                                /> */}
+                                />
 
                             </div>
                         )}
@@ -139,7 +135,6 @@ SubdivisionSummary.propTypes = {
     plats: PropTypes.array,
     lots: PropTypes.array,
     route: PropTypes.object,
-    activeForm: PropTypes.object,
     onComponentDidMount: PropTypes.func,
 };
 
@@ -148,8 +143,7 @@ function mapStateToProps(state) {
         currentUser: state.currentUser,
         subdivisions: !!state.subdivisions && !!state.subdivisions.currentSubdivision && state.subdivisions.currentSubdivision,
         plats: !!state.plats && !!state.plats.plats && state.plats.plats,
-        lots: state.lots,
-        activeForm: state.activeForm,
+        lots: !!state.lots && !!state.lots.lots && state.lots.lots,
     };
 }
 
@@ -160,10 +154,10 @@ function mapDispatchToProps(dispatch, params) {
         onComponentDidMount() {
             dispatch(getSubdivisionID(selectedSubdivision));
             dispatch(getSubdivisionPlats(selectedSubdivision));
-            // dispatch(getSubdivisionLots(selectedSubdivision))
-            // .then(() => {
-            //     dispatch(formUpdate({ loading: false }));
-            // });
+            dispatch(getSubdivisionLots(selectedSubdivision))
+            .then(() => {
+                dispatch(formUpdate({ loading: false }));
+            });
         },
     };
 }

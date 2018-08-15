@@ -52,7 +52,11 @@ const subdivisionsReducer = (state = initialState, action) => {
         }
     case SEARCH_QUERY:
         if (action.response.endpoint === '/subdivision') {
-            return action.response;
+            return {
+                ...state,
+                subdivisions: action.response,
+                loadingSubdivision: false,
+            }
         }
         return state;
     default:

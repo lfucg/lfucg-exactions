@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import { map } from 'ramda';
 import PropTypes from 'prop-types';
 
+import Pagination from './Pagination';
+
 class AccountLedgersMiniSummary extends React.Component {
     render() {
         const {
@@ -115,6 +117,7 @@ class AccountLedgersMiniSummary extends React.Component {
                         >
                             <div className="panel-body">
                                 {ledgersList}
+                                {ledgersList ? <Pagination /> : <h1>No Results Found</h1>}
                             </div>
                         </div>
                     </div>
