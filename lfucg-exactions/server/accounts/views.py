@@ -159,7 +159,7 @@ class AccountCSVExportView(View):
 
                     if lot['lot_exactions']:
                         total_exactions = lot['lot_exactions']['total_exactions']
-                        current_exactions = lot['lot_exactions']['current_exactions']
+                    #     current_exactions = lot['lot_exactions']['current_exactions']
 
                     headers.extend(['Address -%s' %(i+1)])
                     headers.extend(['Permit ID -%s' %(i+1)])

@@ -4,6 +4,33 @@ from rest_framework.response import Response
 from rest_framework import status
 from decimal import Decimal
 
+def calculate_lot_totals(lot):
+    sewer_exactions = (
+        Decimal(lot.current_dues_sewer_cap_own) +
+        Decimal(lot.current_dues_sewer_trans_dev) +
+        Decimal(lot.current_dues_sewer_trans_own) +
+        Decimal(lot.current_dues_sewer_cap_dev)
+    )
+
+    non_sewer_exactions = (
+        Decimal(lot.current_dues_roads_own) +
+        Decimal(lot.current_dues_roads_dev) +
+        Decimal(lot.current_dues_parks_dev) +
+        Decimal(lot.current_dues_parks_own) +
+        Decimal(lot.current_dues_storm_dev) +
+        Decimal(lot.current_dues_storm_own) +
+        Decimal(lot.current_dues_open_space_dev) +
+        Decimal(lot.current_dues_open_space_own)
+    )
+
+    total_exactions = sewer_exactions + non_sewer_exactions
+
+    return {
+        'sewer_exactions': Decimal(sewer_exactions),
+        'non_sewer_exactions': Decimal(non_sewer_exactions),
+        'total_exactions': Decimal(total_exactions),
+    }
+
 def calculate_lot_balance(lot):
     # PAYMENTS
     payments = Payment.objects.exclude(is_active=False).filter(lot_id=lot.id)
@@ -127,6 +154,11 @@ def calculate_plat_balance(plat):
     }
 
     return plat_exactions
+
+def remaining_plat_lots(plat):
+    lots_on_plat = Lot.objects.filter(plat=plat.id)
+
+    return plat.buildable_lots - len(lots_on_plat)
 
 def update_entry(self, request, pk):
     existing_object = self.get_object()

@@ -99,7 +99,7 @@ class PaymentViewSet(viewsets.ModelViewSet):
     permission_classes = (CanAdminister,)
     filter_backends = (DjangoFilterBackend, filters.SearchFilter,)
     search_fields = ('lot_id__address_full', 'payment_type', 'check_number', 'credit_account__account_name', 'paid_by', 'credit_source__resolution_number')
-    filter_fields = ('payment_type', 'paid_by_type', 'credit_account', 'lot_id', 'credit_source', 'is_approved',)
+    filterset_fields = ('payment_type', 'paid_by_type', 'credit_account', 'lot_id', 'credit_source', 'is_approved',)
 
     def get_queryset(self):
         queryset = Payment.objects.exclude(is_active=False)
@@ -236,9 +236,10 @@ class AccountLedgerViewSet(viewsets.ModelViewSet):
     permission_classes = (CanAdminister,)
     filter_backends = (DjangoFilterBackend, filters.SearchFilter,)
     search_fields = ('entry_type', 'agreement__resolution_number', 'lot__address_full', 'account_to__account_name', 'account_from__account_name',)
-    filter_fields = ('entry_type', 'agreement', 'lot', 'account_to', 'account_from', 'is_approved',)
+    filterset_fields = ('entry_type', 'agreement', 'lot', 'account_to', 'account_from', 'is_approved',)
 
     def get_queryset(self):
+        print('LEDGER VIEWSET')
         queryset = AccountLedger.objects.exclude(is_active=False)
         PageNumberPagination.page_size = 0
         paginatePage = self.request.query_params.get('paginatePage', None)

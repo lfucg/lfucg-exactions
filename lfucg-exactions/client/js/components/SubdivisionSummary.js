@@ -34,68 +34,10 @@ class SubdivisionSummary extends React.Component {
             subdivisions,
             plats,
             lots,
-            activeForm,
         } = this.props;
 
         let subdivision_acreage_used = 0;
-        const subdivisionPlats = plats && plats.length > 0 &&
-            map((plat) => {
-                subdivision_acreage_used += parseFloat(plat.cleaned_total_acreage);
-                const cabinet = plat.cabinet ? `${plat.cabinet}-` : '';
-                const slide = plat.slide ? plat.slide : plat.name;
-                let plat_zone_number = 0;
-                const plat_zone_list =
-                    map((plat_zone) => {
-                        plat_zone_number += 1;
-                        return (
-                            <div key={`${plat_zone.zone}_${plat_zone_number}`}>
-                                <p className="col-xs-6">Zone {plat_zone_number}: {plat_zone.zone}</p>
-                                <p className="col-xs-6">Zone {plat_zone_number} Acreage: {plat_zone.cleaned_acres}</p>
-                            </div>
-                        );
-                    })(plat.plat_zone);
-                return (
-                    <div key={plat.id} className="col-xs-12">
-                        <div className="row form-subheading">
-                            <div className="col-sm-7 col-md-9">
-                                <h3>{cabinet}{slide}</h3>
-                            </div>
-                        </div>
-                        <div className="row link-row">
-                            <div className="col-xs-12 col-sm-5 col-sm-offset-7">
-                                <div className="col-xs-5">
-                                    {currentUser && currentUser.permissions && currentUser.permissions.plat &&
-                                        <Link to={`plat/form/${plat.id}`} aria-label="Edit">
-                                            <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
-                                            <div className="col-xs-7 link-label">
-                                                Edit
-                                            </div>
-                                        </Link>
-                                    }
-                                </div>
-                                <div className="col-xs-5 ">
-                                    <Link to={`plat/summary/${plat.id}`} aria-label="Summary">
-                                        <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
-                                        <div className="col-xs-7 link-label">
-                                            Summary
-                                        </div>
-                                    </Link>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="row">
-                            <p className="col-xs-6"><strong>{plat.is_approved ? 'Approved' : 'Not Approved'}</strong></p>
-                            <p className="col-xs-6">Gross Acreage: {plat.cleaned_total_acreage}</p>
-                            <p className="col-xs-6">Name: {plat.name}</p>
-                            <p className="col-xs-6">Expansion Area: {plat.expansion_area}</p>
-                            <p className="col-xs-6">Sewer Exactions: {plat.plat_exactions && plat.plat_exactions.plat_sewer_due}</p>
-                            <p className="col-xs-6">Non-Sewer Exactions: {plat.plat_exactions && plat.plat_exactions.plat_non_sewer_due}</p>
-                            {plat_zone_list}
-                        </div>
-                    </div>
-                );
-            })(plats);
-
+        
         return (
             <div className="subdivision-summary">
                 <Navbar />
@@ -110,7 +52,7 @@ class SubdivisionSummary extends React.Component {
 
                 <div className="inside-body">
                     <div className="container">
-                        {activeForm.loading ? <LoadingScreen /> :
+                        {subdivisions.loadingSubdivision ? <LoadingScreen /> :
                         (
                             <div className="col-md-offset-1 col-md-10 panel-group" id="accordion" role="tablist" aria-multiselectable="false">
                                 <a
@@ -193,17 +135,15 @@ SubdivisionSummary.propTypes = {
     plats: PropTypes.array,
     lots: PropTypes.array,
     route: PropTypes.object,
-    activeForm: PropTypes.object,
     onComponentDidMount: PropTypes.func,
 };
 
 function mapStateToProps(state) {
     return {
         currentUser: state.currentUser,
-        subdivisions: state.subdivisions,
-        plats: state.plats,
-        lots: state.lots,
-        activeForm: state.activeForm,
+        subdivisions: !!state.subdivisions && !!state.subdivisions.currentSubdivision && state.subdivisions.currentSubdivision,
+        plats: !!state.plats && !!state.plats.plats && state.plats.plats,
+        lots: !!state.lots && !!state.lots.lots && state.lots.lots,
     };
 }
 

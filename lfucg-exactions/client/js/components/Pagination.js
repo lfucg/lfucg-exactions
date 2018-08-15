@@ -15,6 +15,7 @@ class Pagination extends React.Component {
             onPaginationChangePage,
             activeForm,
             changePageSize,
+            querysetOptions,
         } = this.props;
 
         // relates to pagination size in backend
@@ -83,6 +84,7 @@ Pagination.propTypes = {
     onPaginationChangePage: PropTypes.func,
     activeForm: PropTypes.object,
     changePageSize: PropTypes.func,
+    querysetOptions: PropTypes.string,
 };
 
 function mapStateToProps(state) {
@@ -91,15 +93,16 @@ function mapStateToProps(state) {
     };
 }
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch, params) {
+    // console.log('PARAMS', params);
     return {
         onPaginationChangePage(field) {
-            dispatch(getPagination(field));
+            dispatch(getPagination(field, params.querysetOptions));
         },
         changePageSize(e) {
             const value = e.target.value;
             dispatch(formUpdate({ page_size: value }));
-            dispatch(getPagination());
+            dispatch(getPagination(null, params.querysetOptions));
         },
     };
 }

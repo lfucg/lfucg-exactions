@@ -35,6 +35,7 @@ class SubdivisionForm extends React.Component {
             activeForm,
             onSubmit,
             selectedSubdivision,
+            subdivisions,
         } = this.props;
 
         const submitEnabled =
@@ -110,11 +111,13 @@ SubdivisionForm.propTypes = {
     onComponentDidMount: PropTypes.func,
     onSubmit: PropTypes.func,
     selectedSubdivision: PropTypes.string,
+    subdivisions: PropTypes.array,
 };
 
 function mapStateToProps(state) {
     return {
         activeForm: state.activeForm,
+        subdivisions: !!state.subdivisions && !!state.subdivisions.currentSubdivision && state.subdivisions.currentSubdivision,
     };
 }
 
