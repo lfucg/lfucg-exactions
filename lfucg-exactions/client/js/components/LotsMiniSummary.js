@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import { map } from 'ramda';
 import PropTypes from 'prop-types';
 
+import Pagination from './Pagination';
+
 class LotsMiniSummary extends React.Component {
     render() {
         const {
@@ -36,7 +38,7 @@ class LotsMiniSummary extends React.Component {
                 </div>
                 <div className="col-xs-12">
                     <p className="col-xs-12">Lot Address: {this.props.mapSet.address_full}</p>
-                    <p className="col-xs-6">Current Exactions: {this.props.mapSet && this.props.mapSet.lot_exactions && this.props.mapSet.lot_exactions.current_exactions}</p>
+                    <p className="col-xs-6">Current Exactions: {this.props.mapSet && this.props.mapSet.lot_exactions && this.props.mapSet.lot_exactions.total_exactions}</p>
                     <p className="col-xs-6">Plat: {this.props.mapSet.plat.cabinet}-{this.props.mapSet.plat.slide}</p>
                     <p className="col-xs-6 ">Lot Number: {this.props.mapSet.lot_number}</p>
                     <p className="col-xs-6">Permit ID: {this.props.mapSet.permit_id}</p>
@@ -71,7 +73,7 @@ class LotsMiniSummary extends React.Component {
                                 </div>
                             </div>
                             <div className="row">
-                                <p className="col-xs-6">Current Exactions: {lot.lot_exactions && lot.lot_exactions.current_exactions}</p>
+                                <p className="col-xs-6">Current Exactions: {lot.lot_exactions && lot.lot_exactions.total_exactions}</p>
                                 <p className="col-xs-6"><strong>{lot.is_approved ? 'Approved' : 'Not Approved'}</strong></p>
                                 <p className="col-xs-6">Lot Number: {lot.lot_number}</p>
                                 <p className="col-xs-6">Parcel ID: {lot.parcel_id}</p>
@@ -112,6 +114,7 @@ class LotsMiniSummary extends React.Component {
                         >
                             <div className="panel-body">
                                 {lotsList}
+                                {lotsList ? <Pagination /> : <h1>No Results Found</h1>}
                             </div>
                         </div>
                     </div>

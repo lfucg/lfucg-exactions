@@ -262,11 +262,10 @@ export function getPlatID(selectedPlat) {
 }
 
 export function getSubdivisionPlats(selectedSubdivision) {
-    console.log('GET SUB PLAT ID', selectedSubdivision);
     return {
         type: API_CALL,
         endpoint: GET_SUBDIVISION_PLATS,
-        url: `/plat/?subdivision=${selectedSubdivision}`,
+        url: `/plat/?paginatePage&subdivision=${selectedSubdivision}`,
     };
 }
 
@@ -488,7 +487,7 @@ export function getSubdivisionLots(selectedSubdivision) {
     return {
         type: API_CALL,
         endpoint: GET_SUBDIVISION_LOTS,
-        url: `/lot/?plat__subdivision=${selectedSubdivision}`,
+        url: `/lot/?paginatePage&plat__subdivision=${selectedSubdivision}`,
     };
 }
 
@@ -496,7 +495,7 @@ export function getPlatLots(selectedPlat) {
     return {
         type: API_CALL,
         endpoint: GET_PLAT_LOTS,
-        url: `/lot/?plat=${selectedPlat}`,
+        url: `/lot/?paginatePage&plat=${selectedPlat}`,
     };
 }
 
@@ -970,7 +969,7 @@ export function getLotPayments(selectedLot) {
     return {
         type: API_CALL,
         endpoint: GET_LOT_PAYMENTS,
-        url: `/payment/?lot_id=${selectedLot}`,
+        url: `/payment/?paginatePage&lot_id=${selectedLot}`,
     };
 }
 
@@ -1289,7 +1288,7 @@ export function getLotAccountLedgers(selectedLot) {
     return {
         type: API_CALL,
         endpoint: GET_LOT_ACCOUNT_LEDGERS,
-        url: `/ledger/?lot=${selectedLot}`,
+        url: `/ledger/?paginatePage&lot=${selectedLot}`,
     };
 }
 
@@ -1498,7 +1497,7 @@ export function putRate(selectedRate, rate) {
     };
 }
 
-export function getPagination(page) {
+export function getPagination(page, querysetOptions) {
     return {
         type: API_CALL,
         endpoint: GET_PAGINATION,
@@ -1510,6 +1509,10 @@ export function getPagination(page) {
                 currentPage,
                 page_size,
             } = activeForm;
+
+            // console.log('QUERYSET OPTIONS API', querysetOptions);
+            // console.log('PAGE', page);
+            // console.log('CURRENT PAGE', currentPage);
 
             if (!page) {
                 if (currentPage === '/credit-transfer/') {

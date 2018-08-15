@@ -32,9 +32,9 @@ class PlatReport extends React.Component {
                     <div className="col-sm-5 report-data">{lot.address_full}</div>
                     <div className="col-sm-7">
                         <div className="col-sm-3 report-data">{lot.parcel_id}</div>
-                        <div className="col-sm-3 report-data">{lot.lot_exactions && lot.lot_exactions.current_exactions}</div>
-                        <div className="col-sm-3 report-data">{lot.lot_exactions && lot.lot_exactions.non_sewer_due}</div>
-                        <div className="col-sm-3 report-data right-border">{lot.lot_exactions && lot.lot_exactions.sewer_due}</div>
+                        <div className="col-sm-3 report-data">{lot.lot_exactions && lot.lot_exactions.total_exactions}</div>
+                        <div className="col-sm-3 report-data">{lot.lot_exactions && lot.lot_exactions.non_sewer_exactions}</div>
+                        <div className="col-sm-3 report-data right-border">{lot.lot_exactions && lot.lot_exactions.sewer_exactions}</div>
                     </div>
                 </div>
             );
@@ -107,7 +107,7 @@ class PlatReport extends React.Component {
                                         Lots
                                     </div>
                                     <div className="col-sm-6">
-                                        Remaining Lots: {plats.plat_exactions && plats.plat_exactions.remaining_lots}
+                                        Remaining Lots: {plats.remaining_lots}
                                     </div>
                                 </h3>
                             </div>
