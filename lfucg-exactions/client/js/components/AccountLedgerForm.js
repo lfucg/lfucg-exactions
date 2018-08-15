@@ -58,7 +58,7 @@ class AccountLedgerForm extends React.Component {
             const cabinet = plat.cabinet ? `${plat.cabinet}-` : '';
             const slide = plat.slide ? plat.slide : plat.name;
             return (
-                <option key={plat.id} value={[plat.id, plat.name, plat.plat_exactions.plat_non_sewer_due, plat.plat_exactions.plat_sewer_due]} >
+                <option key={plat.id} value={[plat.id, plat.name, plat.current_non_sewer_due, plat.current_sewer_due]} >
                     {cabinet}{slide}
                 </option>
             );
@@ -70,7 +70,7 @@ class AccountLedgerForm extends React.Component {
             map((lot) => {
                 lotsList.push({
                     id: lot.id,
-                    value: [lot.id, lot.address_full, lot.lot_exactions.non_sewer_due, lot.lot_exactions.sewer_due],
+                    value: [lot.id, lot.address_full, lot.lot_exactions.non_sewer_exactions, lot.lot_exactions.sewer_exactions],
                     label: lot.address_full,
                 });
             })(lots);
@@ -183,7 +183,7 @@ class AccountLedgerForm extends React.Component {
                                                 />
                                             </div>
                                         </div>
-                                        {activeForm.openModal && currentPlat.plat_exactions && (currentPlat.plat_exactions.remaining_lots > 0) &&
+                                        {activeForm.openModal && currentPlat.remaining_lots > 0 &&
                                         <div className={activeForm.openModal ? 'modal in' : 'modal'} role="alertdialog" aria-labelledby="modal-title" aria-describedby="modalDescription">
                                             <div className="modal-dialog modal-lg" role="document">
                                                 <div className="modal-content">
@@ -199,7 +199,7 @@ class AccountLedgerForm extends React.Component {
                                                                     Buildable lots on plat: {currentPlat.buildable_lots}
                                                                 </div>
                                                                 <div className="col-xs-12">
-                                                                    Lots in system: {currentPlat.buildable_lots - (currentPlat.plat_exactions && currentPlat.plat_exactions.remaining_lots)}
+                                                                    Lots in system: {currentPlat.buildable_lots - currentPlat.remaining_lots}
                                                                 </div>
                                                                 <h5>The credits used will only apply to the lots within the system.</h5>
                                                             </div>}
@@ -411,7 +411,7 @@ function mapDispatchToProps(dispatch, params) {
                 .then((data_account_ledger) => {
                     const update = {
                         lot: data_account_ledger.response && data_account_ledger.response.lot ? data_account_ledger.response.lot.id : null,
-                        lot_show: data_account_ledger.response && data_account_ledger.response.lot ? `${data_account_ledger.response.lot.id},${data_account_ledger.response.lot.address_full},${data_account_ledger.response.lot.lot_exactions.non_sewer_due},${data_account_ledger.response.lot.lot_exactions.sewer_due}` : '',
+                        lot_show: data_account_ledger.response && data_account_ledger.response.lot ? `${data_account_ledger.response.lot.id},${data_account_ledger.response.lot.address_full},${data_account_ledger.response.lot.lot_exactions.non_sewer_exactions},${data_account_ledger.response.lot.lot_exactions.sewer_exactions}` : '',
                         account_from: data_account_ledger.response && data_account_ledger.response.account_from ? data_account_ledger.response.account_from.id : null,
                         account_from_show: data_account_ledger.response && data_account_ledger.response.account_from ? `${data_account_ledger.response.account_from.id},${data_account_ledger.response.account_from.account_name},${data_account_ledger.response.account_from.balance.balance}` : '',
                         account_to: data_account_ledger.response && data_account_ledger.response.account_to ? data_account_ledger.response.account_to.id : null,

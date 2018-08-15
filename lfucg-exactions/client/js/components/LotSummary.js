@@ -51,8 +51,7 @@ class LotSummary extends React.Component {
             activeForm,
         } = this.props;
 
-        const currentLot = lots && lots.length > 0 &&
-            filter(lot => lot.id === parseInt(selectedLot, 10))(lots)[0];
+        const currentLot = lots.currentLot;
 
         return (
             <div className="lot-summary">
@@ -65,7 +64,7 @@ class LotSummary extends React.Component {
                 <Breadcrumbs route={this.props.route} parent_link={'lot'} parent_name={'Lots'} />
 
                 <div className="inside-body">
-                    {activeForm.loading ? <LoadingScreen /> :
+                    {lots.loadingLot ? <LoadingScreen /> :
                     (
                         <div>
                             {currentLot &&
@@ -83,7 +82,7 @@ class LotSummary extends React.Component {
                                     <div className="modal fade" id="permitModal" role="alertdialog" aria-labelledby="modalLabel">
                                         <div className="modal-dialog" role="document">
                                             <div className="modal-content">
-                                                {currentLot.lot_exactions && currentLot.lot_exactions.current_exactions_number > 0 ? (
+                                                {/* {currentLot.lot_exactions && currentLot.lot_exactions.current_exactions_number > 0 ? (
                                                     <div>
                                                         <div className="modal-header">
                                                             <button type="button" className="close" data-dismiss="modal" aria-label="Close" autoFocus><span aria-hidden="true">&times;</span></button>
@@ -108,7 +107,7 @@ class LotSummary extends React.Component {
                                                             <button type="button" className="btn btn-default" data-dismiss="modal">Close</button>
                                                         </div>
                                                     </div>
-                                                    ) : (
+                                                    ) : ( */}
                                                         <div>
                                                             <div className="modal-header">
                                                                 <button type="button" className="close" data-dismiss="modal" aria-label="Close" autoFocus><span aria-hidden="true">&times;</span></button>
@@ -132,8 +131,8 @@ class LotSummary extends React.Component {
                                                                 <button type="button" className="btn btn-default" data-dismiss="modal">Close</button>
                                                             </div>
                                                         </div>
-                                                    )
-                                                }
+                                                    {/* )
+                                                } */}
                                             </div>
                                         </div>
                                     </div>
@@ -176,7 +175,7 @@ class LotSummary extends React.Component {
                                                 </div>
                                             </div>
                                             <div className="col-xs-12">
-                                                <h3 className="col-xs-12 ">Current Exactions: {currentLot.lot_exactions && currentLot.lot_exactions.current_exactions}</h3>
+                                                <h3 className="col-xs-12 ">Current Exactions: {currentLot.lot_exactions && currentLot.lot_exactions.total_exactions}</h3>
                                                 <p className="col-md-8 col-xs-12">Address: {currentLot.address_full}</p>
                                                 <p className="col-md-4 col-xs-6">Lot Number: {currentLot.lot_number}</p>
                                                 <p className="col-md-4 col-xs-6 ">Permit ID: {currentLot.permit_id}</p>
@@ -221,23 +220,21 @@ class LotSummary extends React.Component {
                                                         </div>
                                                     </div>
                                                 </div>
-                                                {currentLot.lot_exactions &&
-                                                    <div className="col-xs-12">
-                                                        <h3 className="col-xs-12 ">Current Exactions: {currentLot.lot_exactions.current_exactions}</h3>
-                                                        <p className="col-sm-6">Road Developer Exactions: {currentLot.lot_exactions.dues_roads_dev}</p>
-                                                        <p className="col-sm-6">Road Owner Exactions: {currentLot.lot_exactions.dues_roads_own}</p>
-                                                        <p className="col-sm-6">Sewer Transmission Developer Exactions: {currentLot.lot_exactions.dues_sewer_trans_dev}</p>
-                                                        <p className="col-sm-6">Sewer Transmission Owner Exactions: {currentLot.lot_exactions.dues_sewer_trans_own}</p>
-                                                        <p className="col-sm-6">Sewer Capacity Developer Exactions: {currentLot.lot_exactions.dues_sewer_cap_dev}</p>
-                                                        <p className="col-sm-6">Sewer Capacity Owner Exactions: {currentLot.lot_exactions.dues_sewer_cap_own}</p>
-                                                        <p className="col-sm-6">Parks Developer Exactions: {currentLot.lot_exactions.dues_parks_dev}</p>
-                                                        <p className="col-sm-6">Parks Owner Exactions: {currentLot.lot_exactions.dues_parks_own}</p>
-                                                        <p className="col-sm-6">Storm Developer Exactions: {currentLot.lot_exactions.dues_storm_dev}</p>
-                                                        <p className="col-sm-6">Storm Owner Exactions: {currentLot.lot_exactions.dues_storm_own}</p>
-                                                        <p className="col-sm-6">Open Space Developer Exactions: {currentLot.lot_exactions.dues_open_space_dev}</p>
-                                                        <p className="col-sm-6">Open Space Owner Exactions: {currentLot.lot_exactions.dues_open_space_own}</p>
-                                                    </div>
-                                                }
+                                                <div className="col-xs-12">
+                                                    <h3 className="col-xs-12 ">Current Exactions: {currentLot.lot_exactions.total_exactions}</h3>
+                                                    <p className="col-sm-6">Road Developer Exactions: {currentLot.current_dues_roads_dev}</p>
+                                                    <p className="col-sm-6">Road Owner Exactions: {currentLot.current_dues_roads_own}</p>
+                                                    <p className="col-sm-6">Sewer Transmission Developer Exactions: {currentLot.current_dues_sewer_trans_dev}</p>
+                                                    <p className="col-sm-6">Sewer Transmission Owner Exactions: {currentLot.current_dues_sewer_trans_own}</p>
+                                                    <p className="col-sm-6">Sewer Capacity Developer Exactions: {currentLot.current_dues_sewer_cap_dev}</p>
+                                                    <p className="col-sm-6">Sewer Capacity Owner Exactions: {currentLot.current_dues_sewer_cap_own}</p>
+                                                    <p className="col-sm-6">Parks Developer Exactions: {currentLot.current_dues_parks_dev}</p>
+                                                    <p className="col-sm-6">Parks Owner Exactions: {currentLot.current_dues_parks_own}</p>
+                                                    <p className="col-sm-6">Storm Developer Exactions: {currentLot.current_dues_storm_dev}</p>
+                                                    <p className="col-sm-6">Storm Owner Exactions: {currentLot.current_dues_storm_own}</p>
+                                                    <p className="col-sm-6">Open Space Developer Exactions: {currentLot.current_dues_open_space_dev}</p>
+                                                    <p className="col-sm-6">Open Space Owner Exactions: {currentLot.current_dues_open_space_own}</p>
+                                                </div>
                                             </div>
                                         </div>
                                         {currentLot.id &&
@@ -313,11 +310,11 @@ LotSummary.propTypes = {
 function mapStateToProps(state) {
     return {
         currentUser: state.currentUser,
-        plats: state.plats,
-        lots: state.lots,
+        plats: !!state.plats && !!state.plats.plats && state.plats.plats,
+        lots: !!state.lots && state.lots,
         accounts: state.accounts,
-        payments: state.payments,
-        accountLedgers: state.accountLedgers,
+        payments: !!state.payments && !!state.payments.payments && state.payments.payments,
+        accountLedgers: !!state.accountLedgers && !!state.accountLedgers.accountLedgers && state.accountLedgers.accountLedgers,
         activeForm: state.activeForm,
     };
 }
@@ -326,17 +323,16 @@ function mapDispatchToProps(dispatch, params) {
     const selectedLot = params.params.id;
     return {
         onComponentDidMount() {
-            dispatch(getLotPayments(selectedLot));
-            dispatch(getLotAccountLedgers(selectedLot))
-            .then(() => {
-                dispatch(formUpdate({ loading: false }));
-            });
-            dispatch(getLots());
             dispatch(getLotID(selectedLot))
             .then((lot_data) => {
                 if (lot_data.response.account) {
                     dispatch(getAccountID(lot_data.response.account));
                 }
+            });
+            dispatch(getLotPayments(selectedLot));
+            dispatch(getLotAccountLedgers(selectedLot))
+            .then(() => {
+                dispatch(formUpdate({ loading: false }));
             });
         },
         addPermitToLot(event) {

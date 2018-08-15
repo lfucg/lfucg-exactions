@@ -102,7 +102,7 @@ class PlatSummary extends React.Component {
 
                 <div className="inside-body">
                     <div className="container">
-                        {activeForm.loading ? <LoadingScreen /> :
+                        {plats.loadingPlat ? <LoadingScreen /> :
                         (
                             <div className="col-md-offset-1 col-md-10 panel-group" id="accordion" role="tablist" aria-multiselectable="false">
                                 <a
@@ -154,8 +154,8 @@ class PlatSummary extends React.Component {
                                             <p className="col-xs-6">Block: {plats.block}</p>
                                             <p className="col-xs-6">Buildable Lots: {plats.buildable_lots}</p>
                                             <p className="col-xs-6">Non-Buildable Lots: {plats.non_buildable_lots}</p>
-                                            <p className="col-xs-6">Current Sewer Due: {plats.plat_exactions && plats.plat_exactions.plat_sewer_due}</p>
-                                            <p className="col-xs-6">Current Non-Sewer Due: {plats.plat_exactions && plats.plat_exactions.plat_non_sewer_due}</p>
+                                            <p className="col-xs-6">Current Sewer Due: {plats.current_sewer_due}</p>
+                                            <p className="col-xs-6">Current Non-Sewer Due: {plats.current_non_sewer_due}</p>
                                             <p className="col-xs-12">Calculation Note: {plats.calculation_note}</p>
                                         </div>
                                     </div>
@@ -283,10 +283,10 @@ class PlatSummary extends React.Component {
                                                         </div>
                                                         <div className="row">
                                                             <div className="col-xs-6 text-center">
-                                                                <p>Sewer Dues: {plats.plat_exactions && plats.plat_exactions.plat_sewer_due}</p>
+                                                                <p>Sewer Dues: {plats.current_sewer_due}</p>
                                                             </div>
                                                             <div className="col-xs-6 text-center">
-                                                                <p>Non-Sewer Dues: {plats.plat_exactions && plats.plat_exactions.plat_non_sewer_due}</p>
+                                                                <p>Non-Sewer Dues: {plats.current_non_sewer_due}</p>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -356,8 +356,8 @@ PlatSummary.propTypes = {
 function mapStateToProps(state) {
     return {
         currentUser: state.currentUser,
-        plats: state.plats,
-        lots: state.lots,
+        plats: !!state.plats && !!state.plats.currentPlat && state.plats.currentPlat,
+        lots: !!state.lots && !!state.lots.lots && state.lots.lots,
         accounts: state.accounts,
         activeForm: state.activeForm,
     };

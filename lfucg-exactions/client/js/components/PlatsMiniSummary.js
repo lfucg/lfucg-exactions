@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import { map } from 'ramda';
 import PropTypes from 'prop-types';
 
+import Pagination from './Pagination';
+
 class PlatsMiniSummary extends React.Component {
     render() {
         const {
@@ -40,8 +42,8 @@ class PlatsMiniSummary extends React.Component {
                     <p className="col-xs-6">Gross Acreage: {this.props.mapSet.cleaned_total_acreage}</p>
                     <p className="col-xs-6">Buildable Lots: {this.props.mapSet.buildable_lots}</p>
                     <p className="col-xs-6">Non-Buildable Lots: {this.props.mapSet.non_buildable_lots}</p>
-                    <p className="col-sm-6 col-xs-12">Sewer Exactions: {this.props.mapSet.plat_exactions && this.props.mapSet.plat_exactions.plat_sewer_due}</p>
-                    <p className="col-sm-6 col-xs-12">Non-Sewer Exactions: {this.props.mapSet.plat_exactions && this.props.mapSet.plat_exactions.plat_non_sewer_due}</p>
+                    <p className="col-sm-6 col-xs-12">Sewer Exactions: {this.props.mapSet.current_sewer_due}</p>
+                    <p className="col-sm-6 col-xs-12">Non-Sewer Exactions: {this.props.mapSet.current_non_sewer_due}</p>
                 </div>
             </div>) : (
                 this.props.mapQualifier && map((plat) => {
@@ -76,8 +78,8 @@ class PlatsMiniSummary extends React.Component {
                             </div>
                             <div className="row">
                                 <p className="col-xs-12"><strong>{plat.is_approved ? 'Approved' : 'Not Approved'}</strong></p>
-                                <p className="col-sm-6 col-xs-12">Sewer Exactions: {plat.plat_exactions && plat.plat_exactions.plat_sewer_due}</p>
-                                <p className="col-sm-6 col-xs-12">Non-Sewer Exactions: {plat.plat_exactions && plat.plat_exactions.plat_non_sewer_due}</p>
+                                <p className="col-sm-6 col-xs-12">Sewer Exactions: {plat.current_sewer_due}</p>
+                                <p className="col-sm-6 col-xs-12">Non-Sewer Exactions: {plat.current_non_sewer_due}</p>
                                 <p className="col-xs-6">Gross Acreage: {plat.cleaned_total_acreage}</p>
                                 <p className="col-xs-6">Expansion Area: {plat.expansion_area}</p>
                             </div>
@@ -117,6 +119,7 @@ class PlatsMiniSummary extends React.Component {
                         >
                             <div className="panel-body">
                                 {platsList}
+                                {platsList ? <Pagination /> : <h1>No Results Found</h1>}
                             </div>
                         </div>
                     </div>

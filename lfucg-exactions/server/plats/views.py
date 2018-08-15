@@ -272,7 +272,7 @@ class PlatCSVExportView(View):
 
                     if lot['lot_exactions']:
                         total_exactions = lot['lot_exactions']['total_exactions']
-                        current_exactions = lot['lot_exactions']['current_exactions']
+                    #     current_exactions = lot['lot_exactions']['current_exactions']
 
                     row['Address -%s' %(i+1)] = lot['address_full']
                     row['Permit ID -%s' %(i+1)] = lot['permit_id']
@@ -472,13 +472,13 @@ class LotSearchCSVExportView(View):
                 total_exactions = lot['lot_exactions']['total_exactions']
                 sewer = lot['lot_exactions']['sewer_due']
                 non_sewer = lot['lot_exactions']['non_sewer_due']
-                sewer_trans = lot['lot_exactions']['dues_sewer_trans_dev']
-                sewer_cap = lot['lot_exactions']['dues_sewer_cap_dev']
-                roads = lot['lot_exactions']['dues_roads_dev']
-                parks = lot['lot_exactions']['dues_parks_dev']
-                storm = lot['lot_exactions']['dues_storm_dev']
-                open_space = lot['lot_exactions']['dues_open_space_dev']
-                current_exactions = lot['lot_exactions']['current_exactions']
+                sewer_trans = lot['current_dues_sewer_trans_dev']
+                sewer_cap = lot['current_dues_sewer_cap_dev']
+                roads = lot['current_dues_roads_dev']
+                parks = lot['current_dues_parks_dev']
+                storm = lot['current_dues_storm_dev']
+                open_space = lot['current_dues_open_space_dev']
+            #     current_exactions = lot['lot_exactions']['current_exactions']
 
             row = {
                 'Address': lot['address_full'],

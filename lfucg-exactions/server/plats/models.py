@@ -111,6 +111,10 @@ class Plat(models.Model):
     sewer_due = models.DecimalField(max_digits=20, decimal_places=2, default=0)
     non_sewer_due = models.DecimalField(max_digits=20, decimal_places=2, default=0)
 
+    # Current amounts due
+    current_sewer_due = models.DecimalField(max_digits=20, decimal_places=2, default=0)
+    current_non_sewer_due = models.DecimalField(max_digits=20, decimal_places=2, default=0)
+
     amended = models.BooleanField(default=False)
     signed_date = models.DateField(null=True, blank=True)
 
@@ -202,6 +206,24 @@ class Lot(models.Model):
 
     dues_open_space_dev = models.DecimalField(max_digits=20, decimal_places=2, default=0)
     dues_open_space_own = models.DecimalField(max_digits=20, decimal_places=2, default=0)
+
+    # Current Dues based on calculations of payments and ledgers vs initial exactions
+    current_dues_roads_dev = models.DecimalField(max_digits=20, decimal_places=2, default=0)
+    current_dues_roads_own = models.DecimalField(max_digits=20, decimal_places=2, default=0)
+    
+    current_dues_sewer_trans_dev = models.DecimalField(max_digits=20, decimal_places=2, default=0)
+    current_dues_sewer_trans_own = models.DecimalField(max_digits=20, decimal_places=2, default=0)
+    current_dues_sewer_cap_dev = models.DecimalField(max_digits=20, decimal_places=2, default=0)
+    current_dues_sewer_cap_own = models.DecimalField(max_digits=20, decimal_places=2, default=0)
+
+    current_dues_parks_dev = models.DecimalField(max_digits=20, decimal_places=2, default=0)
+    current_dues_parks_own = models.DecimalField(max_digits=20, decimal_places=2, default=0)
+
+    current_dues_storm_dev = models.DecimalField(max_digits=20, decimal_places=2, default=0)
+    current_dues_storm_own = models.DecimalField(max_digits=20, decimal_places=2, default=0)
+
+    current_dues_open_space_dev = models.DecimalField(max_digits=20, decimal_places=2, default=0)
+    current_dues_open_space_own = models.DecimalField(max_digits=20, decimal_places=2, default=0)
 
     certificate_of_occupancy_final = models.DateField(blank=True, null=True)
     certificate_of_occupancy_conditional = models.DateField(blank=True, null=True)
