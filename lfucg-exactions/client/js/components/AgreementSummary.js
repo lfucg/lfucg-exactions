@@ -48,7 +48,7 @@ class AgreementSummary extends React.Component {
 
                 <div className="form-header">
                     <div className="container">
-                        <h1>AGREEMENT SUMMARY - {agreements.resolution_number}</h1>
+                        <h1>AGREEMENT SUMMARY - {!!agreements && !!agreements.currentAgreement && agreements.currentAgreement.resolution_number}</h1>
                     </div>
                 </div>
 
@@ -56,7 +56,7 @@ class AgreementSummary extends React.Component {
 
                 <div className="inside-body">
                     <div className="container">
-                        {activeForm.loading ? <LoadingScreen /> :
+                        {agreements.loadingAgreement ? <LoadingScreen /> :
                         (
                             <div className="col-md-offset-1 col-md-10 panel-group" id="accordion" role="tablist" aria-multiselectable="false">
                                 <a
@@ -85,7 +85,7 @@ class AgreementSummary extends React.Component {
                                             <div className="col-xs-12 col-sm-5 col-sm-offset-7">
                                                 <div className="col-xs-5">
                                                     {currentUser && currentUser.permissions && currentUser.permissions.agreement &&
-                                                        <Link to={`agreement/form/${agreements.id}`} aria-label={`Edit ${agreements.resolution_number}`}>
+                                                        <Link to={`agreement/form/${agreements.currentAgreement.id}`} aria-label={`Edit ${agreements.currentAgreement.resolution_number}`}>
                                                             <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
                                                             <div className="col-xs-7 link-label">
                                                                 Edit
@@ -96,18 +96,18 @@ class AgreementSummary extends React.Component {
                                             </div>
                                         </div>
                                         <div className="col-xs-12">
-                                            <p className="col-xs-6">Resolution Number: {agreements.resolution_number}</p>
-                                            <p className="col-xs-6">Current Balance: {agreements.agreement_balance && agreements.agreement_balance.total}</p>
-                                            <p className="col-xs-6">Agreement Type: {agreements.agreement_type_display}</p>
-                                            <p className="col-xs-6">Expansion Area: {agreements.expansion_area}</p>
-                                            <p className="col-xs-6">Date Executed: {agreements.date_executed}</p>
+                                            <p className="col-xs-6">Resolution Number: {agreements.currentAgreement.resolution_number}</p>
+                                            <p className="col-xs-6">Current Balance: {agreements.currentAgreement.agreement_balance && agreements.currentAgreement.agreement_balance.total}</p>
+                                            <p className="col-xs-6">Agreement Type: {agreements.currentAgreement.agreement_type_display}</p>
+                                            <p className="col-xs-6">Expansion Area: {agreements.currentAgreement.expansion_area}</p>
+                                            <p className="col-xs-6">Date Executed: {agreements.currentAgreement.date_executed}</p>
                                         </div>
                                     </div>
                                 </div>
-                                {agreements && agreements.id &&
+                                {agreements && agreements.currentAgreement.id &&
                                     <Notes
                                       content_type="accounts_agreement"
-                                      object_id={agreements.id}
+                                      object_id={agreements.currentAgreement.id}
                                       ariaExpanded="false"
                                       panelClass="panel-collapse collapse row"
                                       permission="agreement"
@@ -115,8 +115,8 @@ class AgreementSummary extends React.Component {
                                 }
 
                                 <AccountsMiniSummary
-                                  mapSet={agreements.account_id}
-                                  mapQualifier={agreements && agreements.account_id && agreements.account_id.id}
+                                  mapSet={agreements.currentAgreement.account_id}
+                                  mapQualifier={agreements && agreements.currentAgreement.account_id && agreements.currentAgreement.account_id.id}
                                   singleAccount
                                   title="Developer Account"
                                   accordionID="Account"
@@ -133,14 +133,15 @@ class AgreementSummary extends React.Component {
                                 />
 
                                 <AccountLedgersMiniSummary
-                                  mapSet={accountLedgers}
-                                  mapQualifier={accountLedgers && accountLedgers.length > 0}
+                                  mapSet={accountLedgers.accountLedgers}
+                                  mapQualifier={accountLedgers && accountLedgers.accountLedgers && accountLedgers.accountLedgers.length > 0}
+                                  accountLedgers={accountLedgers}
                                 />
 
-                                {agreements && agreements.id &&
+                                {agreements && agreements.currentAgreement.id &&
                                     <Uploads
                                       file_content_type="accounts_agreement"
-                                      file_object_id={agreements.id}
+                                      file_object_id={agreements.currentAgreement.id}
                                       ariaExpanded="false"
                                       panelClass="panel-collapse collapse row"
                                       permission="agreement"
@@ -170,10 +171,10 @@ AgreementSummary.propTypes = {
 function mapStateToProps(state) {
     return {
         currentUser: state.currentUser,
-        agreements: state.agreements,
-        payments: state.payments,
-        projects: state.projects,
         accountLedgers: state.accountLedgers,
+        agreements: !!state.agreements && state.agreements,
+        payments: !!state.payments && !!state.payments.payments && state.payments.payments,
+        projects: !!state.projects && !!state.projects.projects && state.projects.projects,
         activeForm: state.activeForm,
     };
 }

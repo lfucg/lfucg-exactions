@@ -49,6 +49,7 @@ class PlatsMiniSummary extends React.Component {
                 this.props.mapQualifier && map((plat) => {
                     const cabinet = plat.cabinet ? `${plat.cabinet}-` : '';
                     const slide = plat.slide ? plat.slide : plat.name;
+
                     return (
                         <div key={plat.id} className="col-xs-12">
                             <div className="row form-subheading">
@@ -119,13 +120,20 @@ class PlatsMiniSummary extends React.Component {
                         >
                             <div className="panel-body">
                                 {platsList}
-                                {platsList ? <Pagination /> : <h1>No Results Found</h1>}
+                                {platsList ? 
+                                    <Pagination 
+                                        next={this.props.plats && this.props.plats.next}
+                                        prev={this.props.plats && this.props.plats.prev}
+                                        count={this.props.plats && this.props.plats.count} 
+                                    /> : 
+                                    <h1>No Results Found</h1>
+                                }
                             </div>
                         </div>
                     </div>
                 ) : (
                     <div className="row section-heading" role="tab" id="headingAccountPlats">
-                        <h3 tabIndex="0">Plats - None</h3>
+                        <h3 tabIndex="0">Plats - {!!this.props.mapSet ? 'None' : <i className="fa fa-spinner fa-pulse fa-fw" />}</h3>
                     </div>
                 )}
             </div>
@@ -135,9 +143,10 @@ class PlatsMiniSummary extends React.Component {
 
 PlatsMiniSummary.propTypes = {
     currentUser: PropTypes.object,
-    mapSet: PropTypes.object,
-    mapQualifier: PropTypes.object,
+    mapSet: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
+    mapQualifier: PropTypes.bool,
     singlePlat: PropTypes.bool,
+    plats: PropTypes.object,
 };
 
 function mapStateToProps(state) {

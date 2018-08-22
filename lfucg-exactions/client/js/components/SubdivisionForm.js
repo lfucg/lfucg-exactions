@@ -111,13 +111,13 @@ SubdivisionForm.propTypes = {
     onComponentDidMount: PropTypes.func,
     onSubmit: PropTypes.func,
     selectedSubdivision: PropTypes.string,
-    subdivisions: PropTypes.array,
+    subdivisions: PropTypes.object,
 };
 
 function mapStateToProps(state) {
     return {
         activeForm: state.activeForm,
-        subdivisions: !!state.subdivisions && !!state.subdivisions.currentSubdivision && state.subdivisions.currentSubdivision,
+        subdivisions: state.subdivisions && state.subdivisions.currentSubdivision,
     };
 }
 

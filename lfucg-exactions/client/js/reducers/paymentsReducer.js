@@ -1,3 +1,9 @@
+import { contains } from 'ramda';
+
+import {
+    API_CALL_START,
+} from '../constants/actionTypes';
+
 import {
     GET_PAYMENTS,
     GET_PAYMENT_ID,
@@ -14,18 +20,34 @@ const initialState = {
     currentPayment: null,
     loadingPayment: true,
     payments: [],
+    next: null,
+    count: 0,
+    prev: null,
 } 
+
+const paymentApiCalls = [GET_PAYMENTS, GET_PAYMENT_ID, GET_LOT_PAYMENTS, GET_ACCOUNT_PAYMENTS, GET_AGREEMENT_PAYMENTS, POST_PAYMENT, PUT_PAYMENT];
 
 const paymentReducer = (state = initialState, action) => {
     const {
         endpoint,
     } = action;
     switch (endpoint) {
+    case API_CALL_START:
+        if (contains(action.apiCall)(paymentApiCalls) || contains('/payment')(action.apiCall)) {
+            return {
+                ...state,
+                loadingPayment: true,
+            };
+        }
+        return state;
     case GET_PAYMENT_ID:
         return {
             ...state,
             currentPayment: action.response,
             loadingPayment: false,
+            next: null,
+            count: 1,
+            prev: null,
         };
     case GET_PAYMENTS:
     case GET_LOT_PAYMENTS:
@@ -33,8 +55,12 @@ const paymentReducer = (state = initialState, action) => {
     case GET_AGREEMENT_PAYMENTS:
         return {
             ...state,
-            payments: action.response,
+            currentPayment: null,
             loadingPayment: false,
+            payments: action.response,
+            next: action.response.next,
+            count: action.response.count,
+            prev: action.response.previous,
         }
     case POST_PAYMENT:
     case PUT_PAYMENT:
@@ -44,8 +70,12 @@ const paymentReducer = (state = initialState, action) => {
         if (action.response.endpoint === '/payment') {
             return {
                 ...state,
-                payments: action.response,
+                currentPayment: null,
                 loadingPayment: false,
+                payments: action.response,
+                next: action.response.next,
+                count: action.response.count,
+                prev: action.response.previous,
             }
         }
         return state;

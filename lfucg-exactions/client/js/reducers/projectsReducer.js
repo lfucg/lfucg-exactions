@@ -1,3 +1,9 @@
+import { contains } from 'ramda';
+
+import {
+    API_CALL_START,
+} from '../constants/actionTypes';
+
 import {
     GET_PROJECTS,
     GET_PROJECT_ID,
@@ -8,23 +14,65 @@ import {
     SEARCH_QUERY,
 } from '../constants/apiConstants';
 
+const initialState = {
+    currentProject: null,
+    loadingProject: true,
+    projects: [],
+    next: null,
+    count: 0,
+    prev: null,
+}
 
-const projectsReducer = (state = [], action) => {
+const projectApiCalls = [GET_PROJECTS, GET_PROJECT_ID, GET_AGREEMENT_PROJECTS, POST_PROJECT, PUT_PROJECT];
+
+const projectsReducer = (state = initialState, action) => {
     const {
         endpoint,
     } = action;
     switch (endpoint) {
+    case API_CALL_START:
+        if (contains(action.apiCall)(projectApiCalls) || contains('/project')(action.apiCall)) {
+            return {
+                ...state,
+                loadingProject: true,
+            };
+        }
+        return state;
     case GET_PROJECT_ID:
+        return {
+            ...state,
+            currentProject: action.response,
+            loadingProject: false,
+            next: null,
+            count: 1,
+            prev: null,
+        }
     case GET_PROJECTS:
     case GET_AGREEMENT_PROJECTS:
-        return action.response;
+        return {
+            ...state,
+            currentProject: null,
+            projects: action.response,
+            loadingProject: false,
+            next: action.response.next,
+            count: action.response.count,
+            prev: action.response.previous,
+        }
     case POST_PROJECT:
     case PUT_PROJECT:
         return {};
     case GET_PAGINATION:
     case SEARCH_QUERY:
         if (action.response.endpoint === '/project') {
-            return action.response;
+            return {
+                ...state,
+                currentProject: null,
+                projects: action.response,
+                loadingProject: false,
+                next: action.response.next,
+                count: action.response.count,
+                prev: action.response.previous,
+            }
         }
         return state;
     default:

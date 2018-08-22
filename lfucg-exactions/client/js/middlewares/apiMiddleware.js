@@ -7,6 +7,7 @@ import {
   API_CALL_SUCCESS,
   API_CALL_ERROR,
   API_CALL_VALIDATION_ERROR,
+  API_CALL_START,
 } from '../constants/actionTypes';
 import {
     BASE_URL,
@@ -48,6 +49,12 @@ export default function api({ getState, dispatch }) {
                 stored_token = null;
             }
         }
+
+        dispatch({
+            type: API_CALL_START,
+            endpoint: API_CALL_START,
+            apiCall: (endpoint === 'GET_PAGINATION' || endpoint === 'SEARCH_QUERY') ? url(getState) : endpoint,
+        });
 
         const authorization = global.Authorization ? global.Authorization : stored_token;
         const header = (authorization !== null) ? {

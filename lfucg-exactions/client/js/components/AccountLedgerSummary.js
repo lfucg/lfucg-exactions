@@ -40,7 +40,7 @@ class AccountLedgerSummary extends React.Component {
 
                 <div className="form-header">
                     <div className="container">
-                        <h1>CREDIT TRANSFER SUMMARY - {accountLedgers.entry_date}</h1>
+                        <h1>CREDIT TRANSFER SUMMARY - {accountLedgers.currentLedger && accountLedgers.currentLedger.entry_date}</h1>
                     </div>
                 </div>
 
@@ -48,9 +48,10 @@ class AccountLedgerSummary extends React.Component {
 
                 <div className="inside-body">
                     <div className="container">
-                      {activeForm.loading ? <LoadingScreen /> :
+                      {accountLedgers.loadingLedger ? <LoadingScreen /> :
                       (
                           <div className="col-md-offset-1 col-md-10 panel-group" id="accordion" role="tablist" aria-multiselectable="false">
+                            {!!accountLedgers && <div>
                               <a
                                 role="button"
                                 data-toggle="collapse"
@@ -77,7 +78,7 @@ class AccountLedgerSummary extends React.Component {
                                           <div className="col-xs-12 col-sm-5 col-sm-offset-7">
                                               <div className="col-xs-5 col-xs-offset-5">
                                                   {currentUser && currentUser.permissions && currentUser.permissions.accountledger &&
-                                                      <Link to={`credit-transfer/form/${accountLedgers.id}`} aria-label={`Edit ${accountLedgers.entry_date}`}>
+                                                      <Link to={`credit-transfer/form/${accountLedgers.currentLedger.id}`} aria-label={`Edit ${accountLedgers.currentLedger.entry_date}`}>
                                                           <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
                                                           <div className="col-xs-7 link-label">
                                                               Edit
@@ -88,16 +89,16 @@ class AccountLedgerSummary extends React.Component {
                                           </div>
                                       </div>
                                       <div className="col-xs-12">
-                                          <p className="col-md-4 col-xs-6">Entry Type: {accountLedgers.entry_type_display}</p>
-                                          <p className="col-md-4 col-xs-6">Sewer Credits: {accountLedgers.dollar_values && accountLedgers.dollar_values.dollar_sewer}</p>
-                                          <p className="col-md-4 col-xs-6">Non-Sewer Credits: {accountLedgers.dollar_values && accountLedgers.dollar_values.dollar_non_sewer}</p>
+                                          <p className="col-md-4 col-xs-6">Entry Type: {accountLedgers.currentLedger.entry_type_display}</p>
+                                          <p className="col-md-4 col-xs-6">Sewer Credits: {accountLedgers.currentLedger.dollar_values && accountLedgers.currentLedger.dollar_values.dollar_sewer}</p>
+                                          <p className="col-md-4 col-xs-6">Non-Sewer Credits: {accountLedgers.currentLedger.dollar_values && accountLedgers.currentLedger.dollar_values.dollar_non_sewer}</p>
                                       </div>
                                   </div>
                               </div>
-                              {accountLedgers && accountLedgers.id &&
+                              {accountLedgers.currentLedger && accountLedgers.currentLedger.id &&
                                   <Notes
                                     content_type="accounts_accountledger"
-                                    object_id={accountLedgers.id}
+                                    object_id={accountLedgers.currentLedger.id}
                                     ariaExpanded="false"
                                     panelClass="panel-collapse collapse row"
                                     permission="accountledger"
@@ -105,33 +106,34 @@ class AccountLedgerSummary extends React.Component {
                               }
 
                               <LotsMiniSummary
-                                mapSet={accountLedgers.lot}
-                                mapQualifier={accountLedgers && accountLedgers.lot && accountLedgers.lot.id}
+                                mapSet={accountLedgers.currentLedger.lot}
+                                mapQualifier={accountLedgers.currentLedger && accountLedgers.currentLedger.lot && accountLedgers.currentLedger.lot.id}
                                 singleLot
                               />
 
                               <AccountsMiniSummary
-                                mapSet={accountLedgers.account_from}
-                                mapQualifier={accountLedgers && accountLedgers.account_from && accountLedgers.account_from.id}
+                                mapSet={accountLedgers.currentLedger.account_from}
+                                mapQualifier={accountLedgers.currentLedger && accountLedgers.currentLedger.account_from && accountLedgers.currentLedger.account_from.id}
                                 singleAccount
                                 title="Developer Account From"
                                 accordionID="AccountFrom"
                               />
 
                               <AccountsMiniSummary
-                                mapSet={accountLedgers.account_to}
-                                mapQualifier={accountLedgers && accountLedgers.account_to && accountLedgers.account_to.id}
+                                mapSet={accountLedgers.currentLedger.account_to}
+                                mapQualifier={accountLedgers.currentLedger && accountLedgers.currentLedger.account_to && accountLedgers.currentLedger.account_to.id}
                                 singleAccount
                                 title="Developer Account To"
                                 accordionID="AccountTo"
                               />
 
                               <AgreementsMiniSummary
-                                mapSet={accountLedgers.agreement}
-                                mapQualifier={accountLedgers && accountLedgers.agreement && accountLedgers.agreement.id}
+                                mapSet={accountLedgers.currentLedger.agreement}
+                                mapQualifier={accountLedgers.currentLedger && accountLedgers.currentLedger.agreement && accountLedgers.currentLedger.agreement.id}
                                 singleAgreement
                               />
-
+                            </div>
+                            }
                           </div>
                       )}
                     </div>
@@ -153,7 +155,7 @@ AccountLedgerSummary.propTypes = {
 function mapStateToProps(state) {
     return {
         currentUser: state.currentUser,
-        accountLedgers: state.accountLedgers,
+        accountLedgers: !!state.accountLedgers && state.accountLedgers,
         activeForm: state.activeForm,
     };
 }

@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router';
 import { map } from 'ramda';
 import PropTypes from 'prop-types';
 
@@ -33,7 +32,6 @@ class LotExisting extends React.Component {
             lots,
             plats,
             accounts,
-            activeForm,
         } = this.props;
 
         const platsList = plats && plats.length > 0 &&
@@ -54,7 +52,7 @@ class LotExisting extends React.Component {
                 };
             })(accounts));
 
-        const lots_list = lots.length > 0 ? (
+        const lots_list = !!lots && !!lots.lots && lots.lots.length > 0 ? (
             map((lot) => {
                 return (
                     <div key={lot.id} className="col-xs-12">
@@ -78,7 +76,7 @@ class LotExisting extends React.Component {
                         </div>}
                     </div>
                 );
-            })(lots)
+            })(lots.lots)
         ) : null;
 
         return (
@@ -107,11 +105,18 @@ class LotExisting extends React.Component {
 
                 <div className="inside-body">
                     <div className="container">
-                        {activeForm.loading ? <LoadingScreen /> :
+                        {lots.loadingLot ? <LoadingScreen /> :
                         (
                             <div>
                                 {lots_list}
-                                {lots_list ? <Pagination /> : <h1>No Results Found</h1>}
+                                {lots_list ? 
+                                    <Pagination 
+                                        next={lots.next}
+                                        prev={lots.prev}
+                                        count={lots.count}
+                                    /> : 
+                                    <h1>No Results Found</h1>
+                                }
                             </div>
                         )}
                     </div>
@@ -128,17 +133,15 @@ LotExisting.propTypes = {
     plats: PropTypes.array,
     accounts: PropTypes.array,
     route: PropTypes.object,
-    activeForm: PropTypes.object,
     onComponentDidMount: PropTypes.func,
 };
 
 function mapStateToProps(state) {
     return {
         currentUser: state.currentUser,
-        lots: !!state.lots && !!state.lots.lots && state.lots.lots,
+        lots: !!state.lots && state.lots,
         plats: !!state.plats && !!state.plats.plats && state.plats.plats,
-        accounts: state.accounts,
-        activeForm: state.activeForm,
+        accounts: !!state.accounts && !!state.accounts.accounts && state.accounts.accounts,
     };
 }
 

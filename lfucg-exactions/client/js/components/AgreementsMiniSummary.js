@@ -117,7 +117,7 @@ class AgreementsMiniSummary extends React.Component {
                     </div>
                 ) : (
                     <div className="row section-heading" role="tab" id="headingAccountAgreements">
-                        <h3 tabIndex="0">Agreements - None</h3>
+                        <h3 tabIndex="0">Agreements - {!!this.props.mapSet ? 'None' : <i className="fa fa-spinner fa-pulse fa-fw" />}</h3>
                     </div>
                 )}
             </div>

@@ -118,7 +118,7 @@ class AccountLedgerForm extends React.Component {
 
                 <div className="inside-body">
                     <div className="container">
-                        {activeForm.loading ? <LoadingScreen /> :
+                        {accountLedgers.loadingLedger ? <LoadingScreen /> :
                         (
                             <div className="col-sm-offset-1 col-sm-10">
                                 <form >
@@ -384,11 +384,11 @@ AccountLedgerForm.propTypes = {
 function mapStateToProps(state) {
     return {
         activeForm: state.activeForm,
-        plats: state.plats,
-        lots: state.lots,
-        accounts: state.accounts,
-        agreements: state.agreements,
-        accountLedgers: state.accountLedgers,
+        accounts: !!state.accounts && !!state.accounts.accounts && state.accounts.accounts,
+        accountLedgers: !!state.accountLedgers && state.accountLedgers,
+        agreements: !!state.agreements && !!state.agreements.agreements && state.agreements.agreements,
+        lots: !!state.lots && !!state.lots.lots && state.lots.lots,
+        plats: !!state.plats && !!state.plats.plats && state.plats.plats,
         currentUser: state.currentUser,
     };
 }
