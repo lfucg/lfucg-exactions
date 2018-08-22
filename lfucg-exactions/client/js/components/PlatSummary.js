@@ -39,7 +39,7 @@ class PlatSummary extends React.Component {
             activeForm,
         } = this.props;
 
-        const platZonesList = plats.plat_zone && (map((single_plat_zone) => {
+        const platZonesList = !!plats && !!plats.currentPlat && plats.currentPlat.plat_zone && (map((single_plat_zone) => {
             return (
                 <div key={single_plat_zone.id} className="col-xs-12">
                     <div className="row form-subheading">
@@ -53,9 +53,9 @@ class PlatSummary extends React.Component {
                     </div>
                 </div>
             );
-        })(plats.plat_zone));
+        })(plats.currentPlat.plat_zone));
 
-        const platZoneExactions = plats.plat_zone && (map((plat_exaction) => {
+        const platZoneExactions = !!plats && !!plats.currentPlat && plats.currentPlat.plat_zone && (map((plat_exaction) => {
             return (
                 <div key={plat_exaction.id}>
                     <div className="col-xs-4">
@@ -86,7 +86,7 @@ class PlatSummary extends React.Component {
                     </div>
                 </div>
             );
-        })(plats.plat_zone));
+        })(plats.currentPlat.plat_zone));
 
         return (
             <div className="plat-summary">
@@ -94,7 +94,7 @@ class PlatSummary extends React.Component {
 
                 <div className="form-header">
                     <div className="container">
-                        <h1>PLAT SUMMARY - {plats.cabinet}-{plats.slide}</h1>
+                        <h1>PLAT SUMMARY - {!!plats && !!plats.currentPlat && plats.currentPlat.cabinet}-{!!plats && !!plats.currentPlat && plats.currentPlat.slide}</h1>
                     </div>
                 </div>
 
@@ -102,9 +102,10 @@ class PlatSummary extends React.Component {
 
                 <div className="inside-body">
                     <div className="container">
-                        {plats.loadingPlat ? <LoadingScreen /> :
+                        {!!plats && plats.loadingPlat ? <LoadingScreen /> :
                         (
                             <div className="col-md-offset-1 col-md-10 panel-group" id="accordion" role="tablist" aria-multiselectable="false">
+                                {!!plats && !!plats.currentPlat && <div>
                                 <a
                                   role="button"
                                   data-toggle="collapse"
@@ -131,7 +132,7 @@ class PlatSummary extends React.Component {
                                             <div className="col-xs-12 col-sm-5 col-sm-offset-7">
                                                 <div className="col-xs-5 col-xs-offset-5">
                                                     {currentUser && currentUser.permissions && currentUser.permissions.plat &&
-                                                        <Link to={`plat/form/${plats.id}`} aria-label={`Edit ${plats.cabinet} ${plats.slide}`}>
+                                                        <Link to={`plat/form/${plats.currentPlat.id}`} aria-label={`Edit ${plats.currentPlat.cabinet} ${plats.currentPlat.slide}`}>
                                                             <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
                                                             <div className="col-xs-7 link-label">
                                                                 Edit
@@ -142,21 +143,21 @@ class PlatSummary extends React.Component {
                                             </div>
                                         </div>
                                         <div className="col-xs-12">
-                                            <h3 className="col-xs-6">Plat: {plats.cabinet}-{plats.slide}</h3>
-                                            <h3 className="col-xs-6">{plats.is_approved ? 'Approved' : 'Not Approved'}</h3>
-                                            <p className="col-xs-6">Name: {plats.name}</p>
-                                            <p className="col-xs-6">Subdivision: {plats.subdivision ? plats.subdivision.name : null}</p>
-                                            <p className="col-xs-6">Plat Type: {plats.plat_type_display}</p>
-                                            <p className="col-xs-6">Expansion Area: {plats.expansion_area}</p>
-                                            <p className="col-xs-6">Gross Acreage: {plats.cleaned_total_acreage}</p>
-                                            <p className="col-xs-6">Unit: {plats.unit}</p>
-                                            <p className="col-xs-6">Section: {plats.section}</p>
-                                            <p className="col-xs-6">Block: {plats.block}</p>
-                                            <p className="col-xs-6">Buildable Lots: {plats.buildable_lots}</p>
-                                            <p className="col-xs-6">Non-Buildable Lots: {plats.non_buildable_lots}</p>
-                                            <p className="col-xs-6">Current Sewer Due: {plats.current_sewer_due}</p>
-                                            <p className="col-xs-6">Current Non-Sewer Due: {plats.current_non_sewer_due}</p>
-                                            <p className="col-xs-12">Calculation Note: {plats.calculation_note}</p>
+                                            <h3 className="col-xs-6">Plat: {plats.currentPlat.cabinet}-{plats.currentPlat.slide}</h3>
+                                            <h3 className="col-xs-6">{plats.currentPlat.is_approved ? 'Approved' : 'Not Approved'}</h3>
+                                            <p className="col-xs-6">Name: {plats.currentPlat.name}</p>
+                                            <p className="col-xs-6">Subdivision: {plats.currentPlat.subdivision ? plats.currentPlat.subdivision.name : null}</p>
+                                            <p className="col-xs-6">Plat Type: {plats.currentPlat.plat_type_display}</p>
+                                            <p className="col-xs-6">Expansion Area: {plats.currentPlat.expansion_area}</p>
+                                            <p className="col-xs-6">Gross Acreage: {plats.currentPlat.cleaned_total_acreage}</p>
+                                            <p className="col-xs-6">Unit: {plats.currentPlat.unit}</p>
+                                            <p className="col-xs-6">Section: {plats.currentPlat.section}</p>
+                                            <p className="col-xs-6">Block: {plats.currentPlat.block}</p>
+                                            <p className="col-xs-6">Buildable Lots: {plats.currentPlat.buildable_lots}</p>
+                                            <p className="col-xs-6">Non-Buildable Lots: {plats.currentPlat.non_buildable_lots}</p>
+                                            <p className="col-xs-6">Current Sewer Due: {plats.currentPlat.current_sewer_due}</p>
+                                            <p className="col-xs-6">Current Non-Sewer Due: {plats.currentPlat.current_non_sewer_due}</p>
+                                            <p className="col-xs-12">Calculation Note: {plats.currentPlat.calculation_note}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -188,7 +189,7 @@ class PlatSummary extends React.Component {
                                                 <div className="col-xs-12 col-sm-5 col-sm-offset-7">
                                                     <div className="col-xs-5 col-xs-offset-5">
                                                         {currentUser && currentUser.permissions && currentUser.permissions.plat &&
-                                                            <Link to={`plat/form/${plats.id}`} aria-label="Edit plat zones">
+                                                            <Link to={`plat/form/${plats.currentPlat.id}`} aria-label="Edit plat zones">
                                                                 <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
                                                                 <div className="col-xs-7 link-label">
                                                                     Edit
@@ -207,7 +208,7 @@ class PlatSummary extends React.Component {
                                     </div>
                                 </div>}
 
-                                { plats && plats.plat_zone &&
+                                { !!plats.currentPlat && plats.currentPlat.plat_zone &&
                                     <div>
                                         <a
                                           role="button"
@@ -235,7 +236,7 @@ class PlatSummary extends React.Component {
                                                     <div className="col-xs-12 col-sm-5 col-sm-offset-7">
                                                         <div className="col-xs-5 col-xs-offset-5">
                                                             {currentUser && currentUser.permissions && currentUser.permissions.plat &&
-                                                                <Link to={`plat/form/${plats.id}`} aria-label={`Edit ${plats.cabinet} ${plats.slide} plat exactions`}>
+                                                                <Link to={`plat/form/${plats.currentPlat.id}`} aria-label={`Edit ${plats.currentPlat.cabinet} ${plats.currentPlat.slide} plat exactions`}>
                                                                     <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
                                                                     <div className="col-xs-7 link-label">
                                                                         Edit
@@ -283,10 +284,10 @@ class PlatSummary extends React.Component {
                                                         </div>
                                                         <div className="row">
                                                             <div className="col-xs-6 text-center">
-                                                                <p>Sewer Dues: {plats.current_sewer_due}</p>
+                                                                <p>Sewer Dues: {plats.currentPlat.current_sewer_due}</p>
                                                             </div>
                                                             <div className="col-xs-6 text-center">
-                                                                <p>Non-Sewer Dues: {plats.current_non_sewer_due}</p>
+                                                                <p>Non-Sewer Dues: {plats.currentPlat.current_non_sewer_due}</p>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -294,17 +295,17 @@ class PlatSummary extends React.Component {
                                                 <div className="col-xs-12">
                                                     <h4>Calculation Notes:</h4>
                                                     <div className="col-xs-12">
-                                                        <p>{plats.calculation_note}</p>
+                                                        <p>{plats.currentPlat.calculation_note}</p>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 }
-                                {plats && plats.id &&
+                                {!!plats.currentPlat && plats.currentPlat.id &&
                                     <Notes
                                       content_type="plats_plat"
-                                      object_id={plats.id}
+                                      object_id={plats.currentPlat.id}
                                       ariaExpanded="false"
                                       panelClass="panel-collapse collapse row"
                                       permission="plat"
@@ -312,27 +313,29 @@ class PlatSummary extends React.Component {
                                 }
 
                                 <LotsMiniSummary
-                                  mapSet={lots}
-                                  mapQualifier={lots && lots.length > 0}
+                                  mapSet={lots.lots}
+                                  mapQualifier={lots && lots.lots && lots.lots.length > 0}
+                                  lots={lots}
                                 />
 
                                 <AccountsMiniSummary
-                                  mapSet={accounts}
-                                  mapQualifier={plats.account && accounts}
+                                  mapSet={!!accounts && accounts.accounts}
+                                  mapQualifier={!!plats.currentPlat && plats.currentPlat.account && accounts.accounts}
                                   singleAccount
                                   title="Developer Account"
                                   accordionID="Account"
                                 />
 
-                                {plats && plats.id &&
+                                {!!plats.currentPlat && plats.currentPlat.id &&
                                     <Uploads
                                       file_content_type="plats_plat"
-                                      file_object_id={plats.id}
+                                      file_object_id={plats.currentPlat.id}
                                       ariaExpanded="false"
                                       panelClass="panel-collapse collapse row"
                                       permission="plat"
                                     />
                                 }
+                                </div>}
                             </div>
                         )}
                     </div>
@@ -356,8 +359,8 @@ PlatSummary.propTypes = {
 function mapStateToProps(state) {
     return {
         currentUser: state.currentUser,
-        plats: !!state.plats && !!state.plats.currentPlat && state.plats.currentPlat,
-        lots: !!state.lots && !!state.lots.lots && state.lots.lots,
+        plats: state.plats,
+        lots: state.lots,
         accounts: state.accounts,
         activeForm: state.activeForm,
     };

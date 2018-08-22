@@ -64,7 +64,7 @@ class PlatExisting extends React.Component {
                 };
             })(subdivisions));
 
-        const plats_list = plats && plats.length > 0 ? (
+        const plats_list = !!plats && !!plats.plats && plats.plats.length > 0 ? (
             map((plat) => {
                 const cabinet = plat.cabinet ? `${plat.cabinet}-` : '';
                 const slide = plat.slide ? plat.slide : plat.name;
@@ -92,7 +92,7 @@ class PlatExisting extends React.Component {
                         </div>}
                     </div>
                 );
-            })(plats)
+            })(plats.plats)
         ) : null;
 
         return (
@@ -123,11 +123,18 @@ class PlatExisting extends React.Component {
 
                 <div className="inside-body">
                     <div className="container">
-                        {activeForm.loading ? <LoadingScreen /> :
+                        {plats.loadingPlat ? <LoadingScreen /> :
                         (
                             <div>
                                 {plats_list}
-                                {plats_list ? <Pagination /> : <h1>No Results Found</h1>}
+                                {plats_list ?
+                                    <Pagination 
+                                        next={plats.next}
+                                        prev={plats.prev}
+                                        count={plats.count} 
+                                    /> : 
+                                    <h1>No Results Found</h1>
+                                }
                             </div>
                         )}
                     </div>
@@ -152,9 +159,9 @@ PlatExisting.propTypes = {
 function mapStateToProps(state) {
     return {
         currentUser: state.currentUser,
-        plats: !!state.plats && !!state.plats.plats && state.plats.plats,
-        accounts: state.accounts,
-        subdivisions: state.subdivisions,
+        plats: !!state.plats && state.plats,
+        accounts: !!state.accounts && !!state.accounts.accounts && state.accounts.accounts,
+        subdivisions: !!state.subdivisions && !!state.subdivisions.subdivisions && state.subdivisions.subdivisions,
         lots: !!state.lots && !!state.lots.lots && state.lots.lots,
         activeForm: state.activeForm,
     };

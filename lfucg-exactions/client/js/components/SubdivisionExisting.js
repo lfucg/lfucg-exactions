@@ -27,13 +27,10 @@ class SubdivisionExisting extends React.Component {
         this.props.onComponentDidMount();
     }
 
-
     render() {
         const {
-            currentUser,
             subdivisions,
             plats,
-            activeForm,
         } = this.props;
 
         const platsList = plats && plats.length > 0 &&
@@ -88,11 +85,18 @@ class SubdivisionExisting extends React.Component {
 
                 <div className="inside-body">
                     <div className="container">
-                        {activeForm.loading ? <LoadingScreen /> :
+                        {subdivisions.loadingSubdivision ? <LoadingScreen /> :
                         (
                             <div>
                                 {subdivisions_list}
-                                {subdivisions_list ? <Pagination /> : <h1>No Results Found</h1>}
+                                {subdivisions_list ? 
+                                    <Pagination 
+                                        next={subdivisions.next}
+                                        prev={subdivisions.prev}
+                                        count={subdivisions.count}
+                                    /> : 
+                                    <h1>No Results Found</h1>
+                                }
                             </div>
                         )}
                     </div>
@@ -104,20 +108,16 @@ class SubdivisionExisting extends React.Component {
 }
 
 SubdivisionExisting.propTypes = {
-    currentUser: PropTypes.object,
-    subdivisions: PropTypes.array,
+    subdivisions: PropTypes.object,
     plats: PropTypes.array,
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
-    activeForm: PropTypes.object,
 };
 
 function mapStateToProps(state) {
     return {
-        currentUser: state.currentUser,
         subdivisions: state.subdivisions,
-        plats: state.plats,
-        activeForm: state.activeForm,
+        plats: state.plats && state.plats.plats,
     };
 }
 

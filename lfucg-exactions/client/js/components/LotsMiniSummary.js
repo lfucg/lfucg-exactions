@@ -114,13 +114,20 @@ class LotsMiniSummary extends React.Component {
                         >
                             <div className="panel-body">
                                 {lotsList}
-                                {lotsList ? <Pagination /> : <h1>No Results Found</h1>}
+                                {lotsList ? 
+                                    <Pagination 
+                                        next={this.props.lots.next}
+                                        prev={this.props.lots.prev}
+                                        count={this.props.lots.count} 
+                                    /> : 
+                                    <h1>No Results Found</h1>
+                                }
                             </div>
                         </div>
                     </div>
                 ) : (
                     <div className="row section-heading" role="tab" id="headingAccountLots">
-                        <h3 tabIndex="0">Lots - None</h3>
+                        <h3 tabIndex="0">Lots - {!!this.props.mapSet ? 'None' : <i className="fa fa-spinner fa-pulse fa-fw" />}</h3>
                     </div>
                 )}
             </div>
@@ -130,9 +137,10 @@ class LotsMiniSummary extends React.Component {
 
 LotsMiniSummary.propTypes = {
     currentUser: PropTypes.object,
-    mapSet: PropTypes.object,
-    mapQualifier: PropTypes.object,
+    mapSet: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
+    mapQualifier: PropTypes.bool,
     singleLot: PropTypes.bool,
+    lots: PropTypes.object,
 };
 
 function mapStateToProps(state) {

@@ -65,7 +65,7 @@ ExistingPageLinks.propTypes = {
     linkStart: PropTypes.string,
     approval: PropTypes.bool,
     title: PropTypes.string,
-    instanceID: PropTypes.string,
+    instanceID: PropTypes.number,
     permissionModel: PropTypes.string,
     uniqueReport: PropTypes.bool,
 };

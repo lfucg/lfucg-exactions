@@ -44,7 +44,7 @@ class AgreementExisting extends React.Component {
                 };
             })(accounts));
 
-        const agreements_list = agreements.length > 0 ? (
+        const agreements_list = !!agreements && !!agreements.agreements && agreements.agreements.length > 0 ? (
             map((agreement) => {
                 return (
                     <div key={agreement.id} className="col-xs-12">
@@ -69,7 +69,7 @@ class AgreementExisting extends React.Component {
                         </div>}
                     </div>
                 );
-            })(agreements)
+            })(agreements.agreements)
         ) : null;
 
         return (
@@ -98,11 +98,18 @@ class AgreementExisting extends React.Component {
 
                 <div className="inside-body">
                     <div className="container">
-                        {activeForm.loading ? <LoadingScreen /> :
+                        {agreements.loadingAgreement ? <LoadingScreen /> :
                         (
                             <div>
                                 {agreements_list}
-                                {agreements_list ? <Pagination /> : <h1>No Results Found</h1>}
+                                {agreements_list ? 
+                                    <Pagination 
+                                        next={agreements.next}
+                                        prev={agreements.prev}
+                                        count={agreements.count}
+                                    /> : 
+                                    <h1>No Results Found</h1>
+                                }
                             </div>
                         )}
                     </div>
@@ -125,8 +132,8 @@ AgreementExisting.propTypes = {
 function mapStateToProps(state) {
     return {
         currentUser: state.currentUser,
-        agreements: state.agreements,
-        accounts: state.accounts,
+        accounts: !!state.accounts && !!state.accounts.accounts && state.accounts.accounts,
+        agreements: !!state.agreements && state.agreements,
         activeForm: state.activeForm,
     };
 }

@@ -55,7 +55,7 @@ class AccountExisting extends React.Component {
                 };
             })(lots));
 
-        const accounts_list = accounts && accounts.length > 0 ? (
+        const accounts_list = !!accounts && !!accounts.accounts && accounts.accounts.length > 0 ? (
             map((account) => {
                 return (
                     <div key={account.id} className="col-xs-12">
@@ -79,7 +79,7 @@ class AccountExisting extends React.Component {
                         </div>
                     </div>
                 );
-            })(accounts)
+            })(accounts.accounts)
         ) : null;
 
         return (
@@ -106,11 +106,18 @@ class AccountExisting extends React.Component {
 
                 <div className="inside-body">
                     <div className="container">
-                        {activeForm.loading ? <LoadingScreen /> :
+                        {accounts.loadingAccount ? <LoadingScreen /> :
                         (
                             <div>
                                 {accounts_list}
-                                {accounts_list ? <Pagination /> : <h1>No Results Found</h1>}
+                                {accounts_list ? 
+                                    <Pagination 
+                                        next={accounts.next}
+                                        prev={accounts.prev}
+                                        count={accounts.count}
+                                    /> : 
+                                    <h1>No Results Found</h1>
+                                }
                             </div>
                         )}
                     </div>
@@ -124,9 +131,9 @@ class AccountExisting extends React.Component {
 function mapStateToProps(state) {
     return {
         currentUser: state.currentUser,
-        accounts: state.accounts,
-        plats: state.plats,
-        lots: state.lots,
+        accounts: !!state.accounts && state.accounts,
+        plats: !!state.plats && state.plats,
+        lots: !!state.lots && state.lots,
         activeForm: state.activeForm,
     };
 }

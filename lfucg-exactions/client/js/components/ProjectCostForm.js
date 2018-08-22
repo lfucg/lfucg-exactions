@@ -53,7 +53,7 @@ class ProjectCostForm extends React.Component {
                         {project.name}
                     </option>
                 );
-            })(projects));
+            })(projects.projects));
 
         const submitEnabled =
             activeForm.project_id &&
@@ -74,10 +74,10 @@ class ProjectCostForm extends React.Component {
 
                 <div className="inside-body">
                     <div className="container">
-                        {activeForm.loading ? <LoadingScreen /> :
+                        {projectCosts && projectCosts.loadingProjectCost ? <LoadingScreen /> :
                         (
                             <div className="col-sm-offset-1 col-sm-10">
-                                {currentParam && projectCosts.is_approved === false && <div className="row"><h1 className="approval-pending">Approval Pending</h1></div>}
+                                {currentParam && projectCosts.currentProjectCost.is_approved === false && <div className="row"><h1 className="approval-pending">Approval Pending</h1></div>}
                                 <form >
 
                                     <fieldset>
@@ -156,10 +156,10 @@ class ProjectCostForm extends React.Component {
                                     </div>
                                 </form>
                                 <div className="clearfix" />
-                                {projectCosts.id &&
+                                {projectCosts.currentProjectCost.id &&
                                     <Uploads
                                       file_content_type="accounts_projectcostestimate"
-                                      file_object_id={projectCosts.id}
+                                      file_object_id={projectCosts.currentProjectCost.id}
                                       ariaExpanded="true"
                                       panelClass="panel-collapse collapse row in"
                                       permission="projectcostestimate"
@@ -201,8 +201,8 @@ ProjectCostForm.propTypes = {
 function mapStateToProps(state) {
     return {
         activeForm: state.activeForm,
-        projects: state.projects,
-        projectCosts: state.projectCosts,
+        projects: !!state.projects && state.projects,
+        projectCosts: !!state.projectCosts && state.projectCosts,
         currentUser: state.currentUser,
     };
 }

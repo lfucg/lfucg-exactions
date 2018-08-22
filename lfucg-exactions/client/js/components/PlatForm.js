@@ -55,7 +55,7 @@ class PlatForm extends React.Component {
 
         const currentParam = this.props.params.id;
 
-        const subdivisionsList = subdivisions.length > 0 &&
+        const subdivisionsList = !!subdivisions && subdivisions.length > 0 &&
             (map((single_subdivision) => {
                 return (
                     <option key={single_subdivision.id} value={[single_subdivision.id, single_subdivision.name]} >
@@ -64,7 +64,7 @@ class PlatForm extends React.Component {
                 );
             })(subdivisions));
 
-        const accountsList = accounts.length > 0 &&
+        const accountsList = !!accounts && accounts.length > 0 &&
             (map((single_account) => {
                 return (
                     <option key={single_account.id} value={[single_account.id, single_account.account_name]} >
@@ -73,7 +73,7 @@ class PlatForm extends React.Component {
                 );
             })(accounts));
 
-        const platZonesList = plats.plat_zone &&
+        const platZonesList = !!plats && !!plats.currentPlat && plats.currentPlat.plat_zone &&
             (map((single_plat_zone) => {
                 return (
                     <div key={single_plat_zone.id} >
@@ -88,9 +88,9 @@ class PlatForm extends React.Component {
                         />
                     </div>
                 );
-            })(plats.plat_zone));
+            })(plats.currentPlat.plat_zone));
 
-        const sortedPlatZones = plats && plats.plat_zone && plats.plat_zone.sort((a, b) => {
+        const sortedPlatZones = !!plats && !!plats.currentPlat && plats.currentPlat.plat_zone && plats.currentPlat.plat_zone.sort((a, b) => {
             if (a.zone < b.zone) {
                 return -1;
             } else if (a.zone > b.zone) {
@@ -99,11 +99,11 @@ class PlatForm extends React.Component {
             return 0;
         });
 
-        const platZoneDuesList = plats && plats.plat_zone &&
+        const platZoneDuesList = !!plats && !!plats.currentPlat && !!plats.currentPlat.plat_zone &&
             (map((single_plat_zone) => {
                 return (
                     <div key={single_plat_zone.id} >
-                        <div className={plats.plat_zone.length < 1 ? 'col-xs-6' : 'col-xs-4'}>
+                        <div className={plats.currentPlat.plat_zone.length < 1 ? 'col-xs-6' : 'col-xs-4'}>
                             <PlatZoneDuesForm
                               props={this.props}
                               plat_zone_id={`${single_plat_zone.id}_plat_zone`}
@@ -153,10 +153,10 @@ class PlatForm extends React.Component {
 
                 <div className="inside-body">
                     <div className="container">
-                        {activeForm.loading ? <LoadingScreen /> :
+                        {plats.loadingPlat  ? <LoadingScreen /> :
                         (
                             <div className="col-md-offset-1 col-md-10 panel-group" id="accordion" role="tablist" aria-multiselectable="false">
-                                {currentParam && plats.is_approved === false && <div className="row"><h1 className="approval-pending">Approval Pending</h1></div>}
+                                {currentParam && plats.currentPlat && plats.currentPlat.is_approved === false && <div className="row"><h1 className="approval-pending">Approval Pending</h1></div>}
                                 <a
                                   role="button"
                                   data-toggle="collapse"
@@ -368,7 +368,7 @@ class PlatForm extends React.Component {
                                                         <div className="col-xs-12">
                                                             { platZonesList }
                                                         </div>
-                                                        { plats.plat_zone && plats.plat_zone.length > 0 ?
+                                                        { plats && plats.currentPlat && plats.currentPlat.plat_zone && plats.currentPlat.plat_zone.length > 0 ?
                                                             <div className="col-xs-12">
                                                                 <button className="btn btn-lex" onClick={addAnotherPlatZone} >Add Another Plat Zone</button>
                                                             </div>
@@ -501,19 +501,19 @@ class PlatForm extends React.Component {
                                         )}
                                     </div>
                                 ) : null }
-                                {plats && plats.id &&
+                                {plats && plats.currentPlat && plats.currentPlat.id &&
                                     <Notes
                                       content_type="plats_plat"
-                                      object_id={plats.id}
+                                      object_id={plats.currentPlat.id}
                                       ariaExpanded="true"
                                       panelClass="panel-collapse collapse row in"
                                       permission="plat"
                                     />
                                 }
-                                {plats && plats.id &&
+                                {plats && plats.currentPlat && plats.currentPlat.id &&
                                     <Uploads
                                       file_content_type="plats_plat"
-                                      file_object_id={plats.id}
+                                      file_object_id={plats.currentPlat.id}
                                       ariaExpanded="true"
                                       panelClass="panel-collapse collapse row in"
                                       permission="plat"
@@ -533,7 +533,7 @@ class PlatForm extends React.Component {
 PlatForm.propTypes = {
     activeForm: PropTypes.object,
     subdivisions: PropTypes.array,
-    plats: PropTypes.array,
+    plats: PropTypes.object,
     accounts: PropTypes.array,
     route: PropTypes.object,
     params: PropTypes.object,
@@ -550,9 +550,9 @@ PlatForm.propTypes = {
 function mapStateToProps(state) {
     return {
         activeForm: state.activeForm,
-        subdivisions: state.subdivisions,
+        subdivisions: state.subdivisions && state.subdivisions.subdivisions,
         plats: state.plats,
-        accounts: state.accounts,
+        accounts: state.accounts && state.accounts.accounts,
         currentUser: state.currentUser,
     };
 }

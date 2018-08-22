@@ -42,7 +42,7 @@ class ProjectExisting extends React.Component {
                     id: single_agreement.id,
                     name: single_agreement.resolution_number,
                 };
-            })(agreements));
+            })(agreements.agreements));
 
         const projects_list = projects.length > 0 &&
             map((project) => {
@@ -71,7 +71,7 @@ class ProjectExisting extends React.Component {
                         </div>}
                     </div>
                 );
-            })(projects);
+            })(projects.projects);
 
         return (
             <div className="project-existing">
@@ -101,11 +101,18 @@ class ProjectExisting extends React.Component {
 
                 <div className="inside-body">
                     <div className="container">
-                        {activeForm.loading ? <LoadingScreen /> :
+                        {!!projects && projects.loadingProject ? <LoadingScreen /> :
                         (
                             <div>
                                 {projects_list}
-                                {projects_list ? <Pagination /> : <h1>No Results Found</h1>}
+                                {projects_list ? 
+                                    <Pagination 
+                                        next={projects.next}
+                                        prev={projects.prev}
+                                        count={projects.count} 
+                                    /> : 
+                                    <h1>No Results Found</h1>
+                                }
                             </div>
                         )}
                     </div>
@@ -128,8 +135,8 @@ ProjectExisting.propTypes = {
 function mapStateToProps(state) {
     return {
         currentUser: state.currentUser,
-        projects: state.projects,
-        agreements: state.agreements,
+        projects: !!state.projects && state.projects,
+        agreements: !!state.agreements && state.agreements,
         activeForm: state.activeForm,
     };
 }

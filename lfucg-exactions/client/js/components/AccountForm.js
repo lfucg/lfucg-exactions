@@ -234,7 +234,7 @@ AccountForm.propTypes = {
 function mapStateToProps(state) {
     return {
         activeForm: state.activeForm,
-        accounts: state.accounts,
+        accounts: !!state.accounts && state.accounts,
     };
 }
 

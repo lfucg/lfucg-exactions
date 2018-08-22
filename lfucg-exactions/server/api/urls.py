@@ -3,7 +3,7 @@ from rest_framework import routers
 from django.contrib.auth import views as auth_views
 
 from accounts.auth import *
-from plats.viewsets import SubdivisionViewSet, PlatViewSet, LotViewSet, PlatZoneViewSet
+from plats.viewsets import SubdivisionViewSet, PlatViewSet, PlatQuickViewSet, LotViewSet, PlatZoneViewSet
 from plats.views import SubdivisionCSVExportView, PlatCSVExportView, LotSearchCSVExportView
 from notes.viewsets import *
 from accounts.viewsets import *
@@ -15,6 +15,7 @@ router.register(r'user', UserViewSet)
 
 router.register(r'subdivision', SubdivisionViewSet)
 router.register(r'plat', PlatViewSet)
+router.register(r'platQuick', PlatQuickViewSet)
 router.register(r'lot', LotViewSet)
 router.register(r'platZone', PlatZoneViewSet)
 router.register(r'payment', PaymentViewSet)
@@ -25,6 +26,7 @@ router.register(r'rate', RateViewSet)
 router.register(r'upload', FileUploadViewSet)
 
 router.register(r'account', AccountViewSet)
+router.register(r'accountQuick', AccountQuickViewSet)
 router.register(r'agreement', AgreementViewSet)
 router.register(r'project', ProjectViewSet)
 router.register(r'estimate', ProjectCostEstimateViewSet)

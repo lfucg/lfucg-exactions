@@ -51,6 +51,10 @@ class AccountViewSet(viewsets.ModelViewSet):
     def update(self, request, pk):
         return update_entry(self, request, pk)
 
+class AccountQuickViewSet(viewsets.ModelViewSet):
+    serializer_class = AccountQuickSerializer
+    queryset = Account.objects.all()
+
 class AgreementViewSet(viewsets.ModelViewSet):
     serializer_class = AgreementSerializer
     queryset = Agreement.objects.all()
@@ -239,7 +243,6 @@ class AccountLedgerViewSet(viewsets.ModelViewSet):
     filterset_fields = ('entry_type', 'agreement', 'lot', 'account_to', 'account_from', 'is_approved',)
 
     def get_queryset(self):
-        print('LEDGER VIEWSET')
         queryset = AccountLedger.objects.exclude(is_active=False)
         PageNumberPagination.page_size = 0
         paginatePage = self.request.query_params.get('paginatePage', None)
