@@ -1,3 +1,9 @@
+import { contains } from 'ramda';
+
+import {
+    API_CALL_START,
+} from '../constants/actionTypes';
+
 import {
     GET_AGREEMENTS,
     GET_AGREEMENT_ID,
@@ -8,23 +14,65 @@ import {
     SEARCH_QUERY,
 } from '../constants/apiConstants';
 
+const initialState = {
+    currentAgreement: null,
+    loadingAgreement: true,
+    agreements: [],
+    next: null,
+    count: 0,
+    prev: null,
+}
 
-const agreementsReducer = (state = [], action) => {
+const agreementApiCalls = [];
+
+const agreementsReducer = (state = initialState, action) => {
     const {
         endpoint,
     } = action;
     switch (endpoint) {
+    case API_CALL_START:
+        if (contains(action.apiCall)(agreementApiCalls) || contains('/agreement')(action.apiCall)) {
+            return {
+                ...state,
+                loadingAgreement: true,
+            };
+        }
+        return state;
     case GET_AGREEMENT_ID:
+        return {
+            ...state,
+            currentAgreement: action.response,
+            loadingAgreement: false,
+            next: null,
+            count: 1,
+            prev: null,
+        }
     case GET_AGREEMENTS:
     case GET_ACCOUNT_AGREEMENTS:
-        return action.response;
+        return {
+            ...state,
+            currentAgreement: null,
+            agreements: action.response,
+            loadingAgreement: false,
+            next: action.response.next,
+            count: action.response.count,
+            prev: action.response.previous,
+        }
     case POST_AGREEMENT:
     case PUT_AGREEMENT:
         return {};
     case GET_PAGINATION:
     case SEARCH_QUERY:
         if (action.response.endpoint === '/agreement') {
-            return action.response;
+            return {
+                ...state,
+                currentAgreement: null,
+                agreements: action.response,
+                loadingAgreement: false,
+                next: action.response.next,
+                count: action.response.count,
+                prev: action.response.previous,
+            }
         }
         return state;
     default:

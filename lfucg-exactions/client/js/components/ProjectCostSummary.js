@@ -38,7 +38,7 @@ class ProjectCostSummary extends React.Component {
 
                 <div className="form-header">
                     <div className="container">
-                        <h1>PROJECT COST SUMMARY - {projectCosts.estimate_type}</h1>
+                        <h1>PROJECT COST SUMMARY - {projectCosts.currentProjectCost.estimate_type}</h1>
                     </div>
                 </div>
 
@@ -46,7 +46,7 @@ class ProjectCostSummary extends React.Component {
 
                 <div className="inside-body">
                     <div className="container">
-                      {activeForm.loading ? <LoadingScreen /> :
+                      {projectCosts && projectCosts.loadingProjectCost ? <LoadingScreen /> :
                       (
                           <div className="col-md-offset-1 col-md-10 panel-group" id="accordion" role="tablist" aria-multiselectable="false">
                               <a
@@ -75,7 +75,7 @@ class ProjectCostSummary extends React.Component {
                                           <div className="col-xs-12 col-sm-5 col-sm-offset-7">
                                               <div className="col-xs-5 col-xs-offset-5">
                                                   {currentUser && currentUser.permissions && currentUser.permissions.projectcostestimate &&
-                                                      <Link to={`project-cost/form/${projectCosts.id}`} aria-label={`Edit ${projectCosts.estimate_type}`}>
+                                                      <Link to={`project-cost/form/${projectCosts.currentProjectCost.id}`} aria-label={`Edit ${projectCosts.currentProjectCost.estimate_type}`}>
                                                           <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
                                                           <div className="col-xs-7 link-label">
                                                               Edit
@@ -86,38 +86,38 @@ class ProjectCostSummary extends React.Component {
                                           </div>
                                       </div>
                                       <div className="col-xs-12">
-                                          <p className="col-xs-12">Estimate Type: {projectCosts.estimate_type}</p>
-                                          <p className="col-xs-6">Total Costs: {projectCosts.total_costs}</p>
-                                          <p className="col-xs-6">Credits Available: {projectCosts.dollar_values && projectCosts.dollar_values.credits_available}</p>
-                                          <p className="col-xs-6">Land Cost: {projectCosts.dollar_values && projectCosts.dollar_values.land_cost}</p>
-                                          <p className="col-xs-6">Design Cost: {projectCosts.dollar_values && projectCosts.dollar_values.design_cost}</p>
-                                          <p className="col-xs-6">Construction Cost: {projectCosts.dollar_values && projectCosts.dollar_values.construction_cost}</p>
-                                          <p className="col-xs-6">Administrative Cost: {projectCosts.dollar_values && projectCosts.dollar_values.admin_cost}</p>
-                                          <p className="col-xs-6">Management Cost: {projectCosts.dollar_values && projectCosts.dollar_values.management_cost}</p>
-                                          <p className="col-xs-6">Other Costs: {projectCosts.dollar_values && projectCosts.dollar_values.other_cost}</p>
+                                          <p className="col-xs-12">Estimate Type: {projectCosts.currentProjectCost.estimate_type}</p>
+                                          <p className="col-xs-6">Total Costs: {projectCosts.currentProjectCost.total_costs}</p>
+                                          <p className="col-xs-6">Credits Available: {projectCosts.currentProjectCost.dollar_values && projectCosts.currentProjectCost.dollar_values.credits_available}</p>
+                                          <p className="col-xs-6">Land Cost: {projectCosts.currentProjectCost.dollar_values && projectCosts.currentProjectCost.dollar_values.land_cost}</p>
+                                          <p className="col-xs-6">Design Cost: {projectCosts.currentProjectCost.dollar_values && projectCosts.currentProjectCost.dollar_values.design_cost}</p>
+                                          <p className="col-xs-6">Construction Cost: {projectCosts.currentProjectCost.dollar_values && projectCosts.currentProjectCost.dollar_values.construction_cost}</p>
+                                          <p className="col-xs-6">Administrative Cost: {projectCosts.currentProjectCost.dollar_values && projectCosts.currentProjectCost.dollar_values.admin_cost}</p>
+                                          <p className="col-xs-6">Management Cost: {projectCosts.currentProjectCost.dollar_values && projectCosts.currentProjectCost.dollar_values.management_cost}</p>
+                                          <p className="col-xs-6">Other Costs: {projectCosts.currentProjectCost.dollar_values && projectCosts.currentProjectCost.dollar_values.other_cost}</p>
                                       </div>
                                   </div>
                               </div>
 
                               <ProjectsMiniSummary
-                                mapSet={projectCosts && projectCosts.project_id}
-                                mapQualifier={projectCosts && projectCosts.project_id}
+                                mapSet={projectCosts.currentProjectCost && projectCosts.currentProjectCost.project_id}
+                                mapQualifier={projectCosts.currentProjectCost && projectCosts.currentProjectCost.project_id}
                                 singleProject
                               />
 
-                              {projectCosts && projectCosts.id &&
+                              {projectCosts.currentProjectCost && projectCosts.currentProjectCost.id &&
                                   <Notes
                                     content_type="accounts_projectcostestimate"
-                                    object_id={projectCosts.id}
+                                    object_id={projectCosts.currentProjectCost.id}
                                     ariaExpanded="false"
                                     panelClass="panel-collapse collapse row"
                                     permission="projectcostestimate"
                                   />
                               }
-                              {projectCosts && projectCosts.id &&
+                              {projectCosts.currentProjectCost && projectCosts.currentProjectCost.id &&
                                   <Uploads
                                     file_content_type="accounts_projectcostestimate"
-                                    file_object_id={projectCosts.id}
+                                    file_object_id={projectCosts.currentProjectCost.id}
                                     ariaExpanded="false"
                                     panelClass="panel-collapse collapse row"
                                     permission="projectcostestimate"
@@ -144,7 +144,7 @@ ProjectCostSummary.propTypes = {
 function mapStateToProps(state) {
     return {
         currentUser: state.currentUser,
-        projectCosts: state.projectCosts,
+        projectCosts: !!state.projectCosts && state.projectCosts,
         activeForm: state.activeForm,
     };
 }

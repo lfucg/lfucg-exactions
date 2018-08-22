@@ -64,7 +64,7 @@ class AccountLedgerExisting extends React.Component {
                 };
             })(accounts));
 
-        const accountLedgers_list = accountLedgers.length > 0 ? (
+        const accountLedgers_list = !!accountLedgers && !!accountLedgers.accountLedgers && accountLedgers.accountLedgers.length > 0 ? (
             map((accountLedger) => {
                 return (
                     <div key={accountLedger.id} className="col-xs-12">
@@ -98,7 +98,7 @@ class AccountLedgerExisting extends React.Component {
                         </div>}
                     </div>
                 );
-            })(accountLedgers)
+            })(accountLedgers.accountLedgers)
         ) : null;
 
         return (
@@ -129,11 +129,18 @@ class AccountLedgerExisting extends React.Component {
 
                 <div className="inside-body">
                     <div className="container">
-                        {activeForm.loading ? <LoadingScreen /> :
+                        {accountLedgers.loadingLedger ? <LoadingScreen /> :
                         (
                             <div>
                                 {accountLedgers_list}
-                                {accountLedgers_list ? <Pagination /> : <h1>No Results Found</h1>}
+                                {accountLedgers_list ? 
+                                    <Pagination
+                                        next={accountLedgers.next}
+                                        prev={accountLedgers.prev}
+                                        count={accountLedgers.count} 
+                                    /> : 
+                                    <h1>No Results Found</h1>
+                                }
                             </div>
                         )}
                     </div>
@@ -158,10 +165,10 @@ AccountLedgerExisting.propTypes = {
 function mapStateToProps(state) {
     return {
         currentUser: state.currentUser,
-        accountLedgers: state.accountLedgers,
-        agreements: state.agreements,
-        lots: state.lots,
-        accounts: state.accounts,
+        accounts: !!state.accounts && !!state.accounts.accounts && state.accounts.accounts,
+        accountLedgers: !!state.accountLedgers && state.accountLedgers,
+        agreements: !!state.agreements && !!state.agreements.agreements && state.agreements.agreements,
+        lots: !!state.lots && !!state.lots.lots && state.lots.lots,
         activeForm: state.activeForm,
     };
 }

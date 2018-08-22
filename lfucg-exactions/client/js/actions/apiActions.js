@@ -2,6 +2,7 @@ import { map, reduce, filter, compose } from 'ramda';
 
 import {
   API_CALL,
+  API_CALL_START,
 } from '../constants/actionTypes';
 
 import {
@@ -18,6 +19,7 @@ import {
     PUT_SUBDIVISION,
 
     GET_PLATS,
+    GET_PLATS_QUICK,
     GET_PLAT_ID,
     GET_SUBDIVISION_PLATS,
     POST_PLAT,
@@ -36,6 +38,7 @@ import {
     PUT_PERMIT_ID_ON_LOT,
 
     GET_ACCOUNTS,
+    GET_ACCOUNTS_QUICK,
     GET_ACCOUNT_ID,
     GET_LFUCG_ACCOUNT,
     POST_ACCOUNT,
@@ -98,6 +101,14 @@ import {
     POST_DELETE,
 
 } from '../constants/apiConstants';
+
+export function startAPI(apiCall) {
+    return {
+        type: API_CALL_START,
+        endpoint: API_CALL_START,
+        apiCall,
+    }
+}
 
 export function getMe() {
     return {
@@ -250,6 +261,14 @@ export function getPlats() {
         type: API_CALL,
         endpoint: GET_PLATS,
         url: '/plat/',
+    };
+}
+
+export function getPlatsQuick() {
+    return {
+        type: API_CALL,
+        endpoint: GET_PLATS_QUICK,
+        url: '/platQuick/',
     };
 }
 
@@ -768,6 +787,14 @@ export function getAccounts() {
         type: API_CALL,
         endpoint: GET_ACCOUNTS,
         url: '/account/',
+    };
+}
+
+export function getAccountsQuick() {
+    return {
+        type: API_CALL,
+        endpoint: GET_ACCOUNTS_QUICK,
+        url: '/accountQuick/',
     };
 }
 
@@ -1497,7 +1524,7 @@ export function putRate(selectedRate, rate) {
     };
 }
 
-export function getPagination(page, querysetOptions) {
+export function getPagination(page) {
     return {
         type: API_CALL,
         endpoint: GET_PAGINATION,
@@ -1509,10 +1536,6 @@ export function getPagination(page, querysetOptions) {
                 currentPage,
                 page_size,
             } = activeForm;
-
-            // console.log('QUERYSET OPTIONS API', querysetOptions);
-            // console.log('PAGE', page);
-            // console.log('CURRENT PAGE', currentPage);
 
             if (!page) {
                 if (currentPage === '/credit-transfer/') {

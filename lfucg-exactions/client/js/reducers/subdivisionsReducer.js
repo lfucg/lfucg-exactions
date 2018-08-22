@@ -1,5 +1,7 @@
+import { contains } from 'ramda';
+
 import {
-    API_CALL,
+    API_CALL_START,
 } from '../constants/actionTypes';
 
 import {
@@ -15,50 +17,63 @@ const initialState = {
     currentSubdivision: null,
     loadingSubdivision: true,
     subdivisions: [],
+    next: null,
+    count: 0,
+    prev: null,
 }
 
+const subdivisionApiCalls = [GET_SUBDIVISIONS, GET_SUBDIVISION_ID, POST_SUBDIVISION, PUT_SUBDIVISION];
 
 const subdivisionsReducer = (state = initialState, action) => {
     const {
         endpoint,
     } = action;
     switch (endpoint) {
-    case API_CALL:
-        return {
-            ...state,
-            loadingSubdivision: true,
-            currentSubdivision: null,
+    case API_CALL_START:
+        if (contains(action.apiCall)(subdivisionApiCalls) || contains('/subdivision/')(action.apiCall)) {
+            return {
+                ...state,
+                loadingSubdivision: true,
+            };
         }
+        return state;
     case GET_SUBDIVISION_ID:
         return {
             ...state,
             currentSubdivision: action.response,
             loadingSubdivision: false,
+            next: null,
+            count: 1,
+            prev: null,
         }
     case GET_SUBDIVISIONS:
-        return action.response;
+        return {
+            ...state,
+            currentSubdivision: null,
+            subdivisions: action.response,
+            loadingSubdivision: false,
+            next: action.response.next,
+            count: action.response.count,
+            prev: action.response.previous,
+        }
     case POST_SUBDIVISION:
     case PUT_SUBDIVISION:
         return {};
     case GET_PAGINATION:
-        if (action.response.endpoint.indexOf('sub') === -1) {
-            return state;
-        } else {
-            return {
-                ...state,
-                subdivisions: action.response,
-                loadingSubdivision: false,
-            }
-        }
     case SEARCH_QUERY:
         if (action.response.endpoint === '/subdivision') {
             return {
                 ...state,
+                currentSubdivision: null,
                 subdivisions: action.response,
                 loadingSubdivision: false,
+                next: action.response.next,
+                count: action.response.count,
+                prev: action.response.previous,
             }
+        } else {
+            return state;
         }
-        return state;
     default:
         return state;
     }

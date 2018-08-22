@@ -75,10 +75,10 @@ class AgreementForm extends React.Component {
 
                 <div className="inside-body">
                     <div className="container">
-                        {activeForm.loading ? <LoadingScreen /> :
+                        {agreements.loadingAgreement ? <LoadingScreen /> :
                         (
                             <div className="col-sm-offset-1 col-sm-10">
-                                {currentParam && agreements.is_approved === false && <div className="row"><h1 className="approval-pending">Approval Pending</h1></div>}
+                                {currentParam && agreements.currentAgreement.is_approved === false && <div className="row"><h1 className="approval-pending">Approval Pending</h1></div>}
                                 <form >
 
                                     <fieldset>
@@ -143,19 +143,19 @@ class AgreementForm extends React.Component {
                                     </div>
                                 </form>
                                 <div className="clearfix" />
-                                {agreements.id &&
+                                {agreements.currentAgreement.id &&
                                     <Uploads
                                       file_content_type="accounts_agreement"
-                                      file_object_id={agreements.id}
+                                      file_object_id={agreements.currentAgreement.id}
                                       ariaExpanded="true"
                                       panelClass="panel-collapse collapse row in"
                                       permission="agreement"
                                     />
                                 }
-                                {agreements && agreements.id &&
+                                {agreements.currentAgreement && agreements.currentAgreement.id &&
                                     <Notes
                                       content_type="accounts_agreement"
-                                      object_id={agreements.id}
+                                      object_id={agreements.currentAgreement.id}
                                       ariaExpanded="true"
                                       panelClass="panel-collapse collapse row in"
                                       permission="agreement"
@@ -188,8 +188,8 @@ AgreementForm.propTypes = {
 function mapStateToProps(state) {
     return {
         activeForm: state.activeForm,
-        accounts: state.accounts,
-        agreements: state.agreements,
+        accounts: !!state.accounts && !!state.accounts.accounts && state.accounts.accounts,
+        agreements: !!state.agreements && state.agreements,
         currentUser: state.currentUser,
     };
 }

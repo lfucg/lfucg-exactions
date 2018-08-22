@@ -39,7 +39,7 @@ FormGroup.propTypes = {
     id: PropTypes.string.isRequired,
     activeForm: PropTypes.object.isRequired,
     formChange: PropTypes.func.isRequired,
-    ariaRequired: PropTypes.bool,
+    ariaRequired: PropTypes.string,
     ariaLabel: PropTypes.string,
 };
 

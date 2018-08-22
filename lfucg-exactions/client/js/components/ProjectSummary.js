@@ -81,7 +81,7 @@ class ProjectSummary extends React.Component {
 
                 <div className="form-header">
                     <div className="container">
-                        <h1>PROJECT SUMMARY - {projects.name}</h1>
+                        <h1>PROJECT SUMMARY - {projects.currentProject.name}</h1>
                     </div>
                 </div>
 
@@ -89,7 +89,7 @@ class ProjectSummary extends React.Component {
 
                 <div className="inside-body">
                     <div className="container">
-                        {activeForm.loading ? <LoadingScreen /> :
+                        {!!projects && !projects.loadingProject ? <LoadingScreen /> :
                         (
                             <div className="col-md-offset-1 col-md-10 panel-group" id="accordion" role="tablist" aria-multiselectable="false">
                                 <a
@@ -118,7 +118,7 @@ class ProjectSummary extends React.Component {
                                             <div className="col-xs-12 col-sm-5 col-sm-offset-7">
                                                 <div className="col-xs-5 col-xs-offset-5">
                                                     {currentUser && currentUser.permissions && currentUser.permissions.project &&
-                                                        <Link to={`project/form/${projects.id}`} aria-label={`Edit ${projects.name}`}>
+                                                        <Link to={`project/form/${projects.currentProject.id}`} aria-label={`Edit ${projects.currentProject.name}`}>
                                                             <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
                                                             <div className="col-xs-7 link-label">
                                                                 Edit
@@ -129,20 +129,20 @@ class ProjectSummary extends React.Component {
                                             </div>
                                         </div>
                                         <div className="col-xs-12">
-                                            <p className="col-md-4 col-xs-6">Project Name: {projects.name}</p>
-                                            <p className="col-md-4 col-xs-6">Project Category: {projects.project_category_display}</p>
-                                            <p className="col-md-4 col-xs-6">Project Type: {projects.project_type_display}</p>
-                                            <p className="col-md-4 col-xs-6">Expansion Area: {projects.expansion_area}</p>
-                                            <p className="col-md-4 col-xs-6 ">Project Status: {projects.project_status_display}</p>
-                                            <p className="col-md-4 col-xs-6 ">Status Date: {projects.status_date}</p>
-                                            <p className="col-xs-12">Project Description: {projects.project_description}</p>
+                                            <p className="col-md-4 col-xs-6">Project Name: {projects.currentProject.name}</p>
+                                            <p className="col-md-4 col-xs-6">Project Category: {projects.currentProject.project_category_display}</p>
+                                            <p className="col-md-4 col-xs-6">Project Type: {projects.currentProject.project_type_display}</p>
+                                            <p className="col-md-4 col-xs-6">Expansion Area: {projects.currentProject.expansion_area}</p>
+                                            <p className="col-md-4 col-xs-6 ">Project Status: {projects.currentProject.project_status_display}</p>
+                                            <p className="col-md-4 col-xs-6 ">Status Date: {projects.currentProject.status_date}</p>
+                                            <p className="col-xs-12">Project Description: {projects.currentProject.project_description}</p>
                                         </div>
                                     </div>
                                 </div>
-                                {projects && projects.id &&
+                                {projects.currentProject && projects.currentProject.id &&
                                     <Notes
                                       content_type="accounts_project"
-                                      object_id={projects.id}
+                                      object_id={projects.currentProject.id}
                                       ariaExpanded="false"
                                       panelClass="panel-collapse collapse row"
                                       permission="project"
@@ -181,20 +181,20 @@ class ProjectSummary extends React.Component {
                                     </div>
                                 ) : (
                                     <div className="row section-heading" role="tab" id="headingCostEstimates">
-                                        <h3>Project Cost Estimates - None</h3>
+                                        <h3>Project Cost Estimates - {!!projectCosts ? 'None' : <i className="fa fa-spinner fa-pulse fa-fw" />}</h3>
                                     </div>
                                 )}
 
                                 <AgreementsMiniSummary
-                                  mapSet={projects.agreement_id}
-                                  mapQualifier={projects.agreement_id}
+                                  mapSet={projects.currentProject.agreement_id}
+                                  mapQualifier={projects.currentProject.agreement_id}
                                   singleAgreement
                                 />
 
-                                {projects.id &&
+                                {projects.currentProject.id &&
                                     <Uploads
                                       file_content_type="accounts_project"
-                                      file_object_id={projects.id}
+                                      file_object_id={projects.currentProject.id}
                                       ariaExpanded="false"
                                       panelClass="panel-collapse collapse row"
                                       permission="project"
@@ -222,8 +222,8 @@ ProjectSummary.propTypes = {
 function mapStateToProps(state) {
     return {
         currentUser: state.currentUser,
-        projects: state.projects,
-        projectCosts: state.projectCosts,
+        projects: !!state.projects && state.projects,
+        projectCosts: !!state.projectCosts && !!state.projectCosts.projectCosts && state.projectCosts.projectCosts,
         activeForm: state.activeForm,
     };
 }

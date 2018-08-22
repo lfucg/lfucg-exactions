@@ -40,98 +40,103 @@ class PlatReport extends React.Component {
             );
         })(lots));
 
-        const platZones = plats && plats.plat_zone && plats.plat_zone.length > 0 && (map((zone) => {
+        const platZones = !!plats && plats.plats && plats.plats.plat_zone && plats.plats.plat_zone.length > 0 && (map((zone) => {
             return (
                 <div className="row" key={zone.id}>
                     <div className="col-sm-3 report-data">{zone.zone}</div>
                     <div className="col-sm-3 report-data right-border">{zone.cleaned_acres}</div>
                 </div>
             );
-        })(plats.plat_zone));
+        })(plats.plats.plat_zone));
 
         return (
             <div className="plat-report">
                 <Navbar />
 
-                <div className="form-header">
-                    <div className="container">
-                        <h1>PLATS - {plats.cabinet}-{plats.slide} - REPORT</h1>
+                {!!plats && !!plats.currentPlat &&
+
+                    <div className="form-header">
+                        <div className="container">
+                            <h1>PLATS - {plats.currentPlat.cabinet}-{plats.currentPlat.slide} - REPORT</h1>
+                        </div>
                     </div>
-                </div>
+                }
 
                 <Breadcrumbs route={this.props.route} parent_link={'plat'} parent_name={'Plats'} />
 
-                <div className="inside-body">
-                    <div className="container">
-                        <h2>Report Preview</h2>
-                        <div className="clearfix" />
-                        <div className="report-table">
-                            <div className="row">
-                                <h3 className="col-sm-6">Plat</h3>
-                            </div>
-                            <div className="row report-header">
-                                <h5 className="col-sm-3">Subdivision</h5>
-                                <h5 className="col-sm-3">Total Acreage</h5>
-                                <h5 className="col-sm-3">Buildable Lots</h5>
-                                <h5 className="col-sm-3 right-border">Non-Buildable Lots</h5>
-                            </div>
-                            <div className="row">
-                                <div className="col-sm-3 report-data">{plats.subdivision && plats.subdivision.name}</div>
-                                <div className="col-sm-3 report-data">{plats.total_acreage}</div>
-                                <div className="col-sm-3 report-data">{plats.buildable_lots}</div>
-                                <div className="col-sm-3 report-data right-border">{plats.non_buildable_lots}</div>
-                            </div>
-                            <div className="row" />
-                            <div className="row">
-                                <h3 className="col-sm-6">Developer Account</h3>
-                            </div>
-                            <div className="row report-header">
-                                <h5 className="col-sm-3 right-border">Developer Name</h5>
-                            </div>
-                            <div className="row">
-                                <div className="col-sm-3 report-data right-border">{accounts.id && accounts.account_name}</div>
-                            </div>
-                            <div className="row" />
-                            <div className="row">
-                                <h3 className="col-sm-6">Plat Zones</h3>
-                            </div>
-                            <div className="row report-header">
-                                <h5 className="col-sm-3">Zone</h5>
-                                <h5 className="col-sm-3 right-border">Acres</h5>
-                            </div>
-                            {platZones}
-                            <div className="row" />
-                            <div className="row">
-                                <h3>
-                                    <div className="col-sm-6">
-                                        Lots
-                                    </div>
-                                    <div className="col-sm-6">
-                                        Remaining Lots: {plats.remaining_lots}
-                                    </div>
-                                </h3>
-                            </div>
-                            <div className="row report-header">
-                                <h5 className="col-sm-5">Lot Address</h5>
-                                <div className="col-sm-7">
-                                    <h5>
-                                        <div className="col-sm-3">Parcel ID</div>
-                                        <div className="col-sm-3 report-wrap-header">Current Exactions Due</div>
-                                        <div className="col-sm-3 report-wrap-header">Non-Sewer Exactions Due</div>
-                                        <div className="col-sm-3 report-wrap-header right-border">Sewer Exactions Due</div>
-                                    </h5>
+                {!!plats && !!plats.currentPlat &&
+                    <div className="inside-body">
+                        <div className="container">
+                            <h2>Report Preview</h2>
+                            <div className="clearfix" />
+                            <div className="report-table">
+                                <div className="row">
+                                    <h3 className="col-sm-6">Plat</h3>
                                 </div>
+                                <div className="row report-header">
+                                    <h5 className="col-sm-3">Subdivision</h5>
+                                    <h5 className="col-sm-3">Total Acreage</h5>
+                                    <h5 className="col-sm-3">Buildable Lots</h5>
+                                    <h5 className="col-sm-3 right-border">Non-Buildable Lots</h5>
+                                </div>
+                                <div className="row">
+                                    <div className="col-sm-3 report-data">{plats.currentPlat.subdivision && plats.currentPlat.subdivision.name}</div>
+                                    <div className="col-sm-3 report-data">{plats.currentPlat.total_acreage}</div>
+                                    <div className="col-sm-3 report-data">{plats.currentPlat.buildable_lots}</div>
+                                    <div className="col-sm-3 report-data right-border">{plats.currentPlat.non_buildable_lots}</div>
+                                </div>
+                                <div className="row" />
+                                <div className="row">
+                                    <h3 className="col-sm-6">Developer Account</h3>
+                                </div>
+                                <div className="row report-header">
+                                    <h5 className="col-sm-3 right-border">Developer Name</h5>
+                                </div>
+                                <div className="row">
+                                    <div className="col-sm-3 report-data right-border">{accounts.id && accounts.account_name}</div>
+                                </div>
+                                <div className="row" />
+                                <div className="row">
+                                    <h3 className="col-sm-6">Plat Zones</h3>
+                                </div>
+                                <div className="row report-header">
+                                    <h5 className="col-sm-3">Zone</h5>
+                                    <h5 className="col-sm-3 right-border">Acres</h5>
+                                </div>
+                                {platZones}
+                                <div className="row" />
+                                <div className="row">
+                                    <h3>
+                                        <div className="col-sm-6">
+                                            Lots
+                                        </div>
+                                        <div className="col-sm-6">
+                                            Remaining Lots: {plats.currentPlat.remaining_lots}
+                                        </div>
+                                    </h3>
+                                </div>
+                                <div className="row report-header">
+                                    <h5 className="col-sm-5">Lot Address</h5>
+                                    <div className="col-sm-7">
+                                        <h5>
+                                            <div className="col-sm-3">Parcel ID</div>
+                                            <div className="col-sm-3 report-wrap-header">Current Exactions Due</div>
+                                            <div className="col-sm-3 report-wrap-header">Non-Sewer Exactions Due</div>
+                                            <div className="col-sm-3 report-wrap-header right-border">Sewer Exactions Due</div>
+                                        </h5>
+                                    </div>
+                                </div>
+                                {platLots}
                             </div>
-                            {platLots}
-                        </div>
 
-                        <a
-                          className="btn btn-lex col-sm-3"
-                          href={`../api/export_plat_csv/?plat=${plats.id}`}
-                          disabled={!plats.id}
-                        >Export CSV</a>
+                            <a
+                            className="btn btn-lex col-sm-3"
+                            href={`../api/export_plat_csv/?plat=${plats.currentPlat.id}`}
+                            disabled={!plats.currentPlat.id}
+                            >Export CSV</a>
+                        </div>
                     </div>
-                </div>
+                }
                 <Footer />
             </div>
         );
@@ -148,9 +153,9 @@ PlatReport.propTypes = {
 
 function mapStateToProps(state) {
     return {
-        plats: state.plats,
-        lots: state.lots,
-        accounts: state.accounts,
+        plats: !!state.plats && state.plats,
+        lots: !!state.lots && state.lots,
+        accounts: !!state.accounts && state.accounts,
     };
 }
 

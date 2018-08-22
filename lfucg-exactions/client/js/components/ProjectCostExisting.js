@@ -41,7 +41,7 @@ class ProjectCostExisting extends React.Component {
                     id: single_project.id,
                     name: single_project.name,
                 };
-            })(projects));
+            })(projects.projects));
 
         const projectCosts_list = projectCosts.length > 0 ? (
             map((projectCost) => {
@@ -66,7 +66,7 @@ class ProjectCostExisting extends React.Component {
                         </div>}
                     </div>
                 );
-            })(projectCosts)
+            })(projectCosts.projectCosts)
         ) : null;
 
         return (
@@ -93,11 +93,18 @@ class ProjectCostExisting extends React.Component {
 
                 <div className="inside-body">
                     <div className="container">
-                        {activeForm.loading ? <LoadingScreen /> :
+                        {projectCosts && projectCosts.loadingProjectCost ? <LoadingScreen /> :
                         (
                             <div>
                                 {projectCosts_list}
-                                {projectCosts_list ? <Pagination /> : <h1>No Results Found</h1>}
+                                {projectCosts_list ? 
+                                    <Pagination 
+                                        next={projectCosts.next}
+                                        prev={projectCosts.prev}
+                                        count={projectCosts.count} 
+                                    /> : 
+                                    <h1>No Results Found</h1>
+                                }
                             </div>
                         )}
                     </div>
@@ -120,8 +127,8 @@ ProjectCostExisting.propTypes = {
 function mapStateToProps(state) {
     return {
         currentUser: state.currentUser,
-        projectCosts: state.projectCosts,
-        projects: state.projects,
+        projectCosts: !!state.projectCosts && state.projectCosts,
+        projects: !!state.projects && state.projects,
         activeForm: state.activeForm,
     };
 }
