@@ -117,13 +117,20 @@ class AccountLedgersMiniSummary extends React.Component {
                         >
                             <div className="panel-body">
                                 {ledgersList}
-                                {ledgersList ? <Pagination /> : <h1>No Results Found</h1>}
+                                {ledgersList ? 
+                                    <Pagination
+                                        next={this.props.accountLedgers.next}
+                                        prev={this.props.accountLedgers.prev}
+                                        count={this.props.accountLedgers.count} 
+                                    /> : 
+                                    <h1>No Results Found</h1>
+                                }
                             </div>
                         </div>
                     </div>
                 ) : (
                     <div className="row section-heading" role="tab" id="headingAccountAccountLedgers">
-                        <h3 tabIndex="0">Credit Transfers - None</h3>
+                        <h3 tabIndex="0">Credit Transfers - {!!this.props.mapSet ? 'None' : <i className="fa fa-spinner fa-pulse fa-fw" />}</h3>
                     </div>
                 )}
             </div>
@@ -136,6 +143,7 @@ AccountLedgersMiniSummary.propTypes = {
     mapSet: PropTypes.object,
     mapQualifier: PropTypes.object,
     singleAccountLedger: PropTypes.bool,
+    accountLedgers: PropTypes.object,
 };
 
 function mapStateToProps(state) {

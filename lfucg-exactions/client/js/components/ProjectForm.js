@@ -52,7 +52,7 @@ class ProjectForm extends React.Component {
                     {agreement.resolution_number}
                 </option>
             );
-        })(agreements)) : null;
+        })(agreements.agreements)) : null;
 
         const submitEnabled =
             activeForm.agreement_id &&
@@ -261,8 +261,8 @@ ProjectForm.propTypes = {
 function mapStateToProps(state) {
     return {
         activeForm: state.activeForm,
-        projects: state.projects,
-        agreements: state.agreements,
+        projects: !!state.projects && !!state.projects.currentProject && state.projects.currentProject,
+        agreements: !!state.agreements && state.agreements,
         currentUser: state.currentUser,
     };
 }

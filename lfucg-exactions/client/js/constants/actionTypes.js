@@ -1,5 +1,6 @@
 // Api actions
 export const API_CALL = 'API_CALL';
+export const API_CALL_START = 'API_CALL_START';
 export const API_CALL_SUCCESS = 'API_CALL_SUCCESS';
 export const API_CALL_ERROR = 'API_CALL_ERROR';
 export const API_CALL_VALIDATION_ERROR = 'API_CALL_VALIDATION_ERROR';

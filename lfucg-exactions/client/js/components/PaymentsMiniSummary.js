@@ -124,7 +124,7 @@ class PaymentsMiniSummary extends React.Component {
                     </div>
                 ) : (
                     <div className="row section-heading" role="tab" id="headingAccountPayments">
-                        <h3 tabIndex="0">Payments - None</h3>
+                        <h3 tabIndex="0">Payments - {!!this.props.mapSet ? 'None' : <i className="fa fa-spinner fa-pulse fa-fw" />}</h3>
                     </div>
                 )}
             </div>

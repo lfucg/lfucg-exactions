@@ -1,10 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import {
-    // Link,
     hashHistory,
 } from 'react-router';
-import { map, filter } from 'ramda';
+import { map } from 'ramda';
 import PropTypes from 'prop-types';
 
 import Navbar from './Navbar';
@@ -26,11 +25,9 @@ import {
     getLotID,
     postLot,
     putLot,
-    getPlats,
-    getPlatID,
-    getAccounts,
+    getPlatsQuick,
+    getAccountsQuick,
     getAccountID,
-    getLots,
 } from '../actions/apiActions';
 
 class LotForm extends React.Component {
@@ -55,8 +52,7 @@ class LotForm extends React.Component {
 
         const currentParam = this.props.params.id;
 
-        const currentLot = lots && lots.length > 0 &&
-            filter(lot => lot.id === parseInt(selectedLot, 10))(lots)[0];
+        const currentLot = !!lots && lots.currentLot;
 
         const platsList = plats && plats.length > 0 &&
             (map((single_plat) => {
@@ -107,11 +103,11 @@ class LotForm extends React.Component {
 
                 <div className="inside-body">
                     <div className="container">
-                        {activeForm.loading ? <LoadingScreen /> :
+                        {lots.loadingLot ? <LoadingScreen /> :
                         (
 
                             <div className="col-md-offset-1 col-md-10 panel-group" id="accordion" role="tablist" aria-multiselectable="false">
-                                {currentParam && lots.is_approved === false && <div className="row"><h1 className="approval-pending">Approval Pending</h1></div>}
+                                {currentParam && lots.currentLot && lots.currentLot.is_approved === false && <div className="row"><h1 className="approval-pending">Approval Pending</h1></div>}
                                 <a
                                   role="button"
                                   data-toggle="collapse"
@@ -253,9 +249,9 @@ class LotForm extends React.Component {
                                                 </div>
                                                 <div className="row">
                                                     <div className="col-xs-12">
-                                                        {/* {activeForm.show_exactions && currentLot && currentLot.lot_exactions && currentLot.lot_exactions.current_exactions_number > 0 &&
-                                                            <h3 className="help-block alert alert-danger text-center">&nbsp;There are still {currentLot.lot_exactions.current_exactions} in exactions due on this lot.</h3>
-                                                        } */}
+                                                        {activeForm.show_exactions && currentLot && currentLot.lot_exactions && currentLot.lot_exactions.total_exactions > 0 &&
+                                                            <h3 className="help-block alert alert-danger text-center">&nbsp;There are still {currentLot.lot_exactions.total_exactions} in exactions due on this lot.</h3>
+                                                        }
                                                     </div>
                                                 </div>
                                             </fieldset>
@@ -515,9 +511,9 @@ LotForm.propTypes = {
 function mapStateToProps(state) {
     return {
         activeForm: state.activeForm,
-        plats: state.plats,
-        lots: state.lots,
-        accounts: state.accounts,
+        plats: !!state.plats && !!state.plats.plats && state.plats.plats,
+        lots: !!state.lots && state.lots,
+        accounts: !!state.accounts && !!state.accounts.accounts && state.accounts.accounts,
         currentUser: state.currentUser,
     };
 }
@@ -575,7 +571,7 @@ function mapDispatchToProps(dispatch, params) {
                                 account_show: `${data_account_id.response.id},${data_account_id.response.account_name}`,
                             };
                             dispatch(formUpdate(update_lot_account));
-                            dispatch(getAccounts());
+                            dispatch(getAccountsQuick());
                         });
                     } else if (data_lot.response.plat && data_lot.response.plat.account) {
                         dispatch(getAccountID(data_lot.response.plat.account))
@@ -585,7 +581,7 @@ function mapDispatchToProps(dispatch, params) {
                                 account_show: `${data_plat_account_id.response.id},${data_plat_account_id.response.account_name}`,
                             };
                             dispatch(formUpdate(update_account));
-                            dispatch(getAccounts());
+                            dispatch(getAccountsQuick());
                         });
                     }
                 });
@@ -598,8 +594,8 @@ function mapDispatchToProps(dispatch, params) {
                 };
                 dispatch(formUpdate(else_update));
             }
-            dispatch(getLots());
-            dispatch(getPlats())
+            // dispatch(getLots());
+            dispatch(getPlatsQuick())
             .then((all_plats) => {
                 dispatch(formUpdate({ loading: false }));
                 if (plat_start) {
@@ -620,7 +616,7 @@ function mapDispatchToProps(dispatch, params) {
                     }
                 }
             });
-            dispatch(getAccounts());
+            dispatch(getAccountsQuick());
         },
         formChange(field) {
             return (e, ...args) => {

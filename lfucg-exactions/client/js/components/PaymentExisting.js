@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router';
 import { map } from 'ramda';
 import PropTypes from 'prop-types';
 
@@ -64,7 +63,7 @@ class PaymentExisting extends React.Component {
                 };
             })(agreements));
 
-        const payments_list = payments && payments.length > 0 &&
+        const payments_list = !!payments && !!payments.payments && payments.payments.length > 0 &&
             map((payment) => {
                 return (
                     <div key={payment.id} className="col-xs-12">
@@ -90,7 +89,7 @@ class PaymentExisting extends React.Component {
                         </div>}
                     </div>
                 );
-            })(payments);
+            })(payments.payments);
 
         return (
             <div className="payment-existing">
@@ -120,11 +119,18 @@ class PaymentExisting extends React.Component {
 
                 <div className="inside-body">
                     <div className="container">
-                        {activeForm.loading ? <LoadingScreen /> :
+                        {payments.loadingPayment ? <LoadingScreen /> :
                         (
                             <div>
                                 {payments_list}
-                                {payments_list ? <Pagination /> : <h1>No Results Found</h1>}
+                                {payments_list ? 
+                                    <Pagination 
+                                        next={payments.next}
+                                        prev={payments.prev}
+                                        count={payments.count} 
+                                    /> : 
+                                    <h1>No Results Found</h1>
+                                }
                             </div>
                         )}
                     </div>
@@ -137,22 +143,22 @@ class PaymentExisting extends React.Component {
 
 PaymentExisting.propTypes = {
     currentUser: PropTypes.object,
-    payments: PropTypes.array,
     route: PropTypes.object,
     activeForm: PropTypes.object,
     accounts: PropTypes.array,
-    lots: PropTypes.array,
     agreements: PropTypes.array,
+    lots: PropTypes.array,
+    payments: PropTypes.array,
     onComponentDidMount: PropTypes.func,
 };
 
 function mapStateToProps(state) {
     return {
         currentUser: state.currentUser,
+        accounts: state.accounts && state.accounts.accounts,
+        agreements: state.agreements && state.agreements.agreements,
+        lots: state.lots && state.lots.lots,
         payments: state.payments,
-        accounts: state.accounts,
-        lots: state.lots,
-        agreements: state.agreements,
         activeForm: state.activeForm,
     };
 }

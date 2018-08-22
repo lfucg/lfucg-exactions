@@ -87,6 +87,10 @@ class PlatViewSet(viewsets.ModelViewSet):
     def update(self, request, pk):
         return update_entry(self, request, pk)
 
+class PlatQuickViewSet(viewsets.ModelViewSet):
+    serializer_class = PlatQuickSerializer
+    queryset = Plat.objects.all()
+
 class LotViewSet(viewsets.ModelViewSet):
     serializer_class = LotSerializer
     queryset = Lot.objects.all()

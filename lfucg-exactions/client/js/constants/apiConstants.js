@@ -15,6 +15,7 @@ export const POST_SUBDIVISION = 'POST_SUBDIVISION';
 export const PUT_SUBDIVISION = 'PUT_SUBDIVISION';
 
 export const GET_PLATS = 'GET_PLATS';
+export const GET_PLATS_QUICK = 'GET_PLATS_QUICK';
 export const GET_PLAT_ID = 'GET_PLAT_ID';
 export const GET_SUBDIVISION_PLATS = 'GET_SUBDIVISION_PLATS';
 export const POST_PLAT = 'POST_PLAT';
@@ -35,6 +36,7 @@ export const PUT_LOT = 'PUT_LOT';
 export const PUT_PERMIT_ID_ON_LOT = 'PUT_PERMIT_ID_ON_LOT';
 
 export const GET_ACCOUNTS = 'GET_ACCOUNTS';
+export const GET_ACCOUNTS_QUICK = 'GET_ACCOUNTS_QUICK';
 export const GET_ACCOUNT_ID = 'GET_ACCOUNT_ID';
 export const GET_LFUCG_ACCOUNT = 'GET_LFUCG_ACCOUNT';
 export const POST_ACCOUNT = 'POST_ACCOUNT';

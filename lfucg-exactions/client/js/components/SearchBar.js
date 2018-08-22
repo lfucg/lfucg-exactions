@@ -20,7 +20,7 @@ class SearchBar extends React.Component {
             csvEndpoint: this.props.csvEndpoint,
         });
     }
-
+    
     render() {
         const {
             onQuery,
@@ -29,6 +29,7 @@ class SearchBar extends React.Component {
             advancedSearchPopulation,
             clearFilters,
         } = this.props;
+        
 
         const queryString = compose(
             reduce((acc, value) => acc + value, this.props.csvEndpoint),
@@ -57,7 +58,7 @@ class SearchBar extends React.Component {
                                 <option value="">
                                     Select {field.displayName}
                                 </option>
-                                {map((option_item) => {
+                                {field && field.list && map((option_item) => {
                                     return (
                                         <option key={`${option_item.id}_${option_item.name}`} value={option_item.id} >
                                             {option_item.name}

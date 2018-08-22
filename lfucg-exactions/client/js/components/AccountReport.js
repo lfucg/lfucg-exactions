@@ -26,7 +26,7 @@ class AccountReport extends React.Component {
             accountLedgers,
         } = this.props;
 
-        const platsList = accounts && accounts.plat_account && accounts.plat_account.length > 0 && (map((plat) => {
+        const platsList = !!accounts && !!accounts.currentAccount && accounts.currentAccount.plat_account && accounts.currentAccount.plat_account.length > 0 && (map((plat) => {
             return (
                 <div className="row" key={plat.id}>
                     <div className="col-sm-3 report-data">{plat.subdivision && plat.subdivision.name}</div>
@@ -36,9 +36,9 @@ class AccountReport extends React.Component {
                     <div className="col-sm-2 report-data right-border">{plat.non_buildable_lots}</div>
                 </div>
             );
-        })(accounts.plat_account));
+        })(accounts.currentAccount.plat_account));
 
-        const lotsList = accounts && accounts.lot_account && accounts.lot_account.length > 0 && (map((lot) => {
+        const lotsList = !!accounts && !!accounts.currentAccount && accounts.currentAccount.lot_account && accounts.currentAccount.lot_account.length > 0 && (map((lot) => {
             return (
                 <div className="row" key={lot.id}>
                     <div className="col-sm-5 report-data right-border">{lot.address_full}</div>
@@ -50,7 +50,7 @@ class AccountReport extends React.Component {
                     </div>
                 </div>
             );
-        })(accounts.lot_account));
+        })(accounts.currentAccount.lot_account));
 
         const paymentsList = payments && payments.length > 0 && (map((payment) => {
             return (
@@ -90,7 +90,7 @@ class AccountReport extends React.Component {
 
                 <div className="form-header">
                     <div className="container">
-                        <h1>ACCOUNTS - {accounts.account_name} - REPORT</h1>
+                        <h1>ACCOUNTS - {accounts.currentAccount.account_name} - REPORT</h1>
                     </div>
                 </div>
 
@@ -109,8 +109,8 @@ class AccountReport extends React.Component {
                                 <h5 className="col-sm-6 right-border">Balance</h5>
                             </div>
                             <div className="row">
-                                <div className="col-sm-6 report-data">{accounts.account_name}</div>
-                                <div className="col-sm-6 report-data right-border">{accounts.balance && accounts.balance.balance}</div>
+                                <div className="col-sm-6 report-data">{accounts.currentAccount.account_name}</div>
+                                <div className="col-sm-6 report-data right-border">{accounts.currentAccount.balance && accounts.currentAccount.balance.balance}</div>
                             </div>
                             <div className="row" />
 
@@ -190,8 +190,8 @@ class AccountReport extends React.Component {
 
                         <a
                           className="btn btn-lex col-sm-3"
-                          href={`../api/export_account_csv/?account=${accounts.id}`}
-                          disabled={!accounts.id}
+                          href={`../api/export_account_csv/?account=${accounts.currentAccount.id}`}
+                          disabled={!accounts.currentAccount.id}
                         >Export CSV</a>
                     </div>
                 </div>
@@ -211,9 +211,9 @@ AccountReport.propTypes = {
 
 function mapStateToProps(state) {
     return {
-        accounts: state.accounts,
-        payments: state.payments,
-        accountLedgers: state.accountLedgers,
+        accounts: !!state.accounts && state.accounts,
+        accountLedgers: !!state.accountLedgers && !!state.accountLedgers.accountLedgers && state.accountLedgers.accountLedgers,
+        payments: !!state.payments && !!state.payments.payments && state.payments.payments,
     };
 }
 

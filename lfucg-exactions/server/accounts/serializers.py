@@ -18,6 +18,14 @@ class LotField(serializers.Field):
     def to_representation(self, obj):
         return LotSerializer(obj).data
 
+class AccountQuickSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Account
+        fields = (
+            'id',
+            'account_name',
+        )
+
 class AccountSerializer(serializers.ModelSerializer):
     plat_account = PlatSerializer(many=True, required=False, allow_null=True)
     lot_account = LotSerializer(many=True, required=False, allow_null=True)

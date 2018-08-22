@@ -56,7 +56,7 @@ class PaymentForm extends React.Component {
 
         const lotsList = [];
 
-        if (lots.length > 0) {
+        if (!!lots && lots.length > 0) {
             map((lot) => {
                 lotsList.push({
                     id: lot.id,
@@ -84,7 +84,7 @@ class PaymentForm extends React.Component {
                 );
             })(agreements));
 
-        const currentLot = lots && lots.length > 0 &&
+        const currentLot = !!lots && lots.length > 0 &&
             filter(lot => lot.id === parseInt(activeForm.lot_id, 10))(lots)[0];
 
         const submitEnabled =
@@ -107,10 +107,10 @@ class PaymentForm extends React.Component {
 
                 <div className="inside-body">
                     <div className="container">
-                        {activeForm.loading ? <LoadingScreen /> :
+                        {payments.loadingPayment ? <LoadingScreen /> :
                         (
                             <div className="col-sm-offset-1 col-sm-10">
-                                {currentParam && payments.is_approved === false && <div className="row"><h1 className="approval-pending">Approval Pending</h1></div>}
+                                {currentParam && !!payments.currentPayment && payments.currentPayment.is_approved === false && <div className="row"><h1 className="approval-pending">Approval Pending</h1></div>}
                                 <form >
                                     <fieldset>
                                         <div className="row form-subheading">
@@ -124,7 +124,7 @@ class PaymentForm extends React.Component {
                                                   id="lot_id"
                                                   options={lotsList}
                                                   placeholder="Lot"
-                                                  emptyLabel={lots.length > 0 ? 'No Results Found.' : 'Results loading...'}
+                                                  emptyLabel={lots.lots.length > 0 ? 'No Results Found.' : 'Results loading...'}
                                                   selected={activeForm.lot_id ? (
                                                     filter(lot => lot.id === activeForm.lot_id)(lotsList)
                                                     ) : []}
@@ -390,10 +390,10 @@ PaymentForm.propTypes = {
 function mapStateToProps(state) {
     return {
         activeForm: state.activeForm,
-        lots: state.lots,
-        accounts: state.accounts,
-        agreements: state.agreements,
-        payments: state.payments,
+        lots: !!state.lots && !!state.lots.lots && state.lots.lots,
+        accounts: !!state.accounts && !!state.accounts.accounts && state.accounts.accounts,
+        agreements: !!state.agreements && !!state.agreements.agreements && state.agreements.agreements,
+        payments: !!state.payments && state.payments,
         currentUser: state.currentUser,
     };
 }

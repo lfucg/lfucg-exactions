@@ -129,7 +129,7 @@ PlatZoneForm.propTypes = {
 function mapStateToProps(state) {
     return {
         activeForm: state.activeForm,
-        plats: state.plats,
+        plats: !!state.plats && state.plats,
         currentUser: state.currentUser,
     };
 }

@@ -75,13 +75,14 @@ class AgreementReport extends React.Component {
 
                 <div className="form-header">
                     <div className="container">
-                        <h1>AGREEMENTS - {agreements.resolution_number} - REPORT</h1>
+                        <h1>AGREEMENTS - {agreements.currentAgreement.resolution_number} - REPORT</h1>
                     </div>
                 </div>
 
                 <Breadcrumbs route={this.props.route} parent_link={'agreement'} parent_name={'Agreements'} />
 
                 <div className="inside-body">
+                    {agreements.loadingAgreement ? <LoadingScreen /> :
                     <div className="container">
                         <h2>Report Preview</h2>
                         <div className="clearfix" />
@@ -94,8 +95,8 @@ class AgreementReport extends React.Component {
                                 <h5 className="col-sm-6 right-border">Account</h5>
                             </div>
                             <div className="row">
-                                <div className="col-sm-6 report-data">{agreements.resolution_number}</div>
-                                <div className="col-sm-6 report-data right-border">{agreements.account_id && agreements.account_id.account_name}</div>
+                                <div className="col-sm-6 report-data">{agreements.currentAgreement.resolution_number}</div>
+                                <div className="col-sm-6 report-data right-border">{agreements.currentAgreement.account_id && agreements.currentAgreement.account_id.account_name}</div>
                             </div>
                             <div className="row" />
 
@@ -154,10 +155,11 @@ class AgreementReport extends React.Component {
 
                         <a
                           className="btn btn-lex col-sm-3"
-                          href={`../api/export_agreement_csv/?agreement=${agreements.id}`}
-                          disabled={!agreements.id}
+                          href={`../api/export_agreement_csv/?agreement=${agreements.currentAgreement.id}`}
+                          disabled={!agreements.currentAgreement.id}
                         >Export CSV</a>
                     </div>
+                    }
                 </div>
                 <Footer />
             </div>
@@ -176,10 +178,10 @@ AgreementReport.propTypes = {
 
 function mapStateToProps(state) {
     return {
-        agreements: state.agreements,
-        projects: state.projects,
-        payments: state.payments,
-        accountLedgers: state.accountLedgers,
+        agreements: !!state.agreements && state.agreements,
+        projects: !!state.projects && !!state.projects.projects && state.projects.projects,
+        payments: !!state.payments && !!state.payments.payments && state.payments.payments,
+        accountLedgers: !!state.accountLedgers && !!state.accountLedgers.accountLedgers && state.accountLedgers.accountLedgers,
     };
 }
 

@@ -1,6 +1,7 @@
 from django.contrib import admin
 from simple_history.admin import SimpleHistoryAdmin
 from django.contrib.auth.admin import UserAdmin
+from django import forms
 
 from accounts.models import *
 
@@ -183,11 +184,17 @@ class ProfileInline(admin.TabularInline):
     model = Profile
     fields = ('is_supervisor',)
 
+class UserForm(forms.ModelForm):
+    fields = ('password',)
+    password = forms.CharField()
+
+
 class UserAdmin(admin.ModelAdmin):
     list_display = ('username', 'email', 'first_name', 'is_staff', 'last_login',)
     inlines = (
         ProfileInline,
     )
+    # exclude = ('password',)
 
 
 admin.site.unregister(User)
