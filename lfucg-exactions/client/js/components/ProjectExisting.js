@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router';
 import { map } from 'ramda';
 import PropTypes from 'prop-types';
 
@@ -20,7 +19,7 @@ import { project_statuses, project_types, project_categories, expansion_areas } 
 
 import {
     getPagination,
-    getAgreements,
+    getAgreementsQuick,
 } from '../actions/apiActions';
 
 class ProjectExisting extends React.Component {
@@ -33,7 +32,6 @@ class ProjectExisting extends React.Component {
             currentUser,
             projects,
             agreements,
-            activeForm,
         } = this.props;
 
         const agreementsList = agreements && agreements.length > 0 &&
@@ -42,7 +40,7 @@ class ProjectExisting extends React.Component {
                     id: single_agreement.id,
                     name: single_agreement.resolution_number,
                 };
-            })(agreements.agreements));
+            })(agreements));
 
         const projects_list = projects.length > 0 &&
             map((project) => {
@@ -86,7 +84,7 @@ class ProjectExisting extends React.Component {
                 <Breadcrumbs route={this.props.route} route_permission="project" />
 
                 <SearchBar
-                  apiCalls={[getAgreements]}
+                  apiCalls={[getAgreementsQuick]}
                   advancedSearch={[
                     { filterField: 'filter_project_status', displayName: 'Status', list: project_statuses },
                     { filterField: 'filter_project_category', displayName: 'Category', list: project_categories },
@@ -125,9 +123,8 @@ class ProjectExisting extends React.Component {
 
 ProjectExisting.propTypes = {
     currentUser: PropTypes.object,
-    projects: PropTypes.array,
+    projects: PropTypes.object,
     route: PropTypes.object,
-    activeForm: PropTypes.object,
     onComponentDidMount: PropTypes.func,
     agreements: PropTypes.array,
 };
@@ -135,9 +132,8 @@ ProjectExisting.propTypes = {
 function mapStateToProps(state) {
     return {
         currentUser: state.currentUser,
-        projects: !!state.projects && state.projects,
-        agreements: !!state.agreements && state.agreements,
-        activeForm: state.activeForm,
+        projects: state.projects,
+        agreements: state.agreements && state.agreements.agreements,
     };
 }
 

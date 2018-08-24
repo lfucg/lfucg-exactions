@@ -7,6 +7,7 @@ import {
 import {
     GET_AGREEMENTS,
     GET_AGREEMENT_ID,
+    GET_AGREEMENTS_QUICK,
     GET_ACCOUNT_AGREEMENTS,
     POST_AGREEMENT,
     PUT_AGREEMENT,
@@ -58,6 +59,16 @@ const agreementsReducer = (state = initialState, action) => {
             count: action.response.count,
             prev: action.response.previous,
         }
+    case GET_AGREEMENTS_QUICK:
+        return {
+            ...state,
+            currentAgreement: null,
+            loadingAgreement: false,
+            next: null,
+            count: 0,
+            agreements: action.response,
+            prev: null,
+        };
     case POST_AGREEMENT:
     case PUT_AGREEMENT:
         return {};

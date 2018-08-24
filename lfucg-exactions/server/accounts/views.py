@@ -47,9 +47,9 @@ class AccountCSVExportView(View):
             account_serializer = self.list(
                 account_queryset,
                 AccountSerializer,
-                many=False
+                many=True
             )
-            filename = account[0].account_name + '_account_report.csv'
+            filename = account_queryset[0].account_name + '_account_report.csv'
 
         else:
             account_queryset = Account.objects.all()
@@ -271,10 +271,10 @@ class AgreementCSVExportView(View):
             agreement_serializer = self.list(
                 agreement_queryset,
                 AgreementSerializer,
-                many=False
+                many=True
             )
 
-            filename = agreement[0]['resolution_number'] + '_agreement_report.csv'
+            filename = agreement_queryset.first().resolution_number + '_agreement_report.csv'
         else:
             agreement_queryset = Agreement.objects.all()
 
@@ -476,7 +476,7 @@ class PaymentCSVExportView(View):
             payment_serializer = self.list(
                 payment_queryset,
                 PaymentSerializer,
-                many=False
+                many=True
             )
             filename = payment_queryset[0].payment_type + '-' + payment_queryset[0].paid_by + '_payment_report.csv'
         else:
@@ -604,7 +604,7 @@ class ProjectCSVExportView(View):
             project_serializer = self.list(
                 project_queryset,
                 ProjectSerializer,
-                many=False
+                many=True
             )
             filename = project_queryset[0].name + '_project_report.csv'
         else:
@@ -746,7 +746,7 @@ class ProjectCostEstimateCSVExportView(View):
             project_estimate_serializer = self.list(
                 project_estimate_queryset,
                 ProjectCostEstimateSerializer,
-                many=False
+                many=True
             )
             filename = project_estimate_queryset[0].estimate_type + '_project_estimate_report.csv'
         else:
@@ -861,7 +861,7 @@ class AccountLedgerCSVExportView(View):
             ledger_serializer = self.list(
                 ledger_queryset,
                 AccountLedgerSerializer,
-                many=False
+                many=True
             )
             filename = ledger_queryset[0].entry_type_display + '-' + ledger_queryset[0].entry_date + '_ledger_report.csv'
         else:

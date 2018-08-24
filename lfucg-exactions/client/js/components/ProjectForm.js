@@ -22,7 +22,7 @@ import {
 } from '../actions/formActions';
 
 import {
-    getAgreements,
+    getAgreementsQuick,
     getProjectID,
     postProject,
     putProject,
@@ -36,12 +36,12 @@ class ProjectForm extends React.Component {
     render() {
         const {
             activeForm,
-            projects,
             agreements,
+            currentUser,
+            projects,
             onSubmit,
             formChange,
             selectedProject,
-            currentUser,
         } = this.props;
 
         const currentParam = this.props.params.id;
@@ -52,7 +52,7 @@ class ProjectForm extends React.Component {
                     {agreement.resolution_number}
                 </option>
             );
-        })(agreements.agreements)) : null;
+        })(agreements)) : null;
 
         const submitEnabled =
             activeForm.agreement_id &&
@@ -76,10 +76,10 @@ class ProjectForm extends React.Component {
 
                 <div className="inside-body">
                     <div className="container">
-                        {activeForm.loading ? <LoadingScreen /> :
+                        {projects.loadingProject ? <LoadingScreen /> :
                         (
                             <div className="col-sm-offset-1 col-sm-10">
-                                {currentParam && projects.is_approved === false && <div className="row"><h1 className="approval-pending">Approval Pending</h1></div>}
+                                {currentParam && projects.currentProject.is_approved === false && <div className="row"><h1 className="approval-pending">Approval Pending</h1></div>}
                                 <form >
                                     <fieldset>
                                         <div className="row">
@@ -216,19 +216,19 @@ class ProjectForm extends React.Component {
                                     </div>
                                 </form>
                                 <div className="clearfix" />
-                                {projects && projects.id &&
+                                {projects && projects.currentProject && projects.currentProject.id &&
                                     <Uploads
                                       file_content_type="accounts_project"
-                                      file_object_id={projects.id}
+                                      file_object_id={projects.currentProject.id}
                                       ariaExpanded="true"
                                       panelClass="panel-collapse collapse row in"
                                       permission="project"
                                     />
                                 }
-                                {projects && projects.id &&
+                                {projects && projects.currentProject && projects.currentProject.id &&
                                     <Notes
                                       content_type="accounts_project"
-                                      object_id={projects.id}
+                                      object_id={projects.currentProject.id}
                                       ariaExpanded="true"
                                       panelClass="panel-collapse collapse row in"
                                       permission="project"
@@ -247,7 +247,7 @@ class ProjectForm extends React.Component {
 
 ProjectForm.propTypes = {
     activeForm: PropTypes.object,
-    projects: PropTypes.array,
+    projects: PropTypes.object,
     agreements: PropTypes.array,
     route: PropTypes.object,
     params: PropTypes.object,
@@ -261,8 +261,8 @@ ProjectForm.propTypes = {
 function mapStateToProps(state) {
     return {
         activeForm: state.activeForm,
-        projects: !!state.projects && !!state.projects.currentProject && state.projects.currentProject,
-        agreements: !!state.agreements && state.agreements,
+        projects: state.projects,
+        agreements: state.agreements && state.agreements.agreements,
         currentUser: state.currentUser,
     };
 }
@@ -274,7 +274,7 @@ function mapDispatchToProps(dispatch, params) {
         onComponentDidMount() {
             dispatch(formInit());
             dispatch(formUpdate({ loading: true }));
-            dispatch(getAgreements())
+            dispatch(getAgreementsQuick())
             .then(() => {
                 dispatch(formUpdate({ loading: false }));
             });

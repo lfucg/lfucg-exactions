@@ -22,7 +22,7 @@ import {
 } from '../actions/formActions';
 
 import {
-    getProjects,
+    getProjectQuick,
     getProjectCostID,
     postProjectCost,
     putProjectCost,
@@ -53,7 +53,7 @@ class ProjectCostForm extends React.Component {
                         {project.name}
                     </option>
                 );
-            })(projects.projects));
+            })(projects));
 
         const submitEnabled =
             activeForm.project_id &&
@@ -188,7 +188,7 @@ class ProjectCostForm extends React.Component {
 ProjectCostForm.propTypes = {
     activeForm: PropTypes.object,
     projects: PropTypes.array,
-    projectCosts: PropTypes.array,
+    projectCosts: PropTypes.object,
     route: PropTypes.object,
     params: PropTypes.object,
     onComponentDidMount: PropTypes.func,
@@ -201,8 +201,8 @@ ProjectCostForm.propTypes = {
 function mapStateToProps(state) {
     return {
         activeForm: state.activeForm,
-        projects: !!state.projects && state.projects,
-        projectCosts: !!state.projectCosts && state.projectCosts,
+        projects: state.projects && state.projects.projects,
+        projectCosts: state.projectCosts,
         currentUser: state.currentUser,
     };
 }
@@ -214,7 +214,7 @@ function mapDispatchToProps(dispatch, params) {
         onComponentDidMount() {
             dispatch(formInit());
             dispatch(formUpdate({ loading: true }));
-            dispatch(getProjects());
+            dispatch(getProjectQuick());
             if (selectedProjectCost) {
                 dispatch(getProjectCostID(selectedProjectCost))
                 .then((data_project_cost) => {

@@ -9,6 +9,8 @@ import {
 
 import {
     getAccountID,
+    getAccountPlats,
+    getAccountLots,
     getAccountAgreements,
     getAccountPayments,
     getAccountAccountLedgers,
@@ -36,9 +38,10 @@ class AccountSummary extends React.Component {
             currentUser,
             accounts,
             agreements,
+            lots,
             payments,
+            plats,
             accountLedgers,
-            activeForm,
         } = this.props;
 
         return (
@@ -58,6 +61,7 @@ class AccountSummary extends React.Component {
                         {accounts.loadingAccount ? <LoadingScreen /> :
                         (
                             <div className="col-md-offset-1 col-md-10 panel-group" id="accordion" role="tablist" aria-multiselectable="false">
+                                {!!accounts && accounts.currentAccount && <div>
                                 <a
                                   role="button"
                                   data-toggle="collapse"
@@ -118,23 +122,27 @@ class AccountSummary extends React.Component {
                                 }
 
                                 <PlatsMiniSummary
-                                  mapSet={accounts.currentAccount.plat_account}
-                                  mapQualifier={accounts.currentAccount.plat_account && accounts.currentAccount.plat_account.length > 0}
+                                  mapSet={plats && plats.plats}
+                                  mapQualifier={plats && plats.plats && plats.plats.length > 0}
+                                  plats={plats}
                                 />
 
                                 <LotsMiniSummary
-                                  mapSet={accounts.currentAccount.lot_account}
-                                  mapQualifier={accounts.currentAccount.lot_account && accounts.currentAccount.lot_account.length > 0}
+                                  mapSet={lots && lots.lots}
+                                  mapQualifier={lots && lots.lots && lots.lots.length > 0}
+                                  lots={lots}
                                 />
 
                                 <AgreementsMiniSummary
-                                  mapSet={agreements}
-                                  mapQualifier={agreements && agreements.length > 0}
+                                  mapSet={agreements && agreements.agreements}
+                                  mapQualifier={agreements && agreements.agreements && agreements.agreements.length > 0}
+                                  agreements={agreements}
                                 />
 
                                 <PaymentsMiniSummary
-                                  mapSet={payments}
-                                  mapQualifier={payments && payments.length > 0}
+                                  mapSet={payments && payments.payments}
+                                  mapQualifier={payments && payments.payments && payments.payments.length > 0}
+                                  payments={payments}
                                 />
 
                                 <AccountLedgersMiniSummary
@@ -142,6 +150,7 @@ class AccountSummary extends React.Component {
                                   mapQualifier={accountLedgers && accountLedgers.accountLedgers && accountLedgers.accountLedgers.length > 0}
                                   accountLedgers={accountLedgers}
                                 />
+                                </div>}
 
                             </div>
                         )}
@@ -155,12 +164,13 @@ class AccountSummary extends React.Component {
 
 AccountSummary.propTypes = {
     currentUser: PropTypes.object,
-    accounts: PropTypes.array,
-    agreements: PropTypes.array,
-    payments: PropTypes.array,
-    accountLedgers: PropTypes.array,
+    accounts: PropTypes.object,
+    agreements: PropTypes.object,
+    lots: PropTypes.object,
+    payments: PropTypes.object,
+    plats: PropTypes.object,
+    accountLedgers: PropTypes.object,
     route: PropTypes.object,
-    activeForm: PropTypes.object,
     onComponentDidMount: PropTypes.func,
 };
 
@@ -169,9 +179,10 @@ function mapStateToProps(state) {
         currentUser: state.currentUser,
         accounts: state.accounts,
         accountLedgers: state.accountLedgers,
-        agreements: !!state.agreements && !!state.agreements.agreements && state.agreements.agreements,
-        payments: !!state.payments && !!state.payments.payments && state.payments.payments,
-        activeForm: state.activeForm,
+        agreements: state.agreements,
+        lots: state.lots,
+        payments: state.payments,
+        plats: state.plats,
     };
 }
 
@@ -181,6 +192,8 @@ function mapDispatchToProps(dispatch, params) {
     return {
         onComponentDidMount() {
             dispatch(getAccountID(selectedAccount));
+            dispatch(getAccountPlats(selectedAccount));
+            dispatch(getAccountLots(selectedAccount));
             dispatch(getAccountAgreements(selectedAccount));
             dispatch(getAccountPayments(selectedAccount));
             dispatch(getAccountAccountLedgers(selectedAccount))

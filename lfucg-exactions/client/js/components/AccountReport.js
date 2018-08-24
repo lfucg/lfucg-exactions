@@ -9,6 +9,8 @@ import Breadcrumbs from './Breadcrumbs';
 
 import {
     getAccountID,
+    getAccountPlats,
+    getAccountLots,
     getAccountPayments,
     getAccountAccountLedgers,
 } from '../actions/apiActions';
@@ -22,11 +24,13 @@ class AccountReport extends React.Component {
     render() {
         const {
             accounts,
-            payments,
             accountLedgers,
+            lots,
+            payments,
+            plats,
         } = this.props;
 
-        const platsList = !!accounts && !!accounts.currentAccount && accounts.currentAccount.plat_account && accounts.currentAccount.plat_account.length > 0 && (map((plat) => {
+        const platsList = plats && plats.length > 0 && (map((plat) => {
             return (
                 <div className="row" key={plat.id}>
                     <div className="col-sm-3 report-data">{plat.subdivision && plat.subdivision.name}</div>
@@ -36,9 +40,9 @@ class AccountReport extends React.Component {
                     <div className="col-sm-2 report-data right-border">{plat.non_buildable_lots}</div>
                 </div>
             );
-        })(accounts.currentAccount.plat_account));
+        })(plats));
 
-        const lotsList = !!accounts && !!accounts.currentAccount && accounts.currentAccount.lot_account && accounts.currentAccount.lot_account.length > 0 && (map((lot) => {
+        const lotsList = lots && lots.length > 0 && (map((lot) => {
             return (
                 <div className="row" key={lot.id}>
                     <div className="col-sm-5 report-data right-border">{lot.address_full}</div>
@@ -50,7 +54,7 @@ class AccountReport extends React.Component {
                     </div>
                 </div>
             );
-        })(accounts.currentAccount.lot_account));
+        })(lots));
 
         const paymentsList = payments && payments.length > 0 && (map((payment) => {
             return (
@@ -90,13 +94,14 @@ class AccountReport extends React.Component {
 
                 <div className="form-header">
                     <div className="container">
-                        <h1>ACCOUNTS - {accounts.currentAccount.account_name} - REPORT</h1>
+                        <h1>ACCOUNTS - {accounts && accounts.currentAccount && accounts.currentAccount.account_name} - REPORT</h1>
                     </div>
                 </div>
 
                 <Breadcrumbs route={this.props.route} parent_link={'account'} parent_name={'Accounts'} />
 
                 <div className="inside-body">
+                    {accounts && accounts.currentAccount && 
                     <div className="container">
                         <h2>Report Preview</h2>
                         <div className="clearfix" />
@@ -193,7 +198,7 @@ class AccountReport extends React.Component {
                           href={`../api/export_account_csv/?account=${accounts.currentAccount.id}`}
                           disabled={!accounts.currentAccount.id}
                         >Export CSV</a>
-                    </div>
+                    </div>}
                 </div>
                 <Footer />
             </div>
@@ -202,18 +207,22 @@ class AccountReport extends React.Component {
 }
 
 AccountReport.propTypes = {
-    accounts: PropTypes.array,
-    payments: PropTypes.array,
+    accounts: PropTypes.object,
     accountLedgers: PropTypes.array,
+    lots: PropTypes.array,
+    payments: PropTypes.array,
+    plats: PropTypes.array,
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
 };
 
 function mapStateToProps(state) {
     return {
-        accounts: !!state.accounts && state.accounts,
-        accountLedgers: !!state.accountLedgers && !!state.accountLedgers.accountLedgers && state.accountLedgers.accountLedgers,
-        payments: !!state.payments && !!state.payments.payments && state.payments.payments,
+        accounts: state.accounts,
+        accountLedgers: state.accountLedgers && state.accountLedgers.accountLedgers,
+        payments: state.payments && state.payments.payments,
+        lots: state.lots && state.lots.lots,
+        plats: state.plats && state.plats.plats,
     };
 }
 
@@ -223,6 +232,8 @@ function mapDispatchToProps(dispatch, params) {
     return {
         onComponentDidMount() {
             dispatch(getAccountID(selectedAccount));
+            dispatch(getAccountPlats(selectedAccount));
+            dispatch(getAccountLots(selectedAccount));
             dispatch(getAccountPayments(selectedAccount));
             dispatch(getAccountAccountLedgers(selectedAccount));
         },

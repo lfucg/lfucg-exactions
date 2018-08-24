@@ -13,13 +13,8 @@ import AccountsMiniSummary from './AccountsMiniSummary';
 import AgreementsMiniSummary from './AgreementsMiniSummary';
 import LoadingScreen from './LoadingScreen';
 
-import {
-    formUpdate,
-} from '../actions/formActions';
-
-import {
-    getAccountLedgerID,
-} from '../actions/apiActions';
+import { formUpdate } from '../actions/formActions';
+import { getAccountLedgerID } from '../actions/apiActions';
 
 
 class AccountLedgerSummary extends React.Component {
@@ -31,7 +26,6 @@ class AccountLedgerSummary extends React.Component {
         const {
             currentUser,
             accountLedgers,
-            activeForm,
         } = this.props;
 
         return (
@@ -51,7 +45,7 @@ class AccountLedgerSummary extends React.Component {
                       {accountLedgers.loadingLedger ? <LoadingScreen /> :
                       (
                           <div className="col-md-offset-1 col-md-10 panel-group" id="accordion" role="tablist" aria-multiselectable="false">
-                            {!!accountLedgers && <div>
+                            {accountLedgers.currentLedger && <div>
                               <a
                                 role="button"
                                 data-toggle="collapse"
@@ -107,13 +101,13 @@ class AccountLedgerSummary extends React.Component {
 
                               <LotsMiniSummary
                                 mapSet={accountLedgers.currentLedger.lot}
-                                mapQualifier={accountLedgers.currentLedger && accountLedgers.currentLedger.lot && accountLedgers.currentLedger.lot.id}
+                                mapQualifier={!!accountLedgers.currentLedger && !!accountLedgers.currentLedger.lot && !!accountLedgers.currentLedger.lot.id}
                                 singleLot
                               />
 
                               <AccountsMiniSummary
                                 mapSet={accountLedgers.currentLedger.account_from}
-                                mapQualifier={accountLedgers.currentLedger && accountLedgers.currentLedger.account_from && accountLedgers.currentLedger.account_from.id}
+                                mapQualifier={!!accountLedgers.currentLedger && !!accountLedgers.currentLedger.account_from && !!accountLedgers.currentLedger.account_from.id}
                                 singleAccount
                                 title="Developer Account From"
                                 accordionID="AccountFrom"
@@ -121,7 +115,7 @@ class AccountLedgerSummary extends React.Component {
 
                               <AccountsMiniSummary
                                 mapSet={accountLedgers.currentLedger.account_to}
-                                mapQualifier={accountLedgers.currentLedger && accountLedgers.currentLedger.account_to && accountLedgers.currentLedger.account_to.id}
+                                mapQualifier={!!accountLedgers.currentLedger && !!accountLedgers.currentLedger.account_to && !!accountLedgers.currentLedger.account_to.id}
                                 singleAccount
                                 title="Developer Account To"
                                 accordionID="AccountTo"
@@ -129,7 +123,7 @@ class AccountLedgerSummary extends React.Component {
 
                               <AgreementsMiniSummary
                                 mapSet={accountLedgers.currentLedger.agreement}
-                                mapQualifier={accountLedgers.currentLedger && accountLedgers.currentLedger.agreement && accountLedgers.currentLedger.agreement.id}
+                                mapQualifier={!!accountLedgers.currentLedger && !!accountLedgers.currentLedger.agreement && !!accountLedgers.currentLedger.agreement.id}
                                 singleAgreement
                               />
                             </div>
@@ -146,17 +140,15 @@ class AccountLedgerSummary extends React.Component {
 
 AccountLedgerSummary.propTypes = {
     currentUser: PropTypes.object,
-    accountLedgers: PropTypes.array,
+    accountLedgers: PropTypes.object,
     route: PropTypes.object,
-    activeForm: PropTypes.object,
     onComponentDidMount: PropTypes.func,
 };
 
 function mapStateToProps(state) {
     return {
         currentUser: state.currentUser,
-        accountLedgers: !!state.accountLedgers && state.accountLedgers,
-        activeForm: state.activeForm,
+        accountLedgers: state.accountLedgers,
     };
 }
 

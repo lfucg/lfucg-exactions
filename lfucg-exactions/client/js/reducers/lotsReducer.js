@@ -6,7 +6,10 @@ import {
 
 import {
     GET_LOTS,
+    GET_LOTS_QUICK,
+    GET_LOTS_EXACTIONS,
     GET_LOT_ID,
+    GET_ACCOUNT_LOTS,
     GET_SUBDIVISION_LOTS,
     GET_PLAT_LOTS,
     POST_LOT,
@@ -99,6 +102,7 @@ const lotsReducer = (state = initialState, action) => {
             prev: null,
         };
     case GET_LOTS:
+    case GET_ACCOUNT_LOTS:
     case GET_SUBDIVISION_LOTS:
     case GET_PLAT_LOTS:
         return {
@@ -110,6 +114,17 @@ const lotsReducer = (state = initialState, action) => {
             count: action.response.count,
             prev: action.response.previous,
         }
+    case GET_LOTS_QUICK:
+    case GET_LOTS_EXACTIONS:
+        return {
+            ...state,
+            currentLot: null,
+            loadingLot: false,
+            next: null,
+            count: 0,
+            lots: action.response,
+            prev: null,
+        };
     case POST_LOT:
     case PUT_LOT:
         return action.response;

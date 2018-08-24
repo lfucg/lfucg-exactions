@@ -30,7 +30,6 @@ class PlatZoneForm extends React.Component {
     render() {
         const {
             activeForm,
-            plats,
             formChange,
             onPlatZoneSubmit,
             currentUser,
@@ -112,7 +111,6 @@ class PlatZoneForm extends React.Component {
 
 PlatZoneForm.propTypes = {
     activeForm: PropTypes.object,
-    plats: PropTypes.object,
     plat_zone_id: PropTypes.string,
     plat_zone_value: PropTypes.number,
     acre_id: PropTypes.string,
@@ -129,7 +127,6 @@ PlatZoneForm.propTypes = {
 function mapStateToProps(state) {
     return {
         activeForm: state.activeForm,
-        plats: !!state.plats && state.plats,
         currentUser: state.currentUser,
     };
 }

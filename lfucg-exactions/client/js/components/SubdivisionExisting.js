@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router';
 import { map } from 'ramda';
 import PropTypes from 'prop-types';
 
@@ -18,7 +17,7 @@ import {
 
 import {
     getPagination,
-    getPlats,
+    getPlatsQuick,
 } from '../actions/apiActions';
 
 
@@ -75,7 +74,7 @@ class SubdivisionExisting extends React.Component {
                 <Breadcrumbs route={this.props.route} route_permission="subdivision" />
 
                 <SearchBar
-                  apiCalls={[getPlats]}
+                  apiCalls={[getPlatsQuick]}
                   advancedSearch={[
                     { filterField: 'filter_plat__id', displayName: 'Plat', list: platsList },
                   ]}

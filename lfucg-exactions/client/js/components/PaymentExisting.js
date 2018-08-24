@@ -19,9 +19,9 @@ import { payment_types, paid_by_types } from '../constants/searchBarConstants';
 
 import {
     getPagination,
-    getAccounts,
-    getLots,
-    getAgreements,
+    getAccountsQuick,
+    getLotsQuick,
+    getAgreementsQuick,
 } from '../actions/apiActions';
 
 class PaymentExisting extends React.Component {
@@ -36,7 +36,6 @@ class PaymentExisting extends React.Component {
             accounts,
             lots,
             agreements,
-            activeForm,
         } = this.props;
 
         const accountsList = accounts && accounts.length > 0 &&
@@ -104,7 +103,7 @@ class PaymentExisting extends React.Component {
                 <Breadcrumbs route={this.props.route} route_permission="payment" />
 
                 <SearchBar
-                  apiCalls={[getAccounts, getLots, getAgreements]}
+                  apiCalls={[getAccountsQuick, getLotsQuick, getAgreementsQuick]}
                   advancedSearch={[
                     { filterField: 'filter_paid_by_type', displayName: 'Paid By', list: paid_by_types },
                     { filterField: 'filter_payment_type', displayName: 'Payment Type', list: payment_types },
@@ -144,11 +143,10 @@ class PaymentExisting extends React.Component {
 PaymentExisting.propTypes = {
     currentUser: PropTypes.object,
     route: PropTypes.object,
-    activeForm: PropTypes.object,
     accounts: PropTypes.array,
     agreements: PropTypes.array,
     lots: PropTypes.array,
-    payments: PropTypes.array,
+    payments: PropTypes.object,
     onComponentDidMount: PropTypes.func,
 };
 
@@ -159,7 +157,6 @@ function mapStateToProps(state) {
         agreements: state.agreements && state.agreements.agreements,
         lots: state.lots && state.lots.lots,
         payments: state.payments,
-        activeForm: state.activeForm,
     };
 }
 

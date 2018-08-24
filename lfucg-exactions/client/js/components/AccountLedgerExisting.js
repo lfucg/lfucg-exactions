@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router';
 import { map } from 'ramda';
 import PropTypes from 'prop-types';
 
@@ -15,15 +14,13 @@ import { entry_types } from '../constants/searchBarConstants';
 
 import {
     getPagination,
-    getAgreements,
-    getLots,
-    getAccounts,
+    getAgreementsQuick,
+    getLotsQuick,
+    getAccountsQuick,
 } from '../actions/apiActions';
 
 import LoadingScreen from './LoadingScreen';
-import {
-    formUpdate,
-} from '../actions/formActions';
+import { formUpdate } from '../actions/formActions';
 
 class AccountLedgerExisting extends React.Component {
     componentDidMount() {
@@ -37,7 +34,6 @@ class AccountLedgerExisting extends React.Component {
             lots,
             agreements,
             accounts,
-            activeForm,
         } = this.props;
 
         const agreementsList = agreements && agreements.length > 0 &&
@@ -114,7 +110,7 @@ class AccountLedgerExisting extends React.Component {
                 <Breadcrumbs route={this.props.route} route_permission="accountledger" />
 
                 <SearchBar
-                  apiCalls={[getAgreements, getLots, getAccounts]}
+                  apiCalls={[getAgreementsQuick, getLotsQuick, getAccountsQuick]}
                   advancedSearch={[
                     { filterField: 'filter_entry_type', displayName: 'Type', list: entry_types },
                     { filterField: 'filter_agreement', displayName: 'Agreement', list: agreementsList },
@@ -153,23 +149,21 @@ class AccountLedgerExisting extends React.Component {
 
 AccountLedgerExisting.propTypes = {
     currentUser: PropTypes.object,
-    accountLedgers: PropTypes.array,
+    accountLedgers: PropTypes.object,
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
     agreements: PropTypes.array,
     lots: PropTypes.array,
     accounts: PropTypes.array,
-    activeForm: PropTypes.object,
 };
 
 function mapStateToProps(state) {
     return {
         currentUser: state.currentUser,
-        accounts: !!state.accounts && !!state.accounts.accounts && state.accounts.accounts,
-        accountLedgers: !!state.accountLedgers && state.accountLedgers,
-        agreements: !!state.agreements && !!state.agreements.agreements && state.agreements.agreements,
-        lots: !!state.lots && !!state.lots.lots && state.lots.lots,
-        activeForm: state.activeForm,
+        accounts: state.accounts && state.accounts.accounts,
+        accountLedgers: state.accountLedgers,
+        agreements: state.agreements && state.agreements.agreements,
+        lots: state.lots && state.lots.lots,
     };
 }
 

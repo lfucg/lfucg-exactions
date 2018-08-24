@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import { map } from 'ramda';
 import PropTypes from 'prop-types';
 
+import Pagination from './Pagination';
+
 class AccountsMiniSummary extends React.Component {
     render() {
         const {
@@ -125,6 +127,14 @@ class AccountsMiniSummary extends React.Component {
                         >
                             <div className="panel-body">
                                 {accountsList}
+                                {accountsList ? 
+                                    <Pagination 
+                                        next={this.props.accounts && this.props.accounts.next}
+                                        prev={this.props.accounts && this.props.accounts.prev}
+                                        count={this.props.accounts && this.props.accounts.count} 
+                                    /> : 
+                                    <h1>No Results Found</h1>
+                                }
                             </div>
                         </div>
                     </div>
@@ -140,8 +150,9 @@ class AccountsMiniSummary extends React.Component {
 
 AccountsMiniSummary.propTypes = {
     currentUser: PropTypes.object,
-    mapSet: PropTypes.object,
-    mapQualifier: PropTypes.object,
+    accounts: PropTypes.object,
+    mapSet: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
+    mapQualifier: PropTypes.bool,
     singleAccount: PropTypes.bool,
     title: PropTypes.string,
     accordionID: PropTypes.string,
@@ -150,6 +161,7 @@ AccountsMiniSummary.propTypes = {
 function mapStateToProps(state) {
     return {
         currentUser: state.currentUser,
+        accounts: state.accounts,
     };
 }
 

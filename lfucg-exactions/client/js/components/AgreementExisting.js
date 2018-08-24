@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router';
 import { map } from 'ramda';
 import PropTypes from 'prop-types';
 
@@ -12,15 +11,13 @@ import SearchBar from './SearchBar';
 import ExistingPageLinks from './ExistingPageLinks';
 
 import LoadingScreen from './LoadingScreen';
-import {
-    formUpdate,
-} from '../actions/formActions';
+import { formUpdate } from '../actions/formActions';
 
 import { expansion_areas, agreement_types } from '../constants/searchBarConstants';
 
 import {
     getPagination,
-    getAccounts,
+    getAccountsQuick,
 } from '../actions/apiActions';
 
 class AgreementExisting extends React.Component {
@@ -33,7 +30,6 @@ class AgreementExisting extends React.Component {
             currentUser,
             agreements,
             accounts,
-            activeForm,
         } = this.props;
 
         const accountsList = accounts && accounts.length > 0 &&
@@ -85,7 +81,7 @@ class AgreementExisting extends React.Component {
                 <Breadcrumbs route={this.props.route} route_permission="agreement" />
 
                 <SearchBar
-                  apiCalls={[getAccounts]}
+                  apiCalls={[getAccountsQuick]}
                   advancedSearch={[
                     { filterField: 'filter_agreement_type', displayName: 'Type', list: agreement_types },
                     { filterField: 'filter_account_id', displayName: 'Developer', list: accountsList },
@@ -122,19 +118,17 @@ class AgreementExisting extends React.Component {
 
 AgreementExisting.propTypes = {
     currentUser: PropTypes.object,
-    agreements: PropTypes.array,
+    agreements: PropTypes.object,
     accounts: PropTypes.array,
     route: PropTypes.object,
-    activeForm: PropTypes.object,
     onComponentDidMount: PropTypes.func,
 };
 
 function mapStateToProps(state) {
     return {
         currentUser: state.currentUser,
-        accounts: !!state.accounts && !!state.accounts.accounts && state.accounts.accounts,
-        agreements: !!state.agreements && state.agreements,
-        activeForm: state.activeForm,
+        accounts: state.accounts && state.accounts.accounts,
+        agreements: state.agreements,
     };
 }
 

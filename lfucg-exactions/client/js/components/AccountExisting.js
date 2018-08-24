@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router';
 import { map } from 'ramda';
 import PropTypes from 'prop-types';
 
@@ -18,8 +17,8 @@ import {
 
 import {
     getPagination,
-    getPlats,
-    getLots,
+    getPlatsQuick,
+    getLotsQuick,
 } from '../actions/apiActions';
 
 
@@ -34,7 +33,6 @@ class AccountExisting extends React.Component {
             accounts,
             plats,
             lots,
-            activeForm,
         } = this.props;
 
         const platsList = plats && plats.length > 0 &&
@@ -95,7 +93,7 @@ class AccountExisting extends React.Component {
                 <Breadcrumbs route={this.props.route} route_permission="account" />
 
                 <SearchBar
-                  apiCalls={[getPlats, getLots]}
+                  apiCalls={[getPlatsQuick, getLotsQuick]}
                   advancedSearch={[
                     { filterField: 'filter_plat_account__id', displayName: 'Plat', list: platsList },
                     { filterField: 'filter_lot_account__id', displayName: 'Lot', list: lotsList },
@@ -128,13 +126,21 @@ class AccountExisting extends React.Component {
     }
 }
 
+AccountExisting.propTypes = {
+    currentUser: PropTypes.object,
+    accounts: PropTypes.object,
+    plats: PropTypes.array,
+    lots: PropTypes.array,
+    route: PropTypes.object,
+    onComponentDidMount: PropTypes.func,
+};
+
 function mapStateToProps(state) {
     return {
         currentUser: state.currentUser,
-        accounts: !!state.accounts && state.accounts,
-        plats: !!state.plats && state.plats,
-        lots: !!state.lots && state.lots,
-        activeForm: state.activeForm,
+        accounts: state.accounts,
+        plats: state.plats && state.plats.plats,
+        lots: state.lots && state.lots.lots,
     };
 }
 
@@ -148,16 +154,6 @@ function mapDispatchToProps(dispatch) {
         },
     };
 }
-
-AccountExisting.propTypes = {
-    currentUser: PropTypes.object,
-    accounts: PropTypes.array,
-    plats: PropTypes.array,
-    lots: PropTypes.array,
-    route: PropTypes.object,
-    activeForm: PropTypes.object,
-    onComponentDidMount: PropTypes.func,
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(AccountExisting);
 

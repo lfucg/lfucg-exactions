@@ -125,7 +125,7 @@ class Notes extends React.Component {
 
 Notes.propTypes = {
     currentUser: PropTypes.object,
-    notes: PropTypes.array,
+    notes: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
     onComponentDidMount: PropTypes.func,
     onSubmit: PropTypes.func,
     ariaExpanded: PropTypes.string,

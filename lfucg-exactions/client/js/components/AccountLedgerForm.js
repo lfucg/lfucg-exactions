@@ -1,8 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import {
-    hashHistory,
-} from 'react-router';
+import { hashHistory } from 'react-router';
 import { map, filter } from 'ramda';
 import PropTypes from 'prop-types';
 import { Typeahead } from 'react-bootstrap-typeahead';
@@ -19,13 +17,15 @@ import {
     formInit,
     formUpdate,
 } from '../actions/formActions';
+import { setLoadingFalse } from '../actions/stateActions';
 
 import {
-    getPlats,
-    getLots,
+    getPlatsQuick,
+    getPlatID,
+    getLotExactions,
     getAccounts,
     getLFUCGAccount,
-    getAgreements,
+    getAgreementsQuick,
     getAccountLedgerID,
     postAccountLedger,
     putAccountLedger,
@@ -54,7 +54,7 @@ class AccountLedgerForm extends React.Component {
             currentUser,
         } = this.props;
 
-        const platsList = plats.length > 0 && (map((plat) => {
+        const platsList = plats && plats.plats && plats.plats.length > 0 && (map((plat) => {
             const cabinet = plat.cabinet ? `${plat.cabinet}-` : '';
             const slide = plat.slide ? plat.slide : plat.name;
             return (
@@ -62,7 +62,7 @@ class AccountLedgerForm extends React.Component {
                     {cabinet}{slide}
                 </option>
             );
-        })(plats));
+        })(plats.plats));
 
         const lotsList = [];
 
@@ -101,8 +101,7 @@ class AccountLedgerForm extends React.Component {
             activeForm.sewer_credits &&
             activeForm.entry_date;
 
-        const currentPlat = plats && plats.length > 0 &&
-            filter(plat => plat.id === parseInt(activeForm.plat, 10))(plats)[0];
+        const currentPlat = !!plats && !!plats.currentPlat && plats.currentPlat;
 
         return (
             <div className="account-ledger-form">
@@ -335,7 +334,7 @@ class AccountLedgerForm extends React.Component {
                                             />
                                         : <div>
                                             {
-                                            plats && plats.length > 0 &&
+                                            plats && plats.plats && plats.plats.length > 0 &&
                                                 map((plat =>
                                                     (plat.id === parseInt(activeForm.plat, 10)) ?
                                                         <Notes
@@ -346,7 +345,7 @@ class AccountLedgerForm extends React.Component {
                                                           permission="plat"
                                                         />
                                                     : null
-                                                    ))(plats)
+                                                    ))(plats.plats)
                                             }
                                         </div>
                                     }
@@ -364,11 +363,11 @@ class AccountLedgerForm extends React.Component {
 
 AccountLedgerForm.propTypes = {
     activeForm: PropTypes.object,
-    plats: PropTypes.array,
+    plats: PropTypes.object,
     lots: PropTypes.array,
     accounts: PropTypes.array,
     agreements: PropTypes.array,
-    accountLedgers: PropTypes.array,
+    accountLedgers: PropTypes.object,
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
     onSubmit: PropTypes.func,
@@ -384,11 +383,11 @@ AccountLedgerForm.propTypes = {
 function mapStateToProps(state) {
     return {
         activeForm: state.activeForm,
-        accounts: !!state.accounts && !!state.accounts.accounts && state.accounts.accounts,
-        accountLedgers: !!state.accountLedgers && state.accountLedgers,
-        agreements: !!state.agreements && !!state.agreements.agreements && state.agreements.agreements,
-        lots: !!state.lots && !!state.lots.lots && state.lots.lots,
-        plats: !!state.plats && !!state.plats.plats && state.plats.plats,
+        accounts: state.accounts && state.accounts.accounts,
+        accountLedgers: state.accountLedgers,
+        agreements: state.agreements && state.agreements.agreements,
+        lots: state.lots && state.lots.lots,
+        plats: state.plats,
         currentUser: state.currentUser,
     };
 }
@@ -401,12 +400,12 @@ function mapDispatchToProps(dispatch, params) {
             dispatch(formInit());
             dispatch(formUpdate({ loading: true }));
             dispatch(getAccounts());
-            dispatch(getAgreements())
+            dispatch(getAgreementsQuick())
             .then(() => {
                 dispatch(formUpdate({ loading: false }));
             });
             if (selectedAccountLedger) {
-                dispatch(getLots());
+                dispatch(getLotExactions());
                 dispatch(getAccountLedgerID(selectedAccountLedger))
                 .then((data_account_ledger) => {
                     const update = {
@@ -429,6 +428,7 @@ function mapDispatchToProps(dispatch, params) {
                     dispatch(formUpdate(update));
                 });
             } else {
+                dispatch(setLoadingFalse('ledger'));
                 const initial_constants = {
                     lot_show: '',
                     account_from_show: '',
@@ -486,7 +486,7 @@ function mapDispatchToProps(dispatch, params) {
 
                 if (field === 'plat_lot') {
                     if (value_id === 'plat') {
-                        dispatch(getPlats());
+                        dispatch(getPlatsQuick());
                         const remove_lot = {
                             lot: '',
                             lot_show: '',
@@ -494,7 +494,7 @@ function mapDispatchToProps(dispatch, params) {
                         };
                         dispatch(formUpdate(remove_lot));
                     } else if (value_id === 'lot') {
-                        dispatch(getLots());
+                        dispatch(getLotExactions());
                         const remove_plat = {
                             plat: '',
                             plat_show: '',
@@ -518,6 +518,8 @@ function mapDispatchToProps(dispatch, params) {
                     const value_name = value.substring(comma_index + 1, dollar_index);
                     const value_non_sewer = value.substring(dollar_index, second_dollar_index);
                     const value_sewer = value.substring(second_dollar_index + 1, value.length);
+
+                    dispatch(getPlatID(value_id));
 
                     const field_name = `${[field]}_name`;
                     const field_show = `${[field]}_show`;
