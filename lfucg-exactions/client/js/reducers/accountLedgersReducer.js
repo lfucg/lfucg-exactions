@@ -1,9 +1,7 @@
 import { contains } from 'ramda';
 
-import {
-    API_CALL_START,
-} from '../constants/actionTypes';
-
+import { API_CALL_START } from '../constants/actionTypes';
+import { SET_LOADING_FALSE } from '../constants/stateConstants';
 import {
     GET_ACCOUNT_LEDGERS,
     GET_ACCOUNT_LEDGER_ID,
@@ -79,6 +77,12 @@ const accountLedgersReducer = (state = initialState, action) => {
             }
         }
         return state;
+    case SET_LOADING_FALSE:
+        console.log('ACTIOON RESPONSE', action);
+        return {
+            ...state,
+            loadingLedger: false,
+        }
     default:
         return state;
     }

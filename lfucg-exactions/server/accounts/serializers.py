@@ -27,9 +27,6 @@ class AccountQuickSerializer(serializers.ModelSerializer):
         )
 
 class AccountSerializer(serializers.ModelSerializer):
-    plat_account = PlatSerializer(many=True, required=False, allow_null=True)
-    lot_account = LotSerializer(many=True, required=False, allow_null=True)
-
     address_state_display = serializers.SerializerMethodField(read_only=True)
 
     balance = serializers.SerializerMethodField(read_only=True)
@@ -65,9 +62,6 @@ class AccountSerializer(serializers.ModelSerializer):
             'created_by',
             'modified_by',
 
-            'plat_account',
-            'lot_account',
-
             'account_name',
             'contact_first_name',
             'contact_last_name',
@@ -97,6 +91,14 @@ class AccountField(serializers.Field):
 
     def to_representation(self, obj):
         return AccountSerializer(obj).data
+
+class AgreementQuickSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Agreement
+        fields = (
+            'id',
+            'resolution_number',
+        )
 
 class AgreementSerializer(serializers.ModelSerializer):
     account_id = AccountField()
@@ -143,6 +145,14 @@ class AgreementField(serializers.Field):
 
     def to_representation(self, obj):
         return AgreementSerializer(obj).data
+
+class ProjectQuickSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Project
+        fields = (
+            'id',
+            'name',
+        )
 
 class ProjectSerializer(serializers.ModelSerializer):
     agreement_id = AgreementField()

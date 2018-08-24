@@ -14,6 +14,7 @@ import {
     RESET_PASSWORD,
 
     GET_SUBDIVISIONS,
+    GET_SUBDIVISIONS_QUICK,
     GET_SUBDIVISION_ID,
     POST_SUBDIVISION,
     PUT_SUBDIVISION,
@@ -21,6 +22,7 @@ import {
     GET_PLATS,
     GET_PLATS_QUICK,
     GET_PLAT_ID,
+    GET_ACCOUNT_PLATS,
     GET_SUBDIVISION_PLATS,
     POST_PLAT,
     PUT_PLAT,
@@ -30,7 +32,10 @@ import {
     PUT_PLAT_ZONE_DUES,
 
     GET_LOTS,
+    GET_LOTS_QUICK,
+    GET_LOTS_EXACTIONS,
     GET_LOT_ID,
+    GET_ACCOUNT_LOTS,
     GET_SUBDIVISION_LOTS,
     GET_PLAT_LOTS,
     POST_LOT,
@@ -52,6 +57,7 @@ import {
     POST_UPLOAD,
 
     GET_AGREEMENTS,
+    GET_AGREEMENTS_QUICK,
     GET_AGREEMENT_ID,
     GET_ACCOUNT_AGREEMENTS,
     POST_AGREEMENT,
@@ -66,6 +72,7 @@ import {
     PUT_PAYMENT,
 
     GET_PROJECTS,
+    GET_PROJECTS_QUICK,
     GET_PROJECT_ID,
     GET_AGREEMENT_PROJECTS,
     POST_PROJECT,
@@ -203,6 +210,14 @@ export function getSubdivisions() {
     };
 }
 
+export function getSubdivisionsQuick() {
+    return {
+        type: API_CALL,
+        endpoint: GET_SUBDIVISIONS_QUICK,
+        url: '/subdivisionQuick/',
+    };
+}
+
 export function getSubdivisionID(selectedSubdivision) {
     return {
         type: API_CALL,
@@ -277,6 +292,14 @@ export function getPlatID(selectedPlat) {
         type: API_CALL,
         endpoint: GET_PLAT_ID,
         url: `/plat/${selectedPlat}`,
+    };
+}
+
+export function getAccountPlats(selectedAccount) {
+    return {
+        type: API_CALL,
+        endpoint: GET_ACCOUNT_PLATS,
+        url: `/plat/?paginatePage&account=${selectedAccount}`,
     };
 }
 
@@ -494,11 +517,35 @@ export function getLots() {
     };
 }
 
+export function getLotsQuick() {
+    return {
+        type: API_CALL,
+        endpoint: GET_LOTS_QUICK,
+        url: '/lotQuick/',
+    };
+}
+
+export function getLotExactions() {
+    return {
+        type: API_CALL,
+        endpoint: GET_LOTS_EXACTIONS,
+        url: '/lotExactions/',
+    };
+}
+
 export function getLotID(selectedLot) {
     return {
         type: API_CALL,
         endpoint: GET_LOT_ID,
         url: `/lot/${selectedLot}`,
+    };
+}
+
+export function getAccountLots(selectedAccount) {
+    return {
+        type: API_CALL,
+        endpoint: GET_ACCOUNT_LOTS,
+        url: `/lot/?paginatePage&account=${selectedAccount}`,
     };
 }
 
@@ -903,6 +950,14 @@ export function getAgreements() {
     };
 }
 
+export function getAgreementsQuick() {
+    return {
+        type: API_CALL,
+        endpoint: GET_AGREEMENTS_QUICK,
+        url: '/agreementQuick/',
+    };
+}
+
 export function getAgreementID(selectedAgreement) {
     return {
         type: API_CALL,
@@ -915,7 +970,7 @@ export function getAccountAgreements(selectedAccount) {
     return {
         type: API_CALL,
         endpoint: GET_ACCOUNT_AGREEMENTS,
-        url: `/agreement/?account_id=${selectedAccount}`,
+        url: `/agreement/?paginatePage&account_id=${selectedAccount}`,
     };
 }
 
@@ -1004,7 +1059,7 @@ export function getAccountPayments(selectedAccount) {
     return {
         type: API_CALL,
         endpoint: GET_ACCOUNT_PAYMENTS,
-        url: `/payment/?credit_account=${selectedAccount}`,
+        url: `/payment/?paginatePage&credit_account=${selectedAccount}`,
     };
 }
 
@@ -1012,7 +1067,7 @@ export function getAgreementPayments(selectedAgreement) {
     return {
         type: API_CALL,
         endpoint: GET_AGREEMENT_PAYMENTS,
-        url: `/payment/?credit_source=${selectedAgreement}`,
+        url: `/payment/?paginatePage&credit_source=${selectedAgreement}`,
     };
 }
 
@@ -1113,6 +1168,14 @@ export function getProjects() {
     };
 }
 
+export function getProjectQuick() {
+    return {
+        type: API_CALL,
+        endpoint: GET_PROJECTS_QUICK,
+        url: '/projectQuick/',
+    };
+}
+
 export function getProjectID(selectedProject) {
     return {
         type: API_CALL,
@@ -1125,7 +1188,7 @@ export function getAgreementProjects(selectedAgreement) {
     return {
         type: API_CALL,
         endpoint: GET_AGREEMENT_PROJECTS,
-        url: `/project/?agreement_id=${selectedAgreement}`,
+        url: `/project/?paginatePage&agreement_id=${selectedAgreement}`,
     };
 }
 
@@ -1222,7 +1285,7 @@ export function getProjectProjectCosts(selectedProject) {
     return {
         type: API_CALL,
         endpoint: GET_PROJECT_PROJECT_COSTS,
-        url: `/estimate/?project_id=${selectedProject}`,
+        url: `/estimate/?paginatePage&project_id=${selectedProject}`,
     };
 }
 
@@ -1323,7 +1386,7 @@ export function getAccountAccountLedgers(selectedAccount) {
     return {
         type: API_CALL,
         endpoint: GET_ACCOUNT_ACCOUNT_LEDGERS,
-        url: `/ledger/?acct=${selectedAccount}`,
+        url: `/ledger/?paginatePage&acct=${selectedAccount}`,
     };
 }
 
@@ -1331,7 +1394,7 @@ export function getAgreementAccountLedgers(selectedAgreement) {
     return {
         type: API_CALL,
         endpoint: GET_AGREEMENT_ACCOUNT_LEDGERS,
-        url: `/ledger/?agreement=${selectedAgreement}`,
+        url: `/ledger/?paginatePage&agreement=${selectedAgreement}`,
     };
 }
 

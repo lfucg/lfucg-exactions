@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import { map } from 'ramda';
 import PropTypes from 'prop-types';
 
+import Pagination from './Pagination';
+
 class PaymentsMiniSummary extends React.Component {
     render() {
         const {
@@ -119,6 +121,14 @@ class PaymentsMiniSummary extends React.Component {
                         >
                             <div className="panel-body">
                                 {paymentsList}
+                                {paymentsList ? 
+                                    <Pagination 
+                                        next={this.props.payments && this.props.payments.next}
+                                        prev={this.props.payments && this.props.payments.prev}
+                                        count={this.props.payments && this.props.payments.count} 
+                                    /> : 
+                                    <h1>No Results Found</h1>
+                                }
                             </div>
                         </div>
                     </div>
@@ -134,9 +144,10 @@ class PaymentsMiniSummary extends React.Component {
 
 PaymentsMiniSummary.propTypes = {
     currentUser: PropTypes.object,
-    mapSet: PropTypes.object,
-    mapQualifier: PropTypes.object,
+    mapSet: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
+    mapQualifier: PropTypes.bool,
     singlePayment: PropTypes.bool,
+    payments: PropTypes.object,
 };
 
 function mapStateToProps(state) {

@@ -6,6 +6,7 @@ import {
 
 import {
     GET_PROJECTS,
+    GET_PROJECTS_QUICK,
     GET_PROJECT_ID,
     GET_AGREEMENT_PROJECTS,
     POST_PROJECT,
@@ -58,6 +59,16 @@ const projectsReducer = (state = initialState, action) => {
             count: action.response.count,
             prev: action.response.previous,
         }
+    case GET_PROJECTS_QUICK:
+        return {
+            ...state,
+            currentProject: null,
+            loadingProject: false,
+            next: null,
+            count: 0,
+            projects: action.response,
+            prev: null,
+        };
     case POST_PROJECT:
     case PUT_PROJECT:
         return {};

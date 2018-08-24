@@ -116,9 +116,9 @@ class LotsMiniSummary extends React.Component {
                                 {lotsList}
                                 {lotsList ? 
                                     <Pagination 
-                                        next={this.props.lots.next}
-                                        prev={this.props.lots.prev}
-                                        count={this.props.lots.count} 
+                                        next={this.props.lots && this.props.lots.next}
+                                        prev={this.props.lots && this.props.lots.prev}
+                                        count={this.props.lots && this.props.lots.count} 
                                     /> : 
                                     <h1>No Results Found</h1>
                                 }

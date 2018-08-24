@@ -96,6 +96,10 @@ class AgreementViewSet(viewsets.ModelViewSet):
 
     def update(self, request, pk):
         return update_entry(self, request, pk)
+
+class AgreementQuickViewSet(viewsets.ModelViewSet):
+    serializer_class = AgreementQuickSerializer
+    queryset = Agreement.objects.all()
             
 class PaymentViewSet(viewsets.ModelViewSet):
     serializer_class = PaymentSerializer
@@ -192,6 +196,10 @@ class ProjectViewSet(viewsets.ModelViewSet):
 
     def update(self, request, pk):
         return update_entry(self, request, pk)
+    
+class ProjectQuickViewSet(viewsets.ModelViewSet):
+    serializer_class = ProjectQuickSerializer
+    queryset = Project.objects.all()
             
 class ProjectCostEstimateViewSet(viewsets.ModelViewSet):
     serializer_class = ProjectCostEstimateSerializer

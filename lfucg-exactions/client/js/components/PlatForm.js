@@ -1,9 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import {
-    hashHistory,
-} from 'react-router';
-import { map, sortBy, prop } from 'ramda';
+import { hashHistory } from 'react-router';
+import { map } from 'ramda';
 import PropTypes from 'prop-types';
 
 import Navbar from './Navbar';
@@ -24,12 +22,12 @@ import {
 } from '../actions/formActions';
 
 import {
-    getSubdivisions,
+    getSubdivisionsQuick,
     getSubdivisionID,
     getPlatID,
     postPlat,
     putPlat,
-    getAccounts,
+    getAccountsQuick,
     getAccountID,
 } from '../actions/apiActions';
 
@@ -569,8 +567,8 @@ function mapDispatchToProps(dispatch, params) {
                 loading: true,
             };
             dispatch(formUpdate(else_update));
-            dispatch(getSubdivisions());
-            dispatch(getAccounts());
+            dispatch(getSubdivisionsQuick());
+            dispatch(getAccountsQuick());
             if (selectedPlat) {
                 dispatch(getPlatID(selectedPlat))
                 .then((data_plat) => {
@@ -582,7 +580,7 @@ function mapDispatchToProps(dispatch, params) {
                                 subdivision_show: `${data_sub_id.response.id},${data_sub_id.response.name}`,
                             };
                             dispatch(formUpdate(sub_update));
-                            dispatch(getSubdivisions())
+                            dispatch(getSubdivisionsQuick())
                             ;
                         });
                     }
@@ -594,7 +592,7 @@ function mapDispatchToProps(dispatch, params) {
                                 account_show: `${data_account.response.id},${data_account.response.account_name}`,
                             };
                             dispatch(formUpdate(update_account));
-                            dispatch(getAccounts());
+                            dispatch(getAccountsQuick());
                         });
                     }
                     if (data_plat.response.plat_zone && data_plat.response.plat_zone.length === 0) {

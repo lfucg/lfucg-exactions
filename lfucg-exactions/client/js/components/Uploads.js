@@ -25,7 +25,6 @@ class Uploads extends React.Component {
     render() {
         const {
             currentUser,
-            activeForm,
             uploads,
             fileUploading,
         } = this.props;
@@ -108,8 +107,7 @@ class Uploads extends React.Component {
 
 Uploads.propTypes = {
     currentUser: PropTypes.object,
-    activeForm: PropTypes.object,
-    uploads: PropTypes.object,
+    uploads: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
     onComponentDidMount: PropTypes.func,
     file_content_type: PropTypes.string,
     file_object_id: PropTypes.number,
@@ -122,7 +120,6 @@ Uploads.propTypes = {
 function mapStateToProps(state) {
     return {
         currentUser: state.currentUser,
-        activeForm: state.activeForm,
         uploads: state.uploads,
     };
 }

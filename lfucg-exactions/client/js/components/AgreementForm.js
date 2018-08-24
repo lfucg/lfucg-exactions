@@ -1,8 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import {
-    hashHistory,
-} from 'react-router';
+import { hashHistory } from 'react-router';
 import { map } from 'ramda';
 import PropTypes from 'prop-types';
 
@@ -23,7 +21,7 @@ import {
 } from '../actions/formActions';
 
 import {
-    getAccounts,
+    getAccountsQuick,
     getAgreementID,
     postAgreement,
     putAgreement,
@@ -78,7 +76,7 @@ class AgreementForm extends React.Component {
                         {agreements.loadingAgreement ? <LoadingScreen /> :
                         (
                             <div className="col-sm-offset-1 col-sm-10">
-                                {currentParam && agreements.currentAgreement.is_approved === false && <div className="row"><h1 className="approval-pending">Approval Pending</h1></div>}
+                                {currentParam && agreements.currentAgreement && agreements.currentAgreement.is_approved === false && <div className="row"><h1 className="approval-pending">Approval Pending</h1></div>}
                                 <form >
 
                                     <fieldset>
@@ -143,7 +141,7 @@ class AgreementForm extends React.Component {
                                     </div>
                                 </form>
                                 <div className="clearfix" />
-                                {agreements.currentAgreement.id &&
+                                {agreements.currentAgreement && agreements.currentAgreement.id &&
                                     <Uploads
                                       file_content_type="accounts_agreement"
                                       file_object_id={agreements.currentAgreement.id}
@@ -175,7 +173,7 @@ class AgreementForm extends React.Component {
 AgreementForm.propTypes = {
     activeForm: PropTypes.object,
     accounts: PropTypes.array,
-    agreements: PropTypes.array,
+    agreements: PropTypes.object,
     route: PropTypes.object,
     params: PropTypes.object,
     onComponentDidMount: PropTypes.func,
@@ -188,8 +186,8 @@ AgreementForm.propTypes = {
 function mapStateToProps(state) {
     return {
         activeForm: state.activeForm,
-        accounts: !!state.accounts && !!state.accounts.accounts && state.accounts.accounts,
-        agreements: !!state.agreements && state.agreements,
+        accounts: state.accounts && state.accounts.accounts,
+        agreements: state.agreements,
         currentUser: state.currentUser,
     };
 }
@@ -201,7 +199,7 @@ function mapDispatchToProps(dispatch, params) {
         onComponentDidMount() {
             dispatch(formInit());
             dispatch(formUpdate({ loading: true }));
-            dispatch(getAccounts());
+            dispatch(getAccountsQuick());
             if (selectedAgreement) {
                 dispatch(getAgreementID(selectedAgreement))
                 .then((data_agreement) => {

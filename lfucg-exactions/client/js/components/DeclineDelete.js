@@ -1,9 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import {
-    hashHistory,
-} from 'react-router';
+import { hashHistory } from 'react-router';
 
 import {
     postDelete,

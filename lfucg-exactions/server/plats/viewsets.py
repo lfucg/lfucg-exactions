@@ -48,6 +48,10 @@ class SubdivisionViewSet(viewsets.ModelViewSet):
     def update(self, request, pk):
         return update_entry(self, request, pk)
 
+class SubdivisionQuickViewSet(viewsets.ModelViewSet):
+    serializer_class = SubdivisionQuickSerializer
+    queryset = Subdivision.objects.all()
+
 class PlatViewSet(viewsets.ModelViewSet):
     serializer_class = PlatSerializer
     queryset = Plat.objects.all()
@@ -134,6 +138,14 @@ class LotViewSet(viewsets.ModelViewSet):
 
     def update(self, request, pk):
         return update_entry(self, request, pk)
+
+class LotQuickViewSet(viewsets.ModelViewSet):
+    serializer_class = LotQuickSerializer
+    queryset = Lot.objects.all()
+
+class LotExactionsViewSet(viewsets.ModelViewSet):
+    serializer_class = LotExactionsSerializer
+    queryset = Lot.objects.all()
 
 class PlatZoneViewSet(viewsets.ModelViewSet):
     serializer_class = PlatZoneSerializer

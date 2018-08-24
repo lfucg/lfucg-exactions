@@ -8,6 +8,7 @@ import {
     GET_PLATS,
     GET_PLATS_QUICK,
     GET_PLAT_ID,
+    GET_ACCOUNT_PLATS,
     GET_SUBDIVISION_PLATS,
     POST_PLAT,
     PUT_PLAT,
@@ -86,6 +87,7 @@ const platsReducer = (state = initialState, action) => {
             prev: null,
         };
     case GET_PLATS:
+    case GET_ACCOUNT_PLATS:
     case GET_SUBDIVISION_PLATS:
         return {
             ...state,

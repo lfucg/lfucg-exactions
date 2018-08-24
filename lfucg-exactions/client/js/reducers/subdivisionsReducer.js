@@ -6,6 +6,7 @@ import {
 
 import {
     GET_SUBDIVISIONS,
+    GET_SUBDIVISIONS_QUICK,
     GET_SUBDIVISION_ID,
     POST_SUBDIVISION,
     PUT_SUBDIVISION,
@@ -56,6 +57,16 @@ const subdivisionsReducer = (state = initialState, action) => {
             count: action.response.count,
             prev: action.response.previous,
         }
+    case GET_SUBDIVISIONS_QUICK:
+        return {
+            ...state,
+            currentSubdivision: null,
+            loadingSubdivision: false,
+            next: null,
+            count: 0,
+            subdivisions: action.response,
+            prev: null,
+        };
     case POST_SUBDIVISION:
     case PUT_SUBDIVISION:
         return {};
