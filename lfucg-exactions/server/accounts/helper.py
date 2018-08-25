@@ -53,34 +53,32 @@ def send_lost_username_email(user):
     msg.attach_alternative(html_content, "text/html")
     msg.send()
 
-# @receiver(post_save, sender=User)
-# def send_email_to_new_user(sender, instance, created=True, **kwargs):
-        # IN DEVELOPMENT
-#     user = instance
-#     token = PasswordResetTokenGenerator().make_token(user)
-#     print('NEW USER SENDER', sender)
-#     print('NEW USER INSTANCE', instance)
-#     print('NEW USER KWARGS', kwargs)
-#     print('NEW USER USER', user)
-#     # print('NEW USER ', )
-#     text_template = get_template('emails/password_reset.txt')
-#     html_template = get_template('emails/password_reset.html')
+@receiver(post_save, sender=User)
+def send_email_to_new_user(sender, instance, **kwargs):
+    user = instance
+    token = PasswordResetTokenGenerator().make_token(user)
 
-#     subject, from_email = 'LFUCG Exactions: Password Reset', settings.DEFAULT_FROM_EMAIL
+    text_template = get_template('emails/password_reset.txt')
+    html_template = get_template('emails/password_reset.html')
 
-#     context = {
-#         'user': user,
-#         'baseURL': settings.BASE_URL,
-#         'uid': int_to_base36(user.id),
-#         'token': token,
-#     }
+    subject, from_email = 'LFUCG Exactions: Password Reset', settings.DEFAULT_FROM_EMAIL
 
-#     text_content = text_template.render(context)
-#     html_content = html_template.render(context)
+    context = {
+        'user': user,
+        'baseURL': settings.BASE_URL,
+        'uid': int_to_base36(user.id),
+        'token': token,
+    }
 
-#     msg = EmailMultiAlternatives(subject, text_content, from_email, [user.email])
-#     msg.attach_alternative(html_content, "text/html")
-#     msg.send()
+    text_content = text_template.render(context)
+    html_content = html_template.render(context)
+
+    msg = EmailMultiAlternatives(subject, text_content, from_email, [user.email])
+    msg.attach_alternative(html_content, "text/html")
+    try:
+        msg.send()
+    except Exception as exc:
+        print('SEND NEW USER EMAIL EXCEPTION', exc)
 
 @receiver(post_save, sender=Agreement)
 @receiver(post_save, sender=AccountLedger)
