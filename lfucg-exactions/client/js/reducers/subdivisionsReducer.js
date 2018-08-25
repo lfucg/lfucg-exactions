@@ -69,7 +69,7 @@ const subdivisionsReducer = (state = initialState, action) => {
         };
     case POST_SUBDIVISION:
     case PUT_SUBDIVISION:
-        return {};
+        return state;
     case GET_PAGINATION:
     case SEARCH_QUERY:
         if (action.response.endpoint === '/subdivision') {

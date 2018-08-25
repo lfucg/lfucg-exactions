@@ -64,7 +64,7 @@ const paymentReducer = (state = initialState, action) => {
         }
     case POST_PAYMENT:
     case PUT_PAYMENT:
-        return {};
+        return state;
     case GET_PAGINATION:
     case SEARCH_QUERY:
         if (action.response.endpoint === '/payment') {

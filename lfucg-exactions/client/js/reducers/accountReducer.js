@@ -69,7 +69,7 @@ const accountReducer = (state = initialState, action) => {
         };
     case POST_ACCOUNT:
     case PUT_ACCOUNT:
-        return {};
+        return state;
     case SEARCH_QUERY:
     case GET_PAGINATION:
         if (action.response.endpoint === '/account') {

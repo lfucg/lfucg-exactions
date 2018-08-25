@@ -71,7 +71,7 @@ const agreementsReducer = (state = initialState, action) => {
         };
     case POST_AGREEMENT:
     case PUT_AGREEMENT:
-        return {};
+        return state;
     case GET_PAGINATION:
     case SEARCH_QUERY:
         if (action.response.endpoint === '/agreement') {

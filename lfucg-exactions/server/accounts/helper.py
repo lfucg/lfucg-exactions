@@ -8,6 +8,7 @@ from django.db.models.signals import pre_save, post_save
 from django.dispatch import receiver
 from django.contrib.contenttypes.models import ContentType
 from decimal import Decimal
+from django.contrib.auth.tokens import PasswordResetTokenGenerator
 
 from django.contrib.auth.models import User
 from plats.models import Plat, Lot
@@ -51,6 +52,35 @@ def send_lost_username_email(user):
     msg = EmailMultiAlternatives(subject, text_content, from_email, [user.email])
     msg.attach_alternative(html_content, "text/html")
     msg.send()
+
+# @receiver(post_save, sender=User)
+# def send_email_to_new_user(sender, instance, created=True, **kwargs):
+        # IN DEVELOPMENT
+#     user = instance
+#     token = PasswordResetTokenGenerator().make_token(user)
+#     print('NEW USER SENDER', sender)
+#     print('NEW USER INSTANCE', instance)
+#     print('NEW USER KWARGS', kwargs)
+#     print('NEW USER USER', user)
+#     # print('NEW USER ', )
+#     text_template = get_template('emails/password_reset.txt')
+#     html_template = get_template('emails/password_reset.html')
+
+#     subject, from_email = 'LFUCG Exactions: Password Reset', settings.DEFAULT_FROM_EMAIL
+
+#     context = {
+#         'user': user,
+#         'baseURL': settings.BASE_URL,
+#         'uid': int_to_base36(user.id),
+#         'token': token,
+#     }
+
+#     text_content = text_template.render(context)
+#     html_content = html_template.render(context)
+
+#     msg = EmailMultiAlternatives(subject, text_content, from_email, [user.email])
+#     msg.attach_alternative(html_content, "text/html")
+#     msg.send()
 
 @receiver(post_save, sender=Agreement)
 @receiver(post_save, sender=AccountLedger)

@@ -71,7 +71,7 @@ const projectsReducer = (state = initialState, action) => {
         };
     case POST_PROJECT:
     case PUT_PROJECT:
-        return {};
+        return state;
     case GET_PAGINATION:
     case SEARCH_QUERY:
         if (action.response.endpoint === '/project') {
