@@ -127,7 +127,7 @@ const lotsReducer = (state = initialState, action) => {
         };
     case POST_LOT:
     case PUT_LOT:
-        return action.response;
+        return state;
     case PUT_PERMIT_ID_ON_LOT:
         return action.response;
     case SEARCH_QUERY:

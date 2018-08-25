@@ -99,9 +99,8 @@ const platsReducer = (state = initialState, action) => {
             prev: action.response.previous,
         }
     case PUT_PLAT:
-        return action.response;
     case POST_PLAT:
-        return {};
+        return state;
     case GET_PAGINATION:
     case SEARCH_QUERY:
         if (action.response.endpoint === '/plat') {

@@ -62,7 +62,7 @@ const accountLedgersReducer = (state = initialState, action) => {
         }
     case POST_ACCOUNT_LEDGER:
     case PUT_ACCOUNT_LEDGER:
-        return {};
+        return state;
     case GET_PAGINATION:
     case SEARCH_QUERY:
         if (action.response.endpoint === '/ledger') {
