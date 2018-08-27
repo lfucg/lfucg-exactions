@@ -15,6 +15,7 @@ import FormGroup from './FormGroup';
 import DeclineDelete from './DeclineDelete';
 import LoadingScreen from './LoadingScreen';
 
+import { setLoadingFalse } from '../actions/stateActions';
 import {
     formInit,
     formUpdate,
@@ -218,6 +219,7 @@ function mapDispatchToProps(dispatch, params) {
                     dispatch(formUpdate(update));
                 });
             } else {
+                dispatch(setLoadingFalse('agreement'));
                 const initial_constants = {
                     account_id_show: '',
                     expansion_area_show: '',

@@ -12,6 +12,7 @@ import Notes from './Notes';
 
 import DeclineDelete from './DeclineDelete';
 
+import { setLoadingFalse } from '../actions/stateActions';
 import {
     formInit,
     formUpdate,
@@ -261,6 +262,7 @@ function mapDispatchToProps(dispatch, params) {
                     dispatch(formUpdate(update));
                 });
             } else {
+                dispatch(setLoadingFalse('account'));
                 const initial_constants = {
                     address_state_show: '',
                 };

@@ -1,8 +1,7 @@
 import { contains } from 'ramda';
 
-import {
-    API_CALL_START,
-} from '../constants/actionTypes';
+import { API_CALL_START } from '../constants/actionTypes';
+import { SET_LOADING_FALSE } from '../constants/stateConstants';
 
 import {
     GET_SUBDIVISIONS,
@@ -85,6 +84,14 @@ const subdivisionsReducer = (state = initialState, action) => {
         } else {
             return state;
         }
+    case SET_LOADING_FALSE:
+        if (action.model === 'subdivision') {
+            return {
+                ...state,
+                loadingSubdivision: false,
+            }
+        }
+        return state;
     default:
         return state;
     }

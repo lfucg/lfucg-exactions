@@ -14,6 +14,8 @@ import LoadingScreen from './LoadingScreen';
 import FormGroup from './FormGroup';
 import DeclineDelete from './DeclineDelete';
 
+import { setLoadingFalse } from '../actions/stateActions';
+
 import {
     formInit,
     formUpdate,
@@ -584,6 +586,7 @@ function mapDispatchToProps(dispatch, params) {
                     }
                 });
             } else {
+                dispatch(setLoadingFalse('lot'));
                 const else_update = {
                     first_section: false,
                     account_show: '',

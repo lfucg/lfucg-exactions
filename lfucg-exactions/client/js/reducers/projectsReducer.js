@@ -1,8 +1,7 @@
 import { contains } from 'ramda';
 
-import {
-    API_CALL_START,
-} from '../constants/actionTypes';
+import { API_CALL_START } from '../constants/actionTypes';
+import { SET_LOADING_FALSE } from '../constants/stateConstants';
 
 import {
     GET_PROJECTS,
@@ -83,6 +82,14 @@ const projectsReducer = (state = initialState, action) => {
                 next: action.response.next,
                 count: action.response.count,
                 prev: action.response.previous,
+            }
+        }
+        return state;
+    case SET_LOADING_FALSE:
+        if (action.model === 'project') {
+            return {
+                ...state,
+                loadingProject: false,
             }
         }
         return state;
