@@ -16,6 +16,7 @@ import PlatZoneForm from './PlatZoneForm';
 import PlatZoneDuesForm from './PlatZoneDuesForm';
 import LoadingScreen from './LoadingScreen';
 
+import { setLoadingFalse } from '../actions/stateActions';
 import {
     formInit,
     formUpdate,
@@ -638,6 +639,7 @@ function mapDispatchToProps(dispatch, params) {
                     dispatch(formUpdate(update));
                 });
             } else {
+                dispatch(setLoadingFalse('plat'));
                 const initial_constants = {
                     subdivision_show: '',
                     account_show: '',

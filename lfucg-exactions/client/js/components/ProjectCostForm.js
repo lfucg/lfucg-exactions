@@ -16,6 +16,7 @@ import LoadingScreen from './LoadingScreen';
 import FormGroup from './FormGroup';
 import DeclineDelete from './DeclineDelete';
 
+import { setLoadingFalse } from '../actions/stateActions';
 import {
     formInit,
     formUpdate,
@@ -233,6 +234,7 @@ function mapDispatchToProps(dispatch, params) {
                     dispatch(formUpdate(update));
                 });
             } else {
+                dispatch(setLoadingFalse('estimate'));
                 const initial_constants = {
                     project_id_show: '',
                     loading: false,

@@ -16,6 +16,7 @@ import LoadingScreen from './LoadingScreen';
 
 import DeclineDelete from './DeclineDelete';
 
+import { setLoadingFalse } from '../actions/stateActions';
 import {
     formInit,
     formUpdate,
@@ -299,6 +300,7 @@ function mapDispatchToProps(dispatch, params) {
                     dispatch(formUpdate(update));
                 });
             } else {
+                dispatch(setLoadingFalse('project'));
                 const initial_constants = {
                     agreement_id_show: '',
                     expansion_area_show: '',

@@ -78,11 +78,13 @@ const accountLedgersReducer = (state = initialState, action) => {
         }
         return state;
     case SET_LOADING_FALSE:
-        console.log('ACTIOON RESPONSE', action);
-        return {
-            ...state,
-            loadingLedger: false,
+        if (action.model === 'ledger') {
+            return {
+                ...state,
+                loadingLedger: false,
+            }
         }
+        return state;
     default:
         return state;
     }

@@ -13,11 +13,11 @@ import FormGroup from './FormGroup';
 import Breadcrumbs from './Breadcrumbs';
 import DeclineDelete from './DeclineDelete';
 
+import { setLoadingFalse } from '../actions/stateActions';
 import {
     formInit,
     formUpdate,
 } from '../actions/formActions';
-
 
 import {
     getSubdivisionID,
@@ -134,6 +134,8 @@ function mapDispatchToProps(dispatch, params) {
                     };
                     dispatch(formUpdate(update));
                 });
+            } else {
+                dispatch(setLoadingFalse('subdivision'));
             }
         },
         onSubmit(event) {

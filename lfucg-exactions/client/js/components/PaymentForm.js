@@ -13,6 +13,7 @@ import FormGroup from './FormGroup';
 import DeclineDelete from './DeclineDelete';
 import Notes from './Notes';
 
+import { setLoadingFalse } from '../actions/stateActions';
 import {
     formInit,
     formUpdate,
@@ -435,6 +436,7 @@ function mapDispatchToProps(dispatch, params) {
                     dispatch(formUpdate(update));
                 });
             } else {
+                dispatch(setLoadingFalse('payment'));
                 const initial_constants = {
                     credit_account_show: '',
                     credit_source_show: '',
