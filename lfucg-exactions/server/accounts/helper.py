@@ -12,7 +12,7 @@ from django.contrib.auth.tokens import PasswordResetTokenGenerator
 
 from django.contrib.auth.models import User
 from plats.models import Plat, Lot
-from .models import Agreement, AccountLedger, Payment, Project, ProjectCostEstimate
+from .models import Account, Agreement, AccountLedger, Payment, Project, ProjectCostEstimate
 from plats.utils import calculate_lot_balance, calculate_plat_balance
 
 def send_password_reset_email(user, token):
@@ -188,3 +188,30 @@ def calculate_current_plat_balance(sender, instance, **kwargs):
 
             super(Plat, plat).save()
 
+@receiver(post_save, sender=AccountLedger)
+def calculate_current_account_balance(sender, instance, **kwargs):
+    account_to = None
+    account_from = None
+    non_sewer_credits = instance.non_sewer_credits if instance.non_sewer_credits else 0
+    sewer_credits = instance.sewer_credits if instance.sewer_credits else 0
+
+    if instance.account_to is not None:
+        account_to = Account.objects.filter(id=instance.account_to.id)
+    
+    if instance.account_from is not None:
+        account_from = Account.objects.filter(id=instance.account_from.id)
+
+    if account_to.exists():
+        account_to.current_account_balance += (non_sewer_credits + sewer_credits)
+        account_to.current_non_sewer_balance += non_sewer_credits
+        account_to.current_sewer_balance += sewer_credits
+
+        super(Account, account_to).save()
+    
+    if account_from.exists():
+        account_from.current_account_balance -= (non_sewer_credits + sewer_credits)
+        account_from.current_non_sewer_balance -= non_sewer_credits
+        account_from.current_sewer_balance -= sewer_credits
+
+        super(Account, account_from).save()
+        

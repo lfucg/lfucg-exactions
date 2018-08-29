@@ -22,7 +22,7 @@ const initialState = {
     prev: null,
 }
 
-const subdivisionApiCalls = [GET_SUBDIVISIONS, GET_SUBDIVISION_ID, POST_SUBDIVISION, PUT_SUBDIVISION];
+const subdivisionApiCalls = [GET_SUBDIVISIONS, GET_SUBDIVISIONS_QUICK, GET_SUBDIVISION_ID, POST_SUBDIVISION, PUT_SUBDIVISION];
 
 const subdivisionsReducer = (state = initialState, action) => {
     const {

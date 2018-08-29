@@ -23,7 +23,7 @@ const initialState = {
     prev: null,
 } 
 
-const accountLedgerApiCalls = [];
+const accountLedgerApiCalls = [GET_ACCOUNT_LEDGERS, GET_ACCOUNT_LEDGER_ID, GET_LOT_ACCOUNT_LEDGERS, GET_ACCOUNT_ACCOUNT_LEDGERS, GET_AGREEMENT_ACCOUNT_LEDGERS, POST_ACCOUNT_LEDGER, PUT_ACCOUNT_LEDGER];
 
 const accountLedgersReducer = (state = initialState, action) => {
     const {

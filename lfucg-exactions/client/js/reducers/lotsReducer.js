@@ -27,7 +27,7 @@ const initialState = {
     prev: null,
 } 
 
-const lotApiCalls = [GET_LOTS, GET_LOT_ID, GET_SUBDIVISION_LOTS, GET_PLAT_LOTS, POST_LOT, PUT_LOT, PUT_PERMIT_ID_ON_LOT];
+const lotApiCalls = [GET_LOTS, GET_LOTS_QUICK, GET_LOTS_EXACTIONS, GET_LOT_ID, GET_ACCOUNT_LOTS, GET_SUBDIVISION_LOTS, GET_PLAT_LOTS, POST_LOT, PUT_LOT, PUT_PERMIT_ID_ON_LOT];
 
 const convertCurrency = (lots) => {
     let newLotList = [];

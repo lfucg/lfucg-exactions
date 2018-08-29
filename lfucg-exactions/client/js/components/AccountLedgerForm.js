@@ -70,7 +70,12 @@ class AccountLedgerForm extends React.Component {
             map((lot) => {
                 lotsList.push({
                     id: lot.id,
-                    value: [lot.id, lot.address_full, lot.lot_exactions.non_sewer_exactions, lot.lot_exactions.sewer_exactions],
+                    value: [
+                        lot.id, 
+                        lot.address_full, 
+                        lot.lot_exactions ? lot.lot_exactions.non_sewer_exactions : 0, 
+                        lot.lot_exactions ? lot.lot_exactions.sewer_exactions : 0
+                    ],
                     label: lot.address_full,
                 });
             })(lots);
@@ -78,7 +83,7 @@ class AccountLedgerForm extends React.Component {
 
         const accountsList = accounts.length > 0 && (map((account) => {
             return (
-                <option key={account.id} value={[account.id, account.account_name, account.balance.balance]} >
+                <option key={account.id} value={[account.id, account.account_name, account.current_account_balance]} >
                     {account.account_name}
                 </option>
             );
@@ -410,11 +415,11 @@ function mapDispatchToProps(dispatch, params) {
                 .then((data_account_ledger) => {
                     const update = {
                         lot: data_account_ledger.response && data_account_ledger.response.lot ? data_account_ledger.response.lot.id : null,
-                        lot_show: data_account_ledger.response && data_account_ledger.response.lot ? `${data_account_ledger.response.lot.id},${data_account_ledger.response.lot.address_full},${data_account_ledger.response.lot.lot_exactions.non_sewer_exactions},${data_account_ledger.response.lot.lot_exactions.sewer_exactions}` : '',
+                        lot_show: data_account_ledger.response && data_account_ledger.response.lot ? `${data_account_ledger.response.lot.id},${data_account_ledger.response.lot.address_full},${data_account_ledger.response.lot.lot_exactions && data_account_ledger.response.lot.lot_exactions.non_sewer_exactions},${data_account_ledger.response.lot.lot_exactions && data_account_ledger.response.lot.lot_exactions.sewer_exactions}` : '',
                         account_from: data_account_ledger.response && data_account_ledger.response.account_from ? data_account_ledger.response.account_from.id : null,
-                        account_from_show: data_account_ledger.response && data_account_ledger.response.account_from ? `${data_account_ledger.response.account_from.id},${data_account_ledger.response.account_from.account_name},${data_account_ledger.response.account_from.balance.balance}` : '',
+                        account_from_show: data_account_ledger.response && data_account_ledger.response.account_from ? `${data_account_ledger.response.account_from.id},${data_account_ledger.response.account_from.account_name},${data_account_ledger.response.account_from.current_account_balance}` : '',
                         account_to: data_account_ledger.response && data_account_ledger.response.account_to ? data_account_ledger.response.account_to.id : null,
-                        account_to_show: data_account_ledger.response && data_account_ledger.response.account_to ? `${data_account_ledger.response.account_to.id},${data_account_ledger.response.account_to.account_name},${data_account_ledger.response.account_to.balance.balance}` : '',
+                        account_to_show: data_account_ledger.response && data_account_ledger.response.account_to ? `${data_account_ledger.response.account_to.id},${data_account_ledger.response.account_to.account_name},${data_account_ledger.response.account_to.current_account_balance}` : '',
                         agreement: data_account_ledger.response && data_account_ledger.response.agreement ? data_account_ledger.response.agreement.id : null,
                         agreement_show: data_account_ledger.response && data_account_ledger.response.agreement ? `${data_account_ledger.response.agreement.id},${data_account_ledger.response.agreement.resolution_number}` : '',
                         entry_date: data_account_ledger.response.entry_date,
@@ -463,14 +468,14 @@ function mapDispatchToProps(dispatch, params) {
                         if (value_id === 'NEW') {
                             const lfucg_from_update = {
                                 account_from: data_lfucg.response[0].id,
-                                account_from_show: `${data_lfucg.response[0].id},${data_lfucg.response[0].account_name},${data_lfucg.response[0].balance.balance}`,
+                                account_from_show: `${data_lfucg.response[0].id},${data_lfucg.response[0].account_name},${data_lfucg.response[0].current_account_balance}`,
                                 account_to_show: '',
                             };
                             dispatch(formUpdate(lfucg_from_update));
                         } else if (value_id === 'USE') {
                             const lfucg_to_update = {
                                 account_to: data_lfucg.response[0].id,
-                                account_to_show: `${data_lfucg.response[0].id},${data_lfucg.response[0].account_name},${data_lfucg.response[0].balance.balance}`,
+                                account_to_show: `${data_lfucg.response[0].id},${data_lfucg.response[0].account_name},${data_lfucg.response[0].current_account_balance}`,
                                 account_from_show: '',
                             };
                             dispatch(formUpdate(lfucg_to_update));

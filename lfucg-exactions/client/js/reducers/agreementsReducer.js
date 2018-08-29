@@ -8,6 +8,7 @@ import {
     GET_AGREEMENT_ID,
     GET_AGREEMENTS_QUICK,
     GET_ACCOUNT_AGREEMENTS,
+    GET_LEDGER_AGREEMENT,
     POST_AGREEMENT,
     PUT_AGREEMENT,
     GET_PAGINATION,
@@ -23,7 +24,7 @@ const initialState = {
     prev: null,
 }
 
-const agreementApiCalls = [];
+const agreementApiCalls = [GET_AGREEMENTS, GET_AGREEMENT_ID, GET_AGREEMENTS_QUICK, GET_ACCOUNT_AGREEMENTS, POST_AGREEMENT, PUT_AGREEMENT];
 
 const agreementsReducer = (state = initialState, action) => {
     const {
@@ -42,6 +43,15 @@ const agreementsReducer = (state = initialState, action) => {
         return {
             ...state,
             currentAgreement: action.response,
+            loadingAgreement: false,
+            next: null,
+            count: 1,
+            prev: null,
+        }
+    case GET_LEDGER_AGREEMENT:
+        return {
+            ...state,
+            currentAgreement: action.response[0],
             loadingAgreement: false,
             next: null,
             count: 1,

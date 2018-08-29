@@ -25,7 +25,7 @@ const initialState = {
     prev: null,
 } 
 
-const platApiCalls = [GET_PLATS, GET_PLATS_QUICK, GET_PLAT_ID, GET_SUBDIVISION_PLATS, POST_PLAT, PUT_PLAT, GET_SUBDIVISION_ID];
+const platApiCalls = [GET_PLATS, GET_PLATS_QUICK, GET_PLAT_ID, GET_ACCOUNT_PLATS, GET_SUBDIVISION_PLATS, POST_PLAT, PUT_PLAT, GET_SUBDIVISION_ID];
 
 const convertCurrency = (plats) => {
     let newPlatList = [];
@@ -68,7 +68,7 @@ const platsReducer = (state = initialState, action) => {
     case GET_PLAT_ID:
         return {
             ...state,
-            currentPlat: action.response,
+            currentPlat: convertCurrency(action.response),
             loadingPlat: false,
             next: null,
             count: 1,
