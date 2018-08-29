@@ -1,9 +1,7 @@
 import { contains } from 'ramda';
 
-import {
-    API_CALL_START,
-} from '../constants/actionTypes';
-
+import { API_CALL_START } from '../constants/actionTypes';
+import { SET_LOADING_FALSE } from '../constants/stateConstants';
 import {
     GET_ACCOUNT_LEDGERS,
     GET_ACCOUNT_LEDGER_ID,
@@ -25,7 +23,7 @@ const initialState = {
     prev: null,
 } 
 
-const accountLedgerApiCalls = [];
+const accountLedgerApiCalls = [GET_ACCOUNT_LEDGERS, GET_ACCOUNT_LEDGER_ID, GET_LOT_ACCOUNT_LEDGERS, GET_ACCOUNT_ACCOUNT_LEDGERS, GET_AGREEMENT_ACCOUNT_LEDGERS, POST_ACCOUNT_LEDGER, PUT_ACCOUNT_LEDGER];
 
 const accountLedgersReducer = (state = initialState, action) => {
     const {
@@ -64,7 +62,7 @@ const accountLedgersReducer = (state = initialState, action) => {
         }
     case POST_ACCOUNT_LEDGER:
     case PUT_ACCOUNT_LEDGER:
-        return {};
+        return state;
     case GET_PAGINATION:
     case SEARCH_QUERY:
         if (action.response.endpoint === '/ledger') {
@@ -76,6 +74,14 @@ const accountLedgersReducer = (state = initialState, action) => {
                 next: action.response.next,
                 count: action.response.count,
                 prev: action.response.previous,
+            }
+        }
+        return state;
+    case SET_LOADING_FALSE:
+        if (action.model === 'ledger') {
+            return {
+                ...state,
+                loadingLedger: false,
             }
         }
         return state;

@@ -1,11 +1,11 @@
 import { contains } from 'ramda';
 
-import {
-    API_CALL_START,
-} from '../constants/actionTypes';
+import { API_CALL_START } from '../constants/actionTypes';
+import { SET_LOADING_FALSE } from '../constants/stateConstants';
 
 import {
     GET_SUBDIVISIONS,
+    GET_SUBDIVISIONS_QUICK,
     GET_SUBDIVISION_ID,
     POST_SUBDIVISION,
     PUT_SUBDIVISION,
@@ -22,7 +22,7 @@ const initialState = {
     prev: null,
 }
 
-const subdivisionApiCalls = [GET_SUBDIVISIONS, GET_SUBDIVISION_ID, POST_SUBDIVISION, PUT_SUBDIVISION];
+const subdivisionApiCalls = [GET_SUBDIVISIONS, GET_SUBDIVISIONS_QUICK, GET_SUBDIVISION_ID, POST_SUBDIVISION, PUT_SUBDIVISION];
 
 const subdivisionsReducer = (state = initialState, action) => {
     const {
@@ -56,9 +56,19 @@ const subdivisionsReducer = (state = initialState, action) => {
             count: action.response.count,
             prev: action.response.previous,
         }
+    case GET_SUBDIVISIONS_QUICK:
+        return {
+            ...state,
+            currentSubdivision: null,
+            loadingSubdivision: false,
+            next: null,
+            count: 0,
+            subdivisions: action.response,
+            prev: null,
+        };
     case POST_SUBDIVISION:
     case PUT_SUBDIVISION:
-        return {};
+        return state;
     case GET_PAGINATION:
     case SEARCH_QUERY:
         if (action.response.endpoint === '/subdivision') {
@@ -74,6 +84,14 @@ const subdivisionsReducer = (state = initialState, action) => {
         } else {
             return state;
         }
+    case SET_LOADING_FALSE:
+        if (action.model === 'subdivision') {
+            return {
+                ...state,
+                loadingSubdivision: false,
+            }
+        }
+        return state;
     default:
         return state;
     }

@@ -30,7 +30,6 @@ class PaymentSummary extends React.Component {
         const {
             currentUser,
             payments,
-            activeForm,
         } = this.props;
 
         return (
@@ -114,13 +113,13 @@ class PaymentSummary extends React.Component {
 
                                     <LotsMiniSummary
                                         mapSet={payments.currentPayment.lot_id}
-                                        mapQualifier={payments && payments.currentPayment.lot_id}
+                                        mapQualifier={!!payments && !!payments.currentPayment && !!payments.currentPayment.lot_id}
                                         singleLot
                                     />
 
                                     <AccountsMiniSummary
                                         mapSet={payments.currentPayment.credit_account}
-                                        mapQualifier={payments.currentPayment.credit_account}
+                                        mapQualifier={!!payments && !!payments.currentPayment && !!payments.currentPayment.credit_account}
                                         singleAccount
                                         title="Developer Account"
                                         accordionID="Account"
@@ -128,7 +127,7 @@ class PaymentSummary extends React.Component {
 
                                     <AgreementsMiniSummary
                                         mapSet={payments.currentPayment.credit_source}
-                                        mapQualifier={payments.currentPayment.credit_source}
+                                        mapQualifier={!!payments && !!payments.currentPayment && !!payments.currentPayment.credit_source}
                                         singleAgreement
                                     />
 
@@ -146,17 +145,15 @@ class PaymentSummary extends React.Component {
 
 PaymentSummary.propTypes = {
     currentUser: PropTypes.object,
-    payments: PropTypes.array,
+    payments: PropTypes.object,
     route: PropTypes.object,
-    activeForm: PropTypes.object,
     onComponentDidMount: PropTypes.func,
 };
 
 function mapStateToProps(state) {
     return {
         currentUser: state.currentUser,
-        payments: !!state.payments && state.payments,
-        activeForm: state.activeForm,
+        payments: state.payments,
     };
 }
 

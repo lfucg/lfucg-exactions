@@ -1,8 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import {
-    hashHistory,
-} from 'react-router';
+import { hashHistory } from 'react-router';
 import { map } from 'ramda';
 import PropTypes from 'prop-types';
 
@@ -15,6 +13,8 @@ import LoadingScreen from './LoadingScreen';
 
 import FormGroup from './FormGroup';
 import DeclineDelete from './DeclineDelete';
+
+import { setLoadingFalse } from '../actions/stateActions';
 
 import {
     formInit,
@@ -494,7 +494,7 @@ class LotForm extends React.Component {
 LotForm.propTypes = {
     activeForm: PropTypes.object,
     plats: PropTypes.array,
-    lots: PropTypes.array,
+    lots: PropTypes.object,
     accounts: PropTypes.array,
     route: PropTypes.object,
     params: PropTypes.object,
@@ -511,9 +511,9 @@ LotForm.propTypes = {
 function mapStateToProps(state) {
     return {
         activeForm: state.activeForm,
-        plats: !!state.plats && !!state.plats.plats && state.plats.plats,
-        lots: !!state.lots && state.lots,
-        accounts: !!state.accounts && !!state.accounts.accounts && state.accounts.accounts,
+        plats: state.plats && state.plats.plats,
+        lots: state.lots,
+        accounts: state.accounts && state.accounts.accounts,
         currentUser: state.currentUser,
     };
 }
@@ -586,6 +586,7 @@ function mapDispatchToProps(dispatch, params) {
                     }
                 });
             } else {
+                dispatch(setLoadingFalse('lot'));
                 const else_update = {
                     first_section: false,
                     account_show: '',

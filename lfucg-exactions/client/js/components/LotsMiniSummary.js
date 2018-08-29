@@ -39,7 +39,7 @@ class LotsMiniSummary extends React.Component {
                 <div className="col-xs-12">
                     <p className="col-xs-12">Lot Address: {this.props.mapSet.address_full}</p>
                     <p className="col-xs-6">Current Exactions: {this.props.mapSet && this.props.mapSet.lot_exactions && this.props.mapSet.lot_exactions.total_exactions}</p>
-                    <p className="col-xs-6">Plat: {this.props.mapSet.plat.cabinet}-{this.props.mapSet.plat.slide}</p>
+                    {this.props.mapSet.plat && <p className="col-xs-6">Plat: {this.props.mapSet.plat.cabinet}-{this.props.mapSet.plat.slide}</p>}
                     <p className="col-xs-6 ">Lot Number: {this.props.mapSet.lot_number}</p>
                     <p className="col-xs-6">Permit ID: {this.props.mapSet.permit_id}</p>
                 </div>
@@ -116,9 +116,9 @@ class LotsMiniSummary extends React.Component {
                                 {lotsList}
                                 {lotsList ? 
                                     <Pagination 
-                                        next={this.props.lots.next}
-                                        prev={this.props.lots.prev}
-                                        count={this.props.lots.count} 
+                                        next={this.props.lots && this.props.lots.next}
+                                        prev={this.props.lots && this.props.lots.prev}
+                                        count={this.props.lots && this.props.lots.count} 
                                     /> : 
                                     <h1>No Results Found</h1>
                                 }

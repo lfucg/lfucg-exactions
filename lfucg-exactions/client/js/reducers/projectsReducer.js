@@ -1,11 +1,11 @@
 import { contains } from 'ramda';
 
-import {
-    API_CALL_START,
-} from '../constants/actionTypes';
+import { API_CALL_START } from '../constants/actionTypes';
+import { SET_LOADING_FALSE } from '../constants/stateConstants';
 
 import {
     GET_PROJECTS,
+    GET_PROJECTS_QUICK,
     GET_PROJECT_ID,
     GET_AGREEMENT_PROJECTS,
     POST_PROJECT,
@@ -23,7 +23,7 @@ const initialState = {
     prev: null,
 }
 
-const projectApiCalls = [GET_PROJECTS, GET_PROJECT_ID, GET_AGREEMENT_PROJECTS, POST_PROJECT, PUT_PROJECT];
+const projectApiCalls = [GET_PROJECTS, GET_PROJECTS_QUICK, GET_PROJECT_ID, GET_AGREEMENT_PROJECTS, POST_PROJECT, PUT_PROJECT];
 
 const projectsReducer = (state = initialState, action) => {
     const {
@@ -58,9 +58,19 @@ const projectsReducer = (state = initialState, action) => {
             count: action.response.count,
             prev: action.response.previous,
         }
+    case GET_PROJECTS_QUICK:
+        return {
+            ...state,
+            currentProject: null,
+            loadingProject: false,
+            next: null,
+            count: 0,
+            projects: action.response,
+            prev: null,
+        };
     case POST_PROJECT:
     case PUT_PROJECT:
-        return {};
+        return state;
     case GET_PAGINATION:
     case SEARCH_QUERY:
         if (action.response.endpoint === '/project') {
@@ -72,6 +82,14 @@ const projectsReducer = (state = initialState, action) => {
                 next: action.response.next,
                 count: action.response.count,
                 prev: action.response.previous,
+            }
+        }
+        return state;
+    case SET_LOADING_FALSE:
+        if (action.model === 'project') {
+            return {
+                ...state,
+                loadingProject: false,
             }
         }
         return state;

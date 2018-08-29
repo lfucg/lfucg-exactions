@@ -13,11 +13,11 @@ import FormGroup from './FormGroup';
 import Breadcrumbs from './Breadcrumbs';
 import DeclineDelete from './DeclineDelete';
 
+import { setLoadingFalse } from '../actions/stateActions';
 import {
     formInit,
     formUpdate,
 } from '../actions/formActions';
-
 
 import {
     getSubdivisionID,
@@ -35,7 +35,6 @@ class SubdivisionForm extends React.Component {
             activeForm,
             onSubmit,
             selectedSubdivision,
-            subdivisions,
         } = this.props;
 
         const submitEnabled =
@@ -111,13 +110,11 @@ SubdivisionForm.propTypes = {
     onComponentDidMount: PropTypes.func,
     onSubmit: PropTypes.func,
     selectedSubdivision: PropTypes.string,
-    subdivisions: PropTypes.object,
 };
 
 function mapStateToProps(state) {
     return {
         activeForm: state.activeForm,
-        subdivisions: state.subdivisions && state.subdivisions.currentSubdivision,
     };
 }
 
@@ -137,6 +134,8 @@ function mapDispatchToProps(dispatch, params) {
                     };
                     dispatch(formUpdate(update));
                 });
+            } else {
+                dispatch(setLoadingFalse('subdivision'));
             }
         },
         onSubmit(event) {

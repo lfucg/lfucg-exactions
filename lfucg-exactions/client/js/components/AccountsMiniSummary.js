@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import { map } from 'ramda';
 import PropTypes from 'prop-types';
 
+import Pagination from './Pagination';
+
 class AccountsMiniSummary extends React.Component {
     render() {
         const {
@@ -36,11 +38,13 @@ class AccountsMiniSummary extends React.Component {
                 </div>
                 <div className="col-xs-12">
                     <p className="col-xs-6">Developer Account Name: {this.props.mapSet.account_name}</p>
-                    <p className="col-xs-6"><strong>{this.props.mapSet.balance && this.props.mapSet.balance.credit_availability}</strong></p>
+                    <p className="col-xs-6"><strong>
+                        {this.props.mapSet.balanceAvailable}
+                    </strong></p>
                     {currentUser && currentUser.username &&
                         <div>
                             <p className="col-xs-6">Contact Name: {this.props.mapSet.contact_full_name}</p>
-                            <p className="col-xs-6">Account Balance: {this.props.mapSet.balance && this.props.mapSet.balance.balance}</p>
+                            <p className="col-xs-6">Account Balance: {this.props.mapSet.current_account_balance}</p>
                             <p className="col-xs-6 ">Phone: {this.props.mapSet.phone}</p>
                             <p className="col-xs-6">Email: {this.props.mapSet.email}</p>
                             <p className="col-xs-12">Address: {this.props.mapSet.address_full}</p>
@@ -78,11 +82,11 @@ class AccountsMiniSummary extends React.Component {
                             </div>
                             <div className="row">
                                 <p className="col-xs-6">Developer Account Name: {account.account_name}</p>
-                                <p className="col-xs-6"><strong>{account.balance && account.balance.credit_availability}</strong></p>
+                                <p className="col-xs-6"><strong>{account.balanceAvailable}</strong></p>
                                 {currentUser && currentUser.username &&
                                     <div>
                                         <p className="col-xs-6">Contact Name: {account.contact_full_name}</p>
-                                        <p className="col-xs-6">Account Balance: {account.balance && account.balance.balance}</p>
+                                        <p className="col-xs-6">Account Balance: {account.current_account_balance}</p>
                                         <p className="col-xs-6 ">Phone: {account.phone}</p>
                                         <p className="col-xs-6">Email: {account.email}</p>
                                         <p className="col-xs-12">Address: {account.address_full}</p>
@@ -125,6 +129,14 @@ class AccountsMiniSummary extends React.Component {
                         >
                             <div className="panel-body">
                                 {accountsList}
+                                {accountsList ? 
+                                    <Pagination 
+                                        next={this.props.accounts && this.props.accounts.next}
+                                        prev={this.props.accounts && this.props.accounts.prev}
+                                        count={this.props.accounts && this.props.accounts.count} 
+                                    /> : 
+                                    <h1>No Results Found</h1>
+                                }
                             </div>
                         </div>
                     </div>
@@ -140,8 +152,9 @@ class AccountsMiniSummary extends React.Component {
 
 AccountsMiniSummary.propTypes = {
     currentUser: PropTypes.object,
-    mapSet: PropTypes.object,
-    mapQualifier: PropTypes.object,
+    accounts: PropTypes.object,
+    mapSet: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
+    mapQualifier: PropTypes.bool,
     singleAccount: PropTypes.bool,
     title: PropTypes.string,
     accordionID: PropTypes.string,
@@ -150,6 +163,7 @@ AccountsMiniSummary.propTypes = {
 function mapStateToProps(state) {
     return {
         currentUser: state.currentUser,
+        accounts: state.accounts,
     };
 }
 

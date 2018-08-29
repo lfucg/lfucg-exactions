@@ -32,7 +32,6 @@ class ProjectSummary extends React.Component {
             currentUser,
             projects,
             projectCosts,
-            activeForm,
         } = this.props;
 
         const projectCostEstimates = projectCosts && projectCosts.length > 0 &&
@@ -187,7 +186,7 @@ class ProjectSummary extends React.Component {
 
                                 <AgreementsMiniSummary
                                   mapSet={projects.currentProject.agreement_id}
-                                  mapQualifier={projects.currentProject.agreement_id}
+                                  mapQualifier={!!projects && !!projects.currentProject && !!projects.currentProject.agreement_id}
                                   singleAgreement
                                 />
 
@@ -212,19 +211,17 @@ class ProjectSummary extends React.Component {
 
 ProjectSummary.propTypes = {
     currentUser: PropTypes.object,
-    projects: PropTypes.array,
+    projects: PropTypes.object,
     projectCosts: PropTypes.array,
     route: PropTypes.object,
-    activeForm: PropTypes.object,
     onComponentDidMount: PropTypes.func,
 };
 
 function mapStateToProps(state) {
     return {
         currentUser: state.currentUser,
-        projects: !!state.projects && state.projects,
-        projectCosts: !!state.projectCosts && !!state.projectCosts.projectCosts && state.projectCosts.projectCosts,
-        activeForm: state.activeForm,
+        projects: state.projects,
+        projectCosts: state.projectCosts && state.projectCosts.projectCosts,
     };
 }
 

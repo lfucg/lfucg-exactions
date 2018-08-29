@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
-import { map } from 'ramda';
 import PropTypes from 'prop-types';
 
 import Navbar from './Navbar';
@@ -39,7 +38,6 @@ class AgreementSummary extends React.Component {
             payments,
             projects,
             accountLedgers,
-            activeForm,
         } = this.props;
 
         return (
@@ -55,9 +53,10 @@ class AgreementSummary extends React.Component {
                 <Breadcrumbs route={this.props.route} parent_link={'agreement'} parent_name={'Agreements'} />
 
                 <div className="inside-body">
-                    <div className="container">
-                        {agreements.loadingAgreement ? <LoadingScreen /> :
-                        (
+                    {agreements.loadingAgreement ? <LoadingScreen /> :
+                    (
+                        <div className="container">
+                            {agreements.currentAgreement &&
                             <div className="col-md-offset-1 col-md-10 panel-group" id="accordion" role="tablist" aria-multiselectable="false">
                                 <a
                                   role="button"
@@ -116,20 +115,22 @@ class AgreementSummary extends React.Component {
 
                                 <AccountsMiniSummary
                                   mapSet={agreements.currentAgreement.account_id}
-                                  mapQualifier={agreements && agreements.currentAgreement.account_id && agreements.currentAgreement.account_id.id}
+                                  mapQualifier={!!agreements && !!agreements.currentAgreement.account_id && !!agreements.currentAgreement.account_id.id}
                                   singleAccount
                                   title="Developer Account"
                                   accordionID="Account"
                                 />
 
                                 <PaymentsMiniSummary
-                                  mapSet={payments}
-                                  mapQualifier={payments && payments.length > 0}
+                                  mapSet={payments && payments.payments}
+                                  mapQualifier={payments && payments.payments && payments.payments.length > 0}
+                                  payments={payments}
                                 />
 
                                 <ProjectsMiniSummary
-                                  mapSet={projects}
-                                  mapQualifier={projects && projects.length > 0}
+                                  mapSet={projects && projects.projects}
+                                  mapQualifier={projects && projects.projects && projects.projects.length > 0}
+                                  projects={projects}
                                 />
 
                                 <AccountLedgersMiniSummary
@@ -148,8 +149,9 @@ class AgreementSummary extends React.Component {
                                     />
                                 }
                             </div>
-                        )}
-                    </div>
+                            }
+                        </div>
+                    )}
                 </div>
                 <Footer />
             </div>
@@ -159,12 +161,11 @@ class AgreementSummary extends React.Component {
 
 AgreementSummary.propTypes = {
     currentUser: PropTypes.object,
-    agreements: PropTypes.array,
-    payments: PropTypes.array,
-    projects: PropTypes.array,
-    accountLedgers: PropTypes.array,
+    agreements: PropTypes.object,
+    payments: PropTypes.object,
+    projects: PropTypes.object,
+    accountLedgers: PropTypes.object,
     route: PropTypes.object,
-    activeForm: PropTypes.object,
     onComponentDidMount: PropTypes.func,
 };
 
@@ -172,10 +173,9 @@ function mapStateToProps(state) {
     return {
         currentUser: state.currentUser,
         accountLedgers: state.accountLedgers,
-        agreements: !!state.agreements && state.agreements,
-        payments: !!state.payments && !!state.payments.payments && state.payments.payments,
-        projects: !!state.projects && !!state.projects.projects && state.projects.projects,
-        activeForm: state.activeForm,
+        agreements: state.agreements,
+        payments: state.payments,
+        projects: state.projects,
     };
 }
 

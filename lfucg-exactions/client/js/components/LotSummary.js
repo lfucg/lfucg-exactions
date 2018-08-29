@@ -241,21 +241,22 @@ class LotSummary extends React.Component {
 
                                         <PlatsMiniSummary
                                           mapSet={lots.currentLot.plat}
-                                          mapQualifier={lots.currentLot && lots.currentLot.plat}
+                                          mapQualifier={!!lots.currentLot && !!lots.currentLot.plat}
                                           singlePlat
                                         />
 
                                         <AccountsMiniSummary
-                                          mapSet={!!accounts && !!accounts.currentAccount && accounts.currentAccount}
-                                          mapQualifier={lots.currentLot.account && accounts}
+                                          mapSet={accounts && accounts.currentAccount}
+                                          mapQualifier={!!accounts && !!accounts.currentAccount}
                                           singleAccount
                                           title="Developer Account"
                                           accordionID="Account"
                                         />
 
                                         <PaymentsMiniSummary
-                                          mapSet={payments}
-                                          mapQualifier={payments && payments.length > 0}
+                                          mapSet={payments && payments.payments}
+                                          mapQualifier={payments && payments.payments && payments.payments.length > 0}
+                                          payments={payments}
                                         />
 
                                         <AccountLedgersMiniSummary
@@ -288,10 +289,10 @@ class LotSummary extends React.Component {
 
 LotSummary.propTypes = {
     currentUser: PropTypes.object,
-    lots: PropTypes.array,
-    accounts: PropTypes.array,
-    payments: PropTypes.array,
-    accountLedgers: PropTypes.array,
+    lots: PropTypes.object,
+    accounts: PropTypes.object,
+    payments: PropTypes.object,
+    accountLedgers: PropTypes.object,
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
     addPermitToLot: PropTypes.func,
@@ -300,9 +301,9 @@ LotSummary.propTypes = {
 function mapStateToProps(state) {
     return {
         currentUser: state.currentUser,
-        lots: !!state.lots && state.lots,
-        accounts: !!state.accounts && state.accounts,
-        payments: !!state.payments && !!state.payments.payments && state.payments.payments,
+        lots: state.lots,
+        accounts: state.accounts,
+        payments: state.payments,
         accountLedgers: state.accountLedgers,
     };
 }

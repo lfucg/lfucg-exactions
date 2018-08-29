@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
 
 class LoadingScreen extends React.Component {
     componentDidMount() {
@@ -16,10 +15,6 @@ class LoadingScreen extends React.Component {
         );
     }
 }
-
-LoadingScreen.propTypes = {
-
-};
 
 function mapStateToProps(state) {
     return {

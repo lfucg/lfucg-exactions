@@ -36,7 +36,6 @@ class PlatSummary extends React.Component {
             plats,
             lots,
             accounts,
-            activeForm,
         } = this.props;
 
         const platZonesList = !!plats && !!plats.currentPlat && plats.currentPlat.plat_zone && (map((single_plat_zone) => {
@@ -352,7 +351,6 @@ PlatSummary.propTypes = {
     lots: PropTypes.array,
     accounts: PropTypes.array,
     route: PropTypes.object,
-    activeForm: PropTypes.object,
     onComponentDidMount: PropTypes.func,
 };
 
@@ -362,7 +360,6 @@ function mapStateToProps(state) {
         plats: state.plats,
         lots: state.lots,
         accounts: state.accounts,
-        activeForm: state.activeForm,
     };
 }
 

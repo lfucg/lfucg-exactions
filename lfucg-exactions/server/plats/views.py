@@ -35,7 +35,7 @@ class SubdivisionCSVExportView(View):
             subdivision_serializer = self.list(
                 subdivision_queryset,
                 SubdivisionSerializer,
-                many=False
+                many=True
             )
             filename = subdivision_queryset[0].name + '_subdivision_report.csv'
         else:
@@ -153,7 +153,7 @@ class PlatCSVExportView(View):
             plat_serializer = self.list(
                 plat_queryset,
                 PlatSerializer,
-                many=False
+                many=True
             )
             filename = plat_queryset[0].cabinet + '-' + plat_queryset[0].slide + '_plat_report.csv'
         else:

@@ -1,8 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import {
-    hashHistory,
-} from 'react-router';
+import { hashHistory } from 'react-router';
 import { map, filter } from 'ramda';
 import PropTypes from 'prop-types';
 import { Typeahead } from 'react-bootstrap-typeahead';
@@ -15,18 +13,19 @@ import FormGroup from './FormGroup';
 import DeclineDelete from './DeclineDelete';
 import Notes from './Notes';
 
+import { setLoadingFalse } from '../actions/stateActions';
 import {
     formInit,
     formUpdate,
 } from '../actions/formActions';
 
 import {
-    getLots,
+    getLotsQuick,
     getLotID,
-    getAccounts,
+    getAccountsQuick,
     getAccountID,
     getAccountAgreements,
-    getAgreements,
+    getAgreementsQuick,
     getPaymentID,
     postPayment,
     putPayment,
@@ -376,7 +375,7 @@ PaymentForm.propTypes = {
     lots: PropTypes.array,
     accounts: PropTypes.array,
     agreements: PropTypes.array,
-    payments: PropTypes.array,
+    payments: PropTypes.object,
     route: PropTypes.object,
     params: PropTypes.object,
     onComponentDidMount: PropTypes.func,
@@ -390,10 +389,10 @@ PaymentForm.propTypes = {
 function mapStateToProps(state) {
     return {
         activeForm: state.activeForm,
-        lots: !!state.lots && !!state.lots.lots && state.lots.lots,
-        accounts: !!state.accounts && !!state.accounts.accounts && state.accounts.accounts,
-        agreements: !!state.agreements && !!state.agreements.agreements && state.agreements.agreements,
-        payments: !!state.payments && state.payments,
+        lots: state.lots && state.lots.lots,
+        accounts: state.accounts && state.accounts.accounts,
+        agreements: state.agreements && state.agreements.agreements,
+        payments: state.payments,
         currentUser: state.currentUser,
     };
 }
@@ -405,9 +404,9 @@ function mapDispatchToProps(dispatch, params) {
         onComponentDidMount() {
             dispatch(formInit());
             dispatch(formUpdate({ loading: true }));
-            dispatch(getLots());
-            dispatch(getAccounts());
-            dispatch(getAgreements())
+            dispatch(getLotsQuick());
+            dispatch(getAccountsQuick());
+            dispatch(getAgreementsQuick())
             .then(()=> {
                 dispatch(formUpdate({ loading: false }));
             })
@@ -437,6 +436,7 @@ function mapDispatchToProps(dispatch, params) {
                     dispatch(formUpdate(update));
                 });
             } else {
+                dispatch(setLoadingFalse('payment'));
                 const initial_constants = {
                     credit_account_show: '',
                     credit_source_show: '',

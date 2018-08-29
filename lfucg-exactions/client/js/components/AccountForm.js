@@ -1,8 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import {
-    hashHistory,
-} from 'react-router';
+import { hashHistory } from 'react-router';
 import PropTypes from 'prop-types';
 
 import Navbar from './Navbar';
@@ -14,6 +12,7 @@ import Notes from './Notes';
 
 import DeclineDelete from './DeclineDelete';
 
+import { setLoadingFalse } from '../actions/stateActions';
 import {
     formInit,
     formUpdate,
@@ -223,7 +222,7 @@ class AccountForm extends React.Component {
 
 AccountForm.propTypes = {
     activeForm: PropTypes.object,
-    accounts: PropTypes.array,
+    accounts: PropTypes.object,
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
     onSubmit: PropTypes.func,
@@ -234,7 +233,7 @@ AccountForm.propTypes = {
 function mapStateToProps(state) {
     return {
         activeForm: state.activeForm,
-        accounts: !!state.accounts && state.accounts,
+        accounts: state.accounts,
     };
 }
 
@@ -263,6 +262,7 @@ function mapDispatchToProps(dispatch, params) {
                     dispatch(formUpdate(update));
                 });
             } else {
+                dispatch(setLoadingFalse('account'));
                 const initial_constants = {
                     address_state_show: '',
                 };

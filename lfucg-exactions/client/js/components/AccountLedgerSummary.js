@@ -13,12 +13,13 @@ import AccountsMiniSummary from './AccountsMiniSummary';
 import AgreementsMiniSummary from './AgreementsMiniSummary';
 import LoadingScreen from './LoadingScreen';
 
-import {
-    formUpdate,
-} from '../actions/formActions';
-
-import {
+import { formUpdate } from '../actions/formActions';
+import { 
     getAccountLedgerID,
+    getLotID,
+    getLedgerAccountTo,
+    getLedgerAccountFrom,
+    getLedgerAgreement,
 } from '../actions/apiActions';
 
 
@@ -31,7 +32,9 @@ class AccountLedgerSummary extends React.Component {
         const {
             currentUser,
             accountLedgers,
-            activeForm,
+            lots,
+            accounts,
+            agreements,
         } = this.props;
 
         return (
@@ -51,7 +54,7 @@ class AccountLedgerSummary extends React.Component {
                       {accountLedgers.loadingLedger ? <LoadingScreen /> :
                       (
                           <div className="col-md-offset-1 col-md-10 panel-group" id="accordion" role="tablist" aria-multiselectable="false">
-                            {!!accountLedgers && <div>
+                            {accountLedgers.currentLedger && <div>
                               <a
                                 role="button"
                                 data-toggle="collapse"
@@ -105,31 +108,34 @@ class AccountLedgerSummary extends React.Component {
                                   />
                               }
 
+                              {accountLedgers.plat ? 'plat' :
+
                               <LotsMiniSummary
-                                mapSet={accountLedgers.currentLedger.lot}
-                                mapQualifier={accountLedgers.currentLedger && accountLedgers.currentLedger.lot && accountLedgers.currentLedger.lot.id}
-                                singleLot
+                              mapSet={lots}
+                              mapQualifier={!!lots && !!lots.id}
+                              singleLot
                               />
+                            }
 
                               <AccountsMiniSummary
-                                mapSet={accountLedgers.currentLedger.account_from}
-                                mapQualifier={accountLedgers.currentLedger && accountLedgers.currentLedger.account_from && accountLedgers.currentLedger.account_from.id}
+                                mapSet={accounts && accounts.accountFrom}
+                                mapQualifier={!!accounts && !!accounts.accountFrom && !!accounts.accountFrom.id}
                                 singleAccount
                                 title="Developer Account From"
                                 accordionID="AccountFrom"
                               />
 
                               <AccountsMiniSummary
-                                mapSet={accountLedgers.currentLedger.account_to}
-                                mapQualifier={accountLedgers.currentLedger && accountLedgers.currentLedger.account_to && accountLedgers.currentLedger.account_to.id}
+                                mapSet={accounts && accounts.accountTo}
+                                mapQualifier={!!accounts && !!accounts.accountTo && !!accounts.accountTo.id}
                                 singleAccount
                                 title="Developer Account To"
                                 accordionID="AccountTo"
                               />
 
                               <AgreementsMiniSummary
-                                mapSet={accountLedgers.currentLedger.agreement}
-                                mapQualifier={accountLedgers.currentLedger && accountLedgers.currentLedger.agreement && accountLedgers.currentLedger.agreement.id}
+                                mapSet={agreements}
+                                mapQualifier={!!agreements && !!agreements.id}
                                 singleAgreement
                               />
                             </div>
@@ -146,17 +152,21 @@ class AccountLedgerSummary extends React.Component {
 
 AccountLedgerSummary.propTypes = {
     currentUser: PropTypes.object,
-    accountLedgers: PropTypes.array,
+    accountLedgers: PropTypes.object,
+    lots: PropTypes.object,
+    accounts:PropTypes.object,
+    agreements: PropTypes.object,
     route: PropTypes.object,
-    activeForm: PropTypes.object,
     onComponentDidMount: PropTypes.func,
 };
 
 function mapStateToProps(state) {
     return {
         currentUser: state.currentUser,
-        accountLedgers: !!state.accountLedgers && state.accountLedgers,
-        activeForm: state.activeForm,
+        accountLedgers: state.accountLedgers,
+        lots: state.lots && state.lots.currentLot,
+        accounts: state.accounts,
+        agreements: state.agreements && state.agreements.currentAgreement,
     };
 }
 
@@ -165,8 +175,14 @@ function mapDispatchToProps(dispatch, params) {
 
     return {
         onComponentDidMount() {
+            dispatch(getLedgerAccountTo(selectedAccountLedger));
+            dispatch(getLedgerAccountFrom(selectedAccountLedger));
+            dispatch(getLedgerAgreement(selectedAccountLedger));
             dispatch(getAccountLedgerID(selectedAccountLedger))
-            .then(() => {
+            .then((ledger) => {
+                if (ledger.response.lot) {
+                    dispatch(getLotID(ledger.response.lot.id));
+                }
                 dispatch(formUpdate({ loading: false }));
             });
         },

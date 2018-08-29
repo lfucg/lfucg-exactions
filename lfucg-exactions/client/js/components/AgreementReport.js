@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
+import LoadingScreen from './LoadingScreen';
 
 import {
     getAgreementID,
@@ -75,7 +76,7 @@ class AgreementReport extends React.Component {
 
                 <div className="form-header">
                     <div className="container">
-                        <h1>AGREEMENTS - {agreements.currentAgreement.resolution_number} - REPORT</h1>
+                        <h1>AGREEMENTS - {agreements.currentAgreement && agreements.currentAgreement.resolution_number} - REPORT</h1>
                     </div>
                 </div>
 
@@ -168,7 +169,7 @@ class AgreementReport extends React.Component {
 }
 
 AgreementReport.propTypes = {
-    agreements: PropTypes.array,
+    agreements: PropTypes.object,
     projects: PropTypes.array,
     payments: PropTypes.array,
     accountLedgers: PropTypes.array,
@@ -178,10 +179,10 @@ AgreementReport.propTypes = {
 
 function mapStateToProps(state) {
     return {
-        agreements: !!state.agreements && state.agreements,
-        projects: !!state.projects && !!state.projects.projects && state.projects.projects,
-        payments: !!state.payments && !!state.payments.payments && state.payments.payments,
-        accountLedgers: !!state.accountLedgers && !!state.accountLedgers.accountLedgers && state.accountLedgers.accountLedgers,
+        agreements: state.agreements,
+        projects: state.projects && state.projects.projects,
+        payments: state.payments && state.payments.payments,
+        accountLedgers: state.accountLedgers && state.accountLedgers.accountLedgers,
     };
 }
 
