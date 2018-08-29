@@ -1,10 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import {
-    Link,
-} from 'react-router';
+import { Link } from 'react-router';
 import PropTypes from 'prop-types';
-import { map, filter } from 'ramda';
+import { filter } from 'ramda';
 
 import Navbar from './Navbar';
 import Footer from './Footer';

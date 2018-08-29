@@ -184,13 +184,15 @@ class ProfileInline(admin.TabularInline):
     model = Profile
     fields = ('is_supervisor',)
 
-class UserForm(forms.ModelForm):
-    fields = ('password',)
-    password = forms.CharField()
+# class UserForm(forms.ModelForm):
+#     fields = ('password',)
+#     password = forms.CharField()
 
 
 class UserAdmin(admin.ModelAdmin):
     list_display = ('username', 'email', 'first_name', 'is_staff', 'last_login',)
+    exclude = ('password',)
+    readonly_fields = ('last_login',)
     inlines = (
         ProfileInline,
     )

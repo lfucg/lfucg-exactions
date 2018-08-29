@@ -12,8 +12,8 @@ import ExistingPageLinks from './ExistingPageLinks';
 
 import {
     getPagination,
-    getPlats,
-    getAccounts,
+    getPlatsQuick,
+    getAccountsQuick,
 } from '../actions/apiActions';
 
 import LoadingScreen from './LoadingScreen';
@@ -93,7 +93,7 @@ class LotExisting extends React.Component {
 
 
                 <SearchBar
-                  apiCalls={[getPlats, getAccounts]}
+                  apiCalls={[getPlatsQuick, getAccountsQuick]}
                   advancedSearch={[
                     { filterField: 'filter_plat', displayName: 'Plat', list: platsList },
                     { filterField: 'filter_account', displayName: 'Developer', list: accountsList },
@@ -129,7 +129,7 @@ class LotExisting extends React.Component {
 
 LotExisting.propTypes = {
     currentUser: PropTypes.object,
-    lots: PropTypes.array,
+    lots: PropTypes.object,
     plats: PropTypes.array,
     accounts: PropTypes.array,
     route: PropTypes.object,
@@ -139,9 +139,9 @@ LotExisting.propTypes = {
 function mapStateToProps(state) {
     return {
         currentUser: state.currentUser,
-        lots: !!state.lots && state.lots,
-        plats: !!state.plats && !!state.plats.plats && state.plats.plats,
-        accounts: !!state.accounts && !!state.accounts.accounts && state.accounts.accounts,
+        lots: state.lots,
+        plats: state.plats && state.plats.plats,
+        accounts: state.accounts && state.accounts.accounts,
     };
 }
 

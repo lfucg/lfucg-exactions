@@ -18,9 +18,9 @@ import {
 
 import {
     getPagination,
-    getAccounts,
-    getSubdivisions,
-    getLots,
+    getAccountsQuick,
+    getSubdivisionsQuick,
+    getLotsQuick,
 } from '../actions/apiActions';
 
 import { expansion_areas, plat_types } from '../constants/searchBarConstants';
@@ -37,7 +37,6 @@ class PlatExisting extends React.Component {
             accounts,
             subdivisions,
             lots,
-            activeForm,
         } = this.props;
 
         const lotsList = lots && lots.length > 0 &&
@@ -108,7 +107,7 @@ class PlatExisting extends React.Component {
                 <Breadcrumbs route={this.props.route} route_permission="plat" />
 
                 <SearchBar
-                  apiCalls={[getAccounts, getSubdivisions, getLots]}
+                  apiCalls={[getAccountsQuick, getSubdivisionsQuick, getLotsQuick]}
                   advancedSearch={[
                     { filterField: 'filter_expansion_area', displayName: 'EA', list: expansion_areas },
                     { filterField: 'filter_account', displayName: 'Developer', list: accountsList },
@@ -147,23 +146,21 @@ class PlatExisting extends React.Component {
 
 PlatExisting.propTypes = {
     currentUser: PropTypes.object,
-    plats: PropTypes.array,
+    plats: PropTypes.object,
     accounts: PropTypes.array,
     subdivisions: PropTypes.array,
     lots: PropTypes.array,
     route: PropTypes.object,
-    activeForm: PropTypes.object,
     onComponentDidMount: PropTypes.func,
 };
 
 function mapStateToProps(state) {
     return {
         currentUser: state.currentUser,
-        plats: !!state.plats && state.plats,
-        accounts: !!state.accounts && !!state.accounts.accounts && state.accounts.accounts,
-        subdivisions: !!state.subdivisions && !!state.subdivisions.subdivisions && state.subdivisions.subdivisions,
-        lots: !!state.lots && !!state.lots.lots && state.lots.lots,
-        activeForm: state.activeForm,
+        plats: state.plats,
+        accounts: state.accounts && state.accounts.accounts,
+        subdivisions: state.subdivisions  && state.subdivisions.subdivisions,
+        lots: state.lots && state.lots.lots,
     };
 }
 

@@ -36,6 +36,14 @@ class SubdivisionSerializer(serializers.ModelSerializer):
             'cleaned_gross_acreage',
         )
 
+class SubdivisionQuickSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Subdivision
+        fields = (
+            'id',
+            'name',
+        )
+
 class CalculationWorksheetSerializer(serializers.ModelSerializer):
     class Meta:
         model = CalculationWorksheet
@@ -107,6 +115,8 @@ class PlatQuickSerializer(serializers.ModelSerializer):
             'name',
             'cabinet',
             'slide',
+            'current_sewer_due',
+            'current_non_sewer_due',
         )
 
 class PlatSerializer(serializers.ModelSerializer):
@@ -249,5 +259,27 @@ class LotSerializer(serializers.ModelSerializer):
 
             'certificate_of_occupancy_final',
 
+            'lot_exactions',
+        )
+
+class LotQuickSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Lot
+        fields = (
+            'id',
+            'address_full',
+        )
+
+class LotExactionsSerializer(serializers.ModelSerializer):
+    lot_exactions = serializers.SerializerMethodField(read_only=True)
+    
+    def get_lot_exactions(self, obj):
+        return calculate_lot_totals(obj)
+
+    class Meta:
+        model = Lot
+        fields = (
+            'id',
+            'address_full',
             'lot_exactions',
         )

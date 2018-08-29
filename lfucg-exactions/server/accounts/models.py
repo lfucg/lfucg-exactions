@@ -99,6 +99,10 @@ class Account(models.Model):
     phone = models.CharField(max_length=15)
     email = models.EmailField(max_length=100)
 
+    current_account_balance = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True, default=0)
+    current_sewer_balance = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True, default=0)
+    current_non_sewer_balance = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True, default=0)
+
     history = HistoricalRecords()
 
     def __str__(self):

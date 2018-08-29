@@ -1,13 +1,14 @@
 import { contains } from 'ramda';
 
-import {
-    API_CALL_START,
-} from '../constants/actionTypes';
+import { API_CALL_START } from '../constants/actionTypes';
+import { SET_LOADING_FALSE } from '../constants/stateConstants';
 
 import {
     GET_AGREEMENTS,
     GET_AGREEMENT_ID,
+    GET_AGREEMENTS_QUICK,
     GET_ACCOUNT_AGREEMENTS,
+    GET_LEDGER_AGREEMENT,
     POST_AGREEMENT,
     PUT_AGREEMENT,
     GET_PAGINATION,
@@ -23,7 +24,7 @@ const initialState = {
     prev: null,
 }
 
-const agreementApiCalls = [];
+const agreementApiCalls = [GET_AGREEMENTS, GET_AGREEMENT_ID, GET_AGREEMENTS_QUICK, GET_ACCOUNT_AGREEMENTS, POST_AGREEMENT, PUT_AGREEMENT];
 
 const agreementsReducer = (state = initialState, action) => {
     const {
@@ -47,6 +48,15 @@ const agreementsReducer = (state = initialState, action) => {
             count: 1,
             prev: null,
         }
+    case GET_LEDGER_AGREEMENT:
+        return {
+            ...state,
+            currentAgreement: action.response[0],
+            loadingAgreement: false,
+            next: null,
+            count: 1,
+            prev: null,
+        }
     case GET_AGREEMENTS:
     case GET_ACCOUNT_AGREEMENTS:
         return {
@@ -58,9 +68,19 @@ const agreementsReducer = (state = initialState, action) => {
             count: action.response.count,
             prev: action.response.previous,
         }
+    case GET_AGREEMENTS_QUICK:
+        return {
+            ...state,
+            currentAgreement: null,
+            loadingAgreement: false,
+            next: null,
+            count: 0,
+            agreements: action.response,
+            prev: null,
+        };
     case POST_AGREEMENT:
     case PUT_AGREEMENT:
-        return {};
+        return state;
     case GET_PAGINATION:
     case SEARCH_QUERY:
         if (action.response.endpoint === '/agreement') {
@@ -72,6 +92,14 @@ const agreementsReducer = (state = initialState, action) => {
                 next: action.response.next,
                 count: action.response.count,
                 prev: action.response.previous,
+            }
+        }
+        return state;
+    case SET_LOADING_FALSE:
+        if (action.model === 'agreement') {
+            return {
+                ...state,
+                loadingAgreement: false,
             }
         }
         return state;

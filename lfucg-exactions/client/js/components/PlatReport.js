@@ -93,7 +93,7 @@ class PlatReport extends React.Component {
                                     <h5 className="col-sm-3 right-border">Developer Name</h5>
                                 </div>
                                 <div className="row">
-                                    <div className="col-sm-3 report-data right-border">{accounts.id && accounts.account_name}</div>
+                                    <div className="col-sm-3 report-data right-border">{!!accounts && accounts.id && accounts.account_name}</div>
                                 </div>
                                 <div className="row" />
                                 <div className="row">
@@ -144,18 +144,18 @@ class PlatReport extends React.Component {
 }
 
 PlatReport.propTypes = {
-    plats: PropTypes.array,
+    plats: PropTypes.object,
     lots: PropTypes.array,
-    accounts: PropTypes.array,
+    accounts: PropTypes.object,
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
 };
 
 function mapStateToProps(state) {
     return {
-        plats: !!state.plats && state.plats,
-        lots: !!state.lots && state.lots,
-        accounts: !!state.accounts && state.accounts,
+        plats: state.plats,
+        lots: state.lots && state.lots.lots,
+        accounts: state.accounts && state.accounts.currentAccount,
     };
 }
 

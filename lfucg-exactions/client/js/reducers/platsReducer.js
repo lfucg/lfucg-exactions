@@ -1,13 +1,13 @@
 import { contains, map, mapObjIndexed } from 'ramda';
 
-import {
-    API_CALL_START,
-} from '../constants/actionTypes';
+import { API_CALL_START } from '../constants/actionTypes';
+import { SET_LOADING_FALSE } from '../constants/stateConstants';
 
 import {
     GET_PLATS,
     GET_PLATS_QUICK,
     GET_PLAT_ID,
+    GET_ACCOUNT_PLATS,
     GET_SUBDIVISION_PLATS,
     POST_PLAT,
     PUT_PLAT,
@@ -25,7 +25,7 @@ const initialState = {
     prev: null,
 } 
 
-const platApiCalls = [GET_PLATS, GET_PLATS_QUICK, GET_PLAT_ID, GET_SUBDIVISION_PLATS, POST_PLAT, PUT_PLAT, GET_SUBDIVISION_ID];
+const platApiCalls = [GET_PLATS, GET_PLATS_QUICK, GET_PLAT_ID, GET_ACCOUNT_PLATS, GET_SUBDIVISION_PLATS, POST_PLAT, PUT_PLAT, GET_SUBDIVISION_ID];
 
 const convertCurrency = (plats) => {
     let newPlatList = [];
@@ -68,7 +68,7 @@ const platsReducer = (state = initialState, action) => {
     case GET_PLAT_ID:
         return {
             ...state,
-            currentPlat: action.response,
+            currentPlat: convertCurrency(action.response),
             loadingPlat: false,
             next: null,
             count: 1,
@@ -86,6 +86,7 @@ const platsReducer = (state = initialState, action) => {
             prev: null,
         };
     case GET_PLATS:
+    case GET_ACCOUNT_PLATS:
     case GET_SUBDIVISION_PLATS:
         return {
             ...state,
@@ -97,9 +98,8 @@ const platsReducer = (state = initialState, action) => {
             prev: action.response.previous,
         }
     case PUT_PLAT:
-        return action.response;
     case POST_PLAT:
-        return {};
+        return state;
     case GET_PAGINATION:
     case SEARCH_QUERY:
         if (action.response.endpoint === '/plat') {
@@ -116,6 +116,14 @@ const platsReducer = (state = initialState, action) => {
         return state;
     case GET_SUBDIVISION_ID:
         return {};
+    case SET_LOADING_FALSE:
+        if (action.model === 'plat') {
+            return {
+                ...state,
+                loadingPlat: false,
+            }
+        }
+        return state;
     default:
         return state;
     }

@@ -7,17 +7,9 @@ import Navbar from './Navbar';
 import Footer from './Footer';
 import FormGroup from './FormGroup';
 
-import {
-    passwordForgot,
-} from '../actions/apiActions';
-
-import {
-    flashMessageSet,
-} from '../actions/flashMessageActions';
-
-import {
-    formInit,
-} from '../actions/formActions';
+import { passwordForgot } from '../actions/apiActions';
+import { flashMessageSet } from '../actions/flashMessageActions';
+import { formInit } from '../actions/formActions';
 
 class ForgotPassword extends React.Component {
 

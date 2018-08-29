@@ -1,8 +1,7 @@
 import { contains } from 'ramda';
 
-import {
-    API_CALL_START,
-} from '../constants/actionTypes';
+import { API_CALL_START } from '../constants/actionTypes';
+import { SET_LOADING_FALSE } from '../constants/stateConstants';
 
 import {
     GET_PROJECT_COSTS,
@@ -60,7 +59,7 @@ const projectCostsReducer = (state = initialState, action) => {
         }
     case POST_PROJECT_COST:
     case PUT_PROJECT_COST:
-        return {};
+        return state;
     case GET_PAGINATION:
     case SEARCH_QUERY:
         if (action.response.endpoint === '/estimate') {
@@ -72,6 +71,14 @@ const projectCostsReducer = (state = initialState, action) => {
                 next: action.response.next,
                 count: action.response.count,
                 prev: action.response.previous,
+            }
+        }
+        return state;
+    case SET_LOADING_FALSE:
+        if (action.model === 'estimate') {
+            return {
+                ...state,
+                loadingProjectCost: false,
             }
         }
         return state;

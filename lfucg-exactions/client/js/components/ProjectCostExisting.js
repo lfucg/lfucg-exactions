@@ -18,7 +18,7 @@ import {
 
 import {
     getPagination,
-    getProjects,
+    getProjectQuick,
 } from '../actions/apiActions';
 
 
@@ -32,7 +32,6 @@ class ProjectCostExisting extends React.Component {
             currentUser,
             projectCosts,
             projects,
-            activeForm,
         } = this.props;
 
         const projectsList = projects && projects.length > 0 &&
@@ -41,7 +40,7 @@ class ProjectCostExisting extends React.Component {
                     id: single_project.id,
                     name: single_project.name,
                 };
-            })(projects.projects));
+            })(projects));
 
         const projectCosts_list = projectCosts.length > 0 ? (
             map((projectCost) => {
@@ -82,7 +81,7 @@ class ProjectCostExisting extends React.Component {
                 <Breadcrumbs route={this.props.route} route_permission="projectcostestimate" />
 
                 <SearchBar
-                  apiCalls={[getProjects]}
+                  apiCalls={[getProjectQuick]}
                   advancedSearch={[
                     { filterField: 'filter_project_id', displayName: 'Project', list: projectsList },
                     { filterField: 'filter_is_approved', displayName: 'Approval', list: [{ id: true, name: 'Approved' }, { id: false, name: 'Unapproved' }] },
@@ -117,19 +116,17 @@ class ProjectCostExisting extends React.Component {
 
 ProjectCostExisting.propTypes = {
     currentUser: PropTypes.object,
-    projectCosts: PropTypes.array,
-    route: PropTypes.object,
-    activeForm: PropTypes.object,
-    onComponentDidMount: PropTypes.func,
     projects: PropTypes.array,
+    projectCosts: PropTypes.object,
+    route: PropTypes.object,
+    onComponentDidMount: PropTypes.func,
 };
 
 function mapStateToProps(state) {
     return {
         currentUser: state.currentUser,
-        projectCosts: !!state.projectCosts && state.projectCosts,
-        projects: !!state.projects && state.projects,
-        activeForm: state.activeForm,
+        projectCosts: state.projectCosts,
+        projects: state.projects && state.projects.projects,
     };
 }
 

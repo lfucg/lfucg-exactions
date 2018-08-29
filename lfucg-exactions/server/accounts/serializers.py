@@ -4,9 +4,9 @@ from django.contrib.auth.models import User, Group
 from rest_framework.authtoken.models import Token
 
 from .models import *
-from .utils import calculate_account_balance, calculate_agreement_balance
+from .utils import calculate_agreement_balance
 from plats.models import Plat, Lot
-from plats.serializers import PlatSerializer, LotSerializer
+from plats.serializers import PlatSerializer, LotSerializer, LotQuickSerializer
 
 class LotField(serializers.Field):
     def to_internal_value(self, data):
@@ -16,7 +16,7 @@ class LotField(serializers.Field):
             return None
 
     def to_representation(self, obj):
-        return LotSerializer(obj).data
+        return LotQuickSerializer(obj).data
 
 class AccountQuickSerializer(serializers.ModelSerializer):
     class Meta:
@@ -27,33 +27,10 @@ class AccountQuickSerializer(serializers.ModelSerializer):
         )
 
 class AccountSerializer(serializers.ModelSerializer):
-    plat_account = PlatSerializer(many=True, required=False, allow_null=True)
-    lot_account = LotSerializer(many=True, required=False, allow_null=True)
-
     address_state_display = serializers.SerializerMethodField(read_only=True)
-
-    balance = serializers.SerializerMethodField(read_only=True)
 
     def get_address_state_display(self, obj):
         return obj.get_address_state_display()
-
-    def get_balance(self, obj):
-        calculated_balance = calculate_account_balance(obj.id)
-
-        if calculated_balance['current_account_balance'] > 0:
-            return {
-                'balance': '${:,.2f}'.format(calculated_balance['current_account_balance']),
-                'sewer_balance': '${:,.2f}'.format(calculated_balance['current_sewer_balance']),
-                'non_sewer_balance': '${:,.2f}'.format(calculated_balance['current_non_sewer_balance']),
-                'credit_availability': 'Credit Available'
-            }
-        else:
-            return {
-                'balance': '${:,.2f}'.format(calculated_balance['current_account_balance']),
-                'sewer_balance': '${:,.2f}'.format(calculated_balance['current_sewer_balance']),
-                'non_sewer_balance': '${:,.2f}'.format(calculated_balance['current_non_sewer_balance']),
-                'credit_availability': 'No Credit Available'
-            }
 
     class Meta:
         model = Account
@@ -64,9 +41,6 @@ class AccountSerializer(serializers.ModelSerializer):
             'date_modified',
             'created_by',
             'modified_by',
-
-            'plat_account',
-            'lot_account',
 
             'account_name',
             'contact_first_name',
@@ -85,7 +59,9 @@ class AccountSerializer(serializers.ModelSerializer):
 
             'address_state_display',
 
-            'balance',
+            'current_account_balance',
+            'current_non_sewer_balance',
+            'current_sewer_balance',
         )
 
 class AccountField(serializers.Field):
@@ -96,7 +72,15 @@ class AccountField(serializers.Field):
             return None
 
     def to_representation(self, obj):
-        return AccountSerializer(obj).data
+        return AccountQuickSerializer(obj).data
+
+class AgreementQuickSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Agreement
+        fields = (
+            'id',
+            'resolution_number',
+        )
 
 class AgreementSerializer(serializers.ModelSerializer):
     account_id = AccountField()
@@ -142,7 +126,15 @@ class AgreementField(serializers.Field):
             return None
 
     def to_representation(self, obj):
-        return AgreementSerializer(obj).data
+        return AgreementQuickSerializer(obj).data
+
+class ProjectQuickSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Project
+        fields = (
+            'id',
+            'name',
+        )
 
 class ProjectSerializer(serializers.ModelSerializer):
     agreement_id = AgreementField()

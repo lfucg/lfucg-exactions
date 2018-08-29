@@ -1,8 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import {
-    hashHistory,
-} from 'react-router';
 import PropTypes from 'prop-types';
 
 import FormGroup from './FormGroup';
@@ -44,7 +41,6 @@ class PlatZoneDuesForm extends React.Component {
     render() {
         const {
             activeForm,
-            plats,
             onPlatZoneDuesChange,
         } = this.props;
 
@@ -127,7 +123,6 @@ class PlatZoneDuesForm extends React.Component {
 
 PlatZoneDuesForm.propTypes = {
     activeForm: PropTypes.object,
-    plats: PropTypes.array,
     plat_zone_id: PropTypes.string,
     plat_zone_value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     zone_id: PropTypes.string,
@@ -153,7 +148,6 @@ PlatZoneDuesForm.propTypes = {
 function mapStateToProps(state) {
     return {
         activeForm: state.activeForm,
-        plats: state.plats,
     };
 }
 

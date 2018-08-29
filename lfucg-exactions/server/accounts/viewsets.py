@@ -22,7 +22,7 @@ class AccountViewSet(viewsets.ModelViewSet):
     permission_classes = (CanAdminister,)
     filter_backends = (DjangoFilterBackend, filters.SearchFilter,)
     search_fields = ('account_name', 'contact_full_name', 'address_full', 'phone', 'email',)
-    filter_fields = ('plat_account__id', 'lot_account__id')
+    filter_fields = ('plat_account__id', 'lot_account__id', 'ledger_account_to', 'ledger_account_from', )
 
     def get_queryset(self):
         queryset = Account.objects.exclude(is_active=False)
@@ -53,7 +53,7 @@ class AccountViewSet(viewsets.ModelViewSet):
 
 class AccountQuickViewSet(viewsets.ModelViewSet):
     serializer_class = AccountQuickSerializer
-    queryset = Account.objects.all()
+    queryset = Account.objects.all().order_by('account_name')
 
 class AgreementViewSet(viewsets.ModelViewSet):
     serializer_class = AgreementSerializer
@@ -61,7 +61,7 @@ class AgreementViewSet(viewsets.ModelViewSet):
     permission_classes = (CanAdminister,)
     filter_backends = (DjangoFilterBackend, filters.SearchFilter,)
     search_fields = ('resolution_number', 'account_id__account_name', 'agreement_type', 'expansion_area',)
-    filter_fields = ('agreement_type', 'account_id', 'expansion_area', 'is_approved',)
+    filter_fields = ('agreement_type', 'account_id', 'expansion_area', 'is_approved', 'ledger',)
 
     def get_queryset(self):
         queryset = Agreement.objects.exclude(is_active=False)
@@ -96,6 +96,10 @@ class AgreementViewSet(viewsets.ModelViewSet):
 
     def update(self, request, pk):
         return update_entry(self, request, pk)
+
+class AgreementQuickViewSet(viewsets.ModelViewSet):
+    serializer_class = AgreementQuickSerializer
+    queryset = Agreement.objects.all().order_by('resolution_number')
             
 class PaymentViewSet(viewsets.ModelViewSet):
     serializer_class = PaymentSerializer
@@ -192,6 +196,10 @@ class ProjectViewSet(viewsets.ModelViewSet):
 
     def update(self, request, pk):
         return update_entry(self, request, pk)
+    
+class ProjectQuickViewSet(viewsets.ModelViewSet):
+    serializer_class = ProjectQuickSerializer
+    queryset = Project.objects.all().order_by('-date_modified')
             
 class ProjectCostEstimateViewSet(viewsets.ModelViewSet):
     serializer_class = ProjectCostEstimateSerializer
