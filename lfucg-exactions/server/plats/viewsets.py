@@ -50,7 +50,7 @@ class SubdivisionViewSet(viewsets.ModelViewSet):
 
 class SubdivisionQuickViewSet(viewsets.ModelViewSet):
     serializer_class = SubdivisionQuickSerializer
-    queryset = Subdivision.objects.all()
+    queryset = Subdivision.objects.all().order_by('name')
 
 class PlatViewSet(viewsets.ModelViewSet):
     serializer_class = PlatSerializer
@@ -73,7 +73,7 @@ class PlatViewSet(viewsets.ModelViewSet):
             PageNumberPagination.page_size = pageSize
             pagination_class = PageNumberPagination
 
-        return queryset.order_by('expansion_area')
+        return queryset.order_by('cabinet')
 
     def create(self, request):
         data_set = request.data
@@ -93,7 +93,7 @@ class PlatViewSet(viewsets.ModelViewSet):
 
 class PlatQuickViewSet(viewsets.ModelViewSet):
     serializer_class = PlatQuickSerializer
-    queryset = Plat.objects.all()
+    queryset = Plat.objects.all().order_by('cabinet')
 
 class LotViewSet(viewsets.ModelViewSet):
     serializer_class = LotSerializer
@@ -101,7 +101,7 @@ class LotViewSet(viewsets.ModelViewSet):
     permission_classes = (CanAdminister,)
     filter_backends = (DjangoFilterBackend, filters.SearchFilter,)
     search_fields = ('address_full', 'lot_number', 'parcel_id', 'permit_id', 'plat__expansion_area', 'plat__name', )
-    filterset_fields = ('account', 'plat', 'is_approved', 'plat__subdivision')
+    filterset_fields = ('account', 'plat', 'is_approved', 'plat__subdivision', 'ledger_lot',)
 
 
     def get_queryset(self):
@@ -141,11 +141,11 @@ class LotViewSet(viewsets.ModelViewSet):
 
 class LotQuickViewSet(viewsets.ModelViewSet):
     serializer_class = LotQuickSerializer
-    queryset = Lot.objects.all()
+    queryset = Lot.objects.all().order_by('address_street')
 
 class LotExactionsViewSet(viewsets.ModelViewSet):
     serializer_class = LotExactionsSerializer
-    queryset = Lot.objects.all()
+    queryset = Lot.objects.all().order_by('address_street')
 
 class PlatZoneViewSet(viewsets.ModelViewSet):
     serializer_class = PlatZoneSerializer

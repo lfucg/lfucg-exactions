@@ -61,7 +61,7 @@ class AccountSummary extends React.Component {
                         {accounts.loadingAccount ? <LoadingScreen /> :
                         (
                             <div className="col-md-offset-1 col-md-10 panel-group" id="accordion" role="tablist" aria-multiselectable="false">
-                                {!!accounts && accounts.currentAccount && <div>
+                                {!!accounts && !!accounts.currentAccount && <div>
                                 <a
                                   role="button"
                                   data-toggle="collapse"
@@ -100,10 +100,12 @@ class AccountSummary extends React.Component {
                                         </div>
                                         <div className="col-xs-12">
                                             <p className="col-xs-6">Developer Account Name: {accounts.currentAccount.account_name}</p>
-                                            {accounts.currentAccount.balance && <p className="col-xs-6"><strong>{accounts.currentAccount.balance.credit_availability}</strong></p>}
+                                            <p className="col-xs-6"><strong>
+                                                {accounts.balanceAvailable}
+                                            </strong></p>
                                             {currentUser && currentUser.username && <div>
                                                 <p className="col-xs-6">Contact Name: {accounts.currentAccount.contact_full_name}</p>
-                                                {accounts.currentAccount.balance && <p className="col-xs-6">Account Balance: {accounts.currentAccount.balance.balance}</p>}
+                                                <p className="col-xs-6">Account Balance: {accounts.currentAccount.current_account_balance}</p>
                                                 <p className="col-xs-6 ">Phone: {accounts.currentAccount.phone}</p>
                                                 <p className="col-xs-6">Email: {accounts.currentAccount.email}</p>
                                                 <p className="col-xs-12">Address: {accounts.currentAccount.address_full}</p>

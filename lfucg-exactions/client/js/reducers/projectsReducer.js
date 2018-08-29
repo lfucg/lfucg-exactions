@@ -23,7 +23,7 @@ const initialState = {
     prev: null,
 }
 
-const projectApiCalls = [GET_PROJECTS, GET_PROJECT_ID, GET_AGREEMENT_PROJECTS, POST_PROJECT, PUT_PROJECT];
+const projectApiCalls = [GET_PROJECTS, GET_PROJECTS_QUICK, GET_PROJECT_ID, GET_AGREEMENT_PROJECTS, POST_PROJECT, PUT_PROJECT];
 
 const projectsReducer = (state = initialState, action) => {
     const {

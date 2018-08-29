@@ -115,7 +115,7 @@ class AccountReport extends React.Component {
                             </div>
                             <div className="row">
                                 <div className="col-sm-6 report-data">{accounts.currentAccount.account_name}</div>
-                                <div className="col-sm-6 report-data right-border">{accounts.currentAccount.balance && accounts.currentAccount.balance.balance}</div>
+                                <div className="col-sm-6 report-data right-border">{accounts.currentAccount.current_account_balance}</div>
                             </div>
                             <div className="row" />
 

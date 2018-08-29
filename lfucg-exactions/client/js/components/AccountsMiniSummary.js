@@ -38,11 +38,13 @@ class AccountsMiniSummary extends React.Component {
                 </div>
                 <div className="col-xs-12">
                     <p className="col-xs-6">Developer Account Name: {this.props.mapSet.account_name}</p>
-                    <p className="col-xs-6"><strong>{this.props.mapSet.balance && this.props.mapSet.balance.credit_availability}</strong></p>
+                    <p className="col-xs-6"><strong>
+                        {this.props.mapSet.balanceAvailable}
+                    </strong></p>
                     {currentUser && currentUser.username &&
                         <div>
                             <p className="col-xs-6">Contact Name: {this.props.mapSet.contact_full_name}</p>
-                            <p className="col-xs-6">Account Balance: {this.props.mapSet.balance && this.props.mapSet.balance.balance}</p>
+                            <p className="col-xs-6">Account Balance: {this.props.mapSet.current_account_balance}</p>
                             <p className="col-xs-6 ">Phone: {this.props.mapSet.phone}</p>
                             <p className="col-xs-6">Email: {this.props.mapSet.email}</p>
                             <p className="col-xs-12">Address: {this.props.mapSet.address_full}</p>
@@ -80,11 +82,11 @@ class AccountsMiniSummary extends React.Component {
                             </div>
                             <div className="row">
                                 <p className="col-xs-6">Developer Account Name: {account.account_name}</p>
-                                <p className="col-xs-6"><strong>{account.balance && account.balance.credit_availability}</strong></p>
+                                <p className="col-xs-6"><strong>{account.balanceAvailable}</strong></p>
                                 {currentUser && currentUser.username &&
                                     <div>
                                         <p className="col-xs-6">Contact Name: {account.contact_full_name}</p>
-                                        <p className="col-xs-6">Account Balance: {account.balance && account.balance.balance}</p>
+                                        <p className="col-xs-6">Account Balance: {account.current_account_balance}</p>
                                         <p className="col-xs-6 ">Phone: {account.phone}</p>
                                         <p className="col-xs-6">Email: {account.email}</p>
                                         <p className="col-xs-12">Address: {account.address_full}</p>
