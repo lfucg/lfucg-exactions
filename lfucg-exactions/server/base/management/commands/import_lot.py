@@ -322,14 +322,19 @@ class Command(BaseCommand):
         user = User.objects.get(username='IMPORT')
 
         if not Account.objects.filter(account_name=name).exists():
-            account, created = Account.objects.get_or_create(account_name=name,
-                defaults= { 'created_by': user, 'modified_by': user,
-            'contact_full_name': 'Unknown', 
-            'contact_first_name': 'Unknown', 'contact_last_name': 'Unknown',
-            'address_number': 0, 'address_street': 'Unknown', 'address_city': 'Unknown', 'address_state': 'KY',
-            'address_zip': 'Unknown', 'address_full': 'Unknown', 
-            'phone': 'Unknown', 
-            'email': 'unknown@unknown.com' })
+            try:
+                account, created = Account.objects.get_or_create(account_name=name,
+                    defaults= { 'created_by': user, 'modified_by': user,
+                    'contact_full_name': 'Unknown', 
+                    'contact_first_name': 'Unknown', 'contact_last_name': 'Unknown',
+                    'address_number': 0, 'address_street': 'Unknown', 'address_city': 'Unknown', 'address_state': 'KY',
+                    'address_zip': 'Unknown', 'address_full': 'Unknown', 
+                    'phone': 'Unknown', 
+                    'email': 'unknown@unknown.com',
+                    'current_account_balance': 0, 'current_non_sewer_balance': 0, 'current_sewer_balance': 0
+                })
+            except Exception as ex:
+                print('Lot Import Account Creation Error', ex)
 
     def AccountFieldCheck(self, name):
         if self.FilterAccount(name).exists():
@@ -395,14 +400,14 @@ class Command(BaseCommand):
                 defaults={
                     'created_by': ledger_details['created_by'], 'modified_by': ledger_details['modified_by'],
                     'entry_date': ledger_entry_date,
-                    'non_sewer_credits': Decimal(ledger_details['non_sewer_credits'] and ledger_details['non_sewer_credits'] or 0),
-                    'sewer_credits': Decimal(ledger_details['sewer_credits'] and ledger_details['sewer_credits'] or 0),
-                    'roads': Decimal(ledger_details['roads'] and ledger_details['roads'] or 0),
-                    'sewer_trans': Decimal(ledger_details['sewer_trans'] and ledger_details['sewer_trans'] or 0),
-                    'sewer_cap': Decimal(ledger_details['sewer_cap'] and ledger_details['sewer_cap'] or 0),
-                    'parks': Decimal(ledger_details['parks'] and ledger_details['parks'] or 0),
-                    'storm': Decimal(ledger_details['storm'] and ledger_details['storm'] or 0),
-                    'open_space': Decimal(ledger_details['open_space'] and ledger_details['open_space'] or 0),
+                    'non_sewer_credits': Decimal(ledger_details['non_sewer_credits'] if ledger_details['non_sewer_credits'] else 0),
+                    'sewer_credits': Decimal(ledger_details['sewer_credits'] if ledger_details['sewer_credits'] else 0),
+                    'roads': Decimal(ledger_details['roads'] if ledger_details['roads'] else 0),
+                    'sewer_trans': Decimal(ledger_details['sewer_trans'] if ledger_details['sewer_trans'] else 0),
+                    'sewer_cap': Decimal(ledger_details['sewer_cap'] if ledger_details['sewer_cap'] else 0),
+                    'parks': Decimal(ledger_details['parks'] if ledger_details['parks'] else 0),
+                    'storm': Decimal(ledger_details['storm'] if ledger_details['storm'] else 0),
+                    'open_space': Decimal(ledger_details['open_space'] if ledger_details['open_space'] else 0),
                 }
             )
         except Exception as ex:
@@ -502,7 +507,7 @@ class Command(BaseCommand):
                 'paid_parks': payments['paid_parks'], 'paid_open_space': payments['paid_open_space'], 'paid_storm': payments['paid_storm']
                 })
         except Exception as ex:
-            print('PAYMEN EXCEPTION', ex)
+            print('PAYMENT EXCEPTION', ex)
             if payment_details not in self.errors:   
                 self.errors.append('Payment Error ' + str(payment_details['lot_id'].address_full)) 
 
@@ -581,19 +586,34 @@ class Command(BaseCommand):
                         address_number = row['StreetNo']
                         unit = None
 
-                    # Create Lot
-                    lot, created = Lot.objects.get_or_create(address_number=address_number, address_unit=unit, address_street=row['StreetName'], lot_number=row['Lot'],
-                        defaults={
-                        'plat': plat, 'parcel_id': row['AddressID'] and row['AddressID'] or None,
-                        'account': plat.account or unknown_account,
-                        'is_approved': True, 'is_active': True, 'created_by': user, 'modified_by': user,
-                        'permit_id': row['PermitNo'] and row['PermitNo'] or '', 
-                        'alternative_address_number': row['AltStreetNo'] and row['AltStreetNo'] or None,
-                        'alternative_address_street': row['AltStreetName'] and row['AltStreetName'] or None,
-                        'address_full': address_number + ' ' + row['StreetName'] + ' ' + (unit or '' ) + ' Lexington, KY' or '',
-                        'certificate_of_occupancy_final': co_cond,
-                        'certificate_of_occupancy_conditional': co_final,
-                    })
+                    try:
+                        # Create Lot
+                        lot, created = Lot.objects.get_or_create(address_number=address_number, address_unit=unit, address_street=row['StreetName'], lot_number=row['Lot'],
+                            defaults={
+                            'plat': plat, 'parcel_id': row['AddressID'] and row['AddressID'] or None,
+                            'account': plat.account or unknown_account,
+                            'is_approved': True, 'is_active': True, 'created_by': user, 'modified_by': user,
+                            'permit_id': row['PermitNo'] and row['PermitNo'] or '', 
+                            'alternative_address_number': row['AltStreetNo'] and row['AltStreetNo'] or None,
+                            'alternative_address_street': row['AltStreetName'] and row['AltStreetName'] or None,
+                            'address_full': address_number + ' ' + row['StreetName'] + ' ' + (unit or '' ) + ' Lexington, KY' or '',
+                            'certificate_of_occupancy_final': co_cond,
+                            'certificate_of_occupancy_conditional': co_final,
+                            'dues_roads_dev': row['D_Roads'] if row['D_Roads'] else 0,
+                            'dues_roads_own': row['P_Roads'] if row['P_Roads'] else 0,
+                            'dues_sewer_trans_dev': row['D_SewerTransmission'] if row['D_SewerTransmission'] else 0,
+                            'dues_sewer_trans_own': row['P_SewerTransmission'] if row['P_SewerTransmission'] else 0,
+                            'dues_sewer_cap_dev': row['D_SewerCapacity'] if row['D_SewerCapacity'] else 0,
+                            'dues_sewer_cap_own': 0,
+                            'dues_parks_dev': row['D_Parks'] if row['D_Parks'] else 0,
+                            'dues_parks_own': row['P_Parks'] if row['P_Parks'] else 0,
+                            'dues_storm_dev': row['D_Stormwater'] if row['D_Stormwater'] else 0,
+                            'dues_storm_own': row['P_Stormwater'] if row['P_Stormwater'] else 0,
+                            'dues_open_space_dev': row['D_OpenSpace'] if row['D_OpenSpace'] else 0,
+                            'dues_open_space_own': 0,
+                        })
+                    except Exception as ex:
+                        print('Lot Import Lot Creation Error', ex)
 
                     # Create Additional Accounts
                     if row['D_AccountName']:
@@ -623,36 +643,48 @@ class Command(BaseCommand):
 
                     # Create Agreements
                     if row['AgreementResolution']:
-                        agreement, created = Agreement.objects.get_or_create(date_executed=datetime.now(),
-                            account_id=self.GetAccount([plat.account and plat.account.account_name, row['D_AccountName'], row['P_AccountName'], 'Unknown']).first(),
-                            resolution_number=row['AgreementResolution'] and row['AgreementResolution'] or 'Unknown',
-                            expansion_area='EA-' + row['ExpansionArea'], agreement_type=row['AccountLedgerAgreementType-1'],
-                            defaults= { 'is_approved': True, 'created_by': user, 'modified_by': user })
-                        agreement_resolution = agreement or unknown_agreement
+                        try:
+                            agreement, created = Agreement.objects.get_or_create(date_executed=datetime.now(),
+                                account_id=self.GetAccount([plat.account and plat.account.account_name, row['D_AccountName'], row['P_AccountName'], 'Unknown']).first(),
+                                resolution_number=row['AgreementResolution'] and row['AgreementResolution'] or 'Unknown',
+                                expansion_area='EA-' + row['ExpansionArea'], agreement_type=row['AccountLedgerAgreementType-1'],
+                                defaults= { 'is_approved': True, 'created_by': user, 'modified_by': user })
+                            agreement_resolution = agreement or unknown_agreement
+                        except Exception as ex:
+                            print('Lot Import Agreement 1 Creation Error', ex)
                     
                     if row['AccountLedgerAgreement-1']:
-                        agreement, created = Agreement.objects.get_or_create(date_executed=datetime.now(),
-                            account_id=self.GetAccount([row['AccountLedgerAccountFrom-1'], row['D_AccountName'], plat.account and plat.account.account_name, row['P_AccountName'], 'Unknown']).first(),
-                            resolution_number=row['AccountLedgerAgreement-1'] and row['AccountLedgerAgreement-1'] or 'Unknown',
-                            expansion_area='EA-' + row['ExpansionArea'], agreement_type=row['AccountLedgerAgreementType-1'],
-                            defaults= { 'is_approved': True, 'created_by': user, 'modified_by': user })
-                        agreement_ledger_1 = agreement or unknown_agreement
+                        try:
+                            agreement, created = Agreement.objects.get_or_create(date_executed=datetime.now(),
+                                account_id=self.GetAccount([row['AccountLedgerAccountFrom-1'], row['D_AccountName'], plat.account and plat.account.account_name, row['P_AccountName'], 'Unknown']).first(),
+                                resolution_number=row['AccountLedgerAgreement-1'] and row['AccountLedgerAgreement-1'] or 'Unknown',
+                                expansion_area='EA-' + row['ExpansionArea'], agreement_type=row['AccountLedgerAgreementType-1'],
+                                defaults= { 'is_approved': True, 'created_by': user, 'modified_by': user })
+                            agreement_ledger_1 = agreement or unknown_agreement
+                        except Exception as ex:
+                            print('Lot Import Agreement 2 Creation Error', ex)
                     
                     if row['AccountLedgerAgreement-2']:
-                        agreement, created = Agreement.objects.get_or_create(date_executed=datetime.now(),
-                            account_id=self.GetAccount([row['AccountLedgerAccountFrom-2'], row['P_AccountName'], plat.account and plat.account.account_name, row['P_AccountName'], 'Unknown']).first(),
-                            resolution_number=row['AccountLedgerAgreement-2'] and row['AccountLedgerAgreement-2'] or 'Unknown',
-                            expansion_area='EA-' + row['ExpansionArea'], agreement_type=row['AccountLedgerAgreementType-2'],
-                            defaults= { 'is_approved': True, 'created_by': user, 'modified_by': user })
-                        agreement_ledger_2 = agreement or unknown_agreement
+                        try:
+                            agreement, created = Agreement.objects.get_or_create(date_executed=datetime.now(),
+                                account_id=self.GetAccount([row['AccountLedgerAccountFrom-2'], row['P_AccountName'], plat.account and plat.account.account_name, row['P_AccountName'], 'Unknown']).first(),
+                                resolution_number=row['AccountLedgerAgreement-2'] and row['AccountLedgerAgreement-2'] or 'Unknown',
+                                expansion_area='EA-' + row['ExpansionArea'], agreement_type=row['AccountLedgerAgreementType-2'],
+                                defaults= { 'is_approved': True, 'created_by': user, 'modified_by': user })
+                            agreement_ledger_2 = agreement or unknown_agreement
+                        except Exception as ex:
+                            print('Lot Import Agreement 3 Creation Error', ex)
                     
                     if row['AccountLedgerAgreement-3']:
-                        agreement, created = Agreement.objects.get_or_create(date_executed=datetime.now(),
-                            account_id=self.GetAccount([row['AccountLedgerAccountFrom-2'], plat.account and plat.account.account_name, row['D_AccountName'], 'Unknown']).first(),
-                            resolution_number=row['AccountLedgerAgreement-3'] and row['AccountLedgerAgreement-3'] or 'Unknown',
-                            expansion_area='EA-' + row['ExpansionArea'], agreement_type=row['AccountLedgerAgreementType-3'],
-                            defaults= { 'is_approved': True, 'created_by': user, 'modified_by': user })
-                        agreement_ledger_3 = agreement or unknown_agreement
+                        try:
+                            agreement, created = Agreement.objects.get_or_create(date_executed=datetime.now(),
+                                account_id=self.GetAccount([row['AccountLedgerAccountFrom-2'], plat.account and plat.account.account_name, row['D_AccountName'], 'Unknown']).first(),
+                                resolution_number=row['AccountLedgerAgreement-3'] and row['AccountLedgerAgreement-3'] or 'Unknown',
+                                expansion_area='EA-' + row['ExpansionArea'], agreement_type=row['AccountLedgerAgreementType-3'],
+                                defaults= { 'is_approved': True, 'created_by': user, 'modified_by': user })
+                            agreement_ledger_3 = agreement or unknown_agreement
+                        except Exception as ex:
+                            print('Lot Import Agreement 4 Creation Error', ex)
 
                     # Create Ledger 1 Entry
                     if row['AccountLedgerAgreement-1'] or row['AccountLedgerAccountFrom-1']:

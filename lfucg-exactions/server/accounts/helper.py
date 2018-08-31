@@ -196,19 +196,19 @@ def calculate_current_account_balance(sender, instance, **kwargs):
     sewer_credits = instance.sewer_credits if instance.sewer_credits else 0
 
     if instance.account_to is not None:
-        account_to = Account.objects.filter(id=instance.account_to.id)
+        account_to = Account.objects.filter(id=instance.account_to.id).first()
     
     if instance.account_from is not None:
-        account_from = Account.objects.filter(id=instance.account_from.id)
+        account_from = Account.objects.filter(id=instance.account_from.id).first()
 
-    if account_to.exists():
+    if account_to is not None:
         account_to.current_account_balance += (non_sewer_credits + sewer_credits)
         account_to.current_non_sewer_balance += non_sewer_credits
         account_to.current_sewer_balance += sewer_credits
 
         super(Account, account_to).save()
     
-    if account_from.exists():
+    if account_from is not None:
         account_from.current_account_balance -= (non_sewer_credits + sewer_credits)
         account_from.current_non_sewer_balance -= non_sewer_credits
         account_from.current_sewer_balance -= sewer_credits

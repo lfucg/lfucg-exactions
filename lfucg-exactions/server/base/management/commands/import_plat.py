@@ -17,25 +17,28 @@ class Command(BaseCommand):
         if zone:
             current_rate_table = RateTable.objects.filter(is_active=True).first()
             user = User.objects.get(username='IMPORT')
-
-            road_rate, created = Rate.objects.get_or_create(expansion_area=expansion_area, zone=zone, category='ROADS', rate_table_id=current_rate_table, defaults={'rate':0, 'created_by':user, 'modified_by':user })
-            if created:
-                print('ROADS Rate created for ' + expansion_area + ' ' + zone)
-            open_space_rate, created = Rate.objects.get_or_create(expansion_area=expansion_area, zone=zone, category='OPEN_SPACE', rate_table_id=current_rate_table, defaults={'rate':0, 'created_by':user, 'modified_by':user })
-            if created:
-                print('OPEN_SPACE Rate created for ' + expansion_area + ' ' + zone)
-            sewer_cap_rate, created = Rate.objects.get_or_create(expansion_area=expansion_area, zone=zone, category='SEWER_CAP', rate_table_id=current_rate_table, defaults={'rate':0, 'created_by':user, 'modified_by':user })
-            if created:
-                print('SEWER_CAP Rate created for ' + expansion_area + ' ' + zone)
-            sewer_trans_rate, created = Rate.objects.get_or_create(expansion_area=expansion_area, zone=zone, category='SEWER_TRANS', rate_table_id=current_rate_table, defaults={'rate':0, 'created_by':user, 'modified_by':user })
-            if created:
-                print('SEWER_TRANS Rate created for ' + expansion_area + ' ' + zone)
-            parks_rate, created = Rate.objects.get_or_create(expansion_area=expansion_area, zone=zone, category='PARK', rate_table_id=current_rate_table, defaults={'rate':0, 'created_by':user, 'modified_by':user })
-            if created:
-                print('PARK Rate created for ' + expansion_area + ' ' + zone)
-            storm_water_rate, created = Rate.objects.get_or_create(expansion_area=expansion_area, zone=zone, category='STORM_WATER', rate_table_id=current_rate_table, defaults={'rate':0, 'created_by':user, 'modified_by':user })
-            if created:
-                print('STORM_WATER Rate created for ' + expansion_area + ' ' + zone)
+            
+            try:
+                road_rate, created = Rate.objects.get_or_create(expansion_area=expansion_area, zone=zone, category='ROADS', rate_table_id=current_rate_table, defaults={'rate':0, 'created_by':user, 'modified_by':user })
+                if created:
+                    print('ROADS Rate created for ' + expansion_area + ' ' + zone)
+                open_space_rate, created = Rate.objects.get_or_create(expansion_area=expansion_area, zone=zone, category='OPEN_SPACE', rate_table_id=current_rate_table, defaults={'rate':0, 'created_by':user, 'modified_by':user })
+                if created:
+                    print('OPEN_SPACE Rate created for ' + expansion_area + ' ' + zone)
+                sewer_cap_rate, created = Rate.objects.get_or_create(expansion_area=expansion_area, zone=zone, category='SEWER_CAP', rate_table_id=current_rate_table, defaults={'rate':0, 'created_by':user, 'modified_by':user })
+                if created:
+                    print('SEWER_CAP Rate created for ' + expansion_area + ' ' + zone)
+                sewer_trans_rate, created = Rate.objects.get_or_create(expansion_area=expansion_area, zone=zone, category='SEWER_TRANS', rate_table_id=current_rate_table, defaults={'rate':0, 'created_by':user, 'modified_by':user })
+                if created:
+                    print('SEWER_TRANS Rate created for ' + expansion_area + ' ' + zone)
+                parks_rate, created = Rate.objects.get_or_create(expansion_area=expansion_area, zone=zone, category='PARK', rate_table_id=current_rate_table, defaults={'rate':0, 'created_by':user, 'modified_by':user })
+                if created:
+                    print('PARK Rate created for ' + expansion_area + ' ' + zone)
+                storm_water_rate, created = Rate.objects.get_or_create(expansion_area=expansion_area, zone=zone, category='STORM_WATER', rate_table_id=current_rate_table, defaults={'rate':0, 'created_by':user, 'modified_by':user })
+                if created:
+                    print('STORM_WATER Rate created for ' + expansion_area + ' ' + zone)
+            except Exception as ex:
+                print('Plat Import Rate Creation Error', ex)
 
     def handle(self, *args, **options):
         filename = options.get('filename', None)
@@ -68,7 +71,8 @@ class Command(BaseCommand):
                 'address_city': 'Unknown', 'address_state': 'Unknown', 'address_zip': 'Unknown',
                 'address_full': 'Unknown',
                 'phone': 'Unknown',
-                'email': 'unknown@unknown.com' 
+                'email': 'unknown@unknown.com',
+                'current_account_balance': 0, 'current_non_sewer_balance': 0, 'current_sewer_balance': 0
                 })
 
             for row in reader:
@@ -108,24 +112,26 @@ class Command(BaseCommand):
                     else:
                         contact_street = contact_full_address[0 : pre_city_divider]
 
-                account, created = Account.objects.get_or_create(account_name=len(row['Contact Company']) > 0 and row['Contact Company'].strip() or contact_full_name, contact_full_name=contact_full_name,
-                    defaults= { 'created_by': user, 'modified_by': user, 
-                    'contact_first_name': 'Unknown', 'contact_last_name': 'Unknown',
-                    'address_number': contact_street_number, 'address_street': contact_street,
-                    'address_city': contact_city, 'address_state': contact_state, 'address_zip': contact_zip,
-                    'address_full': contact_full_address,
-                    'phone': len(row['Contact Phone']) > 0 and row['Contact Phone'] or 'Unknown',
-                    'email': len(row['Contact Email']) > 0 and row['Contact Email'] or 'unknown@unknown.com' 
-                    })
+                try:
+                    account, created = Account.objects.get_or_create(account_name=len(row['Contact Company']) > 0 and row['Contact Company'].strip() or contact_full_name, contact_full_name=contact_full_name,
+                        defaults= { 'created_by': user, 'modified_by': user, 
+                        'contact_first_name': 'Unknown', 'contact_last_name': 'Unknown',
+                        'address_number': contact_street_number, 'address_street': contact_street,
+                        'address_city': contact_city, 'address_state': contact_state, 'address_zip': contact_zip,
+                        'address_full': contact_full_address,
+                        'phone': len(row['Contact Phone']) > 0 and row['Contact Phone'] or 'Unknown',
+                        'email': len(row['Contact Email']) > 0 and row['Contact Email'] or 'unknown@unknown.com',
+                        'current_account_balance': 0, 'current_non_sewer_balance': 0, 'current_sewer_balance': 0
+                        })
+                except Exception as ex:
+                    print('Plat Import Account Creation Error', ex)
 
-                # if created:
-                #     print(str(account) + ' account created')
-
-                # Create Subdivision
-                subdivision, created = Subdivision.objects.get_or_create(name=row['SubdivisionName'].strip(), 
-                    defaults= {'gross_acreage': 0, 'is_approved': True, 'created_by': user, 'modified_by': user})
-                # if created:
-                #     print(str(subdivision) + ' subdivision created')
+                try:
+                    # Create Subdivision
+                    subdivision, created = Subdivision.objects.get_or_create(name=row['SubdivisionName'].strip(), 
+                        defaults= {'gross_acreage': 0, 'is_approved': True, 'created_by': user, 'modified_by': user})
+                except Exception as ex:
+                    print('Plat Import Subdivision Creation Error', ex)
 
                 # Create Plat
                 try:
@@ -140,40 +146,55 @@ class Command(BaseCommand):
                 self.CheckOrCreateRate(row['PlatZone-2'], 'EA-' + row['ExpanArea'])
                 self.CheckOrCreateRate(row['PlatZone-3'], 'EA-' + row['ExpanArea'])
 
-                plat, created = Plat.objects.get_or_create(name=row['PlatName'], expansion_area='EA-' + row['ExpanArea'], 
-                    cabinet=row['Cabinet'], slide=len(row['Slide']) > 0 and row['Slide'] or row['Plat_Slide'], 
-                    defaults= { 'date_recorded': datetime.now, 'signed_date': signed_date, 
-                    'account': account, 'subdivision': subdivision,
-                    'is_approved': True, 'created_by': user, 'modified_by': user, 'total_acreage': len(row['PlatAcres']) > 0 and Decimal(row['PlatAcres']) or 0,
-                    'amended': row['Amended'] and row['Amended'] == 'amd' or False, 'case_number': row['CaseNum'], 'acreage_type': row['GrossVsNet'].upper(),
-                    'right_of_way_acreage': len(row['ROWAcres']) > 0 and Decimal(row['ROWAcres']) or 0,
-                    'plat_type': row['PlatVsDevPlan'] and row['PlatVsDevPlan'].upper(), 'buildable_lots': row['BuildableLots'] and int(row['BuildableLots']) or 0, 
-                    'non_buildable_lots': row['NonBuildLots'] and int(row['NonBuildLots']) or 0, 'calculation_note': row['Notes'],
-                    'unit': ' ', 'section': ' ', 'block': ' '})
-                # if created:
-                #     print(str(plat) + ' plat created')
+                try:
+                    plat, created = Plat.objects.get_or_create(name=row['PlatName'], expansion_area='EA-' + row['ExpanArea'], 
+                        cabinet=row['Cabinet'], slide=len(row['Slide']) > 0 and row['Slide'] or row['Plat_Slide'], 
+                        defaults= { 'date_recorded': datetime.now, 'signed_date': signed_date, 
+                        'account': account, 'subdivision': subdivision,
+                        'is_approved': True, 'created_by': user, 'modified_by': user, 'total_acreage': len(row['PlatAcres']) > 0 and Decimal(row['PlatAcres']) or 0,
+                        'amended': row['Amended'] and row['Amended'] == 'amd' or False, 'case_number': row['CaseNum'], 'acreage_type': row['GrossVsNet'].upper(),
+                        'right_of_way_acreage': len(row['ROWAcres']) > 0 and Decimal(row['ROWAcres']) or 0,
+                        'plat_type': row['PlatVsDevPlan'] and row['PlatVsDevPlan'].upper(), 'buildable_lots': row['BuildableLots'] and int(row['BuildableLots']) or 0, 
+                        'non_buildable_lots': row['NonBuildLots'] and int(row['NonBuildLots']) or 0, 'calculation_note': row['Notes'],
+                        'unit': ' ', 'section': ' ', 'block': ' '})
+                    # if created:
+                    #     print(str(plat) + ' plat created')
+                except Exception as ex:
+                    print('Plat Import Plat Creation Error', ex)
 
                 # Create PlatZones
                 if row['PlatZone-1']:
-                    plat_zone, created = PlatZone.objects.get_or_create(plat=plat, zone=row['PlatZone-1'],
-                        defaults= { 'created_by': user, 'modified_by': user, 'acres': len(row['PlatZoneAcres-1']) > 0 and Decimal(row['PlatZoneAcres-1']) or 0 })
-                    # if created:
-                    #     print (str(plat_zone) + ' plat_zone created')
+                    try:
+                        plat_zone, created = PlatZone.objects.get_or_create(plat=plat, zone=row['PlatZone-1'],
+                            defaults= { 'created_by': user, 'modified_by': user, 'acres': len(row['PlatZoneAcres-1']) > 0 and Decimal(row['PlatZoneAcres-1']) or 0 })
+                        # if created:
+                        #     print (str(plat_zone) + ' plat_zone created')
+                    except Exception as ex:
+                        print('Plat Import Plat Zone 1 Creation Error', ex)
 
                 if row['PlatZone-2']:
-                    plat_zone, created = PlatZone.objects.get_or_create(plat=plat, zone=row['PlatZone-2'],
-                        defaults= { 'created_by': user, 'modified_by': user, 'acres': len(row['PlatZoneAcres-2']) > 0 and Decimal(row['PlatZoneAcres-2']) or 0 })
-                    # if created:
-                    #     print (str(plat_zone) + ' plat_zone created')
+                    try:
+                        plat_zone, created = PlatZone.objects.get_or_create(plat=plat, zone=row['PlatZone-2'],
+                            defaults= { 'created_by': user, 'modified_by': user, 'acres': len(row['PlatZoneAcres-2']) > 0 and Decimal(row['PlatZoneAcres-2']) or 0 })
+                        # if created:
+                        #     print (str(plat_zone) + ' plat_zone created')
+                    except Exception as ex:
+                        print('Plat Import Plat Zone 2 Creation Error', ex)
 
                 if row['PlatZone-3']:
-                    plat_zone, created = PlatZone.objects.get_or_create(plat=plat, zone=row['PlatZone-3'],
-                        defaults= { 'created_by': user, 'modified_by': user, 'acres': len(row['PlatZoneAcres-3']) > 0 and Decimal(row['PlatZoneAcres-3']) or 0 })
-                    # if created:
-                    #     print (str(plat_zone) + ' plat_zone created')
+                    try:
+                        plat_zone, created = PlatZone.objects.get_or_create(plat=plat, zone=row['PlatZone-3'],
+                            defaults= { 'created_by': user, 'modified_by': user, 'acres': len(row['PlatZoneAcres-3']) > 0 and Decimal(row['PlatZoneAcres-3']) or 0 })
+                        # if created:
+                        #     print (str(plat_zone) + ' plat_zone created')
+                    except Exception as ex:
+                        print('Plat Import Plat Zone 3 Creation Error', ex)
 
                 if row['PlatZone-4']:
-                    plat_zone, created = PlatZone.objects.get_or_create(plat=plat, zone=row['PlatZone-4'],
-                        defaults= { 'created_by': user, 'modified_by': user, 'acres': len(row['PlatZoneAcres-4']) > 0 and Decimal(row['PlatZoneAcres-4']) or 0 })
-                    # if created:
-                    #     print (str(plat_zone) + ' plat_zone created')
+                    try:
+                        plat_zone, created = PlatZone.objects.get_or_create(plat=plat, zone=row['PlatZone-4'],
+                            defaults= { 'created_by': user, 'modified_by': user, 'acres': len(row['PlatZoneAcres-4']) > 0 and Decimal(row['PlatZoneAcres-4']) or 0 })
+                        # if created:
+                        #     print (str(plat_zone) + ' plat_zone created')
+                    except Exception as ex:
+                        print('Plat Import Plat Zone 4 Creation Error', ex)
