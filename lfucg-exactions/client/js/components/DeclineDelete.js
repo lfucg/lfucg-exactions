@@ -41,7 +41,7 @@ class DeclineDelete extends React.Component {
                             </div>
                             <div className="modal-footer">
                                 <button type="button" className="btn btn-lex" data-dismiss="modal">Cancel</button>
-                                <button onClick={onDelete} className="btn btn-danger btn-lex-danger">Confirm Deletion</button>
+                                <button onClick={onDelete} className="btn btn-danger btn-lex-danger" data-dismiss="modal">Confirm Deletion</button>
                             </div>
                         </div>
                     </div>
