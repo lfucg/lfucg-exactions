@@ -83,7 +83,7 @@ class AccountLedgerForm extends React.Component {
 
         const accountsList = accounts.length > 0 && (map((account) => {
             return (
-                <option key={account.id} value={[account.id, account.account_name, account.current_account_balance]} >
+                <option key={account.id} value={account.id} >
                     {account.account_name}
                 </option>
             );
@@ -150,14 +150,14 @@ class AccountLedgerForm extends React.Component {
                                         <div className="row">
                                             <div className="col-sm-6 form-group">
                                                 <label htmlFor="account_from" className="form-label" id="account_from" aria-label="Account From" aria-required="true">* Account From</label>
-                                                <select className="form-control" id="account_from" onChange={accountFormChange('account_from')} value={activeForm.account_from_show} disabled={!activeForm.entry_type || activeForm.entry_type === 'NEW'}>
+                                                <select className="form-control" id="account_from" onChange={accountFormChange('account_from')} value={activeForm.account_from} disabled={!activeForm.entry_type || activeForm.entry_type === 'NEW'}>
                                                     <option value="start_account_from">Account From</option>
                                                     {accountsList}
                                                 </select>
                                             </div>
                                             <div className="col-sm-6 form-group">
                                                 <label htmlFor="account_to" className="form-label" id="account_to" aria-label="Account To" aria-required="true">* Account To</label>
-                                                <select className="form-control" id="account_to" onChange={accountFormChange('account_to')} value={activeForm.account_to_show} disabled={!activeForm.entry_type || activeForm.entry_type === 'USE'}>
+                                                <select className="form-control" id="account_to" onChange={accountFormChange('account_to', accounts)} value={activeForm.account_to} disabled={!activeForm.entry_type || activeForm.entry_type === 'USE'}>
                                                     <option value="start_account_to">Account To</option>
                                                     {accountsList}
                                                 </select>
@@ -417,9 +417,9 @@ function mapDispatchToProps(dispatch, params) {
                         lot: data_account_ledger.response && data_account_ledger.response.lot ? data_account_ledger.response.lot.id : null,
                         lot_show: data_account_ledger.response && data_account_ledger.response.lot ? `${data_account_ledger.response.lot.id},${data_account_ledger.response.lot.address_full},${data_account_ledger.response.lot.lot_exactions && data_account_ledger.response.lot.lot_exactions.non_sewer_exactions},${data_account_ledger.response.lot.lot_exactions && data_account_ledger.response.lot.lot_exactions.sewer_exactions}` : '',
                         account_from: data_account_ledger.response && data_account_ledger.response.account_from ? data_account_ledger.response.account_from.id : null,
-                        account_from_show: data_account_ledger.response && data_account_ledger.response.account_from ? `${data_account_ledger.response.account_from.id},${data_account_ledger.response.account_from.account_name},${data_account_ledger.response.account_from.current_account_balance}` : '',
+                        account_from_show: data_account_ledger.response && data_account_ledger.response.account_from ? data_account_ledger.response.account_from.id : '',
                         account_to: data_account_ledger.response && data_account_ledger.response.account_to ? data_account_ledger.response.account_to.id : null,
-                        account_to_show: data_account_ledger.response && data_account_ledger.response.account_to ? `${data_account_ledger.response.account_to.id},${data_account_ledger.response.account_to.account_name},${data_account_ledger.response.account_to.current_account_balance}` : '',
+                        account_to_show: data_account_ledger.response && data_account_ledger.response.account_to ? data_account_ledger.response.account_to.id : '',
                         agreement: data_account_ledger.response && data_account_ledger.response.agreement ? data_account_ledger.response.agreement.id : null,
                         agreement_show: data_account_ledger.response && data_account_ledger.response.agreement ? `${data_account_ledger.response.agreement.id},${data_account_ledger.response.agreement.resolution_number}` : '',
                         entry_date: data_account_ledger.response.entry_date,
@@ -436,8 +436,8 @@ function mapDispatchToProps(dispatch, params) {
                 dispatch(setLoadingFalse('ledger'));
                 const initial_constants = {
                     lot_show: '',
-                    account_from_show: '',
-                    account_to_show: '',
+                    account_from: 'start_account_from',
+                    account_to: 'start_account_to',
                     agreement_show: '',
                     entry_type_show: '',
                 };
@@ -468,21 +468,19 @@ function mapDispatchToProps(dispatch, params) {
                         if (value_id === 'NEW') {
                             const lfucg_from_update = {
                                 account_from: data_lfucg.response[0].id,
-                                account_from_show: `${data_lfucg.response[0].id},${data_lfucg.response[0].account_name},${data_lfucg.response[0].current_account_balance}`,
-                                account_to_show: '',
+                                account_to: 'start_account_to',
                             };
                             dispatch(formUpdate(lfucg_from_update));
                         } else if (value_id === 'USE') {
                             const lfucg_to_update = {
+                                account_from: 'start_account_from',
                                 account_to: data_lfucg.response[0].id,
-                                account_to_show: `${data_lfucg.response[0].id},${data_lfucg.response[0].account_name},${data_lfucg.response[0].current_account_balance}`,
-                                account_from_show: '',
                             };
                             dispatch(formUpdate(lfucg_to_update));
-                        } else if (value_id === 'TRANSFER') {
+                        } else {
                             const lfucg_to_update = {
-                                account_from_show: '',
-                                account_to_show: '',
+                                account_from: 'start_account_from',
+                                account_to: 'start_account_to',
                             };
                             dispatch(formUpdate(lfucg_to_update));
                         }
@@ -565,33 +563,19 @@ function mapDispatchToProps(dispatch, params) {
                 dispatch(formUpdate(lot_update));
             }
         },
-        accountFormChange(field) {
+        accountFormChange(field, accounts) {
             return (e, ...args) => {
                 const value = typeof e.target.value !== 'undefined' ? e.target.value : args[1];
+                const account_update = {
+                    [field]: value,
+                };
+                dispatch(formUpdate(account_update));
 
-                const comma_index = value.indexOf(',');
-                const dollar_index = value.indexOf('$');
-
-                if (comma_index !== -1 && dollar_index !== -1) {
-                    const value_id = value.substring(0, comma_index);
-                    const value_name = value.substring(comma_index + 1, dollar_index);
-                    const value_balance = value.substring(dollar_index, value.length);
-
-                    const field_name = `${[field]}_name`;
-                    const field_show = `${[field]}_show`;
-
-                    const account_update = {
-                        [field]: value_id,
-                        [field_name]: value_name,
-                        [field_show]: value,
+                if (field === 'account_from' && (value !== 1)) {
+                    const balance_update = {
+                        balance: accounts && (filter(lot => lot.id === value)(accounts))[0].current_account_balance,
                     };
-                    dispatch(formUpdate(account_update));
-                    if (field === 'account_from' && (value_name.indexOf('LFUCG') === -1)) {
-                        const balance_update = {
-                            balance: value_balance,
-                        };
-                        dispatch(formUpdate(balance_update));
-                    }
+                    dispatch(formUpdate(balance_update));
                 }
             };
         },
