@@ -50,7 +50,7 @@ class AgreementHistoryAdmin(SimpleHistoryAdmin):
     )    
     search_fields = (
         'resolution_number',
-        'account_name'
+        'account_id__account_name'
     )
 
     def account_name(self, obj):
