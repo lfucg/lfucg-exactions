@@ -76,7 +76,7 @@ class AgreementReport extends React.Component {
 
                 <div className="form-header">
                     <div className="container">
-                        <h1>AGREEMENTS - {agreements.currentAgreement && agreements.currentAgreement.resolution_number} - REPORT</h1>
+                        <h1>AGREEMENTS - {agreements && agreements.currentAgreement && agreements.currentAgreement.resolution_number} - REPORT</h1>
                     </div>
                 </div>
 
@@ -84,81 +84,84 @@ class AgreementReport extends React.Component {
 
                 <div className="inside-body">
                     {agreements.loadingAgreement ? <LoadingScreen /> :
-                    <div className="container">
-                        <h2>Report Preview</h2>
-                        <div className="clearfix" />
-                        <div className="report-table">
-                            <div className="row">
-                                <h3 className="col-sm-6">Agreement</h3>
-                            </div>
-                            <div className="row report-header">
-                                <h5 className="col-sm-6">Resolution</h5>
-                                <h5 className="col-sm-6 right-border">Account</h5>
-                            </div>
-                            <div className="row">
-                                <div className="col-sm-6 report-data">{agreements.currentAgreement.resolution_number}</div>
-                                <div className="col-sm-6 report-data right-border">{agreements.currentAgreement.account_id && agreements.currentAgreement.account_id.account_name}</div>
-                            </div>
-                            <div className="row" />
-
-                            <div className="row">
-                                <h3 className="col-sm-6">Projects</h3>
-                            </div>
-                            <div className="row report-header">
-                                <h5 className="col-sm-3">Category</h5>
-                                <h5 className="col-sm-3">Type</h5>
-                                <h5 className="col-sm-3 right-border">Status</h5>
-                            </div>
-                            {projectsList}
-                            <div className="row" />
-
-                            <div className="row">
-                                <h3>
-                                    <div className="col-sm-6">
-                                        Payments
-                                    </div>
-                                </h3>
-                            </div>
-                            <div className="row report-header">
-                                <h5 className="col-sm-2 right-border">Payment Type</h5>
-                                <div className="col-sm-10">
-                                    <h5 className="col-sm-2">Roads</h5>
-                                    <h5 className="col-sm-2">Parks</h5>
-                                    <h5 className="col-sm-2">Stormwater</h5>
-                                    <h5 className="col-sm-2">Open Space</h5>
-                                    <h5 className="col-sm-2">Sewer Trans</h5>
-                                    <h5 className="col-sm-2 right-border">Sewer Cap</h5>
+                    <div> {agreements.currentAgreement &&
+                        <div className="container">
+                            <h2>Report Preview</h2>
+                            <div className="clearfix" />
+                            <div className="report-table">
+                                <div className="row">
+                                    <h3 className="col-sm-6">Agreement</h3>
                                 </div>
-                            </div>
-                            {paymentsList}
-                            <div className="row" />
-
-                            <div className="row">
-                                <h3>
-                                    <div className="col-sm-6">
-                                        Credit Transfers
-                                    </div>
-                                </h3>
-                            </div>
-                            <div className="row report-header">
-                                <h5 className="col-sm-2 right-border">Entry Type</h5>
-                                <div className="col-sm-10">
-                                    <h5 className="col-sm-2">Roads</h5>
-                                    <h5 className="col-sm-2">Parks</h5>
-                                    <h5 className="col-sm-2">Stormwater</h5>
-                                    <h5 className="col-sm-2">Open Space</h5>
-                                    <h5 className="col-sm-2">Sewer Trans</h5>
-                                    <h5 className="col-sm-2 right-border">Sewer Cap</h5>
+                                <div className="row report-header">
+                                    <h5 className="col-sm-6">Resolution</h5>
+                                    <h5 className="col-sm-6 right-border">Account</h5>
                                 </div>
+                                <div className="row">
+                                    <div className="col-sm-6 report-data">{agreements.currentAgreement.resolution_number}</div>
+                                    <div className="col-sm-6 report-data right-border">{agreements.currentAgreement.account_id && agreements.currentAgreement.account_id.account_name}</div>
+                                </div>
+                                <div className="row" />
+
+                                <div className="row">
+                                    <h3 className="col-sm-6">Projects</h3>
+                                </div>
+                                <div className="row report-header">
+                                    <h5 className="col-sm-3">Category</h5>
+                                    <h5 className="col-sm-3">Type</h5>
+                                    <h5 className="col-sm-3 right-border">Status</h5>
+                                </div>
+                                {projectsList}
+                                <div className="row" />
+
+                                <div className="row">
+                                    <h3>
+                                        <div className="col-sm-6">
+                                            Payments
+                                        </div>
+                                    </h3>
+                                </div>
+                                <div className="row report-header">
+                                    <h5 className="col-sm-2 right-border">Payment Type</h5>
+                                    <div className="col-sm-10">
+                                        <h5 className="col-sm-2">Roads</h5>
+                                        <h5 className="col-sm-2">Parks</h5>
+                                        <h5 className="col-sm-2">Stormwater</h5>
+                                        <h5 className="col-sm-2">Open Space</h5>
+                                        <h5 className="col-sm-2">Sewer Trans</h5>
+                                        <h5 className="col-sm-2 right-border">Sewer Cap</h5>
+                                    </div>
+                                </div>
+                                {paymentsList}
+                                <div className="row" />
+
+                                <div className="row">
+                                    <h3>
+                                        <div className="col-sm-6">
+                                            Credit Transfers
+                                        </div>
+                                    </h3>
+                                </div>
+                                <div className="row report-header">
+                                    <h5 className="col-sm-2 right-border">Entry Type</h5>
+                                    <div className="col-sm-10">
+                                        <h5 className="col-sm-2">Roads</h5>
+                                        <h5 className="col-sm-2">Parks</h5>
+                                        <h5 className="col-sm-2">Stormwater</h5>
+                                        <h5 className="col-sm-2">Open Space</h5>
+                                        <h5 className="col-sm-2">Sewer Trans</h5>
+                                        <h5 className="col-sm-2 right-border">Sewer Cap</h5>
+                                    </div>
+                                </div>
+                                {ledgersList}
                             </div>
-                            {ledgersList}
+
+                            <a
+                            className="btn btn-lex col-sm-3"
+                            href={`../api/export_agreement_csv/?agreement=${agreements.currentAgreement.id}`}
+                            disabled={!agreements.currentAgreement.id}
+                            >Export CSV</a>
                         </div>
-
-                        <a
-                          className="btn btn-lex col-sm-3"
-                          href={`../api/export_agreement_csv/?agreement=${agreements.currentAgreement.id}`}
-                          disabled={!agreements.currentAgreement.id}
-                        >Export CSV</a>
+                    }
                     </div>
                     }
                 </div>
