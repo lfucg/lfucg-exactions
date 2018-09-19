@@ -54,6 +54,7 @@ class AccountViewSet(viewsets.ModelViewSet):
 class AccountQuickViewSet(viewsets.ModelViewSet):
     serializer_class = AccountQuickSerializer
     queryset = Account.objects.all().order_by('account_name')
+    pagination_class = None
 
 class AgreementViewSet(viewsets.ModelViewSet):
     serializer_class = AgreementSerializer
@@ -100,6 +101,7 @@ class AgreementViewSet(viewsets.ModelViewSet):
 class AgreementQuickViewSet(viewsets.ModelViewSet):
     serializer_class = AgreementQuickSerializer
     queryset = Agreement.objects.all().order_by('resolution_number')
+    pagination_class = None
             
 class PaymentViewSet(viewsets.ModelViewSet):
     serializer_class = PaymentSerializer
@@ -200,6 +202,7 @@ class ProjectViewSet(viewsets.ModelViewSet):
 class ProjectQuickViewSet(viewsets.ModelViewSet):
     serializer_class = ProjectQuickSerializer
     queryset = Project.objects.all().order_by('-date_modified')
+    pagination_class = None
             
 class ProjectCostEstimateViewSet(viewsets.ModelViewSet):
     serializer_class = ProjectCostEstimateSerializer
