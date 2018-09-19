@@ -51,6 +51,7 @@ class SubdivisionViewSet(viewsets.ModelViewSet):
 class SubdivisionQuickViewSet(viewsets.ModelViewSet):
     serializer_class = SubdivisionQuickSerializer
     queryset = Subdivision.objects.all().order_by('name')
+    pagination_class = None
 
 class PlatViewSet(viewsets.ModelViewSet):
     serializer_class = PlatSerializer
@@ -94,6 +95,7 @@ class PlatViewSet(viewsets.ModelViewSet):
 class PlatQuickViewSet(viewsets.ModelViewSet):
     serializer_class = PlatQuickSerializer
     queryset = Plat.objects.all().order_by('cabinet')
+    pagination_class = None
 
 class LotViewSet(viewsets.ModelViewSet):
     serializer_class = LotSerializer
@@ -142,6 +144,7 @@ class LotViewSet(viewsets.ModelViewSet):
 class LotQuickViewSet(viewsets.ModelViewSet):
     serializer_class = LotQuickSerializer
     queryset = Lot.objects.all().order_by('address_street')
+    pagination_class = None
 
 class LotExactionsViewSet(viewsets.ModelViewSet):
     serializer_class = LotExactionsSerializer
