@@ -63,7 +63,10 @@ const paymentReducer = (state = initialState, action) => {
         }
     case POST_PAYMENT:
     case PUT_PAYMENT:
-        return state;
+        return {
+            ...state,
+            loadingPayment: false,
+        };
     case GET_PAGINATION:
     case SEARCH_QUERY:
         if (action.response.endpoint === '/payment') {
@@ -77,7 +80,10 @@ const paymentReducer = (state = initialState, action) => {
                 prev: action.response.previous,
             }
         }
-        return state;
+        return {
+            ...state,
+            loadingPayment: false,
+        };
     case SET_LOADING_FALSE:
         if (action.model === 'payment') {
             return {

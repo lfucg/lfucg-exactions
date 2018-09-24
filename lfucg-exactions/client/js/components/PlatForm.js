@@ -72,7 +72,7 @@ class PlatForm extends React.Component {
                 );
             })(accounts));
 
-        const platZonesList = !!plats && !!plats.currentPlat && plats.currentPlat.plat_zone &&
+        const platZonesList = !!plats && plats.currentPlat && plats.currentPlat.plat_zone &&
             (map((single_plat_zone) => {
                 return (
                     <div key={single_plat_zone.id} >
@@ -89,7 +89,7 @@ class PlatForm extends React.Component {
                 );
             })(plats.currentPlat.plat_zone));
 
-        const sortedPlatZones = !!plats && !!plats.currentPlat && plats.currentPlat.plat_zone && plats.currentPlat.plat_zone.sort((a, b) => {
+        const sortedPlatZones = !!plats && plats.currentPlat && plats.currentPlat.plat_zone && plats.currentPlat.plat_zone.sort((a, b) => {
             if (a.zone < b.zone) {
                 return -1;
             } else if (a.zone > b.zone) {
@@ -622,14 +622,14 @@ function mapDispatchToProps(dispatch, params) {
                         longitude: data_plat.response.longitude,
                         name: data_plat.response.name,
                         non_buildable_lots: data_plat.response.non_buildable_lots,
-                        non_sewer_due: data_plat.response.non_sewer_due,
+                        non_sewer_due: data_plat.response.non_sewer_due_float,
                         plat: data_plat.response.id,
                         plat_show: `${data_plat.response.id},${data_plat.response.name}`,
                         plat_name: data_plat.response.name,
                         plat_type: data_plat.response.plat_type,
                         plat_type_show: `${data_plat.response.plat_type},${data_plat.response.plat_type_display}`,
                         section: data_plat.response.section,
-                        sewer_due: data_plat.response.sewer_due,
+                        sewer_due: data_plat.response.sewer_due_float,
                         slide: data_plat.response.slide,
                         subdivision: data_plat.response.subdivision,
                         total_acreage: data_plat.response.cleaned_total_acreage,

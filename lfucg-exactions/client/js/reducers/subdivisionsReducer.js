@@ -68,7 +68,10 @@ const subdivisionsReducer = (state = initialState, action) => {
         };
     case POST_SUBDIVISION:
     case PUT_SUBDIVISION:
-        return state;
+        return {
+            ...state,
+            loadingSubdivision: false,
+        };
     case GET_PAGINATION:
     case SEARCH_QUERY:
         if (action.response.endpoint === '/subdivision') {
@@ -82,7 +85,10 @@ const subdivisionsReducer = (state = initialState, action) => {
                 prev: action.response.previous,
             }
         } else {
-            return state;
+            return {
+                ...state,
+                loadingSubdivision: false,
+            };
         }
     case SET_LOADING_FALSE:
         if (action.model === 'subdivision') {

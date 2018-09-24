@@ -59,7 +59,10 @@ const projectCostsReducer = (state = initialState, action) => {
         }
     case POST_PROJECT_COST:
     case PUT_PROJECT_COST:
-        return state;
+        return {
+            ...state,
+            loadingProjectCost: false,
+        };
     case GET_PAGINATION:
     case SEARCH_QUERY:
         if (action.response.endpoint === '/estimate') {
@@ -73,7 +76,10 @@ const projectCostsReducer = (state = initialState, action) => {
                 prev: action.response.previous,
             }
         }
-        return state;
+        return {
+            ...state,
+            loadingProjectCost: false,
+        };
     case SET_LOADING_FALSE:
         if (action.model === 'estimate') {
             return {

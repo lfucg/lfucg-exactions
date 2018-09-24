@@ -16,7 +16,7 @@ class SubdivisionViewSet(viewsets.ModelViewSet):
     queryset = Subdivision.objects.all()
     permission_classes = (CanAdminister,)
     filter_backends = (DjangoFilterBackend, filters.SearchFilter,)
-    search_fields = ('name',)
+    search_fields = ('name', 'plat__name',)
     filter_fields = ('plat__id',)
 
     def get_queryset(self):

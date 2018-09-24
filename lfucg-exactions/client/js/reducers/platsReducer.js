@@ -11,7 +11,6 @@ import {
     GET_SUBDIVISION_PLATS,
     POST_PLAT,
     PUT_PLAT,
-    GET_SUBDIVISION_ID,
     GET_PAGINATION,
     SEARCH_QUERY,
 } from '../constants/apiConstants';
@@ -25,7 +24,7 @@ const initialState = {
     prev: null,
 } 
 
-const platApiCalls = [GET_PLATS, GET_PLATS_QUICK, GET_PLAT_ID, GET_ACCOUNT_PLATS, GET_SUBDIVISION_PLATS, POST_PLAT, PUT_PLAT, GET_SUBDIVISION_ID];
+const platApiCalls = [GET_PLATS, GET_PLATS_QUICK, GET_PLAT_ID, GET_ACCOUNT_PLATS, GET_SUBDIVISION_PLATS, POST_PLAT, PUT_PLAT];
 
 const convertCurrency = (plats) => {
     let newPlatList = [];
@@ -35,14 +34,16 @@ const convertCurrency = (plats) => {
         newPlatList = plats;
         mapObjIndexed((value) => {
             const field_value = parseFloat(plats[value]);
-            plats[value] = field_value.toLocaleString('en-US', { style: 'currency', currency: 'USD' })
+            newPlatList[value] = field_value.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+            newPlatList[`${value}_float`] = field_value;
         })(platCurrencyFields);
     } else {
         newPlatList = map((plat) => {
-
+            
             mapObjIndexed((value) => {
                 const field_value = parseFloat(plat[value]);
-                plat[value] = field_value.toLocaleString('en-US', { style: 'currency', currency: 'USD' })
+                plat[value] = field_value.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+                plats[`${value}_float`] = field_value;
             })(platCurrencyFields);
 
             return plat;
@@ -99,7 +100,10 @@ const platsReducer = (state = initialState, action) => {
         }
     case PUT_PLAT:
     case POST_PLAT:
-        return state;
+        return {
+            ...state,
+            loadingPlat: false,
+        };
     case GET_PAGINATION:
     case SEARCH_QUERY:
         if (action.response.endpoint === '/plat') {
@@ -113,9 +117,10 @@ const platsReducer = (state = initialState, action) => {
                 prev: action.response.previous,
             }
         }
-        return state;
-    case GET_SUBDIVISION_ID:
-        return {};
+        return {
+            ...state,
+            loadingPlat: false,
+        };
     case SET_LOADING_FALSE:
         if (action.model === 'plat') {
             return {

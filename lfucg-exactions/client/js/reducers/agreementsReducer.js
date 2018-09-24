@@ -80,7 +80,10 @@ const agreementsReducer = (state = initialState, action) => {
         };
     case POST_AGREEMENT:
     case PUT_AGREEMENT:
-        return state;
+        return {
+            ...state,
+            loadingAgreement: false,
+        };
     case GET_PAGINATION:
     case SEARCH_QUERY:
         if (action.response.endpoint === '/agreement') {
@@ -94,7 +97,10 @@ const agreementsReducer = (state = initialState, action) => {
                 prev: action.response.previous,
             }
         }
-        return state;
+        return {
+            ...state,
+            loadingAgreement: false,
+        };
     case SET_LOADING_FALSE:
         if (action.model === 'agreement') {
             return {
