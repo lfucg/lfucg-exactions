@@ -109,15 +109,20 @@ const accountReducer = (state = initialState, action) => {
         return {
             ...state,
             accountFrom: action.response[0],
+            loadingAccount: false,
         };
     case GET_LEDGER_ACCOUNT_TO:
         return {
             ...state,
             accountTo: action.response[0],
+            loadingAccount: false,
         };
     case POST_ACCOUNT:
     case PUT_ACCOUNT:
-        return state;
+        return {
+            ...state,
+            loadingAccount: false,
+        };
     case SEARCH_QUERY:
     case GET_PAGINATION:
         if (action.response.endpoint === '/account') {
@@ -132,7 +137,10 @@ const accountReducer = (state = initialState, action) => {
                 prev: action.response.previous,
             }
         }
-        return state;
+        return {
+            ...state,
+            loadingAccount: false,
+        };
     case SET_LOADING_FALSE:
         if (action.model === 'account') {
             return {

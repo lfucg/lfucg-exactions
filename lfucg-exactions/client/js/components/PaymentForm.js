@@ -55,7 +55,7 @@ class PaymentForm extends React.Component {
 
         const lotsList = [];
 
-        if (!!lots && lots.length > 0) {
+        if (lots && lots.length > 0) {
             map((lot) => {
                 lotsList.push({
                     id: lot.id,
@@ -65,7 +65,7 @@ class PaymentForm extends React.Component {
             })(lots);
         }
 
-        const accountsList = accounts.length > 0 &&
+        const accountsList = accounts && accounts.length > 0 &&
             (map((account) => {
                 return (
                     <option key={account.id} value={[account.id, account.account_name]} >
@@ -74,7 +74,7 @@ class PaymentForm extends React.Component {
                 );
             })(accounts));
 
-        const agreementsList = agreements.length > 0 &&
+        const agreementsList = agreements && agreements.length > 0 &&
             (map((agreement) => {
                 return (
                     <option key={agreement.id} value={[agreement.id, agreement.resolution_number]} >
@@ -83,7 +83,7 @@ class PaymentForm extends React.Component {
                 );
             })(agreements));
 
-        const currentLot = !!lots && lots.length > 0 &&
+        const currentLot = lots && lots.length > 0 &&
             filter(lot => lot.id === parseInt(activeForm.lot_id, 10))(lots)[0];
 
         const submitEnabled =
@@ -123,7 +123,7 @@ class PaymentForm extends React.Component {
                                                   id="lot_id"
                                                   options={lotsList}
                                                   placeholder="Lot"
-                                                  emptyLabel={lots.lots.length > 0 ? 'No Results Found.' : 'Results loading...'}
+                                                  emptyLabel={lots.length > 0 ? 'No Results Found.' : 'Results loading...'}
                                                   selected={activeForm.lot_id ? (
                                                     filter(lot => lot.id === activeForm.lot_id)(lotsList)
                                                     ) : []}

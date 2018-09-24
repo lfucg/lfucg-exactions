@@ -70,7 +70,10 @@ const projectsReducer = (state = initialState, action) => {
         };
     case POST_PROJECT:
     case PUT_PROJECT:
-        return state;
+        return {
+            ...state,
+            loadingProject: false,
+        };
     case GET_PAGINATION:
     case SEARCH_QUERY:
         if (action.response.endpoint === '/project') {
@@ -84,7 +87,10 @@ const projectsReducer = (state = initialState, action) => {
                 prev: action.response.previous,
             }
         }
-        return state;
+        return {
+            ...state,
+            loadingProject: false,
+        };
     case SET_LOADING_FALSE:
         if (action.model === 'project') {
             return {
