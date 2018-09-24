@@ -126,9 +126,15 @@ const lotsReducer = (state = initialState, action) => {
         };
     case POST_LOT:
     case PUT_LOT:
-        return state;
+        return {
+            ...state,
+            loadingLot: false,
+        };
     case PUT_PERMIT_ID_ON_LOT:
-        return action.response;
+        return {
+            currentLot: action.response,
+            loadingLot: false,
+        };
     case SEARCH_QUERY:
     case GET_PAGINATION:
         if (action.response.endpoint === '/lot') {
@@ -142,7 +148,10 @@ const lotsReducer = (state = initialState, action) => {
                 prev: action.response.previous,
             }
         }
-        return state;
+        return {
+            ...state,
+            loadingLot: false,
+        };
     case SET_LOADING_FALSE:
         if (action.model === 'lot') {
             return {
