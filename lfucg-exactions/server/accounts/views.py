@@ -1050,7 +1050,7 @@ class TransactionCSVExportView(View):
                         all_plat_zones += (zone.zone + ', ')
 
                 if lot['alternative_address_number'] or lot['alternative_address_street']:
-                    alt_address = lot['alternative_address_number'] + lot['alternative_address_street']
+                    alt_address = str(lot['alternative_address_number']) + lot['alternative_address_street']
 
                 lot_payments = Payment.objects.filter(lot_id=lot['id'])
                 lot_ledgers = AccountLedger.objects.filter(lot=lot['id'])
