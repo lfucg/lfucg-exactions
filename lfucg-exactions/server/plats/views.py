@@ -426,9 +426,9 @@ class LotSearchCSVExportView(View):
         payment_number = 1
         if max_payments is not None:
             while max_payments >= payment_number:
-                headers.extend(['Pymt. Date %s' % payment_number,])
-                headers.extend(['Pymt. Amt. %s' % payment_number,])
-                headers.extend(['Pymt. Type %s' % payment_number,])
+                headers.extend(['Payment. Date %s' % payment_number,])
+                headers.extend(['Payment. Amt. %s' % payment_number,])
+                headers.extend(['Payment. Type %s' % payment_number,])
                 payment_number += 1
 
         # APPEND LEDGER HEADERS FROM OUTSET BASED ON MAX LEDGERS ON LOTS QUERY
@@ -437,10 +437,10 @@ class LotSearchCSVExportView(View):
         ledger_number = 1
         if max_ledgers is not None:
             while max_ledgers >= ledger_number:
-                headers.extend(['Trf. %s Date' % ledger_number])
-                headers.extend(['Trf. %s Sewer' % ledger_number])
-                headers.extend(['Trf. %s Non-Sewer' % ledger_number])
-                headers.extend(['Trf. %s Type' % ledger_number])
+                headers.extend(['Credit Change. %s Date' % ledger_number])
+                headers.extend(['Credit Change. %s Sewer' % ledger_number])
+                headers.extend(['Credit Change. %s Non-Sewer' % ledger_number])
+                headers.extend(['Credit Change. %s Type' % ledger_number])
                 ledger_number += 1
 
         # WRITE HEADERS
@@ -470,8 +470,8 @@ class LotSearchCSVExportView(View):
 
             if lot['lot_exactions']:
                 total_exactions = lot['lot_exactions']['total_exactions']
-                sewer = lot['lot_exactions']['sewer_due']
-                non_sewer = lot['lot_exactions']['non_sewer_due']
+                sewer = lot['lot_exactions']['sewer_exactions']
+                non_sewer = lot['lot_exactions']['non_sewer_exactions']
                 sewer_trans = lot['current_dues_sewer_trans_dev']
                 sewer_cap = lot['current_dues_sewer_cap_dev']
                 roads = lot['current_dues_roads_dev']
@@ -508,19 +508,19 @@ class LotSearchCSVExportView(View):
                 payment_length_per_lot = 0
                 for single_payment in payment_queryset:
                     payment_length_per_lot += 1
-                    row['Pymt. Date %s' % payment_length_per_lot] = single_payment.date_created
-                    row['Pymt. Amt. %s' % payment_length_per_lot] = '${:,.2f}'.format(single_payment.calculate_payment_total())
-                    row['Pymt. Type %s' % payment_length_per_lot] = single_payment.payment_type
+                    row['Payment. Date %s' % payment_length_per_lot] = single_payment.date_created
+                    row['Payment. Amt. %s' % payment_length_per_lot] = '${:,.2f}'.format(single_payment.calculate_payment_total())
+                    row['Payment. Type %s' % payment_length_per_lot] = single_payment.payment_type
 
             ledger_from_queryset = AccountLedger.objects.filter(lot=lot['id'])
             if ledger_from_queryset is not None:
                 ledger_length_per_lot = 0
                 for ledger in ledger_from_queryset:
                     ledger_length_per_lot += 1
-                    row['Trf. %s Date' % ledger_length_per_lot] = ledger.entry_date
-                    row['Trf. %s Sewer' % ledger_length_per_lot] = '${:,.2f}'.format(ledger.sewer_credits)
-                    row['Trf. %s Non-Sewer' % ledger_length_per_lot] = '${:,.2f}'.format(ledger.non_sewer_credits)
-                    row['Trf. %s Type' % ledger_length_per_lot] = ledger.entry_type
+                    row['Credit Change. %s Date' % ledger_length_per_lot] = ledger.entry_date
+                    row['Credit Change. %s Sewer' % ledger_length_per_lot] = '${:,.2f}'.format(ledger.sewer_credits)
+                    row['Credit Change. %s Non-Sewer' % ledger_length_per_lot] = '${:,.2f}'.format(ledger.non_sewer_credits)
+                    row['Credit Change. %s Type' % ledger_length_per_lot] = ledger.entry_type
 
             writer.writerow(row)
 
