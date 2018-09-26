@@ -121,6 +121,7 @@ class AccountLedgerExisting extends React.Component {
                   ]}
                   currentPage="Credit Transfers"
                   csvEndpoint="../api/ledger_search_csv/?"
+                  dateFilters={true}
                 />
 
                 <div className="inside-body">

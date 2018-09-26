@@ -2,6 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { map, compose, filter, reduce } from 'ramda';
+
+import FormGroup from './FormGroup';
 import {
     searchQuery,
     getPagination,
@@ -18,6 +20,7 @@ class SearchBar extends React.Component {
             apiCalls: this.props.apiCalls,
             advancedSearch: this.props.advancedSearch,
             csvEndpoint: this.props.csvEndpoint,
+            dateFilters: this.props.dateFilters,
         });
     }
     
@@ -125,6 +128,40 @@ class SearchBar extends React.Component {
                             <div className="row">
                                 {advancedSearchDropdowns}
                             </div>
+                            {this.props.dateFilters &&
+                                <div className="row">
+                                    <div className="col-sm-12">
+                                        <div className="col-sm-6"
+                                            onChange={() => onFilter('filter_starting_date')} 
+                                        >
+                                            <FormGroup 
+                                                label="* Starting Date" 
+                                                id="filter_starting_date"
+                                            >
+                                                <input 
+                                                    className="form-control" 
+                                                    placeholder="Date Format YYYY-MM-DD" 
+                                                    type="date" 
+                                                />
+                                            </FormGroup>
+                                        </div>
+                                        <div className="col-sm-6"
+                                            onChange={() => onFilter('filter_ending_date')} 
+                                        >
+                                            <FormGroup 
+                                                label="* Ending Date" 
+                                                id="filter_ending_date"
+                                            >
+                                                <input 
+                                                    className="form-control" 
+                                                    placeholder="Date Format YYYY-MM-DD" 
+                                                    type="date" 
+                                                />
+                                            </FormGroup>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
                         </div>
                     </div>
                 </div>
@@ -153,6 +190,7 @@ SearchBar.propTypes = {
     advancedSearch: PropTypes.array,
     csvEndpoint: PropTypes.string,
     currentPage: PropTypes.string,
+    dateFilters: PropTypes.bool,
 };
 
 function mapStateToProps(state) {
@@ -177,10 +215,12 @@ function mapDispatchToProps(dispatch, props) {
             };
         },
         onFilter(field) {
-            const update = {
-                [field.name]: field.value,
-            };
-            dispatch(formUpdate(update));
+            if (field !== 'filter_ending_date' || field !== 'filter_starting_date') {
+                const update = {
+                    [field.name]: field.value,
+                };
+                dispatch(formUpdate(update));
+            }
             dispatch(searchQuery());
         },
         advancedSearchPopulation() {
