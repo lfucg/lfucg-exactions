@@ -114,6 +114,7 @@ class PaymentExisting extends React.Component {
                   ]}
                   currentPage="Payments"
                   csvEndpoint="../api/payment_search_csv/?"
+                  dateFilters={true}
                 />
 
                 <div className="inside-body">

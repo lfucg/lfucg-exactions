@@ -91,7 +91,7 @@ class AccountCSVExportView(View):
                 'Address': account['address_full'],
                 'Email': account['email'],
                 'Phone': account['phone'],
-                'Balance': account['balance']['balance'],
+                'Balance': account['current_account_balance'],
             }
 
             plat_queryset = Plat.objects.filter(account=account['id'])
