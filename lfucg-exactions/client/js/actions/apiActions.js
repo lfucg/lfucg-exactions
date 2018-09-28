@@ -311,7 +311,7 @@ export function getSubdivisionPlats(selectedSubdivision) {
     return {
         type: API_CALL,
         endpoint: GET_SUBDIVISION_PLATS,
-        url: `/plat/?paginatePage&subdivision__id=${selectedSubdivision}`,
+        url: `/plat/?paginatePage&subdivision=${selectedSubdivision}`,
     };
 }
 
@@ -557,7 +557,7 @@ export function getSubdivisionLots(selectedSubdivision) {
     return {
         type: API_CALL,
         endpoint: GET_SUBDIVISION_LOTS,
-        url: `/lot/?paginatePage&plat__subdivision=${selectedSubdivision}`,
+        url: `/lot/?paginatePage&plat__subdivision__id=${selectedSubdivision}`,
     };
 }
 
