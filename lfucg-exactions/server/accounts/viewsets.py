@@ -10,7 +10,7 @@ from .serializers import *
 from .permissions import CanAdminister
 from django.conf import settings
 
-from django_filters.rest_framework import DjangoFilterBackend
+# from django_filters.rest_framework import DjangoFilterBackend
 
 from plats.models import Plat, Lot
 
@@ -20,7 +20,7 @@ class AccountViewSet(viewsets.ModelViewSet):
     serializer_class = AccountSerializer
     queryset = Account.objects.all()
     permission_classes = (CanAdminister,)
-    filter_backends = (DjangoFilterBackend, filters.SearchFilter,)
+    filter_backends = (filters.DjangoFilterBackend, filters.SearchFilter,)
     search_fields = ('account_name', 'contact_full_name', 'address_full', 'phone', 'email',)
     filter_fields = ('plat_account__id', 'lot_account__id', 'ledger_account_to', 'ledger_account_from', )
 
@@ -60,7 +60,7 @@ class AgreementViewSet(viewsets.ModelViewSet):
     serializer_class = AgreementSerializer
     queryset = Agreement.objects.all()
     permission_classes = (CanAdminister,)
-    filter_backends = (DjangoFilterBackend, filters.SearchFilter,)
+    filter_backends = (filters.DjangoFilterBackend, filters.SearchFilter,)
     search_fields = ('resolution_number', 'account_id__account_name', 'agreement_type', 'expansion_area',)
     filter_fields = ('agreement_type', 'account_id', 'expansion_area', 'is_approved', 'ledger',)
 
@@ -107,9 +107,9 @@ class PaymentViewSet(viewsets.ModelViewSet):
     serializer_class = PaymentSerializer
     queryset = Payment.objects.all()
     permission_classes = (CanAdminister,)
-    filter_backends = (DjangoFilterBackend, filters.SearchFilter,)
+    filter_backends = (filters.DjangoFilterBackend, filters.SearchFilter,)
     search_fields = ('lot_id__address_full', 'payment_type', 'check_number', 'credit_account__account_name', 'paid_by', 'credit_source__resolution_number')
-    filterset_fields = ('payment_type', 'paid_by_type', 'credit_account', 'lot_id', 'credit_source', 'is_approved',)
+    filter_fields = ('payment_type', 'paid_by_type', 'credit_account', 'lot_id', 'credit_source', 'is_approved',)
 
     def get_queryset(self):
         queryset = Payment.objects.exclude(is_active=False)
@@ -167,7 +167,7 @@ class ProjectViewSet(viewsets.ModelViewSet):
     serializer_class = ProjectSerializer
     queryset = Project.objects.all()
     permission_classes = (CanAdminister,)
-    filter_backends = (DjangoFilterBackend, filters.SearchFilter,)
+    filter_backends = (filters.DjangoFilterBackend, filters.SearchFilter,)
     search_fields = ('agreement_id__resolution_number', 'name', 'project_category', 'project_description',)
     filter_fields = ('project_category', 'project_status', 'agreement_id', 'project_type', 'expansion_area', 'is_approved',)
 
@@ -216,7 +216,7 @@ class ProjectCostEstimateViewSet(viewsets.ModelViewSet):
     serializer_class = ProjectCostEstimateSerializer
     queryset = ProjectCostEstimate.objects.all()
     permission_classes = (CanAdminister,)
-    filter_backends = (DjangoFilterBackend, filters.SearchFilter,)
+    filter_backends = (filters.DjangoFilterBackend, filters.SearchFilter,)
     search_fields = ('project_id__name', 'estimate_type',)
     filter_fields = ('project_id', 'is_approved',)
 
@@ -257,9 +257,9 @@ class AccountLedgerViewSet(viewsets.ModelViewSet):
     serializer_class = AccountLedgerSerializer
     queryset = AccountLedger.objects.all()
     permission_classes = (CanAdminister,)
-    filter_backends = (DjangoFilterBackend, filters.SearchFilter,)
+    filter_backends = (filters.DjangoFilterBackend, filters.SearchFilter,)
     search_fields = ('entry_type', 'agreement__resolution_number', 'lot__address_full', 'account_to__account_name', 'account_from__account_name',)
-    filterset_fields = ('entry_type', 'agreement', 'lot', 'account_to', 'account_from', 'is_approved',)
+    filter_fields = ('entry_type', 'agreement', 'lot', 'account_to', 'account_from', 'is_approved',)
 
     def get_queryset(self):
         queryset = AccountLedger.objects.exclude(is_active=False)
