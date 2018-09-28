@@ -3,7 +3,7 @@ from django.db.models import Q
 from django.conf import settings
 
 from rest_framework.response import Response
-from django_filters.rest_framework import DjangoFilterBackend
+# from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.pagination import PageNumberPagination
 
 from .models import *
@@ -15,7 +15,7 @@ class SubdivisionViewSet(viewsets.ModelViewSet):
     serializer_class = SubdivisionSerializer
     queryset = Subdivision.objects.all()
     permission_classes = (CanAdminister,)
-    filter_backends = (DjangoFilterBackend, filters.SearchFilter,)
+    filter_backends = (filters.DjangoFilterBackend, filters.SearchFilter,)
     search_fields = ('name', 'plat__name',)
     filter_fields = ('plat__id',)
 
@@ -57,9 +57,9 @@ class PlatViewSet(viewsets.ModelViewSet):
     serializer_class = PlatSerializer
     queryset = Plat.objects.all()
     permission_classes = (CanAdminister,)
-    filter_backends = (DjangoFilterBackend, filters.SearchFilter,)
+    filter_backends = (filters.DjangoFilterBackend, filters.SearchFilter,)
     search_fields = ('name', 'expansion_area', 'slide', 'subdivision__name', 'account__account_name', 'cabinet', 'unit', 'section', 'block',)
-    filterset_fields = ('expansion_area', 'account', 'subdivision', 'plat_type', 'lot__id', 'is_approved',)
+    filter_fields = ('expansion_area', 'account', 'subdivision', 'plat_type', 'lot__id', 'is_approved',)
 
     def get_queryset(self):
         queryset = Plat.objects.exclude(is_active=False)
@@ -101,9 +101,9 @@ class LotViewSet(viewsets.ModelViewSet):
     serializer_class = LotSerializer
     queryset = Lot.objects.all()
     permission_classes = (CanAdminister,)
-    filter_backends = (DjangoFilterBackend, filters.SearchFilter,)
+    filter_backends = (filters.DjangoFilterBackend, filters.SearchFilter,)
     search_fields = ('address_full', 'lot_number', 'parcel_id', 'permit_id', 'plat__expansion_area', 'plat__name', )
-    filterset_fields = ('account', 'plat', 'is_approved', 'plat__subdivision', 'ledger_lot',)
+    filter_fields = ('account', 'plat__id', 'is_approved', 'plat__subdivision__id', 'ledger_lot',)
 
 
     def get_queryset(self):
