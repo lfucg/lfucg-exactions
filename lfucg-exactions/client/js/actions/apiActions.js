@@ -311,7 +311,7 @@ export function getSubdivisionPlats(selectedSubdivision) {
     return {
         type: API_CALL,
         endpoint: GET_SUBDIVISION_PLATS,
-        url: `/plat/?paginatePage&subdivision=${selectedSubdivision}`,
+        url: `/plat/?paginatePage&subdivision__id=${selectedSubdivision}`,
     };
 }
 
@@ -1627,7 +1627,7 @@ export function getPagination(page) {
                 currentPage,
                 page_size,
             } = activeForm;
-
+            
             if (!page) {
                 if (currentPage === '/credit-transfer/') {
                     return '/ledger/?paginatePage';

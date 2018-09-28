@@ -75,11 +75,17 @@ class AccountField(serializers.Field):
         return AccountQuickSerializer(obj).data
 
 class AgreementQuickSerializer(serializers.ModelSerializer):
+    account_name = serializers.SerializerMethodField(read_only=True)
+
+    def get_account_name(self, obj):
+        return obj.account_id.account_name
+
     class Meta:
         model = Agreement
         fields = (
             'id',
             'resolution_number',
+            'account_name',
         )
 
 class AgreementSerializer(serializers.ModelSerializer):

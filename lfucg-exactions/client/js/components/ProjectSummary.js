@@ -80,7 +80,7 @@ class ProjectSummary extends React.Component {
 
                 <div className="form-header">
                     <div className="container">
-                        <h1>PROJECT SUMMARY - {projects.currentProject.name}</h1>
+                        <h1>PROJECT SUMMARY - {projects.currentProject && projects.currentProject.name}</h1>
                     </div>
                 </div>
 
@@ -88,7 +88,7 @@ class ProjectSummary extends React.Component {
 
                 <div className="inside-body">
                     <div className="container">
-                        {!!projects && !projects.loadingProject ? <LoadingScreen /> :
+                        {projects.loadingProject ? <LoadingScreen /> :
                         (
                             <div className="col-md-offset-1 col-md-10 panel-group" id="accordion" role="tablist" aria-multiselectable="false">
                                 <a

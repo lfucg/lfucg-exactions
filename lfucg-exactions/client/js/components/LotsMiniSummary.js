@@ -114,13 +114,12 @@ class LotsMiniSummary extends React.Component {
                         >
                             <div className="panel-body">
                                 {lotsList}
-                                {lotsList ? 
+                                {!this.props.singleLot &&
                                     <Pagination 
                                         next={this.props.lots && this.props.lots.next}
                                         prev={this.props.lots && this.props.lots.prev}
                                         count={this.props.lots && this.props.lots.count} 
-                                    /> : 
-                                    <h1>No Results Found</h1>
+                                    />
                                 }
                             </div>
                         </div>

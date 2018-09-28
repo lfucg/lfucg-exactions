@@ -28,6 +28,158 @@ class AccountCSVExportView(View):
         serializer = serializer_class(queryset, many=many)
         return serializer
 
+    # def get(self, request, *args, **kwargs):
+    #     headers = [
+    #         'Account Name',
+    #         'Contact Name',
+    #         'Address',
+    #         'Email',
+    #         'Phone',
+    #         'Balance',
+    #         'Subdivision',
+    #         'Cabinet',
+    #         'Slide',
+    #         'Acreage',
+    #         'Buildable Lots',
+    #         'Non-Buildable Lots',
+    #         'Plat Type',
+    #         'Section',
+    #         'Block',
+    #         'Unit',
+    #         'Zone-1',
+    #         'Acres-1',
+    #         'Zone-2',
+    #         'Acres-2',
+    #         'Zone-3',
+    #         'Acres-3',
+    #         'Address',
+    #         'Permit ID',
+    #         'Lot Number',
+    #         'Parcel ID',
+    #         'Total Exactions',
+    #         'Current Exactions',
+    #         'Payment Type',
+    #         'Roads Paid',
+    #         'Parks Paid',
+    #         'Storm Paid',
+    #         'Open Space Paid',
+    #         'Sewer Trans. Paid',
+    #         'Sewer Cap. Paid',
+    #         'Ledger Type',
+    #         'Roads Credits',
+    #         'Parks Credits',
+    #         'Storm Credits',
+    #         'Open Space Credits',
+    #         'Non-Sewer Credits',
+    #         'Sewer Trans. Credits',
+    #         'Sewer Cap. Credits',
+    #         'Sewer Credits',
+    #     ]
+
+    #     all_rows = []
+
+    #     account_value = request.GET.get('account', None)
+
+    #     if account_value is not None:
+    #         account_queryset = Account.objects.filter(id=account_value)
+    #         account_serializer = self.list(
+    #             account_queryset,
+    #             AccountSerializer,
+    #             many=True
+    #         )
+    #         filename = account_queryset[0].account_name + '_account_report.csv'
+
+    #     else:
+    #         account_queryset = Account.objects.all()
+
+    #         plat_set = self.request.GET.get('plat_account__id', None)
+    #         if plat_set is not None:
+    #             account_queryset = account_queryset.filter(plat_account=plat_set)
+
+    #         lot_set = self.request.GET.get('lot_account__id', None)
+    #         if lot_set is not None:
+    #             account_queryset = account_queryset.filter(lot_account=lot_set)
+
+    #         search_set = self.request.GET.get('search', None)
+    #         if search_set is not None:
+    #             account_queryset = account_queryset.filter(
+    #                     Q(account_name__icontains=search_set) |
+    #                     Q(contact_full_name__icontains=search_set) |
+    #                     Q(address_full__icontains=search_set) |
+    #                     Q(phone__icontains=search_set) |
+    #                     Q(email__icontains=search_set)
+    #                 )
+
+    #         account_serializer = self.list(
+    #             account_queryset,
+    #             AccountSerializer,
+    #             many=True
+    #         )
+
+    #         filename = 'account_report_' + datetime.datetime.now().strftime("%Y-%m-%d") + '.csv'
+
+    #     response = HttpResponse(content_type='text/csv')
+    #     response['Content-Disposition'] = 'attachment; filename='+filename
+
+    #     for account in account_serializer.data:
+
+    #         row = {
+    #             'Account Name': account['account_name'],
+    #             'Contact Name': account['contact_full_name'],
+    #             'Address': account['address_full'],
+    #             'Email': account['email'],
+    #             'Phone': account['phone'],
+    #             'Balance': account['current_account_balance'],
+    #         }
+
+    #         plat_queryset = Plat.objects.filter(account=account['id'])
+    #         plat_ids = []
+    #         # if plat_queryset is not None:
+    #         plat_serializer = (self.list (
+    #             plat_queryset,
+    #             PlatSerializer,
+    #             many=True
+    #         ) if plat_queryset is not None else None)
+    #         # else: 
+    #         #     plat_serializer = None
+
+    #         lot_queryset = Lot.objects.filter(account=account['id'])
+    #         lot_ids = []
+    #         if lot_queryset is not None:
+    #             lot_serializer = self.list (
+    #                 lot_queryset,
+    #                 LotSerializer,
+    #                 many=True
+    #             )
+    #         else:
+    #             lot_serializer = None
+
+    #         payment_queryset = Payment.objects.filter(credit_account=account['id'])
+    #         payment_ids = []
+    #         if payment_queryset is not None:
+    #             payment_serializer = self.list (
+    #                 payment_queryset,
+    #                 PaymentSerializer,
+    #                 many=True
+    #             )
+    #         else:
+    #             payment_serializer = None
+
+    #         ledger_queryset = AccountLedger.objects.filter(account_from=account['id'], account_to=account['id'])
+    #         ledger_ids = []
+    #         if ledger_queryset is not None:
+    #             ledger_serializer = self.list (
+    #                 ledger_queryset,
+    #                 AccountLedgerSerializer,
+    #                 many=True
+    #             )
+    #         else:
+    #             ledger_queryset = None
+
+    #         for i, plat in zip(range(plat_queryset.count()), plat_serializer.data):
+    #             print('PLAT', plat)
+
+# OLD VERSION
     def get(self, request, *args, **kwargs):
         headers = [
             'Account Name',
@@ -984,6 +1136,7 @@ class TransactionCSVExportView(View):
             'Permit ID',
             'Alt. Address',
             'Transaction Type',
+            'Account',
             'Paid By',
             'Sewer Trans.',
             'Sewer Cap.',
@@ -1078,6 +1231,7 @@ class TransactionCSVExportView(View):
                             'Permit ID': lot['permit_id'],
                             'Alt. Address': alt_address,
                             'Transaction Type': payment['payment_type_display'],
+                            'Account': payment['credit_account']['account_name'],
                             'Paid By': payment['paid_by'],
                             'Sewer Trans.': payment['paid_sewer_trans'],
                             'Sewer Cap.': payment['paid_sewer_cap'],
@@ -1118,7 +1272,8 @@ class TransactionCSVExportView(View):
                             'Lot Address': lot['address_full'],
                             'Permit ID': lot['permit_id'],
                             'Alt. Address': alt_address,
-                            'Transaction Type': 'Credits',
+                            'Transaction Type': ledger['entry_type'],
+                            'Account': account_from,
                             'Paid By': account_from,
                             'Sewer Trans.': ledger['sewer_trans'],
                             'Sewer Cap.': ledger['sewer_cap'],
