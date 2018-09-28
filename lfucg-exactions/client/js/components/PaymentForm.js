@@ -78,7 +78,7 @@ class PaymentForm extends React.Component {
             (map((agreement) => {
                 return (
                     <option key={agreement.id} value={[agreement.id, agreement.resolution_number]} >
-                        Resolution: {agreement.resolution_number}
+                        Resolution: {agreement.resolution_number} : {agreement.account_name}
                     </option>
                 );
             })(agreements));

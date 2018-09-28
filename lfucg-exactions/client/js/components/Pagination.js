@@ -20,7 +20,7 @@ class Pagination extends React.Component {
         // relates to pagination size in backend
         const paginationSize = activeForm.page_size || 10;
 
-
+        
         return (
             <div className="container-fluid">
                 <div className="row">

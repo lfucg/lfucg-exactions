@@ -120,12 +120,16 @@ class PlatsMiniSummary extends React.Component {
                         >
                             <div className="panel-body">
                                 {platsList}
-                                {platsList ? 
-                                    <Pagination 
-                                        next={this.props.plats && this.props.plats.next}
-                                        prev={this.props.plats && this.props.plats.prev}
-                                        count={this.props.plats && this.props.plats.count} 
-                                    /> : 
+                                {platsList ?
+                                    <div>
+                                        {!this.props.singlePlat &&
+                                            <Pagination 
+                                                next={this.props.plats && this.props.plats.next}
+                                                prev={this.props.plats && this.props.plats.prev}
+                                                count={this.props.plats && this.props.plats.count} 
+                                            /> 
+                                        }
+                                    </div> :
                                     <h1>No Results Found</h1>
                                 }
                             </div>

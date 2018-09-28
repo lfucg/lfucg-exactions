@@ -50,7 +50,7 @@ class ProjectForm extends React.Component {
         const agreementsList = agreements.length > 0 ? (map((agreement) => {
             return (
                 <option key={agreement.id} value={[agreement.id, agreement.resolution_number]} >
-                    {agreement.resolution_number}
+                    {agreement.resolution_number} : {agreement.account_name}
                 </option>
             );
         })(agreements)) : null;

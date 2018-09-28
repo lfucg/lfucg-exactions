@@ -115,11 +115,15 @@ class AgreementsMiniSummary extends React.Component {
                             <div className="panel-body">
                                 {agreementsList}
                                 {agreementsList ? 
-                                    <Pagination 
-                                        next={this.props.agreements && this.props.agreements.next}
-                                        prev={this.props.agreements && this.props.agreements.prev}
-                                        count={this.props.agreements && this.props.agreements.count} 
-                                    /> : 
+                                    <div>
+                                        {!this.props.singleAgreement &&
+                                            <Pagination 
+                                                next={this.props.agreements && this.props.agreements.next}
+                                                prev={this.props.agreements && this.props.agreements.prev}
+                                                count={this.props.agreements && this.props.agreements.count} 
+                                            />
+                                        }
+                                    </div> :
                                     <h1>No Results Found</h1>
                                 }
                             </div>

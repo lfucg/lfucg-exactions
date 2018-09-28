@@ -92,7 +92,7 @@ class AccountLedgerForm extends React.Component {
         const agreementsList = agreements.length > 0 && (map((agreement) => {
             return (
                 <option key={agreement.id} value={[agreement.id, agreement.resolution_number]} >
-                    Resolution: {agreement.resolution_number}
+                    Resolution: {agreement.resolution_number} : {agreement.account_name}
                 </option>
             );
         })(agreements));
@@ -130,7 +130,7 @@ class AccountLedgerForm extends React.Component {
                                     <fieldset>
                                         <div className="row">
                                             <div className="col-sm-6 form-group">
-                                                <label htmlFor="entry_type" className="form-label" id="entry_type" aria-label="Entry Type">Entry Type</label>
+                                                <label htmlFor="entry_type" className="form-label" id="entry_type" aria-label="Entry Type" aria-required="true">* Entry Type</label>
                                                 <select className="form-control" id="entry_type" onChange={formChange('entry_type')} value={activeForm.entry_type_show} >
                                                     <option value="start_entry">Entry Type</option>
                                                     <option value={['NEW', 'New Credits']}>New Credits</option>

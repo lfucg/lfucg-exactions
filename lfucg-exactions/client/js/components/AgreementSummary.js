@@ -21,6 +21,7 @@ import {
 
 import {
     getAgreementID,
+    getAccountID,
     getAgreementPayments,
     getAgreementProjects,
     getAgreementAccountLedgers,
@@ -34,6 +35,7 @@ class AgreementSummary extends React.Component {
     render() {
         const {
             currentUser,
+            accounts,
             agreements,
             payments,
             projects,
@@ -114,8 +116,8 @@ class AgreementSummary extends React.Component {
                                 }
 
                                 <AccountsMiniSummary
-                                  mapSet={agreements.currentAgreement.account_id}
-                                  mapQualifier={!!agreements && !!agreements.currentAgreement.account_id && !!agreements.currentAgreement.account_id.id}
+                                  mapSet={accounts && accounts.currentAccount}
+                                  mapQualifier={!!accounts && !!accounts.currentAccount && !!accounts.currentAccount.id}
                                   singleAccount
                                   title="Developer Account"
                                   accordionID="Account"
@@ -161,6 +163,7 @@ class AgreementSummary extends React.Component {
 
 AgreementSummary.propTypes = {
     currentUser: PropTypes.object,
+    accounts: PropTypes.object,
     agreements: PropTypes.object,
     payments: PropTypes.object,
     projects: PropTypes.object,
@@ -172,6 +175,7 @@ AgreementSummary.propTypes = {
 function mapStateToProps(state) {
     return {
         currentUser: state.currentUser,
+        accounts: state.accounts,
         accountLedgers: state.accountLedgers,
         agreements: state.agreements,
         payments: state.payments,
@@ -190,7 +194,10 @@ function mapDispatchToProps(dispatch, params) {
             .then(() => {
                 dispatch(formUpdate({ loading: false }));
             });
-            dispatch(getAgreementID(selectedAgreement));
+            dispatch(getAgreementID(selectedAgreement))
+            .then((agreement) => {
+                dispatch(getAccountID(agreement.response.account_id.id));
+            });
         },
     };
 }

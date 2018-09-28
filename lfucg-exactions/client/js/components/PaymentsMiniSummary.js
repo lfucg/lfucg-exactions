@@ -121,12 +121,16 @@ class PaymentsMiniSummary extends React.Component {
                         >
                             <div className="panel-body">
                                 {paymentsList}
-                                {paymentsList ? 
-                                    <Pagination 
-                                        next={this.props.payments && this.props.payments.next}
-                                        prev={this.props.payments && this.props.payments.prev}
-                                        count={this.props.payments && this.props.payments.count} 
-                                    /> : 
+                                {paymentsList ?
+                                    <div>
+                                        {!this.props.singlePayment &&
+                                            <Pagination 
+                                                next={this.props.payments && this.props.payments.next}
+                                                prev={this.props.payments && this.props.payments.prev}
+                                                count={this.props.payments && this.props.payments.count} 
+                                            />
+                                        }
+                                    </div> :
                                     <h1>No Results Found</h1>
                                 }
                             </div>

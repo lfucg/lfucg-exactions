@@ -118,12 +118,16 @@ class ProjectsMiniSummary extends React.Component {
                         >
                             <div className="panel-body">
                                 {projectsList}
-                                {projectsList ? 
-                                    <Pagination 
-                                        next={this.props.projects && this.props.projects.next}
-                                        prev={this.props.projects && this.props.projects.prev}
-                                        count={this.props.projects && this.props.projects.count} 
-                                    /> : 
+                                {projectsList ?
+                                    <div>
+                                        {this.props.singleProject &&
+                                            <Pagination 
+                                                next={this.props.projects && this.props.projects.next}
+                                                prev={this.props.projects && this.props.projects.prev}
+                                                count={this.props.projects && this.props.projects.count} 
+                                            /> 
+                                        }
+                                    </div> :
                                     <h1>No Results Found</h1>
                                 }
                             </div>

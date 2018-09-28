@@ -90,7 +90,7 @@ export default function api({ getState, dispatch }) {
 
                 const adjustedResponse = response.data.results;
                 adjustedResponse.next = response.data.next ? response.data.next.slice(response.data.next.indexOf('api') + 3, response.data.next.length) : null;
-                adjustedResponse.prev = response.data.previous ? response.data.previous.slice(response.data.previous.indexOf('api') + 3, response.data.previous.length) : null;
+                adjustedResponse.previous = response.data.previous ? response.data.previous.slice(response.data.previous.indexOf('api') + 3, response.data.previous.length) : null;
                 adjustedResponse.count = response.data.count;
                 adjustedResponse.endpoint = api_endpoint;
 

@@ -19,6 +19,8 @@ import {
 
 import {
     getPaymentID,
+    getAccountID,
+    getAgreementID,
 } from '../actions/apiActions';
 
 class PaymentSummary extends React.Component {
@@ -29,6 +31,8 @@ class PaymentSummary extends React.Component {
     render() {
         const {
             currentUser,
+            accounts,
+            agreements,
             payments,
         } = this.props;
 
@@ -118,16 +122,16 @@ class PaymentSummary extends React.Component {
                                     />
 
                                     <AccountsMiniSummary
-                                        mapSet={payments.currentPayment.credit_account}
-                                        mapQualifier={!!payments && !!payments.currentPayment && !!payments.currentPayment.credit_account}
+                                        mapSet={accounts.currentAccount}
+                                        mapQualifier={!!accounts && !!accounts.currentAccount && !!accounts.currentAccount.id}
                                         singleAccount
                                         title="Developer Account"
                                         accordionID="Account"
                                     />
 
                                     <AgreementsMiniSummary
-                                        mapSet={payments.currentPayment.credit_source}
-                                        mapQualifier={!!payments && !!payments.currentPayment && !!payments.currentPayment.credit_source}
+                                        mapSet={agreements.currentAgreement}
+                                        mapQualifier={!!agreements && !!agreements.currentAgreement && !!agreements.currentAgreement.id}
                                         singleAgreement
                                     />
 
@@ -145,6 +149,8 @@ class PaymentSummary extends React.Component {
 
 PaymentSummary.propTypes = {
     currentUser: PropTypes.object,
+    accounts: PropTypes.object,
+    agreements: PropTypes.object,
     payments: PropTypes.object,
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
@@ -153,6 +159,8 @@ PaymentSummary.propTypes = {
 function mapStateToProps(state) {
     return {
         currentUser: state.currentUser,
+        accounts: state.accounts,
+        agreements: state.agreements,
         payments: state.payments,
     };
 }
@@ -163,7 +171,9 @@ function mapDispatchToProps(dispatch, params) {
     return {
         onComponentDidMount() {
             dispatch(getPaymentID(selectedPayment))
-            .then(() => {
+            .then((payment) => {
+                dispatch(getAccountID(payment.response.credit_account.id));
+                dispatch(getAgreementID(payment.response.credit_source.id));
                 dispatch(formUpdate({ loading: false }));
             });
         },

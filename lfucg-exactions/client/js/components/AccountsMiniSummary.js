@@ -129,12 +129,16 @@ class AccountsMiniSummary extends React.Component {
                         >
                             <div className="panel-body">
                                 {accountsList}
-                                {accountsList ? 
-                                    <Pagination 
-                                        next={this.props.accounts && this.props.accounts.next}
-                                        prev={this.props.accounts && this.props.accounts.prev}
-                                        count={this.props.accounts && this.props.accounts.count} 
-                                    /> : 
+                                {accountsList ?
+                                    <div>
+                                        {!this.props.singleAccount &&
+                                            <Pagination 
+                                                next={this.props.accounts && this.props.accounts.next}
+                                                prev={this.props.accounts && this.props.accounts.prev}
+                                                count={this.props.accounts && this.props.accounts.count} 
+                                            />
+                                        }
+                                    </div> : 
                                     <h1>No Results Found</h1>
                                 }
                             </div>

@@ -318,8 +318,8 @@ class PlatSummary extends React.Component {
                                 />
 
                                 <AccountsMiniSummary
-                                  mapSet={!!accounts && accounts.accounts}
-                                  mapQualifier={!!plats.currentPlat && plats.currentPlat.account && accounts.accounts}
+                                  mapSet={accounts && accounts.currentAccount}
+                                  mapQualifier={!!plats.currentPlat && plats.currentPlat.account && accounts.currentAccount}
                                   singleAccount
                                   title="Developer Account"
                                   accordionID="Account"
