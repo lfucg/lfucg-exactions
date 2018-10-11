@@ -53,7 +53,7 @@ const convertCurrency = (lots) => {
         newLotList = lots;
         mapObjIndexed((value) => {
             const field_value = parseFloat(lots[value]);
-            if (value === 'sewer_exactions' || value === 'non_sewer_exactions' || value === 'total_exactions') {
+            if ((value === 'sewer_exactions' || value === 'non_sewer_exactions' || value === 'total_exactions') && !!lots['lot_exactions']) {
                 lots['lot_exactions'][value] = parseFloat(lots['lot_exactions'][value]).toLocaleString('en-US', { style: 'currency', currency: 'USD' })
             } else {
                 lots[value] = field_value.toLocaleString('en-US', { style: 'currency', currency: 'USD' })
@@ -64,7 +64,7 @@ const convertCurrency = (lots) => {
             
             mapObjIndexed((value) => {
                 const field_value = parseFloat(lot[value]);
-                if (value === 'sewer_exactions' || value === 'non_sewer_exactions' || value === 'total_exactions') {
+                if ((value === 'sewer_exactions' || value === 'non_sewer_exactions' || value === 'total_exactions') && !!lots['lot_exactions']) {
                     lot['lot_exactions'][value] = parseFloat(lot['lot_exactions'][value]).toLocaleString('en-US', { style: 'currency', currency: 'USD' })
                 } else {
                     lot[value] = field_value.toLocaleString('en-US', { style: 'currency', currency: 'USD' })
