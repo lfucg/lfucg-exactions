@@ -1,17 +1,37 @@
 from django.core.management import BaseCommand
-from plats.models import Plat, PlatZone, Lot, Subdivision
-from accounts.models import Account
-from notes.models import Rate, RateTable
-from django.contrib.auth.models import User
 import csv
 from decimal import Decimal
 from datetime import datetime
+
+from django.contrib.auth.models import User
+from plats.models import Plat, PlatZone, Lot, Subdivision
+from accounts.models import Account, Agreement
+from notes.models import Rate, RateTable
 
 class Command(BaseCommand):
     help = "Imports plat data from plat_data"
 
     def add_arguments(self, parser):
         parser.add_argument('filename')
+    
+    def ConvertDates(self, date_field):
+        try:
+            cleaned_date = datetime.strptime(date_field, '%m/%d/%y')
+        except:
+            try:
+                cleaned_date = datetime.strptime(date_field, '%m/%d/%Y')
+            except Exception as ex:
+                cleaned_date = None
+    
+        return cleaned_date
+
+    def SelectDates(self, date_options_list):
+        if date_options_list != 'NULL':
+            converted_date = self.ConvertDates(date_options_list)
+        else:
+            converted_date = self.ConvertDates('1/1/1970')
+        
+        return converted_date
 
     def CheckOrCreateRate(self, zone, expansion_area):
         if zone:
@@ -40,6 +60,21 @@ class Command(BaseCommand):
             except Exception as ex:
                 print('Plat Import Rate Creation Error', ex)
 
+    def GetOrCreateAgreement(self, agreement_details):
+        try:
+            agreement, created = Agreement.objects.get_or_create(
+                resolution_number=agreement_details['resolution'],
+                date_created=agreement_details['date'],
+                date_executed=agreement_details['date'],
+                account_id=agreement_details['account'],
+                agreement_type=agreement_details['type'],
+                defaults = {
+                    'created_by': agreement_details['user'], 'modified_by': agreement_details['user'],
+                    'expansion_area': agreement_details['expansion_area']
+            })
+        except Exception as ex:
+            print('Plat Import Agreement Error', ex)
+
     def handle(self, *args, **options):
         filename = options.get('filename', None)
 
@@ -64,7 +99,7 @@ class Command(BaseCommand):
                 'non_buildable_lots': 0, 'calculation_note': None,
                 'unit': ' ', 'section': ' ', 'block': ' '})
             
-            Account.objects.get_or_create(account_name='Unknown', contact_full_name='Unknown',
+            unknown_account = Account.objects.get_or_create(account_name='Unknown', contact_full_name='Unknown',
                 defaults= { 'created_by': user, 'modified_by': user, 
                 'contact_first_name': 'Unknown', 'contact_last_name': 'Unknown',
                 'address_number': 0, 'address_street': 'Unknown',
@@ -198,3 +233,31 @@ class Command(BaseCommand):
                         #     print (str(plat_zone) + ' plat_zone created')
                     except Exception as ex:
                         print('Plat Import Plat Zone 4 Creation Error', ex)
+
+                # Create agreements
+                if row['Resolution-1'] or row['AgreementType-1'] or row['CreditType-1']:
+                    agreement_details = {
+                        'user': user, 'account': account if account else unknown_account,
+                        'expansion_area': 'EA-' + row['ExpanArea'], 'type': row['AgreementType-1'],
+                        'resolution': row['Resolution-1'] if row['Resolution-1'] else self.SelectDates(row['EntryDate-1']),
+                        'date': self.SelectDates(row['EntryDate-1'])
+                    }
+                    self.GetOrCreateAgreement(agreement_details)
+                
+                if row['Resolution-2'] or row['AgreementType-2'] or row['CreditType-2']:
+                    agreement_details = {
+                        'user': user, 'account': account if account else unknown_account,
+                        'expansion_area': 'EA-' + row['ExpanArea'], 'type': row['AgreementType-2'],
+                        'resolution': row['Resolution-2'] if row['Resolution-2'] else self.SelectDates(row['EntryDate-2']),
+                        'date': self.SelectDates(row['EntryDate-2'])
+                    }
+                    self.GetOrCreateAgreement(agreement_details)
+                
+                if row['Resolution-3'] or row['AgreementType-3'] or row['CreditType-3']:
+                    agreement_details = {
+                        'user': user, 'account': account if account else unknown_account,
+                        'expansion_area': 'EA-' + row['ExpanArea'], 'type': row['AgreementType-3'],
+                        'resolution': row['Resolution-3'] if row['Resolution-3'] else self.SelectDates(row['EntryDate-3']),
+                        'date': self.SelectDates(row['EntryDate-3'])
+                    }
+                    self.GetOrCreateAgreement(agreement_details)

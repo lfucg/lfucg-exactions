@@ -419,8 +419,8 @@ export function putPlat(selectedPlat) {
                 cabinet,
                 slide,
                 calculation_note,
-                sewer_due,
-                non_sewer_due,
+                sewer_due: sewer_due.replace(/[^\d.]/g, ''),
+                non_sewer_due: non_sewer_due.replace(/[^\d.]/g, ''),
                 account,
             };
         },

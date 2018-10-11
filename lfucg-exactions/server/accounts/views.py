@@ -1,10 +1,10 @@
 from rest_framework.generics import RetrieveAPIView
-
 import csv
 from django.views.generic import View
 from django.http import HttpResponse
 from django.db.models import Count, Max, Q
 import datetime
+from decimal import Decimal
 
 from django.contrib.auth.models import User
 from .models import Account, AccountLedger, Agreement, Payment, Project, ProjectCostEstimate
@@ -28,158 +28,6 @@ class AccountCSVExportView(View):
         serializer = serializer_class(queryset, many=many)
         return serializer
 
-    # def get(self, request, *args, **kwargs):
-    #     headers = [
-    #         'Account Name',
-    #         'Contact Name',
-    #         'Address',
-    #         'Email',
-    #         'Phone',
-    #         'Balance',
-    #         'Subdivision',
-    #         'Cabinet',
-    #         'Slide',
-    #         'Acreage',
-    #         'Buildable Lots',
-    #         'Non-Buildable Lots',
-    #         'Plat Type',
-    #         'Section',
-    #         'Block',
-    #         'Unit',
-    #         'Zone-1',
-    #         'Acres-1',
-    #         'Zone-2',
-    #         'Acres-2',
-    #         'Zone-3',
-    #         'Acres-3',
-    #         'Address',
-    #         'Permit ID',
-    #         'Lot Number',
-    #         'Parcel ID',
-    #         'Total Exactions',
-    #         'Current Exactions',
-    #         'Payment Type',
-    #         'Roads Paid',
-    #         'Parks Paid',
-    #         'Storm Paid',
-    #         'Open Space Paid',
-    #         'Sewer Trans. Paid',
-    #         'Sewer Cap. Paid',
-    #         'Ledger Type',
-    #         'Roads Credits',
-    #         'Parks Credits',
-    #         'Storm Credits',
-    #         'Open Space Credits',
-    #         'Non-Sewer Credits',
-    #         'Sewer Trans. Credits',
-    #         'Sewer Cap. Credits',
-    #         'Sewer Credits',
-    #     ]
-
-    #     all_rows = []
-
-    #     account_value = request.GET.get('account', None)
-
-    #     if account_value is not None:
-    #         account_queryset = Account.objects.filter(id=account_value)
-    #         account_serializer = self.list(
-    #             account_queryset,
-    #             AccountSerializer,
-    #             many=True
-    #         )
-    #         filename = account_queryset[0].account_name + '_account_report.csv'
-
-    #     else:
-    #         account_queryset = Account.objects.all()
-
-    #         plat_set = self.request.GET.get('plat_account__id', None)
-    #         if plat_set is not None:
-    #             account_queryset = account_queryset.filter(plat_account=plat_set)
-
-    #         lot_set = self.request.GET.get('lot_account__id', None)
-    #         if lot_set is not None:
-    #             account_queryset = account_queryset.filter(lot_account=lot_set)
-
-    #         search_set = self.request.GET.get('search', None)
-    #         if search_set is not None:
-    #             account_queryset = account_queryset.filter(
-    #                     Q(account_name__icontains=search_set) |
-    #                     Q(contact_full_name__icontains=search_set) |
-    #                     Q(address_full__icontains=search_set) |
-    #                     Q(phone__icontains=search_set) |
-    #                     Q(email__icontains=search_set)
-    #                 )
-
-    #         account_serializer = self.list(
-    #             account_queryset,
-    #             AccountSerializer,
-    #             many=True
-    #         )
-
-    #         filename = 'account_report_' + datetime.datetime.now().strftime("%Y-%m-%d") + '.csv'
-
-    #     response = HttpResponse(content_type='text/csv')
-    #     response['Content-Disposition'] = 'attachment; filename='+filename
-
-    #     for account in account_serializer.data:
-
-    #         row = {
-    #             'Account Name': account['account_name'],
-    #             'Contact Name': account['contact_full_name'],
-    #             'Address': account['address_full'],
-    #             'Email': account['email'],
-    #             'Phone': account['phone'],
-    #             'Balance': account['current_account_balance'],
-    #         }
-
-    #         plat_queryset = Plat.objects.filter(account=account['id'])
-    #         plat_ids = []
-    #         # if plat_queryset is not None:
-    #         plat_serializer = (self.list (
-    #             plat_queryset,
-    #             PlatSerializer,
-    #             many=True
-    #         ) if plat_queryset is not None else None)
-    #         # else: 
-    #         #     plat_serializer = None
-
-    #         lot_queryset = Lot.objects.filter(account=account['id'])
-    #         lot_ids = []
-    #         if lot_queryset is not None:
-    #             lot_serializer = self.list (
-    #                 lot_queryset,
-    #                 LotSerializer,
-    #                 many=True
-    #             )
-    #         else:
-    #             lot_serializer = None
-
-    #         payment_queryset = Payment.objects.filter(credit_account=account['id'])
-    #         payment_ids = []
-    #         if payment_queryset is not None:
-    #             payment_serializer = self.list (
-    #                 payment_queryset,
-    #                 PaymentSerializer,
-    #                 many=True
-    #             )
-    #         else:
-    #             payment_serializer = None
-
-    #         ledger_queryset = AccountLedger.objects.filter(account_from=account['id'], account_to=account['id'])
-    #         ledger_ids = []
-    #         if ledger_queryset is not None:
-    #             ledger_serializer = self.list (
-    #                 ledger_queryset,
-    #                 AccountLedgerSerializer,
-    #                 many=True
-    #             )
-    #         else:
-    #             ledger_queryset = None
-
-    #         for i, plat in zip(range(plat_queryset.count()), plat_serializer.data):
-    #             print('PLAT', plat)
-
-# OLD VERSION
     def get(self, request, *args, **kwargs):
         headers = [
             'Account Name',
@@ -412,6 +260,25 @@ class AgreementCSVExportView(View):
             'Date Executed',
             'Expansion Area',
             'Account',
+            'Type',
+            'Roads',
+            'Parks',
+            'Stormwater', 
+            'Open Space',
+            'Non-Sewer',
+            'Sewer Trans.',
+            'Sewer Cap.',
+            'Sewer',
+            'Project Category',
+            'Project Type',
+            'Project Status',
+            'Estimate Type',
+            'Land Cost',
+            'Design Cost',
+            'Constr. Cost',
+            'Admin Cost',
+            'Mgmt. Cost',
+            'Other Cost',
         ]
 
         all_rows = []
@@ -480,6 +347,8 @@ class AgreementCSVExportView(View):
                 'Account': account_name,
             }
 
+            all_rows.append(row)
+
             project_queryset = Project.objects.filter(agreement_id=agreement['id'])
             if project_queryset is not None:
                 project_serializer = self.list (
@@ -489,13 +358,14 @@ class AgreementCSVExportView(View):
                 )
 
                 for i, project in zip(range(project_queryset.count()), project_serializer.data):
-                    headers.extend(['Project Category -%s' %(i+1)])
-                    headers.extend(['Project Type -%s' %(i+1)])
-                    headers.extend(['Project Status -%s' %(i+1)])
+                    row = {
+                        'Project Category': project['project_category_display'],
+                        'Project Type': project['project_type_display'],
+                        'Project Status': project['project_status_display'],
+                    }
 
-                    row['Project Category -%s' %(i+1)] = project['project_category_display']
-                    row['Project Type -%s' %(i+1)] = project['project_type_display']
-                    row['Project Status -%s' %(i+1)] = project['project_status_display']
+                    all_rows.append(row)
+
 
             project_estimate_queryset = ProjectCostEstimate.objects.filter(project_id__agreement_id=agreement['id'])
             if project_estimate_queryset is not None:
@@ -506,21 +376,15 @@ class AgreementCSVExportView(View):
                 )
 
                 for i, project_estimate in zip(range(project_estimate_queryset.count()), project_estimate_serializer.data):
-                    headers.extend(['Estimate Type -%s' %(i+1)])
-                    headers.extend(['Land Cost -%s' %(i+1)])
-                    headers.extend(['Design Cost -%s' %(i+1)])
-                    headers.extend(['Constr. Cost -%s' %(i+1)])
-                    headers.extend(['Admin Cost -%s' %(i+1)])
-                    headers.extend(['Mgmt. Cost -%s' %(i+1)])
-                    headers.extend(['Other Cost -%s' %(i+1)])
-
-                    row['Estimate Type -%s' %(i+1)] = project_estimate['estimate_type']
-                    row['Land Cost -%s' %(i+1)] = project_estimate['land_cost']
-                    row['Design Cost -%s' %(i+1)] = project_estimate['design_cost']
-                    row['Constr. Cost -%s' %(i+1)] = project_estimate['construction_cost']
-                    row['Admin Cost -%s' %(i+1)] = project_estimate['admin_cost']
-                    row['Mgmt. Cost -%s' %(i+1)] = project_estimate['management_cost']
-                    row['Other Cost -%s' %(i+1)] = project_estimate['other_cost']
+                    row = {
+                        'Estimate Type': project_estimate['estimate_type'],
+                        'Land Cost': project_estimate['land_cost'],
+                        'Design Cost': project_estimate['design_cost'],
+                        'Constr. Cost': project_estimate['construction_cost'],
+                        'Admin Cost': project_estimate['admin_cost'],
+                        'Mgmt. Cost': project_estimate['management_cost'],
+                        'Other Cost': project_estimate['other_cost'],
+                    }
 
             payment_queryset = Payment.objects.filter(credit_source=agreement['id'])
             if payment_queryset is not None:
@@ -531,21 +395,19 @@ class AgreementCSVExportView(View):
                 )
 
                 for i, payment in zip(range(payment_queryset.count()), payment_serializer.data):
-                    headers.extend(['Payment Type -%s' %(i+1)])
-                    headers.extend(['Roads Paid -%s' %(i+1)])
-                    headers.extend(['Parks Paid -%s' %(i+1)])
-                    headers.extend(['Storm Paid -%s' %(i+1)])
-                    headers.extend(['Open Space Paid -%s' %(i+1)])
-                    headers.extend(['Sewer Trans. Paid -%s' %(i+1)])
-                    headers.extend(['Sewer Cap. Paid -%s' %(i+1)])
+                    row = {
+                        'Type': payment['payment_type_display'],
+                        'Roads': payment['paid_roads'],
+                        'Parks': payment['paid_parks'],
+                        'Stormwater': payment['paid_storm'],
+                        'Open Space': payment['paid_open_space'],
+                        'Non-Sewer': Decimal(payment['paid_roads']) + Decimal(payment['paid_parks']) + Decimal(payment['paid_storm']) + Decimal(payment['paid_open_space']),
+                        'Sewer Trans.': payment['paid_sewer_trans'],
+                        'Sewer Cap.': payment['paid_sewer_cap'],
+                        'Sewer': Decimal(payment['paid_sewer_trans']) + Decimal(payment['paid_sewer_cap'],)
+                    }
 
-                    row['Payment Type -%s' %(i+1)] = payment['payment_type_display']
-                    row['Roads Paid -%s' %(i+1)] = payment['paid_roads']
-                    row['Parks Paid -%s' %(i+1)] = payment['paid_parks']
-                    row['Storm Paid -%s' %(i+1)] = payment['paid_storm']
-                    row['Open Space Paid -%s' %(i+1)] = payment['paid_open_space']
-                    row['Sewer Trans. Paid -%s' %(i+1)] = payment['paid_sewer_trans']
-                    row['Sewer Cap. Paid -%s' %(i+1)] = payment['paid_sewer_cap']
+                    all_rows.append(row)
 
             ledger_queryset = AccountLedger.objects.filter(agreement=agreement['id'])
             if ledger_queryset is not None:
@@ -556,27 +418,19 @@ class AgreementCSVExportView(View):
                 )
                 
                 for i, ledger in zip(range(ledger_queryset.count()), ledger_serializer.data):
-                    headers.extend(['Ledger Type -%s' %(i+1)])
-                    headers.extend(['Roads Credits -%s' %(i+1)])
-                    headers.extend(['Parks Credits -%s' %(i+1)])
-                    headers.extend(['Storm Credits -%s' %(i+1)])
-                    headers.extend(['Open Space Credits -%s' %(i+1)])
-                    headers.extend(['Non-Sewer Credits -%s' %(i+1)])
-                    headers.extend(['Sewer Trans. Credits -%s' %(i+1)])
-                    headers.extend(['Sewer Cap. Credits -%s' %(i+1)])
-                    headers.extend(['Sewer Credits -%s' %(i+1)])
+                    row = {
+                        'Type': ledger['entry_type_display'],
+                        'Roads': ledger['roads'],
+                        'Parks': ledger['parks'],
+                        'Stormwater': ledger['storm'],
+                        'Open Space': ledger['open_space'],
+                        'Non-Sewer': ledger['non_sewer_credits'],
+                        'Sewer Trans.': ledger['sewer_trans'],
+                        'Sewer Cap.': ledger['sewer_cap'],
+                        'Sewer': ledger['sewer_credits'],
+                    }
 
-                    row['Ledger Type -%s' %(i+1)] = ledger['entry_type_display']
-                    row['Roads Credits -%s' %(i+1)] = ledger['roads']
-                    row['Parks Credits -%s' %(i+1)] = ledger['parks']
-                    row['Storm Credits -%s' %(i+1)] = ledger['storm']
-                    row['Open Space Credits -%s' %(i+1)] = ledger['open_space']
-                    row['Non-Sewer Credits -%s' %(i+1)] = ledger['non_sewer_credits']
-                    row['Sewer Trans. Credits -%s' %(i+1)] = ledger['sewer_trans']
-                    row['Sewer Cap. Credits -%s' %(i+1)] = ledger['sewer_cap']
-                    row['Sewer Credits -%s' %(i+1)] = ledger['sewer_credits']
-
-            all_rows.append(row)
+                    all_rows.append(row)
 
         unique_fieldnames = []
         for name in headers:
@@ -1135,6 +989,7 @@ class TransactionCSVExportView(View):
             'Lot Address',
             'Permit ID',
             'Alt. Address',
+            'Res. #',
             'Transaction Type',
             'Account',
             'Paid By',
@@ -1203,7 +1058,7 @@ class TransactionCSVExportView(View):
                         all_plat_zones += (zone.zone + ', ')
 
                 if lot['alternative_address_number'] or lot['alternative_address_street']:
-                    alt_address = str(lot['alternative_address_number']) + lot['alternative_address_street']
+                    alt_address = str(lot['alternative_address_number']) + ' ' + lot['alternative_address_street']
 
                 lot_payments = Payment.objects.filter(lot_id=lot['id'])
                 lot_ledgers = AccountLedger.objects.filter(lot=lot['id'])
@@ -1214,6 +1069,8 @@ class TransactionCSVExportView(View):
                         PaymentSerializer,
                         many=True
                     )
+
+                    agreement = ''
                     
                     for payment in payment_serializer.data:
                         sewer_sub = round(float(payment['paid_sewer_trans']) + float(payment['paid_sewer_cap']), 2)
@@ -1230,6 +1087,7 @@ class TransactionCSVExportView(View):
                             'Lot Address': lot['address_full'],
                             'Permit ID': lot['permit_id'],
                             'Alt. Address': alt_address,
+                            'Res. #': payment['credit_source']['resolution_number'],
                             'Transaction Type': payment['payment_type_display'],
                             'Account': payment['credit_account']['account_name'],
                             'Paid By': payment['paid_by'],
@@ -1257,9 +1115,13 @@ class TransactionCSVExportView(View):
                         total = round(float(ledger['sewer_credits']) + float(ledger['non_sewer_credits']), 2)
                         
                         account_from = ''
+                        agreement = ''
 
                         if ledger['account_from']:
                             account_from = ledger['account_from']['account_name']
+
+                        if ledger['agreement']:
+                            agreement = ledger['agreement']['resolution_number']
 
                         row = {
                             'Subdivision': subdivision,
@@ -1272,7 +1134,8 @@ class TransactionCSVExportView(View):
                             'Lot Address': lot['address_full'],
                             'Permit ID': lot['permit_id'],
                             'Alt. Address': alt_address,
-                            'Transaction Type': ledger['entry_type'],
+                            'Res. #': ledger['agreement']['resolution_number'],
+                            'Transaction Type': ledger['entry_type_display'],
                             'Account': account_from,
                             'Paid By': account_from,
                             'Sewer Trans.': ledger['sewer_trans'],
