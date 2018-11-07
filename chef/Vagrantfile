@@ -85,10 +85,10 @@ Vagrant.configure("2") do |config|
       }
     }
     chef.run_list = [
-      # "recipe[chef-lfucg-exactions::system]",
-      # "recipe[chef-lfucg-exactions::data]",
+      "recipe[chef-lfucg-exactions::system]",
+      "recipe[chef-lfucg-exactions::data]",
+      "recipe[chef-lfucg-exactions::django]",
       "recipe[chef-lfucg-exactions::gulp]",
-      # "recipe[chef-lfucg-exactions::django]"
     ]
   end
 end
