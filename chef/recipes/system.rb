@@ -27,8 +27,8 @@ end
 
 include_recipe 'apt'
 
-python_runtime '3.7' do
-  options package_name: 'python3.7'
+python_runtime '3.6' do
+  options package_name: 'python3.6'
 end
 
 python_package "virtualenv" do
@@ -37,7 +37,7 @@ end
 
 # NOTE: This will fail with SSL errors if owner/group isn't specified
 python_virtualenv "#{virtualenv}" do
-    python "/usr/bin/python3.7"
+    python "/usr/bin/python3.6"
     user "#{user}"
     group "#{user}"
     action :create

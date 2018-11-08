@@ -12,5 +12,6 @@ mock
 django-nose
 coverage
 pep8
+psycopg2-binary==2.7.5
 pyflakes
 pylint
