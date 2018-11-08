@@ -28,7 +28,8 @@ MEDIA_URL = '<%= @config["MEDIA_URL"] %>'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'ENGINE': 'django.db.backends.sqlite3',
+        # 'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'exactions',
         'USER': '<%= @config["DATABASE_USER"] %>',
         'PASSWORD': '<%= @config["DATABASE_PASSWORD"] %>',
