@@ -32,13 +32,19 @@ template "/home/#{user}/lfucg-exactions/lfucg-exactions/server/server/settings/l
   variables( :config => config )
 end
 
-pip_requirements "--exists-action w -r /home/#{user}/lfucg-exactions/lfucg-exactions/server/requirements.txt" do
-    virtualenv "#{virtualenv}"
-    user "#{user}"
-    group "#{user}"
+pip_requirements "/home/#{user}/lfucg-exactions/lfucg-exactions/server/requirements.txt" do
+  python "#{virtualenv}/bin/python"
 end
+# virtualenv "#{virtualenv}"
+# user "#{user}"
+# group "#{user}"
 
+# bash "migrate" do
+#   code "#{virtualenv}/bin/python manage.py migrate --noinput"
+#   cwd "/home/#{user}/lfucg-exactions/lfucg-exactions/server"
+# end
 bash "migrate" do
+  user "#{user}"
   code "#{virtualenv}/bin/python manage.py migrate --noinput"
   cwd "/home/#{user}/lfucg-exactions/lfucg-exactions/server"
 end

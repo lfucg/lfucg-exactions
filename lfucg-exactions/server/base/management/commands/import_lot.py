@@ -537,7 +537,7 @@ class Command(BaseCommand):
                 defaults= { 'is_approved': True, 'created_by': user, 'modified_by': user })
 
             for row in reader:
-                for k, v in row.items():
+                for (k, v in row.items()):
                     if v == 'NULL':
                         row[k] = None
                     if v == 'N/A':
