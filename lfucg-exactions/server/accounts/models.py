@@ -126,7 +126,7 @@ class Agreement(models.Model):
     modified_by = models.ForeignKey(User, related_name='agreement_modified')    
 
     account_id = models.ForeignKey(Account, related_name='agreement')
-    resolution_number = models.CharField(max_length=100)
+    resolution_number = models.CharField(max_length=100, unique=True)
 
     expansion_area = models.CharField(max_length=100, choices=EXPANSION_AREAS)
     agreement_type = models.CharField(max_length=100, choices=AGREEMENT_TYPES)
@@ -265,7 +265,7 @@ class ProjectCostEstimate(models.Model):
     created_by = models.ForeignKey(User, related_name='project_cost_estimate_created')
     modified_by = models.ForeignKey(User, related_name='project_cost_estimate_modified')  
 
-    project_id = models.ForeignKey(Project, related_name='project_cost_estimate')
+    project_id = models.ForeignKey(Project, related_name='project_cost_estimate', null=True, blank=True)
 
     estimate_type = models.CharField(max_length=200)
 
@@ -294,7 +294,9 @@ class AccountLedger(models.Model):
     )
 
     entry_date = models.DateField()
-    date_created = models.DateField(auto_now_add=True)
+    date_created = models.DateField()
+    # TODO Revert to auto_now_add after import
+    # date_created = models.DateField(auto_now_add=True)
     date_modified = models.DateField(auto_now=True)
 
     created_by = models.ForeignKey(User, related_name='ledger_created')
