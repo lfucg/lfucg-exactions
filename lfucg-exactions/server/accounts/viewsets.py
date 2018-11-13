@@ -316,14 +316,15 @@ class AccountLedgerViewSet(viewsets.ModelViewSet):
                     return Response('Invalid credit entry', status=status.HTTP_400_BAD_REQUEST)
 
             chosen_lots = Lot.objects.filter(plat=chosen_plat)
-            for lot in chosen_lots:
-                data_set['lot'] = lot.id
-                data_set['non_sewer_credits'] = non_sewer_credits_per_lot
-                data_set['sewer_credits'] = sewer_credits_per_lot
+            if chosen_lots.exists():
+                for lot in chosen_lots:
+                    data_set['lot'] = lot.id
+                    data_set['non_sewer_credits'] = non_sewer_credits_per_lot
+                    data_set['sewer_credits'] = sewer_credits_per_lot
 
-                serializer = AccountLedgerSerializer(data=data_set)
-                if serializer.is_valid(raise_exception=True):
-                    self.perform_create(serializer)
+                    serializer = AccountLedgerSerializer(data=data_set)
+                    if serializer.is_valid(raise_exception=True):
+                        self.perform_create(serializer)
             return Response('Success')
 
         else:

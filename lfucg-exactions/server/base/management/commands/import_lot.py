@@ -1,13 +1,18 @@
-from django.core.management import BaseCommand
-from django.contrib.contenttypes.models import ContentType
-from plats.models import Plat, PlatZone, Lot, Subdivision
-from accounts.models import Account, Agreement, AccountLedger, Payment
-from notes.models import Note
-from django.contrib.auth.models import User
 import csv
 from datetime import datetime
 from decimal import Decimal
+from operator import abs
+import pandas as pd
+
+from django.contrib.auth.models import User
+from django.contrib.contenttypes.models import ContentType
+from django.core.management import BaseCommand
+
+from accounts.models import Account, AccountLedger, Agreement, Payment
+from notes.models import Note
+from plats.models import Lot, Plat, PlatZone, Subdivision
 from plats.utils import calculate_lot_balance
+
 
 class Command(BaseCommand):
     help = "Imports exaction data"
@@ -15,6 +20,9 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument('filename')
     
+    user = User.objects.get(username='IMPORT')
+    errors = []
+
     paid_by = {
         'Artique Custom Homes': 'Artique Custom Homes, LLC',
         'Artique Custom Homes ': 'Artique Custom Homes, LLC',
@@ -313,18 +321,39 @@ class Command(BaseCommand):
         '?': 'Unknown'
     }
 
-    errors = []
+    df = pd.read_csv('plat_data.csv')
 
+    def ConvertDates(self, date_field):
+        try:
+            cleaned_date = datetime.strptime(date_field.split(' ')[0], '%m/%d/%y')
+        except:
+            try:
+                cleaned_date = datetime.strptime(date_field.split(' ')[0], '%m/%d/%Y')
+            except Exception as ex:
+                print('Date Creation Error', ex)
+                cleaned_date = None
+    
+        return cleaned_date
+
+    def SelectDates(self, date_options_list):
+        if date_options_list[0] and date_options_list[0] != 'NULL':
+            converted_date = self.ConvertDates(date_options_list[0])
+        elif date_options_list[1] and date_options_list[1] != 'NULL':
+            converted_date = self.ConvertDates(date_options_list[1])
+        else:
+            converted_date = self.ConvertDates('1/1/1970')
+        
+        return converted_date
+  
     def FilterAccount(self, name):
         return Account.objects.filter(account_name=name)
 
     def CheckOrCreateAccount(self, name):
-        user = User.objects.get(username='IMPORT')
-
         if not Account.objects.filter(account_name=name).exists():
             try:
                 account, created = Account.objects.get_or_create(account_name=name,
-                    defaults= { 'created_by': user, 'modified_by': user,
+                    defaults= { 'created_by': self.user, 'modified_by': self.user,
+                    'date_created': self.ConvertDates('1/1/1970'),
                     'contact_full_name': 'Unknown', 
                     'contact_first_name': 'Unknown', 'contact_last_name': 'Unknown',
                     'address_number': 0, 'address_street': 'Unknown', 'address_city': 'Unknown', 'address_state': 'KY',
@@ -359,6 +388,10 @@ class Command(BaseCommand):
             else:
                 pass
 
+    def PlatPandasCSV(self, cabinet, slide):
+        related_plat = self.df[(self.df['Cabinet'] == cabinet) & (self.df['Slide'] == slide)]
+        return related_plat
+    
     def FilterAgreements(self, agreement_list):
         finished = False
         for i in range(len(agreement_list)):
@@ -367,6 +400,81 @@ class Command(BaseCommand):
                 return Agreement.objects.filter(resolution_number=agreement_list[i]).first()
             else:
                 pass
+
+    def LedgerAmounts(self, value_list):
+        amounts = {
+            'sewer_credits': 0, 'non_sewer_credits': 0,
+            'roads': 0, 'parks': 0, 'storm': 0, 'open_space': 0,
+            'sewer_trans': 0, 'sewer_cap': 0,
+        }
+        non_sewer_total = value_list['roads'] + value_list['parks'] + value_list['storm'] + value_list['open_space']
+        sewer_total = value_list['sewer_trans'] + value_list['sewer_cap']
+
+        if (abs(non_sewer_total - value_list['non_sewer_credits']) <= 0.02):
+            amounts['roads'] = value_list['roads']
+            amounts['parks'] = value_list['parks']
+            amounts['storm'] = value_list['storm']
+            amounts['open_space'] = value_list['open_space']
+            amounts['non_sewer_credits'] = value_list['non_sewer_credits']
+        elif (value_list['non_sewer_credits'] == 0):
+            pass
+        else:
+            non_sewer_ledger = value_list['non_sewer_credits']
+
+            while(non_sewer_ledger > 0):
+                if ((value_list['roads'] <= non_sewer_ledger) & (amounts['roads'] == 0)):
+                    amounts['roads'] = value_list['roads']
+                    non_sewer_ledger -= value_list['roads']
+                else:
+                    amounts['roads'] = non_sewer_ledger
+                    non_sewer_ledger -= non_sewer_ledger
+                
+                if ((value_list['parks'] <= non_sewer_ledger) & (amounts['parks'] == 0)):
+                    amounts['parks'] = value_list['parks']
+                    non_sewer_ledger -= value_list['parks']
+                else:
+                    amounts['parks'] = non_sewer_ledger
+                    non_sewer_ledger -= non_sewer_ledger
+                
+                if ((value_list['storm'] <= non_sewer_ledger) & (amounts['storm'] == 0)):
+                    amounts['storm'] = value_list['storm']
+                    non_sewer_ledger -= value_list['storm']
+                else:
+                    amounts['storm'] = non_sewer_ledger
+                    non_sewer_ledger -= non_sewer_ledger
+
+                if ((value_list['open_space'] <= non_sewer_ledger) & (amounts['open_space'] == 0)):
+                    amounts['open_space'] = value_list['open_space']
+                    non_sewer_ledger -= value_list['open_space']
+                else:
+                    amounts['open_space'] = non_sewer_ledger
+                    non_sewer_ledger -= non_sewer_ledger
+
+        if (abs(sewer_total - value_list['sewer_credits']) <= 0.02):
+            amounts['sewer_trans'] = value_list['sewer_trans']
+            amounts['sewer_cap'] = value_list['sewer_cap']
+            amounts['sewer_credits'] = value_list['sewer_credits']
+        elif (value_list['sewer_credits'] == 0):
+            pass
+        else:
+            sewer_ledger = value_list['sewer_credits']
+
+            while (sewer_ledger > 0):
+                if ((value_list['sewer_trans'] <= sewer_ledger) & (amounts['sewer_trans'] == 0)):
+                    amounts['sewer_trans'] = value_list['sewer_trans']
+                    sewer_ledger -= value_list['sewer_trans']
+                else:
+                    amounts['sewer_trans'] = sewer_ledger
+                    sewer_ledger -= sewer_ledger
+
+                if ((value_list['sewer_cap'] <= sewer_ledger) & (amounts['sewer_cap'] == 0)):
+                    amounts['sewer_cap'] = value_list['sewer_cap']
+                    sewer_ledger -= value_list['sewer_cap']
+                else:
+                    amounts['sewer_cap'] = sewer_ledger
+                    sewer_ledger -= sewer_ledger
+        
+        return amounts
     
     def CreateUseLedger(self, ledger_details):
         ledger_entry_type = ledger_details['entry_type']
@@ -383,14 +491,6 @@ class Command(BaseCommand):
                 ledger_entry_type = 'USE'
 
         try:
-            ledger_entry_date = datetime.strptime(ledger_details['entry_date'].split(' ')[0], '%m/%d/%y')
-        except:
-            try:
-                ledger_entry_date = datetime.strptime(ledger_details['entry_date'].split(' ')[0], '%m/%d/%Y')
-            except:
-                ledger_entry_date = datetime.now()
-
-        try:
             ledger, created = AccountLedger.objects.get_or_create(
                 account_to=ledger_to_account,
                 account_from=ledger_from_account,
@@ -398,23 +498,18 @@ class Command(BaseCommand):
                 lot=ledger_details['lot'],
                 agreement=ledger_details['agreement'],
                 defaults={
-                    'created_by': ledger_details['created_by'], 'modified_by': ledger_details['modified_by'],
-                    'entry_date': ledger_entry_date,
-                    'non_sewer_credits': Decimal(ledger_details['non_sewer_credits'] if ledger_details['non_sewer_credits'] else 0),
-                    'sewer_credits': Decimal(ledger_details['sewer_credits'] if ledger_details['sewer_credits'] else 0),
-                    'roads': Decimal(ledger_details['roads'] if ledger_details['roads'] else 0),
-                    'sewer_trans': Decimal(ledger_details['sewer_trans'] if ledger_details['sewer_trans'] else 0),
-                    'sewer_cap': Decimal(ledger_details['sewer_cap'] if ledger_details['sewer_cap'] else 0),
-                    'parks': Decimal(ledger_details['parks'] if ledger_details['parks'] else 0),
-                    'storm': Decimal(ledger_details['storm'] if ledger_details['storm'] else 0),
-                    'open_space': Decimal(ledger_details['open_space'] if ledger_details['open_space'] else 0),
+                    'created_by': self.user, 'modified_by': self.user,
+                    'entry_date': ledger_details['date'], 'date_created': ledger_details['date'],
+                    'non_sewer_credits': ledger_details['non_sewer_credits'], 'sewer_credits': ledger_details['sewer_credits'],
+                    'sewer_trans': ledger_details['sewer_trans'], 'sewer_cap': ledger_details['sewer_cap'],
+                    'roads': ledger_details['roads'], 'parks': ledger_details['parks'], 'storm': ledger_details['storm'], 'open_space': ledger_details['open_space'],
                 }
             )
         except Exception as ex:
             print('LEDGER EXCEPTION', ex)
             if ledger_details not in self.errors:   
                 self.errors.append('Ledger Error ' + str(ledger_details['lot'].address_full))     
-
+        
     def GetCurrentLotTotals(self, lot):
         current_calculated_lot = calculate_lot_balance(lot)
 
@@ -455,66 +550,66 @@ class Command(BaseCommand):
                 'dues_open_space_percent': 0,
             }
     
+    def PaymentAmounts(self, value_list, payment):
+        amounts = {
+            'roads': 0, 'parks': 0, 'storm': 0, 'open_space': 0,
+            'sewer_trans': 0, 'sewer_cap': 0,
+        }
+        sewer_difference = abs(Decimal(value_list['sewer']) - Decimal(value_list['sewer_trans']) - Decimal(value_list['sewer_cap']))
+        non_sewer_difference = abs(Decimal(value_list['non_sewer']) - Decimal(value_list['roads']) - Decimal(value_list['parks']) - Decimal(value_list['storm']) - Decimal(value_list['open_space']))
+
+        print('SEWER TRANS PAY AMT CONVERT', value_list['sewer_trans'])
+        if (abs(sewer_difference - payment) <= 0.03):
+            amounts['sewer_trans'] = value_list['sewer_trans']
+            amounts['sewer_cap'] = value_list['sewer_cap']
+            # print('SEWER', amounts)
+        elif (abs(non_sewer_difference - payment )<= 0.03):
+            amounts['roads'] = value_list['roads']
+            amounts['parks'] = value_list['parks']
+            amounts['storm'] = value_list['storm']
+            amounts['open_space'] = value_list['open_space']
+            # print('NON-SEWER', amounts)
+        elif (abs(payment - sewer_difference - non_sewer_difference) <= 0.03):
+            amounts['sewer_trans'] = value_list['sewer_trans']
+            amounts['sewer_cap'] = value_list['sewer_cap']
+            amounts['roads'] = value_list['roads']
+            amounts['parks'] = value_list['parks']
+            amounts['storm'] = value_list['storm']
+            amounts['open_space'] = value_list['open_space']
+        else:
+            print('VALUE LIST', value_list)
+            print('MIXED', payment)
+            amounts['roads'] = payment
+
+        return amounts
+    
     def CheckOrCreatePayment(self, payment_details):
 
         amount_paid = payment_details['amount_paid']
         categories = 6
         current_lot = self.GetCurrentLotTotals(payment_details['lot_id'])
-        payments = {
-            'paid_roads': 0, 
-            'paid_sewer_trans': 0, 
-            'paid_sewer_cap': 0,
-            'paid_parks': 0, 
-            'paid_open_space': 0, 
-            'paid_storm': 0,
-        }
 
-        category_fields = [
-            {'category': 'paid_roads', 'dues': 'dues_roads', 'percent': 'dues_roads_percent'},
-            {'category': 'paid_sewer_trans', 'dues': 'dues_sewer_trans', 'percent': 'dues_sewer_trans_percent'},
-            {'category': 'paid_sewer_cap', 'dues': 'dues_sewer_cap', 'percent': 'dues_sewer_cap_percent'},
-            {'category': 'paid_parks', 'dues': 'dues_parks', 'percent': 'dues_parks_percent'},
-            {'category': 'paid_open_space', 'dues': 'dues_open_space', 'percent': 'dues_open_space_percent'},
-            {'category': 'paid_storm', 'dues': 'dues_storm', 'percent': 'dues_storm_percent'},
-        ]
-
-        if current_lot['current_exactions'] > 0:
-            while (amount_paid > 0 and categories > 0):
-                for i in range(len(category_fields)):
-                    if current_lot[category_fields[i]['dues']] > 0:
-                        categories -= 1
-                        if (amount_paid * current_lot[category_fields[i]['percent']]) >= current_lot[category_fields[i]['dues']]:
-                            payments[category_fields[i]['category']] = current_lot[category_fields[i]['dues']]
-                            amount_paid -= current_lot[category_fields[i]['dues']]
-                        elif (amount_paid * current_lot[category_fields[i]['percent']]) >= amount_paid:
-                            payments[category_fields[i]['category']] = amount_paid
-                            amount_paid -= amount_paid
-                        elif (amount_paid * current_lot[category_fields[i]['percent']]) > 0:
-                            payments[category_fields[i]['category']] = amount_paid * current_lot[category_fields[i]['percent']]
-                            amount_paid -= (amount_paid * current_lot[category_fields[i]['percent']])
-                        else:
-                            payments[category_fields[i]['category']] = 0        
+        print('TRANS SEWR', payment_details['paid_sewer_trans'])
 
         try:
             payment, created = Payment.objects.get_or_create(lot_id=payment_details['lot_id'], credit_account=payment_details['credit_account'],
                 credit_source=payment_details['credit_source'],
-                defaults={ 'is_approved': True, 'created_by': payment_details['user'], 'modified_by': payment_details['user'],
+                defaults={ 'is_approved': True, 'created_by': self.user, 'modified_by': self.user,
                 'paid_by': payment_details['paid_by'] and payment_details['paid_by'][:100] or 'Unknown',
                 'paid_by_type': payment_details['paid_by_type'] or 'DEVELOPER', 'payment_type': payment_details['payment_type'] or 'OTHER', 
                 'check_number': payment_details['check_number'] or None, 
 
-                'paid_roads': payments['paid_roads'], 'paid_sewer_trans': payments['paid_sewer_trans'], 'paid_sewer_cap': payments['paid_sewer_cap'],
-                'paid_parks': payments['paid_parks'], 'paid_open_space': payments['paid_open_space'], 'paid_storm': payments['paid_storm']
+                'paid_roads': payment_details['paid_roads'], 'paid_sewer_trans': payment_details['paid_sewer_trans'], 'paid_sewer_cap': payment_details['paid_sewer_cap'],
+                'paid_parks': payment_details['paid_parks'], 'paid_open_space': payment_details['paid_open_space'], 'paid_storm': payment_details['paid_storm']
                 })
         except Exception as ex:
             print('PAYMENT EXCEPTION', ex)
+            print('PAYMENT EXCEPTION DETAILS', payment_details)
             if payment_details not in self.errors:   
                 self.errors.append('Payment Error ' + str(payment_details['lot_id'].address_full)) 
 
-    
+ 
     def handle(self, *args, **options):
-
-        agreements = []
         filename = options.get('filename', None)
 
         if filename is None:
@@ -526,15 +621,17 @@ class Command(BaseCommand):
         with open(filename) as file:
             reader = csv.DictReader(file)
 
-            user = User.objects.get(username='IMPORT')
             lfucg_account = Account.objects.get(account_name='Lexington Fayette Urban County Government (LFUCG)')
 
             unknown_account = self.FilterAccount('Unknown').first()
-            unknown_agreement = Agreement.objects.get_or_create(date_executed=datetime.now(),
-                account_id=unknown_account, 
+            unknown_agreement = Agreement.objects.get_or_create(
                 resolution_number='Unknown',
-                expansion_area='EA-', agreement_type='OTHER',
-                defaults= { 'is_approved': True, 'created_by': user, 'modified_by': user })
+                defaults= { 
+                    'date_executed': datetime.now(),
+                    'account_id': unknown_account, 
+                    'is_approved': True, 'created_by': self.user, 'modified_by': self.user,
+                    'expansion_area': 'EA-', 'agreement_type': 'OTHER',
+                })
 
             for row in reader:
                 for (k, v in row.items()):
@@ -592,7 +689,7 @@ class Command(BaseCommand):
                             defaults={
                             'plat': plat, 'parcel_id': row['AddressID'] and row['AddressID'] or None,
                             'account': plat.account or unknown_account,
-                            'is_approved': True, 'is_active': True, 'created_by': user, 'modified_by': user,
+                            'is_approved': True, 'is_active': True, 'created_by': self.user, 'modified_by': self.user,
                             'permit_id': row['PermitNo'] and row['PermitNo'] or '', 
                             'alternative_address_number': row['AltStreetNo'] and row['AltStreetNo'] or None,
                             'alternative_address_street': row['AltStreetName'] and row['AltStreetName'] or None,
@@ -641,128 +738,179 @@ class Command(BaseCommand):
                     if row['AccountLedgerAccountTo-3']:
                         self.AccountFieldCheck(row['AccountLedgerAccountTo-3'])
 
+                    pandas_plat = self.PlatPandasCSV(plat.cabinet, plat.slide)
+
+                    agreement = None
+                    agreement_1 = None
+                    agreement_2 = None
+                    agreement_3 = None
+                    agreement_4 = None if (pandas_plat['Resolution-1'].hasnans or len(pandas_plat['Resolution-1']) < 1) else self.FilterAgreements([pandas_plat['Resolution-1'].values[0]])
+                    agreement_5 = None if (pandas_plat['Resolution-2'].hasnans or len(pandas_plat['Resolution-2']) < 1) else self.FilterAgreements([pandas_plat['Resolution-2'].values[0]])
+                    agreement_6 = None if (pandas_plat['Resolution-3'].hasnans or len(pandas_plat['Resolution-3']) < 1) else self.FilterAgreements([pandas_plat['Resolution-3'].values[0]])
+
                     # Create Agreements
                     if row['AgreementResolution']:
-                        try:
-                            agreement, created = Agreement.objects.get_or_create(date_executed=datetime.now(),
-                                account_id=self.GetAccount([plat.account and plat.account.account_name, row['D_AccountName'], row['P_AccountName'], 'Unknown']).first(),
-                                resolution_number=row['AgreementResolution'] and row['AgreementResolution'] or 'Unknown',
-                                expansion_area='EA-' + row['ExpansionArea'], agreement_type=row['AccountLedgerAgreementType-1'],
-                                defaults= { 'is_approved': True, 'created_by': user, 'modified_by': user })
-                            agreement_resolution = agreement or unknown_agreement
-                        except Exception as ex:
-                            print('Lot Import Agreement 1 Creation Error', ex)
+                        if self.FilterAgreements([row['AgreementResolution']]):
+                            agreement = self.FilterAgreements([row['AgreementResolution']])
+                        else:
+                            try:
+                                agreement, created = Agreement.objects.get_or_create(date_executed=datetime.now(),
+                                    account_id=self.GetAccount([plat.account and plat.account.account_name, row['D_AccountName'], row['P_AccountName'], 'Unknown']).first(),
+                                    created_by=self.user, modified_by=self.user,
+                                    resolution_number=row['AgreementResolution'] and row['AgreementResolution'] or 'Unknown',
+                                    expansion_area='EA-' + row['ExpansionArea'], agreement_type=row['AccountLedgerAgreementType-1'],
+                                    defaults= { 'is_approved': True})
+                                agreement_resolution = agreement or unknown_agreement
+                            except Exception as ex:
+                                print('Lot Import Agreement 1 Creation Error', ex)
                     
                     if row['AccountLedgerAgreement-1']:
-                        try:
-                            agreement, created = Agreement.objects.get_or_create(date_executed=datetime.now(),
-                                account_id=self.GetAccount([row['AccountLedgerAccountFrom-1'], row['D_AccountName'], plat.account and plat.account.account_name, row['P_AccountName'], 'Unknown']).first(),
-                                resolution_number=row['AccountLedgerAgreement-1'] and row['AccountLedgerAgreement-1'] or 'Unknown',
-                                expansion_area='EA-' + row['ExpansionArea'], agreement_type=row['AccountLedgerAgreementType-1'],
-                                defaults= { 'is_approved': True, 'created_by': user, 'modified_by': user })
-                            agreement_ledger_1 = agreement or unknown_agreement
-                        except Exception as ex:
-                            print('Lot Import Agreement 2 Creation Error', ex)
+                        if self.FilterAgreements([row['AccountLedgerAgreement-1']]):
+                            agreement_1 = self.FilterAgreements([row['AccountLedgerAgreement-1']])
+                        else:
+                            try:
+                                agreement_1, created = Agreement.objects.get_or_create(date_executed=datetime.now(),
+                                    account_id=self.GetAccount([row['AccountLedgerAccountFrom-1'], row['D_AccountName'], plat.account and plat.account.account_name, row['P_AccountName'], 'Unknown']).first(),
+                                    created_by=self.user, modified_by=self.user,
+                                    resolution_number=row['AccountLedgerAgreement-1'] and row['AccountLedgerAgreement-1'] or 'Unknown',
+                                    expansion_area='EA-' + row['ExpansionArea'], agreement_type=row['AccountLedgerAgreementType-1'],
+                                    defaults= { 'is_approved': True})
+                                agreement_ledger_1 = agreement or unknown_agreement
+                            except Exception as ex:
+                                print('Lot Import Agreement 2 Creation Error', ex)
                     
                     if row['AccountLedgerAgreement-2']:
-                        try:
-                            agreement, created = Agreement.objects.get_or_create(date_executed=datetime.now(),
-                                account_id=self.GetAccount([row['AccountLedgerAccountFrom-2'], row['P_AccountName'], plat.account and plat.account.account_name, row['P_AccountName'], 'Unknown']).first(),
-                                resolution_number=row['AccountLedgerAgreement-2'] and row['AccountLedgerAgreement-2'] or 'Unknown',
-                                expansion_area='EA-' + row['ExpansionArea'], agreement_type=row['AccountLedgerAgreementType-2'],
-                                defaults= { 'is_approved': True, 'created_by': user, 'modified_by': user })
-                            agreement_ledger_2 = agreement or unknown_agreement
-                        except Exception as ex:
-                            print('Lot Import Agreement 3 Creation Error', ex)
+                        if self.FilterAgreements([row['AccountLedgerAgreement-2']]):
+                            agreement_2 = self.FilterAgreements([row['AccountLedgerAgreement-2']])
+                        else:
+                            try:
+                                agreement_2, created = Agreement.objects.get_or_create(date_executed=datetime.now(),
+                                    account_id=self.GetAccount([row['AccountLedgerAccountFrom-2'], row['P_AccountName'], plat.account and plat.account.account_name, row['P_AccountName'], 'Unknown']).first(),
+                                    created_by=self.user, modified_by=self.user,
+                                    resolution_number=row['AccountLedgerAgreement-2'] and row['AccountLedgerAgreement-2'] or 'Unknown',
+                                    expansion_area='EA-' + row['ExpansionArea'], agreement_type=row['AccountLedgerAgreementType-2'],
+                                    defaults= { 'is_approved': True})
+                                agreement_ledger_2 = agreement or unknown_agreement
+                            except Exception as ex:
+                                print('Lot Import Agreement 3 Creation Error', ex)
                     
                     if row['AccountLedgerAgreement-3']:
-                        try:
-                            agreement, created = Agreement.objects.get_or_create(date_executed=datetime.now(),
-                                account_id=self.GetAccount([row['AccountLedgerAccountFrom-2'], plat.account and plat.account.account_name, row['D_AccountName'], 'Unknown']).first(),
-                                resolution_number=row['AccountLedgerAgreement-3'] and row['AccountLedgerAgreement-3'] or 'Unknown',
-                                expansion_area='EA-' + row['ExpansionArea'], agreement_type=row['AccountLedgerAgreementType-3'],
-                                defaults= { 'is_approved': True, 'created_by': user, 'modified_by': user })
-                            agreement_ledger_3 = agreement or unknown_agreement
-                        except Exception as ex:
-                            print('Lot Import Agreement 4 Creation Error', ex)
+                        if self.FilterAgreements([row['AccountLedgerAgreement-3']]):
+                            agreement_3 = self.FilterAgreements([row['AccountLedgerAgreement-3']])
+                        else:
+                            try:
+                                agreement_3, created = Agreement.objects.get_or_create(date_executed=datetime.now(),
+                                    account_id=self.GetAccount([row['AccountLedgerAccountFrom-2'], plat.account and plat.account.account_name, row['D_AccountName'], 'Unknown']).first(),
+                                    created_by=self.user, modified_by=self.user,
+                                    resolution_number=row['AccountLedgerAgreement-3'] and row['AccountLedgerAgreement-3'] or 'Unknown',
+                                    expansion_area='EA-' + row['ExpansionArea'], agreement_type=row['AccountLedgerAgreementType-3'],
+                                    defaults= { 'is_approved': True})
+                                agreement_ledger_3 = agreement or unknown_agreement
+                            except Exception as ex:
+                                print('Lot Import Agreement 4 Creation Error', ex)
 
-                    # Create Ledger 1 Entry
-                    if row['AccountLedgerAgreement-1'] or row['AccountLedgerAccountFrom-1']:
-                        ledger_details = {
-                            'plat': plat, 'lot': lot,
-                            'agreement': self.FilterAgreements([row['AccountLedgerAgreement-1'], 'Unknown']),
-                            'account_from': row['AccountLedgerAccountFrom-1'], 'account_from_alt': row['D_PaidBy'], 'account_to': row['AccountLedgerAccountTo-1'],
-                            'entry_type': row['D_LedgerEntryType'], 
-                            'created_by': user, 'modified_by': user, 'entry_date': row['D_DatePaid'],
-                            'non_sewer_credits': row['D_OtherCredits'], 'sewer_credits': row['D_SewerCredits'],
-                            'roads': row['D_Roads'], 'parks': row['D_Parks'], 'storm': row['D_Stormwater'], 'open_space': row['D_OpenSpace'],
-                            'sewer_trans': row['D_SewerTransmission'], 'sewer_cap': row['D_SewerCapacity'],
-                        }
-                        self.CreateUseLedger(ledger_details)
-                    # # Create D_ Ledger Entries
-                    elif row['D_LedgerEntryType']:
-                        ledger_details = {
-                            'plat': plat, 'lot': lot,
-                            'agreement': self.FilterAgreements([row['AgreementResolution'], row['AccountLedgerAgreement-1'], row['AccountLedgerAgreement-2'], row['AccountLedgerAgreement-3'], 'Unknown']),
-                            'account_from': row['D_AccountName'], 'account_from_alt': row['D_PaidBy'], 'account_to': lfucg_account,
-                            'entry_type': row['D_LedgerEntryType'], 
-                            'created_by': user, 'modified_by': user, 'entry_date': row['D_DatePaid'],
-                            'non_sewer_credits': row['D_OtherCredits'], 'sewer_credits': row['D_SewerCredits'],
-                            'roads': row['D_Roads'], 'parks': row['D_Parks'], 'storm': row['D_Stormwater'], 'open_space': row['D_OpenSpace'],
-                            'sewer_trans': row['D_SewerTransmission'], 'sewer_cap': row['D_SewerCapacity'],
-                        }
-                        self.CreateUseLedger(ledger_details)
+                    # Combine credit usage and get account ledger values
+                    ledger_value_list = self.LedgerAmounts({
+                        'non_sewer_credits': Decimal(row['D_OtherCredits']) + Decimal(row['P_OtherCredits']), 
+                        'sewer_credits': Decimal(row['D_SewerCredits']) + Decimal(row['P_SewerCredits']),
+                        'roads': Decimal(row['D_Roads']) + Decimal(row['P_Roads']), 
+                        'parks': Decimal(row['D_Parks']) + Decimal(row['P_Parks']), 
+                        'storm': Decimal(row['D_Stormwater']) + Decimal(row['P_Stormwater']), 
+                        'open_space': Decimal(row['D_OpenSpace']),
+                        'sewer_trans': Decimal(row['D_SewerTransmission']) + Decimal(row['P_SewerTransmission']), 
+                        'sewer_cap': Decimal(row['D_SewerCapacity']),
+                    })
+
+                    # Determine if account ledger data exists
+                    ledger_1 = bool(row['AccountLedgerAgreement-1'] or row['AccountLedgerAccountFrom-1'] or row['AccountLedgerAgreementType-1'])
+                    ledger_2 = bool(row['AccountLedgerAgreement-2'] or row['AccountLedgerAccountFrom-2'] or row['AccountLedgerAgreementType-2'])
+                    ledger_3 = bool(row['AccountLedgerAgreement-3'] or row['AccountLedgerAccountFrom-3'] or row['AccountLedgerAgreementType-3'])
+                    ledger_4 = bool(agreement_4)
+                    ledger_5 = bool(agreement_5)
+                    ledger_6 = bool(agreement_6)
                     
-                    # # Create Ledger 2 Entry
-                    if row['AccountLedgerAgreement-2'] or row['AccountLedgerAccountFrom-2']:
-                        ledger_details = {
-                            'plat': plat, 'lot': lot,
-                            'agreement': self.FilterAgreements([row['AccountLedgerAgreement-2'], 'Unknown']),
-                            'account_from': row['AccountLedgerAccountFrom-2'], 'account_from_alt': row['P_PaidBy'], 'account_to': row['AccountLedgerAccountTo-2'],
-                            'entry_type': row['P_LedgerEntryType'], 
-                            'created_by': user, 'modified_by': user, 'entry_date': row['P_DatePaid'],
-                            'non_sewer_credits': row['P_OtherCredits'], 'sewer_credits': row['P_SewerCredits'],
-                            'roads': row['P_Roads'], 'parks': row['P_Parks'], 'storm': row['P_Stormwater'], 'open_space': 0,
-                            'sewer_trans': row['P_SewerTransmission'], 'sewer_cap': 0,
-                        }
-                        self.CreateUseLedger(ledger_details)
-                    # # Create P_ Ledger Entries
-                    elif row['P_LedgerEntryType']:
-                        ledger_details = {
-                            'plat': plat, 'lot': lot,
-                            'agreement': self.FilterAgreements([row['AccountLedgerAgreement-2'], row['AccountLedgerAgreement-3'], 'Unknown']),
-                            'account_from': row['P_AccountName'], 'account_from_alt': row['P_PaidBy'], 'account_to': lfucg_account,
-                            'entry_type': row['P_LedgerEntryType'], 
-                            'created_by': user, 'modified_by': user, 'entry_date': row['P_DatePaid'],
-                            'non_sewer_credits': row['P_OtherCredits'], 'sewer_credits': row['P_SewerCredits'],
-                            'roads': row['P_Roads'], 'parks': row['P_Parks'], 'storm': row['P_Stormwater'], 'open_space': 0,
-                            'sewer_trans': row['P_SewerTransmission'], 'sewer_cap': 0,
-                        }
-                        self.CreateUseLedger(ledger_details)
+                    if (ledger_4 or ledger_5 or ledger_6):
+                        print('ledger_4', ledger_4)
+                        print('ledger_5', ledger_5)
+                        print('ledger_6', ledger_6)
+                    else:
+                        print('ROW', row['AddressID'])
+                        if (ledger_1 and not (ledger_2 or ledger_3)):
+                            ledger_details = {
+                                'plat': plat, 'lot': lot, 'date': self.SelectDates([row['EntryDate-1'], row['D_DatePaid']]),
+                                'agreement': self.FilterAgreements([row['AccountLedgerAgreement-1'], 'Unknown']),
+                                'account_from': row['AccountLedgerAccountFrom-1'], 'account_from_alt': row['D_PaidBy'], 'account_to': row['AccountLedgerAccountTo-1'],
+                                'entry_type': row['D_LedgerEntryType'], 'credit_type': row['CreditType-1'],
+                                'non_sewer_credits': ledger_value_list['non_sewer_credits'], 'sewer_credits': ledger_value_list['sewer_credits'],
+                                'sewer_trans': ledger_value_list['sewer_trans'], 'sewer_cap': ledger_value_list['sewer_cap'],
+                                'roads': ledger_value_list['roads'], 'parks': ledger_value_list['parks'], 'storm': ledger_value_list['storm'], 'open_space': ledger_value_list['open_space'],
+                            }
+                            self.CreateUseLedger(ledger_details)
+                        elif (((row['CreditType-1'] == 'sewer_credits') & (row['CreditType-2'] == 'non_sewer_credits')) and not ledger_3):
+                            ledger_details = {
+                                'plat': plat, 'lot': lot, 'date': self.SelectDates([row['EntryDate-1'], row['D_DatePaid']]),
+                                'agreement': self.FilterAgreements([row['AccountLedgerAgreement-1'], 'Unknown']),
+                                'account_from': row['AccountLedgerAccountFrom-1'], 'account_from_alt': row['D_PaidBy'], 'account_to': row['AccountLedgerAccountTo-1'],
+                                'entry_type': row['D_LedgerEntryType'], 'credit_type': row['CreditType-1'],
+                                'non_sewer_credits': 0, 'sewer_credits': ledger_value_list['sewer_credits'],
+                                'sewer_trans': ledger_value_list['sewer_trans'], 'sewer_cap': ledger_value_list['sewer_cap'],
+                                'roads': 0, 'parks': 0, 'storm': 0, 'open_space': 0,
+                            }
+                            self.CreateUseLedger(ledger_details)
+                            ledger_details = {
+                                'plat': plat, 'lot': lot, 'date': self.SelectDates([row['EntryDate-2'], row['D_DatePaid']]),
+                                'agreement': self.FilterAgreements([row['AccountLedgerAgreement-2'], 'Unknown']),
+                                'account_from': row['AccountLedgerAccountFrom-2'], 'account_from_alt': row['P_PaidBy'], 'account_to': row['AccountLedgerAccountTo-2'],
+                                'entry_type': row['D_LedgerEntryType'], 'credit_type': row['CreditType-2'],
+                                'non_sewer_credits': ledger_value_list['non_sewer_credits'], 'sewer_credits': 0,
+                                'sewer_trans': 0, 'sewer_cap': 0,
+                                'roads': ledger_value_list['roads'], 'parks': ledger_value_list['parks'], 'storm': ledger_value_list['storm'], 'open_space': ledger_value_list['open_space'],
+                            }
+                            self.CreateUseLedger(ledger_details)
+                        elif (((row['CreditType-1'] == 'non_sewer_credits') & (row['CreditType-2'] == 'sewer_credits')) and not ledger_3):
+                            ledger_details = {
+                                'plat': plat, 'lot': lot, 'date': self.SelectDates([row['EntryDate-1'], row['D_DatePaid']]),
+                                'agreement': self.FilterAgreements([row['AccountLedgerAgreement-1'], 'Unknown']),
+                                'account_from': row['AccountLedgerAccountFrom-1'], 'account_from_alt': row['D_PaidBy'], 'account_to': row['AccountLedgerAccountTo-1'],
+                                'entry_type': row['D_LedgerEntryType'], 'credit_type': row['CreditType-1'],
+                                'non_sewer_credits': ledger_value_list['non_sewer_credits'], 'sewer_credits': 0,
+                                'sewer_trans': 0, 'sewer_cap': 0,
+                                'roads': ledger_value_list['roads'], 'parks': ledger_value_list['parks'], 'storm': ledger_value_list['storm'], 'open_space': ledger_value_list['open_space'],
+                            }
+                            self.CreateUseLedger(ledger_details)
+                            ledger_details = {
+                                'plat': plat, 'lot': lot, 'date': self.SelectDates([row['EntryDate-2'], row['D_DatePaid']]),
+                                'agreement': self.FilterAgreements([row['AccountLedgerAgreement-2'], 'Unknown']),
+                                'account_from': row['AccountLedgerAccountFrom-2'], 'account_from_alt': row['P_PaidBy'], 'account_to': row['AccountLedgerAccountTo-2'],
+                                'entry_type': row['D_LedgerEntryType'], 'credit_type': row['CreditType-2'],
+                                'non_sewer_credits': 0, 'sewer_credits': ledger_value_list['sewer_credits'],
+                                'sewer_trans': ledger_value_list['sewer_trans'], 'sewer_cap': ledger_value_list['sewer_cap'],
+                                'roads': 0, 'parks': 0, 'storm': 0, 'open_space': 0,
+                            }
+                            self.CreateUseLedger(ledger_details)
+  
+                        else:
+                            print('MORE LEDGERS', row['AddressID'])
 
-                    # # Create Ledger 3 Entry
-                    if row['AccountLedgerAgreement-3'] or row['AccountLedgerAccountFrom-3']:
-                        ledger_details = {
-                            'plat': plat, 'lot': lot,
-                            'agreement': self.FilterAgreements([row['AccountLedgerAgreement-3'], 'Unknown']),
-                            'account_from': row['AccountLedgerAccountFrom-3'], 'account_from_alt': None, 'account_to': row['AccountLedgerAccountTo-3'],
-                            'entry_type': row['D_LedgerEntryType'], 
-                            'created_by': user, 'modified_by': user, 'entry_date': row['D_DatePaid'],
-                            'non_sewer_credits': 0, 'sewer_credits': 0,
-                            'roads': 0, 'parks': 0, 'storm': 0, 'open_space': 0,
-                            'sewer_trans': 0, 'sewer_cap': 0,
-                        }
-                        self.CreateUseLedger(ledger_details)
-
-
+                     
                     # Create D_ Payment Entries
                     if row['D_AmtPaid'] != '0':
+                        payment_amounts = self.PaymentAmounts({
+                            'sewer': row['D_SewerCredits'], 'non_sewer': row['D_OtherCredits'],
+                            'sewer_trans': row['D_SewerTransmission'], 'sewer_cap': row['D_SewerCapacity'],
+                            'roads': row['D_Roads'], 'parks': row['D_Parks'], 'storm': row['D_Stormwater'], 'open_space': row['D_OpenSpace']
+                        }, Decimal(row['D_AmtPaid']))
+                        
+                        print('PAYMENT AMTS DD', payment_amounts)
                         payment_account = self.GetAccount([row['D_AccountName'], row['D_PaidBy'], plat.account and plat.account.account_name, 'Unknown']).first()
                         payment_agreement = self.FilterAgreements([row['AgreementResolution'], row['AccountLedgerAgreement-1'], row['AccountLedgerAgreement-2'], row['AccountLedgerAgreement-3'], 'Unknown'])
 
                         payment_details = {
-                            'lot_id': lot, 'credit_account': payment_account, 'credit_source': payment_agreement, 'user': user,
+                            'lot_id': lot, 'credit_account': payment_account, 'credit_source': payment_agreement,
                             'amount_paid': Decimal(row['D_AmtPaid']), 'paid_by': row['D_PaidBy'], 
+                            'paid_sewer_trans': payment_amounts['sewer_trans'], 'paid_sewer_cap': payment_amounts['sewer_cap'],
+                            'paid_roads': payment_amounts['roads'], 'paid_parks': payment_amounts['parks'],
+                            'paid_storm': payment_amounts['storm'], 'paid_open_space': payment_amounts['open_space'],
                             'paid_by_type': row['D_Paid_By_Type'], 'payment_type': row['D_Payment_Type'],
                             'check_number': row['D_CheckNo']
                         }
@@ -771,12 +919,23 @@ class Command(BaseCommand):
                     
                     # Create P_ Payment Entries
                     if row['P_AmtPaid'] != '0':
+                        payment_amounts = self.PaymentAmounts({
+                            'sewer': row['P_SewerCredits'], 'non_sewer': row['P_OtherCredits'],
+                            'sewer_trans': row['P_SewerTransmission'], 'sewer_cap': '0',
+                            'roads': row['P_Roads'], 'parks': row['P_Parks'], 'storm': row['P_Stormwater'], 'open_space': '0'
+                        }, Decimal(row['P_AmtPaid']))
+                        
+                        print('PAYMENT P AMTS P', payment_amounts)
+                        print('PAYMENT P AMTS P TYPE', type(payment_amounts['sewer_trans']))
                         payment_account = self.GetAccount([row['P_AccountName'], row['P_PaidBy'], plat.account and plat.account.account_name, 'Unknown']).first()
                         payment_agreement = self.FilterAgreements([row['AgreementResolution'], row['AccountLedgerAgreement-2'], row['AccountLedgerAgreement-3'], 'Unknown'])
 
                         payment_details = {
-                            'lot_id': lot, 'credit_account': payment_account, 'credit_source': payment_agreement, 'user': user,
+                            'lot_id': lot, 'credit_account': payment_account, 'credit_source': payment_agreement,
                             'amount_paid': Decimal(row['P_AmtPaid']), 'paid_by': row['P_PaidBy'], 
+                            'paid_sewer_trans': payment_amounts['sewer_trans'], 'paid_sewer_cap': payment_amounts['sewer_cap'],
+                            'paid_roads': payment_amounts['roads'], 'paid_parks': payment_amounts['parks'],
+                            'paid_storm': payment_amounts['storm'], 'paid_open_space': payment_amounts['open_space'],
                             'paid_by_type': row['P_Paid_By_Type'], 'payment_type': row['P_Payment_Type'],
                             'check_number': row['P_CheckNo']
                         }
@@ -786,18 +945,9 @@ class Command(BaseCommand):
                     # Create Lot Notes
                     if row['Notes'] is not None:
                         content = ContentType.objects.get_for_model(Lot)
-                        Note.objects.get_or_create(user=user, object_id=lot.id,
+                        Note.objects.get_or_create(user=self.user, object_id=lot.id,
                             defaults={'content_type': content, 'note': row['Notes'], 'date': datetime.now()}
                         )
-                        
-                    #     total_paid = p_payment.paid_roads + p_payment.paid_parks + p_payment.paid_storm + p_payment.paid_sewer_trans
-                    #     if total_paid - (Decimal(row['P_AmtPaid'] or 0) + Decimal(row['P_Deferral'] or 0)) > 0.01:
-                    #         print(str(total_paid) + ' vs. ' + row['P_AmtPaid'] + ' ' + row['P_Deferral'] + ' Payment mismatch for : ' + str(lot))
-
-
-                    # if created:
-                    #     print(row['StreetNo'] + ' ' + row['StreetName'] + ' ' + row['Lot'] + ' created')
                 else:
                     print("Plat not found: " + row)
-            # print(agreements)
             print('ERRORS', self.errors)

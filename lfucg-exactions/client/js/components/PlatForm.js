@@ -444,39 +444,39 @@ class PlatForm extends React.Component {
                                                                     </div>
                                                                     <div className="col-xs-12 dues-table-heading"><h3>Plat Exactions</h3></div>
                                                                     <div className="row">
-                                                                        <div className="col-sm-6">
-                                                                            <FormGroup label="Sewer Exactions" id="sewer_due">
-                                                                                <input
-                                                                                  type="number"
-                                                                                  step="0.01"
-                                                                                  className="form-control"
-                                                                                  placeholder="Sewer Exactions"
-                                                                                  disabled
-                                                                                />
-                                                                            </FormGroup>
-                                                                        </div>
-                                                                        <div className="col-sm-6">
-                                                                            <FormGroup label="Non-Sewer Exactions" id="non_sewer_due">
-                                                                                <input
-                                                                                  type="number"
-                                                                                  step="0.01"
-                                                                                  className="form-control"
-                                                                                  placeholder="Non-Sewer Exactions"
-                                                                                  disabled
-                                                                                />
-                                                                            </FormGroup>
+                                                                        <div className="col-xs-12">
+                                                                            <div className="col-sm-6">
+                                                                                <div className="form-group">
+                                                                                    <div className="row">
+                                                                                        <label className="form-label">Sewer Exactions</label>
+                                                                                    </div>
+                                                                                    <div className="row">
+                                                                                        <label className="form-label col-sm-4 col-sm-offset-1">{plats.currentPlat && plats.currentPlat.sewer_due}</label>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div className="col-sm-6">
+                                                                                <div className="form-group">
+                                                                                    <div className="row">
+                                                                                        <label className="form-label">Non-Sewer Exactions</label>
+                                                                                    </div>
+                                                                                    <div className="row">
+                                                                                        <label className="form-label col-sm-4 col-sm-offset-1">{plats.currentPlat && plats.currentPlat.non_sewer_due}</label>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
                                                                         </div>
                                                                     </div>
                                                                     <div className="row">
                                                                         <div className="col-xs-12">
-                                                                            <FormGroup label="* Calculation Notes" id="calculation_note">
+                                                                            <FormGroup label="Calculation Notes" id="calculation_note">
                                                                                 <textarea type="text" className="form-control" placeholder="Calculation Notes" rows="4" />
                                                                             </FormGroup>
                                                                         </div>
                                                                     </div>
                                                                 </fieldset>
                                                                 <div className="col-xs-offset-2 col-xs-4">
-                                                                    <button className="btn btn-lex" >Submit Exactions</button>
+                                                                    <button className="btn btn-lex" onClick={onPlatSubmit}>Submit Exactions</button>
                                                                 </div>
                                                                 <div className="col-xs-offset-1 col-xs-4">
                                                                     <button className="btn btn-lex" onClick={onPlatAndCreateLot} >Submit and Create Lot</button>
