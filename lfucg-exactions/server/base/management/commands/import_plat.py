@@ -111,7 +111,7 @@ class Command(BaseCommand):
                 })
 
             for row in reader:
-                for (k, v in row.items()):
+                for k, v in row.items():
                     if v == 'NULL':
                         row[k] = None
                     if v == '?':

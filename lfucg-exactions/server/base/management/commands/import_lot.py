@@ -491,6 +491,16 @@ class Command(BaseCommand):
                 ledger_entry_type = 'USE'
 
         try:
+            # if ledger_details['entry_date'].match('\d{1,2}\/\d{1,2}\/\d{2,4}.'):
+            ledger_entry_date = datetime.strptime(ledger_details['entry_date'].split(' ')[0], '%m/%d/%y')
+        except:
+            try:
+                ledger_entry_date = datetime.strptime(ledger_details['entry_date'].split(' ')[0], '%m/%d/%Y')
+            except:
+                print('LEDGER DATE EXCEPT', ledger_details['entry_date'])
+                ledger_entry_date = datetime.now()
+
+        try:
             ledger, created = AccountLedger.objects.get_or_create(
                 account_to=ledger_to_account,
                 account_from=ledger_from_account,
@@ -634,7 +644,8 @@ class Command(BaseCommand):
                 })
 
             for row in reader:
-                for (k, v in row.items()):
+                print('Address Id', row['AddressID'])
+                for k, v in row.items():
                     if v == 'NULL':
                         row[k] = None
                     if v == 'N/A':
