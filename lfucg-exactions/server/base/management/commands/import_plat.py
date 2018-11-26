@@ -10,6 +10,7 @@ from notes.models import Rate, RateTable
 
 class Command(BaseCommand):
     help = "Imports plat data from plat_data"
+    plat_errors = []
 
     def add_arguments(self, parser):
         parser.add_argument('filename')
@@ -58,21 +59,28 @@ class Command(BaseCommand):
                 if created:
                     print('STORM_WATER Rate created for ' + expansion_area + ' ' + zone)
             except Exception as ex:
+                self.plat_errors.append({'Plat Import Rate Creation Error': ex})
                 print('Plat Import Rate Creation Error', ex)
 
     def GetOrCreateAgreement(self, agreement_details):
         try:
+            resolution = ''
+            if agreement_details['resolution']:
+                resolution = agreement_details['resolution']
+            elif agreement_details['type'] == 'MEMO':
+                resolution = str(agreement_details['date'])
             agreement, created = Agreement.objects.get_or_create(
-                resolution_number=agreement_details['resolution'],
-                date_created=agreement_details['date'],
-                date_executed=agreement_details['date'],
-                account_id=agreement_details['account'],
-                agreement_type=agreement_details['type'],
+                resolution_number=resolution,
                 defaults = {
+                    'date_created': agreement_details['date'],
+                    'date_executed': agreement_details['date'],
+                    'account_id': agreement_details['account'],
+                    'agreement_type': agreement_details['type'],
                     'created_by': agreement_details['user'], 'modified_by': agreement_details['user'],
                     'expansion_area': agreement_details['expansion_area']
             })
         except Exception as ex:
+            self.plat_errors.append({'Plat Import Agreement Error': ex})
             print('Plat Import Agreement Error', ex)
 
     def handle(self, *args, **options):
@@ -159,6 +167,7 @@ class Command(BaseCommand):
                         'current_account_balance': 0, 'current_non_sewer_balance': 0, 'current_sewer_balance': 0
                         })
                 except Exception as ex:
+                    self.plat_errors.append({'Plat Import Account Creation Error': ex})
                     print('Plat Import Account Creation Error', ex)
 
                 try:
@@ -166,6 +175,7 @@ class Command(BaseCommand):
                     subdivision, created = Subdivision.objects.get_or_create(name=row['SubdivisionName'].strip(), 
                         defaults= {'gross_acreage': 0, 'is_approved': True, 'created_by': user, 'modified_by': user})
                 except Exception as ex:
+                    self.plat_errors.append({'Plat Import Subdivision Creation Error': ex})
                     print('Plat Import Subdivision Creation Error', ex)
 
                 # Create Plat
@@ -175,13 +185,14 @@ class Command(BaseCommand):
                     try:
                         signed_date = datetime.strptime(row['SignedDate'], '%m/%d/%Y')
                     except:
-                        signed_date = datetime.strptime("01/01/1900", '%m/%d/%Y')
+                        signed_date = datetime.strptime("1/1/1970", '%m/%d/%Y')
 
                 self.CheckOrCreateRate(row['PlatZone-1'], 'EA-' + row['ExpanArea'])
                 self.CheckOrCreateRate(row['PlatZone-2'], 'EA-' + row['ExpanArea'])
                 self.CheckOrCreateRate(row['PlatZone-3'], 'EA-' + row['ExpanArea'])
 
                 try:
+                    print('ROW PLAT NAME', row['PlatName'])
                     plat, created = Plat.objects.get_or_create(name=row['PlatName'], expansion_area='EA-' + row['ExpanArea'], 
                         cabinet=row['Cabinet'], slide=len(row['Slide']) > 0 and row['Slide'] or row['Plat_Slide'], 
                         defaults= { 'date_recorded': datetime.now, 'signed_date': signed_date, 
@@ -195,6 +206,7 @@ class Command(BaseCommand):
                     # if created:
                     #     print(str(plat) + ' plat created')
                 except Exception as ex:
+                    self.plat_errors.append({'Plat Import Plat Creation Error': ex})
                     print('Plat Import Plat Creation Error', ex)
 
                 # Create PlatZones
@@ -205,6 +217,7 @@ class Command(BaseCommand):
                         # if created:
                         #     print (str(plat_zone) + ' plat_zone created')
                     except Exception as ex:
+                        self.plat_errors.append({'Plat Import Plat Zone 1 Creation Error': ex})
                         print('Plat Import Plat Zone 1 Creation Error', ex)
 
                 if row['PlatZone-2']:
@@ -214,6 +227,7 @@ class Command(BaseCommand):
                         # if created:
                         #     print (str(plat_zone) + ' plat_zone created')
                     except Exception as ex:
+                        self.plat_errors.append({'Plat Import Plat Zone 2 Creation Error': ex})
                         print('Plat Import Plat Zone 2 Creation Error', ex)
 
                 if row['PlatZone-3']:
@@ -223,6 +237,7 @@ class Command(BaseCommand):
                         # if created:
                         #     print (str(plat_zone) + ' plat_zone created')
                     except Exception as ex:
+                        self.plat_errors.append({'Plat Import Plat Zone 3 Creation Error': ex})
                         print('Plat Import Plat Zone 3 Creation Error', ex)
 
                 if row['PlatZone-4']:
@@ -232,6 +247,7 @@ class Command(BaseCommand):
                         # if created:
                         #     print (str(plat_zone) + ' plat_zone created')
                     except Exception as ex:
+                        self.plat_errors.append({'Plat Import Plat Zone 4 Creation Error': ex})
                         print('Plat Import Plat Zone 4 Creation Error', ex)
 
                 # Create agreements
@@ -261,3 +277,5 @@ class Command(BaseCommand):
                         'date': self.SelectDates(row['EntryDate-3'])
                     }
                     self.GetOrCreateAgreement(agreement_details)
+            
+            print('PLAT ERRORS', self.plat_errors)
