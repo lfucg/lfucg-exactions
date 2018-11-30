@@ -740,8 +740,8 @@ class Command(BaseCommand):
 
             # print('PANDAS SUM ', self.df['Non-Sewer-1'].sum())
 
-            cleaned_reader = [row for row in reader if row['StreetName'] != 'deleted address']
-            for row in cleaned_reader:
+            # cleaned_reader = [row for row in reader if row['StreetName'] != 'deleted address']
+            for row in reader:
                 print('Address Id', row['AddressID'])
                 for k, v in row.items():
                     if v == 'NULL':
