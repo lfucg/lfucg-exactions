@@ -478,16 +478,16 @@ class Command(BaseCommand):
         
         return amounts
     
-    def GetLotResolutions(self, lot_agreements):
-        lot_resolutions = []
+    def GetLotPlatResolutions(self, agreements):
+        resolution_numbers = []
 
-        for lot in lot_agreements:
-            if hasattr(lot, 'resolution_number'):
-                lot_resolutions.append(lot.resolution_number)
-            elif hasattr(lot, 'agreement_type') and lot.agreement_type == 'MEMO':
-                lot_resolutions.append(str(lot.date_modified))
+        for agreement in agreements:
+            if hasattr(agreement, 'resolution_number'):
+                resolution_numbers.append(agreement.resolution_number)
+            elif hasattr(agreement, 'agreement_type') and agreement.agreement_type == 'MEMO':
+                resolution_numbers.append(str(agreement.date_modified))
 
-        return lot_resolutions
+        return resolution_numbers
     
     def LedgerSimpleCheck(self, row, pandas_plat, lot_agreements, plat_agreements):
         is_simple = True
@@ -495,7 +495,7 @@ class Command(BaseCommand):
         no_plat_needed = True
 
         # Check if all plats are already accounted for with lots.
-        lot_resolutions = self.GetLotResolutions(lot_agreements)
+        lot_resolutions = self.GetLotPlatResolutions(lot_agreements)
         for plat in plat_agreements:
             if (hasattr(plat, 'resolution_number') and plat.resolution_number not in lot_resolutions):
                 plats_match = False
@@ -507,6 +507,7 @@ class Command(BaseCommand):
         non_sewer = len([s for s in lot_ledger_types if s == 'non_sewer_credits'])
         sewer = len([s for s in lot_ledger_types if s == 'sewer_credits'])
 
+        # Check if all types (sewer_credits, non_sewer_credits or a mixture) are unique, allowing for direct assignment of each
         if (mixed_non_sewer_first + mixed_sewer_first > 1):
             is_simple = False
             no_plat_needed = False
@@ -522,16 +523,11 @@ class Command(BaseCommand):
         elif sewer >= 2:
             is_simple = False
             no_plat_needed = False
-
-        # Check if all types (sewer_credits, non_sewer_credits or a mixture) are unique, allowing for direct assignment of each
-        # filtered_types = list(filter(None, lot_ledger_types))
-        # if (len(filtered_types) != len(set(filtered_types))):
-        #     is_simple = False
         
         return [is_simple, no_plat_needed, plats_match]
     
     def GetLedgerPlatTypes(self, pandas_plat, lot_agreements):
-        lot_resolutions = self.GetLotResolutions(lot_agreements)
+        lot_resolutions = self.GetLotPlatResolutions(lot_agreements)
         lot_ledger_types = []
 
         try:
@@ -539,11 +535,12 @@ class Command(BaseCommand):
                 column = 'CreditType-' + str(index + 1)
                 col_match = pandas_plat.columns[(pandas_plat == lot).iloc[0]]
 
-                lot_ledger_types.append({column: pandas_plat['CreditType-1'].values[0] }) if col_match.values[0] == 'Resolution-1' else None
-                lot_ledger_types.append({column: pandas_plat['CreditType-2'].values[0] }) if col_match.values[0] == 'Resolution-2' else None
-                lot_ledger_types.append({column: pandas_plat['CreditType-3'].values[0] }) if col_match.values[0] == 'Resolution-3' else None
-                lot_ledger_types.append({column: pandas_plat['CreditType-4'].values[0] }) if col_match.values[0] == 'Resolution-4' else None
-                lot_ledger_types.append({column: pandas_plat['CreditType-5'].values[0] }) if col_match.values[0] == 'Resolution-5' else None
+                if len(col_match) > 0:
+                    lot_ledger_types.append({column: pandas_plat['CreditType-1'].values[0] }) if col_match.values[0] == 'Resolution-1' else None
+                    lot_ledger_types.append({column: pandas_plat['CreditType-2'].values[0] }) if col_match.values[0] == 'Resolution-2' else None
+                    lot_ledger_types.append({column: pandas_plat['CreditType-3'].values[0] }) if col_match.values[0] == 'Resolution-3' else None
+                    lot_ledger_types.append({column: pandas_plat['CreditType-4'].values[0] }) if col_match.values[0] == 'Resolution-4' else None
+                    lot_ledger_types.append({column: pandas_plat['CreditType-5'].values[0] }) if col_match.values[0] == 'Resolution-5' else None
         except Exception as ex:
             self.lot_errors.append({'Get Ledger Plat Types Error': ex})
             print('Get Ledger Plat Types Error', ex)
@@ -601,11 +598,11 @@ class Command(BaseCommand):
             if ledger_details not in self.errors:   
                 self.errors.append('Ledger Error ' + str(ledger_details['lot'].address_full))     
         
-    def Ledger1(self, row, common_details, credit_type):
-        print('LEDGER 1', credit_type)
+    def Ledger1(self, row, common_details, credit_type, agreement):
+        # print('LEDGER 1', agreement)
         ledger_1_details = {
             'date': self.SelectDates([row['EntryDate-1'], row['D_DatePaid']]),
-            'agreement': self.FilterAgreements([row['AccountLedgerAgreement-1'], 'Unknown']),
+            'agreement': agreement if agreement else self.FilterAgreements([row['AccountLedgerAgreement-1'], 'Unknown']),
             'account_from': row['AccountLedgerAccountFrom-1'], 'account_from_alt': row['D_PaidBy'], 'account_to': row['AccountLedgerAccountTo-1'],
             'entry_type': row['D_LedgerEntryType'], 'credit_type': credit_type,
         } 
@@ -613,11 +610,10 @@ class Command(BaseCommand):
         ledger_1_combined = {**common_details, **ledger_1_details}
         return self.CreateUseLedger(ledger_1_combined)
     
-    def Ledger2(self, row, common_details, credit_type):
-        print('LEDGER 2', credit_type)
+    def Ledger2(self, row, common_details, credit_type, agreement):
         ledger_2_details = {
             'date': self.SelectDates([row['EntryDate-2'], row['D_DatePaid']]),
-            'agreement': self.FilterAgreements([row['AccountLedgerAgreement-2'], 'Unknown']),
+            'agreement': agreement if agreement else self.FilterAgreements([row['AccountLedgerAgreement-2'], 'Unknown']),
             'account_from': row['AccountLedgerAccountFrom-2'], 'account_from_alt': row['D_PaidBy'], 'account_to': row['AccountLedgerAccountTo-2'],
             'entry_type': row['D_LedgerEntryType'], 'credit_type': credit_type,
         }
@@ -742,13 +738,20 @@ class Command(BaseCommand):
                     'expansion_area': 'EA-', 'agreement_type': 'OTHER',
                 })
 
-            for row in reader:
+            # print('PANDAS SUM ', self.df['Non-Sewer-1'].sum())
+
+            cleaned_reader = [row for row in reader if row['StreetName'] != 'deleted address']
+            for row in cleaned_reader:
                 print('Address Id', row['AddressID'])
                 for k, v in row.items():
                     if v == 'NULL':
                         row[k] = None
                     if v == 'N/A':
                         row[k] = 'Unknown'
+
+                # # Skip deleted addresses
+                # if row['StreetName'] == 'deleted address':
+                #     pass
 
                 # Get Plat
                 if len(row['Cabinet'].strip()) == 0 and len(row['Slide'].strip()) == 0:
@@ -977,53 +980,65 @@ class Command(BaseCommand):
                             'roads': ledger_value_list['roads'], 'parks': ledger_value_list['parks'], 'storm': ledger_value_list['storm'], 'open_space': ledger_value_list['open_space'],
                         }
 
+                        lot_resolutions = self.GetLotPlatResolutions(lot_agreements)
+                        plat_resolutions = self.GetLotPlatResolutions(plat_agreements)
+                        plat_lot_differences = (list(set(plat_resolutions) - set(lot_resolutions)))
+
+                        col_match = pandas_plat.columns[(pandas_plat == '509-2004').iloc[0]]
+                        if len(col_match) > 0:
+                            print('COL MATCH', col_match.values[0])
+
+                        if hasattr(pandas_plat, 'BuildableLots'):
+                            plat_reso_length = len(plat_resolutions)
+                            ending = 1
+                            plat_sewer = 0
+                            plat_non_sewer = 0
+
+                            while plat_reso_length >= ending:
+                                sewer_name = 'Sewer-' + str(ending)
+                                non_sewer_name = 'Non-Sewer-' + str(ending)
+                                
+                                if not((pandas_plat[sewer_name].hasnans or pandas_plat['BuildableLots'].hasnans)):
+                                    plat_sewer += (Decimal(pandas_plat[sewer_name].values[0]) / Decimal(pandas_plat['BuildableLots'].values[0]))
+                                if not((pandas_plat[non_sewer_name].hasnans or pandas_plat['BuildableLots'].hasnans)):
+                                    plat_non_sewer += (Decimal(pandas_plat[non_sewer_name].values[0]) / Decimal(pandas_plat['BuildableLots'].values[0]))
+
+                                ending += 1
+                                
+                            # print('LEDGER SEWER', ledger_value_list['sewer_credits'])
+                            # print('LEDGER NON SEWER', ledger_value_list['non_sewer_credits'])
+                            # print('PLAT SEWER', plat_sewer)
+                            # print('PLAT NON SEWER', plat_non_sewer)
+                            # print('NUMBERS SEWR', plat_sewer - ledger_value_list['sewer_credits'])
+                            # print('NUMBERS NON SEWR', plat_non_sewer - ledger_value_list['non_sewer_credits'])
+
+                            # if (plat_sewer - ledger_value_list['sewer_credits']) > 0.05:
+                            #     print('SEWER DIFFERENCE', plat_sewer - ledger_value_list['sewer_credits'])
+                            # else:
+                            #     print('SEWER OKAY')
+                            # if (plat_non_sewer - ledger_value_list['non_sewer_credits']) > 0.05:
+                            #     print('SEWER DIFFERENCE', plat_non_sewer - ledger_value_list['non_sewer_credits'])
+                            # else:
+                            #     print('NON SEWER OKAY')
+
                         # Check if ledgers are a simple case
                         if ledger_check[0] and ledger_check[1] and ledger_check[2]:
-                            self.Ledger1(row, common_details, row['CreditType-1']) if ledger_1 else None
-                            self.Ledger2(row, common_details, row['CreditType-2']) if ledger_2 else None
-                        # Check if there are extra plat ledgers not in lots
+                            self.Ledger1(row, common_details, row['CreditType-1'], None) if ledger_1 else None
+                            self.Ledger2(row, common_details, row['CreditType-2'], None) if ledger_2 else None
+                        # Check if plat data is needed but there are no extra plat entries
                         elif not ledger_check[1] and ledger_check[2]:
-                            print('NOT QUITE SIMPLE')
                             plat_ledger_types = self.GetLedgerPlatTypes(pandas_plat, lot_agreements)
                             plat_ledger_values = [list(x.values()) for x in plat_ledger_types]
 
                             if len(plat_ledger_types) > 1 and hasattr(agreement_2, 'resolution_number'):
-                                self.Ledger2(row, common_details, plat_ledger_values[1]) if ledger_2 else None
+                                self.Ledger2(row, common_details, plat_ledger_values[1], None) if ledger_2 else None
                             if len(plat_ledger_types) > 0 and hasattr(agreement_1, 'resolution_number'):
-                                self.Ledger1(row, common_details, plat_ledger_values[0]) if ledger_1 else None
+                                self.Ledger1(row, common_details, plat_ledger_values[0], None) if ledger_1 else None
 
                             if len(plat_ledger_types) > 2:
-                                print('Has Extra Plat Ledgers')
-                        elif not ledger_check[2]:
-                            # print('VARS AGREEMENT 1', agreement_1)
-                            # print('VARS AGREEMENT 1', vars(agreement_1))
-                            # print('VARS AGREEMENT 2', vars(agreement_2))
-                            # print('VARS AGREEMENT 2', agreement_2)
-                            # print('VARS AGREEMENT 3', vars(agreement_3))
-                            # print('VARS AGREEMENT 3', agreement_3)
-                            for lot_agreement in lot_agreements:
-                                if hasattr(lot_agreement, 'resolution_number') and lot_agreement.resolution_number == 'Unknown':
-                                    print('LOT AGREEMENT HAS RESO', lot_agreement.resolution_number)
-                                    # print('INDEX', index)
+                                print('Has Extra Plat Ledgers', plat_ledger_types)
+                        # Check if there are extra plat ledgers not in lots
 
-                                    # print('EXTRA PLAT AGREEMENT 1', agreement_1)
-                                    # print('EXTRA PLAT AGREEMENT 2', agreement_2)
-                                    # print('EXTRA PLAT AGREEMENT 3', agreement_3)
-                                    # print('EXTRA PLAT AGREEMENT 4', agreement_4)
-                                    # print('EXTRA PLAT AGREEMENT 5', agreement_5)
-                                    # print('EXTRA PLAT AGREEMENT 6', agreement_6)
-                                    # print('EXTRA PLAT AGREEMENT 7', agreement_7)
-                                    # print('EXTRA PLAT AGREEMENT 8', agreement_8)
-                            # if agreement_1 and agreement_1.resolution_number == 'Unknown':
-                            #     print('LEDGER CHECK 21 Lot Unknown')
-                            #     print('UNKNOWN PLAT AGREEMENT 1', agreement_1)
-                            # elif agreement_2 and agreement_2.resolution_number == 'Unknown':
-                            #     print('LEDGER CHECK 22 Lot Unknown')
-                            #     print('UNKNOWN PLAT AGREEMENT 2', agreement_2)
-                            # elif agreement_3 and agreement_3.resolution_number == 'Unknown':
-                            #     print('LEDGER CHECK 23 Lot Unknown')
-                            #     print('UNKNOWN PLAT AGREEMENT 3', agreement_3)
-                            # else:
                         # Check if additional data needed from plats
                         elif not ledger_check[1]:
                             plat_ledger_clarification = self.GetLedgerPlatTypes(pandas_plat, lot_agreements)
@@ -1031,9 +1046,9 @@ class Command(BaseCommand):
                             for ledger_dict in plat_ledger_clarification:
                                 for key in ledger_dict:
                                     if key == 'CreditType-1':
-                                        key1 = self.Ledger1(row, common_details, ledger_dict['CreditType-1']) if ledger_1 else None
+                                        key1 = self.Ledger1(row, common_details, ledger_dict['CreditType-1'], None) if ledger_1 else None
                                     elif key == 'CreditType-2':
-                                        key2 = self.Ledger2(row, common_details, ledger_dict['CreditType-2']) if ledger_2 else None
+                                        key2 = self.Ledger2(row, common_details, ledger_dict['CreditType-2'], None) if ledger_2 else None
                                     elif key == 'CreditType-3':
                                         print('CREDIT TYPE 3 Check type #1', key)
                                         print('VALUE ELSE 3', ledger_dict[key])
@@ -1041,43 +1056,50 @@ class Command(BaseCommand):
                                         print('Ledger Check #1 Else Key', key)
                                         print('Ledger Check #1 Else Value', ledger_dict[key])
 
+                        elif not ledger_check[2]:
+  
+                            for lot_resolution in lot_resolutions:
+                                if lot_resolution in plat_resolutions and ledger_check[0]:
+                                    lot_agree = [x for x in lot_agreements if hasattr(x, 'resolution_number') and x.resolution_number == lot_resolution]
+                                    lot_agree_index = [i for i, e in enumerate(lot_agreements) if e == lot_agree[0]]
+
+                                    if lot_agree_index[0] == 0:
+                                        self.Ledger1(row, common_details, row['CreditType-1'], lot_agree[0])
+                                    elif lot_agree_index[0] == 1:
+                                        self.Ledger2(row, common_details, row['CreditType-2'], lot_agree[0])
+                                    else:
+                                        print('Lot Not Check [2] Agreement', lot_agree)
+                                        print('Lot Not Check [2] Agreement Index', lot_agree_index)
+                                elif lot_resolution == 'Unknown':
+                                    plat_ledger_types = self.GetLedgerPlatTypes(pandas_plat, lot_agreements)
+
+                                    lot_agree = [x for x in lot_agreements if hasattr(x, 'resolution_number') and x.resolution_number == 'Unknown']
+                                    lot_agree_index = [i for i, e in enumerate(lot_agreements) if e == lot_agree[0]]
+
+                                    if len(plat_lot_differences) > 0 and len(lot_resolutions) == len(plat_resolutions):
+                                        plat_agree_index = [i for i, e in enumerate(plat_agreements) if hasattr(e, 'resolution_number') and e.resolution_number == plat_lot_differences[0]]
+
+                                        if len(plat_lot_differences) <= 2:
+                                            plat_type = pandas_plat['CreditType-1'].values[0] if plat_agree_index[0] == 0 else pandas_plat['CreditType-2'].values[0]
+
+                                            if lot_agree_index[0] == 0:
+                                                self.Ledger1(row, common_details, plat_type, plat_agreements[plat_agree_index[0]])
+                                            elif lot_agree_index[0] == 1:
+                                                self.Ledger2(row, common_details, plat_type, plat_agreements[plat_agree_index[0]])
+                                            else:
+                                                print('Lot Not Check [2] Agreement', lot_agree)
+                                                print('Lot Not Check [2] Agreement Index', lot_agree_index)
+                                        else:
+                                            print('Multiple differences betwee plats and lots', plat_lot_differences)
+                                    else:
+                                        print('Different number of lots vs. plats')
+                                else:
+                                    print('LOT RESOLUTIONS', lot_resolutions)
+                                    print('PLAT RESOLUTIONS', plat_resolutions)
+                                    print('LOT RESOLUTION aingl', lot_resolution)
+                                    print('PLAT RESOLUTIONS Diff ', plat_lot_differences)
                         else:
                             print('FAILED CHECK')  
-
-                        #     ledger_details = {
-                        #         'plat': plat, 'lot': lot, 'date': self.SelectDates([row['EntryDate-2'], row['D_DatePaid']]),
-                        #         'agreement': self.FilterAgreements([row['AccountLedgerAgreement-2'], 'Unknown']),
-                        #         'account_from': row['AccountLedgerAccountFrom-2'], 'account_from_alt': row['P_PaidBy'], 'account_to': row['AccountLedgerAccountTo-2'],
-                        #         'entry_type': row['D_LedgerEntryType'], 'credit_type': row['CreditType-2'],
-                        #         'non_sewer_credits': ledger_value_list['non_sewer_credits'], 'sewer_credits': 0,
-                        #         'sewer_trans': 0, 'sewer_cap': 0,
-                        #         'roads': ledger_value_list['roads'], 'parks': ledger_value_list['parks'], 'storm': ledger_value_list['storm'], 'open_space': ledger_value_list['open_space'],
-                        #     }
-                        #     self.CreateUseLedger(ledger_details)
-                        # elif (((row['CreditType-1'] == 'non_sewer_credits') & (row['CreditType-2'] == 'sewer_credits')) and not ledger_3):
-                            # ledger_details = {
-                            #     'plat': plat, 'lot': lot, 'date': self.SelectDates([row['EntryDate-1'], row['D_DatePaid']]),
-                            #     'agreement': self.FilterAgreements([row['AccountLedgerAgreement-1'], 'Unknown']),
-                            #     'account_from': row['AccountLedgerAccountFrom-1'], 'account_from_alt': row['D_PaidBy'], 'account_to': row['AccountLedgerAccountTo-1'],
-                            #     'entry_type': row['D_LedgerEntryType'], 'credit_type': row['CreditType-1'],
-                            #     'non_sewer_credits': ledger_value_list['non_sewer_credits'], 'sewer_credits': 0,
-                            #     'sewer_trans': 0, 'sewer_cap': 0,
-                            #     'roads': ledger_value_list['roads'], 'parks': ledger_value_list['parks'], 'storm': ledger_value_list['storm'], 'open_space': ledger_value_list['open_space'],
-                            # }
-                            # self.CreateUseLedger(ledger_details)
-                            # ledger_details = {
-                            #     'plat': plat, 'lot': lot, 'date': self.SelectDates([row['EntryDate-2'], row['D_DatePaid']]),
-                            #     'agreement': self.FilterAgreements([row['AccountLedgerAgreement-2'], 'Unknown']),
-                            #     'account_from': row['AccountLedgerAccountFrom-2'], 'account_from_alt': row['P_PaidBy'], 'account_to': row['AccountLedgerAccountTo-2'],
-                            #     'entry_type': row['D_LedgerEntryType'], 'credit_type': row['CreditType-2'],
-                            #     'non_sewer_credits': 0, 'sewer_credits': ledger_value_list['sewer_credits'],
-                            #     'sewer_trans': ledger_value_list['sewer_trans'], 'sewer_cap': ledger_value_list['sewer_cap'],
-                            #     'roads': 0, 'parks': 0, 'storm': 0, 'open_space': 0,
-                            # }
-                            # self.CreateUseLedger(ledger_details)
-  
-                        # else:
-                        #     print('MORE LEDGERS', row['AddressID'])
 
                      
                     # Create D_ Payment Entries
