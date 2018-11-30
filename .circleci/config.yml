@@ -27,7 +27,8 @@ workflows:
       - deploy-dev:
         filters:
           branches:
-            only: dev
+            only: 
+              - dev
       # - deploy-prod:
       #   filters:
       #     branches:
