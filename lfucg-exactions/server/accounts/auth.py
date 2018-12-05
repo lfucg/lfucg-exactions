@@ -100,8 +100,9 @@ class Registration(GenericAPIView):
 @permission_classes((AllowAny, ))
 def forgot_password(request):
     email = request.data.get('email_forgot_password', None)
+
     if email is not None:
-        users = User.objects.filter(email=email)
+        users = User.objects.filter(email__icontains=email)
         for user in users:
             token = PasswordResetTokenGenerator().make_token(user)
             send_password_reset_email(user, token)
