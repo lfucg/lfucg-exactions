@@ -38,11 +38,11 @@ workflows:
   build-deploy:
     jobs:
       # - build
-      - deploy-dev:
-        filters:
-          branches:
-            only: 
-              - dev
+      - deploy-dev
+        # filters:
+        #   branches:
+        #     only: 
+        #       - dev
       # - deploy-prod:
       #   filters:
       #     branches:
