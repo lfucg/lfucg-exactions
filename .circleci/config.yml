@@ -1,49 +1,49 @@
-version: 2
-jobs:
-  build:
-    machine:
-      ruby: 2.3.1
-    steps:
-      - run: gem install dream-ops -v 0.4.2
-      - run: dream deploy opsworks -T d93434c3-4ace-4970-ac0a-6f87c0d9e125
- workflows:
-  version: 2
-  build:
-    jobs:
-      - build
-
 # version: 2
 # jobs:
-#   # build:
-#   #   machine:
-#   #     ruby: 2.4.1
-#   #   steps:
-#   #     - run: python manage.py test
-#   deploy-dev:
+#   build:
 #     machine:
-#       ruby: 2.4.1
+#       ruby: 2.3.1
 #     steps:
 #       - run: gem install dream-ops -v 0.4.2
 #       - run: dream deploy opsworks -T d93434c3-4ace-4970-ac0a-6f87c0d9e125
-#   # deploy-prod:
-#   #   machine:
-#   #     ruby: 2.4.1
-#   #   steps:
-#   #     - run: gem install dream-ops -v 0.4.2
-#   #     - run: dream deploy opsworks -T <STACK_ID>
-
-
 # workflows:
 #   version: 2
-#   build-deploy:
+#   build:
 #     jobs:
-#       # - build
-#       - deploy-dev:
-#         filters:
-#           branches:
-#             only: 
-#               - dev
-#       # - deploy-prod:
-#       #   filters:
-#       #     branches:
-#       #       only: master
+#       - build
+
+version: 2
+jobs:
+  # build:
+  #   machine:
+  #     ruby: 2.4.1
+  #   steps:
+  #     - run: python manage.py test
+  deploy-dev:
+    machine:
+      ruby: 2.4.1
+    steps:
+      - run: gem install dream-ops -v 0.4.2
+      - run: dream deploy opsworks -T d93434c3-4ace-4970-ac0a-6f87c0d9e125
+  # deploy-prod:
+  #   machine:
+  #     ruby: 2.4.1
+  #   steps:
+  #     - run: gem install dream-ops -v 0.4.2
+  #     - run: dream deploy opsworks -T <STACK_ID>
+
+
+workflows:
+  version: 2
+  build-deploy:
+    jobs:
+      # - build
+      - deploy-dev:
+        filters:
+          branches:
+            only: 
+              - dev
+      # - deploy-prod:
+      #   filters:
+      #     branches:
+      #       only: master
