@@ -24,7 +24,7 @@ jobs:
       ruby: 2.4.1
     steps:
       - run: gem install dream-ops -v 0.4.2
-      - run: dream deploy opsworks -T d93434c3-4ace-4970-ac0a-6f87c0d9e125
+      - run: dream deploy opsworks -T 91d06f70-4df7-408d-bf52-d726afdc1a6e
   # deploy-prod:
   #   machine:
   #     ruby: 2.4.1
