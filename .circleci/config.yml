@@ -10,8 +10,6 @@ jobs:
       - image: circleci/ruby:2.4.4
     steps:
       - checkout
-      - run: pwd
-      - run: ls -l
       - run: gem install dream-ops -v 0.4.2
       - run: dream deploy opsworks -T d93434c3-4ace-4970-ac0a-6f87c0d9e125
   # deploy-prod:
