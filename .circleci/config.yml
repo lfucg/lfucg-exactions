@@ -6,13 +6,12 @@ jobs:
   #   steps:
   #     - run: python manage.py test
   deploy-dev:
-    machine:
-      ruby: 
-        version: 2.4.1
+    docker:
+      - image: circleci/ruby:2.4.4
     steps:
-      - run:
-          name: Set Ruby Version
-          command:  chruby ruby-2.4.1
+      - checkout
+      - run: pwd
+      - run: ls -l
       - run: gem install dream-ops -v 0.4.2
       - run: dream deploy opsworks -T d93434c3-4ace-4970-ac0a-6f87c0d9e125
   # deploy-prod:
