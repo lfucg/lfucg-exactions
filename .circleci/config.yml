@@ -23,12 +23,11 @@ workflows:
   version: 2
   build-deploy:
     jobs:
-      # - build
       - deploy-dev:
-        filters:
-          branches:
-            only: dev
+          filters:
+            branches:
+              only: dev
       # - deploy-prod:
-      #   filters:
-      #     branches:
-      #       only: master
+      #     filters:
+      #       branches:
+      #         only: master
