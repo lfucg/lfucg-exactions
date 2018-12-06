@@ -28,8 +28,7 @@ MEDIA_URL = '<%= @config["MEDIA_URL"] %>'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        # 'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'ENGINE': 'django.db.backends.<% if @config["DEV"] %>sqlite3<% else %>postgresql_psycopg2<% end %>',
         'NAME': 'exactions',
         'USER': '<%= @config["DATABASE_USER"] %>',
         'PASSWORD': '<%= @config["DATABASE_PASSWORD"] %>',
@@ -56,11 +55,11 @@ CACHES = {
     }
 }
 
-DEBUG = '<%= @config["DEBUG"] %>'
+DEBUG = '<%= @config["DEBUG"] %>' == 'True'
 
 # Is this a development instance? Set this to True on development/master
 # instances and False on stage/prod.
-DEV = '<%= @config["DEV"] %>'
+DEV = '<%= @config["DEV"] %>' == 'True'
 
 SECRET_KEY = '<%= @config["SECRET_KEY"] %>'
 

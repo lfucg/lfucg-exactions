@@ -35,14 +35,7 @@ end
 pip_requirements "/home/#{user}/lfucg-exactions/lfucg-exactions/server/requirements.txt" do
   python "#{virtualenv}/bin/python"
 end
-# virtualenv "#{virtualenv}"
-# user "#{user}"
-# group "#{user}"
 
-# bash "migrate" do
-#   code "#{virtualenv}/bin/python manage.py migrate --noinput"
-#   cwd "/home/#{user}/lfucg-exactions/lfucg-exactions/server"
-# end
 bash "migrate" do
   user "#{user}"
   code "#{virtualenv}/bin/python manage.py migrate --noinput"
