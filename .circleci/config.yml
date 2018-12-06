@@ -7,7 +7,8 @@ jobs:
   #     - run: python manage.py test
   deploy-dev:
     machine:
-      ruby: 2.4.1
+      ruby: 
+        version: 2.4.1
     steps:
       - run: gem install dream-ops -v 0.4.2
       - run: dream deploy opsworks -T d93434c3-4ace-4970-ac0a-6f87c0d9e125
