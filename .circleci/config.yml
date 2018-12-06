@@ -6,9 +6,9 @@ jobs:
   #   steps:
   #     - run: python manage.py test
   deploy-dev:
-    # machine:
-    #   ruby: 
-    #     version: 2.4.1
+    machine:
+      ruby: 
+        version: 2.4.1
     steps:
       - run:
           name: Set Ruby Version
