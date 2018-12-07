@@ -47,6 +47,7 @@ MANAGERS = ADMINS
 EMAIL_BACKEND = 'postmarker.django.EmailBackend'
 POSTMARK = {
     'TOKEN': '<%= @config["POSTMARK_API_KEY"] %>',
+    'TEST_MODE': False,
 }
 
 CACHES = {
