@@ -337,13 +337,9 @@ class Command(BaseCommand):
 
         return cleaned_date
 
-    def SelectDates(self, date_option):
-        if date_option:
-            converted_date = self.ConvertDates(date_option)
-        else:
-            converted_date = self.ConvertDates('1/1/1970')
-        
-        return converted_date
+    def SelectDates(self, date_option):        
+        return self.ConvertDates(date_option) if date_option else self.ConvertDates('1/1/1970')
+
   
     def FilterAccount(self, name):
         return Account.objects.filter(account_name=name)
