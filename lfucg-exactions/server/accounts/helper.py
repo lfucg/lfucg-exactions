@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.template.loader import get_template
-from django.core.mail import EmailMultiAlternatives
+from django.core.mail import EmailMultiAlternatives, send_mail
 from django.utils.http import int_to_base36
 from rest_framework import viewsets, status, filters
 from django.db.models import Q
@@ -19,21 +19,29 @@ def send_password_reset_email(user, token):
     text_template = get_template('emails/password_reset.txt')
     html_template = get_template('emails/password_reset.html')
 
-    subject, from_email = 'LFUCG Exactions: Password Reset', settings.DEFAULT_FROM_EMAIL
+    send_mail(
+        'LFUCG Exactions: Password Reset',
+        '',
+        'exactions@lfucg.com',
+        [user.email],
+        html_message=html_template,
+    )
 
-    context = {
-        'user': user,
-        'baseURL': settings.BASE_URL,
-        'uid': int_to_base36(user.id),
-        'token': token,
-    }
+    # subject, from_email = 'LFUCG Exactions: Password Reset', settings.DEFAULT_FROM_EMAIL
 
-    text_content = text_template.render(context)
-    html_content = html_template.render(context)
+    # context = {
+    #     'user': user,
+    #     'baseURL': settings.BASE_URL,
+    #     'uid': int_to_base36(user.id),
+    #     'token': token,
+    # }
 
-    msg = EmailMultiAlternatives(subject, text_content, from_email, [user.email])
-    msg.attach_alternative(html_content, "text/html")
-    msg.send()
+    # text_content = text_template.render(context)
+    # html_content = html_template.render(context)
+
+    # msg = EmailMultiAlternatives(subject, text_content, from_email, [user.email])
+    # msg.attach_alternative(html_content, "text/html")
+    # msg.send()
 
 def send_lost_username_email(user):
     text_template = get_template('emails/forgot_username.txt')
