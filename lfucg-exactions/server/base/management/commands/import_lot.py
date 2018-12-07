@@ -337,13 +337,10 @@ class Command(BaseCommand):
 
         return cleaned_date
 
-    def SelectDates(self, date_option):
-        if date_option:
-            converted_date = self.ConvertDates(date_option)
-        else:
-            converted_date = self.ConvertDates('1/1/1970')
-        
-        return converted_date
+    def SelectDates(self, date_option):     
+        # return self.ConvertDates(date_option) if date_option else self.ConvertDates('1/1/1970')
+        return self.ConvertDates('1/1/1970') if not date_option else self.ConvertDates(date_option)
+
   
     def FilterAccount(self, name):
         return Account.objects.filter(account_name=name)
@@ -614,17 +611,17 @@ class Command(BaseCommand):
     def OtherLedger(self, other_details, pandas_plat, ending_number):
         sewer = 0 if pandas_plat[str('Sewer-' + ending_number)].hasnans else str(round(Decimal(pandas_plat[str('Sewer-' + ending_number)].values[0]) / Decimal(pandas_plat['BuildableLots'].values[0]), 2))
         non_sewer = 0 if pandas_plat[str('Non-Sewer-' + ending_number)].hasnans else str(round(Decimal(pandas_plat[str('Non-Sewer-' + ending_number)].values[0]) / Decimal(pandas_plat['BuildableLots'].values[0]), 2))
+        plat_date = pandas_plat[str('EntryDate-' + ending_number)].values[0]
 
         ledger_other_details = {
-            'date': self.SelectDates(pandas_plat[str('EntryDate-' + ending_number)].values[0]),
+            'date': self.SelectDates(plat_date),
             'agreement': self.FilterAgreements([pandas_plat[str('Resolution-' + ending_number)].values[0], 'Unknown']),
             'account_from': self.GetAccount([pandas_plat['Contact Company'].values[0], 'Unknown']).first(),
-            'account_to': self.GetAccount(['Lexington Fayette Urban County Government (LFUCG)']),
+            'account_to': self.GetAccount(['Lexington Fayette Urban County Government (LFUCG)']).first(),
             'entry_type': pandas_plat[str('AgreementType-' + ending_number)].values[0], 'credit_type': pandas_plat[str('CreditType-' + ending_number)].values[0],
             'sewer_credits': sewer,
             'non_sewer_credits': non_sewer,
         }
-        # print('LEDGER DETAILS', ledger_other_details)
 
         ledger_other_combined = {**other_details, **ledger_other_details}
         self.CreateUseLedger(ledger_other_combined)
@@ -979,11 +976,13 @@ class Command(BaseCommand):
                                     resolution = str(row['EntryDate-2'])
                                 else:
                                     resolution = 'Unknown'
+                                plat_account = plat.account.account_name if hasattr(plat.account, 'account_name') else None 
+
                                 agreement_ledger_2, created = Agreement.objects.get_or_create(
                                     resolution_number=resolution,
                                     defaults= {
                                         'date_executed': self.SelectDates(row['EntryDate-2']),
-                                        'account_id': self.GetAccount([row['AccountLedgerAccountFrom-2'], row['P_AccountName'], plat.account and plat.account.account_name, row['P_AccountName'], 'Unknown']).first(),
+                                        'account_id': self.GetAccount([row['AccountLedgerAccountFrom-2'], row['P_AccountName'], plat_account, row['P_AccountName'], 'Unknown']).first(),
                                         'created_by': self.user, 'modified_by': self.user,
                                         'expansion_area': 'EA-' + row['ExpansionArea'], 'agreement_type': row['AccountLedgerAgreementType-2'],
                                         'is_approved': True

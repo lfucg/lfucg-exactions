@@ -28,7 +28,7 @@ MEDIA_URL = '<%= @config["MEDIA_URL"] %>'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.<% if @config["DEV"] == 'True' %>sqlite3<% else %>postgresql_psycopg2<% end %>',
+        'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'exactions',
         'USER': '<%= @config["DATABASE_USER"] %>',
         'PASSWORD': '<%= @config["DATABASE_PASSWORD"] %>',
@@ -47,6 +47,7 @@ MANAGERS = ADMINS
 EMAIL_BACKEND = 'postmarker.django.EmailBackend'
 POSTMARK = {
     'TOKEN': '<%= @config["POSTMARK_API_KEY"] %>',
+    'TEST_MODE': False,
 }
 
 CACHES = {

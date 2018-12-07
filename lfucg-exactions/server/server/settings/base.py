@@ -219,7 +219,7 @@ WSGI_APPLICATION = 'server.wsgi.application'
 # Define your database connections
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'exactions',
         'USER': '',
         'PASSWORD': '',
