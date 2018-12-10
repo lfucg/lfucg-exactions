@@ -42,9 +42,9 @@ bash "migrate" do
   cwd "/home/#{user}/lfucg-exactions/lfucg-exactions/server"
 end
 
-if node.attribute?('vagrant')
-  bash "loaddata" do
-    code "#{virtualenv}/bin/python manage.py loaddata initial_data"
-    cwd "/home/#{user}/lfucg-exactions/lfucg-exactions/server"
-  end
-end
+# if node.attribute?('vagrant')
+#   bash "loaddata" do
+#     code "#{virtualenv}/bin/python manage.py loaddata initial_data"
+#     cwd "/home/#{user}/lfucg-exactions/lfucg-exactions/server"
+#   end
+# end
