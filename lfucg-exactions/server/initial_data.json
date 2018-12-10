@@ -1,60 +1,6 @@
 [
   {
     "model": "auth.user",
-    "pk": 1,
-    "fields": {
-      "password": "bcrypt_sha256$$2b$12$PP9v0nzrfqKl4NqtucvVZ.gTY5Q.mcFn369W/gX2QA3kTaRFW8BbS",
-      "last_login": "2017-06-29T19:20:13.981Z",
-      "is_superuser": true,
-      "username": "kelly",
-      "first_name": "Kelly",
-      "last_name": "Wright",
-      "email": "kelly@apaxsoftware.com",
-      "is_staff": true,
-      "is_active": true,
-      "date_joined": "2017-06-29T13:14:44Z",
-      "groups": [],
-      "user_permissions": []
-    }
-  },
-  {
-    "model": "auth.user",
-    "pk": 2,
-    "fields": {
-      "password": "bcrypt_sha256$$2b$12$45wlIxarZuytliOxk9mb8OeaDM9DOU03cvIFwewOpVRea8WfD5gaa",
-      "last_login": null,
-      "is_superuser": true,
-      "username": "cbencz",
-      "first_name": "Craig",
-      "last_name": "Bencz",
-      "email": "cbencz@lexingtonky.gov",
-      "is_staff": true,
-      "is_active": true,
-      "date_joined": "2017-10-22T02:04:38Z",
-      "groups": [],
-      "user_permissions": []
-    }
-  },
-  {
-    "model": "auth.user",
-    "pk": 3,
-    "fields": {
-      "password": "bcrypt_sha256$$2b$12$eW0R5uB4VAD9iRPa70gpqOx4N3DO0TyevAQGzBAuLJEZ2ndSchnRa",
-      "last_login": null,
-      "is_superuser": true,
-      "username": "jarane",
-      "first_name": "Justin",
-      "last_name": "Raney",
-      "email": "jarane2@gmail.com",
-      "is_staff": true,
-      "is_active": true,
-      "date_joined": "2017-07-25T19:46:40Z",
-      "groups": [],
-      "user_permissions": []
-    }
-  },
-  {
-    "model": "auth.user",
     "pk": 4,
     "fields": {
       "password": "",
