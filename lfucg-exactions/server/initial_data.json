@@ -1,7 +1,7 @@
 [
   {
     "model": "auth.user",
-    "pk": 4,
+    "pk": 1,
     "fields": {
       "password": "",
       "last_login": null,
