@@ -62,31 +62,32 @@ def send_lost_username_email(user):
     msg.send()
 
 @receiver(post_save, sender=User)
-def send_email_to_new_user(sender, instance, **kwargs):
-    user = instance
-    token = PasswordResetTokenGenerator().make_token(user)
+def send_email_to_new_user(sender, instance, created, **kwargs):
+    if created:
+        user = instance
+        token = PasswordResetTokenGenerator().make_token(user)
 
-    text_template = get_template('emails/password_reset.txt')
-    html_template = get_template('emails/password_reset.html')
+        text_template = get_template('emails/password_reset.txt')
+        html_template = get_template('emails/password_reset.html')
 
-    subject, from_email = 'LFUCG Exactions: Password Reset', settings.DEFAULT_FROM_EMAIL
+        subject, from_email = 'LFUCG Exactions: Password Reset', settings.DEFAULT_FROM_EMAIL
 
-    context = {
-        'user': user,
-        'baseURL': settings.BASE_URL,
-        'uid': int_to_base36(user.id),
-        'token': token,
-    }
+        context = {
+            'user': user,
+            'baseURL': settings.BASE_URL,
+            'uid': int_to_base36(user.id),
+            'token': token,
+        }
 
-    text_content = text_template.render(context)
-    html_content = html_template.render(context)
+        text_content = text_template.render(context)
+        html_content = html_template.render(context)
 
-    msg = EmailMultiAlternatives(subject, text_content, from_email, [user.email])
-    msg.attach_alternative(html_content, "text/html")
-    try:
-        msg.send()
-    except Exception as exc:
-        print('SEND NEW USER EMAIL EXCEPTION', exc)
+        msg = EmailMultiAlternatives(subject, text_content, from_email, [user.email])
+        msg.attach_alternative(html_content, "text/html")
+        try:
+            msg.send()
+        except Exception as exc:
+            print('SEND NEW USER EMAIL EXCEPTION', exc)
 
 @receiver(post_save, sender=Agreement)
 @receiver(post_save, sender=AccountLedger)
