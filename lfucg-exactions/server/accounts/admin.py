@@ -182,7 +182,7 @@ class AccountLedgerHistoryAdmin(SimpleHistoryAdmin):
 
 class ProfileInline(admin.TabularInline):
     model = Profile
-    fields = ('is_supervisor',)
+    fields = ('is_supervisor', 'is_approval_required',)
 
 # class UserForm(forms.ModelForm):
 #     fields = ('password',)

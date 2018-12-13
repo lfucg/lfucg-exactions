@@ -74,6 +74,7 @@ Vagrant.configure("2") do |config|
             'DEV': 'True',
             'DEBUG': 'True',
             "SENDGRID_API_KEY": "sendgrid_api_key",
+            'POSTMARK_API_KEY': 'postmark_api_key',
           }
         }
       },

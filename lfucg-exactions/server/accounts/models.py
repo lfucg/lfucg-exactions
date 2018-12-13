@@ -331,3 +331,4 @@ class AccountLedger(models.Model):
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     is_supervisor = models.BooleanField(default=False)
+    is_approval_required = models.BooleanField(default=False)

@@ -285,10 +285,9 @@ INTERNAL_IPS = ('127.0.0.1')
 #USE_X_FORWARDED_HOST = False
 
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-EMAIL_BACKEND = "sgbackend.SendGridBackend"
 
 SERVER_EMAIL = "webmaster@example.com"
-DEFAULT_FROM_EMAIL = "kelly@apaxsoftware.com"
+DEFAULT_FROM_EMAIL = "josh@apaxsoftware.com"
 SYSTEM_EMAIL_PREFIX = "[server]"
 
 ## Log settings

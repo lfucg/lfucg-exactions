@@ -22,10 +22,6 @@ DEFAULT_FILE_STORAGE = '<%= @config["DEFAULT_FILE_STORAGE"] %>'
 
 MEDIA_URL = '<%= @config["MEDIA_URL"] %>'
 
-# EMAIL_BACKEND = "sgbackend.SendGridBackend"
-# SENDGRID_API_KEY = '<%= @config["SENDGRID_API_KEY"] %>'
-
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -46,6 +42,12 @@ MANAGERS = ADMINS
 
 EMAIL_BACKEND = "sgbackend.SendGridBackend"
 SENDGRID_API_KEY ='<%= @config["SENDGRID_API_KEY"] %>'
+
+# EMAIL_BACKEND = 'postmarker.django.EmailBackend'
+# POSTMARK = {
+#     'TOKEN': '<%= @config["POSTMARK_API_KEY"] %>',
+#     'TEST_MODE': False,
+# }
 
 CACHES = {
     'default': {
