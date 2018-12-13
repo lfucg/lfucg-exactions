@@ -12,36 +12,28 @@ from django.contrib.auth.tokens import PasswordResetTokenGenerator
 
 from django.contrib.auth.models import User
 from plats.models import Plat, Lot
-from .models import Account, Agreement, AccountLedger, Payment, Project, ProjectCostEstimate
+from .models import Account, Agreement, AccountLedger, Payment, Project, ProjectCostEstimate, Profile
 from plats.utils import calculate_lot_balance, calculate_plat_balance
 
 def send_password_reset_email(user, token):
     text_template = get_template('emails/password_reset.txt')
     html_template = get_template('emails/password_reset.html')
 
-    send_mail(
-        'LFUCG Exactions: Password Reset',
-        '',
-        'exactions@lfucg.com',
-        [user.email],
-        html_message=html_template,
-    )
+    context = {
+        'user': user,
+        'baseURL': settings.BASE_URL,
+        'uid': int_to_base36(user.id),
+        'token': token,
+    }
 
-    # subject, from_email = 'LFUCG Exactions: Password Reset', settings.DEFAULT_FROM_EMAIL
+    text_content = text_template.render(context)
+    html_content = html_template.render(context)
 
-    # context = {
-    #     'user': user,
-    #     'baseURL': settings.BASE_URL,
-    #     'uid': int_to_base36(user.id),
-    #     'token': token,
-    # }
+    subject, from_email = 'LFUCG Exactions: Password Reset', settings.DEFAULT_FROM_EMAIL
 
-    # text_content = text_template.render(context)
-    # html_content = html_template.render(context)
-
-    # msg = EmailMultiAlternatives(subject, text_content, from_email, [user.email])
-    # msg.attach_alternative(html_content, "text/html")
-    # msg.send()
+    msg = EmailMultiAlternatives(subject, text_content, from_email, [user.email])
+    msg.attach_alternative(html_content, "text/html")
+    msg.send()
 
 def send_lost_username_email(user):
     text_template = get_template('emails/forgot_username.txt')
@@ -96,7 +88,7 @@ def send_email_to_new_user(sender, instance, created, **kwargs):
 @receiver(post_save, sender=ProjectCostEstimate)
 @receiver(post_save, sender=Plat)
 @receiver(post_save, sender=Lot)
-def send_email_to_supervisors(sender, instance, created=False, **kwargs):
+def send_email_to_supervisors(sender, instance, **kwargs):
 
     if instance.modified_by.is_superuser or (hasattr(instance.modified_by, 'profile') and instance.modified_by.profile.is_supervisor == True):
         return
@@ -110,27 +102,35 @@ def send_email_to_supervisors(sender, instance, created=False, **kwargs):
 
     users = User.objects.filter(Q(profile__is_supervisor=True) & Q(groups__name__in=group))
 
-    to_emails = list(users.values_list('email', flat=True))
+    for user in users:
+        profile = Profile.objects.filter(user=user)
+        print('PROFILE', profile)
+        print('PROFILE', profile.is_approval_required)
+        if not profile.is_approval_required:
+            profile.is_approval_required = True
+            profile.save()
 
-    html_template = get_template('emails/supervisor_email.html')
-    text_template = get_template('emails/supervisor_email.txt')
+            to_emails = list(users.values_list('email', flat=True))
 
-    subject = 'LFUCG Exactions Activity: New Entry Pending Approval'
-    from_email = settings.DEFAULT_FROM_EMAIL
+            html_template = get_template('emails/supervisor_email.html')
+            text_template = get_template('emails/supervisor_email.txt')
 
-    context = {
-        'baseURL': settings.BASE_URL,
-        'model': ctype.model,
-        'staticURL': settings.STATIC_URL,
-        'id': instance.id,
-    }
+            subject = 'LFUCG Exactions Activity: New Entry Pending Approval'
+            from_email = settings.DEFAULT_FROM_EMAIL
 
-    html_content = html_template.render(context)
-    text_content = text_template.render(context)
+            context = {
+                'baseURL': settings.BASE_URL,
+                'model': ctype.model,
+                'staticURL': settings.STATIC_URL,
+                'id': instance.id,
+            }
 
-    msg = EmailMultiAlternatives(subject, text_content, from_email, to_emails)
-    msg.attach_alternative(html_content, "text/html")
-    msg.send()
+            html_content = html_template.render(context)
+            text_content = text_template.render(context)
+
+            msg = EmailMultiAlternatives(subject, text_content, from_email, to_emails)
+            msg.attach_alternative(html_content, "text/html")
+            msg.send()
 
 @receiver(pre_save, sender=Agreement)
 @receiver(pre_save, sender=AccountLedger)
@@ -142,6 +142,20 @@ def send_email_to_supervisors(sender, instance, created=False, **kwargs):
 def set_approval(sender, instance, **kwargs):
     if instance.modified_by.is_superuser == True or (hasattr(instance.modified_by, 'profile') and instance.modified_by.profile.is_supervisor == True):
         instance.is_approved = True
+
+        ctype = ContentType.objects.get_for_model(instance)
+
+        if ctype.app_label == 'accounts':
+            group = ['Finance']
+        elif ctype.app_label == 'plats':
+            group = ['Planning']
+
+        users = User.objects.filter(Q(profile__is_supervisor=True) & Q(groups__name__in=group))
+
+        for user in users:
+            profile = Profile.objects.filter(user=user)
+            profile.is_approval_required = False
+            profile.save()
     else:
         instance.is_approved = False
     return instance
