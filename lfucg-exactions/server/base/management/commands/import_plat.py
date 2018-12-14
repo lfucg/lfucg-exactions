@@ -33,34 +33,29 @@ class Command(BaseCommand):
             converted_date = self.ConvertDates('1/1/1970')
         
         return converted_date
+    
+    def FilterRates(self, zone, expansion_area, category):
+        current_rate_table = RateTable.objects.filter(is_active=True).first()
+
+        existing_rate = Rate.objects.filter(expansion_area=expansion_area, zone=zone, category=category, rate_table_id=current_rate_table)
+        
+        return existing_rate
 
     def CheckOrCreateRate(self, zone, expansion_area):
         if zone:
-            current_rate_table = RateTable.objects.filter(is_active=True).first()
             user = User.objects.get(username='IMPORT')
+            new_rate_table = RateTable.objects.filter(resolution_number='IMPORT-Table').first()
+            categories = ['ROADS', 'OPEN_SPACE', 'SEWER_CAP', 'SEWER_TRANS', 'PARK', 'STORM_WATER']
             
-            try:
-                road_rate, created = Rate.objects.get_or_create(expansion_area=expansion_area, zone=zone, category='ROADS', rate_table_id=current_rate_table, defaults={'rate':0, 'created_by':user, 'modified_by':user })
-                if created:
-                    print('ROADS Rate created for ' + expansion_area + ' ' + zone)
-                open_space_rate, created = Rate.objects.get_or_create(expansion_area=expansion_area, zone=zone, category='OPEN_SPACE', rate_table_id=current_rate_table, defaults={'rate':0, 'created_by':user, 'modified_by':user })
-                if created:
-                    print('OPEN_SPACE Rate created for ' + expansion_area + ' ' + zone)
-                sewer_cap_rate, created = Rate.objects.get_or_create(expansion_area=expansion_area, zone=zone, category='SEWER_CAP', rate_table_id=current_rate_table, defaults={'rate':0, 'created_by':user, 'modified_by':user })
-                if created:
-                    print('SEWER_CAP Rate created for ' + expansion_area + ' ' + zone)
-                sewer_trans_rate, created = Rate.objects.get_or_create(expansion_area=expansion_area, zone=zone, category='SEWER_TRANS', rate_table_id=current_rate_table, defaults={'rate':0, 'created_by':user, 'modified_by':user })
-                if created:
-                    print('SEWER_TRANS Rate created for ' + expansion_area + ' ' + zone)
-                parks_rate, created = Rate.objects.get_or_create(expansion_area=expansion_area, zone=zone, category='PARK', rate_table_id=current_rate_table, defaults={'rate':0, 'created_by':user, 'modified_by':user })
-                if created:
-                    print('PARK Rate created for ' + expansion_area + ' ' + zone)
-                storm_water_rate, created = Rate.objects.get_or_create(expansion_area=expansion_area, zone=zone, category='STORM_WATER', rate_table_id=current_rate_table, defaults={'rate':0, 'created_by':user, 'modified_by':user })
-                if created:
-                    print('STORM_WATER Rate created for ' + expansion_area + ' ' + zone)
-            except Exception as ex:
-                self.plat_errors.append({'Plat Import Rate Creation Error': ex})
-                print('Plat Import Rate Creation Error', ex)
+            for category in categories:
+                filtered_rate = self.FilterRates(zone, expansion_area, category)
+                if filtered_rate.exists():
+                    pass
+                else:
+                    try:
+                        new_rate = Rate.objects.get_or_create(expansion_area=expansion_area, zone=zone, category=category, rate_table_id=new_rate_table, defaults={'rate':0, 'created_by':user, 'modified_by':user })
+                    except Exception as ex:
+                        print('New Rate Exception', ex)
 
     def GetOrCreateAgreement(self, agreement_details):
         try:
