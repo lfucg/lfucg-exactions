@@ -96,18 +96,8 @@ class Command(BaseCommand):
             reader = csv.DictReader(file)
 
             user = User.objects.get(username='IMPORT')
-            # Create Unknown Plat if doesn't exist
-            Plat.objects.get_or_create(name='Unknown', expansion_area='EA-1', cabinet='Unknown', slide='Unknown', 
-                defaults= { 'date_recorded': datetime.now, 'signed_date': datetime.now, 
-                'account': None, 'subdivision': None,
-                'is_approved': False, 'created_by': user, 'modified_by': user, 'total_acreage': 0,
-                'amended': False, 'case_number': '', 'acreage_type': 'gross',
-                'right_of_way_acreage': 0,
-                'plat_type': 'DEVELOPMENT_PLAN', 'buildable_lots': 0, 
-                'non_buildable_lots': 0, 'calculation_note': None,
-                'unit': ' ', 'section': ' ', 'block': ' '})
-            
-            unknown_account = Account.objects.get_or_create(account_name='Unknown', contact_full_name='Unknown',
+
+            unknown_account_created = Account.objects.get_or_create(account_name='Unknown', contact_full_name='Unknown',
                 defaults= { 'created_by': user, 'modified_by': user, 
                 'contact_first_name': 'Unknown', 'contact_last_name': 'Unknown',
                 'address_number': 0, 'address_street': 'Unknown',
@@ -117,6 +107,18 @@ class Command(BaseCommand):
                 'email': 'unknown@unknown.com',
                 'current_account_balance': 0, 'current_non_sewer_balance': 0, 'current_sewer_balance': 0
                 })
+            unknown_account = Account.objects.filter(account_name='Unknown')
+            
+            # Create Unknown Plat if doesn't exist
+            Plat.objects.get_or_create(name='Unknown', expansion_area='EA-1', cabinet='Unknown', slide='Unknown', 
+                defaults= { 'date_recorded': datetime.now, 'signed_date': datetime.now, 
+                'account': unknown_account.first(), 'subdivision': None,
+                'is_approved': False, 'created_by': user, 'modified_by': user, 'total_acreage': 0,
+                'amended': False, 'case_number': '', 'acreage_type': 'gross',
+                'right_of_way_acreage': 0,
+                'plat_type': 'DEVELOPMENT_PLAN', 'buildable_lots': 0, 
+                'non_buildable_lots': 0, 'calculation_note': None,
+                'unit': ' ', 'section': ' ', 'block': ' '})
 
             for row in reader:
                 for k, v in row.items():
