@@ -104,8 +104,7 @@ def send_email_to_supervisors(sender, instance, **kwargs):
 
     for user in users:
         profile = Profile.objects.filter(user=user)
-        print('PROFILE', profile)
-        print('PROFILE', profile.is_approval_required)
+
         if not profile.is_approval_required:
             profile.is_approval_required = True
             profile.save()
