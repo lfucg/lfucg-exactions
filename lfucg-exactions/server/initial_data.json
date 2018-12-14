@@ -83,6 +83,20 @@
     }
   },
   {
+    "model": "notes.ratetable",
+    "pk": 2,
+    "fields": {
+      "is_active": false,
+      "date_created": "2017-06-29",
+      "date_modified": "2017-07-17",
+      "created_by": 1,
+      "modified_by": 1,
+      "begin_effective_date": "2009-03-25",
+      "end_effective_date": "2009-11-24",
+      "resolution_number": "IMPORT-Table"
+    }
+  },
+  {
     "model": "notes.rate",
     "pk": 1,
     "fields": {
