@@ -105,7 +105,7 @@ def send_email_to_supervisors(sender, instance, **kwargs):
     for user in users:
         profile = Profile.objects.filter(user=user)
 
-        if profile is not None and profile.is_approval_required == False:
+        if hasattr(profile, 'is_approval_required') and profile.is_approval_required == False:
             profile.is_approval_required = True
             profile.save()
 
