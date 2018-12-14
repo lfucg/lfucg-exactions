@@ -471,7 +471,7 @@ class Command(BaseCommand):
                 else:
                     amounts['sewer_cap'] = sewer_ledger
                     sewer_ledger -= sewer_ledger
-        
+
         return amounts
     
     def GetLotPlatResolutions(self, agreements):
@@ -497,11 +497,17 @@ class Command(BaseCommand):
                 plats_match = False
 
         # Check for repeat types
-        lot_ledger_types = [row['CreditType-1'], row['CreditType-2'], row['CreditType-3']]
+        all_ledger_types = [row['CreditType-1'], row['CreditType-2'], row['CreditType-3']]
+        lot_ledger_types = [lt for lt in all_ledger_types if lt]
+
         mixed_sewer_first = len([s for s in lot_ledger_types if s == 'sewer_credits, non_sewer_credits'])
         mixed_non_sewer_first = len([s for s in lot_ledger_types if s == 'non_sewer_credits, sewer_credits'])
         non_sewer = len([s for s in lot_ledger_types if s == 'non_sewer_credits'])
         sewer = len([s for s in lot_ledger_types if s == 'sewer_credits'])
+
+        # Check if all credit types defined
+        if len(lot_ledger_types) < len(lot_resolutions):
+            no_plat_needed = False        
 
         # Check if all types (sewer_credits, non_sewer_credits or a mixture) are unique, allowing for direct assignment of each
         if (mixed_non_sewer_first + mixed_sewer_first > 1):
@@ -545,15 +551,40 @@ class Command(BaseCommand):
 
     def CreateUseLedger(self, ledger_details):
         ledger_entry_type = ledger_details['entry_type']
+        mixed_types = ['sewer_credits, non_sewer_credits', 'non_sewer_credits, sewer_credits', 'sewer, non-sewer', 'non-sewer, sewer', 'non-sewer & sewer']
+        non_sewer_types = ['non-sewer', 'non_sewer_credits']
+        sewer_types = ['sewer', 'sewer_credits']
 
-        non_sewer_credits = ledger_details['non_sewer_credits'] if ledger_details['credit_type'] == 'non_sewer_credits' else 0
-        sewer_credits = ledger_details['sewer_credits'] if ledger_details['credit_type'] == 'sewer_credits' else 0
-        sewer_trans = ledger_details['sewer_trans'] if ledger_details['credit_type'] == 'sewer_credits' else 0
-        sewer_cap = ledger_details['sewer_cap'] if ledger_details['credit_type'] == 'sewer_credits' else 0
-        roads = ledger_details['roads'] if ledger_details['credit_type'] == 'non_sewer_credits' else 0
-        parks = ledger_details['parks'] if ledger_details['credit_type'] == 'non_sewer_credits' else 0
-        storm = ledger_details['storm'] if ledger_details['credit_type'] == 'non_sewer_credits' else 0
-        open_space = ledger_details['open_space'] if ledger_details['credit_type'] == 'non_sewer_credits' else 0
+        if ledger_details['credit_type'] in mixed_types or ledger_details['credit_type'][0] in mixed_types:
+            non_sewer_credits = ledger_details['non_sewer_credits']
+            roads = ledger_details['roads']
+            parks = ledger_details['parks']
+            storm = ledger_details['storm']
+            open_space = ledger_details['open_space']
+            sewer_credits = ledger_details['sewer_credits']
+            sewer_trans = ledger_details['sewer_trans']
+            sewer_cap = ledger_details['sewer_cap']
+        elif ledger_details['credit_type'] in non_sewer_types or ledger_details['credit_type'][0] in non_sewer_types:
+            non_sewer_credits = ledger_details['non_sewer_credits']
+            roads = ledger_details['roads']
+            parks = ledger_details['parks']
+            storm = ledger_details['storm']
+            open_space = ledger_details['open_space']
+            sewer_credits = 0
+            sewer_trans = 0
+            sewer_cap = 0
+        elif ledger_details['credit_type'] in sewer_types or ledger_details['credit_type'][0] in sewer_types:
+            sewer_credits = ledger_details['sewer_credits']
+            sewer_trans = ledger_details['sewer_trans']
+            sewer_cap = ledger_details['sewer_cap']
+            non_sewer_credits = 0
+            roads = 0
+            parks = 0
+            storm = 0
+            open_space = 0
+        else:
+            print('Other Credit Type', ledger_details['credit_type'])
+
 
         if ledger_details['account_from'] and self.FilterAccount(ledger_details['account_from']).exists():
             if self.FilterAccount(ledger_details['account_from']).first().account_name == 'Lexington Fayette Urban County Government (LFUCG)':
@@ -609,8 +640,8 @@ class Command(BaseCommand):
         self.CreateUseLedger(ledger_2_combined)
 
     def OtherLedger(self, other_details, pandas_plat, ending_number):
-        sewer = 0 if pandas_plat[str('Sewer-' + ending_number)].hasnans else str(round(Decimal(pandas_plat[str('Sewer-' + ending_number)].values[0]) / Decimal(pandas_plat['BuildableLots'].values[0]), 2))
-        non_sewer = 0 if pandas_plat[str('Non-Sewer-' + ending_number)].hasnans else str(round(Decimal(pandas_plat[str('Non-Sewer-' + ending_number)].values[0]) / Decimal(pandas_plat['BuildableLots'].values[0]), 2))
+        sewer = 0 if pandas_plat[str('Sewer-' + ending_number)].hasnans else round(Decimal(pandas_plat[str('Sewer-' + ending_number)].values[0]) / Decimal(pandas_plat['BuildableLots'].values[0]), 2)
+        non_sewer = 0 if pandas_plat[str('Non-Sewer-' + ending_number)].hasnans else round(Decimal(pandas_plat[str('Non-Sewer-' + ending_number)].values[0]) / Decimal(pandas_plat['BuildableLots'].values[0]), 2)
         plat_date = pandas_plat[str('EntryDate-' + ending_number)].values[0]
 
         ledger_other_details = {
@@ -621,7 +652,15 @@ class Command(BaseCommand):
             'entry_type': pandas_plat[str('AgreementType-' + ending_number)].values[0], 'credit_type': pandas_plat[str('CreditType-' + ending_number)].values[0],
             'sewer_credits': sewer,
             'non_sewer_credits': non_sewer,
+            'roads': 0,
+            'parks': 0,
+            'storm': 0,
+            'open_space': 0,
+            'sewer_trans': 0,
+            'sewer_cap': 0,
         }
+        # print('OTHER DETAILS', other_details)
+        # print('LEDGER OTHER ', ledger_other_details)
 
         ledger_other_combined = {**other_details, **ledger_other_details}
         self.CreateUseLedger(ledger_other_combined)
@@ -1126,7 +1165,6 @@ class Command(BaseCommand):
                                         print('Ledger Check #1 Else Value', ledger_dict[key])
 
                         elif not ledger_check[2]:
-  
                             for lot_resolution in lot_resolutions:
                                 if lot_resolution in plat_resolutions and ledger_check[0]:
                                     lot_agree = [x for x in lot_agreements if hasattr(x, 'resolution_number') and x.resolution_number == lot_resolution]
