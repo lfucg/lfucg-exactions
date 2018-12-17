@@ -9,6 +9,7 @@ from django.dispatch import receiver
 from django.contrib.contenttypes.models import ContentType
 from decimal import Decimal
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
+from builtins import hasattr
 
 from django.contrib.auth.models import User
 from plats.models import Plat, Lot
