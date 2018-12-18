@@ -112,16 +112,6 @@ def calculate_lot_balance(lot):
             sewer_credits_applied += Decimal(ledger.sewer_credits)
             non_sewer_credits_applied += Decimal(ledger.non_sewer_credits)
 
-    lot_id = Lot.objects.filter(id=lot.id).first()
-
-    lot_id.current_dues_roads_dev = dues_roads_dev
-    lot_id.current_dues_sewer_trans_dev = dues_sewer_trans_dev
-    lot_id.current_dues_sewer_cap_dev = dues_sewer_cap_dev
-    lot_id.current_dues_parks_dev = dues_parks_dev
-    lot_id.current_dues_storm_dev = dues_storm_dev
-    lot_id.current_dues_open_space_dev = dues_open_space_dev
-
-    lot_id.save()
 
     all_exactions = {
         'total_exactions': total_exactions,

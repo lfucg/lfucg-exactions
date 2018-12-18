@@ -402,6 +402,7 @@ export function putPlat(selectedPlat) {
                 non_sewer_due,
                 account,
             } = activeForm;
+            console.log('ACTIVE', activeForm);
             return {
                 name,
                 subdivision,
@@ -419,8 +420,8 @@ export function putPlat(selectedPlat) {
                 cabinet,
                 slide,
                 calculation_note,
-                sewer_due: sewer_due.replace(/[^\d.]/g, ''),
-                non_sewer_due: non_sewer_due.replace(/[^\d.]/g, ''),
+                sewer_due: sewer_due,
+                non_sewer_due: non_sewer_due,
                 account,
             };
         },
@@ -624,7 +625,7 @@ export function postLot() {
                 address_city,
                 address_state,
                 address_zip,
-                address_full: `${address_number} ${address_direction ? address_direction : ''} ${address_street} ${address_suffix ? address_suffix : ''} ${address_unit ? address_unit : ''}, Lexington, KY ${address_zip ? address_zip : ''}`,
+                address_full: `${address_number} ${address_direction ? address_direction : ''}${address_street}${address_suffix ? address_suffix : ''} ${address_unit ? address_unit : ''} Lexington, KY ${address_zip ? address_zip : ''}`,
                 dues_roads_dev,
                 dues_roads_own,
                 dues_sewer_trans_dev,
@@ -700,7 +701,7 @@ export function putLot(selectedLot) {
                 address_city,
                 address_state,
                 address_zip,
-                address_full: `${address_number} ${address_direction ? address_direction : ''} ${address_street} ${address_suffix ? address_suffix : ''} ${address_unit ? address_unit : ''}, Lexington, KY ${address_zip ? address_zip : ''}`,
+                address_full: `${address_number} ${address_direction ? address_direction : ''}${address_street}${address_suffix ? address_suffix : ''}${address_unit ? address_unit : ''} Lexington, KY ${address_zip ? address_zip : ''}`,
                 dues_roads_dev,
                 dues_roads_own,
                 dues_sewer_trans_dev,
