@@ -89,6 +89,8 @@ class LotForm extends React.Component {
             activeForm.address_number &&
             activeForm.address_street;
 
+        const lotExactions = currentLot && currentLot.lot_exactions && currentLot.lot_exactions.total_exactions && currentLot.lot_exactions.total_exactions.replace(/\$|,/g, "");
+
         return (
             <div className="lot-form">
                 <Navbar />
@@ -249,7 +251,7 @@ class LotForm extends React.Component {
                                                 </div>
                                                 <div className="row">
                                                     <div className="col-xs-12">
-                                                        {activeForm.show_exactions && currentLot && currentLot.lot_exactions && currentLot.lot_exactions.total_exactions > 0 &&
+                                                        {activeForm.show_exactions && lotExactions > 0 &&
                                                             <h3 className="help-block alert alert-danger text-center">&nbsp;There are still {currentLot.lot_exactions.total_exactions} in exactions due on this lot.</h3>
                                                         }
                                                     </div>
