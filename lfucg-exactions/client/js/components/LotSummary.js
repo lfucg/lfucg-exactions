@@ -46,6 +46,8 @@ class LotSummary extends React.Component {
             addPermitToLot,
         } = this.props;
 
+        const lotExactions = !!lots && !!lots.currentLot && !!lots.currentLot.lot_exactions && lots.currentLot.lot_exactions.total_exactions && lots.currentLot.lot_exactions.total_exactions.replace(/\$|,/g, "");
+
         return (
             <div className="lot-summary">
                 <Navbar />
@@ -75,7 +77,7 @@ class LotSummary extends React.Component {
                                     <div className="modal fade" id="permitModal" role="alertdialog" aria-labelledby="modalLabel">
                                         <div className="modal-dialog" role="document">
                                             <div className="modal-content">
-                                                {!!lots.currentLot.lot_exactions && lots.currentLot.lot_exactions.total_exactions > 0 ? (
+                                                {lotExactions > 0 ? (
                                                     <div>
                                                         <div className="modal-header">
                                                             <button type="button" className="close" data-dismiss="modal" aria-label="Close" autoFocus><span aria-hidden="true">&times;</span></button>
