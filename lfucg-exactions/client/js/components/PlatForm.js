@@ -134,9 +134,7 @@ class PlatForm extends React.Component {
             activeForm.plat_type &&
             activeForm.expansion_area &&
             activeForm.buildable_lots &&
-            activeForm.non_buildable_lots &&
-            activeForm.cabinet &&
-            activeForm.slide;
+            activeForm.non_buildable_lots
 
         return (
             <div className="plat-form">
@@ -275,19 +273,19 @@ class PlatForm extends React.Component {
                                                         </FormGroup>
                                                     </div>
                                                     <div className="col-sm-6">
-                                                        <FormGroup label="* Date Recorded" id="date_recorded" ariaRequired="true">
+                                                        <FormGroup label="Date Recorded" id="date_recorded">
                                                             <input type="date" className="form-control" placeholder="Use YYYY-MM-DD Format for Date" />
                                                         </FormGroup>
                                                     </div>
                                                 </div>
                                                 <div className="row">
                                                     <div className="col-sm-6">
-                                                        <FormGroup label="* Cabinet" id="cabinet" ariaRequired="true">
+                                                        <FormGroup label="Cabinet" id="cabinet">
                                                             <input type="text" className="form-control" placeholder="Cabinet" />
                                                         </FormGroup>
                                                     </div>
                                                     <div className="col-sm-6">
-                                                        <FormGroup label="* Slide" id="slide" ariaRequired="true">
+                                                        <FormGroup label="Slide" id="slide">
                                                             <input type="text" className="form-control" placeholder="Slide" />
                                                         </FormGroup>
                                                     </div>
@@ -467,13 +465,13 @@ class PlatForm extends React.Component {
                                                                             </div>
                                                                         </div>
                                                                     </div>
-                                                                    <div className="row">
+                                                                    {/* <div className="row">
                                                                         <div className="col-xs-12">
                                                                             <FormGroup label="Calculation Notes" id="calculation_note">
                                                                                 <textarea type="text" className="form-control" placeholder="Calculation Notes" rows="4" />
                                                                             </FormGroup>
                                                                         </div>
-                                                                    </div>
+                                                                    </div> */}
                                                                 </fieldset>
                                                                 <div className="col-xs-offset-2 col-xs-4">
                                                                     <button className="btn btn-lex" onClick={onPlatSubmit}>Submit Exactions</button>
@@ -613,7 +611,7 @@ function mapDispatchToProps(dispatch, params) {
                         block: data_plat.response.block,
                         buildable_lots: data_plat.response.buildable_lots,
                         cabinet: data_plat.response.cabinet,
-                        calculation_note: data_plat.response.calculation_note,
+                        // calculation_note: data_plat.response.calculation_note,
                         date_recorded: data_plat.response.date_recorded,
                         expansion_area: data_plat.response.expansion_area,
                         expansion_area_show: `${data_plat.response.expansion_area},${data_plat.response.expansion_area}`,
