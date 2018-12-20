@@ -173,7 +173,9 @@ function mapDispatchToProps(dispatch, params) {
             dispatch(getPaymentID(selectedPayment))
             .then((payment) => {
                 dispatch(getAccountID(payment.response.credit_account.id));
-                dispatch(getAgreementID(payment.response.credit_source.id));
+                if (!!payment.response.credit_source && payment.response.credit_source.id) {
+                    dispatch(getAgreementID(payment.response.credit_source.id));
+                }
                 dispatch(formUpdate({ loading: false }));
             });
         },
