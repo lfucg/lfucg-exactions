@@ -86,14 +86,6 @@ class Pagination extends React.Component {
                                 >
                                 50
                                 </button>
-                                <button
-                                  aria-label="Change Page Size"
-                                  className="btn btn-link"
-                                  value="9999"
-                                  onClick={changePageSize}
-                                >
-                                All
-                                </button>
                             </div>
                         </div>
                     </div>

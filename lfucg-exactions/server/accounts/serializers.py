@@ -266,6 +266,12 @@ class AccountLedgerSerializer(serializers.ModelSerializer):
         return {
             'dollar_non_sewer': '${:,.2f}'.format(obj.non_sewer_credits),
             'dollar_sewer': '${:,.2f}'.format(obj.sewer_credits),
+            'dollar_roads': '${:,.2f}'.format(obj.roads),
+            'dollar_parks': '${:,.2f}'.format(obj.parks),
+            'dollar_storm': '${:,.2f}'.format(obj.storm),
+            'dollar_open_space': '${:,.2f}'.format(obj.open_space),
+            'dollar_sewer_trans': '${:,.2f}'.format(obj.sewer_trans),
+            'dollar_sewer_cap': '${:,.2f}'.format(obj.sewer_cap),
         }
 
     class Meta:

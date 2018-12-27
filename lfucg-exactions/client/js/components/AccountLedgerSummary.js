@@ -95,6 +95,12 @@ class AccountLedgerSummary extends React.Component {
                                           <p className="col-md-4 col-xs-6">Entry Type: {accountLedgers.currentLedger.entry_type_display}</p>
                                           <p className="col-md-4 col-xs-6">Sewer Credits: {accountLedgers.currentLedger.dollar_values && accountLedgers.currentLedger.dollar_values.dollar_sewer}</p>
                                           <p className="col-md-4 col-xs-6">Non-Sewer Credits: {accountLedgers.currentLedger.dollar_values && accountLedgers.currentLedger.dollar_values.dollar_non_sewer}</p>
+                                          <p className="col-md-4 col-xs-6">Roads: {accountLedgers.currentLedger.dollar_values && accountLedgers.currentLedger.dollar_values.dollar_roads}</p>
+                                          <p className="col-md-4 col-xs-6">Parks: {accountLedgers.currentLedger.dollar_values && accountLedgers.currentLedger.dollar_values.dollar_parks}</p>
+                                          <p className="col-md-4 col-xs-6">Storm Water: {accountLedgers.currentLedger.dollar_values && accountLedgers.currentLedger.dollar_values.dollar_storm}</p>
+                                          <p className="col-md-4 col-xs-6">Open Space: {accountLedgers.currentLedger.dollar_values && accountLedgers.currentLedger.dollar_values.dollar_open_space}</p>
+                                          <p className="col-md-4 col-xs-6">Sewer Transmission: {accountLedgers.currentLedger.dollar_values && accountLedgers.currentLedger.dollar_values.dollar_sewer_trans}</p>
+                                          <p className="col-md-4 col-xs-6">Sewer Capacity: {accountLedgers.currentLedger.dollar_values && accountLedgers.currentLedger.dollar_values.dollar_non_sewer_cap}</p>
                                       </div>
                                   </div>
                               </div>
