@@ -305,13 +305,28 @@ class AccountLedgerViewSet(viewsets.ModelViewSet):
             plat_set = Plat.objects.filter(id=chosen_plat)
             non_sewer_credits_per_lot = 0
             sewer_credits_per_lot = 0
+            roads_per_lot = 0
+            parks_per_lot = 0
+            storm_per_lot = 0
+            open_space_per_lot = 0
+            sewer_trans_per_lot = 0
+            sewer_cap_per_lot = 0
 
             if plat_set.exists():
                 buildable_lots = plat_set[0].buildable_lots
 
+                if buildable_lots == 0:
+                    return Response('There are no buildable lots for assignment.', status=status.HTTP_400_BAD_REQUEST)
+
                 try:
-                    non_sewer_credits_per_lot = round((float(data_set['non_sewer_credits']) / buildable_lots), 2)
-                    sewer_credits_per_lot = round((float(data_set['sewer_credits']) / buildable_lots), 2)
+                    non_sewer_credits_per_lot = round((float(data_set['non_sewer_credits']) / buildable_lots), 2) if hasattr(data_set, 'non_sewer_credits') else 0
+                    sewer_credits_per_lot = round((float(data_set['sewer_credits']) / buildable_lots), 2) if hasattr(data_set, 'sewer_credits') else 0
+                    roads_per_lot = round((float(data_set['roads']) / buildable_lots), 2) if hasattr(data_set, 'roads') else 0
+                    parks_per_lot = round((float(data_set['parks']) / buildable_lots), 2) if hasattr(data_set, 'parks') else 0
+                    storm_per_lot = round((float(data_set['storm']) / buildable_lots), 2) if hasattr(data_set, 'storm') else 0
+                    open_space_per_lot = round((float(data_set['open_space']) / buildable_lots), 2) if hasattr(data_set, 'open_space') else 0
+                    sewer_trans_per_lot = round((float(data_set['sewer_trans']) / buildable_lots), 2) if hasattr(data_set, 'sewer_trans') else 0
+                    sewer_cap_per_lot = round((float(data_set['sewer_cap']) / buildable_lots), 2) if hasattr(data_set, 'sewer_cap') else 0
                 except Exception as exc:
                     return Response('Invalid credit entry', status=status.HTTP_400_BAD_REQUEST)
 
@@ -321,6 +336,12 @@ class AccountLedgerViewSet(viewsets.ModelViewSet):
                     data_set['lot'] = lot.id
                     data_set['non_sewer_credits'] = non_sewer_credits_per_lot
                     data_set['sewer_credits'] = sewer_credits_per_lot
+                    data_set['roads'] = roads_per_lot
+                    data_set['parks'] = parks_per_lot
+                    data_set['storm'] = storm_per_lot
+                    data_set['open_space'] = open_space_per_lot
+                    data_set['sewer_trans'] = sewer_trans_per_lot
+                    data_set['sewer_cap'] = sewer_cap_per_lot
 
                     serializer = AccountLedgerSerializer(data=data_set)
                     if serializer.is_valid(raise_exception=True):

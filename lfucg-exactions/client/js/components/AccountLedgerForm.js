@@ -279,6 +279,78 @@ class AccountLedgerForm extends React.Component {
                                                 </FormGroup>
                                             </div>
                                         </div>
+                                        <div className="row">
+                                            <div className="col-sm-6">
+                                                <FormGroup label="Roads" id="roads">
+                                                    <input
+                                                        type="number"
+                                                        className="form-control"
+                                                        placeholder="Roads"
+                                                        disabled={!activeForm.entry_type}
+                                                        step="0.01"
+                                                    />
+                                                </FormGroup>
+                                            </div>
+                                            <div className="col-sm-6">
+                                                <FormGroup label="Parks" id="parks">
+                                                    <input
+                                                        type="number"
+                                                        className="form-control"
+                                                        placeholder="Parks"
+                                                        disabled={!activeForm.entry_type}
+                                                        step="0.01"
+                                                    />
+                                                </FormGroup>
+                                            </div>
+                                        </div>
+                                        <div className="row">
+                                            <div className="col-sm-6">
+                                                <FormGroup label="Storm water" id="storm">
+                                                    <input
+                                                        type="number"
+                                                        className="form-control"
+                                                        placeholder="Storm water"
+                                                        disabled={!activeForm.entry_type}
+                                                        step="0.01"
+                                                    />
+                                                </FormGroup>
+                                            </div>
+                                            <div className="col-sm-6">
+                                                <FormGroup label="Open Space" id="open_space">
+                                                    <input
+                                                        type="number"
+                                                        className="form-control"
+                                                        placeholder="Open Space"
+                                                        disabled={!activeForm.entry_type}
+                                                        step="0.01"
+                                                    />
+                                                </FormGroup>
+                                            </div>
+                                        </div>
+                                        <div className="row">
+                                            <div className="col-sm-6">
+                                                <FormGroup label="Sewer Transmission" id="sewer_trans">
+                                                    <input
+                                                        type="number"
+                                                        className="form-control"
+                                                        placeholder="Sewer Transmission"
+                                                        disabled={!activeForm.entry_type}
+                                                        step="0.01"
+                                                    />
+                                                </FormGroup>
+                                            </div>
+                                            <div className="col-sm-6">
+                                                <FormGroup label="Sewer Capacity" id="sewer_cap">
+                                                    <input
+                                                        type="number"
+                                                        className="form-control"
+                                                        placeholder="Sewer Capacity"
+                                                        disabled={!activeForm.entry_type}
+                                                        step="0.01"
+                                                    />
+                                                </FormGroup>
+                                            </div>
+                                        </div>
                                     </fieldset>
                                     <div className="col-xs-8">
                                         <button disabled={!submitEnabled} className="btn btn-lex" onClick={() => onSubmit(activeForm.plat_lot)} >
@@ -328,6 +400,7 @@ class AccountLedgerForm extends React.Component {
                                                 : null
                                         ))(lots)
                                     }
+                                </div> : <div>
                                     {
                                         selectedAccountLedger ?
                                             <Notes
@@ -354,7 +427,7 @@ class AccountLedgerForm extends React.Component {
                                             }
                                         </div>
                                     }
-                                </div> : null}
+                                </div>}
                             </div>
                         )}
                     </div>
@@ -427,6 +500,12 @@ function mapDispatchToProps(dispatch, params) {
                         entry_type_show: `${data_account_ledger.response.entry_type},${data_account_ledger.response.entry_type_display}`,
                         non_sewer_credits: data_account_ledger.response.non_sewer_credits,
                         sewer_credits: data_account_ledger.response.sewer_credits,
+                        roads: data_account_ledger.response.roads,
+                        parks: data_account_ledger.response.parks,
+                        storm: data_account_ledger.response.storm,
+                        open_space: data_account_ledger.response.open_space,
+                        sewer_trans: data_account_ledger.response.sewer_trans,
+                        sewer_cap: data_account_ledger.response.sewer_cap,
                         plat_lot: 'lot',
                         plat_lot_show: 'lot,lot',
                     };
