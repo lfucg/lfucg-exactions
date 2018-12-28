@@ -54,7 +54,7 @@ INSTALLED_APPS = (
     'django_extensions',
 
     # Third-party apps, patches, fixes
-    'debug_toolbar',
+    # 'debug_toolbar',
     'compressor',
 
     # Application base, containing global templates.
@@ -147,7 +147,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
+    # 'debug_toolbar.middleware.DebugToolbarMiddleware',
     'simple_history.middleware.HistoryRequestMiddleware',
 ]
 
@@ -174,19 +174,19 @@ TEMPLATES = [
 TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 
 
-def custom_show_toolbar(request):
-    """ Only show the debug toolbar to users with the superuser flag. """
-    return request.user.is_superuser
+# def custom_show_toolbar(request):
+#     """ Only show the debug toolbar to users with the superuser flag. """
+#     return request.user.is_superuser
 
 
-DEBUG_TOOLBAR_CONFIG = {
-    'INTERCEPT_REDIRECTS': False,
-    'SHOW_TOOLBAR_CALLBACK': 'server.settings.base.custom_show_toolbar',
-    'HIDE_DJANGO_SQL': True,
-    'TAG': 'body',
-    'SHOW_TEMPLATE_CONTEXT': True,
-    'ENABLE_STACKTRACES': True,
-}
+# DEBUG_TOOLBAR_CONFIG = {
+#     'INTERCEPT_REDIRECTS': False,
+#     'SHOW_TOOLBAR_CALLBACK': 'server.settings.base.custom_show_toolbar',
+#     'HIDE_DJANGO_SQL': True,
+#     'TAG': 'body',
+#     'SHOW_TEMPLATE_CONTEXT': True,
+#     'ENABLE_STACKTRACES': True,
+# }
 
 # Uncomment the following setting if you get an ImportError such as:
 #   ImproperlyConfigured: The included urlconf projectname.urls doesn't have any patterns in it
