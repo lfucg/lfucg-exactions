@@ -5,6 +5,8 @@ from django.http import HttpResponse
 from django.db.models import Count, Max, Q
 import datetime
 from decimal import Decimal
+import pandas as pd
+from io import BytesIO
 
 from django.contrib.auth.models import User
 from .models import Account, AccountLedger, Agreement, Payment, Project, ProjectCostEstimate
@@ -969,186 +971,308 @@ class AccountLedgerCSVExportView(View):
         return response
 
 class TransactionCSVExportView(View):
-    def get_serializer_class(self, serializer_class):
-        return serializer_class
-
-    def list(self, queryset, serializer_class, many):
-        serializer_class = self.get_serializer_class(serializer_class)
-        serializer = serializer_class(queryset, many=many)
-        return serializer
-
     def get(self, request, *args, **kwargs):
-        headers = [
-            'Subdivision',
-            'Cabinet',
-            'Slide',
-            'Unit',
-            'Section',
-            'Block',
-            'Plat Zones',
-            'Lot Address',
-            'Permit ID',
-            'Alt. Address',
-            'Res. #',
-            'Transaction Type',
-            'Account',
-            'Paid By',
-            'Sewer Trans.',
-            'Sewer Cap.',
-            'SEWER SUBTL',
-            'Roads',
-            'Parks',
-            'Stormwater',
-            'Open Space',
-            'NONSWR SUBTL',
-            'Total',
-        ]
-
         starting_date = request.GET.get('starting_date', None)
         ending_date = request.GET.get('ending_date', datetime.date.today())
 
-        if starting_date is not None:
-            transaction_filename = 'transactions_starting_date_' + starting_date + 'ending_date_' + ending_date
+        payments = pd.DataFrame.from_records(
+            Payment.objects.filter(date_created__lte=ending_date, date_created__gte=starting_date).values(),
+            columns=[
+                'check_number', 'credit_account_id', 'date_created',
+                'id', 'lot_id_id', 'paid_by', 'payment_type',
+                'paid_open_space', 'paid_parks', 'paid_roads', 'paid_sewer_cap',
+                'paid_sewer_trans', 'paid_storm'
+            ]
+        )
+        payments = payments.rename(index=str, columns={
+            'check_number': 'Check', 'date_created': 'Date',
+            'paid_by': 'Paid By', 'payment_type': 'Transaction Type',
+            'paid_open_space': 'Open Space', 'paid_parks': 'Parks', 'paid_roads': 'Roads', 
+            'paid_sewer_cap': 'Sewer Cap.', 'paid_sewer_trans': 'Sewer Trans.', 'paid_storm': 'Storm'
+        })
 
-            response = HttpResponse(content_type='text/csv')
-            response['Content-Disposition'] = 'attachment; filename=' + transaction_filename + '.csv'
+        ledgers = pd.DataFrame.from_records(
+            AccountLedger.objects.filter(date_created__lte=ending_date, date_created__gte=starting_date).values(),
+            columns=[
+                'account_from_id', 'account_to_id', 'agreement_id',
+                'entry_date', 'entry_type', 'id', 'lot_id',
+                'non_sewer_credits', 'open_space', 'parks', 'roads', 'sewer_cap',
+                'sewer_credits', 'sewer_trans', 'storm'
+            ]
+        )
+        ledgers = ledgers.rename(index=str, columns={
+            'entry_date': 'Date', 'entry_type': 'Transaction Type',
+            'non_sewer_credits': 'Non-Sewer', 'open_space': 'Open Space', 'parks': 'Parks', 
+            'roads': 'Roads', 'storm': 'Storm',
+            'sewer_cap': 'Sewer Cap.', 'sewer_credits': 'Sewer', 'sewer_trans': 'Sewer Trans.'
+        })
 
-            payment_queryset = Payment.objects.filter(date_created__lte=ending_date, date_created__gte=starting_date)
-            ledger_queryset = AccountLedger.objects.filter(date_created__lte=ending_date, date_created__gte=starting_date)
+        agreements = pd.DataFrame.from_records(
+            Agreement.objects.filter(ledger__in=ledgers['id']).distinct().values(),
+            columns=['id', 'resolution_number']
+        )
 
-            lot_queryset = Lot.objects.filter(
-                Q(payment__in=payment_queryset) |
-                Q(ledger_lot__in=ledger_queryset)
-            ).distinct()
+        accounts = pd.DataFrame.from_records(
+            Account.objects.filter(
+                Q(payment_account__in=payments['id']) |
+                Q(ledger_account_from__in=ledgers['id']) |
+                Q(ledger_account_to__in=ledgers['id'])
+            ).distinct().values(),
+            columns=['id', 'account_name']
+        )
 
-            # SERIALIZE LOT
-            lot_serializer = self.list(
-                lot_queryset,
-                LotSerializer,
-                many=True
-            )
+        pay_account = pd.merge(payments, accounts, left_on='credit_account_id', right_on='id', suffixes=['_payment', '_payaccount'])
+        pay_account = pay_account.drop(columns=['credit_account_id', 'id_payaccount'])
+        
+        led_agree = pd.merge(ledgers, agreements, left_on='agreement_id', right_on='id', suffixes=['_ledger', '_ledagree'])
+        led_agree = led_agree.drop(columns=['agreement_id', 'id_ledagree'])
 
-            writer = csv.DictWriter(response, fieldnames=headers, extrasaction='ignore')
-            writer.writeheader()
+        led_agree_from_account = pd.merge(led_agree, accounts, left_on='account_from_id', right_on='id', how='inner', suffixes=['_led_agree', '_from'])
+        led_agree_from_account = led_agree_from_account.drop(columns=['account_from_id', 'id'])
 
-            for lot in lot_serializer.data:
-                subdivision = ''
-                all_plat_zones = ''
-                alt_address = ''
-                cabinet = ''
-                slide = ''
-                unit = ''
-                section = ''
-                block = ''
+        led_combine = pd.merge(led_agree_from_account, accounts, left_on='account_to_id', right_on='id', suffixes=['_from', '_to'])
+        led_combine = led_combine.drop(columns=['account_to_id', 'id'])
 
-                if lot['plat']:
-                    cabinet = lot['plat']['cabinet']
-                    slide = lot['plat']['slide']
-                    unit = lot['plat']['unit']
-                    section = lot['plat']['section']
-                    block = lot['plat']['block']
+        lots = pd.DataFrame.from_records(
+            Lot.objects.filter(
+                Q(payment__in=payments['id']) |
+                Q(ledger_lot__in=ledgers['id'])
+            ).distinct().values(),
+            columns=['id', 'plat_id', 'lot_number', 'address_full']
+        )
 
-                    if lot['plat']['subdivision']:
-                        subdivision = lot['plat']['subdivision']['name']
+        plats = pd.DataFrame.from_records(
+            Plat.objects.filter(lot__in=lots['id']).distinct().values(),
+            columns=['id',
+            # 'subdivision',
+            'cabinet',
+            'slide']
+        )
 
-                plat_zones = PlatZone.objects.filter(plat=lot['plat']['id'])
-                if plat_zones.count() > 0: 
-                    all_plat_zones = ''
-                    for zone in plat_zones:
-                        all_plat_zones += (zone.zone + ', ')
+        plat_lot = pd.merge(lots, plats, left_on='plat_id', right_on='id', how='inner', suffixes=['_lots', '_plats'])
+        plat_lot = plat_lot.drop(columns=['id_plats', 'plat_id'])
 
-                if lot['alternative_address_number'] or lot['alternative_address_street']:
-                    alt_address = str(lot['alternative_address_number']) + ' ' + lot['alternative_address_street']
+        lot_payments = pd.merge(plat_lot, pay_account, left_on='id_lots', right_on='lot_id_id', how='inner', suffixes=['_platlots', '_payaccount'])
+        lot_payments = lot_payments.drop(columns=['lot_id_id', 'id_payment'])
+        lot_payments = lot_payments.rename(index=str, columns={'account_name': 'Account From'})
 
-                lot_payments = Payment.objects.filter(lot_id=lot['id'])
-                lot_ledgers = AccountLedger.objects.filter(lot=lot['id'])
+        lot_ledgers_agreements = pd.merge(plat_lot, led_combine, left_on='id_lots', right_on='lot_id', how='inner', suffixes=['_platlots', '_ledcomb'])
+        lot_ledgers_agreements = lot_ledgers_agreements.drop(columns=['id_lots', 'id_ledger', 'lot_id'])
+        lot_ledgers_agreements = lot_ledgers_agreements.rename(index=str, columns={
+            'resolution_number': 'Resolution',
+            'account_name_from': 'Account From',
+            'account_name_to': 'Account To',
+        })
 
-                if lot_payments is not None:
-                    payment_serializer = self.list(
-                        lot_payments,
-                        PaymentSerializer,
-                        many=True
-                    )
+        concat = pd.concat([lot_payments, lot_ledgers_agreements])
+        concat = concat.drop(columns=['id_lots', 'Date'])
+        concat = concat.rename(index=str, columns={
+            'address_full': 'Lot Address', 'cabinet': 'Cabinet',
+            'lot_number': 'Lot ID', 'slide': 'Slide'
+        })
+        concat = concat[[
+            'Lot ID', 'Lot Address', 'Cabinet', 'Slide', 
+            'Account From', 'Account To', 'Resolution', 
+            'Transaction Type', 'Paid By', 'Check', 
+            'Non-Sewer', 'Open Space', 'Parks', 'Roads', 'Storm', 
+            'Sewer', 'Sewer Cap.', 'Sewer Trans.'
+        ]].sort_values(by=['Lot ID'])
+        print('CONCAT SHAPE', concat.shape)
 
-                    agreement = ''
+        bytesio = BytesIO()
+
+        writer = pd.ExcelWriter(bytesio)
+        concat.to_excel(writer, 'Transaction Report')
+
+        writer.save()
+
+        bytesio.seek(0)
+
+        response = HttpResponse(bytesio.read(), content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        response['Content-Disposition'] = 'attachment; filename=Transaction_report_' + starting_date + '_' + ending_date + '.xlsx'
+
+        return response
+
+    # def get_serializer_class(self, serializer_class):
+    #     return serializer_class
+
+    # def list(self, queryset, serializer_class, many):
+    #     serializer_class = self.get_serializer_class(serializer_class)
+    #     serializer = serializer_class(queryset, many=many)
+    #     return serializer
+
+    # def get(self, request, *args, **kwargs):
+    #     headers = [
+    #         'Subdivision',
+    #         'Cabinet',
+    #         'Slide',
+    #         'Unit',
+    #         'Section',
+    #         'Block',
+    #         'Plat Zones',
+    #         'Lot Address',
+    #         'Permit ID',
+    #         'Alt. Address',
+    #         'Res. #',
+    #         'Transaction Type',
+    #         'Account',
+    #         'Paid By',
+    #         'Sewer Trans.',
+    #         'Sewer Cap.',
+    #         'SEWER SUBTL',
+    #         'Roads',
+    #         'Parks',
+    #         'Stormwater',
+    #         'Open Space',
+    #         'NONSWR SUBTL',
+    #         'Total',
+    #     ]
+
+        # starting_date = request.GET.get('starting_date', None)
+        # ending_date = request.GET.get('ending_date', datetime.date.today())
+
+    #     if starting_date is not None:
+    #         transaction_filename = 'transactions_starting_date_' + starting_date + 'ending_date_' + ending_date
+
+    #         response = HttpResponse(content_type='text/csv')
+    #         response['Content-Disposition'] = 'attachment; filename=' + transaction_filename + '.csv'
+
+    #         payment_queryset = Payment.objects.filter(date_created__lte=ending_date, date_created__gte=starting_date)
+    #         ledger_queryset = AccountLedger.objects.filter(date_created__lte=ending_date, date_created__gte=starting_date)
+
+    #         lot_queryset = Lot.objects.filter(
+    #             Q(payment__in=payment_queryset) |
+    #             Q(ledger_lot__in=ledger_queryset)
+    #         ).distinct()
+
+    #         # SERIALIZE LOT
+    #         lot_serializer = self.list(
+    #             lot_queryset,
+    #             LotSerializer,
+    #             many=True
+    #         )
+
+    #         writer = csv.DictWriter(response, fieldnames=headers, extrasaction='ignore')
+    #         writer.writeheader()
+
+    #         for lot in lot_serializer.data:
+    #             subdivision = ''
+    #             all_plat_zones = ''
+    #             alt_address = ''
+    #             cabinet = ''
+    #             slide = ''
+    #             unit = ''
+    #             section = ''
+    #             block = ''
+
+    #             if lot['plat']:
+    #                 cabinet = lot['plat']['cabinet']
+    #                 slide = lot['plat']['slide']
+    #                 unit = lot['plat']['unit']
+    #                 section = lot['plat']['section']
+    #                 block = lot['plat']['block']
+
+    #                 if lot['plat']['subdivision']:
+    #                     subdivision = lot['plat']['subdivision']['name']
+
+    #             plat_zones = PlatZone.objects.filter(plat=lot['plat']['id'])
+    #             if plat_zones.count() > 0: 
+    #                 all_plat_zones = ''
+    #                 for zone in plat_zones:
+    #                     all_plat_zones += (zone.zone + ', ')
+
+    #             if lot['alternative_address_number'] or lot['alternative_address_street']:
+    #                 alt_address = str(lot['alternative_address_number']) + ' ' + lot['alternative_address_street']
+
+    #             lot_payments = Payment.objects.filter(lot_id=lot['id'])
+    #             lot_ledgers = AccountLedger.objects.filter(lot=lot['id'])
+
+    #             if lot_payments is not None:
+    #                 payment_serializer = self.list(
+    #                     lot_payments,
+    #                     PaymentSerializer,
+    #                     many=True
+    #                 )
+
+    #                 agreement = ''
                     
-                    for payment in payment_serializer.data:
-                        sewer_sub = round(float(payment['paid_sewer_trans']) + float(payment['paid_sewer_cap']), 2)
-                        non_sewer_sub = round(float(payment['paid_roads']) + float(payment['paid_parks']) + float(payment['paid_storm']) + float(payment['paid_open_space']), 2)
-                        total = sewer_sub + non_sewer_sub
-                        row = {
-                            'Subdivision': subdivision,
-                            'Cabinet': cabinet,
-                            'Slide': slide,
-                            'Unit': unit,
-                            'Section': section,
-                            'Block': block,
-                            'Plat Zones': all_plat_zones,
-                            'Lot Address': lot['address_full'],
-                            'Permit ID': lot['permit_id'],
-                            'Alt. Address': alt_address,
-                            'Res. #': payment['credit_source']['resolution_number'],
-                            'Transaction Type': payment['payment_type_display'],
-                            'Account': payment['credit_account']['account_name'],
-                            'Paid By': payment['paid_by'],
-                            'Sewer Trans.': payment['paid_sewer_trans'],
-                            'Sewer Cap.': payment['paid_sewer_cap'],
-                            'SEWER SUBTL': sewer_sub,
-                            'Roads': payment['paid_roads'],
-                            'Parks': payment['paid_parks'],
-                            'Stormwater': payment['paid_storm'],
-                            'Open Space': payment['paid_open_space'],
-                            'NONSWR SUBTL': non_sewer_sub,
-                            'Total': total,
-                        }
+    #                 for payment in payment_serializer.data:
+    #                     sewer_sub = round(float(payment['paid_sewer_trans']) + float(payment['paid_sewer_cap']), 2)
+    #                     non_sewer_sub = round(float(payment['paid_roads']) + float(payment['paid_parks']) + float(payment['paid_storm']) + float(payment['paid_open_space']), 2)
+    #                     total = sewer_sub + non_sewer_sub
+    #                     row = {
+    #                         'Subdivision': subdivision,
+    #                         'Cabinet': cabinet,
+    #                         'Slide': slide,
+    #                         'Unit': unit,
+    #                         'Section': section,
+    #                         'Block': block,
+    #                         'Plat Zones': all_plat_zones,
+    #                         'Lot Address': lot['address_full'],
+    #                         'Permit ID': lot['permit_id'],
+    #                         'Alt. Address': alt_address,
+    #                         'Res. #': payment['credit_source']['resolution_number'],
+    #                         'Transaction Type': payment['payment_type_display'],
+    #                         'Account': payment['credit_account']['account_name'],
+    #                         'Paid By': payment['paid_by'],
+    #                         'Sewer Trans.': payment['paid_sewer_trans'],
+    #                         'Sewer Cap.': payment['paid_sewer_cap'],
+    #                         'SEWER SUBTL': sewer_sub,
+    #                         'Roads': payment['paid_roads'],
+    #                         'Parks': payment['paid_parks'],
+    #                         'Stormwater': payment['paid_storm'],
+    #                         'Open Space': payment['paid_open_space'],
+    #                         'NONSWR SUBTL': non_sewer_sub,
+    #                         'Total': total,
+    #                     }
 
-                        writer.writerow(row)
+    #                     writer.writerow(row)
 
-                if lot_ledgers is not None:
-                    ledger_serializer = self.list(
-                        lot_ledgers,
-                        AccountLedgerSerializer,
-                        many=True
-                    )
+    #             if lot_ledgers is not None:
+    #                 ledger_serializer = self.list(
+    #                     lot_ledgers,
+    #                     AccountLedgerSerializer,
+    #                     many=True
+    #                 )
                     
-                    for ledger in ledger_serializer.data:
-                        total = round(float(ledger['sewer_credits']) + float(ledger['non_sewer_credits']), 2)
+    #                 for ledger in ledger_serializer.data:
+    #                     total = round(float(ledger['sewer_credits']) + float(ledger['non_sewer_credits']), 2)
                         
-                        account_from = ''
-                        agreement = ''
+    #                     account_from = ''
+    #                     agreement = ''
 
-                        if ledger['account_from']:
-                            account_from = ledger['account_from']['account_name']
+    #                     if ledger['account_from']:
+    #                         account_from = ledger['account_from']['account_name']
 
-                        if ledger['agreement']:
-                            agreement = ledger['agreement']['resolution_number']
+    #                     if ledger['agreement']:
+    #                         agreement = ledger['agreement']['resolution_number']
 
-                        row = {
-                            'Subdivision': subdivision,
-                            'Cabinet': cabinet,
-                            'Slide': slide,
-                            'Unit': unit,
-                            'Section': section,
-                            'Block': block,
-                            'Plat Zones': all_plat_zones,
-                            'Lot Address': lot['address_full'],
-                            'Permit ID': lot['permit_id'],
-                            'Alt. Address': alt_address,
-                            'Res. #': ledger['agreement']['resolution_number'],
-                            'Transaction Type': ledger['entry_type_display'],
-                            'Account': account_from,
-                            'Paid By': account_from,
-                            'Sewer Trans.': ledger['sewer_trans'],
-                            'Sewer Cap.': ledger['sewer_cap'],
-                            'SEWER SUBTL': ledger['sewer_credits'],
-                            'Roads': ledger['roads'],
-                            'Parks': ledger['parks'],
-                            'Stormwater': ledger['storm'],
-                            'Open Space': ledger['open_space'],
-                            'NONSWR SUBTL': ledger['non_sewer_credits'],
-                            'Total': total,
-                        }
+    #                     row = {
+    #                         'Subdivision': subdivision,
+    #                         'Cabinet': cabinet,
+    #                         'Slide': slide,
+    #                         'Unit': unit,
+    #                         'Section': section,
+    #                         'Block': block,
+    #                         'Plat Zones': all_plat_zones,
+    #                         'Lot Address': lot['address_full'],
+    #                         'Permit ID': lot['permit_id'],
+    #                         'Alt. Address': alt_address,
+    #                         'Res. #': ledger['agreement']['resolution_number'],
+    #                         'Transaction Type': ledger['entry_type_display'],
+    #                         'Account': account_from,
+    #                         'Paid By': account_from,
+    #                         'Sewer Trans.': ledger['sewer_trans'],
+    #                         'Sewer Cap.': ledger['sewer_cap'],
+    #                         'SEWER SUBTL': ledger['sewer_credits'],
+    #                         'Roads': ledger['roads'],
+    #                         'Parks': ledger['parks'],
+    #                         'Stormwater': ledger['storm'],
+    #                         'Open Space': ledger['open_space'],
+    #                         'NONSWR SUBTL': ledger['non_sewer_credits'],
+    #                         'Total': total,
+    #                     }
 
-                        writer.writerow(row)
-            return response
+    #                     writer.writerow(row)
+    #         return response
 
