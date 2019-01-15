@@ -342,31 +342,30 @@ class Command(BaseCommand):
   def SelectDates(self, date_option):     
     return self.ConvertDates('1/1/1970') if pd.isnull(date_option) else self.ConvertDates(date_option)
 
-  def GetLedgerDetails(self, row, df, numb):
+  def GetLedgerDetails(self, row, df, numb, lot_count):
     buildable_lots = int(row['BuildableLots']) if not row['BuildableLots'] == '?' else 0
     
     agreement = self.GetAgreement(row['Resolution-' + str(numb)])
     sewer = 0
     non_sewer = 0
 
-    if pd.notna(row['CreditType-' + str(numb)]) and buildable_lots is not None and buildable_lots != 0:
-      if pd.notna(row['Non-Sewer-' + str(numb)]):
-        non_sewer = Decimal(row['Non-Sewer-' + str(numb)]) / buildable_lots 
-      if pd.notna(row['Sewer-' + str(numb)]):
-        sewer = Decimal(row['Sewer-' + str(numb)]) / buildable_lots 
+    # if pd.notna(row['CreditType-' + str(numb)]) and buildable_lots is not None and buildable_lots != 0:
+    if pd.notna(row['Non-Sewer-' + str(numb)]):
+      non_sewer = Decimal(row['Non-Sewer-' + str(numb)]) / lot_count 
+    if pd.notna(row['Sewer-' + str(numb)]):
+      sewer = Decimal(row['Sewer-' + str(numb)]) / lot_count 
 
-      date = self.SelectDates(row['EntryDate-' + str(numb)])
-      print('DATE', date)
-    
-      ledger_details = {
-        'agreement': agreement,
-        'sewer': round(sewer, 2), 'non_sewer': round(non_sewer, 2),
-        'date': date,
-      }
+    date = self.SelectDates(row['EntryDate-' + str(numb)])
+  
+    ledger_details = {
+      'agreement': agreement,
+      'sewer': round(sewer, 2), 'non_sewer': round(non_sewer, 2),
+      'date': date,
+    }
 
-      return ledger_details
-    else:
-      pass
+    return ledger_details
+    # else:
+    #   pass
 
   def CreateLedger(self, ledger_details):
     try:
@@ -391,32 +390,49 @@ class Command(BaseCommand):
     df = pd.read_csv('plat_data.csv')
 
     for index, row in df.iterrows():
-        print('INDEX', index)
-        print('PLAT', row['Plat_Slide'])
+      print('INDEX', index)
+      print('PLAT', row['Plat_Slide'])
 
-        account_from = self.AccountFieldCheck(row['Contact Company'])
-        account_to = self.FilterAccount('Lexington Fayette Urban County Government (LFUCG)').first()
+      account_from = self.AccountFieldCheck(row['Contact Company'])
+      account_to = self.FilterAccount('Lexington Fayette Urban County Government (LFUCG)').first()
 
-        plat = Plat.objects.filter(cabinet=row['Cabinet'], slide=row['Slide']).first()
-        lots = Lot.objects.filter(plat=plat)
+      plat = Plat.objects.filter(cabinet=row['Cabinet'], slide=row['Slide']).first()
+      lots = Lot.objects.filter(plat=plat)
 
-        buildable_lots = int(row['BuildableLots']) if not row['BuildableLots'] == '?' else 0
-        lot_count = lots.count()
-        if buildable_lots < lot_count:
-          print('BUILD', buildable_lots)
-          print('LOT COUNT', lot_count)
-          for lot in lots:
-            ending = 1
+      buildable_lots = int(row['BuildableLots']) if not row['BuildableLots'] == '?' else 0
+      lot_count = lots.count()
+      # if buildable_lots < lot_count:
+      #   print('BUILD', buildable_lots)
+      for lot in lots:
+        print('LOT COUNT', lot_count)
+        ending = 1
 
-            while ending <= 5:
-              ledger_details = self.GetLedgerDetails(row, df, ending)
-              if ledger_details is not None:
-                ledger_details['account_to'] = account_to
-                ledger_details['account_from'] = account_from
-                ledger_details['lot'] = lot
-                self.CreateLedger(ledger_details)
-              else:
-                pass
-              ending += 1
-        else:
-          pass
+        while ending <= 5:
+          ledger_details = self.GetLedgerDetails(row, df, ending, lot_count)
+          if ledger_details is not None:
+            ledger_details['account_to'] = account_to
+            ledger_details['account_from'] = account_from
+            ledger_details['lot'] = lot
+            self.CreateLedger(ledger_details)
+          else:
+            pass
+          ending += 1
+      # else:
+      #   pass
+
+# ./manage.py shell_plus
+# AccountLedger.objects.all().delete()
+
+# from django.db.models import Sum
+
+# non_sewer_credits = AccountLedger.objects.aggregate(Sum('non_sewer_credits'))
+# sewer_credits = AccountLedger.objects.aggregate(Sum('sewer_credits'))
+
+# paid_roads = Payment.objects.aggregate(Sum('paid_roads'))
+# paid_sewer_trans = Payment.objects.aggregate(Sum('paid_sewer_trans'))
+# paid_sewer_cap = Payment.objects.aggregate(Sum('paid_sewer_cap'))
+# paid_parks = Payment.objects.aggregate(Sum('paid_parks'))
+# paid_storm = Payment.objects.aggregate(Sum('paid_storm'))
+# paid_open_space = Payment.objects.aggregate(Sum('paid_open_space'))
+
+# ./manage.py update_ledgers_plat
