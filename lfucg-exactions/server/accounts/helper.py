@@ -34,7 +34,7 @@ def send_password_reset_email(user, token):
 
     msg = EmailMultiAlternatives(subject, text_content, from_email, [user.email])
     msg.attach_alternative(html_content, "text/html")
-    # msg.send()
+    msg.send()
 
 def send_lost_username_email(user):
     text_template = get_template('emails/forgot_username.txt')
@@ -52,7 +52,7 @@ def send_lost_username_email(user):
 
     msg = EmailMultiAlternatives(subject, text_content, from_email, [user.email])
     msg.attach_alternative(html_content, "text/html")
-    # msg.send()
+    msg.send()
 
 @receiver(post_save, sender=User)
 def send_email_to_new_user(sender, instance, created, **kwargs):
@@ -77,10 +77,10 @@ def send_email_to_new_user(sender, instance, created, **kwargs):
 
         msg = EmailMultiAlternatives(subject, text_content, from_email, [user.email])
         msg.attach_alternative(html_content, "text/html")
-        # try:
-        #     msg.send()
-        # except Exception as exc:
-        #     print('SEND NEW USER EMAIL EXCEPTION', exc)
+        try:
+            msg.send()
+        except Exception as exc:
+            print('SEND NEW USER EMAIL EXCEPTION', exc)
 
 @receiver(post_save, sender=Agreement)
 @receiver(post_save, sender=AccountLedger)
