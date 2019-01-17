@@ -176,7 +176,7 @@ export function passwordReset(token, uid) {
     return {
         type: API_CALL,
         endpoint: RESET_PASSWORD,
-        url: '/password_reset/',
+        url: `/reset/${uid}/${token}/`,
         method: 'POST',
         body: (getState) => {
             const {
