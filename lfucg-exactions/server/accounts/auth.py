@@ -123,15 +123,15 @@ def forgot_username(request):
 
 @api_view(['POST'])
 @permission_classes((AllowAny, ))
-def reset_password(request):
+def reset_password(request, uid, token):
     user = User.objects.get(id=request.data['uid'])
     token = request.data['token']
     response, status, user = _validate_token(user, token)
     if status == statuses.HTTP_200_OK:
         user.set_password(request.data.get('password_2'))
         user.save()
-        _delete_token(token)
         response = {'success': 'New password has been saved.'}
+        _delete_token(token)
 
     return Response(response, status=status)
 
