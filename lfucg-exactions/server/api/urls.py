@@ -43,10 +43,10 @@ urlpatterns = [
     url(r'^login/$', CustomObtainAuthToken.as_view()),
     url(r'^register/$', Registration.as_view()),
     url(r'^forgot-password/$', forgot_password),
-    url(r'^password_reset/$', reset_password),
+    # url(r'^password_reset/$', reset_password),
     url(r'^forgot-username/$', forgot_username),
     url(r'^delete_token/', Logout.as_view()),
-    url(r'^reset/(?P<uidb36>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$', auth_views.password_reset_confirm, name='password_reset_confirm'),
+    url(r'^reset/(?P<uid>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$', reset_password, name='password_reset_confirm'),
 
     url(r'^upload/create/$', FileUploadCreate.as_view(), name="document-upload"),
     url(r'^subdivision_search_csv/$', SubdivisionCSVExportView.as_view()),
