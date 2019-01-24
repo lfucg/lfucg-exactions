@@ -1077,7 +1077,6 @@ class TransactionCSVExportView(View):
             'Non-Sewer', 'Open Space', 'Parks', 'Roads', 'Storm', 
             'Sewer', 'Sewer Cap.', 'Sewer Trans.'
         ]].sort_values(by=['Lot ID'])
-        print('CONCAT SHAPE', concat.shape)
 
         bytesio = BytesIO()
 

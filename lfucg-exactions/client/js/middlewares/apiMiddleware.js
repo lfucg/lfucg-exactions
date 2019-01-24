@@ -10,8 +10,10 @@ import {
   API_CALL_START,
 } from '../constants/actionTypes';
 import {
-    BASE_URL,
+    BASE_URL, PASSWORD, LOGOUT,
 } from '../constants/apiConstants';
+import { setLoadingFalse } from '../constants/stateConstants';
+
 import {
     errorMessageSet,
 } from '../actions/flashMessageActions';
@@ -37,6 +39,15 @@ export default function api({ getState, dispatch }) {
         if (shouldCallAPI && !shouldCallAPI()) {
             return next(action);
         }
+
+        if (endpoint === PASSWORD) {
+            localStorage.removeItem('Token');
+        }
+        if (endpoint === LOGOUT) {
+            delete global.Authorization;
+            localStorage.removeItem('Token');
+        }
+
         let stored_token;
         try {
             stored_token = localStorage.getItem('Token');
@@ -73,8 +84,8 @@ export default function api({ getState, dispatch }) {
         }))
         .then((response) => {
             const error = responseValidation ?
-            responseValidation(response.data, { getState, dispatch }) :
-            null;
+                responseValidation(response.data, { getState, dispatch }) :
+                null;
             if (error) {
                 dispatch({
                     type: API_CALL_VALIDATION_ERROR,
@@ -108,7 +119,7 @@ export default function api({ getState, dispatch }) {
             });
         })
         .catch((error) => {
-            console.log(error);  // eslint-disable-line no-console
+            console.log('API Middleware Error: ', error);  // eslint-disable-line no-console
             if (error.response.status !== 500) {
                 const error_obj = error.response.data;
                 const error_message = {};

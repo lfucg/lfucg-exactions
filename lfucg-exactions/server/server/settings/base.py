@@ -244,6 +244,7 @@ REST_FRAMEWORK = {
 # Recipients of traceback emails and other notifications.
 ADMINS = (
     # ('Your Name', 'your_email@domain.com'),
+    ('Kelly Wright', 'kelly@apaxsoftware.com'),
 )
 MANAGERS = ADMINS
 
@@ -312,4 +313,4 @@ LOGGING = {
 #CEF_VERSION = '0'
 #CEF_DEVICE_VERSION = '0'
 PAGINATION_SIZE = 10
-PASSWORD_RESET_TIMEOUT_DAYS = 1
+PASSWORD_RESET_TIMEOUT_DAYS = 7
