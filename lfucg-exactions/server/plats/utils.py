@@ -33,6 +33,7 @@ def calculate_lot_totals(lot):
 
 def calculate_lot_balance(lot):
     # PAYMENTS
+    # payments = lot.payment.all()
     payments = Payment.objects.exclude(is_active=False).filter(lot_id=lot.id)
 
     sewer_payment = 0
@@ -95,6 +96,7 @@ def calculate_lot_balance(lot):
             non_sewer_payment += non_sewer_payment_paid
 
     # ACCOUNT LEDGERS
+    # account_ledgers = lot.ledger_lot.all()
     account_ledgers = AccountLedger.objects.exclude(is_active=False).filter(lot=lot.id, entry_type='USE')
     
     sewer_credits_applied = 0
@@ -163,9 +165,9 @@ def calculate_plat_balance(plat):
     return plat_exactions
 
 def remaining_plat_lots(plat):
-    lots_on_plat = Lot.objects.filter(plat=plat.id)
+    lots_on_plat = plat.lot.count()
 
-    return plat.buildable_lots - len(lots_on_plat)
+    return plat.buildable_lots - lots_on_plat
 
 def update_entry(self, request, pk):
     existing_object = self.get_object()

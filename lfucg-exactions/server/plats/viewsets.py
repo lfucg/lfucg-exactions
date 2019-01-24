@@ -1,3 +1,4 @@
+from django.db.models import Prefetch
 from rest_framework import viewsets, status, filters
 from django.db.models import Q
 from django.conf import settings
@@ -62,7 +63,15 @@ class PlatViewSet(viewsets.ModelViewSet):
     filter_fields = ('expansion_area', 'account', 'subdivision', 'plat_type', 'lot__id', 'is_approved',)
 
     def get_queryset(self):
-        queryset = Plat.objects.exclude(is_active=False)
+        queryset = Plat.objects.select_related('subdivision').prefetch_related(
+            Prefetch(
+                "plat_zone",
+                queryset=PlatZone.objects.filter(is_active=True),
+            ),
+            Prefetch(
+                "lot",
+                queryset=Lot.objects.filter(is_active=True),
+            )).exclude(is_active=False)
         PageNumberPagination.page_size = 0
         paginatePage = self.request.query_params.get('paginatePage', None)
         pageSize = self.request.query_params.get('pageSize', settings.PAGINATION_SIZE)

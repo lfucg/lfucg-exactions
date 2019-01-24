@@ -90,8 +90,7 @@ def send_email_to_new_user(sender, instance, created, **kwargs):
 @receiver(post_save, sender=Plat)
 @receiver(post_save, sender=Lot)
 def send_email_to_supervisors(sender, instance, **kwargs):
-
-    if instance.modified_by.is_superuser or (hasattr(instance.modified_by, 'profile') and instance.modified_by.profile.is_supervisor == True):
+    if instance.modified_by.is_superuser or ((hasattr(instance.modified_by, 'profile') and instance.modified_by.profile.is_supervisor == True)):
         return
 
     ctype = ContentType.objects.get_for_model(instance)
@@ -104,9 +103,8 @@ def send_email_to_supervisors(sender, instance, **kwargs):
     users = User.objects.filter(Q(profile__is_supervisor=True) & Q(groups__name__in=group))
 
     for user in users:
-        profile = Profile.objects.filter(user=user)
-
-        if hasattr(profile, 'is_approval_required') and profile.is_approval_required == False:
+        profile = Profile.objects.filter(user=user).first()
+        if hasattr(profile, 'is_approval_required') and not profile.is_approval_required:
             profile.is_approval_required = True
             profile.save()
 
@@ -130,7 +128,7 @@ def send_email_to_supervisors(sender, instance, **kwargs):
 
             msg = EmailMultiAlternatives(subject, text_content, from_email, to_emails)
             msg.attach_alternative(html_content, "text/html")
-            # msg.send()
+            msg.send()
 
 @receiver(pre_save, sender=Agreement)
 @receiver(pre_save, sender=AccountLedger)
@@ -140,7 +138,7 @@ def send_email_to_supervisors(sender, instance, **kwargs):
 @receiver(pre_save, sender=Plat)
 @receiver(pre_save, sender=Lot)
 def set_approval(sender, instance, **kwargs):
-    if instance.modified_by.is_superuser == True or (hasattr(instance.modified_by, 'profile') and instance.modified_by.profile.is_supervisor == True):
+    if instance.modified_by.is_superuser == True or ((hasattr(instance.modified_by, 'profile') and instance.modified_by.profile.is_supervisor == True)):
         instance.is_approved = True
 
         ctype = ContentType.objects.get_for_model(instance)
@@ -153,7 +151,7 @@ def set_approval(sender, instance, **kwargs):
         users = User.objects.filter(Q(profile__is_supervisor=True) & Q(groups__name__in=group))
 
         for user in users:
-            profile = Profile.objects.filter(user=user)
+            profile = Profile.objects.filter(user=user).first()
             profile.is_approval_required = False
             profile.save()
     else:

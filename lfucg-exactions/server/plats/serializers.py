@@ -137,7 +137,7 @@ class PlatSerializer(serializers.ModelSerializer):
         return remaining_plat_lots(obj)
 
     def get_plat_zone(self, obj):
-        plat_zone_set = PlatZone.objects.filter(is_active=True, plat=obj.id)
+        plat_zone_set = obj.plat_zone
         return PlatZoneSerializer(instance=plat_zone_set, many=True).data
 
     class Meta:

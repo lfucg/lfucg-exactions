@@ -167,7 +167,7 @@ class AccountForm extends React.Component {
                                             </select>
                                         </div>
                                         <div className="col-sm-3 form-group">
-                                            <FormGroup label="Zipcode" id="address_zip" >
+                                            <FormGroup label="* Zipcode" id="address_zip" >
                                                 <input type="text" className="form-control" placeholder="Zipcode" />
                                             </FormGroup>
                                         </div>

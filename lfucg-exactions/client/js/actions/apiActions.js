@@ -402,7 +402,6 @@ export function putPlat(selectedPlat) {
                 non_sewer_due,
                 account,
             } = activeForm;
-            console.log('ACTIVE', activeForm);
             return {
                 name,
                 subdivision,
