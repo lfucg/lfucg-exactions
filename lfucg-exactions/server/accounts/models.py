@@ -99,6 +99,10 @@ class Account(models.Model):
     phone = models.CharField(max_length=15)
     email = models.EmailField(max_length=100)
 
+    current_account_balance = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True, default=0)
+    current_sewer_balance = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True, default=0)
+    current_non_sewer_balance = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True, default=0)
+
     history = HistoricalRecords()
 
     def __str__(self):
@@ -122,7 +126,7 @@ class Agreement(models.Model):
     modified_by = models.ForeignKey(User, related_name='agreement_modified')    
 
     account_id = models.ForeignKey(Account, related_name='agreement')
-    resolution_number = models.CharField(max_length=100)
+    resolution_number = models.CharField(max_length=100, unique=True)
 
     expansion_area = models.CharField(max_length=100, choices=EXPANSION_AREAS)
     agreement_type = models.CharField(max_length=100, choices=AGREEMENT_TYPES)
@@ -161,7 +165,7 @@ class Payment(models.Model):
     paid_by = models.CharField(max_length=100)
     paid_by_type = models.CharField(max_length=100, choices=PAID_BY_TYPE_CHOICES)
     payment_type = models.CharField(max_length=100, choices=PAYMENT_TYPE)
-    check_number = models.IntegerField(null=True, blank=True)
+    check_number = models.CharField(max_length=20, null=True, blank=True)
 
     paid_roads = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True, default=0)
     paid_sewer_trans = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True, default=0)
@@ -174,6 +178,15 @@ class Payment(models.Model):
 
     def __str__(self):
         return self.lot_id.address_full
+
+    def calculate_payment_total(self):
+        return self.paid_roads + \
+            self.paid_sewer_trans + \
+            self.paid_sewer_cap + \
+            self.paid_parks + \
+            self.paid_storm + \
+            self.paid_open_space
+
 
 class Project(models.Model):
     is_approved = models.BooleanField(default=False)
@@ -252,7 +265,7 @@ class ProjectCostEstimate(models.Model):
     created_by = models.ForeignKey(User, related_name='project_cost_estimate_created')
     modified_by = models.ForeignKey(User, related_name='project_cost_estimate_modified')  
 
-    project_id = models.ForeignKey(Project, related_name='project_cost_estimate')
+    project_id = models.ForeignKey(Project, related_name='project_cost_estimate', null=True, blank=True)
 
     estimate_type = models.CharField(max_length=200)
 
@@ -275,13 +288,15 @@ class AccountLedger(models.Model):
     is_active = models.BooleanField(default=True)
 
     ENTRY_TYPE = (
-        ('NEW', 'New'),
-        ('SELL', 'Sell'),
-        ('TRANSFER', 'Transfer'),
+        ('NEW', 'New Credits'),
+        ('USE', 'Use Credits'),
+        ('TRANSFER', 'Transfer Credits'),
     )
 
     entry_date = models.DateField()
-    date_created = models.DateField(auto_now_add=True)
+    date_created = models.DateField()
+    # TODO Revert to auto_now_add after import
+    # date_created = models.DateField(auto_now_add=True)
     date_modified = models.DateField(auto_now=True)
 
     created_by = models.ForeignKey(User, related_name='ledger_created')
@@ -297,7 +312,23 @@ class AccountLedger(models.Model):
     non_sewer_credits = models.DecimalField(max_digits=20, decimal_places=2)
     sewer_credits = models.DecimalField(max_digits=20, decimal_places=2)
 
+    roads = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True, default=0)
+    sewer_trans = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True, default=0)
+    sewer_cap = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True, default=0)
+    parks = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True, default=0)
+    storm = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True, default=0)
+    open_space = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True, default=0)
+
+
     history = HistoricalRecords()
 
     def __str__(self):
-        return self.entry_type
+        return str(self.lot)
+
+    def calculate_credits(self):
+        return self.non_sewer_credits + self.sewer_credits
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+    is_supervisor = models.BooleanField(default=False)
+    is_approval_required = models.BooleanField(default=False)

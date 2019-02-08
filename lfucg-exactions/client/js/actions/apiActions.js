@@ -1,22 +1,28 @@
+import { map, reduce, filter, compose } from 'ramda';
+
 import {
   API_CALL,
+  API_CALL_START,
 } from '../constants/actionTypes';
-
-import { map, reduce, filter, compose } from 'ramda';
 
 import {
     ME,
 
     LOGIN,
     LOGOUT,
+    PASSWORD,
+    RESET_PASSWORD,
 
     GET_SUBDIVISIONS,
+    GET_SUBDIVISIONS_QUICK,
     GET_SUBDIVISION_ID,
     POST_SUBDIVISION,
     PUT_SUBDIVISION,
 
     GET_PLATS,
+    GET_PLATS_QUICK,
     GET_PLAT_ID,
+    GET_ACCOUNT_PLATS,
     GET_SUBDIVISION_PLATS,
     POST_PLAT,
     PUT_PLAT,
@@ -26,27 +32,38 @@ import {
     PUT_PLAT_ZONE_DUES,
 
     GET_LOTS,
+    GET_LOTS_QUICK,
+    GET_LOTS_EXACTIONS,
     GET_LOT_ID,
+    GET_ACCOUNT_LOTS,
+    GET_SUBDIVISION_LOTS,
     GET_PLAT_LOTS,
+    GET_LEDGER_LOT,
     POST_LOT,
     PUT_LOT,
     PUT_PERMIT_ID_ON_LOT,
 
     GET_ACCOUNTS,
+    GET_ACCOUNTS_QUICK,
     GET_ACCOUNT_ID,
     GET_LFUCG_ACCOUNT,
+    GET_LEDGER_ACCOUNT_TO,
+    GET_LEDGER_ACCOUNT_FROM,
     POST_ACCOUNT,
     PUT_ACCOUNT,
 
     GET_NOTE_CONTENT,
+    GET_SECONDARY_NOTE_CONTENT,
     POST_NOTE,
 
     GET_UPLOAD_CONTENT,
     POST_UPLOAD,
 
     GET_AGREEMENTS,
+    GET_AGREEMENTS_QUICK,
     GET_AGREEMENT_ID,
     GET_ACCOUNT_AGREEMENTS,
+    GET_LEDGER_AGREEMENT,
     POST_AGREEMENT,
     PUT_AGREEMENT,
 
@@ -59,6 +76,7 @@ import {
     PUT_PAYMENT,
 
     GET_PROJECTS,
+    GET_PROJECTS_QUICK,
     GET_PROJECT_ID,
     GET_AGREEMENT_PROJECTS,
     POST_PROJECT,
@@ -78,10 +96,30 @@ import {
     POST_ACCOUNT_LEDGER,
     PUT_ACCOUNT_LEDGER,
 
+    GET_RATE_TABLES,
+    GET_RATE_TABLE_ID,
+    POST_RATE_TABLE,
+    PUT_RATE_TABLE,
+    PUT_RATE_TABLE_ACTIVE,
+
+    GET_RATES,
+    POST_RATE,
+    PUT_RATE,
+
     GET_PAGINATION,
     SEARCH_QUERY,
 
+    POST_DELETE,
+
 } from '../constants/apiConstants';
+
+export function startAPI(apiCall) {
+    return {
+        type: API_CALL_START,
+        endpoint: API_CALL_START,
+        apiCall,
+    }
+}
 
 export function getMe() {
     return {
@@ -114,6 +152,50 @@ export function login() {
     };
 }
 
+export function passwordForgot() {
+    return {
+        type: API_CALL,
+        endpoint: PASSWORD,
+        url: '/forgot-password/',
+        method: 'POST',
+        body: (getState) => {
+            const {
+                activeForm,
+            } = getState();
+            const {
+                email_forgot_password,
+            } = activeForm;
+            return {
+                email_forgot_password,
+            };
+        },
+    };
+}
+
+export function passwordReset(token, uid) {
+    return {
+        type: API_CALL,
+        endpoint: RESET_PASSWORD,
+        url: `/reset/${uid}/${token}/`,
+        method: 'POST',
+        body: (getState) => {
+            const {
+                activeForm,
+            } = getState();
+            const {
+                password_1,
+                password_2,
+            } = activeForm;
+            return {
+                password_1,
+                password_2,
+                token,
+                uid,
+            };
+        },
+    };
+}
+
 export function logout() {
     return {
         type: API_CALL,
@@ -129,6 +211,14 @@ export function getSubdivisions() {
         type: API_CALL,
         endpoint: GET_SUBDIVISIONS,
         url: '/subdivision/',
+    };
+}
+
+export function getSubdivisionsQuick() {
+    return {
+        type: API_CALL,
+        endpoint: GET_SUBDIVISIONS_QUICK,
+        url: '/subdivisionQuick/',
     };
 }
 
@@ -193,6 +283,14 @@ export function getPlats() {
     };
 }
 
+export function getPlatsQuick() {
+    return {
+        type: API_CALL,
+        endpoint: GET_PLATS_QUICK,
+        url: '/platQuick/',
+    };
+}
+
 export function getPlatID(selectedPlat) {
     return {
         type: API_CALL,
@@ -201,11 +299,19 @@ export function getPlatID(selectedPlat) {
     };
 }
 
+export function getAccountPlats(selectedAccount) {
+    return {
+        type: API_CALL,
+        endpoint: GET_ACCOUNT_PLATS,
+        url: `/plat/?paginatePage&account=${selectedAccount}`,
+    };
+}
+
 export function getSubdivisionPlats(selectedSubdivision) {
     return {
         type: API_CALL,
         endpoint: GET_SUBDIVISION_PLATS,
-        url: `/plat/?subdivision=${selectedSubdivision}`,
+        url: `/plat/?paginatePage&subdivision=${selectedSubdivision}`,
     };
 }
 
@@ -313,8 +419,8 @@ export function putPlat(selectedPlat) {
                 cabinet,
                 slide,
                 calculation_note,
-                sewer_due,
-                non_sewer_due,
+                sewer_due: sewer_due,
+                non_sewer_due: non_sewer_due,
                 account,
             };
         },
@@ -415,6 +521,22 @@ export function getLots() {
     };
 }
 
+export function getLotsQuick() {
+    return {
+        type: API_CALL,
+        endpoint: GET_LOTS_QUICK,
+        url: '/lotQuick/',
+    };
+}
+
+export function getLotExactions() {
+    return {
+        type: API_CALL,
+        endpoint: GET_LOTS_EXACTIONS,
+        url: '/lotExactions/',
+    };
+}
+
 export function getLotID(selectedLot) {
     return {
         type: API_CALL,
@@ -423,11 +545,27 @@ export function getLotID(selectedLot) {
     };
 }
 
+export function getAccountLots(selectedAccount) {
+    return {
+        type: API_CALL,
+        endpoint: GET_ACCOUNT_LOTS,
+        url: `/lot/?paginatePage&account=${selectedAccount}`,
+    };
+}
+
+export function getSubdivisionLots(selectedSubdivision) {
+    return {
+        type: API_CALL,
+        endpoint: GET_SUBDIVISION_LOTS,
+        url: `/lot/?paginatePage&plat__subdivision__id=${selectedSubdivision}`,
+    };
+}
+
 export function getPlatLots(selectedPlat) {
     return {
         type: API_CALL,
         endpoint: GET_PLAT_LOTS,
-        url: `/lot/?plat=${selectedPlat}`,
+        url: `/lot/?paginatePage&plat=${selectedPlat}`,
     };
 }
 
@@ -469,6 +607,7 @@ export function postLot() {
                 dues_open_space_dev,
                 dues_open_space_own,
                 account,
+                certificate_of_occupancy_final,
             } = activeForm;
             return {
                 plat,
@@ -485,7 +624,7 @@ export function postLot() {
                 address_city,
                 address_state,
                 address_zip,
-                address_full: `${address_number} ${address_direction ? address_direction : ''} ${address_street} ${address_suffix ? address_suffix : ''} ${address_unit ? address_unit : ''}, Lexington, KY ${address_zip}`,
+                address_full: `${address_number} ${address_direction ? address_direction : ''}${address_street}${address_suffix ? address_suffix : ''} ${address_unit ? address_unit : ''} Lexington, KY ${address_zip ? address_zip : ''}`,
                 dues_roads_dev,
                 dues_roads_own,
                 dues_sewer_trans_dev,
@@ -499,6 +638,7 @@ export function postLot() {
                 dues_open_space_dev,
                 dues_open_space_own,
                 account,
+                certificate_of_occupancy_final,
             };
         },
     };
@@ -542,6 +682,7 @@ export function putLot(selectedLot) {
                 dues_open_space_dev,
                 dues_open_space_own,
                 account,
+                certificate_of_occupancy_final,
                 // payment,
             } = activeForm;
             return {
@@ -559,7 +700,7 @@ export function putLot(selectedLot) {
                 address_city,
                 address_state,
                 address_zip,
-                address_full: `${address_number} ${address_direction ? address_direction : ''} ${address_street} ${address_suffix ? address_suffix : ''} ${address_unit ? address_unit : ''}, Lexington, KY ${address_zip}`,
+                address_full: `${address_number} ${address_direction ? address_direction : ''}${address_street}${address_suffix ? address_suffix : ''}${address_unit ? address_unit : ''} Lexington, KY ${address_zip ? address_zip : ''}`,
                 dues_roads_dev,
                 dues_roads_own,
                 dues_sewer_trans_dev,
@@ -573,6 +714,7 @@ export function putLot(selectedLot) {
                 dues_open_space_dev,
                 dues_open_space_own,
                 account,
+                certificate_of_occupancy_final,
                 // payment,
             };
         },
@@ -600,28 +742,29 @@ export function putPermitIdOnLot(selectedLot) {
 }
 
 // NOTES
-export function getNoteContent() {
+export function getNoteContent(
+    content_type,
+    object_id,
+    ) {
     return {
         type: API_CALL,
         endpoint: GET_NOTE_CONTENT,
-        url: (getState) => {
-            const {
-                activeForm,
-            } = getState();
-            const {
-                content_type,
-                object_id,
-                parent_content_type,
-                parent_object_id,
-            } = activeForm;
-
-            const related_notes = parent_content_type ? `/note/?content_type=${content_type}&object_id=${object_id}&parent_content_type=${parent_content_type}&parent_object_id=${parent_object_id}` : `/note/?content_type=${content_type}&object_id=${object_id}`;
-            return related_notes;
-        },
+        url: `/note/?content_type=${content_type}&object_id=${object_id}`,
     };
 }
 
-export function postNote() {
+export function getSecondaryNoteContent(
+    content_type,
+    object_id,
+    ) {
+    return {
+        type: API_CALL,
+        endpoint: GET_SECONDARY_NOTE_CONTENT,
+        url: `/note/?content_type=${content_type}&object_id=${object_id}`,
+    };
+}
+
+export function postNote(content_type, object_id) {
     return {
         type: API_CALL,
         endpoint: POST_NOTE,
@@ -634,8 +777,6 @@ export function postNote() {
             } = getState();
             const {
                 note,
-                content_type,
-                object_id,
             } = activeForm;
             const {
                 id,
@@ -700,6 +841,14 @@ export function getAccounts() {
     };
 }
 
+export function getAccountsQuick() {
+    return {
+        type: API_CALL,
+        endpoint: GET_ACCOUNTS_QUICK,
+        url: '/accountQuick/',
+    };
+}
+
 export function getAccountID(selectedAccount) {
     return {
         type: API_CALL,
@@ -713,6 +862,22 @@ export function getLFUCGAccount() {
         type: API_CALL,
         endpoint: GET_LFUCG_ACCOUNT,
         url: '/account/?search=LFUCG',
+    };
+}
+
+export function getLedgerAccountTo(selectedLedger) {
+    return {
+        type: API_CALL,
+        endpoint: GET_LEDGER_ACCOUNT_TO,
+        url: `/account/?ledger_account_to=${selectedLedger}`,
+    };
+}
+
+export function getLedgerAccountFrom(selectedLedger) {
+    return {
+        type: API_CALL,
+        endpoint: GET_LEDGER_ACCOUNT_FROM,
+        url: `/account/?ledger_account_from=${selectedLedger}`,
     };
 }
 
@@ -805,6 +970,14 @@ export function getAgreements() {
     };
 }
 
+export function getAgreementsQuick() {
+    return {
+        type: API_CALL,
+        endpoint: GET_AGREEMENTS_QUICK,
+        url: '/agreementQuick/',
+    };
+}
+
 export function getAgreementID(selectedAgreement) {
     return {
         type: API_CALL,
@@ -817,7 +990,15 @@ export function getAccountAgreements(selectedAccount) {
     return {
         type: API_CALL,
         endpoint: GET_ACCOUNT_AGREEMENTS,
-        url: `/agreement/?account_id=${selectedAccount}`,
+        url: `/agreement/?paginatePage&account_id=${selectedAccount}`,
+    };
+}
+
+export function getLedgerAgreement(selectedAccount) {
+    return {
+        type: API_CALL,
+        endpoint: GET_LEDGER_AGREEMENT,
+        url: `/agreement/?ledger=${selectedAccount}`,
     };
 }
 
@@ -898,7 +1079,7 @@ export function getLotPayments(selectedLot) {
     return {
         type: API_CALL,
         endpoint: GET_LOT_PAYMENTS,
-        url: `/payment/?lot_id=${selectedLot}`,
+        url: `/payment/?paginatePage&lot_id=${selectedLot}`,
     };
 }
 
@@ -906,7 +1087,7 @@ export function getAccountPayments(selectedAccount) {
     return {
         type: API_CALL,
         endpoint: GET_ACCOUNT_PAYMENTS,
-        url: `/payment/?credit_account=${selectedAccount}`,
+        url: `/payment/?paginatePage&credit_account=${selectedAccount}`,
     };
 }
 
@@ -914,7 +1095,7 @@ export function getAgreementPayments(selectedAgreement) {
     return {
         type: API_CALL,
         endpoint: GET_AGREEMENT_PAYMENTS,
-        url: `/payment/?credit_source=${selectedAgreement}`,
+        url: `/payment/?paginatePage&credit_source=${selectedAgreement}`,
     };
 }
 
@@ -1015,6 +1196,14 @@ export function getProjects() {
     };
 }
 
+export function getProjectQuick() {
+    return {
+        type: API_CALL,
+        endpoint: GET_PROJECTS_QUICK,
+        url: '/projectQuick/',
+    };
+}
+
 export function getProjectID(selectedProject) {
     return {
         type: API_CALL,
@@ -1027,7 +1216,7 @@ export function getAgreementProjects(selectedAgreement) {
     return {
         type: API_CALL,
         endpoint: GET_AGREEMENT_PROJECTS,
-        url: `/project/?agreement_id=${selectedAgreement}`,
+        url: `/project/?paginatePage&agreement_id=${selectedAgreement}`,
     };
 }
 
@@ -1124,7 +1313,7 @@ export function getProjectProjectCosts(selectedProject) {
     return {
         type: API_CALL,
         endpoint: GET_PROJECT_PROJECT_COSTS,
-        url: `/estimate/?project_id=${selectedProject}`,
+        url: `/estimate/?paginatePage&project_id=${selectedProject}`,
     };
 }
 
@@ -1217,7 +1406,7 @@ export function getLotAccountLedgers(selectedLot) {
     return {
         type: API_CALL,
         endpoint: GET_LOT_ACCOUNT_LEDGERS,
-        url: `/ledger/?lot=${selectedLot}`,
+        url: `/ledger/?paginatePage&lot=${selectedLot}`,
     };
 }
 
@@ -1225,7 +1414,7 @@ export function getAccountAccountLedgers(selectedAccount) {
     return {
         type: API_CALL,
         endpoint: GET_ACCOUNT_ACCOUNT_LEDGERS,
-        url: `/ledger/?account_from=${selectedAccount}&account_to=${selectedAccount}`,
+        url: `/ledger/?paginatePage&acct=${selectedAccount}`,
     };
 }
 
@@ -1233,7 +1422,7 @@ export function getAgreementAccountLedgers(selectedAgreement) {
     return {
         type: API_CALL,
         endpoint: GET_AGREEMENT_ACCOUNT_LEDGERS,
-        url: `/ledger/?agreement=${selectedAgreement}`,
+        url: `/ledger/?paginatePage&agreement=${selectedAgreement}`,
     };
 }
 
@@ -1257,6 +1446,12 @@ export function postAccountLedger() {
                 entry_type,
                 non_sewer_credits,
                 sewer_credits,
+                parks,
+                storm,
+                roads,
+                open_space,
+                sewer_trans,
+                sewer_cap,
                 plat_lot,
             } = activeForm;
             return {
@@ -1269,6 +1464,12 @@ export function postAccountLedger() {
                 entry_type,
                 non_sewer_credits,
                 sewer_credits,
+                parks,
+                storm,
+                roads,
+                open_space,
+                sewer_trans,
+                sewer_cap,
                 plat_lot,
             };
         },
@@ -1313,6 +1514,119 @@ export function putAccountLedger(selectedAccountLedger) {
     };
 }
 
+export function getRateTables() {
+    return {
+        type: API_CALL,
+        endpoint: GET_RATE_TABLES,
+        url: '/rateTable/',
+    };
+}
+
+export function getRateTableID(selectedRateTable) {
+    return {
+        type: API_CALL,
+        endpoint: GET_RATE_TABLE_ID,
+        url: `/rateTable/${selectedRateTable}`,
+    };
+}
+
+export function postRateTable() {
+    return {
+        type: API_CALL,
+        endpoint: POST_RATE_TABLE,
+        url: '/rateTable/',
+        method: 'POST',
+        body: (getState) => {
+            const {
+                activeForm,
+            } = getState();
+            const {
+                resolution_number,
+                begin_effective_date,
+                end_effective_date,
+            } = activeForm;
+            return {
+                resolution_number,
+                begin_effective_date,
+                end_effective_date,
+            };
+        },
+    };
+}
+
+export function putRateTable(selectedRateTable) {
+    return {
+        type: API_CALL,
+        endpoint: PUT_RATE_TABLE,
+        url: `/rateTable/${selectedRateTable}/`,
+        method: 'PUT',
+        body: (getState) => {
+            const {
+                activeForm,
+            } = getState();
+            const {
+                resolution_number,
+                begin_effective_date,
+                end_effective_date,
+            } = activeForm;
+            return {
+                resolution_number,
+                begin_effective_date,
+                end_effective_date,
+            };
+        },
+    };
+}
+
+export function putRateTableActive(selectedRateTable) {
+    return {
+        type: API_CALL,
+        endpoint: PUT_RATE_TABLE_ACTIVE,
+        url: `/rateTable/${selectedRateTable}/`,
+        method: 'PUT',
+        body: {
+            is_active: true,
+            id: selectedRateTable,
+        },
+    };
+}
+
+export function getRates(selectedRateTable) {
+    return {
+        type: API_CALL,
+        endpoint: GET_RATES,
+        url: `/rate/?rate_table_id=${selectedRateTable}`,
+    };
+}
+
+export function postRate(rate_table_id, category, zone, expansion_area, rate) {
+    return {
+        type: API_CALL,
+        endpoint: POST_RATE,
+        url: '/rate/',
+        method: 'POST',
+        body: {
+            rate_table_id,
+            category,
+            zone,
+            expansion_area,
+            rate,
+        },
+    };
+}
+
+export function putRate(selectedRate, rate) {
+    return {
+        type: API_CALL,
+        endpoint: PUT_RATE,
+        url: `/rate/${selectedRate}/`,
+        method: 'PUT',
+        body: {
+            rate,
+        },
+    };
+}
+
 export function getPagination(page) {
     return {
         type: API_CALL,
@@ -1327,7 +1641,7 @@ export function getPagination(page) {
             } = activeForm;
             
             if (!page) {
-                if (currentPage === '/account-ledger/') {
+                if (currentPage === '/credit-transfer/') {
                     return '/ledger/?paginatePage';
                 }
 
@@ -1340,7 +1654,7 @@ export function getPagination(page) {
                 }
                 return `${currentPage}?paginatePage`;
             }
-            if (!page.includes('paginatePage')) {
+            if (page.indexOf('paginatePage') === -1) {
                 return `${page}?paginatePage`;
             }
             return `${page}`;
@@ -1360,7 +1674,7 @@ export function searchQuery() {
 
             let query_all = `${activeForm.currentPage}?paginatePage`;
 
-            if (activeForm.currentPage === '/account-ledger/') {
+            if (activeForm.currentPage === '/credit-transfer/') {
                 query_all = '/ledger/?paginatePage';
             }
 
@@ -1370,13 +1684,13 @@ export function searchQuery() {
 
             const queryString = compose(
                 reduce((acc, value) => acc + value, query_all),
-                map((a) => {
-                    const field = a[0].slice(7, a[0].length);
-                    return `&${field}=${a[1]}`;
+                map((key_name) => {
+                    const filter_index = key_name.indexOf('filter_') + 'filter_'.length;
+                    const field = key_name.slice(filter_index, key_name.length);
+                    return `&${field}=${activeForm[key_name]}`;
                 }),
-                filter(a => a[1] && a[0].startsWith('filter_')),
-            )(Object.entries(activeForm));
-
+                filter(key_name => activeForm[key_name] && (key_name.indexOf('filter_') !== -1)),
+            )(Object.keys(activeForm));
             return queryString;
         },
         meta: {
@@ -1386,3 +1700,18 @@ export function searchQuery() {
         },
     };
 }
+
+export function postDelete(currentForm, selectedEntry) {
+    return {
+        type: API_CALL,
+        endpoint: POST_DELETE,
+        url: `${currentForm}${selectedEntry}/`,
+        method: 'PUT',
+        body: () => {
+            return {
+                is_active: false,
+            };
+        },
+    };
+}
+

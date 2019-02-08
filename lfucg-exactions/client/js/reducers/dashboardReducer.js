@@ -5,6 +5,7 @@ import currentUserReducer from './currentUserReducer';
 import tokenReducer from './tokenReducer';
 
 import activeFormReducer from './activeFormReducer';
+import flashMessageReducer from './flashMessageReducer';
 
 import subdivisionsReducer from './subdivisionsReducer';
 import platsReducer from './platsReducer';
@@ -18,6 +19,7 @@ import projectCostsReducer from './projectCostsReducer';
 import accountLedgersReducer from './accountLedgersReducer';
 
 import notesReducer from './notesReducer';
+import ratesReducer from './ratesReducer';
 import uploadReducer from './uploadReducer';
 
 const dashboardReducer = combineReducers({
@@ -27,6 +29,7 @@ const dashboardReducer = combineReducers({
     token: tokenReducer,
 
     activeForm: activeFormReducer,
+    flashMessage: flashMessageReducer,
 
     subdivisions: subdivisionsReducer,
     plats: platsReducer,
@@ -40,6 +43,7 @@ const dashboardReducer = combineReducers({
     accountLedgers: accountLedgersReducer,
 
     notes: notesReducer,
+    rates: ratesReducer,
     uploads: uploadReducer,
 });
 

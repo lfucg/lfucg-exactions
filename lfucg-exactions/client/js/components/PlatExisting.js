@@ -9,12 +9,18 @@ import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
 import Pagination from './Pagination';
 import SearchBar from './SearchBar';
+import ExistingPageLinks from './ExistingPageLinks';
+import LoadingScreen from './LoadingScreen';
+
+import {
+    formUpdate,
+} from '../actions/formActions';
 
 import {
     getPagination,
-    getAccounts,
-    getSubdivisions,
-    getLots,
+    getAccountsQuick,
+    getSubdivisionsQuick,
+    getLotsQuick,
 } from '../actions/apiActions';
 
 import { expansion_areas, plat_types } from '../constants/searchBarConstants';
@@ -57,60 +63,35 @@ class PlatExisting extends React.Component {
                 };
             })(subdivisions));
 
-        const plats_list = plats && plats.length > 0 ? (
+        const plats_list = !!plats && !!plats.plats && plats.plats.length > 0 ? (
             map((plat) => {
+                const cabinet = plat.cabinet ? `${plat.cabinet}-` : '';
+                const slide = plat.slide ? plat.slide : plat.name;
                 return (
                     <div key={plat.id} className="col-xs-12">
-                        <div className="row form-subheading">
-                            <div className="col-sm-7 col-md-9">
-                                <h3>{plat.name}</h3>
-                            </div>
-                        </div>
-                        <div className="row link-row">
-                            <div className="col-xs-12 col-sm-7 col-md-5 col-sm-offset-5 col-md-offset-7">
-                                <div className="col-xs-3">
-                                    {currentUser && currentUser.permissions && currentUser.permissions.plat &&
-                                        <Link to={`plat/form/${plat.id}`} aria-label="Edit">
-                                            <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
-                                            <div className="col-xs-7 link-label">
-                                                Edit
-                                            </div>
-                                        </Link>
-                                    }
-                                </div>
-                                <div className="col-xs-4">
-                                    {currentUser && currentUser.permissions && currentUser.permissions.plat &&
-                                        <Link to={`plat/report/${plat.id}`} aria-label="Report">
-                                            <i className="fa fa-line-chart link-icon col-xs-4" aria-hidden="true" />
-                                            <div className="col-xs-7 link-label">
-                                                Report
-                                            </div>
-                                        </Link>
-                                    }
-                                </div>
-                                <div className="col-xs-4 ">
-                                    <Link to={`plat/summary/${plat.id}`} aria-label="Summary">
-                                        <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
-                                        <div className="col-xs-7 link-label">
-                                            Summary
-                                        </div>
-                                    </Link>
+                        {(currentUser.id || plat.is_approved) && <div>
+                            <ExistingPageLinks
+                              linkStart="plat"
+                              approval={plat.is_approved}
+                              title={`${cabinet}${slide}`}
+                              permissionModel="plat"
+                              instanceID={plat.id}
+                              uniqueReport
+                            />
+                            <div className="row">
+                                <div className="col-sm-offset-1">
+                                    <p className="col-xs-12 col-sm-6">Sewer Due: {plat.current_sewer_due}</p>
+                                    <p className="col-xs-12 col-sm-6">Non-Sewer Due: {plat.current_non_sewer_due}</p>
+                                    <p className="col-xs-6">Name: {plat.name}</p>
+                                    <p className="col-xs-6">Section: {plat.section}</p>
+                                    <p className="col-xs-6">Block: {plat.block}</p>
+                                    <p className="col-xs-6">Expansion Area: {plat.expansion_area}</p>
                                 </div>
                             </div>
-                        </div>
-                        <div className="row">
-                            <div className="col-sm-offset-1">
-                                <p className="col-sm-4 col-xs-6">Expansion Area: {plat.expansion_area}</p>
-                                <p className="col-sm-4 col-xs-6">Plat Type: {plat.plat_type_display}</p>
-                                <p className="col-sm-4 col-xs-6">Unit: {plat.unit}</p>
-                                <p className="col-sm-4 col-xs-6">Section: {plat.section}</p>
-                                <p className="col-sm-4 col-xs-6">Block: {plat.block}</p>
-                                <p className="col-sm-4 col-xs-6">Slide: {plat.slide}</p>
-                            </div>
-                        </div>
+                        </div>}
                     </div>
                 );
-            })(plats)
+            })(plats.plats)
         ) : null;
 
         return (
@@ -123,23 +104,38 @@ class PlatExisting extends React.Component {
                     </div>
                 </div>
 
-                <Breadcrumbs route={this.props.route} />
+                <Breadcrumbs route={this.props.route} route_permission="plat" />
 
                 <SearchBar
-                  apiCalls={[getAccounts, getSubdivisions, getLots]}
+                  apiCalls={[getAccountsQuick, getSubdivisionsQuick, getLotsQuick]}
                   advancedSearch={[
                     { filterField: 'filter_expansion_area', displayName: 'EA', list: expansion_areas },
                     { filterField: 'filter_account', displayName: 'Developer', list: accountsList },
                     { filterField: 'filter_subdivision', displayName: 'Subdivision', list: subdivisionsList },
                     { filterField: 'filter_plat_type', displayName: 'Type', list: plat_types },
                     { filterField: 'filter_lot__id', displayName: 'Lot', list: lotsList },
+                    { filterField: 'filter_is_approved', displayName: 'Approval', list: [{ id: true, name: 'Approved' }, { id: false, name: 'Unapproved' }] },
                   ]}
+                  currentPage="Plats"
+                  csvEndpoint="../api/export_plat_csv/?"
                 />
 
                 <div className="inside-body">
                     <div className="container">
-                        {plats_list}
-                        {plats_list ? <Pagination /> : <h1>No Results Found</h1>}
+                        {plats.loadingPlat ? <LoadingScreen /> :
+                        (
+                            <div>
+                                {plats_list}
+                                {plats_list ?
+                                    <Pagination 
+                                        next={plats.next}
+                                        prev={plats.prev}
+                                        count={plats.count} 
+                                    /> : 
+                                    <h1>No Results Found</h1>
+                                }
+                            </div>
+                        )}
                     </div>
                 </div>
                 <Footer />
@@ -150,7 +146,7 @@ class PlatExisting extends React.Component {
 
 PlatExisting.propTypes = {
     currentUser: PropTypes.object,
-    plats: PropTypes.array,
+    plats: PropTypes.object,
     accounts: PropTypes.array,
     subdivisions: PropTypes.array,
     lots: PropTypes.array,
@@ -162,16 +158,19 @@ function mapStateToProps(state) {
     return {
         currentUser: state.currentUser,
         plats: state.plats,
-        accounts: state.accounts,
-        subdivisions: state.subdivisions,
-        lots: state.lots,
+        accounts: state.accounts && state.accounts.accounts,
+        subdivisions: state.subdivisions  && state.subdivisions.subdivisions,
+        lots: state.lots && state.lots.lots,
     };
 }
 
 function mapDispatchToProps(dispatch) {
     return {
         onComponentDidMount() {
-            dispatch(getPagination('/plat/'));
+            dispatch(getPagination('/plat/'))
+            .then(() => {
+                dispatch(formUpdate({ loading: false }));
+            });
         },
     };
 }

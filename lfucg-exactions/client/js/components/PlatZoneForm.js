@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import FormGroup from './FormGroup';
+import DeclineDelete from './DeclineDelete';
 
 import {
     formUpdate,
@@ -29,9 +30,10 @@ class PlatZoneForm extends React.Component {
     render() {
         const {
             activeForm,
-            plats,
             formChange,
             onPlatZoneSubmit,
+            currentUser,
+            calculationWarning,
         } = this.props;
 
         const submitEnabled =
@@ -40,7 +42,7 @@ class PlatZoneForm extends React.Component {
 
         return (
             <div className="plat-zone-form">
-                <form onSubmit={onPlatZoneSubmit({ activeForm })} >
+                <form >
                     <fieldset>
                         <div className="row form-subheading">
                             {this.props.zone_value ? <h3>Plat Zone - {this.props.zone_value}</h3> : <h3>Plat Zone</h3>}
@@ -56,14 +58,14 @@ class PlatZoneForm extends React.Component {
                         <div className="row">
                             <div className="col-sm-6 form-group">
                                 <label htmlFor={this.props.zone_id} className="form-label">* Zone</label>
-                                <select className="form-control" id={this.props.zone_id} onChange={formChange('zone')} >
+                                <select className="form-control" id={this.props.zone_id} onChange={formChange('zone')} onFocus={() => this.props.zone_value ? calculationWarning(`${this.props.zone_id}_warning`) : null}>
                                     {this.props.zone_value ? (
-                                        <option value="zone_name" aria-label={this.props.zone_value}>{this.props.zone_value}</option>
+                                        <option value={[`${this.props.zone_value}`, `${this.props.zone_value}`]} aria-label={this.props.zone_value}>{this.props.zone_value}</option>
                                     ) : (
                                         <option value="start_zone" aria-label="Zone">Zone</option>
                                     )}
                                     <option value={['EAR-1', 'EAR-1']}>EAR-1</option>
-                                    <option value={['EAR1-SRA', 'EAR1-SRA']}>EAR1-SRA</option>
+                                    <option value={['EAR-1SRA', 'EAR-1SRA']}>EAR-1SRA</option>
                                     <option value={['EAR-2', 'EAR-2']}>EAR-2</option>
                                     <option value={['EAR-3', 'EAR-3']}>EAR-3</option>
                                     <option value={['CC(RES)', 'CC(RES)']}>CC(RES)</option>
@@ -73,19 +75,34 @@ class PlatZoneForm extends React.Component {
                             </div>
                             <div className="col-sm-6">
                                 <FormGroup label="* Gross Acreage" id={this.props.acre_id}>
-                                    <input type="number" className="form-control" placeholder="Gross Acreage" />
+                                    <input type="number" step="0.01" className="form-control" placeholder="Gross Acreage" onFocus={() => this.props.zone_value ? calculationWarning(`${this.props.zone_id}_warning`) : null} />
                                 </FormGroup>
                             </div>
                         </div>
-                    </fieldset>
-                    <button className="btn btn-lex">Submit Plat Zone</button>
-                    {!submitEnabled ? (
-                        <div>
-                            <div className="clearfix" />
-                            <span> * All required fields must be filled.</span>
+                        <div className="row alert alert-danger hidden" id={`${this.props.zone_id}_warning`}>
+                            <div className="col-xs-8 col-xs-offset-2 text-center">
+                                Calculations for this plat were made based on the original zone.<br />Any changes made to the zone now will <strong>NOT</strong> result in new calculations being made.<br />Changes can be made manually in the form below.
+                            </div>
                         </div>
-                    ) : null
-                    }
+                    </fieldset>
+                    <div>
+                        <div className="col-xs-8">
+                            <button className="btn btn-lex" onClick={onPlatZoneSubmit({ activeForm })} >
+                                {currentUser.is_superuser || (currentUser.profile && currentUser.profile.is_supervisor) ? <div>Submit / Approve</div> : <div>Submit</div>}
+                            </button>
+                            {!submitEnabled ? (
+                                <div>
+                                    <div className="clearfix" />
+                                    <span> * All required fields must be filled.</span>
+                                </div>
+                            ) : null
+                            }
+                        </div>
+                        <div className="col-xs-4">
+                            <DeclineDelete currentForm="/platZone/" selectedEntry={this.props.plat_zone_value} parentRoute="plat" />
+                        </div>
+                    </div>
+                    <div className="clearfix" />
                 </form>
             </div>
         );
@@ -94,7 +111,6 @@ class PlatZoneForm extends React.Component {
 
 PlatZoneForm.propTypes = {
     activeForm: PropTypes.object,
-    plats: PropTypes.array,
     plat_zone_id: PropTypes.string,
     plat_zone_value: PropTypes.number,
     acre_id: PropTypes.string,
@@ -104,12 +120,14 @@ PlatZoneForm.propTypes = {
     onComponentDidMount: PropTypes.func,
     formChange: PropTypes.func,
     onPlatZoneSubmit: PropTypes.func,
+    currentUser: PropTypes.object,
+    calculationWarning: PropTypes.func,
 };
 
 function mapStateToProps(state) {
     return {
         activeForm: state.activeForm,
-        plats: state.plats,
+        currentUser: state.currentUser,
     };
 }
 
@@ -160,18 +178,16 @@ function mapDispatchToProps(dispatch, props) {
                     zone = zone.substr(0, zone.indexOf(','));
 
                     const acres = activeForm.activeForm[`${props.acre_id}`];
-                    dispatch(putPlatZone(selectedPlatZone, zone, acres))
-                    .then(() => {
-                        dispatch(getPlatID(activeForm.activeForm.plat))
-                        .then((zone_put_get_plat) => {
-                            const zone_put_update = {
-                                sewer_due: zone_put_get_plat.response.sewer_due,
-                                non_sewer_due: zone_put_get_plat.response.non_sewer_due,
-                                calculation_note: zone_put_get_plat.response.calculation_note,
-                                add_another_plat_zone: false,
-                            };
-                            dispatch(formUpdate(zone_put_update));
-                        });
+                    dispatch(putPlatZone(selectedPlatZone, zone, acres));
+                    dispatch(getPlatID(activeForm.activeForm.plat))
+                    .then((zone_put_get_plat) => {
+                        const zone_put_update = {
+                            sewer_due: zone_put_get_plat.response.sewer_due,
+                            non_sewer_due: zone_put_get_plat.response.non_sewer_due,
+                            calculation_note: zone_put_get_plat.response.calculation_note,
+                            add_another_plat_zone: false,
+                        };
+                        dispatch(formUpdate(zone_put_update));
                     });
                 } else {
                     dispatch(postPlatZone())
@@ -189,6 +205,9 @@ function mapDispatchToProps(dispatch, props) {
                     });
                 }
             };
+        },
+        calculationWarning(warning_id) {
+            document.getElementById(warning_id).classList.remove('hidden');
         },
     };
 }

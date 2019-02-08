@@ -12,6 +12,7 @@ import Login from './components/LoginPage';
 import Registration from './components/RegistrationPage';
 import ForgotPassword from './components/ForgotPassword';
 import ForgotUsername from './components/ForgotUsername';
+import ResetPassword from './components/ResetPassword';
 
 import SubdivisionExisting from './components/SubdivisionExisting';
 import SubdivisionForm from './components/SubdivisionForm';
@@ -29,10 +30,12 @@ import LotSummary from './components/LotSummary';
 import AccountExisting from './components/AccountExisting';
 import AccountSummary from './components/AccountSummary';
 import AccountForm from './components/AccountForm';
+import AccountReport from './components/AccountReport';
 
 import AgreementExisting from './components/AgreementExisting';
 import AgreementSummary from './components/AgreementSummary';
 import AgreementForm from './components/AgreementForm';
+import AgreementReport from './components/AgreementReport';
 
 import PaymentExisting from './components/PaymentExisting';
 import PaymentSummary from './components/PaymentSummary';
@@ -50,12 +53,10 @@ import AccountLedgerExisting from './components/AccountLedgerExisting';
 import AccountLedgerSummary from './components/AccountLedgerSummary';
 import AccountLedgerForm from './components/AccountLedgerForm';
 
+import ReportsAdditional from './components/ReportsAdditional';
+import RateTableForm from './components/Rates/RateTableForm';
+
 global.reduxStore = dashboardStore;
-global.BASE_STATIC_URL = (window.location.host === '52.201.224.95') ?
-    //'52.201.224.95' :
-    'https://s3.amazonaws.com/chef-lfucg/temp_exactions_images' :
-    '/static';
-// global.BASE_STATIC_URL = '/static';
 
 const history = syncHistoryWithStore(hashHistory, dashboardStore);
 global.Promise = require('bluebird');
@@ -71,6 +72,7 @@ ReactDOM.render(
             <Route path="registration/" component={Registration} name="Registration" />
             <Route path="forgot-password/" component={ForgotPassword} name="Forgot Password" />
             <Route path="forgot-username/" component={ForgotUsername} name="Forgot Username" />
+            <Route path="reset/:uid/:token/" component={ResetPassword} name="Reset Password" />
 
             <Route path="subdivision" component={SubdivisionExisting} name="Existing Subdivisions" />
             <Route path="subdivision/summary/:id" component={SubdivisionSummary} name="Subdivision Summary" />
@@ -93,11 +95,13 @@ ReactDOM.render(
             <Route path="account/summary/:id" component={AccountSummary} name="Developer Account Summary" />
             <Route path="account/form" component={AccountForm} name="Developer Account Form" />
             <Route path="account/form/:id" component={AccountForm} name="Current Developer Account Form" />
+            <Route path="account/report/:id" component={AccountReport} name="Account Report" />
 
             <Route path="agreement" component={AgreementExisting} name="Existing Agreements" />
             <Route path="agreement/summary/:id" component={AgreementSummary} name="Agreement Summary" />
             <Route path="agreement/form" component={AgreementForm} name="Agreement Form" />
             <Route path="agreement/form/:id" component={AgreementForm} name="Current Agreement Form" />
+            <Route path="agreement/report/:id" component={AgreementReport} name="Agreement Report" />
 
             <Route path="payment" component={PaymentExisting} name="Existing Payments" />
             <Route path="payment/summary/:id" component={PaymentSummary} name="Payment Summary" />
@@ -114,10 +118,15 @@ ReactDOM.render(
             <Route path="project-cost/form" component={ProjectCostForm} name="Project Cost Form" />
             <Route path="project-cost/form/:id" component={ProjectCostForm} name="Current Project Cost Form" />
 
-            <Route path="account-ledger" component={AccountLedgerExisting} name="Existing Account Ledgers" />
-            <Route path="account-ledger/summary/:id" component={AccountLedgerSummary} name="Account Ledger Summary" />
-            <Route path="account-ledger/form" component={AccountLedgerForm} name="Account Ledger Form" />
-            <Route path="account-ledger/form/:id" component={AccountLedgerForm} name="Current Account Ledger Form" />
+            <Route path="credit-transfer" component={AccountLedgerExisting} name="Existing Credit Transfers" />
+            <Route path="credit-transfer/summary/:id" component={AccountLedgerSummary} name="Credit Transfer Summary" />
+            <Route path="credit-transfer/form" component={AccountLedgerForm} name="Credit Transfer Form" />
+            <Route path="credit-transfer/form/:id" component={AccountLedgerForm} name="Current Credit Transfer Form" />
+
+            <Route path="reports-additional" component={ReportsAdditional} name="Additional Reports" />
+
+            <Route path="rate-table/form" component={RateTableForm} name="Rate Table Form" />
+            <Route path="rate-table/form/:id" component={RateTableForm} name="Rate Table Form" />
 
         </Router>
     </Provider>,

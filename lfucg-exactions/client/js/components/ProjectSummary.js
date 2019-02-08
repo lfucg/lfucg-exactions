@@ -8,6 +8,14 @@ import Navbar from './Navbar';
 import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
 import Uploads from './Uploads';
+import Notes from './Notes';
+import LoadingScreen from './LoadingScreen';
+
+import {
+    formUpdate,
+} from '../actions/formActions';
+
+import AgreementsMiniSummary from './AgreementsMiniSummary';
 
 import {
     getProjectID,
@@ -34,10 +42,10 @@ class ProjectSummary extends React.Component {
                             <h3>{projectCost.estimate_type}</h3>
                         </div>
                         <div className="row link-row">
-                            <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
+                            <div className="col-xs-12 col-sm-5 col-sm-offset-7">
                                 <div className="col-xs-5">
                                     {currentUser && currentUser.permissions && currentUser.permissions.projectcostestimate &&
-                                        <Link to={`project-cost/form/${projectCost.id}`} aria-label="Edit">
+                                        <Link to={`project-cost/form/${projectCost.id}`} aria-label={`Edit ${projectCost.estimate_type}`}>
                                             <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
                                             <div className="col-xs-7 link-label">
                                                 Edit
@@ -46,7 +54,7 @@ class ProjectSummary extends React.Component {
                                     }
                                 </div>
                                 <div className="col-xs-5 ">
-                                    <Link to={`project-cost/summary/${projectCost.id}`} aria-label="Summary">
+                                    <Link to={`project-cost/summary/${projectCost.id}`} aria-label={`${projectCost.estimate_type} Summary`}>
                                         <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
                                         <div className="col-xs-7 link-label">
                                             Summary
@@ -58,8 +66,8 @@ class ProjectSummary extends React.Component {
                         <div className="row">
                             <div className="col-sm-offset-1">
                                 <p className="col-md-4 col-xs-6">Project: {projectCost.project_id.name}</p>
-                                <p className="col-md-4 col-xs-6">Total Costs: ${projectCost.total_costs}</p>
-                                <p className="col-md-4 col-xs-6 ">Credits Available: ${projectCost.credits_available}</p>
+                                <p className="col-md-4 col-xs-6">Total Costs: {projectCost.total_costs}</p>
+                                <p className="col-md-4 col-xs-6 ">Credits Available: {projectCost.dollar_values && projectCost.dollar_values.credits_available}</p>
                             </div>
                         </div>
                     </div>
@@ -72,7 +80,7 @@ class ProjectSummary extends React.Component {
 
                 <div className="form-header">
                     <div className="container">
-                        <h1>PROJECT - SUMMARY</h1>
+                        <h1>PROJECT SUMMARY - {projects.currentProject && projects.currentProject.name}</h1>
                     </div>
                 </div>
 
@@ -80,119 +88,36 @@ class ProjectSummary extends React.Component {
 
                 <div className="inside-body">
                     <div className="container">
-                        <div className="col-md-offset-1 col-md-10 panel-group" id="accordion" role="tablist" aria-multiselectable="false">
-                            <a
-                              role="button"
-                              data-toggle="collapse"
-                              data-parent="#accordion"
-                              href="#collapseProjectInfo"
-                              aria-expanded="false"
-                              aria-controls="collapseProjectInfo"
-                            >
-                                <div className="row section-heading" role="tab" id="headingProjectInfo">
-                                    <div className="col-xs-1 caret-indicator" />
-                                    <div className="col-xs-10">
-                                        <h2>Project Information</h2>
-                                    </div>
-                                </div>
-                            </a>
-                            <div
-                              id="collapseProjectInfo"
-                              className="panel-collapse collapse row"
-                              role="tabpanel"
-                              aria-labelledby="#headingProjectInfo"
-                            >
-                                <div className="panel-body">
-                                    <div className="row link-row">
-                                        <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
-                                            <div className="col-xs-5 col-xs-offset-5">
-                                                {currentUser && currentUser.permissions && currentUser.permissions.project &&
-                                                    <Link to={`project/form/${projects.id}`} aria-label="Edit">
-                                                        <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
-                                                        <div className="col-xs-7 link-label">
-                                                            Edit
-                                                        </div>
-                                                    </Link>
-                                                }
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="col-xs-12">
-                                        <p className="col-md-4 col-xs-6">Project Name: {projects.name}</p>
-                                        <p className="col-md-4 col-xs-6">Project Category: {projects.project_category_display}</p>
-                                        <p className="col-md-4 col-xs-6">Project Type: {projects.project_type_display}</p>
-                                        <p className="col-md-4 col-xs-6">Expansion Area: {projects.expansion_area}</p>
-                                        <p className="col-md-4 col-xs-6 ">Project Status: {projects.project_status_display}</p>
-                                        <p className="col-md-4 col-xs-6 ">Status Date: {projects.status_date}</p>
-                                        <p className="col-xs-12">Project Description: {projects.project_description}</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {projectCostEstimates ? (
-                                <div>
-                                    <a
-                                      role="button"
-                                      data-toggle="collapse"
-                                      data-parent="#accordion"
-                                      href="#collapseCostEstimates"
-                                      aria-expanded="false"
-                                      aria-controls="collapseCostEstimates"
-                                    >
-                                        <div className="row section-heading" role="tab" id="headingCostEstimates">
-                                            <div className="col-xs-1 caret-indicator" />
-                                            <div className="col-xs-10">
-                                                <h2>Project Cost Estimates</h2>
-                                            </div>
-                                        </div>
-                                    </a>
-                                    <div
-                                      id="collapseCostEstimates"
-                                      className="panel-collapse collapse row"
-                                      role="tabpanel"
-                                      aria-labelledby="#headingCostEstimates"
-                                    >
-                                        <div className="panel-body">
-                                            <div className="col-xs-12">
-                                                {projectCostEstimates}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            ) : (
-                                <div className="row section-heading" role="tab" id="headingCostEstimates">
-                                    <h2>Project Cost Estimates - None</h2>
-                                </div>
-                            )}
-
-                            {projects.agreement_id ? <div>
+                        {projects.loadingProject ? <LoadingScreen /> :
+                        (
+                            <div className="col-md-offset-1 col-md-10 panel-group" id="accordion" role="tablist" aria-multiselectable="false">
                                 <a
                                   role="button"
                                   data-toggle="collapse"
                                   data-parent="#accordion"
-                                  href="#collapseAgreementInfo"
+                                  href="#collapseProjectInfo"
                                   aria-expanded="false"
-                                  aria-controls="collapseAgreementInfo"
+                                  aria-controls="collapseProjectInfo"
                                 >
-                                    <div className="row section-heading" role="tab" id="headingAgreementInfo">
+                                    <div className="row section-heading" role="tab" id="headingProjectInfo">
                                         <div className="col-xs-1 caret-indicator" />
                                         <div className="col-xs-10">
-                                            <h2>Agreement</h2>
+                                            <h3>Project Information</h3>
                                         </div>
                                     </div>
                                 </a>
                                 <div
-                                  id="collapseAgreementInfo"
+                                  id="collapseProjectInfo"
                                   className="panel-collapse collapse row"
                                   role="tabpanel"
-                                  aria-labelledby="#headingAgreementInfo"
+                                  aria-labelledby="#headingProjectInfo"
                                 >
                                     <div className="panel-body">
                                         <div className="row link-row">
-                                            <div className="col-xs-12 col-sm-5 col-md-3 col-sm-offset-7 col-md-offset-9">
-                                                <div className="col-xs-5">
-                                                    {currentUser && currentUser.permissions && currentUser.permissions.agreement &&
-                                                        <Link to={`agreement/form/${projects.agreement_id.id}`} aria-label="Edit">
+                                            <div className="col-xs-12 col-sm-5 col-sm-offset-7">
+                                                <div className="col-xs-5 col-xs-offset-5">
+                                                    {currentUser && currentUser.permissions && currentUser.permissions.project &&
+                                                        <Link to={`project/form/${projects.currentProject.id}`} aria-label={`Edit ${projects.currentProject.name}`}>
                                                             <i className="fa fa-pencil-square link-icon col-xs-4" aria-hidden="true" />
                                                             <div className="col-xs-7 link-label">
                                                                 Edit
@@ -200,41 +125,82 @@ class ProjectSummary extends React.Component {
                                                         </Link>
                                                     }
                                                 </div>
-                                                <div className="col-xs-5 ">
-                                                    <Link to={`agreement/summary/${projects.agreement_id.id}`} aria-label="Summary">
-                                                        <i className="fa fa-file-text link-icon col-xs-4" aria-hidden="true" />
-                                                        <div className="col-xs-7 link-label">
-                                                            Summary
-                                                        </div>
-                                                    </Link>
-                                                </div>
                                             </div>
                                         </div>
                                         <div className="col-xs-12">
-                                            <p className="col-md-4 col-xs-6">Resolution Number: {projects.agreement_id.resolution_number}</p>
-                                            <p className="col-md-4 col-xs-6">Current Balance: {projects.agreement_id.agreement_balance && projects.agreement_id.agreement_balance.total}</p>
-                                            {projects.agreement_id.account_id &&
-                                                <p className="col-md-4 col-xs-6">Account: {projects.agreement_id.account_id && projects.agreement_id.account_id.account_name}</p>
-                                            }
-                                            <p className="col-md-4 col-xs-6">Expansion Area: {projects.agreement_id.expansion_area}</p>
-                                            <p className="col-md-4 col-xs-6">Agreement Type: {projects.agreement_id.agreement_type_display}</p>
-                                            <p className="col-md-4 col-xs-6">Date Executed: {projects.agreement_id.date_executed}</p>
+                                            <p className="col-md-4 col-xs-6">Project Name: {projects.currentProject.name}</p>
+                                            <p className="col-md-4 col-xs-6">Project Category: {projects.currentProject.project_category_display}</p>
+                                            <p className="col-md-4 col-xs-6">Project Type: {projects.currentProject.project_type_display}</p>
+                                            <p className="col-md-4 col-xs-6">Expansion Area: {projects.currentProject.expansion_area}</p>
+                                            <p className="col-md-4 col-xs-6 ">Project Status: {projects.currentProject.project_status_display}</p>
+                                            <p className="col-md-4 col-xs-6 ">Status Date: {projects.currentProject.status_date}</p>
+                                            <p className="col-xs-12">Project Description: {projects.currentProject.project_description}</p>
                                         </div>
                                     </div>
                                 </div>
-                            </div> : <div className="row section-heading" role="tab" id="headingCostEstimates">
-                                <h2>Agreement - None</h2>
-                            </div>}
-                        </div>
-                        {projects.id &&
-                            <Uploads
-                              file_content_type="accounts_project"
-                              file_object_id={projects.id}
-                              ariaExpanded="false"
-                              panelClass="panel-collapse collapse row"
-                              permission="project"
-                            />
-                        }
+                                {projects.currentProject && projects.currentProject.id &&
+                                    <Notes
+                                      content_type="accounts_project"
+                                      object_id={projects.currentProject.id}
+                                      ariaExpanded="false"
+                                      panelClass="panel-collapse collapse row"
+                                      permission="project"
+                                    />
+                                }
+
+                                {projectCostEstimates ? (
+                                    <div>
+                                        <a
+                                          role="button"
+                                          data-toggle="collapse"
+                                          data-parent="#accordion"
+                                          href="#collapseCostEstimates"
+                                          aria-expanded="false"
+                                          aria-controls="collapseCostEstimates"
+                                        >
+                                            <div className="row section-heading" role="tab" id="headingCostEstimates">
+                                                <div className="col-xs-1 caret-indicator" />
+                                                <div className="col-xs-10">
+                                                    <h3>Project Cost Estimates</h3>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <div
+                                          id="collapseCostEstimates"
+                                          className="panel-collapse collapse row"
+                                          role="tabpanel"
+                                          aria-labelledby="#headingCostEstimates"
+                                        >
+                                            <div className="panel-body">
+                                                <div className="col-xs-12">
+                                                    {projectCostEstimates}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <div className="row section-heading" role="tab" id="headingCostEstimates">
+                                        <h3>Project Cost Estimates - {!!projectCosts ? 'None' : <i className="fa fa-spinner fa-pulse fa-fw" />}</h3>
+                                    </div>
+                                )}
+
+                                <AgreementsMiniSummary
+                                  mapSet={projects.currentProject.agreement_id}
+                                  mapQualifier={!!projects && !!projects.currentProject && !!projects.currentProject.agreement_id}
+                                  singleAgreement
+                                />
+
+                                {projects.currentProject.id &&
+                                    <Uploads
+                                      file_content_type="accounts_project"
+                                      file_object_id={projects.currentProject.id}
+                                      ariaExpanded="false"
+                                      panelClass="panel-collapse collapse row"
+                                      permission="project"
+                                    />
+                                }
+                            </div>
+                        )}
                     </div>
                 </div>
                 <Footer />
@@ -245,7 +211,7 @@ class ProjectSummary extends React.Component {
 
 ProjectSummary.propTypes = {
     currentUser: PropTypes.object,
-    projects: PropTypes.array,
+    projects: PropTypes.object,
     projectCosts: PropTypes.array,
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
@@ -255,7 +221,7 @@ function mapStateToProps(state) {
     return {
         currentUser: state.currentUser,
         projects: state.projects,
-        projectCosts: state.projectCosts,
+        projectCosts: state.projectCosts && state.projectCosts.projectCosts,
     };
 }
 
@@ -265,7 +231,10 @@ function mapDispatchToProps(dispatch, params) {
     return {
         onComponentDidMount() {
             dispatch(getProjectID(selectedProject));
-            dispatch(getProjectProjectCosts(selectedProject));
+            dispatch(getProjectProjectCosts(selectedProject))
+            .then(() => {
+                dispatch(formUpdate({ loading: false }));
+            });
         },
     };
 }

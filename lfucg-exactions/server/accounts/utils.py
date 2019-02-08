@@ -2,39 +2,6 @@ from .models import *
 from rest_framework.response import Response
 from rest_framework import status
 
-def calculate_account_balance(account_id):
-    account_ledgers_from = AccountLedger.objects.filter(account_from=account_id)
-    account_ledgers_to = AccountLedger.objects.filter(account_to=account_id)
-
-    payments = Payment.objects.filter(credit_account=account_id)
-
-    from_value = 0
-    to_value = 0
-    payment_value = 0
-
-    if account_ledgers_from.exists():
-        for ledger in account_ledgers_from:
-            from_value += ledger.non_sewer_credits + ledger.sewer_credits
-
-    if account_ledgers_to.exists():
-        for ledger in account_ledgers_to:
-            to_value += ledger.non_sewer_credits + ledger.sewer_credits
-
-    if payments.exists():
-        for payment in payments:
-            payment_value += (
-                payment.paid_roads +
-                payment.paid_sewer_trans +
-                payment.paid_sewer_cap +
-                payment.paid_parks +
-                payment.paid_storm +
-                payment.paid_open_space
-            )
-    
-    current_account_balance = to_value - from_value - payment_value
-
-    return current_account_balance
-
 def calculate_agreement_balance(agreement_id):
     agreement = Agreement.objects.filter(id=agreement_id)
 

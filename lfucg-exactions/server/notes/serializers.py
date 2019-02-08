@@ -24,12 +24,11 @@ class ContentTypeField(serializers.Field):
             return ContentType.objects.get(app_label=content_type_app_label, model=content_type_model)
 
     def to_representation(self, obj):
-        if obj.model == 'plats_plat':
-            return 'Plat'
-        elif obj.model == 'plats_lot':
-            return 'Lot'
+        if obj and obj.name:
+            return obj.name.title()
         else:
-            return obj.model
+            return 'Unknown'
+
 
 class CleanedDateField(serializers.Field):
     def to_representation(self, obj):
@@ -53,6 +52,11 @@ class NoteSerializer(serializers.ModelSerializer):
         )
 
 class RateSerializer(serializers.ModelSerializer):
+    table_identifier = serializers.SerializerMethodField(read_only=True)
+
+    def get_table_identifier(self, obj):
+        return obj.category + ', ' + obj.zone + ', ' + obj.expansion_area
+
     class Meta:
         model = Rate
         fields = (
@@ -67,6 +71,7 @@ class RateSerializer(serializers.ModelSerializer):
             'zone',
             'category',
             'rate',
+            'table_identifier',
         )
 
 class RateTableSerializer(serializers.ModelSerializer):

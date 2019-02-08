@@ -7,36 +7,38 @@
 # All rights reserved - Do Not Redistribute
 #
 
+# Update user depending on environment
+if Dir.exists? "/home/vagrant"
+  user = "vagrant"
+else
+  user = "ubuntu"
+end
+
+virtualenv = "/home/#{user}/env"
+
+# Install git
+package "git"
+
+# Install python related packages
+# Docs: https://launchpad.net/~deadsnakes/+archive/ubuntu/ppa
+apt_repository 'deadsnakes' do
+  uri 'ppa:deadsnakes'
+end
+
 include_recipe 'apt'
-include_recipe 'python'
-include_recipe "python::pip"
 
-python_pip "virtualenv" do
-  action :install
+python_runtime '3.6' do
+  options package_name: 'python3.6'
 end
 
-virtualenv = "/home/ubuntu/env"
-
-package "my packages" do
-  package_name [
-    # Django
-    "git",
-    "python3-dev",
-    "libpq-dev",
-    "libffi-dev",
-    "libjpeg-dev",
-  ]
+python_package "virtualenv" do
   action :install
 end
-
-# python_runtime '3'
 
 # NOTE: This will fail with SSL errors if owner/group isn't specified
 python_virtualenv "#{virtualenv}" do
-    interpreter '/usr/bin/python3'
-    owner 'ubuntu'
-    group 'ubuntu'
+    python "/usr/bin/python3.6"
+    user "#{user}"
+    group "#{user}"
     action :create
 end
-
-include_recipe "nodejs::npm"

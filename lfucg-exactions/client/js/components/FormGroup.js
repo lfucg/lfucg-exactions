@@ -10,6 +10,8 @@ const FormGroup = ({
     id,
     activeForm,
     formChange,
+    ariaRequired,
+    ariaLabel,
 }) => {
     return (
         <div className="form-group">
@@ -21,9 +23,12 @@ const FormGroup = ({
                         id,
                         value: activeForm[id] || '',
                         onChange: formChange(id),
+                        'aria-required': ariaRequired,
+                        'aria-label': ariaLabel,
                     },
                 )
             }
+            <p className="help-block hidden" id={`help-block-${id}`} />
         </div>
     );
 };
@@ -34,6 +39,8 @@ FormGroup.propTypes = {
     id: PropTypes.string.isRequired,
     activeForm: PropTypes.object.isRequired,
     formChange: PropTypes.func.isRequired,
+    ariaRequired: PropTypes.string,
+    ariaLabel: PropTypes.string,
 };
 
 const mapState = ({ activeForm }) => {

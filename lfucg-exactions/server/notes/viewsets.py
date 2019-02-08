@@ -1,14 +1,17 @@
-from rest_framework import viewsets, status, generics
+from rest_framework import viewsets, status, generics, filters
 from django.db.models import Q
 from rest_framework.response import Response
+from rest_framework import status
 from django.contrib.contenttypes.models import ContentType
 
 from rest_framework.parsers import FileUploadParser, MultiPartParser
+# from django_filters.rest_framework import DjangoFilterBackend
 
-from .models import *
+from .models import Note, FileUpload, MediaStorage, Rate, RateTable, expose_rate_total
 from .serializers import *
-from plats.models import *
+from plats.models import Lot, Plat, Subdivision
 from .permissions import CanAdminister
+from .utils import update_entry
 
 class NoteViewSet(viewsets.ModelViewSet):
     serializer_class = NoteSerializer
@@ -20,8 +23,6 @@ class NoteViewSet(viewsets.ModelViewSet):
 
         child_content_type_string = self.request.query_params.get('content_type', None)
         child_object_id = self.request.query_params.get('object_id', None)
-        parent_content_type_string = self.request.query_params.get('parent_content_type', None)
-        parent_object_id = self.request.query_params.get('parent_object_id', None)
                 
         if child_content_type_string is not None:
             split_child_content = child_content_type_string.split('_')
@@ -29,32 +30,47 @@ class NoteViewSet(viewsets.ModelViewSet):
             if len(split_child_content) == 2:
                 child_content_type_app_label = split_child_content[0]
                 child_content_type_model = split_child_content[1]
-
                 child_content_type = ContentType.objects.get(app_label=child_content_type_app_label, model=child_content_type_model)
 
-                if parent_content_type_string is not None:
-                    split_parent_string = parent_content_type_string.split('_')
+                parent_content_type = None
+                parent_object_id = None
+                grandparent_content_type = None
+                grandparent_object_id = None
+                if child_content_type_model == 'lot':
+                    content_lot = Lot.objects.filter(id=child_object_id).first()
+                    if content_lot is not None and content_lot.plat:
+                        content_plat = Plat.objects.filter(id=content_lot.plat.id).first()
+                        if content_plat is not None:
+                            parent_object_id = content_plat.id
+                            parent_content_type = ContentType.objects.get_for_model(Plat)
+                            if content_plat and content_plat.subdivision:
+                                grandparent_content_type = ContentType.objects.get_for_model(Subdivision)
+                                grandparent_object_id = content_plat.subdivision.id
+                elif child_content_type_model == 'plat':
+                    content_plat = Plat.objects.filter(id=child_object_id).first()
+                    if content_plat is not None and content_plat.subdivision:
+                        parent_content_type = ContentType.objects.get_for_model(Subdivision)
+                        parent_object_id = content_plat.subdivision.id
 
-                    if len(split_parent_string) == 2:
-                        parent_content_type_app_label = split_parent_string[0]
-                        parent_content_type_model = split_parent_string[1]
+                if grandparent_content_type is not None and parent_content_type is not None and child_content_type is not None:
+                    queryset = queryset.filter(
+                        Q(content_type=grandparent_content_type, object_id=grandparent_object_id) |
+                        Q(content_type=parent_content_type, object_id=parent_object_id) |
+                        Q(content_type=child_content_type, object_id=child_object_id))
 
-                        parent_content_type = ContentType.objects.get(app_label=parent_content_type_app_label, model=parent_content_type_model)
-
-                        if parent_content_type and child_content_type:
-                            query_list = queryset.filter(
-                                Q(content_type=parent_content_type, object_id=parent_object_id) |
-                                Q(content_type=child_content_type, object_id=child_object_id))
-
-                        queryset = query_list
-
-                else:
+                elif parent_content_type is not None and child_content_type is not None:
+                    queryset = queryset.filter(
+                        Q(content_type=parent_content_type, object_id=parent_object_id) |
+                        Q(content_type=child_content_type, object_id=child_object_id))
+                elif child_content_type is not None:
                     queryset = queryset.filter(content_type=child_content_type, object_id=child_object_id)
+                else:
+                    return Response('No Notes chosen', status=status.HTTP_404_NOT_FOUND)
 
         else:
-            queryset = queryset
+            return Response('No Notes chosen', status=status.HTTP_404_NOT_FOUND)
 
-        return queryset.order_by('-date')
+        return queryset.order_by('-date', 'id')
 
 class RateTableViewSet(viewsets.ModelViewSet):
     serializer_class = RateTableSerializer
@@ -75,23 +91,46 @@ class RateTableViewSet(viewsets.ModelViewSet):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def update(self, request, pk):
-        existing_object  = self.get_object()
-        setattr(existing_object, 'modified_by', request.user)
-        for key, value in request.data.items():
-            for existing_object_key, existing_object_value in existing_object.__dict__.items():
-                if key == existing_object_key:
-                    if value != existing_object_value:
-                        setattr(existing_object, existing_object_key, value)
-        try:
-            existing_object.save()
-            return Response(status=status.HTTP_200_OK)
-        except Exception as e:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+        self_table = request.data
+
+        if self_table['is_active'] == True:
+            all_true_tables = RateTable.objects.filter(is_active=True)
+            rate_count = Rate.objects.filter(rate_table_id=request.data['id']).count()
+
+            exposed = expose_rate_total(self)
+            total_rate_entries_per_table = exposed
+            if rate_count == total_rate_entries_per_table:
+                for rate_table in all_true_tables:
+                    if self != rate_table:
+                        rate_table.is_active = False
+                        rate_table.save()
+                
+                self_table['is_active'] = True
+                return update_entry(self, request, pk)
+            else:
+                return Response('You must enter a rate for each of the rate types, zones, expansion areas.', status=status.HTTP_404_NOT_FOUND)
+        else:
+            return update_entry(self, request, pk)
 
 class RateViewSet(viewsets.ModelViewSet):
     serializer_class = RateSerializer
     queryset = Rate.objects.all()
     permission_classes = (CanAdminister,)
+    filter_backends = (filters.DjangoFilterBackend, filters.SearchFilter,)
+    filter_fields = ('rate_table_id__id',)
+
+    def get_queryset(self):
+        queryset = Rate.objects.all()
+
+        rate_table = self.request.query_params.get('rate_table_id', None)
+        if rate_table is not None:
+            queryset = queryset.filter(rate_table_id=rate_table)
+
+        category_set = self.request.query_params.get('category', None)
+        if category_set is not None:
+            queryset = queryset.filter(category=category_set)
+
+        return queryset.order_by('expansion_area')
 
     def create(self, request):
         data_set = request.data
@@ -107,18 +146,7 @@ class RateViewSet(viewsets.ModelViewSet):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def update(self, request, pk):
-        existing_object  = self.get_object()
-        setattr(existing_object, 'modified_by', request.user)
-        for key, value in request.data.items():
-            for existing_object_key, existing_object_value in existing_object.__dict__.items():
-                if key == existing_object_key:
-                    if value != existing_object_value:
-                        setattr(existing_object, existing_object_key, value)
-        try:
-            existing_object.save()
-            return Response(status=status.HTTP_200_OK)
-        except Exception as e:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+        return update_entry(self, request, pk)
 
 class FileUploadViewSet(viewsets.ModelViewSet):
     serializer_class = FileUploadSerializer
@@ -147,7 +175,7 @@ class FileUploadViewSet(viewsets.ModelViewSet):
         else:
             queryset = queryset
 
-        return queryset.order_by('-date')
+        return queryset.order_by('-date', 'id')
 
 class FileUploadCreate(generics.CreateAPIView):
     model = FileUpload

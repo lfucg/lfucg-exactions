@@ -1,20 +1,29 @@
 import React from 'react';
-import {
-    Link,
-} from 'react-router';
+import { connect } from 'react-redux';
+import { Link } from 'react-router';
+import PropTypes from 'prop-types';
+import { filter } from 'ramda';
 
 import Navbar from './Navbar';
 import Footer from './Footer';
+import FlashMessage from './FlashMessage';
 
 class DashboardPage extends React.Component {
     render() {
+        const {
+            currentUser,
+        } = this.props;
+
+        const userGroup = currentUser && currentUser.groups &&
+            filter(user => user.name === 'Finance')(currentUser.groups);
         return (
             <div className="dashboard">
                 <Navbar />
 
-                <img src={`${global.BASE_STATIC_URL}/lexington-hero-interior.jpg`} role="presentation" className="lex-banner" />
+                <img src={`${window.StaticURL}images/lexington-hero-interior.jpg`} role="presentation" className="lex-banner" />
                 <div className="inside-body">
                     <div className="container">
+                        <FlashMessage />
                         <div className="row">
                             <div className="col-md-4 col-sm-6">
                                 <Link to="subdivision" role="link"><h2 className="in-page-link">Subdivisions</h2></Link>
@@ -37,8 +46,8 @@ class DashboardPage extends React.Component {
                                 <p>Lexington agreements based on resolution numbers or memos.</p>
                             </div>
                             <div className="col-md-4 col-sm-6">
-                                <Link to="account-ledger" role="link"><h2 className="in-page-link">Credit Transfers</h2></Link>
-                                <p>Lexington account ledgers.  Credit transfers, new credit awards, and credit payments.</p>
+                                <Link to="credit-transfer" role="link"><h2 className="in-page-link">Credit Transfers</h2></Link>
+                                <p>Lexington account ledgers for credits.  Credit transfers, new credit awards, and credit payments.</p>
                             </div>
                             <div className="col-md-4 col-sm-6">
                                 <Link to="payment" role="link"><h2 className="in-page-link">Monetary Payments</h2></Link>
@@ -52,6 +61,18 @@ class DashboardPage extends React.Component {
                                 <Link to="project-cost" role="link"><h2 className="in-page-link">Project Costs</h2></Link>
                                 <p>Lexington project costs.</p>
                             </div>
+                            {((currentUser && currentUser.is_superuser) || (userGroup && userGroup.length > 0)) &&
+                                <div className="col-md-4 col-sm-6">
+                                    <Link to="reports-additional" role="link"><h2 className="in-page-link">Transaction Report</h2></Link>
+                                    <p>Create transaction reports for a chosen time frame.</p>
+                                </div>
+                            }
+                            {currentUser && currentUser.is_superuser &&
+                                <div className="col-md-4 col-sm-6">
+                                    <Link to="rate-table/form/" role="link"><h2 className="in-page-link">Rate Tables</h2></Link>
+                                    <p>Update or create rate tables.</p>
+                                </div>
+                            }
                         </div>
                     </div>
                 </div>
@@ -61,5 +82,15 @@ class DashboardPage extends React.Component {
     }
 }
 
-export default (DashboardPage);
+DashboardPage.propTypes = {
+    currentUser: PropTypes.object,
+};
+
+function mapStateToProps(state) {
+    return {
+        currentUser: state.currentUser,
+    };
+}
+
+export default connect(mapStateToProps)(DashboardPage);
 

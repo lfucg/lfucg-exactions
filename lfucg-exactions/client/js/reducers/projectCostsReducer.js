@@ -1,5 +1,11 @@
+import { contains } from 'ramda';
+
+import { API_CALL_START } from '../constants/actionTypes';
+import { SET_LOADING_FALSE } from '../constants/stateConstants';
+
 import {
     GET_PROJECT_COSTS,
+    GET_PROJECT_PROJECT_COSTS,
     GET_PROJECT_COST_ID,
     POST_PROJECT_COST,
     PUT_PROJECT_COST,
@@ -7,26 +13,79 @@ import {
     SEARCH_QUERY,
 } from '../constants/apiConstants';
 
+const initialState = {
+    currentProjectCost: null,
+    loadingProjectCost: true,
+    projectCosts: [],
+    next: null,
+    count: 0,
+    prev: null,
+}
 
-const projectCostsReducer = (state = [], action) => {
+const projectCostApiCalls = [GET_PROJECT_COSTS, GET_PROJECT_PROJECT_COSTS, GET_PROJECT_COST_ID, POST_PROJECT_COST, PUT_PROJECT_COST];
+
+const projectCostsReducer = (state = initialState, action) => {
     const {
         endpoint,
     } = action;
     switch (endpoint) {
+    case API_CALL_START:
+        if (contains(action.apiCall)(projectCostApiCalls) || contains('/estimate')(action.apiCall)) {
+            return {
+                ...state,
+                loadingProjectCost: true,
+            };
+        }
+        return state;
     case GET_PROJECT_COST_ID:
+        return {
+            ...state,
+            currentProjectCost: action.response,
+            loadingProjectCost: false,
+            next: null,
+            count: 1,
+            prev: null,
+        }
     case GET_PROJECT_COSTS:
-        return action.response;
+    case GET_PROJECT_PROJECT_COSTS:
+        return {
+            ...state,
+            currentProjectCost: null,
+            loadingProjectCost: false,
+            projectCosts: action.response,
+            next: action.response.next,
+            count: action.response.count,
+            prev: action.response.previous,
+        }
     case POST_PROJECT_COST:
     case PUT_PROJECT_COST:
-        return {};
+        return {
+            ...state,
+            loadingProjectCost: false,
+        };
     case GET_PAGINATION:
     case SEARCH_QUERY:
-        const next = action.response.next;
-        const prev = action.response.prev;
-        if ((next != null && next.startsWith('/estimate')) ||
-            (prev != null && prev.startsWith('/estimate')) ||
-            (window.location.hash === '#/project-cost')) {
-            return action.response;
+        if (action.response.endpoint === '/estimate') {
+            return {
+                ...state,
+                currentProjectCost: null,
+                loadingProjectCost: false,
+                projectCosts: action.response,
+                next: action.response.next,
+                count: action.response.count,
+                prev: action.response.previous,
+            }
+        }
+        return {
+            ...state,
+            loadingProjectCost: false,
+        };
+    case SET_LOADING_FALSE:
+        if (action.model === 'estimate') {
+            return {
+                ...state,
+                loadingProjectCost: false,
+            }
         }
         return state;
     default:

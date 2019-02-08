@@ -1,9 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import {
-    Link,
-    hashHistory,
-} from 'react-router';
+import { hashHistory } from 'react-router';
 import PropTypes from 'prop-types';
 
 import Navbar from './Navbar';
@@ -11,7 +8,11 @@ import Footer from './Footer';
 
 import FormGroup from './FormGroup';
 import Breadcrumbs from './Breadcrumbs';
+import Notes from './Notes';
 
+import DeclineDelete from './DeclineDelete';
+
+import { setLoadingFalse } from '../actions/stateActions';
 import {
     formInit,
     formUpdate,
@@ -34,6 +35,7 @@ class AccountForm extends React.Component {
             accounts,
             onSubmit,
             formChange,
+            selectedAccount,
         } = this.props;
 
         const submitEnabled =
@@ -60,12 +62,12 @@ class AccountForm extends React.Component {
                 <div className="inside-body">
                     <div className="container">
                         <div className="col-sm-offset-1 col-sm-10">
-                            <form onSubmit={onSubmit} >
+                            <form >
 
                                 <fieldset>
                                     <div className="row">
                                         <div className="col-sm-12">
-                                            <FormGroup label="* Developer Account Name" id="account_name" aria-required="true">
+                                            <FormGroup label="* Developer Account Name" id="account_name" ariaRequired="true">
                                                 <input type="text" className="form-control" placeholder="Developer Account Name" autoFocus />
                                             </FormGroup>
                                         </div>
@@ -73,31 +75,31 @@ class AccountForm extends React.Component {
 
                                     <div className="row">
                                         <div className="col-sm-6">
-                                            <FormGroup label="* Contact First Name" id="contact_first_name" aria-required="true">
+                                            <FormGroup label="* Contact First Name" id="contact_first_name" ariaRequired="true">
                                                 <input type="text" className="form-control" placeholder="Contact First Name" />
                                             </FormGroup>
                                         </div>
                                         <div className="col-sm-6">
-                                            <FormGroup label="* Contact Last Name" id="contact_last_name" aria-required="true">
+                                            <FormGroup label="* Contact Last Name" id="contact_last_name" ariaRequired="true">
                                                 <input type="text" className="form-control" placeholder="Contact Last Name" />
                                             </FormGroup>
                                         </div>
                                     </div>
                                     <div className="row">
                                         <div className="col-sm-4">
-                                            <FormGroup label="* Address Number" id="address_number" aria-required="true">
+                                            <FormGroup label="* Address Number" id="address_number" ariaRequired="true">
                                                 <input type="number" className="form-control" placeholder="Address Number" />
                                             </FormGroup>
                                         </div>
                                         <div className="col-sm-8">
-                                            <FormGroup label="* Street" id="address_street" aria-required="true">
+                                            <FormGroup label="* Street" id="address_street" ariaRequired="true">
                                                 <input type="text" className="form-control" placeholder="Street" />
                                             </FormGroup>
                                         </div>
                                     </div>
                                     <div className="row">
                                         <div className="col-sm-5">
-                                            <FormGroup label="* City" id="address_city" aria-required="true">
+                                            <FormGroup label="* City" id="address_city" ariaRequired="true">
                                                 <input type="text" className="form-control" placeholder="City" />
                                             </FormGroup>
                                         </div>
@@ -165,33 +167,49 @@ class AccountForm extends React.Component {
                                             </select>
                                         </div>
                                         <div className="col-sm-3 form-group">
-                                            <FormGroup label="Zipcode" id="address_zip" >
+                                            <FormGroup label="* Zipcode" id="address_zip" >
                                                 <input type="text" className="form-control" placeholder="Zipcode" />
                                             </FormGroup>
                                         </div>
                                     </div>
                                     <div className="row">
                                         <div className="col-sm-6">
-                                            <FormGroup label="* Phone" id="phone" aria-required="true">
+                                            <FormGroup label="* Phone" id="phone" ariaRequired="true">
                                                 <input type="text" className="form-control" placeholder="Phone Number" />
                                             </FormGroup>
                                         </div>
                                         <div className="col-sm-6">
-                                            <FormGroup label="* Email" id="email" aria-required="true">
+                                            <FormGroup label="* Email" id="email" ariaRequired="true">
                                                 <input type="email" className="form-control" placeholder="Email" />
                                             </FormGroup>
                                         </div>
                                     </div>
                                 </fieldset>
-                                <button disabled={!submitEnabled} className="btn btn-lex">Submit</button>
-                                {!submitEnabled ? (
-                                    <div>
-                                        <div className="clearfix" />
-                                        <span> * All required fields must be filled.</span>
-                                    </div>
-                                ) : null
-                                }
+                                <div className="col-xs-8">
+                                    <button disabled={!submitEnabled} className="btn btn-lex" onClick={onSubmit} >Submit</button>
+                                    {!submitEnabled ? (
+                                        <div>
+                                            <div className="clearfix" />
+                                            <span> * All required fields must be filled.</span>
+                                        </div>
+                                    ) : null
+                                    }
+                                </div>
+                                <div className="col-xs-4">
+                                    <DeclineDelete currentForm="/account/" selectedEntry={selectedAccount} parentRoute="account" />
+                                </div>
                             </form>
+                            <div className="clearfix" />
+                            <hr aria-hidden="true" />
+                            {selectedAccount &&
+                                <Notes
+                                  content_type="accounts_account"
+                                  object_id={selectedAccount}
+                                  ariaExpanded="true"
+                                  panelClass="panel-collapse collapse row in"
+                                  permission="account"
+                                />
+                            }
                         </div>
                     </div>
                 </div>
@@ -204,11 +222,12 @@ class AccountForm extends React.Component {
 
 AccountForm.propTypes = {
     activeForm: PropTypes.object,
-    accounts: PropTypes.array,
+    accounts: PropTypes.object,
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
     onSubmit: PropTypes.func,
     formChange: PropTypes.func,
+    selectedAccount: PropTypes.string,
 };
 
 function mapStateToProps(state) {
@@ -243,6 +262,7 @@ function mapDispatchToProps(dispatch, params) {
                     dispatch(formUpdate(update));
                 });
             } else {
+                dispatch(setLoadingFalse('account'));
                 const initial_constants = {
                     address_state_show: '',
                 };
@@ -270,16 +290,21 @@ function mapDispatchToProps(dispatch, params) {
             event.preventDefault();
             if (selectedAccount) {
                 dispatch(putAccount(selectedAccount))
-                .then(() => {
-                    hashHistory.push(`account/summary/${selectedAccount}`);
+                .then((data) => {
+                    if (data.response) {
+                        hashHistory.push(`account/summary/${selectedAccount}`);
+                    }
                 });
             } else {
                 dispatch(postAccount())
                 .then((data_post) => {
-                    hashHistory.push(`account/summary/${data_post.response.id}`);
+                    if (data_post.response) {
+                        hashHistory.push(`account/summary/${data_post.response.id}`);
+                    }
                 });
             }
         },
+        selectedAccount,
     };
 }
 

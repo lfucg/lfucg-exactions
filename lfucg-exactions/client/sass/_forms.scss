@@ -4,6 +4,17 @@
     margin-top: 2.5em;
 }
 
+.btn-lex-danger {
+    color: #fff;
+    margin-top: 2.5em;
+}
+
+.btn-modal {
+    background-color: #0057A8;
+    color: #fff;
+    margin-top: 0;
+}
+
 .form-header {
     background-color: #001A49;
     color: white;
@@ -11,6 +22,10 @@
     padding-top: 0px;
     padding-bottom: 8px;
     margin-bottom: 3em;
+}
+
+.modal.in {
+    display: block;
 }
 
 .login-link-row {
@@ -22,21 +37,61 @@
     }
 }
 
+.collapsing {
+    -webkit-transition: none;
+    transition: none;
+    display: none;
+}
 .panel-group {
     .section-heading {
         text-align: center;
         color: white;
         background-color: #001A49;
         border: 2px solid #585858;
-        border-radius: 4px;
+        border-radius: 3px;
         margin-top: 20px;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        h3 {
+            margin: 8px 0px 8px 8px;
+        }
+    }
+    [aria-expanded="false"] {
+        .caret-indicator:before {
+            font-family: FontAwesome;
+            content: "\f0da";
+            font-size: 2.2em;
+            color: #858585;
+        }
+    }
+    [aria-expanded="true"] {
+        .caret-indicator:before {
+            font-family: FontAwesome;
+            content: "\f0d7";
+            font-size: 2.2em;
+            color: white;
+        }
+    }
+}
+
+.rate-panel-group {
+    .rate-panel-heading {
+        text-align: center;
+        color: white;
+        background-color: #001A49;
+        border: 2px solid #585858;
+        border-radius: 4px;
+        margin-top: 10px;
+        h3 {
+            margin-top: 10px;
+        }
     }
     [aria-expanded="false"] {
         .caret-indicator:before {
             font-family: FontAwesome;
             /*fa-caret-right*/
             content: "\f0da";
-            font-size: 3.8em;
+            font-size: 2.5em;
             margin: 20px 0px 0px 20px;
             color: #858585;
         }
@@ -46,11 +101,10 @@
             font-family: FontAwesome;
             /*fa-caret-down*/
             content: "\f0d7";
-            font-size: 3.8em;
+            font-size: 2.5em;
             color: white;
         }
     }
-    /*background-color: green;*/
 }
 
 .form-subheading {
@@ -77,6 +131,9 @@
 
 .form-group {
     font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+    .label-error {
+        color: red !important;
+    }
     label {
         color: #585858;
         font-size: 1.5em;
@@ -88,9 +145,18 @@
         font-weight: normal;
         margin-bottom: 0.5em;
     }
+    .help-block {
+        font-size: 1em;
+        color: red;
+    }
 }
+
 .reduced-form-label {
     margin-top: -20px;
+}
+
+.inline-label {
+    margin-top: 2px;
 }
 
 .dues-table-heading {
@@ -147,11 +213,6 @@
             border-top: 1px solid black;
             border-bottom: 1px solid black;
             border-left: 1px solid black;
-        }
-    }
-    .col-sm-7 {
-        padding: 0px;
-        h5 {
             .report-wrap-header {
                 line-height: 20px;
                 height: 60px;
@@ -160,6 +221,10 @@
             }
         }
     }
+    .col-sm-7, .col-sm-10 {
+        padding: 0px;
+    }
+
     .report-data {
         padding-top: 10px;
         height: 36px;
@@ -168,5 +233,37 @@
     }
     .right-border {
         border-right: 1px solid black;
+    }
+}
+
+
+.error {
+    border: 1px solid red;
+}
+
+.bg-danger {
+    color: #a74545;
+    padding: 5px;
+}
+
+.btn-link {
+    outline: none;
+    &:focus, &:active, &:active:focus {
+        box-shadow: none;
+        outline: none;
+    }
+}
+
+.rate-table {
+    text-align: center;
+}
+
+.rate-form-group {
+    font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+    .form-group {
+        color: black;
+        font-weight: normal;
+        margin-bottom: 0.5em;
+        width: 125%;
     }
 }
