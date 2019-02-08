@@ -90,45 +90,46 @@ def send_email_to_new_user(sender, instance, created, **kwargs):
 @receiver(post_save, sender=Plat)
 @receiver(post_save, sender=Lot)
 def send_email_to_supervisors(sender, instance, **kwargs):
-    if instance.modified_by.is_superuser or ((hasattr(instance.modified_by, 'profile') and instance.modified_by.profile.is_supervisor == True)):
+    if (instance.modified_by.is_superuser or ((hasattr(instance.modified_by, 'profile') and instance.modified_by.profile.is_supervisor == True))):
         return
+    else:
 
-    ctype = ContentType.objects.get_for_model(instance)
+        ctype = ContentType.objects.get_for_model(instance)
 
-    if ctype.app_label == 'accounts':
-        group = ['Finance']
-    elif ctype.app_label == 'plats':
-        group = ['Planning']
+        if ctype.app_label == 'accounts':
+            group = ['Finance']
+        elif ctype.app_label == 'plats':
+            group = ['Planning']
 
-    users = User.objects.filter(Q(profile__is_supervisor=True) & Q(groups__name__in=group))
+        users = User.objects.filter(Q(profile__is_supervisor=True) & Q(groups__name__in=group))
 
-    for user in users:
-        profile = Profile.objects.filter(user=user).first()
-        if hasattr(profile, 'is_approval_required') and not profile.is_approval_required:
-            profile.is_approval_required = True
-            profile.save()
+        for user in users:
+            profile = Profile.objects.filter(user=user).first()
+            if hasattr(profile, 'is_approval_required') and not profile.is_approval_required:
+                profile.is_approval_required = True
+                profile.save()
 
-            to_emails = list(users.values_list('email', flat=True))
+                to_emails = list(users.values_list('email', flat=True))
 
-            html_template = get_template('emails/supervisor_email.html')
-            text_template = get_template('emails/supervisor_email.txt')
+                html_template = get_template('emails/supervisor_email.html')
+                text_template = get_template('emails/supervisor_email.txt')
 
-            subject = 'LFUCG Exactions Activity: New Entry Pending Approval'
-            from_email = settings.DEFAULT_FROM_EMAIL
+                subject = 'LFUCG Exactions Activity: New Entry Pending Approval'
+                from_email = settings.DEFAULT_FROM_EMAIL
 
-            context = {
-                'baseURL': settings.BASE_URL,
-                'model': ctype.model,
-                'staticURL': settings.STATIC_URL,
-                'id': instance.id,
-            }
+                context = {
+                    'baseURL': settings.BASE_URL,
+                    'model': ctype.model,
+                    'staticURL': settings.STATIC_URL,
+                    'id': instance.id,
+                }
 
-            html_content = html_template.render(context)
-            text_content = text_template.render(context)
+                html_content = html_template.render(context)
+                text_content = text_template.render(context)
 
-            msg = EmailMultiAlternatives(subject, text_content, from_email, to_emails)
-            msg.attach_alternative(html_content, "text/html")
-            msg.send()
+                msg = EmailMultiAlternatives(subject, text_content, from_email, to_emails)
+                msg.attach_alternative(html_content, "text/html")
+                msg.send()
 
 @receiver(pre_save, sender=Agreement)
 @receiver(pre_save, sender=AccountLedger)
