@@ -9,6 +9,7 @@ from .models import *
 from .serializers import *
 from .permissions import CanAdminister
 from django.conf import settings
+from builtins import hasattr
 
 # from django_filters.rest_framework import DjangoFilterBackend
 
@@ -118,14 +119,12 @@ class PaymentViewSet(viewsets.ModelViewSet):
         paginatePage = self.request.query_params.get('paginatePage', None)
         pageSize = self.request.query_params.get('pageSize', settings.PAGINATION_SIZE)
 
-
         if self.request.user.is_anonymous(): 
             queryset = queryset.exclude(is_approved=False)
 
         if paginatePage is not None:
             pagination_class = PageNumberPagination
             PageNumberPagination.page_size = pageSize
-
 
         lot_id_set = self.request.query_params.get('lot_id', None)
         if lot_id_set is not None:
