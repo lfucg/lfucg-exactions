@@ -23,7 +23,7 @@ def send_password_reset_email(user, token):
     context = {
         'user': user,
         'baseURL': settings.BASE_URL,
-        'uid': int_to_base36(user.id),
+        'uid': user.id,
         'token': token,
     }
 
@@ -68,7 +68,7 @@ def send_email_to_new_user(sender, instance, created, **kwargs):
         context = {
             'user': user,
             'baseURL': settings.BASE_URL,
-            'uid': int_to_base36(user.id),
+            'uid': user.id,
             'token': token,
         }
 
