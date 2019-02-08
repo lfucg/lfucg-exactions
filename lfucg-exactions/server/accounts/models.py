@@ -294,9 +294,7 @@ class AccountLedger(models.Model):
     )
 
     entry_date = models.DateField()
-    date_created = models.DateField()
-    # TODO Revert to auto_now_add after import
-    # date_created = models.DateField(auto_now_add=True)
+    date_created = models.DateField(auto_now_add=True)
     date_modified = models.DateField(auto_now=True)
 
     created_by = models.ForeignKey(User, related_name='ledger_created')
