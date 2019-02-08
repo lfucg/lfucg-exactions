@@ -70,7 +70,7 @@ class NoteViewSet(viewsets.ModelViewSet):
         else:
             return Response('No Notes chosen', status=status.HTTP_404_NOT_FOUND)
 
-        return queryset.order_by('-date')
+        return queryset.order_by('-date', 'id')
 
 class RateTableViewSet(viewsets.ModelViewSet):
     serializer_class = RateTableSerializer
@@ -175,7 +175,7 @@ class FileUploadViewSet(viewsets.ModelViewSet):
         else:
             queryset = queryset
 
-        return queryset.order_by('-date')
+        return queryset.order_by('-date', 'id')
 
 class FileUploadCreate(generics.CreateAPIView):
     model = FileUpload

@@ -118,12 +118,14 @@ class PaymentViewSet(viewsets.ModelViewSet):
         paginatePage = self.request.query_params.get('paginatePage', None)
         pageSize = self.request.query_params.get('pageSize', settings.PAGINATION_SIZE)
 
+
         if self.request.user.is_anonymous(): 
             queryset = queryset.exclude(is_approved=False)
 
         if paginatePage is not None:
             pagination_class = PageNumberPagination
             PageNumberPagination.page_size = pageSize
+
 
         lot_id_set = self.request.query_params.get('lot_id', None)
         if lot_id_set is not None:
@@ -145,7 +147,7 @@ class PaymentViewSet(viewsets.ModelViewSet):
         if starting_date is not None:
             queryset = queryset.filter(date_created__gte=starting_date)
 
-        return queryset.order_by('-date_created')
+        return queryset.order_by('-date_created', 'id')
 
     def create(self, request):
         data_set = request.data
@@ -189,7 +191,7 @@ class ProjectViewSet(viewsets.ModelViewSet):
         if agreement_id_set is not None:
             queryset = queryset.filter(agreement_id=agreement_id_set)
 
-        return queryset.order_by('-date_modified')
+        return queryset.order_by('-date_modified', 'id')
 
     def create(self, request):
         data_set = request.data
@@ -235,7 +237,7 @@ class ProjectCostEstimateViewSet(viewsets.ModelViewSet):
             pagination_class = PageNumberPagination
             PageNumberPagination.page_size = pageSize
 
-        return queryset.order_by('-date_modified')
+        return queryset.order_by('-date_modified', 'id')
 
     def create(self, request):
         data_set = request.data
@@ -286,7 +288,7 @@ class AccountLedgerViewSet(viewsets.ModelViewSet):
         if agreement_set is not None:
             queryset = queryset.filter(agreement=agreement_set)
 
-        return queryset.order_by('entry_date')
+        return queryset.order_by('entry_date', 'id')
 
     def create(self, request):
         data_set = request.data
