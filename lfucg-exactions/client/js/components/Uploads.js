@@ -25,7 +25,6 @@ class Uploads extends React.Component {
     render() {
         const {
             currentUser,
-            activeForm,
             uploads,
             fileUploading,
         } = this.props;
@@ -52,7 +51,7 @@ class Uploads extends React.Component {
 
         return (
             <div className="uploads-page">
-                <div className="col-md-offset-1 col-md-10 panel-group" id="accordion" role="tablist" aria-multiselectable="false">
+                <div className="panel-group" id="accordion" role="tablist" aria-multiselectable="false">
                     <a
                       role="button"
                       data-toggle="collapse"
@@ -64,7 +63,7 @@ class Uploads extends React.Component {
                         <div className="row section-heading" role="tab" id="headingUploads">
                             <div className="col-xs-1 caret-indicator" />
                             <div className="col-xs-10">
-                                <h2>Uploads</h2>
+                                <h3>Uploads</h3>
                             </div>
                         </div>
                     </a>
@@ -108,8 +107,7 @@ class Uploads extends React.Component {
 
 Uploads.propTypes = {
     currentUser: PropTypes.object,
-    activeForm: PropTypes.object,
-    uploads: PropTypes.object,
+    uploads: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
     onComponentDidMount: PropTypes.func,
     file_content_type: PropTypes.string,
     file_object_id: PropTypes.number,
@@ -122,7 +120,6 @@ Uploads.propTypes = {
 function mapStateToProps(state) {
     return {
         currentUser: state.currentUser,
-        activeForm: state.activeForm,
         uploads: state.uploads,
     };
 }

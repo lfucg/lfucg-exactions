@@ -8,8 +8,6 @@
 #
 
 include_recipe "apache2"
-include_recipe 'python'
-include_recipe "python::pip"
 
 package "apache2-dev"
 
@@ -19,7 +17,7 @@ environment = app['environment']
 
 virtualenv = "/home/ubuntu/env"
 
-python_pip "mod_wsgi" do
+python_package "mod_wsgi" do
   version "4.5.2"
   virtualenv "#{virtualenv}"
 end
@@ -30,7 +28,7 @@ end
 
 apache_module "wsgi_express" do
   identifier "wsgi_module"
-  filename "mod_wsgi-py35.cpython-35m-x86_64-linux-gnu.so"
+  filename "mod_wsgi-py36.cpython-36m-x86_64-linux-gnu.so"
 end
 
 web_app 'lfucg-exactions' do

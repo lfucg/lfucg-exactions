@@ -1,10 +1,12 @@
 from rest_framework import serializers
 
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
+from rest_framework.authtoken.models import Token
+
 from .models import *
-from .utils import calculate_account_balance, calculate_agreement_balance
+from .utils import calculate_agreement_balance
 from plats.models import Plat, Lot
-from plats.serializers import PlatSerializer, LotSerializer
+from plats.serializers import PlatSerializer, LotSerializer, LotQuickSerializer
 
 class LotField(serializers.Field):
     def to_internal_value(self, data):
@@ -14,32 +16,21 @@ class LotField(serializers.Field):
             return None
 
     def to_representation(self, obj):
-        return LotSerializer(obj).data
+        return LotQuickSerializer(obj).data
+
+class AccountQuickSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Account
+        fields = (
+            'id',
+            'account_name',
+        )
 
 class AccountSerializer(serializers.ModelSerializer):
-    plat_account = PlatSerializer(many=True, required=False)
-    lot_account = LotSerializer(many=True, required=False)
-
     address_state_display = serializers.SerializerMethodField(read_only=True)
-
-    balance = serializers.SerializerMethodField(read_only=True)
 
     def get_address_state_display(self, obj):
         return obj.get_address_state_display()
-
-    def get_balance(self, obj):
-        calculated_balance = calculate_account_balance(obj.id)
-
-        if calculated_balance > 0:
-            return {
-                'balance': '${:,.2f}'.format(calculated_balance),
-                'credit_availability': 'Credit Available'
-            }
-        else:
-            return {
-                'balance': '${:,.2f}'.format(calculated_balance),
-                'credit_availability': 'No Credit Available'
-            }
 
     class Meta:
         model = Account
@@ -50,9 +41,6 @@ class AccountSerializer(serializers.ModelSerializer):
             'date_modified',
             'created_by',
             'modified_by',
-
-            'plat_account',
-            'lot_account',
 
             'account_name',
             'contact_first_name',
@@ -71,7 +59,9 @@ class AccountSerializer(serializers.ModelSerializer):
 
             'address_state_display',
 
-            'balance',
+            'current_account_balance',
+            'current_non_sewer_balance',
+            'current_sewer_balance',
         )
 
 class AccountField(serializers.Field):
@@ -82,7 +72,21 @@ class AccountField(serializers.Field):
             return None
 
     def to_representation(self, obj):
-        return AccountSerializer(obj).data
+        return AccountQuickSerializer(obj).data
+
+class AgreementQuickSerializer(serializers.ModelSerializer):
+    account_name = serializers.SerializerMethodField(read_only=True)
+
+    def get_account_name(self, obj):
+        return obj.account_id.account_name
+
+    class Meta:
+        model = Agreement
+        fields = (
+            'id',
+            'resolution_number',
+            'account_name',
+        )
 
 class AgreementSerializer(serializers.ModelSerializer):
     account_id = AccountField()
@@ -128,7 +132,15 @@ class AgreementField(serializers.Field):
             return None
 
     def to_representation(self, obj):
-        return AgreementSerializer(obj).data
+        return AgreementQuickSerializer(obj).data
+
+class ProjectQuickSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Project
+        fields = (
+            'id',
+            'name',
+        )
 
 class ProjectSerializer(serializers.ModelSerializer):
     agreement_id = AgreementField()
@@ -173,7 +185,6 @@ class ProjectSerializer(serializers.ModelSerializer):
             'project_status_display',
 
             'project_description',
-            'status_date',
         )
 
 class ProjectField(serializers.Field):
@@ -190,6 +201,7 @@ class ProjectCostEstimateSerializer(serializers.ModelSerializer):
     project_id = ProjectField()
 
     total_costs = serializers.SerializerMethodField(read_only=True)
+    dollar_values = serializers.SerializerMethodField(read_only=True)
 
     def get_total_costs(self,obj):
         total = (
@@ -199,7 +211,18 @@ class ProjectCostEstimateSerializer(serializers.ModelSerializer):
             obj.admin_cost +
             obj.management_cost
         )
-        return total
+        return '${:,.2f}'.format(total)
+
+    def get_dollar_values(self, obj):
+        return {
+            'land_cost': '${:,.2f}'.format(obj.land_cost),
+            'design_cost': '${:,.2f}'.format(obj.design_cost),
+            'construction_cost': '${:,.2f}'.format(obj.construction_cost),
+            'admin_cost': '${:,.2f}'.format(obj.admin_cost),
+            'management_cost': '${:,.2f}'.format(obj.management_cost),
+            'other_cost': '${:,.2f}'.format(obj.other_cost),
+            'credits_available': '${:,.2f}'.format(obj.credits_available),
+        }
 
     class Meta:
         model = ProjectCostEstimate
@@ -224,18 +247,32 @@ class ProjectCostEstimateSerializer(serializers.ModelSerializer):
             'credits_available',
 
             'total_costs',
+            'dollar_values',
         )
 
 class AccountLedgerSerializer(serializers.ModelSerializer):
-    lot = LotField()
+    lot = LotField(required=False, allow_null=True)
     agreement = AgreementField()
     account_from = AccountField()
     account_to = AccountField()
 
     entry_type_display = serializers.SerializerMethodField(read_only=True)
+    dollar_values = serializers.SerializerMethodField(read_only=True)
 
     def get_entry_type_display(self, obj):
         return obj.get_entry_type_display()
+
+    def get_dollar_values(self, obj):
+        return {
+            'dollar_non_sewer': '${:,.2f}'.format(obj.non_sewer_credits),
+            'dollar_sewer': '${:,.2f}'.format(obj.sewer_credits),
+            'dollar_roads': '${:,.2f}'.format(obj.roads),
+            'dollar_parks': '${:,.2f}'.format(obj.parks),
+            'dollar_storm': '${:,.2f}'.format(obj.storm),
+            'dollar_open_space': '${:,.2f}'.format(obj.open_space),
+            'dollar_sewer_trans': '${:,.2f}'.format(obj.sewer_trans),
+            'dollar_sewer_cap': '${:,.2f}'.format(obj.sewer_cap),
+        }
 
     class Meta:
         model = AccountLedger
@@ -258,19 +295,27 @@ class AccountLedgerSerializer(serializers.ModelSerializer):
             'non_sewer_credits',
             'sewer_credits',
 
+            'sewer_trans',
+            'sewer_cap',
+            'roads',
+            'parks',
+            'storm',
+            'open_space',
+
             'entry_type_display',
+            'dollar_values',
         )
 
 class PaymentSerializer(serializers.ModelSerializer):
     lot_id = LotField()
     credit_account = AccountField()
-    credit_source = AgreementField(read_only=True)
+    credit_source = AgreementField(allow_null=True, required=False)
 
     total_paid = serializers.SerializerMethodField(read_only=True)
     payment_type_display = serializers.SerializerMethodField(read_only=True)
     paid_by_type_display = serializers.SerializerMethodField(read_only=True)
 
-    lot_id = LotField()
+    dollar_values = serializers.SerializerMethodField(read_only=True)
 
     def get_total_paid(self,obj):
         total = (
@@ -281,13 +326,23 @@ class PaymentSerializer(serializers.ModelSerializer):
             obj.paid_storm +
             obj.paid_open_space
         )
-        return total
+        return '${:,.2f}'.format(total)
 
     def get_payment_type_display(self, obj):
         return obj.get_payment_type_display()
 
     def get_paid_by_type_display(self, obj):
         return obj.get_paid_by_type_display()
+
+    def get_dollar_values(self, obj):
+        return {
+            'paid_roads': '${:,.2f}'.format(obj.paid_roads),
+            'paid_sewer_trans': '${:,.2f}'.format(obj.paid_sewer_trans),
+            'paid_sewer_cap': '${:,.2f}'.format(obj.paid_sewer_cap),
+            'paid_parks': '${:,.2f}'.format(obj.paid_parks),
+            'paid_storm': '${:,.2f}'.format(obj.paid_storm),
+            'paid_open_space': '${:,.2f}'.format(obj.paid_open_space),
+        }
 
     class Meta:
         model = Payment
@@ -319,41 +374,56 @@ class PaymentSerializer(serializers.ModelSerializer):
             'total_paid',
             'payment_type_display',
             'paid_by_type_display',
+            'dollar_values',
         )
 
+class ProfileSerializer(serializers.ModelSerializer):
+     class Meta:
+        model = Profile
+        fields = (
+            'id',
+            'is_supervisor',
+        )       
+
+class ProfileField(serializers.Field):
+    def to_representation(self, obj):
+        return ProfileSerializer(obj).data
+
+class GroupSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Group
+        fields = ('name',)
+
 class UserSerializer(serializers.ModelSerializer):
+    token = serializers.SerializerMethodField(read_only=True)
+    permissions = serializers.SerializerMethodField(read_only=True)
+    profile = ProfileField(read_only=True)
+    groups = GroupSerializer(many=True)
 
-    password = serializers.CharField(write_only=True)
+    def get_token(self, obj):
+        token_value = Token.objects.filter(user=obj)[0].key
+        return token_value
 
-    # def validate_password(self, pwd):
-    #     strong_enough, error_msg = password_strong_enough(pwd)
-    #     if not strong_enough:
-    #         raise serializers.ValidationError(error_msg)
-    #     return pwd
+    def get_permissions(self, obj):
+        permission_set = {}
+        for permission in obj.get_all_permissions():
+            permission_name = permission[permission.index('_') + 1: len(permission)]
 
-    def validate_email(self, email):
-        validate_email(email)
-        return email
+            permission_set[permission_name] = True
 
-    def create(self, validated_data):
-        pwd = validated_data.pop('password')
-        username = validated_data.pop('username').lower()
-        user = User.objects.create(username=username, **validated_data)
-        user.set_password(pwd)
-        user.save()
-
-        tasks.send_welcome_email.delay(user.id)
-
-        return user
+        return permission_set
 
     class Meta:
         model = User
         fields = (
             'id',
             'username',
-            'password',
             'email',
             'first_name',
             'last_name',
+            'is_superuser',
+            'token',
+            'permissions',
+            'profile',
+            'groups',
         )
-        extra_kwargs = {'email': {'required': True}}

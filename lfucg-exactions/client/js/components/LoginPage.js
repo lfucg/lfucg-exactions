@@ -1,8 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { hashHistory } from 'react-router';
+import { hashHistory, Link } from 'react-router';
 import PropTypes from 'prop-types';
 
+import FlashMessage from './FlashMessage';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
@@ -12,6 +13,10 @@ import FormGroup from './FormGroup';
 import {
     login,
 } from '../actions/apiActions';
+
+import {
+    flashMessageSet,
+} from '../actions/flashMessageActions';
 
 class Login extends React.Component {
     render() {
@@ -37,13 +42,14 @@ class Login extends React.Component {
 
                 <div className="inside-body">
                     <div className="container">
+                        <FlashMessage />
                         <div className="col-md-offset-1 col-md-10">
                             <form onSubmit={onLogin}>
                                 <fieldset>
                                     <div className="row">
                                         <div className="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
                                             <FormGroup label="Username" id="username">
-                                                <input type="text" className="form-control" placeholder="Username" aria-label="Username" autoFocus />
+                                                <input type="text" className="form-control" placeholder="Username" aria-label="Username" />
                                             </FormGroup>
                                         </div>
                                     </div>
@@ -56,26 +62,12 @@ class Login extends React.Component {
                                     </div>
                                 </fieldset>
                                 <div className="row">
-                                    <div className="col-sm-offset-8">
-                                        <button className="btn btn-lex">Login</button>
+                                    <div className="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
+                                        <Link to="forgot-password/" role="link" className="btn btn-link pull-left">Forgot Password?</Link>
+                                        <button className="btn btn-lex pull-right" style={{ 'marginTop': 0 }}>Login</button>
                                     </div>
                                 </div>
                             </form>
-                            {
-                                // <div className="row login-link-row">
-                                //     <div className="col-md-offset-3 col-md-6 col-sm-8 col-sm-offset-2">
-                                //         <div className="col-sm-3">
-                                //             <Link to="registration/" role="link" className="btn btn-lex">Register</Link>
-                                //         </div>
-                                //         <div className="col-sm-4">
-                                //             <Link to="forgot-password/" role="link" className="btn btn-lex">Forgot Password</Link>
-                                //         </div>
-                                //         <div className="col-sm-4">
-                                //             <Link to="forgot-username/" role="link" className="btn btn-lex">Forgot Username</Link>
-                                //         </div>
-                                //     </div>
-                                // </div>
-                            }
                         </div>
                     </div>
                 </div>
@@ -102,8 +94,13 @@ function mapDispatchToProps(dispatch) {
         onLogin(event) {
             event.preventDefault();
             dispatch(login())
-            .then(() => {
-                hashHistory.goBack();
+            .then((response) => {
+                if (response.error) {
+                    dispatch(flashMessageSet('The username/password combination you entered didn\'t match our records. Please try again.', 'danger'));
+                } else {
+                    hashHistory.push('dashboard/');
+                    dispatch(flashMessageSet('Login successful', 'success'));
+                }
             });
         },
     };

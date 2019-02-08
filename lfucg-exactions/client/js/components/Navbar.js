@@ -1,12 +1,18 @@
 import React from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
+import { hashHistory } from 'react-router';
 import PropTypes from 'prop-types';
 
 import {
     logout,
     getMe,
 } from '../actions/apiActions';
+
+
+import {
+    formUpdate,
+} from '../actions/formActions';
 
 class Navbar extends React.Component {
     componentDidMount() {
@@ -28,11 +34,11 @@ class Navbar extends React.Component {
                         <div className="navbar-header">
                             {windowWidth <= 767 ?
                                 <Link to="dashboard/" aria-label="Exactions Home" role="link" >
-                                    <img className="navbar-brand" src={`${global.BASE_STATIC_URL}/Lexington_Web_Color_Horse_Only.png`} alt="#" aria-hidden />
+                                    <img className="navbar-brand" src={`${window.StaticURL}images/Lexington_Web_Color_Horse_Only.png`} alt="#" aria-hidden />
                                 </Link>
                             :
-                                <Link to="dashboard/" aria-label="Exactions Home" role="link" >
-                                    <img className="navbar-brand" src={`${global.BASE_STATIC_URL}/lexington-logo.svg`} alt="#" aria-hidden />
+                                <Link to="dashboard/" aria-label="Exactions Home" role="link" autoFocus >
+                                    <img className="navbar-brand" src={`${window.StaticURL}images/lexington-logo.svg`} alt="#" aria-hidden />
                                 </Link>
                             }
                             <button className="btn navbar-btn navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
@@ -41,7 +47,7 @@ class Navbar extends React.Component {
                                 <span className="icon-bar" />
                             </button>
                         </div>
-                        <div id="navbar-header-collapse" className="collapse navbar-collapse">
+                        <div id="navbar-header-collapse" className="text-center collapse navbar-collapse">
                             <div className="pull-right">
                                 <ul className="nav navbar-nav pull-right navbar-menu">
                                     <li>
@@ -85,9 +91,11 @@ function mapDispatchToProps(dispatch) {
     return {
         onComponentDidMount() {
             dispatch(getMe());
+            dispatch(formUpdate({ loading: true }));
         },
         onLogout() {
             dispatch(logout());
+            hashHistory.push('login/');
         },
     };
 }

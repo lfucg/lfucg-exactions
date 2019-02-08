@@ -1,12 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { map } from 'ramda';
+import { map, contains } from 'ramda';
 import PropTypes from 'prop-types';
 
 import FormGroup from './FormGroup';
 
 import {
     getNoteContent,
+    getSecondaryNoteContent,
     postNote,
 } from '../actions/apiActions';
 
@@ -16,19 +17,13 @@ import {
 
 class Notes extends React.Component {
     componentDidMount() {
-        this.props.onComponentDidMount({
-            content_type: this.props.content_type,
-            object_id: this.props.object_id,
-            parent_content_type: this.props.parent_content_type,
-            parent_object_id: this.props.parent_object_id,
-        });
+        this.props.onComponentDidMount();
     }
 
 
     render() {
         const {
             currentUser,
-            activeForm,
             notes,
             onSubmit,
         } = this.props;
@@ -53,9 +48,7 @@ class Notes extends React.Component {
                             </div>
                         </div>
                         <div className="col-sm-8">
-                            <h5>
-                                {single_note.note}
-                            </h5>
+                            {single_note.note}
                         </div>
                     </div>
                     <hr aria-hidden="true" />
@@ -64,35 +57,67 @@ class Notes extends React.Component {
         })(notes));
 
         return (
-            <div className="container notes-page">
-                <div className="row">
-                    <h2>Existing Notes</h2>
-                </div>
-                <div className="row">
-                    <h4>
-                        <div className="col-sm-3">Information</div>
-                        <div className="col-sm-8">Notes</div>
-                    </h4>
-                </div>
-                <div className="row existing-notes">
-                    {notesList}
-                </div>
-                {currentUser && currentUser.id &&
-                    <form onSubmit={onSubmit} >
-                        <fieldset>
-                            <div className="row">
-                                <FormGroup label="Add Notes" id="note">
-                                    <textarea type="text" className="form-control" placeholder="Add Notes" rows="5" />
-                                </FormGroup>
+            <div className="notes-page">
+                <div className="panel-group" id="accordion" role="tablist" aria-multiselectable="false">
+                    <a
+                      role="button"
+                      data-toggle="collapse"
+                      data-parent="#accordion"
+                      href="#collapseNote"
+                      aria-expanded={this.props.ariaExpanded}
+                      aria-controls="collapseNote"
+                    >
+                        <div className="row section-heading" role="tab" id="headingNotes">
+                            <div className="col-xs-1 caret-indicator" />
+                            <div className="col-xs-10">
+                                <h3>Notes</h3>
                             </div>
-                            <div className="col-sm-3">
-                                <button className="btn btn-lex">
-                                    Add Note
-                                </button>
+                        </div>
+                    </a>
+                    <div
+                      id="collapseNote"
+                      className={this.props.panelClass}
+                      role="tabpanel"
+                      aria-labelledby="#headingNotes"
+                    >
+                        <div className="panel-body">
+                            <div className="col-sm-12">
+                                {notes && notes.length > 0 &&
+                                    <div>
+                                        <div className="row">
+                                            <h2>Existing Notes</h2>
+                                        </div>
+                                        <div className="row">
+                                            <h4>
+                                                <div className="col-sm-3">Information</div>
+                                                <div className="col-sm-8">Notes</div>
+                                            </h4>
+                                        </div>
+                                        <div className="row existing-notes">
+                                            {notesList}
+                                        </div>
+                                    </div>
+                                }
+                                {currentUser && currentUser.permissions && contains(this.props.permission, Object.keys(currentUser.permissions)) &&
+                                    <form onSubmit={onSubmit} >
+                                        <fieldset>
+                                            <div className="row">
+                                                <FormGroup label="Add Notes" id="note">
+                                                    <textarea type="text" className="form-control" placeholder="Add Notes" rows="5" />
+                                                </FormGroup>
+                                            </div>
+                                            <div className="col-sm-3">
+                                                <button className="btn btn-lex">
+                                                    Add Note
+                                                </button>
+                                            </div>
+                                        </fieldset>
+                                    </form>
+                                }
                             </div>
-                        </fieldset>
-                    </form>
-                }
+                        </div>
+                    </div>
+                </div>
             </div>
         );
     }
@@ -100,47 +125,44 @@ class Notes extends React.Component {
 
 Notes.propTypes = {
     currentUser: PropTypes.object,
-    activeForm: PropTypes.object,
-    notes: PropTypes.object,
+    notes: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
     onComponentDidMount: PropTypes.func,
     onSubmit: PropTypes.func,
-    content_type: PropTypes.string,
-    object_id: PropTypes.number,
-    parent_content_type: PropTypes.string,
-    parent_object_id: PropTypes.number,
+    ariaExpanded: PropTypes.string,
+    panelClass: PropTypes.string,
+    permission: PropTypes.string,
 };
 
 function mapStateToProps(state) {
     return {
         currentUser: state.currentUser,
-        activeForm: state.activeForm,
         notes: state.notes,
     };
 }
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch, props) {
     return {
-        onComponentDidMount(pass_props) {
-            if (pass_props.content_type) {
-                const update_content = {};
-
-                update_content.content_type = pass_props.content_type;
-                update_content.object_id = pass_props.object_id;
-                update_content.parent_content_type = pass_props.parent_content_type;
-                update_content.parent_object_id = pass_props.parent_object_id;
-
-                dispatch(formUpdate(update_content));
-                dispatch(getNoteContent());
+        onComponentDidMount() {
+            if (props.secondary_content_type) {
+                dispatch(getNoteContent(props.content_type, props.object_id));
+                dispatch(getSecondaryNoteContent(props.secondary_content_type, props.secondary_object_id));
+            } else {
+                dispatch(getNoteContent(props.content_type, props.object_id));
             }
         },
         onSubmit() {
-            dispatch(postNote())
+            dispatch(postNote(props.content_type, props.object_id))
             .then(() => {
                 const clear_note = {
                     note: '',
                 };
                 dispatch(formUpdate(clear_note));
-                dispatch(getNoteContent());
+                if (props.secondary_content_type) {
+                    dispatch(getNoteContent(props.content_type, props.object_id));
+                    dispatch(getSecondaryNoteContent(props.secondary_content_type, props.secondary_object_id));
+                } else {
+                    dispatch(getNoteContent(props.content_type, props.object_id));
+                }
             });
         },
     };

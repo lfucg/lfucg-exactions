@@ -19,7 +19,6 @@ def get_env_setting(setting):
         error_msg = "Set the %s env variable" % setting
         raise ImproperlyConfigured(error_msg)
 
-
 # Your project root
 PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__) + "../../../")
 
@@ -34,7 +33,7 @@ STATIC_FILE_DIR = BASE_DIR.child("static")
 # http://www.i18nguy.com/unicode/language-identifiers.html
 LANGUAGE_CODE = 'en-us'
 
-BASE_URL = "http://52.201.224.95/"
+# BASE_URL = "http://52.201.224.95/"
 # Defines the views served for root URLs.
 ROOT_URLCONF = 'server.urls'
 
@@ -52,9 +51,10 @@ INSTALLED_APPS = (
     'django_filters',
     'rest_framework',
     'rest_framework.authtoken',
+    'django_extensions',
 
     # Third-party apps, patches, fixes
-    'debug_toolbar',
+    # 'debug_toolbar',
     'compressor',
 
     # Application base, containing global templates.
@@ -147,7 +147,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
+    # 'debug_toolbar.middleware.DebugToolbarMiddleware',
     'simple_history.middleware.HistoryRequestMiddleware',
 ]
 
@@ -165,6 +165,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'django.template.context_processors.media',
+                'server.settings.context_processors.set_static_url',
             ],
         },
     },
@@ -173,19 +174,19 @@ TEMPLATES = [
 TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 
 
-def custom_show_toolbar(request):
-    """ Only show the debug toolbar to users with the superuser flag. """
-    return request.user.is_superuser
+# def custom_show_toolbar(request):
+#     """ Only show the debug toolbar to users with the superuser flag. """
+#     return request.user.is_superuser
 
 
-DEBUG_TOOLBAR_CONFIG = {
-    'INTERCEPT_REDIRECTS': False,
-    'SHOW_TOOLBAR_CALLBACK': 'server.settings.base.custom_show_toolbar',
-    'HIDE_DJANGO_SQL': True,
-    'TAG': 'body',
-    'SHOW_TEMPLATE_CONTEXT': True,
-    'ENABLE_STACKTRACES': True,
-}
+# DEBUG_TOOLBAR_CONFIG = {
+#     'INTERCEPT_REDIRECTS': False,
+#     'SHOW_TOOLBAR_CALLBACK': 'server.settings.base.custom_show_toolbar',
+#     'HIDE_DJANGO_SQL': True,
+#     'TAG': 'body',
+#     'SHOW_TEMPLATE_CONTEXT': True,
+#     'ENABLE_STACKTRACES': True,
+# }
 
 # Uncomment the following setting if you get an ImportError such as:
 #   ImproperlyConfigured: The included urlconf projectname.urls doesn't have any patterns in it
@@ -218,7 +219,7 @@ WSGI_APPLICATION = 'server.wsgi.application'
 # Define your database connections
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'exactions',
         'USER': '',
         'PASSWORD': '',
@@ -243,6 +244,7 @@ REST_FRAMEWORK = {
 # Recipients of traceback emails and other notifications.
 ADMINS = (
     # ('Your Name', 'your_email@domain.com'),
+    ('Kelly Wright', 'kelly@apaxsoftware.com'),
 )
 MANAGERS = ADMINS
 
@@ -283,10 +285,10 @@ INTERNAL_IPS = ('127.0.0.1')
 # Set this to true if you use a proxy that sets X-Forwarded-Host
 #USE_X_FORWARDED_HOST = False
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 SERVER_EMAIL = "webmaster@example.com"
-DEFAULT_FROM_EMAIL = "webmaster@example.com"
+DEFAULT_FROM_EMAIL = "cbencz@lexingtonky.gov"
 SYSTEM_EMAIL_PREFIX = "[server]"
 
 ## Log settings
@@ -311,3 +313,4 @@ LOGGING = {
 #CEF_VERSION = '0'
 #CEF_DEVICE_VERSION = '0'
 PAGINATION_SIZE = 10
+PASSWORD_RESET_TIMEOUT_DAYS = 7

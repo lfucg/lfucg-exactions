@@ -1,7 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { map } from 'ramda';
+import { map, compose, filter, reduce } from 'ramda';
+
+import FormGroup from './FormGroup';
 import {
     searchQuery,
     getPagination,
@@ -17,9 +19,11 @@ class SearchBar extends React.Component {
         this.props.onComponentDidMount({
             apiCalls: this.props.apiCalls,
             advancedSearch: this.props.advancedSearch,
+            csvEndpoint: this.props.csvEndpoint,
+            dateFilters: this.props.dateFilters,
         });
     }
-
+    
     render() {
         const {
             onQuery,
@@ -28,6 +32,17 @@ class SearchBar extends React.Component {
             advancedSearchPopulation,
             clearFilters,
         } = this.props;
+        
+
+        const queryString = compose(
+            reduce((acc, value) => acc + value, this.props.csvEndpoint),
+            map((key_name) => {
+                const filter_index = key_name.indexOf('filter_') + 'filter_'.length;
+                const field = key_name.slice(filter_index, key_name.length);
+                return `&${field}=${activeForm[key_name]}`;
+            }),
+            filter(key_name => activeForm[key_name] && (key_name.indexOf('filter_') !== -1)),
+        )(Object.keys(activeForm));
 
         const advancedSearchDropdowns = this.props && this.props.advancedSearch &&
             (map((field) => {
@@ -46,7 +61,7 @@ class SearchBar extends React.Component {
                                 <option value="">
                                     Select {field.displayName}
                                 </option>
-                                {map((option_item) => {
+                                {field && field.list && map((option_item) => {
                                     return (
                                         <option key={`${option_item.id}_${option_item.name}`} value={option_item.id} >
                                             {option_item.name}
@@ -71,8 +86,9 @@ class SearchBar extends React.Component {
                                 <input
                                   type="text"
                                   className="form-control"
-                                  placeholder="Enter search..."
+                                  placeholder={`Enter ${this.props.currentPage} search...`}
                                   id="query"
+                                  aria-label={`Enter ${this.props.currentPage} search...`}
                                 />
                             </div>
                         </fieldset>
@@ -112,9 +128,52 @@ class SearchBar extends React.Component {
                             <div className="row">
                                 {advancedSearchDropdowns}
                             </div>
+                            {this.props.dateFilters &&
+                                <div className="row">
+                                    <div className="col-sm-12">
+                                        <div className="col-sm-6"
+                                            onChange={() => onFilter('filter_starting_date')} 
+                                        >
+                                            <FormGroup 
+                                                label="* Starting Date" 
+                                                id="filter_starting_date"
+                                            >
+                                                <input 
+                                                    className="form-control" 
+                                                    placeholder="Date Format YYYY-MM-DD" 
+                                                    type="date" 
+                                                />
+                                            </FormGroup>
+                                        </div>
+                                        <div className="col-sm-6"
+                                            onChange={() => onFilter('filter_ending_date')} 
+                                        >
+                                            <FormGroup 
+                                                label="* Ending Date" 
+                                                id="filter_ending_date"
+                                            >
+                                                <input 
+                                                    className="form-control" 
+                                                    placeholder="Date Format YYYY-MM-DD" 
+                                                    type="date" 
+                                                />
+                                            </FormGroup>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
                         </div>
                     </div>
                 </div>
+                { this.props.csvEndpoint &&
+                    <div className="row">
+                        <div className="col-xs-12 text-center">
+                            <a href={`${queryString}`} className="btn button-modal-link" aria-label="Generate CSV from Current Results">
+                                <i className="fa fa-download button-modal-icon" aria-hidden="true" />&nbsp;Generate CSV from Current Results
+                            </a>
+                        </div>
+                    </div>
+                }
             </div>
         );
     }
@@ -129,6 +188,9 @@ SearchBar.propTypes = {
     advancedSearchPopulation: PropTypes.func,
     apiCalls: PropTypes.array,
     advancedSearch: PropTypes.array,
+    csvEndpoint: PropTypes.string,
+    currentPage: PropTypes.string,
+    dateFilters: PropTypes.bool,
 };
 
 function mapStateToProps(state) {
@@ -153,10 +215,12 @@ function mapDispatchToProps(dispatch, props) {
             };
         },
         onFilter(field) {
-            const update = {
-                [field.name]: field.value,
-            };
-            dispatch(formUpdate(update));
+            if (field !== 'filter_ending_date' || field !== 'filter_starting_date') {
+                const update = {
+                    [field.name]: field.value,
+                };
+                dispatch(formUpdate(update));
+            }
             dispatch(searchQuery());
         },
         advancedSearchPopulation() {

@@ -1,8 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import {
-    hashHistory,
-} from 'react-router';
 import PropTypes from 'prop-types';
 
 import FormGroup from './FormGroup';
@@ -44,7 +41,6 @@ class PlatZoneDuesForm extends React.Component {
     render() {
         const {
             activeForm,
-            plats,
             onPlatZoneDuesChange,
         } = this.props;
 
@@ -59,33 +55,63 @@ class PlatZoneDuesForm extends React.Component {
                             <h4>{this.props.acre_value}</h4>
                         </div>
                         <div className="row reduced-form-label">
-                            <FormGroup label="" aria-label={`${this.props.zone_value} road exaction`} id={this.props.dues_roads_id} >
-                                <input type="number" className="form-control" placeholder="Road Exactions" />
+                            <FormGroup label="" ariaLabel={`${this.props.zone_value} road exaction`} id={this.props.dues_roads_id} >
+                                <input
+                                  type="number"
+                                  step="0.01"
+                                  className="form-control"
+                                  placeholder="Road Exactions"
+                                />
                             </FormGroup>
                         </div>
                         <div className="row reduced-form-label">
-                            <FormGroup label="" aria-label={`${this.props.zone_value} open space exaction`} id={this.props.dues_open_spaces_id} >
-                                <input type="number" className="form-control" placeholder="Open Spaces Exactions" />
+                            <FormGroup label="" ariaLabel={`${this.props.zone_value} open space exaction`} id={this.props.dues_open_spaces_id} >
+                                <input
+                                  type="number"
+                                  step="0.01"
+                                  className="form-control"
+                                  placeholder="Open Spaces Exactions"
+                                />
                             </FormGroup>
                         </div>
                         <div className="row reduced-form-label">
-                            <FormGroup label="" aria-label={`${this.props.zone_value} sewer capacity exaction`} id={this.props.dues_sewer_cap_id} >
-                                <input type="number" className="form-control" placeholder="Sewer Capacity Exactions" />
+                            <FormGroup label="" ariaLabel={`${this.props.zone_value} sewer capacity exaction`} id={this.props.dues_sewer_cap_id} >
+                                <input
+                                  type="number"
+                                  step="0.01"
+                                  className="form-control"
+                                  placeholder="Sewer Capacity Exactions"
+                                />
                             </FormGroup>
                         </div>
                         <div className="row reduced-form-label">
-                            <FormGroup label="" aria-label={`${this.props.zone_value} sewer transmission exaction`} id={this.props.dues_sewer_trans_id} >
-                                <input type="number" className="form-control" placeholder="Sewer Transmission Exactions" />
+                            <FormGroup label="" ariaLabel={`${this.props.zone_value} sewer transmission exaction`} id={this.props.dues_sewer_trans_id} >
+                                <input
+                                  type="number"
+                                  step="0.01"
+                                  className="form-control"
+                                  placeholder="Sewer Transmission Exactions"
+                                />
                             </FormGroup>
                         </div>
                         <div className="row reduced-form-label">
-                            <FormGroup label="" aria-label={`${this.props.zone_value} parks exaction`} id={this.props.dues_parks_id} >
-                                <input type="number" className="form-control" placeholder="Park Exactions" />
+                            <FormGroup label="" ariaLabel={`${this.props.zone_value} parks exaction`} id={this.props.dues_parks_id} >
+                                <input
+                                  type="number"
+                                  step="0.01"
+                                  className="form-control"
+                                  placeholder="Park Exactions"
+                                />
                             </FormGroup>
                         </div>
                         <div className="row reduced-form-label">
-                            <FormGroup label="" aria-label={`${this.props.zone_value} storm water exaction`} id={this.props.dues_storm_water_id} >
-                                <input type="number" className="form-control" placeholder="Storm Water Exactions" />
+                            <FormGroup label="" ariaLabel={`${this.props.zone_value} storm water exaction`} id={this.props.dues_storm_water_id} >
+                                <input
+                                  type="number"
+                                  step="0.01"
+                                  className="form-control"
+                                  placeholder="Storm Water Exactions"
+                                />
                             </FormGroup>
                         </div>
                     </fieldset>
@@ -97,25 +123,24 @@ class PlatZoneDuesForm extends React.Component {
 
 PlatZoneDuesForm.propTypes = {
     activeForm: PropTypes.object,
-    plats: PropTypes.array,
     plat_zone_id: PropTypes.string,
-    plat_zone_value: PropTypes.number,
+    plat_zone_value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     zone_id: PropTypes.string,
     zone_value: PropTypes.string,
     acre_id: PropTypes.string,
-    acre_value: PropTypes.number,
+    acre_value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     dues_roads_id: PropTypes.string,
-    dues_roads_value: PropTypes.number,
+    dues_roads_value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     dues_open_spaces_id: PropTypes.string,
-    dues_open_spaces_value: PropTypes.number,
+    dues_open_spaces_value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     dues_sewer_cap_id: PropTypes.string,
-    dues_sewer_cap_value: PropTypes.number,
+    dues_sewer_cap_value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     dues_sewer_trans_id: PropTypes.string,
-    dues_sewer_trans_value: PropTypes.number,
+    dues_sewer_trans_value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     dues_parks_id: PropTypes.string,
-    dues_parks_value: PropTypes.number,
+    dues_parks_value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     dues_storm_water_id: PropTypes.string,
-    dues_storm_water_value: PropTypes.number,
+    dues_storm_water_value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     onComponentDidMount: PropTypes.func,
     onPlatZoneDuesChange: PropTypes.func,
 };
@@ -123,7 +148,6 @@ PlatZoneDuesForm.propTypes = {
 function mapStateToProps(state) {
     return {
         activeForm: state.activeForm,
-        plats: state.plats,
     };
 }
 

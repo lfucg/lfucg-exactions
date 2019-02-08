@@ -8,9 +8,12 @@ import PropTypes from 'prop-types';
 import Navbar from './Navbar';
 import Footer from './Footer';
 
+import Notes from './Notes';
 import FormGroup from './FormGroup';
 import Breadcrumbs from './Breadcrumbs';
+import DeclineDelete from './DeclineDelete';
 
+import { setLoadingFalse } from '../actions/stateActions';
 import {
     formInit,
     formUpdate,
@@ -30,8 +33,8 @@ class SubdivisionForm extends React.Component {
     render() {
         const {
             activeForm,
-            subdivisions,
             onSubmit,
+            selectedSubdivision,
         } = this.props;
 
         const submitEnabled =
@@ -53,29 +56,44 @@ class SubdivisionForm extends React.Component {
                 <div className="inside-body">
                     <div className="container">
                         <div className="col-sm-offset-1 col-sm-10">
-                            <form onSubmit={onSubmit} >
-
+                            <form >
                                 <fieldset>
                                     <div className="row">
-                                        <FormGroup label="* Subdivision Name" id="name" aria-required="true">
+                                        <FormGroup label="* Subdivision Name" id="name" ariaRequired="true">
                                             <input type="text" className="form-control" placeholder="Subdivision Name" autoFocus />
                                         </FormGroup>
                                     </div>
                                     <div className="row">
-                                        <FormGroup label="* Gross Acreage" id="gross_acreage" aria-required="true">
+                                        <FormGroup label="* Gross Acreage" id="gross_acreage" ariaRequired="true">
                                             <input type="text" className="form-control" placeholder="Gross Acreage" />
                                         </FormGroup>
                                     </div>
                                 </fieldset>
-                                <button disabled={!submitEnabled} className="btn btn-lex">Submit</button>
-                                {!submitEnabled ? (
-                                    <div>
-                                        <div className="clearfix" />
-                                        <span> * All required fields must be filled.</span>
-                                    </div>
-                                ) : null
-                                }
+                                <div className="col-xs-8">
+                                    <button disabled={!submitEnabled} className="btn btn-lex" onClick={onSubmit} >Submit</button>
+                                    {!submitEnabled ? (
+                                        <div>
+                                            <div className="clearfix" />
+                                            <span> * All required fields must be filled.</span>
+                                        </div>
+                                    ) : null
+                                    }
+                                </div>
+                                <div className="col-xs-4">
+                                    <DeclineDelete currentForm="/subdivision/" selectedEntry={selectedSubdivision} parentRoute="subdivision" />
+                                </div>
                             </form>
+                            <div className="clearfix" />
+                            <hr aria-hidden="true" />
+                            {selectedSubdivision &&
+                                <Notes
+                                  content_type="plats_subdivision"
+                                  object_id={selectedSubdivision}
+                                  ariaExpanded="true"
+                                  panelClass="panel-collapse collapse row in"
+                                  permission="subdivision"
+                                />
+                            }
                         </div>
                     </div>
                 </div>
@@ -88,16 +106,15 @@ class SubdivisionForm extends React.Component {
 
 SubdivisionForm.propTypes = {
     activeForm: PropTypes.object,
-    subdivisions: PropTypes.array,
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
     onSubmit: PropTypes.func,
+    selectedSubdivision: PropTypes.string,
 };
 
 function mapStateToProps(state) {
     return {
         activeForm: state.activeForm,
-        subdivisions: state.subdivisions,
     };
 }
 
@@ -117,22 +134,29 @@ function mapDispatchToProps(dispatch, params) {
                     };
                     dispatch(formUpdate(update));
                 });
+            } else {
+                dispatch(setLoadingFalse('subdivision'));
             }
         },
         onSubmit(event) {
             event.preventDefault();
             if (selectedSubdivision) {
                 dispatch(putSubdivision(selectedSubdivision))
-                .then(() => {
-                    hashHistory.push(`subdivision/summary/${selectedSubdivision}`);
-                });
+                    .then((data) => {
+                        if (data.response) {
+                            hashHistory.push(`subdivision/summary/${selectedSubdivision}`);
+                        }
+                    });
             } else {
                 dispatch(postSubdivision())
                 .then((data_sub_post) => {
-                    hashHistory.push(`subdivision/summary/${data_sub_post.response.id}`);
+                    if (data_sub_post.response) {
+                        hashHistory.push(`subdivision/summary/${data_sub_post.response.id}`);
+                    }
                 });
             }
         },
+        selectedSubdivision,
     };
 }
 

@@ -1,0 +1,34 @@
+version: 2
+jobs:
+  # build:
+  #   machine:
+  #     ruby: 2.4.1
+  #   steps:
+  #     - run: python manage.py test
+  deploy-dev:
+    docker:
+      - image: circleci/ruby:2.4.4
+    steps:
+      - checkout
+      - run: gem install dream-ops -v 0.4.2
+      - run: dream deploy opsworks -T d93434c3-4ace-4970-ac0a-6f87c0d9e125
+  # deploy-prod:
+  #   machine:
+  #     ruby: 2.4.1
+  #   steps:
+  #     - run: gem install dream-ops -v 0.4.2
+  #     - run: dream deploy opsworks -T <STACK_ID>
+
+
+workflows:
+  version: 2
+  build-deploy:
+    jobs:
+      - deploy-dev:
+          filters:
+            branches:
+              only: dev
+      # - deploy-prod:
+      #     filters:
+      #       branches:
+      #         only: master
