@@ -205,8 +205,8 @@ class Command(BaseCommand):
         self.CreateNewLedger(ledger_data)
 
   def handle(self, *args, **options):
-    # df_to_delete = pd.read_csv('ledgers_to_delete.csv')
-    # self.DeleteExtraLedgers(df_to_delete)
+    df_to_delete = pd.read_csv('ledgers_to_delete.csv')
+    self.DeleteExtraLedgers(df_to_delete)
 
     df_to_add = pd.read_csv('ledgers_to_add.csv')
     self.AddNewLedgers(df_to_add)
