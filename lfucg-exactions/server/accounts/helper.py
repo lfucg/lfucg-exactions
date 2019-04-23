@@ -96,6 +96,10 @@ def send_email_to_supervisors(sender, instance, **kwargs):
 
         ctype = ContentType.objects.get_for_model(instance)
 
+        model = ctype.model
+        if ctype.model == 'accountledger':
+            model = 'credit-transfer'
+
         if ctype.app_label == 'accounts':
             group = ['Finance']
         elif ctype.app_label == 'plats':
@@ -119,7 +123,7 @@ def send_email_to_supervisors(sender, instance, **kwargs):
 
                 context = {
                     'baseURL': settings.BASE_URL,
-                    'model': ctype.model,
+                    'model': model,
                     'staticURL': settings.STATIC_URL,
                     'id': instance.id,
                 }
