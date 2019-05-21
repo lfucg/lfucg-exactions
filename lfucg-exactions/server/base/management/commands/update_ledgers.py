@@ -142,7 +142,11 @@ class Command(BaseCommand):
     elif ';' not in res:
       agreement = self.GetLedgerAgreement(res, plat)
 
-      credit_type = 'non' if 'NSWR' in res else 'sewer'
+      credit_type = ''
+      if 'NSWR' in res or 'SWR' in res:
+        credit_type = 'non' if 'NSWR' in res else 'sewer'
+      else:
+        credit_type = 'sewer&non'
       credit_values = self.GetCreditValues(row, credit_type)
 
       res_results.append({
@@ -178,7 +182,7 @@ class Command(BaseCommand):
       sewer_credits = ledger_data['credits']['sewer'],
       non_sewer_credits = ledger_data['credits']['non_sewer'],
       sewer_trans = ledger_data['credits']['sewer_trans'],
-      sewer_cap = ledger_data['credits']['sewer_cap'],
+      sewer_cap = Decimal(ledger_data['credits']['sewer_cap']),
       roads = ledger_data['credits']['roads'],
       parks = ledger_data['credits']['parks'],
       open_space = ledger_data['credits']['open_space'],
@@ -186,7 +190,8 @@ class Command(BaseCommand):
     )
 
   def handle(self, *args, **options):
-    df_update = pd.read_csv('ledgers_to_update.csv')
+    # df_update = pd.read_csv('ledgers_to_update.csv')
+    df_update = pd.read_csv('plat_ledgers_to_update.csv')
 
     df_update['Roads'] = df_update['Roads'].fillna(0.00)
     df_update['SewerTransmission'] = df_update['SewerTransmission'].fillna(0.00)
