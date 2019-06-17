@@ -1,7 +1,7 @@
 from django.core.management import BaseCommand
 import pandas as pd
 import numpy as np
-from datetime import datetime
+import datetime
 from decimal import Decimal
 
 from django.contrib.auth.models import User
@@ -15,7 +15,7 @@ class Command(BaseCommand):
   def ConvertDates(self, date_field):
   
     try:
-      cleaned_date = str(datetime.strptime(date_field, '%m-%d-%y').strftime('%-m/%-d/%Y'))
+      cleaned_date = str(datetime.datetime.strptime(date_field, '%m-%d-%y').strftime('%-m/%-d/%Y'))
     except Exception as ex:
       print('Date conversion exception', ex)  
       cleaned_date = None
@@ -172,53 +172,90 @@ class Command(BaseCommand):
     
     return res_results
   
-  def UpdateLedger(self, ledger_data):
+  def GetHistoricalLedger(self, lot):
+    historical_ledger = {}
+    historical_ledger['entry_date'] = datetime.date.today()
+    historical_ledger['entry_type'] = 'USE'
+
     ledger = AccountLedger.objects.filter(
+      lot=lot,
+    ).first()
+
+    if ledger is not None:
+      historical_ledger['entry_date'] = ledger.entry_date
+      historical_ledger['entry_type'] = ledger.entry_type
+
+    return historical_ledger
+
+  def CreateLedgers(self, ledger_data):
+    AccountLedger.objects.get_or_create(
+      account_from=ledger_data['account'],
+      account_to=self.lfucg_account,
       lot=ledger_data['lot'],
+      agreement=ledger_data['agreement'],
+      defaults={
+        'entry_type': ledger_data['historical_ledger']['entry_type'],
+        'entry_date': ledger_data['historical_ledger']['entry_date'],
+        'created_by': self.user,
+        'modified_by': self.user,
+        'sewer_credits': ledger_data['credits']['sewer'],
+        'non_sewer_credits': ledger_data['credits']['non_sewer'],
+        'sewer_trans': ledger_data['credits']['sewer_trans'],
+        'sewer_cap': Decimal(ledger_data['credits']['sewer_cap']),
+        'roads': ledger_data['credits']['roads'],
+        'parks': ledger_data['credits']['parks'],
+        'open_space': ledger_data['credits']['open_space'],
+        'storm': ledger_data['credits']['stormwater'],
+      }
+    )
+
+  def DeleteExistingLedger(self, ledger_data):
+    original_ledgers = AccountLedger.objects.filter(
+      lot=ledger_data['lot'],
+      account_from=ledger_data['account'],
       agreement=ledger_data['agreement'],
     )
 
-    ledger.update(
-      sewer_credits = ledger_data['credits']['sewer'],
-      non_sewer_credits = ledger_data['credits']['non_sewer'],
-      sewer_trans = ledger_data['credits']['sewer_trans'],
-      sewer_cap = Decimal(ledger_data['credits']['sewer_cap']),
-      roads = ledger_data['credits']['roads'],
-      parks = ledger_data['credits']['parks'],
-      open_space = ledger_data['credits']['open_space'],
-      storm = ledger_data['credits']['stormwater'],
-    )
+    original_ledgers.delete()
 
   def handle(self, *args, **options):
-    # df_update = pd.read_csv('ledgers_to_update.csv')
-    df_update = pd.read_csv('plat_ledgers_to_update.csv')
+    csv_list = [
+      pd.read_csv('ledgers_to_update.csv'),
+      pd.read_csv('plat_ledgers_to_update.csv'),
+    ]
+    for csv in csv_list:
+      df_update = csv
 
-    df_update['Roads'] = df_update['Roads'].fillna(0.00)
-    df_update['SewerTransmission'] = df_update['SewerTransmission'].fillna(0.00)
-    df_update['SewerCapacity'] = df_update['SewerCapacity'].fillna(0.00)
-    df_update['Parks'] = df_update['Parks'].fillna(0.00)
-    df_update['OpenSpace'] = df_update['OpenSpace'].fillna(0.00)
-    df_update['Stormwater'] = df_update['Stormwater'].fillna(0.00)
+      df_update['Roads'] = df_update['Roads'].fillna(0.00)
+      df_update['SewerTransmission'] = df_update['SewerTransmission'].fillna(0.00)
+      df_update['SewerCapacity'] = df_update['SewerCapacity'].fillna(0.00)
+      df_update['Parks'] = df_update['Parks'].fillna(0.00)
+      df_update['OpenSpace'] = df_update['OpenSpace'].fillna(0.00)
+      df_update['Stormwater'] = df_update['Stormwater'].fillna(0.00)
 
-    for index, row in df_update.iterrows():
-      lot = self.GetLedgerLot(row['Address'])
-      plat = self.GetLedgerPlat(row['PLAT'])
-      if plat:
-        account = plat.account
-        agreements_and_credits = self.ResEvaluation(row, plat)
-        print('Lot to update', lot)
+      for index, row in df_update.iterrows():
+        lot = self.GetLedgerLot(row['Address'])
+        plat = self.GetLedgerPlat(row['PLAT'])
+        if plat:
+          account = plat.account
+          agreements_and_credits = self.ResEvaluation(row, plat)
+          print('Lot to update', lot)
 
-        if agreements_and_credits is not None:
-          for agreement_set in agreements_and_credits:
-            ledger_data = {
-              'lot': lot,
-              'account': account,
-              'agreement': agreement_set['agreement'],
-              'credits': agreement_set['credit_values'],
-            }
+          historical_ledger = self.GetHistoricalLedger(lot)
 
-            self.UpdateLedger(ledger_data)
+          if agreements_and_credits is not None:
+            for agreement_set in agreements_and_credits:
+              ledger_data = {
+                'lot': lot,
+                'account': account,
+                'agreement': agreement_set['agreement'],
+                'credits': agreement_set['credit_values'],
+                'historical_ledger': historical_ledger,
+              }
+
+              self.DeleteExistingLedger(ledger_data)
+              self.CreateLedgers(ledger_data)
+          else:
+            print('No agreements and credits', lot)
         else:
-          print('No agreements and credits', lot)
-      else:
-        print('No plat', row['PLAT'])
+          print('No plat', row['PLAT'])
