@@ -23,7 +23,7 @@ def send_password_reset_email(user, token):
     context = {
         'user': user,
         'baseURL': settings.BASE_URL,
-        'uid': int_to_base36(user.id),
+        'uid': user.id,
         'token': token,
     }
 
@@ -68,7 +68,7 @@ def send_email_to_new_user(sender, instance, created, **kwargs):
         context = {
             'user': user,
             'baseURL': settings.BASE_URL,
-            'uid': int_to_base36(user.id),
+            'uid': user.id,
             'token': token,
         }
 
@@ -90,45 +90,50 @@ def send_email_to_new_user(sender, instance, created, **kwargs):
 @receiver(post_save, sender=Plat)
 @receiver(post_save, sender=Lot)
 def send_email_to_supervisors(sender, instance, **kwargs):
-    if instance.modified_by.is_superuser or ((hasattr(instance.modified_by, 'profile') and instance.modified_by.profile.is_supervisor == True)):
+    if (instance.modified_by.is_superuser or ((hasattr(instance.modified_by, 'profile') and instance.modified_by.profile.is_supervisor == True))):
         return
+    else:
 
-    ctype = ContentType.objects.get_for_model(instance)
+        ctype = ContentType.objects.get_for_model(instance)
 
-    if ctype.app_label == 'accounts':
-        group = ['Finance']
-    elif ctype.app_label == 'plats':
-        group = ['Planning']
+        model = ctype.model
+        if ctype.model == 'accountledger':
+            model = 'credit-transfer'
 
-    users = User.objects.filter(Q(profile__is_supervisor=True) & Q(groups__name__in=group))
+        if ctype.app_label == 'accounts':
+            group = ['Finance']
+        elif ctype.app_label == 'plats':
+            group = ['Planning']
 
-    for user in users:
-        profile = Profile.objects.filter(user=user).first()
-        if hasattr(profile, 'is_approval_required') and not profile.is_approval_required:
-            profile.is_approval_required = True
-            profile.save()
+        users = User.objects.filter(Q(profile__is_supervisor=True) & Q(groups__name__in=group))
 
-            to_emails = list(users.values_list('email', flat=True))
+        for user in users:
+            profile = Profile.objects.filter(user=user).first()
+            if hasattr(profile, 'is_approval_required') and not profile.is_approval_required:
+                profile.is_approval_required = True
+                profile.save()
 
-            html_template = get_template('emails/supervisor_email.html')
-            text_template = get_template('emails/supervisor_email.txt')
+                to_emails = list(users.values_list('email', flat=True))
 
-            subject = 'LFUCG Exactions Activity: New Entry Pending Approval'
-            from_email = settings.DEFAULT_FROM_EMAIL
+                html_template = get_template('emails/supervisor_email.html')
+                text_template = get_template('emails/supervisor_email.txt')
 
-            context = {
-                'baseURL': settings.BASE_URL,
-                'model': ctype.model,
-                'staticURL': settings.STATIC_URL,
-                'id': instance.id,
-            }
+                subject = 'LFUCG Exactions Activity: New Entry Pending Approval'
+                from_email = settings.DEFAULT_FROM_EMAIL
 
-            html_content = html_template.render(context)
-            text_content = text_template.render(context)
+                context = {
+                    'baseURL': settings.BASE_URL,
+                    'model': model,
+                    'staticURL': settings.STATIC_URL,
+                    'id': instance.id,
+                }
 
-            msg = EmailMultiAlternatives(subject, text_content, from_email, to_emails)
-            msg.attach_alternative(html_content, "text/html")
-            msg.send()
+                html_content = html_template.render(context)
+                text_content = text_template.render(context)
+
+                msg = EmailMultiAlternatives(subject, text_content, from_email, to_emails)
+                msg.attach_alternative(html_content, "text/html")
+                msg.send()
 
 @receiver(pre_save, sender=Agreement)
 @receiver(pre_save, sender=AccountLedger)

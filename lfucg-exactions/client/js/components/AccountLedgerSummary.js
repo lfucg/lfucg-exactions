@@ -100,7 +100,7 @@ class AccountLedgerSummary extends React.Component {
                                           <p className="col-md-4 col-xs-6">Storm Water: {accountLedgers.currentLedger.dollar_values && accountLedgers.currentLedger.dollar_values.dollar_storm}</p>
                                           <p className="col-md-4 col-xs-6">Open Space: {accountLedgers.currentLedger.dollar_values && accountLedgers.currentLedger.dollar_values.dollar_open_space}</p>
                                           <p className="col-md-4 col-xs-6">Sewer Transmission: {accountLedgers.currentLedger.dollar_values && accountLedgers.currentLedger.dollar_values.dollar_sewer_trans}</p>
-                                          <p className="col-md-4 col-xs-6">Sewer Capacity: {accountLedgers.currentLedger.dollar_values && accountLedgers.currentLedger.dollar_values.dollar_non_sewer_cap}</p>
+                                          <p className="col-md-4 col-xs-6">Sewer Capacity: {accountLedgers.currentLedger.dollar_values && accountLedgers.currentLedger.dollar_values.dollar_sewer_cap}</p>
                                       </div>
                                   </div>
                               </div>
