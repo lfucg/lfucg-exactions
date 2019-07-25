@@ -31,7 +31,7 @@ class SubdivisionCSVExportView(View):
         subdivision_value = request.GET.get('subdivision', None)
 
         if subdivision_value is not None:
-            subdivision_queryset = Subdivision.objects.filter(id=subdivision_value)
+            subdivision_queryset = Subdivision.objects.filter(id=subdivision_value).exclude(is_active=False)
             subdivision_serializer = self.list(
                 subdivision_queryset,
                 SubdivisionSerializer,
@@ -39,7 +39,7 @@ class SubdivisionCSVExportView(View):
             )
             filename = subdivision_queryset[0].name + '_subdivision_report.csv'
         else:
-            subdivision_queryset = Subdivision.objects.all()
+            subdivision_queryset = Subdivision.objects.all().exclude(is_active=False)
 
             plat_set = self.request.GET.get('plat__id', None)
             if plat_set is not None:
@@ -67,7 +67,7 @@ class SubdivisionCSVExportView(View):
                 'Acres': subdivision['gross_acreage'],
             }
 
-            plat_queryset = Plat.objects.filter(subdivision=subdivision['id'])
+            plat_queryset = Plat.objects.filter(subdivision=subdivision['id']).exclude(is_active=False)
             if plat_queryset is not None:
                 plat_serializer = self.list (
                     plat_queryset,
@@ -149,7 +149,7 @@ class PlatCSVExportView(View):
         plat_value = request.GET.get('plat', None)
 
         if plat_value is not None:
-            plat_queryset = Plat.objects.filter(id=plat_value)
+            plat_queryset = Plat.objects.filter(id=plat_value).exclude(is_active=False)
             plat_serializer = self.list(
                 plat_queryset,
                 PlatSerializer,
@@ -157,7 +157,7 @@ class PlatCSVExportView(View):
             )
             filename = plat_queryset[0].cabinet + '-' + plat_queryset[0].slide + '_plat_report.csv'
         else:
-            plat_queryset = Plat.objects.all()
+            plat_queryset = Plat.objects.all().exclude(is_active=False)
 
             subdivision_set = self.request.GET.get('subdivision', None)
             if subdivision_set is not None:
@@ -214,7 +214,7 @@ class PlatCSVExportView(View):
             if plat['subdivision']:
                 subdivision = plat['subdivision']['name']
             if plat['account']:
-                plat_account = Account.objects.filter(id=plat['account']).first()
+                plat_account = Account.objects.filter(id=plat['account']).first().exclude(is_active=False)
                 account = plat_account.account_name
 
             row = {
@@ -235,7 +235,7 @@ class PlatCSVExportView(View):
             }
 
             # PLAT ZONE
-            plat_zone_queryset = PlatZone.objects.filter(plat=plat['id'])
+            plat_zone_queryset = PlatZone.objects.filter(plat=plat['id']).exclude(is_active=False)
             if plat_zone_queryset is not None:
                 plat_zone_serializer = self.list (
                     plat_zone_queryset,
@@ -251,7 +251,7 @@ class PlatCSVExportView(View):
                     row['Acres -%s' %((i+1))] = plat_zone['acres']
                             
             # LOTS AND LOT DETAILS
-            lot_queryset = Lot.objects.filter(plat=plat['id'])
+            lot_queryset = Lot.objects.filter(plat=plat['id']).exclude(is_active=False)
             if lot_queryset is not None:
                 lot_serializer = self.list (
                     lot_queryset,
@@ -281,7 +281,7 @@ class PlatCSVExportView(View):
                     row['Total Exactions -%s' %(i+1)] = total_exactions
                     row['Current Exactions -%s' %(i+1)] = current_exactions
 
-                    payment_queryset = Payment.objects.filter(lot_id=lot['id'])
+                    payment_queryset = Payment.objects.filter(lot_id=lot['id']).exclude(is_active=False)
                     if payment_queryset is not None:
                         payment_serializer = self.list (
                             payment_queryset,
@@ -306,7 +306,7 @@ class PlatCSVExportView(View):
                             row['Sewer Trans. Paid -%s-%s' %((i+1), (j+1))] = payment['paid_sewer_trans']
                             row['Sewer Cap. Paid -%s-%s' %((i+1), (j+1))] = payment['paid_sewer_cap']
 
-                    ledger_queryset = AccountLedger.objects.filter(lot=lot['id'])
+                    ledger_queryset = AccountLedger.objects.filter(lot=lot['id']).exclude(is_active=False)
                     if ledger_queryset is not None:
                         ledger_serializer = self.list (
                             ledger_queryset,
@@ -366,7 +366,7 @@ class LotSearchCSVExportView(View):
 
         # QUERY DB // FILTER ON PARAMS
 
-        lots = Lot.objects.all()
+        lots = Lot.objects.all().exclude(is_active=False)
 
         plat_set = self.request.GET.get('plat', None)
         if plat_set is not None:
@@ -421,7 +421,15 @@ class LotSearchCSVExportView(View):
         ]
 
         # APPEND PAYMENT HEADERS FROM OUTSET BASED ON MAX PAYMENTS ON LOTS QUERY
-        max_payments = Payment.objects.filter(lot_id__in=lots).values("lot_id").annotate(payments_on_lots=Count("lot_id")).aggregate(Max('payments_on_lots'))['payments_on_lots__max']
+        max_payments = Payment.objects.filter(
+            lot_id__in=lots
+        ).exclude(
+            is_active=False
+        ).values("lot_id").annotate(
+            payments_on_lots=Count("lot_id")
+        ).aggregate(
+            Max('payments_on_lots')
+        )['payments_on_lots__max']
 
         payment_number = 1
         if max_payments is not None:
@@ -432,7 +440,17 @@ class LotSearchCSVExportView(View):
                 payment_number += 1
 
         # APPEND LEDGER HEADERS FROM OUTSET BASED ON MAX LEDGERS ON LOTS QUERY
-        max_ledgers = AccountLedger.objects.filter(lot__in=lots).values("lot").annotate(ledgers_on_lots=Count("lot")).aggregate(Max('ledgers_on_lots'))['ledgers_on_lots__max']
+        max_ledgers = AccountLedger.objects.filter(
+            lot__in=lots
+        ).exclude(
+            is_active=False
+        ).values(
+            "lot"
+        ).annotate(
+            ledgers_on_lots=Count("lot")
+        ).aggregate(
+            Max('ledgers_on_lots')
+        )['ledgers_on_lots__max']
 
         ledger_number = 1
         if max_ledgers is not None:
@@ -502,7 +520,7 @@ class LotSearchCSVExportView(View):
                 'Current Total Due': current_exactions,
             }
 
-            payment_queryset = Payment.objects.filter(lot_id=lot['id'])
+            payment_queryset = Payment.objects.filter(lot_id=lot['id']).exclude(is_active=False)
 
             if payment_queryset is not None:
                 payment_length_per_lot = 0
@@ -512,7 +530,7 @@ class LotSearchCSVExportView(View):
                     row['Payment. Amt. %s' % payment_length_per_lot] = '${:,.2f}'.format(single_payment.calculate_payment_total())
                     row['Payment. Type %s' % payment_length_per_lot] = single_payment.payment_type
 
-            ledger_from_queryset = AccountLedger.objects.filter(lot=lot['id'])
+            ledger_from_queryset = AccountLedger.objects.filter(lot=lot['id']).exclude(is_active=False)
             if ledger_from_queryset is not None:
                 ledger_length_per_lot = 0
                 for ledger in ledger_from_queryset:
