@@ -150,11 +150,9 @@ class PlatCSVExportView(View):
 
         if plat_value is not None:
             plat_queryset = Plat.objects.filter(id=plat_value).exclude(is_active=False)
-            plat_serializer = self.list(
-                plat_queryset,
-                PlatSerializer,
-                many=True
-            )
+            plat_serializer = self.get_serializer_class(
+                PlatSerializer
+            ).setup_eager_loading(plat_queryset)
             filename = plat_queryset[0].cabinet + '-' + plat_queryset[0].slide + '_plat_report.csv'
         else:
             plat_queryset = Plat.objects.exclude(is_active=False)
