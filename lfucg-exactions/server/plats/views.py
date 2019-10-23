@@ -3,7 +3,7 @@ import datetime
 import csv
 from django.views.generic import View
 from django.http import HttpResponse
-from django.db.models import Count, Max, Q
+from django.db.models import Count, Max, Q, Prefetch
 from .models import *
 from .serializers import *
 from accounts.models import *
@@ -157,32 +157,32 @@ class PlatCSVExportView(View):
             )
             filename = plat_queryset[0].cabinet + '-' + plat_queryset[0].slide + '_plat_report.csv'
         else:
-            plat_queryset = Plat.objects.all().exclude(is_active=False)
+            plat_queryset = Plat.objects.exclude(is_active=False)
 
             subdivision_set = self.request.GET.get('subdivision', None)
             if subdivision_set is not None:
-                plat_queryset = plat_queryset.filter(subdivision=subdivision_set)
+                plat_queryset = plat_queryset.filter(Q(subdivision=subdivision_set))
 
             is_approved_set = self.request.GET.get('is_approved', None)
             if is_approved_set is not None:
                 is_approved_set = True if is_approved_set == 'true' else False
-                plat_queryset = plat_queryset.filter(is_approved=is_approved_set)
+                plat_queryset = plat_queryset.filter(Q(is_approved=is_approved_set))
 
             account_set = self.request.GET.get('account', None)
             if account_set is not None:
-                plat_queryset = plat_queryset.filter(account=account_set)
+                plat_queryset = plat_queryset.filter(Q(account=account_set))
 
             lot_set = self.request.GET.get('lot__id', None)
             if lot_set is not None:
-                plat_queryset = plat_queryset.filter(lot=lot_set)
+                plat_queryset = plat_queryset.filter(Q(lot=lot_set))
 
             expansion_area_set = self.request.GET.get('expansion_area', None)
             if expansion_area_set is not None:
-                plat_queryset = plat_queryset.filter(expansion_area=expansion_area_set)
+                plat_queryset = plat_queryset.filter(Q(expansion_area=expansion_area_set))
 
             plat_type_set = self.request.GET.get('plat_type', None)
             if plat_type_set is not None:
-                plat_queryset = plat_queryset.filter(plat_type=plat_type_set)
+                plat_queryset = plat_queryset.filter(Q(plat_type=plat_type_set))
 
             search_set = self.request.GET.get('search', None)
             if search_set is not None:
@@ -197,69 +197,43 @@ class PlatCSVExportView(View):
                         Q(unit__icontains=search_set)
                     )
 
-            plat_serializer = self.list(
-                plat_queryset,
-                PlatSerializer,
-                many=True
-            )
+            plat_serializer = self.get_serializer_class(
+                PlatSerializer
+            ).setup_eager_loading(plat_queryset)
             filename = 'plat_report_' + datetime.datetime.now().strftime("%Y-%m-%d") + '.csv'
 
         response = HttpResponse(content_type='text/csv')
         response['Content-Disposition'] = 'attachment; filename=%s'%filename
-        
-        for plat in plat_serializer.data:
-            subdivision = ''
-            account = ''
 
-            if plat['subdivision']:
-                subdivision = plat['subdivision']['name']
-            if plat['account']:
-                plat_account = Account.objects.filter(id=plat['account']).first().exclude(is_active=False)
-                account = plat_account.account_name
-
+        for plat in plat_serializer:
             row = {
-                'Subdivision': subdivision,
-                'Cabinet': plat['cabinet'],
-                'Slide': plat['slide'],
-                'Total Acreage': plat['total_acreage'],
-                'Buildable Lots': plat['buildable_lots'],
-                'Non-Buildable Lots': plat['non_buildable_lots'],
-                'Plat Type': plat['plat_type_display'],
-                'Expansion Area': plat['expansion_area'],
-                'Unit': plat['unit'],
-                'Block': plat['block'],
-                'Section': plat['section'],
-                'Non-Sewer Exactions': plat['non_sewer_due'],
-                'Sewer Exactions': plat['sewer_due'],
-                'Account': account,
+                'Subdivision': plat.subdivision.name if plat.subdivision else '',
+                'Cabinet': plat.cabinet,
+                'Slide': plat.slide,
+                'Total Acreage': plat.total_acreage,
+                'Buildable Lots': plat.buildable_lots,
+                'Non-Buildable Lots': plat.non_buildable_lots,
+                'Plat Type': plat.get_plat_type_display(),
+                'Expansion Area': plat.expansion_area,
+                'Unit': plat.unit,
+                'Block': plat.block,
+                'Section': plat.section,
+                'Non-Sewer Exactions': plat.non_sewer_due,
+                'Sewer Exactions': plat.sewer_due,
+                'Account': plat.account.account_name if plat.account else '',
             }
 
-            # PLAT ZONE
-            plat_zone_queryset = PlatZone.objects.filter(plat=plat['id']).exclude(is_active=False)
-            if plat_zone_queryset is not None:
-                plat_zone_serializer = self.list (
-                    plat_zone_queryset,
-                    PlatZoneSerializer,
-                    many=True
-                )
-
-                for i, plat_zone in zip(range(plat_zone_queryset.count()), plat_zone_serializer.data):
+            if plat.plat_zone.count() > 0:
+                for i, zone in zip(range(plat.plat_zone.count()), plat.plat_zone.values()):
                     headers.extend(['Zone -%s' %((i+1))])
                     headers.extend(['Acres -%s' %((i+1))])
 
-                    row['Zone -%s' %((i+1))] = plat_zone['zone']
-                    row['Acres -%s' %((i+1))] = plat_zone['acres']
-                            
-            # LOTS AND LOT DETAILS
-            lot_queryset = Lot.objects.filter(plat=plat['id']).exclude(is_active=False)
-            if lot_queryset is not None:
-                lot_serializer = self.list (
-                    lot_queryset,
-                    LotSerializer,
-                    many=True
-                )
+                    row['Zone -%s' %((i+1))] = zone['zone']
+                    row['Acres -%s' %((i+1))] = zone['acres']
 
-                for i, lot in zip(range(lot_queryset.count()), lot_serializer.data):
+            if plat.lot.count() > 0:
+
+                for i, lot in zip(range(plat.lot.count()), plat.lot.values()):
                     headers.extend(['Address -%s' %(i+1)])
                     headers.extend(['Permit ID -%s' %(i+1)])
                     headers.extend(['Lot Number -%s' %(i+1)])
