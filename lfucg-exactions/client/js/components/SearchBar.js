@@ -1,7 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { map, compose, filter, reduce } from 'ramda';
+import {
+    compose,
+    filter,
+    map,
+    reduce,
+    toString,
+} from 'ramda';
 
 import FormGroup from './FormGroup';
 import {
@@ -15,6 +21,10 @@ import {
 } from '../actions/formActions';
 
 class SearchBar extends React.Component {
+    state = {
+        filter_showDeleted: false,
+    };
+
     componentDidMount() {
         this.props.onComponentDidMount({
             apiCalls: this.props.apiCalls,
@@ -27,7 +37,9 @@ class SearchBar extends React.Component {
     render() {
         const {
             onQuery,
+            toggleShowDeleted,
             activeForm,
+            currentUser,
             onFilter,
             advancedSearchPopulation,
             clearFilters,
@@ -155,10 +167,34 @@ class SearchBar extends React.Component {
                                                 <input 
                                                     className="form-control" 
                                                     placeholder="Date Format YYYY-MM-DD" 
-                                                    type="date" 
+                                                    type="date"
                                                 />
                                             </FormGroup>
                                         </div>
+                                    </div>
+                                </div>
+                            }
+                            {
+                                !!currentUser
+                                && (currentUser.is_superuser
+                                || (
+                                    currentUser.profile
+                                    && currentUser.profile.is_supervisor
+                                )) &&
+                                <div className="row">
+                                    <div className="col-sm-6">
+                                        <input
+                                            id="filter_showDeleted"
+                                            className="show-deleted-box"
+                                            type="checkbox"
+                                            onClick={() => {
+                                                this.setState({filter_showDeleted: !filter_showDeleted})
+                                                toggleShowDeleted(this.state.filter_showDeleted)
+                                            }}
+                                        />
+                                        <label htmlFor="filter_showDeleted">
+                                            Show Deleted Entries
+                                        </label>
                                     </div>
                                 </div>
                             }
@@ -168,6 +204,7 @@ class SearchBar extends React.Component {
                 { this.props.csvEndpoint &&
                     <div className="row">
                         <div className="col-xs-12 text-center">
+                            {console.log('QUERYSERIGNR', queryString)}
                             <a href={`${queryString}`} className="btn button-modal-link" aria-label="Generate CSV from Current Results">
                                 <i className="fa fa-download button-modal-icon" aria-hidden="true" />&nbsp;Generate CSV from Current Results
                             </a>
@@ -183,6 +220,7 @@ SearchBar.propTypes = {
     onComponentDidMount: PropTypes.func,
     onQuery: PropTypes.func,
     activeForm: PropTypes.object,
+    currentUser: PropTypes.object,
     onFilter: PropTypes.func,
     clearFilters: PropTypes.func,
     advancedSearchPopulation: PropTypes.func,
@@ -191,11 +229,13 @@ SearchBar.propTypes = {
     csvEndpoint: PropTypes.string,
     currentPage: PropTypes.string,
     dateFilters: PropTypes.bool,
+    toggleShowDeleted: PropTypes.func,
 };
 
 function mapStateToProps(state) {
     return {
         activeForm: state.activeForm,
+        currentUser: state.currentUser,
     };
 }
 
@@ -238,6 +278,10 @@ function mapDispatchToProps(dispatch, props) {
             (map((dropdown) => {
                 dropdown.selectedIndex = 0;
             })(dropdowns));
+        },
+        toggleShowDeleted(prevState) {
+            dispatch(formUpdate({filter_showDeleted: toString(!prevState.filter_showDeleted)}));
+            dispatch(searchQuery());
         },
     };
 }
