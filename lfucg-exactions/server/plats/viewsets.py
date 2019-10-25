@@ -71,10 +71,16 @@ class PlatViewSet(viewsets.ModelViewSet):
             Prefetch(
                 "lot",
                 queryset=Lot.objects.filter(is_active=True),
-            )).exclude(is_active=False)
+            ))
         PageNumberPagination.page_size = 0
         paginatePage = self.request.query_params.get('paginatePage', None)
         pageSize = self.request.query_params.get('pageSize', settings.PAGINATION_SIZE)
+
+        show_inactive = self.request.query_params.get('showDeleted', False)
+        if show_inactive:
+            print('Show deleted entries')
+        else:
+            queryset = queryset.exclude(is_active=False)
 
         if self.request.user.is_anonymous(): 
             queryset = queryset.exclude(is_approved=False)
@@ -116,11 +122,16 @@ class LotViewSet(viewsets.ModelViewSet):
 
 
     def get_queryset(self):
-        queryset = Lot.objects.exclude(is_active=False)
+        queryset = Lot.objects.all()
         PageNumberPagination.page_size = 0
         paginatePage = self.request.query_params.get('paginatePage', None)
         pageSize = self.request.query_params.get('pageSize', settings.PAGINATION_SIZE)
 
+        show_inactive = self.request.query_params.get('showDeleted', False)
+        if show_inactive:
+            print('Show deleted entries')
+        else:
+            queryset = queryset.exclude(is_active=False)
         plat_set = self.request.query_params.get('plat', None)
         if plat_set is not None:
             queryset = queryset.filter(plat=plat_set)
