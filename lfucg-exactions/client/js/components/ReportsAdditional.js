@@ -51,9 +51,14 @@ class ReportsAdditional extends React.Component {
                             </div>
                             <div className="col-sm-3">
                                 <a
-                                  className="btn btn-lex"
-                                  disabled={!activeForm.starting_date || !activeForm.ending_date}
-                                  href={`../api/transactions_csv/?starting_date=${activeForm.starting_date}&ending_date=${activeForm.ending_date}`}
+                                    onClick={(e) => {
+                                        if (!activeForm.starting_date || !activeForm.ending_date) {
+                                            e.preventDefault();
+                                        }
+                                    }}
+                                    className="btn btn-lex"
+                                    disabled={!activeForm.starting_date || !activeForm.ending_date}
+                                    href={`../api/transactions_csv/?starting_date=${activeForm.starting_date}&ending_date=${activeForm.ending_date}`}
                                 >Transaction CSV</a>
                             </div>
                         </form>
