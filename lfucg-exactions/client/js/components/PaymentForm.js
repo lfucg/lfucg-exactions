@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { hashHistory } from 'react-router';
-import { map, filter } from 'ramda';
+import { map, filter, contains } from 'ramda';
 import PropTypes from 'prop-types';
 import { Typeahead } from 'react-bootstrap-typeahead';
 import Navbar from './Navbar';
@@ -55,7 +55,7 @@ class PaymentForm extends React.Component {
 
         const lotsList = [];
 
-        if (lots && lots.length > 0) {
+        if (!!lots && lots.length > 0) {
             map((lot) => {
                 lotsList.push({
                     id: lot.id,
@@ -327,7 +327,7 @@ class PaymentForm extends React.Component {
                                     </div>
                                 </form>
                                 <div className="clearfix" />
-                                {currentLot && currentLot.id ? <div>
+                                {!!currentLot && currentLot.id ? <div>
                                     {selectedPayment ?
                                         <Notes
                                           secondary_content_type="plats_lot"
@@ -494,7 +494,11 @@ function mapDispatchToProps(dispatch, params) {
                         };
                         dispatch(formUpdate(update));
                     }
-                    dispatch(getNoteContent('plats_lot', value_id, 'plats_plat', lot_id.response.plat.id, 'plats_subdivision', lot_id.response.plat.subdivision.id));
+                    if (contains('subdivision.id', lot_id.response.plat)) {
+                        dispatch(getNoteContent('plats_lot', value_id, 'plats_plat', lot_id.response.plat.id, 'plats_subdivision', lot_id.response.plat.subdivision.id));
+                    } else {
+                        dispatch(getNoteContent('plats_lot', value_id, 'plats_plat', lot_id.response.plat.id));
+                    }
                 });
             }
         },
