@@ -478,9 +478,16 @@ class PaymentCSVExportView(View):
         all_rows = []
 
         payment_value = request.GET.get('payment', None)
+        payment_queryset = Payment.objects.all()
+
+        show_inactive = request.GET.get('showDeleted', False)
+        if show_inactive:
+            print('Show deleted entries')
+        else:
+            payment_queryset = payment_queryset.exclude(is_active=False)
 
         if payment_value is not None:
-            payment_queryset = Payment.objects.filter(id=payment_value).exclude(is_active=False)
+            payment_queryset = payment_queryset.filter(id=payment_value)
             payment_serializer = self.list(
                 payment_queryset,
                 PaymentSerializer,
@@ -488,8 +495,6 @@ class PaymentCSVExportView(View):
             )
             filename = payment_queryset[0].payment_type + '-' + payment_queryset[0].paid_by + '_payment_report.csv'
         else:
-            payment_queryset = Payment.objects.all().exclude(is_active=False)
-
             lot_set = self.request.GET.get('lot_id', None)
             if lot_set is not None:
                 payment_queryset = payment_queryset.filter(lot_id=lot_set)
@@ -863,12 +868,18 @@ class AccountLedgerCSVExportView(View):
         all_rows = []
 
         ledger_value = request.GET.get('ledger', None)
+        ledger_queryset = AccountLedger.objects.all()
+
+        show_inactive = request.GET.get('showDeleted', False)
+        if show_inactive:
+            print('Show deleted entries')
+        else:
+            ledger_queryset = ledger_queryset.exclude(is_active=False)
+
 
         if ledger_value is not None:
             ledger_queryset = AccountLedger.objects.filter(
                 id=ledger_value
-            ).exclude(
-                is_active=False
             )
 
             ledger_serializer = self.list(
@@ -878,8 +889,6 @@ class AccountLedgerCSVExportView(View):
             )
             filename = ledger_queryset[0].entry_type_display + '-' + ledger_queryset[0].entry_date + '_ledger_report.csv'
         else:
-            ledger_queryset = AccountLedger.objects.all().exclude(is_active=False)
-
             lot_set = self.request.GET.get('lot', None)
             if lot_set is not None:
                 ledger_queryset = ledger_queryset.filter(lot=lot_set)
