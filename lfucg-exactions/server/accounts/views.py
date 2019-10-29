@@ -561,7 +561,7 @@ class PaymentCSVExportView(View):
                 'Payer Type': payment['paid_by_type_display'],
                 'Payer': payment['paid_by'],
                 'Check Number': payment['check_number'],
-                'Date': payment['date_created'],
+                'Date': payment['entry_date'],
                 'Roads Paid': payment['paid_roads'],
                 'Parks Paid': payment['paid_parks'],
                 'Stormwater': payment['paid_storm'],
@@ -991,19 +991,19 @@ class TransactionCSVExportView(View):
 
         payments = pd.DataFrame.from_records(
             Payment.objects.filter(
-                date_created__lte=ending_date, date_created__gte=starting_date
+                entry_date__lte=ending_date, entry_date__gte=starting_date
             ).exclude(
                 is_active=False
             ).values(),
             columns=[
-                'check_number', 'credit_account_id', 'date_created',
+                'check_number', 'credit_account_id', 'entry_date',
                 'id', 'lot_id_id', 'paid_by', 'payment_type',
                 'paid_open_space', 'paid_parks', 'paid_roads', 'paid_sewer_cap',
                 'paid_sewer_trans', 'paid_storm'
             ]
         )
         payments = payments.rename(index=str, columns={
-            'check_number': 'Check', 'date_created': 'Date',
+            'check_number': 'Check', 'entry_date': 'Date',
             'paid_by': 'Paid By', 'payment_type': 'Transaction Type',
             'paid_open_space': 'Open Space', 'paid_parks': 'Parks', 'paid_roads': 'Roads', 
             'paid_sewer_cap': 'Sewer Cap.', 'paid_sewer_trans': 'Sewer Trans.', 'paid_storm': 'Storm'
@@ -1011,7 +1011,7 @@ class TransactionCSVExportView(View):
 
         ledgers = pd.DataFrame.from_records(
             AccountLedger.objects.filter(
-                date_created__lte=ending_date, date_created__gte=starting_date
+                entry_date__lte=ending_date, entry_date__gte=starting_date
             ).exclude(
                 is_active=False
             ).values(),
