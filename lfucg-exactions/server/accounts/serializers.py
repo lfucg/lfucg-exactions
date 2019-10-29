@@ -352,6 +352,7 @@ class PaymentSerializer(serializers.ModelSerializer):
             'is_active',
             'date_created',
             'date_modified',
+            'entry_date',
             'created_by',
             'modified_by',
 

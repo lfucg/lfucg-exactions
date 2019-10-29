@@ -156,6 +156,7 @@ class Payment(models.Model):
     credit_source = models.ForeignKey(Agreement, related_name='payment_source', null=True, blank=True)
     credit_account = models.ForeignKey(Account, related_name='payment_account')
 
+    entry_date = models.DateField()
     date_created = models.DateField(auto_now_add=True)
     date_modified = models.DateField(auto_now=True)
 
