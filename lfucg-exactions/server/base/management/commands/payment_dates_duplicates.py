@@ -36,6 +36,7 @@ class Command(BaseCommand):
     try:
       Payment.objects.create(
         lot_id=existing_payment.first().lot_id,
+        is_approved=True,
         credit_account=existing_payment.first().credit_account,
         credit_source=existing_payment.first().credit_source,
         entry_date=self.ConvertDates(df_row['D_date']),
@@ -60,6 +61,7 @@ class Command(BaseCommand):
     try:
       Payment.objects.create(
         lot_id=existing_payment.first().lot_id,
+        is_approved=True,
         credit_account=existing_payment.first().credit_account,
         credit_source=existing_payment.first().credit_source,
         entry_date=self.ConvertDates(df_row['P_date']),
@@ -81,53 +83,49 @@ class Command(BaseCommand):
 
   def handle(self, *args, **options):
     # df_dates = pd.read_csv('import_files/payment_entry_date.csv')
-    df_dates = pd.read_csv('import_files/payment_entry_date_multiples.csv')
 
-    for index, row in df_dates.iterrows():
-      print('Entry Date Address', row['Address'])
-      existing_payment = Payment.objects.filter(lot_id__address_full__icontains=row['Address'])
-
-      if existing_payment.exists() and existing_payment.count() == 1:
-        if existing_payment.filter(entry_date__icontains='1970'):
-          print('HAS 70')
-          self.UpdatePaymentDates(existing_payment, row)
-      else:
-        for payment in existing_payment:
-          try:
-            if payment.filter(entry_date__icontains='1970'):
-              print('HAS 70 FOR EACH')
-              self.UpdatePaymentDates(payment, row)
-          except Exception as exc:
-            print('TOTAL EXCEPTION', exc)
-            # print('ERROR NOT 1', payment.count())
-            print('ERROR ADDRESS', row['Address'])
-    
-    # df_multiple = pd.read_csv('import_files/payments_multiple.csv')
-
-    # df_multiple['D_Roads'] = df_multiple['D_Roads'].fillna(0.00)
-    # df_multiple['D_SewerTransmission'] = df_multiple['D_SewerTransmission'].fillna(0.00)
-    # df_multiple['D_SewerCapacity'] = df_multiple['D_SewerCapacity'].fillna(0.00)
-    # df_multiple['D_Parks'] = df_multiple['D_Parks'].fillna(0.00)
-    # df_multiple['D_OpenSpace'] = df_multiple['D_OpenSpace'].fillna(0.00)
-    # df_multiple['D_Stormwater'] = df_multiple['D_Stormwater'].fillna(0.00)
-
-    # df_multiple['P_Roads'] = df_multiple['P_Roads'].fillna(0.00)
-    # df_multiple['P_SewerTransmission'] = df_multiple['P_SewerTransmission'].fillna(0.00)
-    # df_multiple['P_Parks'] = df_multiple['P_Parks'].fillna(0.00)
-    # df_multiple['P_Stormwater'] = df_multiple['P_Stormwater'].fillna(0.00)
-
-    # df_multiple['D_paidby'] = df_multiple['D_paidby'].fillna('Unknown')
-    # df_multiple['P_paidby'] = df_multiple['P_paidby'].fillna('Unknown')
-
-    # for index, row in df_multiple.iterrows():
-    #   print('Multiple Payments Address', row['Address'])
+    # for index, row in df_dates.iterrows():
+    #   print('Entry Date Address', row['Address'])
     #   existing_payment = Payment.objects.filter(lot_id__address_full__icontains=row['Address'])
 
     #   if existing_payment.exists() and existing_payment.count() == 1:
-    #     self.SplitMultiplePayents(existing_payment, row)
+    #     self.UpdatePaymentDates(existing_payment, row)
     #   else:
     #     print('ERROR EXISTS', existing_payment.exists())
     #     print('ERROR NOT 1', existing_payment.count())
+    #     print('ERROR ADDRESS', row['Address'])
+    
+    df_multiple = pd.read_csv('import_files/payments_multiple.csv')
 
+    df_multiple['D_Roads'] = df_multiple['D_Roads'].fillna(0.00)
+    df_multiple['D_SewerTransmission'] = df_multiple['D_SewerTransmission'].fillna(0.00)
+    df_multiple['D_SewerCapacity'] = df_multiple['D_SewerCapacity'].fillna(0.00)
+    df_multiple['D_Parks'] = df_multiple['D_Parks'].fillna(0.00)
+    df_multiple['D_OpenSpace'] = df_multiple['D_OpenSpace'].fillna(0.00)
+    df_multiple['D_Stormwater'] = df_multiple['D_Stormwater'].fillna(0.00)
+
+    df_multiple['P_Roads'] = df_multiple['P_Roads'].fillna(0.00)
+    df_multiple['P_SewerTransmission'] = df_multiple['P_SewerTransmission'].fillna(0.00)
+    df_multiple['P_Parks'] = df_multiple['P_Parks'].fillna(0.00)
+    df_multiple['P_Stormwater'] = df_multiple['P_Stormwater'].fillna(0.00)
+
+    df_multiple['D_paidby'] = df_multiple['D_paidby'].fillna('Unknown')
+    df_multiple['P_paidby'] = df_multiple['P_paidby'].fillna('Unknown')
+
+    for index, row in df_multiple.iterrows():
+      print('Multiple Payments Address', row['Address'])
+      existing_payment = Payment.objects.filter(lot_id__address_full__icontains=row['Address'])
+
+      if existing_payment.exists() and existing_payment.count() == 1:
+        self.SplitMultiplePayents(existing_payment, row)
+      else:
+        for payment in existing_payment:
+          if payment != existing_payment.first():
+            print('PAYMENT TO DELETE', payment.lot_id.address_full)
+            payment.delete()
+          else:
+            print('FIRST ', payment.lot_id.address_full)
+            self.SplitMultiplePayents(existing_payment, row)
+  
 # ./manage.py shell_plus
 # ./manage.py payment_dates_duplicates
