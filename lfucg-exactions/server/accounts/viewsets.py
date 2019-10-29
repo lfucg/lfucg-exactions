@@ -157,13 +157,13 @@ class PaymentViewSet(viewsets.ModelViewSet):
 
         ending_date = self.request.query_params.get('ending_date', None)
         if ending_date is not None:
-            queryset = queryset.filter(Q(date_created__lte=ending_date))
+            queryset = queryset.filter(Q(entry_date__lte=ending_date))
         
         starting_date = self.request.query_params.get('starting_date', None)
         if starting_date is not None:
-            queryset = queryset.filter(Q(date_created__gte=starting_date))
+            queryset = queryset.filter(Q(entry_date__gte=starting_date))
 
-        return queryset.order_by('-date_created', 'id')
+        return queryset.order_by('-entry_date', 'id')
 
     def create(self, request):
         data_set = request.data
