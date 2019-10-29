@@ -99,7 +99,7 @@ class Command(BaseCommand):
               self.UpdatePaymentDates(payment, row)
           except Exception as exc:
             print('TOTAL EXCEPTION', exc)
-            print('ERROR NOT 1', payment.count())
+            # print('ERROR NOT 1', payment.count())
             print('ERROR ADDRESS', row['Address'])
     
     # df_multiple = pd.read_csv('import_files/payments_multiple.csv')
