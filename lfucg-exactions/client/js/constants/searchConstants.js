@@ -1,0 +1,2 @@
+export const CLEAR_SEARCH = 'CLEAR_SEARCH';
+export const UPDATE_SEARCH = 'UPDATE_SEARCH';

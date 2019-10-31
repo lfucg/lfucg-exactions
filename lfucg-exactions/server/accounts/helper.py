@@ -84,7 +84,7 @@ def send_email_to_new_user(sender, instance, created, **kwargs):
 
 @receiver(post_save, sender=Agreement)
 @receiver(post_save, sender=AccountLedger)
-# @receiver(post_save, sender=Payment)
+@receiver(post_save, sender=Payment)
 @receiver(post_save, sender=Project)
 @receiver(post_save, sender=ProjectCostEstimate)
 @receiver(post_save, sender=Plat)
@@ -137,7 +137,7 @@ def send_email_to_supervisors(sender, instance, **kwargs):
 
 @receiver(pre_save, sender=Agreement)
 @receiver(pre_save, sender=AccountLedger)
-# @receiver(pre_save, sender=Payment)
+@receiver(pre_save, sender=Payment)
 @receiver(pre_save, sender=Project)
 @receiver(pre_save, sender=ProjectCostEstimate)
 @receiver(pre_save, sender=Plat)
@@ -163,7 +163,7 @@ def set_approval(sender, instance, **kwargs):
         instance.is_approved = False
     return instance
 
-# @receiver(post_save, sender=Payment)
+@receiver(post_save, sender=Payment)
 @receiver(post_save, sender=AccountLedger)
 def calculate_current_lot_balance(sender, instance, **kwargs):
     related_lot = None
@@ -192,7 +192,7 @@ def calculate_current_lot_balance(sender, instance, **kwargs):
 
         super(Lot, lot).save()
 
-# @receiver(post_save, sender=Payment)
+@receiver(post_save, sender=Payment)
 @receiver(post_save, sender=AccountLedger)
 def calculate_current_plat_balance(sender, instance, **kwargs):
     related_lot = None
