@@ -20,6 +20,7 @@ import accountLedgersReducer from './accountLedgersReducer';
 
 import notesReducer from './notesReducer';
 import ratesReducer from './ratesReducer';
+import searchReducer from './searchReducer';
 import uploadReducer from './uploadReducer';
 
 const dashboardReducer = combineReducers({
@@ -44,6 +45,7 @@ const dashboardReducer = combineReducers({
 
     notes: notesReducer,
     rates: ratesReducer,
+    search: searchReducer,
     uploads: uploadReducer,
 });
 
