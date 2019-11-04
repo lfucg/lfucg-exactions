@@ -99,9 +99,6 @@ class Rate(models.Model):
     def __str__(self):
         return self.zone + ': ' + self.category
 
-def expose_rate_total(self):
-    return len(ZONES) * len(CATEGORIES) * len(EXPANSION_AREAS)
-
 class MediaStorage(S3Boto3Storage):
     location = 'media'
 
