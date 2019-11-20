@@ -6,7 +6,7 @@ description      'Installs/Configures chef-lfucg-exactions'
 long_description 'Installs/Configures chef-lfucg-exactions'
 version          '0.1.0'
 
-depends "apache2"
+depends "apache2", "5.2.1"
 depends "apt"
 depends "nodejs"
 depends "poise-python"
