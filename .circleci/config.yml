@@ -16,6 +16,7 @@ jobs:
     docker:
       - image: circleci/ruby:2.4.4
     steps:
+      - checkout
       - run: gem install dream-ops -v 0.4.2
       - run: dream deploy opsworks -T 4c6e1652-6e5c-4d8c-ba27-33b9abf7c6c3
 
