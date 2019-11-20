@@ -1,0 +1,37 @@
+DEPENDENCIES
+  chef-lfucg-exactions
+    path: .
+    metadata: true
+
+GRAPH
+  apache2 (5.2.1)
+  apt (7.1.1)
+  ark (4.0.0)
+    build-essential (>= 0.0.0)
+    seven_zip (>= 0.0.0)
+  build-essential (8.2.1)
+    mingw (>= 1.1)
+    seven_zip (>= 0.0.0)
+  chef-lfucg-exactions (0.1.0)
+    apache2 (>= 0.0.0)
+    apt (>= 0.0.0)
+    nodejs (>= 0.0.0)
+    poise-python (>= 0.0.0)
+    seven_zip (= 2.0.2)
+  mingw (2.1.0)
+    seven_zip (>= 0.0.0)
+  nodejs (6.0.0)
+    ark (>= 2.0.2)
+    build-essential (>= 5.0)
+  poise (2.8.2)
+  poise-archive (1.5.0)
+    poise (~> 2.6)
+  poise-languages (2.1.2)
+    poise (~> 2.5)
+    poise-archive (~> 1.0)
+  poise-python (1.7.0)
+    poise (~> 2.7)
+    poise-languages (~> 2.0)
+  seven_zip (2.0.2)
+    windows (>= 1.2.2)
+  windows (5.1.5)
