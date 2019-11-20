@@ -26,8 +26,14 @@ class AccountViewSet(viewsets.ModelViewSet):
     filter_fields = ('plat_account__id', 'lot_account__id', 'ledger_account_to', 'ledger_account_from', )
 
     def get_queryset(self):
-        queryset = Account.objects.exclude(is_active=False)
+        queryset = Account.objects.all()
         PageNumberPagination.page_size = 0
+
+        show_inactive = self.request.query_params.get('showDeleted', False)
+        if show_inactive:
+            print('Show deleted entries')
+        else:
+            queryset = queryset.exclude(is_active=False)
         
         paginatePage = self.request.query_params.get('paginatePage', None)
         pageSize = self.request.query_params.get('pageSize', settings.PAGINATION_SIZE)
@@ -66,10 +72,15 @@ class AgreementViewSet(viewsets.ModelViewSet):
     filter_fields = ('agreement_type', 'account_id', 'expansion_area', 'is_approved', 'ledger',)
 
     def get_queryset(self):
-        queryset = Agreement.objects.exclude(is_active=False)
+        queryset = Agreement.objects.all()
         paginatePage = self.request.query_params.get('paginatePage', None)
         pageSize = self.request.query_params.get('pageSize', settings.PAGINATION_SIZE)
 
+        show_inactive = self.request.query_params.get('showDeleted', False)
+        if show_inactive:
+            print('Show deleted entries')
+        else:
+            queryset = queryset.exclude(is_active=False)
         if self.request.user.is_anonymous(): 
             queryset = queryset.exclude(is_approved=False)
 
@@ -113,8 +124,14 @@ class PaymentViewSet(viewsets.ModelViewSet):
     filter_fields = ('payment_type', 'paid_by_type', 'credit_account', 'lot_id', 'credit_source', 'is_approved',)
 
     def get_queryset(self):
-        queryset = Payment.objects.exclude(is_active=False)
+        queryset = Payment.objects.all()
         PageNumberPagination.page_size = 0
+
+        show_inactive = self.request.query_params.get('showDeleted', False)
+        if show_inactive:
+            print('Show deleted entries')
+        else:
+            queryset = queryset.exclude(is_active=False)
 
         paginatePage = self.request.query_params.get('paginatePage', None)
         pageSize = self.request.query_params.get('pageSize', settings.PAGINATION_SIZE)
@@ -128,25 +145,25 @@ class PaymentViewSet(viewsets.ModelViewSet):
 
         lot_id_set = self.request.query_params.get('lot_id', None)
         if lot_id_set is not None:
-            queryset = queryset.filter(lot_id=lot_id_set)
+            queryset = queryset.filter(Q(lot_id=lot_id_set))
 
         credit_account_set = self.request.query_params.get('credit_account', None)
         if credit_account_set is not None:
-            queryset = queryset.filter(credit_account=credit_account_set)
+            queryset = queryset.filter(Q(credit_account=credit_account_set))
 
         credit_source_set = self.request.query_params.get('credit_source', None)
         if credit_source_set is not None:
-            queryset = queryset.filter(credit_source=credit_source_set)
+            queryset = queryset.filter(Q(credit_source=credit_source_set))
 
         ending_date = self.request.query_params.get('ending_date', None)
         if ending_date is not None:
-            queryset = queryset.filter(date_created__lte=ending_date)
+            queryset = queryset.filter(Q(entry_date__lte=ending_date))
         
         starting_date = self.request.query_params.get('starting_date', None)
         if starting_date is not None:
-            queryset = queryset.filter(date_created__gte=starting_date)
+            queryset = queryset.filter(Q(entry_date__gte=starting_date))
 
-        return queryset.order_by('-date_created', 'id')
+        return queryset.order_by('-entry_date', 'id')
 
     def create(self, request):
         data_set = request.data
@@ -263,11 +280,16 @@ class AccountLedgerViewSet(viewsets.ModelViewSet):
     filter_fields = ('entry_type', 'agreement', 'lot', 'account_to', 'account_from', 'is_approved',)
 
     def get_queryset(self):
-        queryset = AccountLedger.objects.exclude(is_active=False)
+        queryset = AccountLedger.objects.all()
         PageNumberPagination.page_size = 0
         paginatePage = self.request.query_params.get('paginatePage', None)
         pageSize = self.request.query_params.get('pageSize', settings.PAGINATION_SIZE)
 
+        show_inactive = self.request.query_params.get('showDeleted', False)
+        if show_inactive:
+            print('Show deleted entries')
+        else:
+            queryset = queryset.exclude(is_active=False)
         if self.request.user.is_anonymous(): 
             queryset = queryset.exclude(is_approved=False)
         

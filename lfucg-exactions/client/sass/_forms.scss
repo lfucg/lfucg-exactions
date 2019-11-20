@@ -203,6 +203,10 @@
     }
 }
 
+.show-deleted-box, input[type="checkbox"] {
+    margin-right: 8px;
+}
+
 .report-table {
     border-collapse: collapse;
     .report-header {

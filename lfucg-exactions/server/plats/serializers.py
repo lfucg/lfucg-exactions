@@ -2,6 +2,8 @@ from rest_framework import serializers
 
 from .models import *
 from .utils import calculate_lot_balance, calculate_plat_balance, remaining_plat_lots, calculate_lot_totals
+from django.db.models import Count, Prefetch
+from accounts.models import Account, AccountLedger, Payment
 
 from notes.models import Note
 from notes.serializers import NoteSerializer
@@ -125,6 +127,30 @@ class PlatSerializer(serializers.ModelSerializer):
     subdivision = SubdivisionField(required=False, allow_null=True)
     plat_type_display = serializers.SerializerMethodField(read_only=True)
     remaining_lots = serializers.SerializerMethodField(read_only=True)
+
+    @staticmethod
+    def setup_eager_loading(queryset):
+        queryset = queryset.select_related(
+            'account',
+            'subdivision',
+        ).prefetch_related(
+            'plat_zone',
+            Prefetch(
+                'lot',
+                queryset=Lot.objects.filter(is_active=False).prefetch_related(
+                    Prefetch(
+                        'payment',
+                        queryset=Payment.objects.filter(is_active=False)
+                    ),
+                    Prefetch(
+                        'ledger_lot',
+                        queryset=AccountLedger.objects.filter(is_active=False)
+                    )
+                )
+            )
+        )
+        
+        return queryset
 
     def get_cleaned_total_acreage(self, obj):
         set_acreage = str(obj.total_acreage).rstrip('0').rstrip('.')

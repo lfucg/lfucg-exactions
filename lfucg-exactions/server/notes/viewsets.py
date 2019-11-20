@@ -7,7 +7,7 @@ from django.contrib.contenttypes.models import ContentType
 from rest_framework.parsers import FileUploadParser, MultiPartParser
 # from django_filters.rest_framework import DjangoFilterBackend
 
-from .models import Note, FileUpload, MediaStorage, Rate, RateTable, expose_rate_total
+from .models import Note, FileUpload, MediaStorage, Rate, RateTable
 from .serializers import *
 from plats.models import Lot, Plat, Subdivision
 from .permissions import CanAdminister
@@ -97,8 +97,12 @@ class RateTableViewSet(viewsets.ModelViewSet):
             all_true_tables = RateTable.objects.filter(is_active=True)
             rate_count = Rate.objects.filter(rate_table_id=request.data['id']).count()
 
-            exposed = expose_rate_total(self)
-            total_rate_entries_per_table = exposed
+            # Total number of entries should be
+            # 7 ZONES
+            # 6 CATEGORIES
+            # 5 EXPANSION_AREAS
+            # While there may be more historical ones, these should match the current system
+            total_rate_entries_per_table = 7 * 6 * 5
             if rate_count == total_rate_entries_per_table:
                 for rate_table in all_true_tables:
                     if self != rate_table:
