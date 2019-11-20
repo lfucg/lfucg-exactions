@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { hashHistory } from 'react-router';
-import { map, filter } from 'ramda';
+import { map, filter, contains } from 'ramda';
 import PropTypes from 'prop-types';
 import { Typeahead } from 'react-bootstrap-typeahead';
 import Navbar from './Navbar';
@@ -55,7 +55,7 @@ class PaymentForm extends React.Component {
 
         const lotsList = [];
 
-        if (lots && lots.length > 0) {
+        if (!!lots && lots.length > 0) {
             map((lot) => {
                 lotsList.push({
                     id: lot.id,
@@ -90,7 +90,8 @@ class PaymentForm extends React.Component {
             activeForm.lot_id &&
             activeForm.credit_account &&
             activeForm.paid_by &&
-            activeForm.paid_by_type;
+            activeForm.paid_by_type &&
+            activeForm.entry_date;
 
         return (
             <div className="payment-form">
@@ -190,6 +191,13 @@ class PaymentForm extends React.Component {
                                                     <option value={['OTHER', 'Other']}>Other</option>
                                                 </select>
                                             </div>
+                                            <div className="col-sm-6">
+                                                <FormGroup label="* Entry Date" id="entry_date" ariaRequired="true">
+                                                    <input type="date" className="form-control" placeholder="Date Format mm/dd/yyyy" />
+                                                </FormGroup>
+                                            </div>
+                                        </div>
+                                        <div className="row">
                                             <div className="col-sm-6">
                                                 <FormGroup label="Check Number" id="check_number">
                                                     <input type="text" className="form-control" placeholder="Check Number" />
@@ -327,7 +335,7 @@ class PaymentForm extends React.Component {
                                     </div>
                                 </form>
                                 <div className="clearfix" />
-                                {currentLot && currentLot.id ? <div>
+                                {!!currentLot && currentLot.id ? <div>
                                     {selectedPayment ?
                                         <Notes
                                           secondary_content_type="plats_lot"
@@ -426,6 +434,7 @@ function mapDispatchToProps(dispatch, params) {
                         payment_type: data_payment.response.payment_type,
                         payment_type_show: `${data_payment.response.payment_type},${data_payment.response.payment_type_display}`,
                         check_number: data_payment.response.check_number,
+                        entry_date: data_payment.response.entry_date,
                         paid_roads: data_payment.response.paid_roads,
                         paid_sewer_trans: data_payment.response.paid_sewer_trans,
                         paid_sewer_cap: data_payment.response.paid_sewer_cap,
@@ -494,7 +503,11 @@ function mapDispatchToProps(dispatch, params) {
                         };
                         dispatch(formUpdate(update));
                     }
-                    dispatch(getNoteContent('plats_lot', value_id, 'plats_plat', lot_id.response.plat.id, 'plats_subdivision', lot_id.response.plat.subdivision.id));
+                    if (contains('subdivision.id', lot_id.response.plat)) {
+                        dispatch(getNoteContent('plats_lot', value_id, 'plats_plat', lot_id.response.plat.id, 'plats_subdivision', lot_id.response.plat.subdivision.id));
+                    } else {
+                        dispatch(getNoteContent('plats_lot', value_id, 'plats_plat', lot_id.response.plat.id));
+                    }
                 });
             }
         },

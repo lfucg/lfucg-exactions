@@ -134,7 +134,10 @@ class PlatForm extends React.Component {
             activeForm.plat_type &&
             activeForm.expansion_area &&
             activeForm.buildable_lots &&
-            activeForm.non_buildable_lots
+            activeForm.non_buildable_lots &&
+            activeForm.date_recorded &&
+            activeForm.cabinet &&
+            activeForm.slide;
 
         return (
             <div className="plat-form">
@@ -273,19 +276,19 @@ class PlatForm extends React.Component {
                                                         </FormGroup>
                                                     </div>
                                                     <div className="col-sm-6">
-                                                        <FormGroup label="Date Recorded" id="date_recorded">
+                                                        <FormGroup label="* Date Recorded" id="date_recorded">
                                                             <input type="date" className="form-control" placeholder="Use YYYY-MM-DD Format for Date" />
                                                         </FormGroup>
                                                     </div>
                                                 </div>
                                                 <div className="row">
                                                     <div className="col-sm-6">
-                                                        <FormGroup label="Cabinet" id="cabinet">
+                                                        <FormGroup label="* Cabinet" id="cabinet">
                                                             <input type="text" className="form-control" placeholder="Cabinet" />
                                                         </FormGroup>
                                                     </div>
                                                     <div className="col-sm-6">
-                                                        <FormGroup label="Slide" id="slide">
+                                                        <FormGroup label="* Slide" id="slide">
                                                             <input type="text" className="form-control" placeholder="Slide" />
                                                         </FormGroup>
                                                     </div>

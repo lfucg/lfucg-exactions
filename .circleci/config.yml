@@ -12,12 +12,12 @@ jobs:
       - checkout
       - run: gem install dream-ops -v 0.4.2
       - run: dream deploy opsworks -T d93434c3-4ace-4970-ac0a-6f87c0d9e125
-  # deploy-prod:
-  #   machine:
-  #     ruby: 2.4.1
-  #   steps:
-  #     - run: gem install dream-ops -v 0.4.2
-  #     - run: dream deploy opsworks -T <STACK_ID>
+  deploy-prod:
+    docker:
+      - image: circleci/ruby:2.4.4
+    steps:
+      - run: gem install dream-ops -v 0.4.2
+      - run: dream deploy opsworks -T 4c6e1652-6e5c-4d8c-ba27-33b9abf7c6c3
 
 
 workflows:
@@ -28,7 +28,7 @@ workflows:
           filters:
             branches:
               only: dev
-      # - deploy-prod:
-      #     filters:
-      #       branches:
-      #         only: master
+      - deploy-prod:
+          filters:
+            branches:
+              only: master
