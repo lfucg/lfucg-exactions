@@ -82,30 +82,118 @@ def send_email_to_new_user(sender, instance, created, **kwargs):
         except Exception as exc:
             print('SEND NEW USER EMAIL EXCEPTION', exc)
 
-@receiver(post_save, sender=Agreement)
-@receiver(post_save, sender=AccountLedger)
-@receiver(post_save, sender=Payment)
-@receiver(post_save, sender=Project)
-@receiver(post_save, sender=ProjectCostEstimate)
-@receiver(post_save, sender=Plat)
-@receiver(post_save, sender=Lot)
-def send_email_to_supervisors(sender, instance, **kwargs):
+@receiver(pre_save, sender=Lot)
+def lot_update_exactions_and_email_supervisor(sender, instance, **kwargs):
+    pre_save.disconnect(lot_update_exactions_and_email_supervisor, sender=Lot)
+    related_lot = Lot.objects.get(id=instance.id)
+
     if (instance.modified_by.is_superuser or ((hasattr(instance.modified_by, 'profile') and instance.modified_by.profile.is_supervisor == True))):
         return
     else:
-
         ctype = ContentType.objects.get_for_model(instance)
-
         model = ctype.model
+        users = User.objects.filter(Q(profile__is_supervisor=True) & Q(groups__name='Planning'))
+
+        for user in users:
+            profile = Profile.objects.filter(user=user).first()
+            if hasattr(profile, 'is_approval_required') and not profile.is_approval_required:
+                profile.is_approval_required = True
+                profile.save()
+
+                to_emails = list(users.values_list('email', flat=True))
+
+                html_template = get_template('emails/supervisor_email.html')
+                text_template = get_template('emails/supervisor_email.txt')
+
+                subject = 'LFUCG Exactions Activity: New Entry Pending Approval'
+                from_email = settings.DEFAULT_FROM_EMAIL
+
+                context = {
+                    'baseURL': settings.BASE_URL,
+                    'model': model,
+                    'staticURL': settings.STATIC_URL,
+                    'id': instance.id,
+                }
+
+                html_content = html_template.render(context)
+                text_content = text_template.render(context)
+
+                msg = EmailMultiAlternatives(subject, text_content, from_email, to_emails)
+                msg.attach_alternative(html_content, "text/html")
+                msg.send()
+
+    if related_lot:
+        lot = related_lot
+        lot_balances = calculate_lot_balance(lot)
+
+        related_lot.current_dues_roads_dev = lot_balances['dues_roads_dev']
+        related_lot.current_dues_roads_own = lot_balances['dues_roads_own']
+        related_lot.current_dues_sewer_trans_dev = lot_balances['dues_sewer_trans_dev']
+        related_lot.current_dues_sewer_trans_own = lot_balances['dues_sewer_trans_own']
+        related_lot.current_dues_sewer_cap_dev = lot_balances['dues_sewer_cap_dev']
+        related_lot.current_dues_sewer_cap_own = lot_balances['dues_sewer_cap_own']
+        related_lot.current_dues_parks_dev = lot_balances['dues_parks_dev']
+        related_lot.current_dues_parks_own = lot_balances['dues_parks_own']
+        related_lot.current_dues_storm_dev = lot_balances['dues_storm_dev']
+        related_lot.current_dues_storm_own = lot_balances['dues_storm_own']
+        related_lot.current_dues_open_space_dev = lot_balances['dues_open_space_dev']
+        related_lot.current_dues_open_space_own = lot_balances['dues_open_space_own']
+
+        super(Lot, lot).save()
+    
+    pre_save.connect(lot_update_exactions_and_email_supervisor, sender=Lot)
+
+@receiver(post_save, sender=Agreement)
+@receiver(post_save, sender=AccountLedger)
+@receiver(post_save, sender=Payment)
+def send_email_to_finance_supervisors(sender, instance, **kwargs):
+    if (instance.modified_by.is_superuser or ((hasattr(instance.modified_by, 'profile') and instance.modified_by.profile.is_supervisor == True))):
+        return
+    else:
+        ctype = ContentType.objects.get_for_model(instance)
+        model = ctype.model
+
         if ctype.model == 'accountledger':
             model = 'credit-transfer'
 
-        if ctype.app_label == 'accounts':
-            group = ['Finance']
-        elif ctype.app_label == 'plats':
-            group = ['Planning']
+        users = User.objects.filter(Q(profile__is_supervisor=True) & Q(groups__name='Finance'))
 
-        users = User.objects.filter(Q(profile__is_supervisor=True) & Q(groups__name__in=group))
+        for user in users:
+            profile = Profile.objects.filter(user=user).first()
+            if hasattr(profile, 'is_approval_required') and not profile.is_approval_required:
+                profile.is_approval_required = True
+                profile.save()
+
+                to_emails = list(users.values_list('email', flat=True))
+
+                html_template = get_template('emails/supervisor_email.html')
+                text_template = get_template('emails/supervisor_email.txt')
+
+                subject = 'LFUCG Exactions Activity: New Entry Pending Approval'
+                from_email = settings.DEFAULT_FROM_EMAIL
+
+                context = {
+                    'baseURL': settings.BASE_URL,
+                    'model': model,
+                    'staticURL': settings.STATIC_URL,
+                    'id': instance.id,
+                }
+
+                html_content = html_template.render(context)
+                text_content = text_template.render(context)
+
+                msg = EmailMultiAlternatives(subject, text_content, from_email, to_emails)
+                msg.attach_alternative(html_content, "text/html")
+                msg.send()
+
+@receiver(post_save, sender=Plat)
+def send_email_to_planning_supervisors(sender, instance, **kwargs):
+    if (instance.modified_by.is_superuser or ((hasattr(instance.modified_by, 'profile') and instance.modified_by.profile.is_supervisor == True))):
+        return
+    else:
+        ctype = ContentType.objects.get_for_model(instance)
+        model = ctype.model
+        users = User.objects.filter(Q(profile__is_supervisor=True) & Q(groups__name='Planning'))
 
         for user in users:
             profile = Profile.objects.filter(user=user).first()
@@ -165,16 +253,13 @@ def set_approval(sender, instance, **kwargs):
 
 @receiver(post_save, sender=Payment)
 @receiver(post_save, sender=AccountLedger)
-@receiver(post_save, sender=Lot)
 def calculate_current_lot_balance(sender, instance, **kwargs):
     related_lot = None
-    post_save.disconnect(calculate_current_lot_balance, sender=Lot)
+
     if sender.__name__ == 'Payment':
         related_lot = Lot.objects.get(id=instance.lot_id_id)
     elif sender.__name__ == 'AccountLedger':
         related_lot = Lot.objects.get(id=instance.lot_id)
-    elif sender.__name__ == 'Lot':
-        related_lot = Lot.objects.get(id=instance.id)
 
     if related_lot:
         lot = related_lot
@@ -194,7 +279,6 @@ def calculate_current_lot_balance(sender, instance, **kwargs):
         related_lot.current_dues_open_space_own = lot_balances['dues_open_space_own']
 
         super(Lot, lot).save()
-    post_save.connect(calculate_current_lot_balance, sender=Lot)
 
 @receiver(post_save, sender=Payment)
 @receiver(post_save, sender=AccountLedger)
