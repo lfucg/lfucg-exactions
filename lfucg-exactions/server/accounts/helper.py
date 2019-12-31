@@ -82,12 +82,20 @@ def send_email_to_new_user(sender, instance, created, **kwargs):
         except Exception as exc:
             print('SEND NEW USER EMAIL EXCEPTION', exc)
 
-@receiver(pre_save, sender=Lot)
+@receiver(post_save, sender=Lot)
 def lot_update_exactions_and_email_supervisor(sender, instance, **kwargs):
-    pre_save.disconnect(lot_update_exactions_and_email_supervisor, sender=Lot)
+    post_save.disconnect(lot_update_exactions_and_email_supervisor, sender=Lot)
     related_lot = Lot.objects.get(id=instance.id)
 
     if (instance.modified_by.is_superuser or ((hasattr(instance.modified_by, 'profile') and instance.modified_by.profile.is_supervisor == True))):
+        instance.is_approved = True
+        users = User.objects.filter(Q(profile__is_supervisor=True) & Q(groups__name='Planning'))
+
+        for user in users:
+            profile = Profile.objects.filter(user=user).first()
+            profile.is_approval_required = False
+            profile.save()
+    elif (hasattr(related_lot, 'is_approved') and (not related_lot.is_approved)):
         return
     else:
         ctype = ContentType.objects.get_for_model(instance)
@@ -122,33 +130,62 @@ def lot_update_exactions_and_email_supervisor(sender, instance, **kwargs):
                 msg.attach_alternative(html_content, "text/html")
                 msg.send()
 
+        instance.is_approved = False
+
     if related_lot:
         lot = related_lot
         lot_balances = calculate_lot_balance(lot)
 
-        related_lot.current_dues_roads_dev = lot_balances['dues_roads_dev']
-        related_lot.current_dues_roads_own = lot_balances['dues_roads_own']
-        related_lot.current_dues_sewer_trans_dev = lot_balances['dues_sewer_trans_dev']
-        related_lot.current_dues_sewer_trans_own = lot_balances['dues_sewer_trans_own']
-        related_lot.current_dues_sewer_cap_dev = lot_balances['dues_sewer_cap_dev']
-        related_lot.current_dues_sewer_cap_own = lot_balances['dues_sewer_cap_own']
-        related_lot.current_dues_parks_dev = lot_balances['dues_parks_dev']
-        related_lot.current_dues_parks_own = lot_balances['dues_parks_own']
-        related_lot.current_dues_storm_dev = lot_balances['dues_storm_dev']
-        related_lot.current_dues_storm_own = lot_balances['dues_storm_own']
-        related_lot.current_dues_open_space_dev = lot_balances['dues_open_space_dev']
-        related_lot.current_dues_open_space_own = lot_balances['dues_open_space_own']
+        lot.current_dues_roads_dev = lot_balances['dues_roads_dev']
+        lot.current_dues_roads_own = lot_balances['dues_roads_own']
+        lot.current_dues_sewer_trans_dev = lot_balances['dues_sewer_trans_dev']
+        lot.current_dues_sewer_trans_own = lot_balances['dues_sewer_trans_own']
+        lot.current_dues_sewer_cap_dev = lot_balances['dues_sewer_cap_dev']
+        lot.current_dues_sewer_cap_own = lot_balances['dues_sewer_cap_own']
+        lot.current_dues_parks_dev = lot_balances['dues_parks_dev']
+        lot.current_dues_parks_own = lot_balances['dues_parks_own']
+        lot.current_dues_storm_dev = lot_balances['dues_storm_dev']
+        lot.current_dues_storm_own = lot_balances['dues_storm_own']
+        lot.current_dues_open_space_dev = lot_balances['dues_open_space_dev']
+        lot.current_dues_open_space_own = lot_balances['dues_open_space_own']
 
         super(Lot, lot).save()
-    
-    pre_save.connect(lot_update_exactions_and_email_supervisor, sender=Lot)
+
+    related_lot.is_approved = instance.is_approved
+    related_lot.save()
+
+    post_save.connect(lot_update_exactions_and_email_supervisor, sender=Lot)
 
 @receiver(post_save, sender=Agreement)
 @receiver(post_save, sender=AccountLedger)
 @receiver(post_save, sender=Payment)
 def send_email_to_finance_supervisors(sender, instance, **kwargs):
+    ctype = ContentType.objects.get_for_model(instance)
+    model = ctype.model
+
+    sender = None
+    sender_model = None
+
+    if model == 'agreement':
+        sender = Agreement
+        sender_model = Agreement.objects.get(id=instance.id)
+    elif model == 'accountledger':
+        sender = AccountLedger
+        sender_model = AccountLedger.objects.get(id=instance.id)
+    elif model == 'payment':
+        sender = Payment
+        sender_model = Payment.objects.get(id=instance.id)
+
+    post_save.disconnect(send_email_to_finance_supervisors, sender=sender)
+
     if (instance.modified_by.is_superuser or ((hasattr(instance.modified_by, 'profile') and instance.modified_by.profile.is_supervisor == True))):
-        return
+        instance.is_approved = True
+        users = User.objects.filter(Q(profile__is_supervisor=True) & Q(groups__name='Finance'))
+
+        for user in users:
+            profile = Profile.objects.filter(user=user).first()
+            profile.is_approval_required = False
+            profile.save()
     else:
         ctype = ContentType.objects.get_for_model(instance)
         model = ctype.model
@@ -185,10 +222,28 @@ def send_email_to_finance_supervisors(sender, instance, **kwargs):
                 msg = EmailMultiAlternatives(subject, text_content, from_email, to_emails)
                 msg.attach_alternative(html_content, "text/html")
                 msg.send()
+        
+        instance.is_approved = False
+    
+    sender_model.is_approved = instance.is_approved
+    sender_model.save()
+
+    post_save.connect(send_email_to_finance_supervisors, sender=sender)
 
 @receiver(post_save, sender=Plat)
 def send_email_to_planning_supervisors(sender, instance, **kwargs):
+    post_save.disconnect(send_email_to_planning_supervisors, sender=Plat)
+    plat = Plat.objects.get(id=instance.id)
+
     if (instance.modified_by.is_superuser or ((hasattr(instance.modified_by, 'profile') and instance.modified_by.profile.is_supervisor == True))):
+        instance.is_approved = True
+        users = User.objects.filter(Q(profile__is_supervisor=True) & Q(groups__name='Planning'))
+
+        for user in users:
+            profile = Profile.objects.filter(user=user).first()
+            profile.is_approval_required = False
+            profile.save()
+    elif (hasattr(plat, 'is_approved') and (not plat.is_approved)):
         return
     else:
         ctype = ContentType.objects.get_for_model(instance)
@@ -223,33 +278,11 @@ def send_email_to_planning_supervisors(sender, instance, **kwargs):
                 msg.attach_alternative(html_content, "text/html")
                 msg.send()
 
-@receiver(pre_save, sender=Agreement)
-@receiver(pre_save, sender=AccountLedger)
-@receiver(pre_save, sender=Payment)
-@receiver(pre_save, sender=Project)
-@receiver(pre_save, sender=ProjectCostEstimate)
-@receiver(pre_save, sender=Plat)
-@receiver(pre_save, sender=Lot)
-def set_approval(sender, instance, **kwargs):
-    if instance.modified_by.is_superuser == True or ((hasattr(instance.modified_by, 'profile') and instance.modified_by.profile.is_supervisor == True)):
-        instance.is_approved = True
-
-        ctype = ContentType.objects.get_for_model(instance)
-
-        if ctype.app_label == 'accounts':
-            group = ['Finance']
-        elif ctype.app_label == 'plats':
-            group = ['Planning']
-
-        users = User.objects.filter(Q(profile__is_supervisor=True) & Q(groups__name__in=group))
-
-        for user in users:
-            profile = Profile.objects.filter(user=user).first()
-            profile.is_approval_required = False
-            profile.save()
-    else:
         instance.is_approved = False
-    return instance
+
+    plat.is_approved=instance.is_approved
+    plat.save()
+    post_save.connect(send_email_to_planning_supervisors, sender=Plat)
 
 @receiver(post_save, sender=Payment)
 @receiver(post_save, sender=AccountLedger)
