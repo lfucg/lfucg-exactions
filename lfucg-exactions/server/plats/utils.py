@@ -114,6 +114,102 @@ def calculate_lot_balance(lot):
             sewer_credits_applied += Decimal(ledger.sewer_credits)
             non_sewer_credits_applied += Decimal(ledger.non_sewer_credits)
 
+            sewer_diff = sewer_credits_applied - Decimal(ledger.sewer_trans) - Decimal(ledger.sewer_cap)
+            non_sewer_diff = non_sewer_credits_applied - Decimal(ledger.roads) - Decimal(ledger.parks) - Decimal(ledger.storm) - Decimal(ledger.open_space)
+
+            while sewer_diff > 0 and (
+                dues_sewer_cap_dev > 0 or
+                dues_sewer_trans_dev > 0 or
+                dues_sewer_cap_own > 0 or
+                dues_sewer_trans_own > 0
+            ):
+                if dues_sewer_cap_dev >= sewer_diff:
+                    dues_sewer_cap_dev -= sewer_diff
+                    sewer_diff -= sewer_diff
+                elif dues_sewer_cap_dev > 0:
+                    dues_sewer_cap_dev -= dues_sewer_cap_dev
+                    sewer_diff -= dues_sewer_cap_dev
+                elif dues_sewer_trans_dev >= sewer_diff:
+                    dues_sewer_trans_dev -= sewer_diff
+                    sewer_diff -= sewer_diff
+                elif dues_sewer_trans_dev > 0:
+                    dues_sewer_trans_dev -= dues_sewer_trans_dev
+                    sewer_diff -= dues_sewer_trans_dev
+                elif dues_sewer_cap_own >= sewer_diff:
+                    dues_sewer_cap_own -= sewer_diff
+                    sewer_diff -= sewer_diff
+                elif dues_sewer_cap_own > 0:
+                    dues_sewer_cap_own -= dues_sewer_cap_own
+                    sewer_diff -= dues_sewer_cap_own
+                elif dues_sewer_trans_own >= sewer_diff:
+                    dues_sewer_trans_own -= sewer_diff
+                    sewer_diff -= sewer_diff
+                elif dues_sewer_trans_own > 0:
+                    dues_sewer_trans_own -= dues_sewer_trans_own
+                    sewer_diff -= dues_sewer_trans_own
+                else:
+                    pass
+
+            while non_sewer_diff > 0 and (
+                dues_roads_dev > 0 or
+                dues_roads_own > 0 or
+                dues_parks_dev > 0 or
+                dues_parks_own > 0 or
+                dues_storm_dev > 0 or
+                dues_storm_own > 0 or
+                dues_open_space_dev > 0 or
+                dues_storm_own > 0 
+            ):
+                if dues_roads_dev >= non_sewer_diff:
+                    dues_roads_dev -= non_sewer_diff
+                    non_sewer_diff -= non_sewer_diff
+                elif dues_roads_dev > 0:
+                    dues_roads_dev -= dues_roads_dev
+                    non_sewer_diff -= dues_roads_dev
+                elif dues_parks_dev >= non_sewer_diff:
+                    dues_parks_dev -= non_sewer_diff
+                    non_sewer_diff -= non_sewer_diff
+                elif dues_parks_dev > 0:
+                    dues_parks_dev -= dues_parks_dev
+                    non_sewer_diff -= dues_parks_dev
+                elif dues_storm_dev >= non_sewer_diff:
+                    dues_storm_dev -= non_sewer_diff
+                    non_sewer_diff -= non_sewer_diff
+                elif dues_storm_dev > 0:
+                    dues_storm_dev -= dues_storm_dev
+                    non_sewer_diff -= dues_storm_dev
+                elif dues_open_space_dev >= non_sewer_diff:
+                    dues_open_space_dev -= non_sewer_diff
+                    non_sewer_diff -= non_sewer_diff
+                elif dues_open_space_dev > 0:
+                    dues_open_space_dev -= dues_open_space_dev
+                    non_sewer_diff -= dues_open_space_dev
+                elif dues_roads_own >= non_sewer_diff:
+                    dues_roads_own -= non_sewer_diff
+                    non_sewer_diff -= non_sewer_diff
+                elif dues_roads_own > 0:
+                    dues_roads_own -= dues_roads_own
+                    non_sewer_diff -= dues_roads_own
+                elif dues_parks_own >= non_sewer_diff:
+                    dues_parks_own -= non_sewer_diff
+                    non_sewer_diff -= non_sewer_diff
+                elif dues_parks_own > 0:
+                    dues_parks_own -= dues_parks_own
+                    non_sewer_diff -= dues_parks_own
+                elif dues_storm_own >= non_sewer_diff:
+                    dues_storm_own -= non_sewer_diff
+                    non_sewer_diff -= non_sewer_diff
+                elif dues_storm_own > 0:
+                    dues_storm_own -= dues_storm_own
+                    non_sewer_diff -= dues_storm_own
+                elif dues_storm_own >= non_sewer_diff:
+                    dues_storm_own -= non_sewer_diff
+                    non_sewer_diff -= non_sewer_diff
+                elif dues_storm_own > 0:
+                    dues_storm_own -= dues_storm_own
+                    non_sewer_diff -= dues_storm_own
+                else:
+                    pass
 
     all_exactions = {
         'total_exactions': total_exactions,
