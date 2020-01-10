@@ -89,7 +89,7 @@ class PlatViewSet(viewsets.ModelViewSet):
             PageNumberPagination.page_size = pageSize
             pagination_class = PageNumberPagination
 
-        return queryset.order_by('cabinet')
+        return queryset.order_by('cabinet', 'slide')
 
     def create(self, request):
         data_set = request.data
@@ -143,7 +143,7 @@ class LotViewSet(viewsets.ModelViewSet):
             PageNumberPagination.page_size = pageSize
             pagination_class = PageNumberPagination
 
-        return queryset.order_by('address_street')
+        return queryset.order_by('address_street', 'address_number', 'address_unit')
 
     def create(self, request):
         data_set = request.data
