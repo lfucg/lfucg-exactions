@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { hashHistory } from 'react-router';
-import { map } from 'ramda';
+import { map, sum } from 'ramda';
 import PropTypes from 'prop-types';
 
 import Navbar from './Navbar';
@@ -90,6 +90,24 @@ class LotForm extends React.Component {
             activeForm.address_street;
 
         const lotExactions = currentLot && currentLot.lot_exactions && currentLot.lot_exactions.total_exactions && currentLot.lot_exactions.total_exactions.replace(/\$|,/g, "");
+
+        const sewerTotal = sum([
+            activeForm.dues_sewer_cap_dev,
+            activeForm.dues_sewer_cap_own,
+            activeForm.dues_sewer_trans_dev,
+            activeForm.dues_sewer_trans_own
+        ]).toFixed(2);
+
+        const nonSewerTotal = sum([
+            activeForm.dues_roads_dev,
+            activeForm.dues_roads_own,
+            activeForm.dues_storm_dev,
+            activeForm.dues_storm_own,
+            activeForm.dues_parks_dev,
+            activeForm.dues_parks_own,
+            activeForm.dues_open_space_dev,
+            activeForm.dues_open_space_own
+        ]).toFixed(2);
 
         return (
             <div className="lot-form">
@@ -445,8 +463,20 @@ class LotForm extends React.Component {
                                                             </div>
                                                         </div>
                                                     </fieldset>
+                                                    <div className="row">
+                                                        <div className="col-sm-6">
+                                                            <h3>Sewer Exactions: </h3>
+                                                            <h4>${sewerTotal}</h4>
+                                                        </div>
+                                                        <div className="col-sm-6">
+                                                            <h3>Non-Sewer Exactions: </h3>
+                                                            <h4>${nonSewerTotal}</h4>
+                                                        </div>
+                                                    </div>
                                                     <div className="col-xs-6 text-center">
-                                                        <button disabled={!submitEnabled} className="btn btn-lex" onClick={onLotDues} >Submit</button>
+                                                        <button disabled={!submitEnabled} className="btn btn-lex" onClick={onLotDues} >
+                                                            {currentUser.is_superuser || (currentUser.profile && currentUser.profile.is_supervisor) ? <div>Submit / Approve</div> : <div>Submit</div>}
+                                                        </button>
                                                         {!submitEnabled ? (
                                                             <div>
                                                                 <div className="clearfix" />
