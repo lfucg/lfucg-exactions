@@ -92,7 +92,7 @@ class AgreementViewSet(viewsets.ModelViewSet):
             pagination_class = PageNumberPagination
             PageNumberPagination.page_size = pageSize
 
-        return queryset.order_by('expansion_area')
+        return queryset.order_by('resolution_number', 'expansion_area')
 
     def create(self, request):
         data_set = request.data
