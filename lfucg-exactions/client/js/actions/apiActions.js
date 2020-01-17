@@ -565,7 +565,7 @@ export function getPlatLots(selectedPlat) {
     return {
         type: API_CALL,
         endpoint: GET_PLAT_LOTS,
-        url: `/lot/?paginatePage&plat=${selectedPlat}`,
+        url: `/lotQuick/?paginatePage&plat=${selectedPlat}`,
     };
 }
 

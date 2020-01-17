@@ -137,7 +137,10 @@ const lotsReducer = (state = initialState, action) => {
         };
     case SEARCH_QUERY:
     case GET_PAGINATION:
-        if (action.response.endpoint === '/lot') {
+        if (
+            action.response.endpoint === '/lot' ||
+            action.response.endpoint === '/lotQuick'
+        ) {
             return {
                 ...state,
                 currentLot: null,
