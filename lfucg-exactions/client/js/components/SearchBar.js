@@ -78,7 +78,7 @@ class SearchBar extends React.Component {
                 onChange={() => onFilter(this[field.displayName])}
                 ref={(input) => { this[field.displayName] = input; }}
                 name={field.filterField}
-                value={path(['searchParams', page, field.filterField], search)}
+                value={path(['searchParams', page, field.filterField], search) || ""}
               >
                 <option value="">
                   Select {field.displayName}

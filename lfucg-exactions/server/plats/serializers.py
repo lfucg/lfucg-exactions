@@ -114,11 +114,15 @@ class PlatQuickSerializer(serializers.ModelSerializer):
         model = Plat
         fields = (
             'id',
-            'name',
+            'block',
             'cabinet',
-            'slide',
             'current_sewer_due',
             'current_non_sewer_due',
+            'expansion_area',
+            'is_approved',
+            'name',
+            'slide',
+            'section',
         )
 
 class PlatSerializer(serializers.ModelSerializer):
@@ -134,17 +138,20 @@ class PlatSerializer(serializers.ModelSerializer):
             'account',
             'subdivision',
         ).prefetch_related(
-            'plat_zone',
+            Prefetch(
+                'plat_zone',
+                queryset=PlatZone.objects.filter(is_active=True),
+            ),
             Prefetch(
                 'lot',
-                queryset=Lot.objects.filter(is_active=False).prefetch_related(
+                queryset=Lot.objects.filter(is_active=True).prefetch_related(
                     Prefetch(
                         'payment',
-                        queryset=Payment.objects.filter(is_active=False)
+                        queryset=Payment.objects.filter(is_active=True)
                     ),
                     Prefetch(
                         'ledger_lot',
-                        queryset=AccountLedger.objects.filter(is_active=False)
+                        queryset=AccountLedger.objects.filter(is_active=True)
                     )
                 )
             )
@@ -289,11 +296,20 @@ class LotSerializer(serializers.ModelSerializer):
         )
 
 class LotQuickSerializer(serializers.ModelSerializer):
+    lot_exactions = serializers.SerializerMethodField(read_only=True)
+    
+    def get_lot_exactions(self, obj):
+        return calculate_lot_totals(obj)
+
     class Meta:
         model = Lot
         fields = (
             'id',
             'address_full',
+            'lot_number',
+            'permit_id',
+            'is_approved',
+            'lot_exactions',
         )
 
 class LotExactionsSerializer(serializers.ModelSerializer):

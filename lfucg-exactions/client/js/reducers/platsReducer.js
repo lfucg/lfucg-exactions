@@ -106,7 +106,10 @@ const platsReducer = (state = initialState, action) => {
         };
     case GET_PAGINATION:
     case SEARCH_QUERY:
-        if (action.response.endpoint === '/plat') {
+        if (
+            action.response.endpoint === '/plat' ||
+            action.response.endpoint === '/platQuick'
+        ) {
             return {
                 ...state,
                 currentPlat: null,

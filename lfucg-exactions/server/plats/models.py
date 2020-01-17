@@ -103,8 +103,9 @@ class Plat(models.Model):
     buildable_lots = models.IntegerField()
     non_buildable_lots = models.IntegerField(default=0)
 
-    cabinet = models.CharField(max_length=200)
-    slide = models.CharField(max_length=200)
+    cabinet = models.CharField(max_length=100)
+    slide = models.CharField(max_length=100)
+    cabinet_slide = models.CharField(max_length=200, null=True, blank=True)
 
     calculation_note = models.TextField(null=True, blank=True)
 
@@ -141,6 +142,7 @@ class Plat(models.Model):
 
             self.sewer_due = sewer_calc
             self.non_sewer_due = non_sewer_calc
+        self.cabinet_slide = self.cabinet + '-' + self.slide
 
         super(Plat, self).save(*args, **kwargs)
 
