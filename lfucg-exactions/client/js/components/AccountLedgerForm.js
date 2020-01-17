@@ -131,7 +131,12 @@ class AccountLedgerForm extends React.Component {
                                         <div className="row">
                                             <div className="col-sm-6 form-group">
                                                 <label htmlFor="entry_type" className="form-label" id="entry_type" aria-label="Entry Type" aria-required="true">* Entry Type</label>
-                                                <select className="form-control" id="entry_type" onChange={formChange('entry_type')} value={activeForm.entry_type_show} >
+                                                <select
+                                                    className="form-control"
+                                                    id="entry_type"
+                                                    value={activeForm.entry_type_show || 'start_entry'}
+                                                    onChange={formChange('entry_type')}
+                                                >
                                                     <option value="start_entry">Entry Type</option>
                                                     <option value={['NEW', 'New Credits']}>New Credits</option>
                                                     <option value={['USE', 'Use Credits']}>Use Credits</option>
@@ -140,7 +145,13 @@ class AccountLedgerForm extends React.Component {
                                             </div>
                                             <div className="col-sm-6 form-group">
                                                 <label htmlFor="plat_lot" className="form-label" id="plat_lot" aria-label="Apply By Plat or Lot">Apply By Plat or Lot</label>
-                                                <select className="form-control" id="plat_lot" onChange={formChange('plat_lot')} value={activeForm.plat_lot_show} disabled={activeForm.entry_type !== 'USE'}>
+                                                <select
+                                                    className="form-control"
+                                                    id="plat_lot" 
+                                                    value={activeForm.plat_lot_show || 'start_entry'}
+                                                    disabled={activeForm.entry_type !== 'USE'}
+                                                    onChange={formChange('plat_lot')}
+                                                >
                                                     <option value="start_entry">Plat or Lot Credit Level</option>
                                                     <option value={['plat', 'plat']}>Plat</option>
                                                     <option value={['lot', 'lot']}>Lot</option>
@@ -150,14 +161,26 @@ class AccountLedgerForm extends React.Component {
                                         <div className="row">
                                             <div className="col-sm-6 form-group">
                                                 <label htmlFor="account_from" className="form-label" id="account_from" aria-label="Account From" aria-required="true">* Account From</label>
-                                                <select className="form-control" id="account_from" onChange={accountFormChange('account_from')} value={activeForm.account_from} disabled={!activeForm.entry_type || activeForm.entry_type === 'NEW'}>
+                                                <select
+                                                    className="form-control"
+                                                    id="account_from"
+                                                    onChange={accountFormChange('account_from')} 
+                                                    value={activeForm.account_from || 'start_account_from'} 
+                                                    disabled={!activeForm.entry_type || activeForm.entry_type === 'NEW'}
+                                                >
                                                     <option value="start_account_from">Account From</option>
                                                     {accountsList}
                                                 </select>
                                             </div>
                                             <div className="col-sm-6 form-group">
                                                 <label htmlFor="account_to" className="form-label" id="account_to" aria-label="Account To" aria-required="true">* Account To</label>
-                                                <select className="form-control" id="account_to" onChange={accountFormChange('account_to', accounts)} value={activeForm.account_to} disabled={!activeForm.entry_type || activeForm.entry_type === 'USE'}>
+                                                <select
+                                                    className="form-control"
+                                                    id="account_to"
+                                                    onChange={accountFormChange('account_to', accounts)} 
+                                                    value={activeForm.account_to || 'start_account_to'} 
+                                                    disabled={!activeForm.entry_type || activeForm.entry_type === 'USE'}
+                                                >
                                                     <option value="start_account_to">Account To</option>
                                                     {accountsList}
                                                 </select>
@@ -166,7 +189,13 @@ class AccountLedgerForm extends React.Component {
                                         <div className="row">
                                             <div className="col-sm-6 form-group">
                                                 <label htmlFor="plat" className="form-label" id="plat" aria-label="Plat" >Plat</label>
-                                                <select className="form-control" id="plat" onChange={platFormChange('plat')} value={activeForm.plat_show} disabled={activeForm.entry_type !== 'USE' || activeForm.plat_lot !== 'plat'}>
+                                                <select
+                                                    className="form-control"
+                                                    id="plat"
+                                                    onChange={platFormChange('plat')} 
+                                                    value={activeForm.plat_show || 'start_plat'} 
+                                                    disabled={activeForm.entry_type !== 'USE' || activeForm.plat_lot !== 'plat'}
+                                                >
                                                     <option value="start_plat">Plat</option>
                                                     {platsList}
                                                 </select>
@@ -219,7 +248,13 @@ class AccountLedgerForm extends React.Component {
                                         <div className="row">
                                             <div className="col-sm-6 form-group">
                                                 <label htmlFor="agreement" className="form-label" id="agreement" aria-label="Agreement" aria-required="true">* Agreement</label>
-                                                <select className="form-control" id="agreement" onChange={formChange('agreement')} value={activeForm.agreement_show} disabled={!activeForm.entry_type}>
+                                                <select
+                                                    className="form-control"
+                                                    id="agreement"
+                                                    onChange={formChange('agreement')}
+                                                    value={activeForm.agreement_show || 'start_agreement'}
+                                                    disabled={!activeForm.entry_type}
+                                                >
                                                     <option value="start_agreement">Agreement Resolution</option>
                                                     {agreementsList}
                                                 </select>

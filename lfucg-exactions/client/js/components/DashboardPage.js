@@ -53,14 +53,14 @@ class DashboardPage extends React.Component {
                                 <Link to="payment" role="link"><h2 className="in-page-link">Monetary Payments</h2></Link>
                                 <p>Payments via cash, credit card, check, or money order.</p>
                             </div>
-                            <div className="col-md-4 col-sm-6">
+                            {/* <div className="col-md-4 col-sm-6">
                                 <Link to="project" role="link"><h2 className="in-page-link">Projects</h2></Link>
                                 <p>Lexington projects.</p>
                             </div>
                             <div className="col-md-4 col-sm-6">
                                 <Link to="project-cost" role="link"><h2 className="in-page-link">Project Costs</h2></Link>
                                 <p>Lexington project costs.</p>
-                            </div>
+                            </div> */}
                             {((currentUser && currentUser.is_superuser) || (userGroup && userGroup.length > 0)) &&
                                 <div className="col-md-4 col-sm-6">
                                     <Link to="reports-additional" role="link"><h2 className="in-page-link">Transaction Report</h2></Link>

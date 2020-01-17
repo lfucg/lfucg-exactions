@@ -188,7 +188,12 @@ class PlatForm extends React.Component {
                                                 <div className="row">
                                                     <div className="col-sm-6 form-group">
                                                         <label htmlFor="account" className="form-label" id="account" aria-label="Developer Account">Developer Account</label>
-                                                        <select className="form-control" id="account" onChange={formChange('account')} value={activeForm.account_show} >
+                                                        <select
+                                                            className="form-control"
+                                                            id="account"
+                                                            onChange={formChange('account')}
+                                                            value={activeForm.account_show || 'start_account'}
+                                                        >
                                                             <option value="start_account">Developer Account</option>
                                                             {accountsList}
                                                         </select>
@@ -200,7 +205,12 @@ class PlatForm extends React.Component {
                                                 <div className="row">
                                                     <div className="col-sm-6 form-group">
                                                         <label htmlFor="subdivision" className="form-label" id="subdivision" aria-label="Subdivision" >Subdivision</label>
-                                                        <select className="form-control" id="subdivision" onChange={formChange('subdivision')} value={activeForm.subdivision_show} >
+                                                        <select
+                                                            className="form-control"
+                                                            id="subdivision"
+                                                            onChange={formChange('subdivision')}
+                                                            value={activeForm.subdivision_show || 'start_subdivision'}
+                                                        >
                                                             <option value="start_subdivision">Subdivision</option>
                                                             {subdivisionsList}
                                                         </select>
@@ -230,7 +240,7 @@ class PlatForm extends React.Component {
                                                           className="form-control"
                                                           id="expansion_area"
                                                           onChange={formChange('expansion_area')}
-                                                          value={activeForm.expansion_area_show}
+                                                          value={activeForm.expansion_area_show || ''}
                                                           aria-required="true"
                                                           aria-label="* Expansion Area"
                                                           required
@@ -296,7 +306,12 @@ class PlatForm extends React.Component {
                                                 <div className="row">
                                                     <div className="col-sm-6 form-group">
                                                         <label htmlFor="plat_type" className="form-label" id="plat_type" aria-label="Plat Type" aria-required="true">* Plat Type</label>
-                                                        <select className="form-control" id="plat_type" onChange={formChange('plat_type')} value={activeForm.plat_type_show} >
+                                                        <select
+                                                            className="form-control"
+                                                            id="plat_type"
+                                                            onChange={formChange('plat_type')}
+                                                            value={activeForm.plat_type_show || 'start_plat_type'}
+                                                        >
                                                             <option value="start_plat_type">Plat Type</option>
                                                             <option value={['PLAT', 'Final Record Plat']}>Final Record Plat</option>
                                                             <option value={['DEVELOPMENT_PLAN', 'Final Development Plan']}>Final Development Plan</option>

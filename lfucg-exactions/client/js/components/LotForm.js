@@ -158,7 +158,12 @@ class LotForm extends React.Component {
                                                 <div className="row">
                                                     <div className="col-sm-6 form-group">
                                                         <label htmlFor="account" className="form-label" id="account">Developer Account</label>
-                                                        <select className="form-control" id="account" onChange={formChange('account')} value={activeForm.account_show} >
+                                                        <select
+                                                            className="form-control"
+                                                            id="account"
+                                                            onChange={formChange('account')}
+                                                            value={activeForm.account_show || 'start_account'}
+                                                        >
                                                             <option value="start_account">Developer Account</option>
                                                             {accountsList}
                                                         </select>
@@ -209,7 +214,12 @@ class LotForm extends React.Component {
                                                     </div>
                                                     <div className="col-sm-3 form-group">
                                                         <label htmlFor="address_zip" className="form-label" id="address_zip">Zipcode</label>
-                                                        <select className="form-control" id="address_zip" onChange={formChange('address_zip')} value={activeForm.address_zip_show} >
+                                                        <select
+                                                            className="form-control"
+                                                            id="address_zip"
+                                                            onChange={formChange('address_zip')}
+                                                            value={activeForm.address_zip_show || 'start_zip'}
+                                                        >
                                                             <option value="start_zip">Zipcode</option>
                                                             <option value={['40505', '40505']}>40505</option>
                                                             <option value={['40509', '40509']}>40509</option>
@@ -225,7 +235,12 @@ class LotForm extends React.Component {
                                                 <div className="row">
                                                     <div className="col-sm-6 form-group">
                                                         <label htmlFor="plat" className="form-label" id="plat" aria-required="true">* Plat</label>
-                                                        <select className="form-control" id="plat" onChange={formChange('plat')} value={activeForm.plat_show} >
+                                                        <select
+                                                            className="form-control"
+                                                            id="plat"
+                                                            onChange={formChange('plat')}
+                                                            value={activeForm.plat_show || 'start_plat'}
+                                                        >
                                                             <option value="start_plat">Plat</option>
                                                             {platsList}
                                                         </select>
