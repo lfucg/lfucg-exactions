@@ -85,7 +85,12 @@ class ProjectCostForm extends React.Component {
                                         <div className="row">
                                             <div className="col-sm-6 form-group">
                                                 <label htmlFor="project_id" className="form-label" id="project_id" aria-label="* Project" aria-required="true">* Project</label>
-                                                <select className="form-control" id="project_id" onChange={formChange('project_id')} value={activeForm.project_id_show} >
+                                                <select
+                                                    className="form-control"
+                                                    id="project_id"
+                                                    onChange={formChange('project_id')}
+                                                    value={activeForm.project_id_show || 'start_project'}
+                                                >
                                                     <option value="start_project">* Project</option>
                                                     {projectsList}
                                                 </select>
