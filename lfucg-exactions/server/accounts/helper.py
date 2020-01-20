@@ -289,29 +289,32 @@ def send_email_to_planning_supervisors(sender, instance, **kwargs):
 def calculate_current_lot_balance(sender, instance, **kwargs):
     related_lot = None
 
-    if sender.__name__ == 'Payment':
-        related_lot = Lot.objects.get(id=instance.lot_id_id)
-    elif sender.__name__ == 'AccountLedger':
-        related_lot = Lot.objects.get(id=instance.lot_id)
+    try:
+        if sender.__name__ == 'Payment':
+            related_lot = Lot.objects.get(id=instance.lot_id_id)
+        elif sender.__name__ == 'AccountLedger':
+            related_lot = Lot.objects.get(id=instance.lot_id)
 
-    if related_lot:
-        lot = related_lot
-        lot_balances = calculate_lot_balance(lot)
+        if related_lot:
+            lot = related_lot
+            lot_balances = calculate_lot_balance(lot)
 
-        related_lot.current_dues_roads_dev = lot_balances['dues_roads_dev']
-        related_lot.current_dues_roads_own = lot_balances['dues_roads_own']
-        related_lot.current_dues_sewer_trans_dev = lot_balances['dues_sewer_trans_dev']
-        related_lot.current_dues_sewer_trans_own = lot_balances['dues_sewer_trans_own']
-        related_lot.current_dues_sewer_cap_dev = lot_balances['dues_sewer_cap_dev']
-        related_lot.current_dues_sewer_cap_own = lot_balances['dues_sewer_cap_own']
-        related_lot.current_dues_parks_dev = lot_balances['dues_parks_dev']
-        related_lot.current_dues_parks_own = lot_balances['dues_parks_own']
-        related_lot.current_dues_storm_dev = lot_balances['dues_storm_dev']
-        related_lot.current_dues_storm_own = lot_balances['dues_storm_own']
-        related_lot.current_dues_open_space_dev = lot_balances['dues_open_space_dev']
-        related_lot.current_dues_open_space_own = lot_balances['dues_open_space_own']
+            related_lot.current_dues_roads_dev = lot_balances['dues_roads_dev']
+            related_lot.current_dues_roads_own = lot_balances['dues_roads_own']
+            related_lot.current_dues_sewer_trans_dev = lot_balances['dues_sewer_trans_dev']
+            related_lot.current_dues_sewer_trans_own = lot_balances['dues_sewer_trans_own']
+            related_lot.current_dues_sewer_cap_dev = lot_balances['dues_sewer_cap_dev']
+            related_lot.current_dues_sewer_cap_own = lot_balances['dues_sewer_cap_own']
+            related_lot.current_dues_parks_dev = lot_balances['dues_parks_dev']
+            related_lot.current_dues_parks_own = lot_balances['dues_parks_own']
+            related_lot.current_dues_storm_dev = lot_balances['dues_storm_dev']
+            related_lot.current_dues_storm_own = lot_balances['dues_storm_own']
+            related_lot.current_dues_open_space_dev = lot_balances['dues_open_space_dev']
+            related_lot.current_dues_open_space_own = lot_balances['dues_open_space_own']
 
-        super(Lot, lot).save()
+            super(Lot, lot).save()
+    except Exception as exc:
+        print('EXCEPTION', exc)
 
 @receiver(post_save, sender=Payment)
 @receiver(post_save, sender=AccountLedger)
@@ -361,4 +364,3 @@ def calculate_current_account_balance(sender, instance, **kwargs):
         account_from.current_sewer_balance -= sewer_credits
 
         super(Account, account_from).save()
-        

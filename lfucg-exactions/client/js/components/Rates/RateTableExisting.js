@@ -61,7 +61,11 @@ class RateTableForm extends React.Component {
                 <h3 className="col-xs-5 inline-label">Currently Active Table</h3>
                 <h5 className="col-xs-4 inline-label">*(Only one table may be active at a time.)</h5>
                 <div className="form-group col-xs-3">
-                    <select id="active_table" className="form-control" onChange={onActiveTableSelection('active_table')}>
+                    <select
+                        className="form-control"
+                        id="active_table"
+                        onChange={onActiveTableSelection('active_table')}
+                    >
                         {activeRateTable &&
                             <option value={activeRateTable.id} >Currently: {activeRateTable.resolution_number}</option>
                         }
@@ -71,7 +75,11 @@ class RateTableForm extends React.Component {
                 <div className="clearfix" />
                 <h3 className="col-xs-4 col-sm-3 inline-label">Rate Table</h3>
                 <div className="form-group col-xs-4 col-sm-3 ">
-                    <select id="rate_table_id" className="form-control" onChange={onRateTableSelection('rate_table_id')}>
+                    <select
+                        className="form-control"
+                        id="rate_table_id"
+                        onChange={onRateTableSelection('rate_table_id')}
+                    >
                         {currentTable ?
                             <option value={currentTable.id} >{currentTable.resolution_number}</option>
                             : <option value="start_table">Rate Table</option>

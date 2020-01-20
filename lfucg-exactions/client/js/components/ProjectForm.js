@@ -93,14 +93,24 @@ class ProjectForm extends React.Component {
                                         <div className="row">
                                             <div className="col-sm-6 form-group">
                                                 <label htmlFor="agreement_id" className="form-label" id="agreement_id" aria-label="Agreement" aria-required="true">* Agreement</label>
-                                                <select className="form-control" id="agreement_id" onChange={formChange('agreement_id')} value={activeForm.agreement_id_show} >
+                                                <select
+                                                    className="form-control"
+                                                    id="agreement_id"
+                                                    onChange={formChange('agreement_id')}
+                                                    value={activeForm.agreement_id_show || 'start_agreement'}
+                                                >
                                                     <option value="start_agreement">Agreement</option>
                                                     {agreementsList}
                                                 </select>
                                             </div>
                                             <div className="col-sm-6 form-group">
                                                 <label htmlFor="expansion_area" className="form-label" id="expansion_area" aria-label="Expansion Area" aria-required="true">* Expansion Area</label>
-                                                <select className="form-control" id="expansion_area" onChange={formChange('expansion_area')} value={activeForm.expansion_area_show} >
+                                                <select
+                                                    className="form-control"
+                                                    id="expansion_area"
+                                                    onChange={formChange('expansion_area')}
+                                                    value={activeForm.expansion_area_show || 'start_expansion'}
+                                                >
                                                     <option value="start_expansion">Expansion Area</option>
                                                     <option value={['EA-1', 'EA-1']}>EA-1</option>
                                                     <option value={['EA-2A', 'EA-2A']}>EA-2A</option>
@@ -113,7 +123,12 @@ class ProjectForm extends React.Component {
                                         <div className="row">
                                             <div className="col-sm-6 form-group">
                                                 <label htmlFor="project_category" className="form-label" id="project_category" aria-label="Project Category" aria-required="true">* Project Category</label>
-                                                <select className="form-control" id="project_category" onChange={formChange('project_category')} value={activeForm.project_category_show} >
+                                                <select
+                                                    className="form-control"
+                                                    id="project_category"
+                                                    onChange={formChange('project_category')}
+                                                    value={activeForm.project_category_show || 'start_category'}
+                                                >
                                                     <option value="start_category">Category</option>
                                                     <option value={['ROADS', 'Roads']}>Roads</option>
                                                     <option value={['SEWER', 'Sanitary Sewer']}>Sanitary Sewer</option>
@@ -125,7 +140,12 @@ class ProjectForm extends React.Component {
                                                 <div className="col-sm-6 form-group">
                                                     <label htmlFor="project_type" className="form-label" id="project_type" aria-label="Project Type" aria-required="true">* Project Type</label>
                                                     {activeForm.project_category === 'ROADS' && (
-                                                        <select className="form-control" id="project_type" onChange={formChange('project_type')} value={activeForm.project_type_show} >
+                                                        <select
+                                                            className="form-control"
+                                                            id="project_type"
+                                                            onChange={formChange('project_type')}
+                                                            value={activeForm.project_type_show || 'start_type'}
+                                                        >
                                                             <option value="start_type">Project Type</option>
                                                             <option value={['BOULEVARD', 'Boulevard']}>Boulevard</option>
                                                             <option value={['PARKWAY', 'Parkway']}>Parkway</option>
@@ -135,21 +155,36 @@ class ProjectForm extends React.Component {
                                                         </select>
                                                     )}
                                                     {activeForm.project_category === 'SEWER' && (
-                                                        <select className="form-control" id="project_type" onChange={formChange('project_type')} value={activeForm.project_type_show} >
+                                                        <select
+                                                            className="form-control"
+                                                            id="project_type"
+                                                            onChange={formChange('project_type')}
+                                                            value={activeForm.project_type_show || 'start_type'}
+                                                        >
                                                             <option value="start_type">Project Type</option>
                                                             <option value={['SEWER_TRANSMISSION', 'Sanitary Sewer Transmission']}>Sanitary Sewer Transmission</option>
                                                             <option value={['SEWER_OTHER', 'Other Sewer']}>Other Sewer</option>
                                                         </select>
                                                     )}
                                                     {activeForm.project_category === 'PARK' && (
-                                                        <select className="form-control" id="project_type" onChange={formChange('project_type')} value={activeForm.project_type_show} >
+                                                        <select
+                                                            className="form-control"
+                                                            id="project_type"
+                                                            onChange={formChange('project_type')}
+                                                            value={activeForm.project_type_show || 'start_type'}
+                                                        >
                                                             <option value="start_type">Project Type</option>
                                                             <option value={['PARKS_AQUISITION', 'Parks Aquisition']}>Parks Aquisition</option>
                                                             <option value={['OTHER_NON_SEWER', 'Other Non-Sewer']} >Other Non-Sewer</option>
                                                         </select>
                                                     )}
                                                     {activeForm.project_category === 'STORM_WATER' && (
-                                                        <select className="form-control" id="project_type" onChange={formChange('project_type')} value={activeForm.project_type_show} >
+                                                        <select
+                                                            className="form-control"
+                                                            id="project_type"
+                                                            onChange={formChange('project_type')}
+                                                            value={activeForm.project_type_show || 'start_type'}
+                                                        >
                                                             <option value="start_type">Project Type</option>
                                                             <option value={['STORMWATER', 'Storm Water']}>Storm Water</option>
                                                             <option value={['LAND_AQUISITION', 'Land Aquisition']}>Land Aquisition</option>
@@ -160,7 +195,12 @@ class ProjectForm extends React.Component {
                                             ) : (
                                                 <div className="col-sm-6 form-group">
                                                     <label htmlFor="project_type" className="form-label" id="project_type" aria-label="Project Type" aria-required="true">* Project Type</label>
-                                                    <select className="form-control" id="project_type" onChange={formChange('project_type')} value={activeForm.project_type_show} >
+                                                    <select
+                                                        className="form-control"
+                                                        id="project_type"
+                                                        onChange={formChange('project_type')}
+                                                        value={activeForm.project_type_show || 'start_type'}
+                                                    >
                                                         <option value="start_type">Project Type</option>
                                                         <option value={['BOULEVARD', 'Boulevard']}>Boulevard</option>
                                                         <option value={['PARKWAY', 'Parkway']}>Parkway</option>
@@ -179,7 +219,12 @@ class ProjectForm extends React.Component {
                                         <div className="row">
                                             <div className="col-sm-6 form-group">
                                                 <label htmlFor="project_status" className="form-label" id="project_status" aria-label="Project Status" aria-required="true">* Project Status</label>
-                                                <select className="form-control" id="project_status" onChange={formChange('project_status')} value={activeForm.project_status_show} >
+                                                <select
+                                                    className="form-control"
+                                                    id="project_status"
+                                                    onChange={formChange('project_status')}
+                                                    value={activeForm.project_status_show || 'start_status'}
+                                                >
                                                     <option value="start_status">Status</option>
                                                     <option value={['IN_PROGRESS', 'In Progress']}>In Progress</option>
                                                     <option value={['COMPLETE', 'Complete']}>Complete</option>

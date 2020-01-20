@@ -1,6 +1,6 @@
 module.exports = {
   entry: {
-    'dashboard': ['core-js/fn/object', './js/dashboard.js'],
+    'dashboard': ['@babel/polyfill', 'core-js/fn/object', './js/dashboard.js'],
   },
   devtool: 'source-map',
   module: {

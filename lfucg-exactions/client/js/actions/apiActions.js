@@ -1439,14 +1439,13 @@ export function postAccountLedger() {
         body: (getState) => {
             const {
                 activeForm,
+                accounts,
+                agreements,
+                lots,
+                plats,
             } = getState();
             const {
                 entry_date,
-                account_from,
-                account_to,
-                plat,
-                lot,
-                agreement,
                 entry_type,
                 non_sewer_credits,
                 sewer_credits,
@@ -1460,11 +1459,11 @@ export function postAccountLedger() {
             } = activeForm;
             return {
                 entry_date,
-                account_from,
-                account_to,
-                plat,
-                lot,
-                agreement,
+                account_from: accounts.accountFrom,
+                account_to: accounts.accountTo,
+                plat: plats.currentPlat ? plats.currentPlat : null,
+                lot: lots.currentLot ? lots.currentLot : null,
+                agreement: agreements.currentAgreement,
                 entry_type,
                 non_sewer_credits,
                 sewer_credits,
@@ -1489,14 +1488,13 @@ export function putAccountLedger(selectedAccountLedger) {
         body: (getState) => {
             const {
                 activeForm,
+                accounts,
+                agreements,
+                lots,
+                plats,
             } = getState();
             const {
                 entry_date,
-                account_from,
-                account_to,
-                plat,
-                lot,
-                agreement,
                 entry_type,
                 non_sewer_credits,
                 sewer_credits,
@@ -1510,11 +1508,11 @@ export function putAccountLedger(selectedAccountLedger) {
             } = activeForm;
             return {
                 entry_date,
-                account_from,
-                account_to,
-                plat,
-                lot,
-                agreement,
+                account_from: accounts.accountFrom,
+                account_to: accounts.accountTo,
+                plat: plats.currentPlat ? plats.currentPlat : null,
+                lot: lots.currentLot ? lots.currentLot : null,
+                agreement: agreements.currentAgreement,
                 entry_type,
                 non_sewer_credits,
                 sewer_credits,
