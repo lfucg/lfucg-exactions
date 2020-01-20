@@ -105,7 +105,11 @@ class AccountForm extends React.Component {
                                         </div>
                                         <div className="col-sm-4 form-group">
                                             <label htmlFor="address_state" className="form-label" id="address_state" aria-label="State" aria-required="true">* State</label>
-                                            <select className="form-control" onChange={formChange('address_state')} value={activeForm.address_state_show} >
+                                            <select
+                                                className="form-control"
+                                                onChange={formChange('address_state')}
+                                                value={activeForm.address_state_show || 'start_state'}
+                                            >
                                                 <option value="start_state">State</option>
                                                 <option value={['AK', 'Alaska']}>Alaska</option>
                                                 <option value={['AL', 'Alabama']}>Alabama</option>

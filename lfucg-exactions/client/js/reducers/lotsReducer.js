@@ -1,4 +1,4 @@
-import { contains, map, mapObjIndexed } from 'ramda';
+import { contains, find, map, mapObjIndexed } from 'ramda';
 
 import { API_CALL_START } from '../constants/actionTypes';
 import { SET_LOADING_FALSE } from '../constants/stateConstants';
@@ -17,6 +17,8 @@ import {
     GET_PAGINATION,
     SEARCH_QUERY,
 } from '../constants/apiConstants';
+
+import { SET_CURRENT_LOT } from '../constants/componentConstants/lotConstants';
 
 const initialState = {
     currentLot: null,
@@ -124,6 +126,11 @@ const lotsReducer = (state = initialState, action) => {
             lots: action.response,
             prev: null,
         };
+    case SET_CURRENT_LOT:
+        return {
+            ...state,
+            currentLot: find((lot) => (lot.id == action.lot))(state.lots),
+        }
     case POST_LOT:
     case PUT_LOT:
         return {

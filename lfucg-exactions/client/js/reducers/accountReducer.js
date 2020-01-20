@@ -1,4 +1,4 @@
-import { contains, map, mapObjIndexed } from 'ramda';
+import { contains, filter, map, mapObjIndexed, find } from 'ramda';
 
 import { API_CALL_START } from '../constants/actionTypes';
 import { SET_LOADING_FALSE } from '../constants/stateConstants';
@@ -14,6 +14,11 @@ import {
     GET_PAGINATION,
     SEARCH_QUERY,
 } from '../constants/apiConstants';
+
+import {
+    SET_ACCOUNT_FROM,
+    SET_ACCOUNT_TO,
+} from '../constants/componentConstants/accountConstants';
 
 const initialState = {
     currentAccount: null,
@@ -53,6 +58,9 @@ const convertCurrency = (accounts) => {
 
     return newAccountList;
 }
+
+const filterLFUCG = (accounts) => find((account) => contains('LFUCG')(account.account_name))(accounts);
+const accountById = (id, accounts) => find((account) => (account.id == id))(accounts);
 
 const accountReducer = (state = initialState, action) => {
     const {
@@ -111,12 +119,30 @@ const accountReducer = (state = initialState, action) => {
             accountFrom: action.response[0],
             loadingAccount: false,
         };
+    case SET_ACCOUNT_FROM:
+        const newAcctFrom = action.account === 'LFUCG' ?
+            filterLFUCG(state.accounts) :
+            accountById(action.account, state.accounts);
+
+        return {
+            ...state,
+            accountFrom: newAcctFrom,
+        }
     case GET_LEDGER_ACCOUNT_TO:
         return {
             ...state,
             accountTo: action.response[0],
             loadingAccount: false,
         };
+    case SET_ACCOUNT_TO:
+        const newAcctTo = action.account === 'LFUCG' ?
+            filterLFUCG(state.accounts) :
+            accountById(action.account, state.accounts);
+
+        return {
+            ...state,
+            accountTo: newAcctTo,
+        }
     case POST_ACCOUNT:
     case PUT_ACCOUNT:
         return {
