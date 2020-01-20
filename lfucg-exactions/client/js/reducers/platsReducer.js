@@ -1,4 +1,4 @@
-import { contains, map, mapObjIndexed } from 'ramda';
+import { contains, find, map, mapObjIndexed } from 'ramda';
 
 import { API_CALL_START } from '../constants/actionTypes';
 import { SET_LOADING_FALSE } from '../constants/stateConstants';
@@ -14,6 +14,10 @@ import {
     GET_PAGINATION,
     SEARCH_QUERY,
 } from '../constants/apiConstants';
+
+import {
+    SET_CURRENT_PLAT,
+} from '../constants/componentConstants/platConstants';
 
 const initialState = {
     currentPlat: null,
@@ -86,6 +90,11 @@ const platsReducer = (state = initialState, action) => {
             plats: action.response,
             prev: null,
         };
+    case SET_CURRENT_PLAT:
+        return {
+            ...state,
+            currentPlat: find((p) => (p.id == action.plat))(state.plats)
+        }
     case GET_PLATS:
     case GET_ACCOUNT_PLATS:
     case GET_SUBDIVISION_PLATS:
