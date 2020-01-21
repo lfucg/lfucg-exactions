@@ -27,6 +27,7 @@ import {
     getAccountLedgerID,
     postAccountLedger,
     putAccountLedger,
+    getLotID,
 } from '../actions/apiActions';
 
 import {
@@ -73,14 +74,9 @@ class AccountLedgerForm extends React.Component {
             );
         })(plats.plats));
 
-        const lotsList = [{
-            id: 'start_lot',
-            key: 'start_lot',
-            value: 'start_lot',
-            label: 'Lot',
-        }];
+        const lotsList = [];
 
-        if (lots.length > 0) {
+        if (!!lots.lots) {
             map((lot) => {
                 lotsList.push({
                     id: lot.id,
@@ -90,6 +86,8 @@ class AccountLedgerForm extends React.Component {
                 });
             })(lots.lots);
         }
+
+        const defaultLot = !!lots.currentLot ? [lots.currentLot.address_full] : [];
 
         const accountsList = accounts && accounts.accounts.length > 0 && (map((account) => {
             return (
@@ -108,9 +106,9 @@ class AccountLedgerForm extends React.Component {
         })(agreements.agreements));
 
         const submitEnabled =
-            !!accounts.accountFrom &&
-            !!accounts.accountTo &&
-            !!agreements.currentAgreement &&
+            !!accounts.accountFrom && !!accounts.accountFrom.id &&
+            !!accounts.accountTo && !!accounts.accountTo.id &&
+            !!agreements.currentAgreement && !!agreements.currentAgreement.id &&
             activeForm.entry_type &&
             activeForm.non_sewer_credits &&
             activeForm.sewer_credits &&
@@ -143,7 +141,7 @@ class AccountLedgerForm extends React.Component {
 
                 <div className="inside-body">
                     <div className="container">
-                        {accountLedgers.loadingLedger ? <LoadingScreen /> :
+                        {accountLedgers.loadingLedger || activeForm.loading ? <LoadingScreen /> :
                         (
                             <div className="col-sm-offset-1 col-sm-10">
                                 <form >
@@ -228,7 +226,7 @@ class AccountLedgerForm extends React.Component {
                                                     id="lot"
                                                     options={lotsList}
                                                     placeholder="Lot"
-                                                    value={(!!lots.currentLot && lots.currentLot.id) || 'start_lot'}
+                                                    selected={defaultLot}
                                                     disabled={activeForm.entry_type !== 'USE' || activeForm.plat_lot !== 'lot'}
                                                     emptyLabel={!!lots.lots ? 'No Results Found.' : 'Results loading...'}
                                                     aria-required="true"
@@ -455,7 +453,7 @@ class AccountLedgerForm extends React.Component {
                                     </div>
                                 </form>
                                 <div className="clearfix" />
-                                {activeForm.lot || activeForm.plat ? <div>
+                                {!!lots.lots || !!plats.plats ? <div>
                                     {
                                         selectedAccountLedger ?
                                             !!lots.lots &&
@@ -488,7 +486,7 @@ class AccountLedgerForm extends React.Component {
                                     }
                                 </div> : <div>
                                     {
-                                        selectedAccountLedger ?
+                                        selectedAccountLedger && !activeForm.loading ?
                                             <Notes
                                               content_type="accounts_accountledger"
                                               object_id={selectedAccountLedger}
@@ -561,43 +559,56 @@ function mapDispatchToProps(dispatch, params) {
     const selectedAccountLedger = params.params.id;
 
     return {
-        async onComponentDidMount() {
+        onComponentDidMount() {
             dispatch(formInit());
             dispatch(formUpdate({ loading: true }));
-            dispatch(getAccounts());
-            dispatch(getAgreementsQuick())
-            .then(() => {
-                dispatch(formUpdate({ loading: false }));
-            });
             if (selectedAccountLedger) {
-                await dispatch(getLotExactions());
-                await dispatch(getAccountLedgerID(selectedAccountLedger))
-                .then((data_account_ledger) => {
-                    if (data_account_ledger.response) {
+                let lotId;
+                let fromId;
+                let toId;
+                let agreeId;
+
+                Promise.all([
+                    dispatch(getAccounts()),
+                    dispatch(getAgreementsQuick()),
+                    dispatch(getAccountLedgerID(selectedAccountLedger))
+                    .then((data_account_ledger) => {
                         const ledResp = data_account_ledger.response;
-                        const update = {
-                            entry_date: ledResp.entry_date,
-                            entry_type: ledResp.entry_type,
-                            entry_type_show: `${ledResp.entry_type},${ledResp.entry_type_display}`,
-                            non_sewer_credits: ledResp.non_sewer_credits,
-                            sewer_credits: ledResp.sewer_credits,
-                            roads: ledResp.roads,
-                            parks: ledResp.parks,
-                            storm: ledResp.storm,
-                            open_space: ledResp.open_space,
-                            sewer_trans: ledResp.sewer_trans,
-                            sewer_cap: ledResp.sewer_cap,
-                            plat_lot: 'lot',
-                            plat_lot_show: 'lot,lot',
-                        };
-                        dispatch(formUpdate(update));
-                        !!ledResp.lot && dispatch(setCurrentLot(ledResp.lot.id));
-                        !!ledResp.account_from && dispatch(setAccountFrom(ledResp.account_from.id));
-                        !!ledResp.account_to && dispatch(setAccountTo(ledResp.account_to.id));
-                        !!ledResp.agreement && dispatch(setCurrentAgreement(ledResp.agreement.id));
-                    }
-                });
+                        if (ledResp) {
+                            lotId = !!ledResp.lot ? ledResp.lot.id : null;
+                            fromId = !!ledResp.account_from ? ledResp.account_from.id : null;
+                            toId = !!ledResp.account_to ? ledResp.account_to.id : null;
+                            agreeId = !!ledResp.agreement ? ledResp.agreement.id : null;
+            
+                            const update = {
+                                entry_date: ledResp.entry_date,
+                                entry_type: ledResp.entry_type,
+                                entry_type_show: `${ledResp.entry_type},${ledResp.entry_type_display}`,
+                                non_sewer_credits: ledResp.non_sewer_credits,
+                                sewer_credits: ledResp.sewer_credits,
+                                roads: ledResp.roads,
+                                parks: ledResp.parks,
+                                storm: ledResp.storm,
+                                open_space: ledResp.open_space,
+                                sewer_trans: ledResp.sewer_trans,
+                                sewer_cap: ledResp.sewer_cap,
+                                plat_lot: 'lot',
+                                plat_lot_show: 'lot,lot',
+                            };
+                            dispatch(formUpdate(update));
+                        }
+                    }),
+                ]).then(() => {
+                    dispatch(getLotID(lotId));
+                    dispatch(setCurrentLot(lotId));
+                    dispatch(setAccountFrom(fromId));
+                    dispatch(setAccountTo(toId));
+                    dispatch(setCurrentAgreement(agreeId));
+                    dispatch(formUpdate({ loading: false }));
+                })
             } else {
+                dispatch(getAccounts());
+                dispatch(getAgreementsQuick());
                 dispatch(setLoadingFalse('ledger'));
                 const initial_constants = {
                     lot_show: '',
@@ -605,9 +616,11 @@ function mapDispatchToProps(dispatch, params) {
                     account_to: 'start_account_to',
                     agreement_show: '',
                     entry_type_show: '',
+                    loading: false,
                 };
                 dispatch(formUpdate(initial_constants));
             }
+            dispatch(getLotExactions());
         },
         formChange(field) {
             return (e, ...args) => {
@@ -654,7 +667,7 @@ function mapDispatchToProps(dispatch, params) {
             };
         },
         lotFormChange(selected) {
-            const value = selected[0] !== undefined ? selected[0].value : 'start_lot';
+            const value = selected[0] !== undefined ? selected[0].value : null;
 
             dispatch(setCurrentLot(value));
         },
