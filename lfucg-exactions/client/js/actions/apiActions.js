@@ -1459,11 +1459,11 @@ export function postAccountLedger() {
             } = activeForm;
             return {
                 entry_date,
-                account_from: accounts.accountFrom,
-                account_to: accounts.accountTo,
-                plat: plats.currentPlat ? plats.currentPlat : null,
-                lot: lots.currentLot ? lots.currentLot : null,
-                agreement: agreements.currentAgreement,
+                account_from: !!accounts.accountFrom ? accounts.accountFrom.id : null,
+                account_to: !!accounts.accountTo ? accounts.accountTo.id : null,
+                plat: !!plats.currentPlat ? plats.currentPlat.id : null,
+                lot: !!lots.currentLot ? lots.currentLot.id : null,
+                agreement: !!agreements.currentAgreement ? agreements.currentAgreement.id : null,
                 entry_type,
                 non_sewer_credits,
                 sewer_credits,
@@ -1508,11 +1508,11 @@ export function putAccountLedger(selectedAccountLedger) {
             } = activeForm;
             return {
                 entry_date,
-                account_from: accounts.accountFrom,
-                account_to: accounts.accountTo,
-                plat: plats.currentPlat ? plats.currentPlat : null,
-                lot: lots.currentLot ? lots.currentLot : null,
-                agreement: agreements.currentAgreement,
+                account_from: !!accounts.accountFrom ? accounts.accountFrom.id : null,
+                account_to: !!accounts.accountTo ? accounts.accountTo.id : null,
+                plat: !!plats.currentPlat ? plats.currentPlat.id : null,
+                lot: !!lots.currentLot ? lots.currentLot.id : null,
+                agreement: !!agreements.currentAgreement ? agreements.currentAgreement.id : null,
                 entry_type,
                 non_sewer_credits,
                 sewer_credits,
