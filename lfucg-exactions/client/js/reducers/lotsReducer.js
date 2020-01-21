@@ -119,7 +119,6 @@ const lotsReducer = (state = initialState, action) => {
     case GET_LOTS_EXACTIONS:
         return {
             ...state,
-            currentLot: null,
             loadingLot: false,
             next: null,
             count: 0,
