@@ -1671,7 +1671,7 @@ export function getPagination(page) {
             if (page.indexOf('paginatePage') === -1) {
                 return `${page}?paginatePage`;
             }
-            return `${page}`;
+            return page;
         },
     };
 }
@@ -1685,15 +1685,17 @@ export function searchQuery() {
                 activeForm,
             } = getState();
 
+            const currPage = activeForm.currentPage;
+            const currentPageModel = currPage.indexOf('?') !== -1 ?
+                currPage.substring(1, currPage.indexOf('?')) :
+                currPage.substring(1,);
 
-            let query_all = `${activeForm.currentPage}?paginatePage`;
+            let query_all = `/${currentPageModel}?paginatePage`;
 
-            if (activeForm.currentPage === '/credit-transfer/') {
-                query_all = '/ledger/?paginatePage';
-            }
-
-            if (activeForm.currentPage === '/project-cost/') {
-                query_all = '/estimate/?paginatePage';
+            if (currentPageModel === 'credit-transfer') {
+                query_all = '/ledger?paginatePage';
+            } else if (currentPageModel === 'project-cost') {
+                query_all = '/estimate?paginatePage';
             }
 
             const queryString = compose(
@@ -1705,6 +1707,7 @@ export function searchQuery() {
                 }),
                 filter(key_name => activeForm[key_name] && (key_name.indexOf('filter_') !== -1)),
             )(Object.keys(activeForm));
+
             return queryString;
         },
         meta: {
