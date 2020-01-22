@@ -128,7 +128,7 @@ def lot_update_exactions_and_email_supervisor(sender, instance, **kwargs):
 
                 msg = EmailMultiAlternatives(subject, text_content, from_email, to_emails)
                 msg.attach_alternative(html_content, "text/html")
-                # msg.send()
+                msg.send()
 
         instance.is_approved = False
 
@@ -221,7 +221,7 @@ def send_email_to_finance_supervisors(sender, instance, **kwargs):
 
                 msg = EmailMultiAlternatives(subject, text_content, from_email, to_emails)
                 msg.attach_alternative(html_content, "text/html")
-                # msg.send()
+                msg.send()
         
         instance.is_approved = False
     
@@ -276,7 +276,7 @@ def send_email_to_planning_supervisors(sender, instance, **kwargs):
 
                 msg = EmailMultiAlternatives(subject, text_content, from_email, to_emails)
                 msg.attach_alternative(html_content, "text/html")
-                # msg.send()
+                msg.send()
 
         instance.is_approved = False
 
