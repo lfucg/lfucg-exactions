@@ -104,6 +104,9 @@ class PlatViewSet(viewsets.ModelViewSet):
 class PlatQuickViewSet(viewsets.ModelViewSet):
     serializer_class = PlatQuickSerializer
     queryset = Plat.objects.none()
+    filter_backends = (filters.DjangoFilterBackend, filters.SearchFilter,)
+    search_fields = ('name', 'expansion_area', 'slide', 'subdivision__name', 'account__account_name', 'cabinet', 'unit', 'section', 'block', 'cabinet_slide',)
+    filter_fields = ('expansion_area', 'account', 'subdivision', 'plat_type', 'lot__id', 'is_approved',)
 
     def get_queryset(self):
         queryset = Plat.objects.filter(is_active=True)

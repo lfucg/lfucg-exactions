@@ -268,17 +268,19 @@ function mapDispatchToProps(dispatch, props) {
     },
     onSearchTextChange(field) {
       return (e, ...args) => {
-        const value = typeof e.target.value !== 'undefined' ? e.target.value : args[1];
-        const update = {
-          [field]: value,
-        };
+        if (e.keyCode != 13) {
+          const value = typeof e.target.value !== 'undefined' ? e.target.value : args[1];
+          const update = {
+            [field]: value,
+          };
 
-        dispatch(formUpdate(update));
-        dispatch(updateSearch({
-          page: props.currentPage,
-          text: e.target.value,
-        }));
-        dispatch(searchQuery());
+          dispatch(formUpdate(update));
+          dispatch(updateSearch({
+            page: props.currentPage,
+            text: e.target.value,
+          }));
+          dispatch(searchQuery());
+        }
       };
     },
     onFilter(field) {
