@@ -128,7 +128,7 @@ def lot_update_exactions_and_email_supervisor(sender, instance, **kwargs):
 
                 msg = EmailMultiAlternatives(subject, text_content, from_email, to_emails)
                 msg.attach_alternative(html_content, "text/html")
-                msg.send()
+                # msg.send()
 
         instance.is_approved = False
 
@@ -221,7 +221,7 @@ def send_email_to_finance_supervisors(sender, instance, **kwargs):
 
                 msg = EmailMultiAlternatives(subject, text_content, from_email, to_emails)
                 msg.attach_alternative(html_content, "text/html")
-                msg.send()
+                # msg.send()
         
         instance.is_approved = False
     
@@ -276,7 +276,7 @@ def send_email_to_planning_supervisors(sender, instance, **kwargs):
 
                 msg = EmailMultiAlternatives(subject, text_content, from_email, to_emails)
                 msg.attach_alternative(html_content, "text/html")
-                msg.send()
+                # msg.send()
 
         instance.is_approved = False
 
@@ -288,6 +288,8 @@ def send_email_to_planning_supervisors(sender, instance, **kwargs):
 @receiver(post_save, sender=AccountLedger)
 def calculate_current_lot_balance(sender, instance, **kwargs):
     related_lot = None
+    post_save.disconnect(calculate_current_lot_balance, sender=AccountLedger)
+    post_save.disconnect(calculate_current_lot_balance, sender=Payment)
 
     try:
         if sender.__name__ == 'Payment':
@@ -315,11 +317,17 @@ def calculate_current_lot_balance(sender, instance, **kwargs):
             super(Lot, lot).save()
     except Exception as exc:
         print('EXCEPTION', exc)
+    
+    post_save.connect(calculate_current_lot_balance, sender=AccountLedger)
+    post_save.connect(calculate_current_lot_balance, sender=Payment)
 
 @receiver(post_save, sender=Payment)
 @receiver(post_save, sender=AccountLedger)
 def calculate_current_plat_balance(sender, instance, **kwargs):
     related_lot = None
+    
+    post_save.disconnect(calculate_current_plat_balance, sender=AccountLedger)
+    post_save.disconnect(calculate_current_plat_balance, sender=Payment)
 
     if sender.__name__ == 'Payment':
         related_lot = Lot.objects.filter(id=instance.lot_id_id)
@@ -337,9 +345,14 @@ def calculate_current_plat_balance(sender, instance, **kwargs):
             plat.current_non_sewer_due = plat_balances['plat_non_sewer_due']
 
             super(Plat, plat).save()
+    
+    post_save.connect(calculate_current_plat_balance, sender=AccountLedger)
+    post_save.connect(calculate_current_plat_balance, sender=Payment)
 
 @receiver(post_save, sender=AccountLedger)
 def calculate_current_account_balance(sender, instance, **kwargs):
+    post_save.disconnect(calculate_current_account_balance, sender=AccountLedger)
+
     account_to = None
     account_from = None
     non_sewer_credits = instance.non_sewer_credits if instance.non_sewer_credits else 0
@@ -364,3 +377,5 @@ def calculate_current_account_balance(sender, instance, **kwargs):
         account_from.current_sewer_balance -= sewer_credits
 
         super(Account, account_from).save()
+    
+    post_save.connect(calculate_current_account_balance, sender=AccountLedger)
