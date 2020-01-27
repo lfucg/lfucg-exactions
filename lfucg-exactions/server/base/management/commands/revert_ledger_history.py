@@ -13,21 +13,32 @@ class Command(BaseCommand):
     jan_nine = AccountLedger.objects.filter(
       date_modified__gte=datetime.date(2020, 1, 9),
       date_modified__lte=datetime.date(2020, 1, 9),
-      modified_by__username='IMPORT'
+      modified_by__username='kelly'
+      # modified_by__username='IMPORT'
     )
 
-    jan_nine.update(
-      modified_by=user,
-      is_approved=True
-    )
-    # for jan_date in jan_nine:
-    #   print('JAN DATE', jan_date)
-    #   date_hist = jan_date.history.order_by('-date_modified').distinct('date_modified')
+    # jan_nine.update(
+    #   modified_by=user,
+    #   is_approved=True
+    # )
+    for ledger in jan_nine:
+      print('JAN DATE', ledger)
+      date_hist = ledger.history.order_by('-date_modified').distinct('date_modified')
+      print('DATE HIST ', date_hist)
 
-    #   if len(date_hist) > 1:
-    #     prev_inst = date_hist[1].instance
-    #     print('DATE HIST ONE', date_hist[1])
-    #     print('DATE HIST ONE INSTANCE MOD', prev_inst.modified_by)
-    #     prev_inst.modified_by_id = user.id
-    #     prev_inst.is_approved = True
-    #     prev_inst.save()
+      nine_index = [l.date_modified for l in date_hist].index(datetime.date(2020, 1, 9))
+      print('NINE INDEX', nine_index)
+
+      if len(date_hist) > 1:
+        older_hist = date_hist[nine_index + 1]
+        print('VARS ONE PLUS', older_hist)
+
+        newer_hist = date_hist[nine_index - 1] if nine_index != 0 else False
+
+        if older_hist and not newer_hist:
+          prev_inst = older_hist.instance
+          print('DATE HIST ONE', older_hist)
+          print('DATE HIST ONE INSTANCE MOD', prev_inst.modified_by)
+          prev_inst.modified_by_id = user.id
+          prev_inst.is_approved = True
+          prev_inst.save()
