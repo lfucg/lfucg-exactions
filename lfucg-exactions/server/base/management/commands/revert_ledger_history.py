@@ -13,8 +13,8 @@ class Command(BaseCommand):
     jan_nine = AccountLedger.objects.filter(
       # date_modified__gte=datetime.date(2020, 1, 9),
       # date_modified__lte=datetime.date(2020, 1, 9),
-      # date_modified__gte=datetime.date(2020, 1, 27),
-      # date_modified__lte=datetime.date(2020, 1, 27),
+      date_modified__gte=datetime.date(2020, 1, 27),
+      date_modified__lte=datetime.date(2020, 1, 27),
       # modified_by__username='kelly',
       # modified_by__username='IMPORT'
       agreement__resolution_number='365-2006',
