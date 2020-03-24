@@ -97,6 +97,8 @@ def lot_update_exactions_and_email_supervisor(sender, instance, **kwargs):
             profile.save()
     elif (hasattr(related_lot, 'is_approved') and (not related_lot.is_approved)):
         return
+    elif kwargs['update_fields'] is not None and hasattr(kwargs['update_fields'], 'current_dues_roads_dev'):
+        return
     else:
         ctype = ContentType.objects.get_for_model(instance)
         model = ctype.model
@@ -133,26 +135,22 @@ def lot_update_exactions_and_email_supervisor(sender, instance, **kwargs):
         instance.is_approved = False
 
     if related_lot:
-        lot = related_lot
-        lot_balances = calculate_lot_balance(lot)
+        lot_balances = calculate_lot_balance(related_lot)
 
-        lot.current_dues_roads_dev = lot_balances['dues_roads_dev']
-        lot.current_dues_roads_own = lot_balances['dues_roads_own']
-        lot.current_dues_sewer_trans_dev = lot_balances['dues_sewer_trans_dev']
-        lot.current_dues_sewer_trans_own = lot_balances['dues_sewer_trans_own']
-        lot.current_dues_sewer_cap_dev = lot_balances['dues_sewer_cap_dev']
-        lot.current_dues_sewer_cap_own = lot_balances['dues_sewer_cap_own']
-        lot.current_dues_parks_dev = lot_balances['dues_parks_dev']
-        lot.current_dues_parks_own = lot_balances['dues_parks_own']
-        lot.current_dues_storm_dev = lot_balances['dues_storm_dev']
-        lot.current_dues_storm_own = lot_balances['dues_storm_own']
-        lot.current_dues_open_space_dev = lot_balances['dues_open_space_dev']
-        lot.current_dues_open_space_own = lot_balances['dues_open_space_own']
+        related_lot.current_dues_roads_dev = lot_balances['dues_roads_dev']
+        related_lot.current_dues_roads_own = lot_balances['dues_roads_own']
+        related_lot.current_dues_sewer_trans_dev = lot_balances['dues_sewer_trans_dev']
+        related_lot.current_dues_sewer_trans_own = lot_balances['dues_sewer_trans_own']
+        related_lot.current_dues_sewer_cap_dev = lot_balances['dues_sewer_cap_dev']
+        related_lot.current_dues_sewer_cap_own = lot_balances['dues_sewer_cap_own']
+        related_lot.current_dues_parks_dev = lot_balances['dues_parks_dev']
+        related_lot.current_dues_parks_own = lot_balances['dues_parks_own']
+        related_lot.current_dues_storm_dev = lot_balances['dues_storm_dev']
+        related_lot.current_dues_storm_own = lot_balances['dues_storm_own']
+        related_lot.current_dues_open_space_dev = lot_balances['dues_open_space_dev']
+        related_lot.current_dues_open_space_own = lot_balances['dues_open_space_own']
 
-        super(Lot, lot).save()
-
-    related_lot.is_approved = instance.is_approved
-    related_lot.save()
+        related_lot.save()
 
     post_save.connect(lot_update_exactions_and_email_supervisor, sender=Lot)
 
@@ -225,9 +223,6 @@ def send_email_to_finance_supervisors(sender, instance, **kwargs):
         
         instance.is_approved = False
     
-    sender_model.is_approved = instance.is_approved
-    sender_model.save()
-
     post_save.connect(send_email_to_finance_supervisors, sender=sender)
 
 @receiver(post_save, sender=Plat)
@@ -313,8 +308,22 @@ def calculate_current_lot_balance(sender, instance, **kwargs):
             related_lot.current_dues_storm_own = lot_balances['dues_storm_own']
             related_lot.current_dues_open_space_dev = lot_balances['dues_open_space_dev']
             related_lot.current_dues_open_space_own = lot_balances['dues_open_space_own']
+            related_lot.modified_by = instance.modified_by
 
-            super(Lot, lot).save()
+            super(Lot, lot).save(update_fields=[
+                'current_dues_roads_dev',
+                'current_dues_roads_own',
+                'current_dues_sewer_trans_dev',
+                'current_dues_sewer_trans_own',
+                'current_dues_sewer_cap_dev',
+                'current_dues_sewer_cap_own',
+                'current_dues_parks_dev',
+                'current_dues_parks_own',
+                'current_dues_storm_dev',
+                'current_dues_storm_own',
+                'current_dues_open_space_dev',
+                'current_dues_open_space_own',
+            ])
     except Exception as exc:
         print('EXCEPTION', exc)
     
