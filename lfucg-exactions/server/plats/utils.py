@@ -31,31 +31,43 @@ def calculate_lot_totals(lot):
         'total_exactions': Decimal(total_exactions),
     }
 
-def calculate_lot_balance(lot):
-    # PAYMENTS
-    # payments = lot.payment.all()
-    payments = Payment.objects.exclude(is_active=False).filter(lot_id=lot.id)
+def subtract_ledger_values(ledger_value, lot_dev_value, lot_own_value):
+    new_led = ledger_value
+    new_dev = lot_dev_value
+    new_own = lot_own_value
+    should_escape = False
 
-    sewer_payment = 0
-    non_sewer_payment = 0
+    while new_led > 0 and not should_escape:
+        if new_dev >= new_led or new_own >= new_led:
+            if new_dev >= new_led:
+                new_dev -= new_led
+                new_led -= new_led
+            if new_own >= new_led:
+                new_own -= new_led
+                new_led -= new_led
+        elif (new_dev + new_own) >= new_led:
+            if new_dev > 0:
+                new_led -= new_dev
+                new_dev -= new_dev
+            if new_own > 0:
+                new_led -= new_own
+                new_own -= new_own
+        elif new_dev > 0 or new_own > 0:
+            if new_dev > 0:
+                new_dev -= new_dev
+                new_led -= new_dev
+            if new_own > 0:
+                new_own -= new_own
+                new_led -= new_own
+        else:
+            should_escape = True
 
-    sewer_exactions = (
-        Decimal(lot.dues_sewer_cap_own) +
-        Decimal(lot.dues_sewer_trans_dev) +
-        Decimal(lot.dues_sewer_trans_own) +
-        Decimal(lot.dues_sewer_cap_dev)
-    )
+    return (new_led, new_dev, new_own)
 
-    non_sewer_exactions = (
-        Decimal(lot.dues_roads_own) +
-        Decimal(lot.dues_roads_dev) +
-        Decimal(lot.dues_parks_dev) +
-        Decimal(lot.dues_parks_own) +
-        Decimal(lot.dues_storm_dev) +
-        Decimal(lot.dues_storm_own) +
-        Decimal(lot.dues_open_space_dev) +
-        Decimal(lot.dues_open_space_own)
-    )
+def calculate_lot_balance(lot_queryset):
+    lot = lot_queryset
+    payments = lot_queryset.payment.all() if hasattr(lot_queryset, 'payment') else None
+    account_ledgers = lot_queryset.ledger_lot.all() if hasattr(lot_queryset, 'ledger_lot') else None
 
     dues_roads_dev = Decimal(lot.dues_roads_dev)
     dues_roads_own = Decimal(lot.dues_roads_own)
@@ -70,161 +82,34 @@ def calculate_lot_balance(lot):
     dues_open_space_dev = Decimal(lot.dues_open_space_dev)
     dues_open_space_own = Decimal(lot.dues_open_space_own)
 
+    sewer_exactions = (
+        dues_sewer_cap_own + dues_sewer_trans_dev +
+        dues_sewer_trans_own + dues_sewer_cap_dev
+    )
+
+    non_sewer_exactions = (
+        dues_roads_own + dues_roads_dev +
+        dues_parks_own + dues_parks_dev +
+        dues_storm_own + dues_storm_dev +
+        dues_open_space_own + dues_open_space_dev
+    )
+
     total_exactions = sewer_exactions + non_sewer_exactions
-
-    if payments is not None:
-        for payment in payments:
-            sewer_payment_paid = Decimal(
-                payment.paid_sewer_trans +
-                payment.paid_sewer_cap
-            )
-            non_sewer_payment_paid = Decimal(
-                payment.paid_roads +
-                payment.paid_parks +
-                payment.paid_storm +
-                payment.paid_open_space
-            )
-
-            dues_roads_dev -= payment.paid_roads
-            dues_sewer_trans_dev -= payment.paid_sewer_trans
-            dues_sewer_cap_dev -= payment.paid_sewer_cap
-            dues_parks_dev -= payment.paid_parks
-            dues_storm_dev -= payment.paid_storm
-            dues_open_space_dev -= payment.paid_open_space
-
-            sewer_payment += sewer_payment_paid
-            non_sewer_payment += non_sewer_payment_paid
-
-    # ACCOUNT LEDGERS
-    # account_ledgers = lot.ledger_lot.all()
-    account_ledgers = AccountLedger.objects.exclude(is_active=False).filter(lot=lot.id, entry_type='USE')
-    
-    sewer_credits_applied = 0
-    non_sewer_credits_applied = 0
-
-    if account_ledgers is not None:
-        for ledger in account_ledgers:
-            dues_roads_dev -= ledger.roads
-            dues_sewer_trans_dev -= ledger.sewer_trans
-            dues_sewer_cap_dev -= ledger.sewer_cap
-            dues_parks_dev -= ledger.parks
-            dues_storm_dev -= ledger.storm
-            dues_open_space_dev -= ledger.open_space
-
-            sewer_credits_applied += Decimal(ledger.sewer_credits)
-            non_sewer_credits_applied += Decimal(ledger.non_sewer_credits)
-
-            sewer_diff = sewer_credits_applied - Decimal(ledger.sewer_trans) - Decimal(ledger.sewer_cap)
-            non_sewer_diff = non_sewer_credits_applied - Decimal(ledger.roads) - Decimal(ledger.parks) - Decimal(ledger.storm) - Decimal(ledger.open_space)
-
-            while sewer_diff > 0 and (
-                dues_sewer_cap_dev > 0 or
-                dues_sewer_trans_dev > 0 or
-                dues_sewer_cap_own > 0 or
-                dues_sewer_trans_own > 0
-            ):
-                if dues_sewer_cap_dev >= sewer_diff:
-                    dues_sewer_cap_dev -= sewer_diff
-                    sewer_diff -= sewer_diff
-                elif dues_sewer_cap_dev > 0:
-                    dues_sewer_cap_dev -= dues_sewer_cap_dev
-                    sewer_diff -= dues_sewer_cap_dev
-                elif dues_sewer_trans_dev >= sewer_diff:
-                    dues_sewer_trans_dev -= sewer_diff
-                    sewer_diff -= sewer_diff
-                elif dues_sewer_trans_dev > 0:
-                    dues_sewer_trans_dev -= dues_sewer_trans_dev
-                    sewer_diff -= dues_sewer_trans_dev
-                elif dues_sewer_cap_own >= sewer_diff:
-                    dues_sewer_cap_own -= sewer_diff
-                    sewer_diff -= sewer_diff
-                elif dues_sewer_cap_own > 0:
-                    dues_sewer_cap_own -= dues_sewer_cap_own
-                    sewer_diff -= dues_sewer_cap_own
-                elif dues_sewer_trans_own >= sewer_diff:
-                    dues_sewer_trans_own -= sewer_diff
-                    sewer_diff -= sewer_diff
-                elif dues_sewer_trans_own > 0:
-                    dues_sewer_trans_own -= dues_sewer_trans_own
-                    sewer_diff -= dues_sewer_trans_own
-                else:
-                    pass
-
-            while non_sewer_diff > 0 and (
-                dues_roads_dev > 0 or
-                dues_roads_own > 0 or
-                dues_parks_dev > 0 or
-                dues_parks_own > 0 or
-                dues_storm_dev > 0 or
-                dues_storm_own > 0 or
-                dues_open_space_dev > 0 or
-                dues_storm_own > 0 
-            ):
-                if dues_roads_dev >= non_sewer_diff:
-                    dues_roads_dev -= non_sewer_diff
-                    non_sewer_diff -= non_sewer_diff
-                elif dues_roads_dev > 0:
-                    dues_roads_dev -= dues_roads_dev
-                    non_sewer_diff -= dues_roads_dev
-                elif dues_parks_dev >= non_sewer_diff:
-                    dues_parks_dev -= non_sewer_diff
-                    non_sewer_diff -= non_sewer_diff
-                elif dues_parks_dev > 0:
-                    dues_parks_dev -= dues_parks_dev
-                    non_sewer_diff -= dues_parks_dev
-                elif dues_storm_dev >= non_sewer_diff:
-                    dues_storm_dev -= non_sewer_diff
-                    non_sewer_diff -= non_sewer_diff
-                elif dues_storm_dev > 0:
-                    dues_storm_dev -= dues_storm_dev
-                    non_sewer_diff -= dues_storm_dev
-                elif dues_open_space_dev >= non_sewer_diff:
-                    dues_open_space_dev -= non_sewer_diff
-                    non_sewer_diff -= non_sewer_diff
-                elif dues_open_space_dev > 0:
-                    dues_open_space_dev -= dues_open_space_dev
-                    non_sewer_diff -= dues_open_space_dev
-                elif dues_roads_own >= non_sewer_diff:
-                    dues_roads_own -= non_sewer_diff
-                    non_sewer_diff -= non_sewer_diff
-                elif dues_roads_own > 0:
-                    dues_roads_own -= dues_roads_own
-                    non_sewer_diff -= dues_roads_own
-                elif dues_parks_own >= non_sewer_diff:
-                    dues_parks_own -= non_sewer_diff
-                    non_sewer_diff -= non_sewer_diff
-                elif dues_parks_own > 0:
-                    dues_parks_own -= dues_parks_own
-                    non_sewer_diff -= dues_parks_own
-                elif dues_storm_own >= non_sewer_diff:
-                    dues_storm_own -= non_sewer_diff
-                    non_sewer_diff -= non_sewer_diff
-                elif dues_storm_own > 0:
-                    dues_storm_own -= dues_storm_own
-                    non_sewer_diff -= dues_storm_own
-                elif dues_storm_own >= non_sewer_diff:
-                    dues_storm_own -= non_sewer_diff
-                    non_sewer_diff -= non_sewer_diff
-                elif dues_storm_own > 0:
-                    dues_storm_own -= dues_storm_own
-                    non_sewer_diff -= dues_storm_own
-                else:
-                    pass
 
     all_exactions = {
         'total_exactions': total_exactions,
         'sewer_exactions': sewer_exactions,
         'non_sewer_exactions': non_sewer_exactions,
 
-        'sewer_payment': sewer_payment,
-        'non_sewer_payment': non_sewer_payment,
+        'sewer_payment': 0,
+        'non_sewer_payment': 0,
 
-        'sewer_credits_applied': sewer_credits_applied,
-        'non_sewer_credits_applied': non_sewer_credits_applied,
+        'sewer_credits_applied': 0,
+        'non_sewer_credits_applied': 0,
 
-        'current_exactions': round((total_exactions - sewer_payment - non_sewer_payment - sewer_credits_applied - non_sewer_credits_applied), 2),
-        'sewer_due': sewer_exactions - sewer_payment - sewer_credits_applied,
-        'non_sewer_due': non_sewer_exactions - non_sewer_payment - non_sewer_credits_applied,
+        'current_exactions': total_exactions,
+        'sewer_due': sewer_exactions,
+        'non_sewer_due': non_sewer_exactions,
         'dues_roads_dev': dues_roads_dev,
         'dues_roads_own': dues_roads_own,
         'dues_sewer_trans_dev': dues_sewer_trans_dev,
@@ -238,6 +123,59 @@ def calculate_lot_balance(lot):
         'dues_open_space_dev': dues_open_space_dev,
         'dues_open_space_own': dues_open_space_own,
     }
+
+    if account_ledgers:
+        for ledger in account_ledgers:
+            ledger_set = {
+                'ledger_sewer_trans': Decimal(ledger.sewer_trans),
+                'ledger_sewer_cap': Decimal(ledger.sewer_cap),
+                'ledger_roads': Decimal(ledger.roads),
+                'ledger_parks': Decimal(ledger.parks),
+                'ledger_storm': Decimal(ledger.storm),
+                'ledger_open_space': Decimal(ledger.open_space),
+            }
+
+            ledger_calc_set = [
+                {'ledger_sewer_trans': ledger_set['ledger_sewer_trans'], 'dues_sewer_trans_dev': all_exactions['dues_sewer_trans_dev'], 'dues_sewer_trans_own': all_exactions['dues_sewer_trans_own']},
+                {'ledger_sewer_cap': ledger_set['ledger_sewer_cap'], 'dues_sewer_cap_dev': all_exactions['dues_sewer_cap_dev'], 'dues_sewer_cap_own': all_exactions['dues_sewer_cap_own']},
+                {'ledger_roads': ledger_set['ledger_roads'], 'dues_roads_dev': all_exactions['dues_roads_dev'], 'dues_roads_own': all_exactions['dues_roads_own']},
+                {'ledger_parks': ledger_set['ledger_parks'], 'dues_parks_dev': all_exactions['dues_parks_dev'], 'dues_parks_own': all_exactions['dues_parks_own']},
+                {'ledger_storm': ledger_set['ledger_storm'], 'dues_storm_dev': all_exactions['dues_storm_dev'], 'dues_storm_own': all_exactions['dues_storm_own']},
+                {'ledger_open_space': ledger_set['ledger_open_space'], 'dues_open_space_dev': all_exactions['dues_open_space_dev'], 'dues_open_space_own': all_exactions['dues_open_space_own']},
+            ]
+
+            for led_calc in ledger_calc_set:
+                led_keys = list(led_calc.keys())
+
+                new_led, new_dev, new_own = subtract_ledger_values(
+                    led_calc[led_keys[0]],
+                    led_calc[led_keys[1]],
+                    led_calc[led_keys[2]]
+                )
+
+                ledger_set[led_keys[0]] = new_led
+                all_exactions[led_keys[1]] = new_dev
+                all_exactions[led_keys[2]] = new_own
+
+    if payments:
+        for payment in payments:
+            all_exactions['sewer_payment'] = all_exactions['sewer_payment'] + Decimal(
+                payment.paid_sewer_trans +
+                payment.paid_sewer_cap
+            )
+            all_exactions['non_sewer_payment'] = all_exactions['non_sewer_payment'] + Decimal(
+                payment.paid_roads +
+                payment.paid_parks +
+                payment.paid_storm +
+                payment.paid_open_space
+            )
+
+            all_exactions['dues_roads_dev'] = all_exactions['dues_roads_dev'] - payment.paid_roads
+            all_exactions['dues_sewer_trans_dev'] = all_exactions['dues_sewer_trans_dev'] - payment.paid_sewer_trans
+            all_exactions['dues_sewer_cap_dev'] = all_exactions['dues_sewer_cap_dev'] - payment.paid_sewer_cap
+            all_exactions['dues_parks_dev'] = all_exactions['dues_parks_dev'] - payment.paid_parks
+            all_exactions['dues_storm_dev'] = all_exactions['dues_storm_dev'] - payment.paid_storm
+            all_exactions['dues_open_space_dev'] = all_exactions['dues_open_space_dev'] - payment.paid_open_space
 
     return all_exactions
 

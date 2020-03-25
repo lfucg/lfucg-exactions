@@ -3,7 +3,7 @@ from django.template.loader import get_template
 from django.core.mail import EmailMultiAlternatives, send_mail
 from django.utils.http import int_to_base36
 from rest_framework import viewsets, status, filters
-from django.db.models import Q
+from django.db.models import Q, Prefetch
 from django.db.models.signals import pre_save, post_save
 from django.dispatch import receiver
 from django.contrib.contenttypes.models import ContentType
@@ -130,11 +130,13 @@ def lot_update_exactions_and_email_supervisor(sender, instance, **kwargs):
 
                 msg = EmailMultiAlternatives(subject, text_content, from_email, to_emails)
                 msg.attach_alternative(html_content, "text/html")
-                # msg.send()
+                msg.send()
 
         instance.is_approved = False
 
-    if related_lot:
+    if related_lot and not(
+        kwargs['update_fields'] is not None and hasattr(kwargs['update_fields'], 'current_dues_roads_dev')
+    ):
         lot_balances = calculate_lot_balance(related_lot)
 
         related_lot.current_dues_roads_dev = lot_balances['dues_roads_dev']
@@ -222,6 +224,8 @@ def send_email_to_finance_supervisors(sender, instance, **kwargs):
                 # msg.send()
         
         instance.is_approved = False
+    sender_model.is_approved = instance.is_approved
+    sender_model.save()
     
     post_save.connect(send_email_to_finance_supervisors, sender=sender)
 
@@ -288,12 +292,47 @@ def calculate_current_lot_balance(sender, instance, **kwargs):
 
     try:
         if sender.__name__ == 'Payment':
-            related_lot = Lot.objects.get(id=instance.lot_id_id)
+            related_lot = Lot.objects.filter(
+                id=instance.lot_id_id
+            ).prefetch_related(
+                'plat',
+                Prefetch(
+                    'payment',
+                    queryset=Payment.objects.exclude(is_active=False),
+                ),
+                Prefetch(
+                    'ledger_lot',
+                    queryset=AccountLedger.objects.exclude(is_active=False).filter(entry_type='USE'),
+                ),
+            )
         elif sender.__name__ == 'AccountLedger':
-            related_lot = Lot.objects.get(id=instance.lot_id)
+            related_lot = Lot.objects.filter(
+                id=instance.lot_id
+            ).prefetch_related(
+                'plat',
+                Prefetch(
+                    'payment',
+                    queryset=Payment.objects.exclude(is_active=False),
+                ),
+                Prefetch(
+                    'ledger_lot',
+                    queryset=AccountLedger.objects.exclude(is_active=False).filter(entry_type='USE'),
+                )
+            )
 
         if related_lot:
-            lot = related_lot
+            lot = related_lot.first()
+            related_plat = lot.plat if hasattr(lot, 'plat') else None
+
+            if related_plat:
+                plat = related_plat
+                plat_balances = calculate_plat_balance(plat)
+
+                plat.current_sewer_due = plat_balances['plat_sewer_due']
+                plat.current_non_sewer_due = plat_balances['plat_non_sewer_due']
+
+                super(Plat, plat).save()
+
             lot_balances = calculate_lot_balance(lot)
 
             related_lot.current_dues_roads_dev = lot_balances['dues_roads_dev']
@@ -329,34 +368,6 @@ def calculate_current_lot_balance(sender, instance, **kwargs):
     
     post_save.connect(calculate_current_lot_balance, sender=AccountLedger)
     post_save.connect(calculate_current_lot_balance, sender=Payment)
-
-@receiver(post_save, sender=Payment)
-@receiver(post_save, sender=AccountLedger)
-def calculate_current_plat_balance(sender, instance, **kwargs):
-    related_lot = None
-    
-    post_save.disconnect(calculate_current_plat_balance, sender=AccountLedger)
-    post_save.disconnect(calculate_current_plat_balance, sender=Payment)
-
-    if sender.__name__ == 'Payment':
-        related_lot = Lot.objects.filter(id=instance.lot_id_id)
-    elif sender.__name__ == 'AccountLedger':
-        related_lot = Lot.objects.filter(id=instance.lot_id)
-
-    if related_lot.exists():
-        related_plat = Plat.objects.filter(id=related_lot.first().plat.id)
-        
-        if related_plat.exists():
-            plat = related_plat.first()
-            plat_balances = calculate_plat_balance(plat)
-
-            plat.current_sewer_due = plat_balances['plat_sewer_due']
-            plat.current_non_sewer_due = plat_balances['plat_non_sewer_due']
-
-            super(Plat, plat).save()
-    
-    post_save.connect(calculate_current_plat_balance, sender=AccountLedger)
-    post_save.connect(calculate_current_plat_balance, sender=Payment)
 
 @receiver(post_save, sender=AccountLedger)
 def calculate_current_account_balance(sender, instance, **kwargs):
