@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from .models import *
-from .utils import calculate_lot_balance, calculate_plat_balance, remaining_plat_lots, calculate_lot_totals
+from .utils import remaining_plat_lots, calculate_lot_totals
 from django.db.models import Count, Prefetch
 from accounts.models import Account, AccountLedger, Payment
 

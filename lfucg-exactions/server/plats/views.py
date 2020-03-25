@@ -8,7 +8,6 @@ from .models import *
 from .serializers import *
 from accounts.models import *
 from accounts.serializers import PaymentSerializer, AccountLedgerSerializer
-from .utils import calculate_lot_balance
 from .serializers import *
 
 class SubdivisionCSVExportView(View):
