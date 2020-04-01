@@ -4,10 +4,24 @@ from django.contrib.auth import views as auth_views
 
 from accounts.auth import *
 from plats.viewsets import SubdivisionViewSet, SubdivisionQuickViewSet, PlatViewSet, PlatQuickViewSet, LotViewSet, LotQuickViewSet, LotExactionsViewSet, PlatZoneViewSet
-from plats.views import SubdivisionCSVExportView, PlatCSVExportView, LotSearchCSVExportView
+from plats.views import (
+    LotSearchCSVExportView,
+    AdminLotSearchCSVExportView,
+    PlatCSVExportView,
+    SubdivisionCSVExportView,
+)
 from notes.viewsets import *
 from accounts.viewsets import *
-from accounts.views import CurrentUserDetails, TransactionCSVExportView, AgreementCSVExportView, AccountCSVExportView, PaymentCSVExportView, ProjectCSVExportView, ProjectCostEstimateCSVExportView, AccountLedgerCSVExportView
+from accounts.views import (
+    AccountCSVExportView,
+    AccountLedgerCSVExportView,
+    AgreementCSVExportView,
+    CurrentUserDetails,
+    PaymentCSVExportView,
+    ProjectCSVExportView,
+    ProjectCostEstimateCSVExportView,
+    TransactionCSVExportView,
+)
 
 router = routers.DefaultRouter()
 
@@ -56,6 +70,7 @@ urlpatterns = [
     url(r'^subdivision_search_csv/$', SubdivisionCSVExportView.as_view()),
     url(r'^export_plat_csv/$', PlatCSVExportView.as_view()),
     url(r'^lot_search_csv/$', LotSearchCSVExportView.as_view()),
+    url(r'^admin_lot_search_csv/$', AdminLotSearchCSVExportView.as_view()),
 
     url(r'^transactions_csv/$', TransactionCSVExportView.as_view()),
     url(r'^export_account_csv/$', AccountCSVExportView.as_view()),

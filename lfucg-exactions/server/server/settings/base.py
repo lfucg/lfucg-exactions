@@ -288,7 +288,7 @@ INTERNAL_IPS = ('127.0.0.1')
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 SERVER_EMAIL = "webmaster@example.com"
-DEFAULT_FROM_EMAIL = "cbencz@lexingtonky.gov"
+DEFAULT_FROM_EMAIL = "exactions@apaxdev.com"
 SYSTEM_EMAIL_PREFIX = "[server]"
 
 ## Log settings
