@@ -1,14 +1,19 @@
-from django.shortcuts import render
 import datetime
 import csv
+import operator
+import numpy as np
+import pandas as pd
 from django.views.generic import View
 from django.http import HttpResponse
 from django.db.models import Count, Max, Q, Prefetch
 from .models import *
 from .serializers import *
 from accounts.models import *
+from django.contrib.contenttypes.models import ContentType
+from notes.models import Note
 from accounts.serializers import PaymentSerializer, AccountLedgerSerializer
 from .serializers import *
+from io import BytesIO
 
 class SubdivisionCSVExportView(View):
     def get_serializer_class(self, serializer_class):
@@ -513,5 +518,280 @@ class LotSearchCSVExportView(View):
 
             writer.writerow(row)
 
-
         return response
+
+class AdminLotSearchCSVExportView(View):
+    def get(self, request, *args, **kwargs):
+        lots = Lot.objects.all().filter(is_active=True)
+
+        plat_set = self.request.GET.get('plat', None)
+        if plat_set is not None:
+            lots = lots.filter(Q(plat=plat_set))
+
+        is_approved_set = self.request.GET.get('is_approved', None)
+        if is_approved_set is not None:
+            is_approved_set = True if is_approved_set == 'true' else False
+            lots = lots.filter(Q(is_approved=is_approved_set))
+
+        account_set = self.request.GET.get('account', None)
+        if account_set is not None:
+            lots = lots.filter(Q(account=account_set))
+
+        search_set = self.request.GET.get('search', None)
+        if search_set is not None:
+            lots = lots.filter(Q(
+                Q(address_full__icontains=search_set) |
+                Q(lot_number__icontains=search_set) |
+                Q(parcel_id__icontains=search_set) |
+                Q(permit_id__icontains=search_set) |
+                Q(plat__expansion_area__icontains=search_set) |
+                Q(plat__name__icontains=search_set)
+            ))
+
+        lots = lots.prefetch_related(
+            'payment',
+            'ledger_lot',
+            Prefetch(
+                'plat',
+                queryset=Plat.objects.all().prefetch_related(
+                    'subdivision',
+                    'plat_zone',
+                ),
+            )
+        )
+
+        lot_fields = [
+            'id', 'lot_number', 'permit_id',
+            'address_number', 'address_street', 'address_full',
+            'alternative_address_number', 'alternative_address_street',
+            'dues_roads_dev', 'dues_roads_own',
+            'dues_sewer_trans_dev', 'dues_sewer_trans_own',
+            'dues_sewer_cap_dev', 'dues_sewer_cap_own',
+            'dues_parks_dev', 'dues_parks_own',
+            'dues_storm_dev', 'dues_storm_own',
+            'dues_open_space_dev', 'dues_open_space_own',
+            'current_dues_sewer_trans_dev', 'current_dues_sewer_trans_own',
+            'current_dues_sewer_cap_dev', 'current_dues_sewer_cap_own',
+            'current_dues_parks_dev', 'current_dues_parks_own',
+            'current_dues_storm_dev', 'current_dues_storm_own',
+            'current_dues_open_space_dev', 'current_dues_open_space_own',
+            'certificate_of_occupancy_final', 'certificate_of_occupancy_conditional',
+            'plat_id',
+        ]
+
+        df = pd.DataFrame.from_records(lots.values(), columns=lot_fields) 
+        lot_ids = list(set([lot.id for lot in lots.all()]))
+        plat_ids = list(set([lot.plat.id for lot in lots.all()]))
+        subdivision_ids = list(set([operator.attrgetter('plat.subdivision.id')(lot) for lot in lots.all()]))
+
+        # Plats
+        plat_fields = [
+            'pk', 'name', 'cabinet', 'slide', 'expansion_area', 'unit',
+            'section', 'block', 'calculation_note',
+            'subdivision__name', 'subdivision_id',
+        ]
+        df_plat = pd.DataFrame.from_records(Plat.objects.filter(pk__in=plat_ids).values(), columns=plat_fields)
+
+        # Plat Zones
+        plat_zone_fields = ['plat_id', 'zone',]
+        df_plat_zone = pd.DataFrame.from_records(PlatZone.objects.filter(plat__id__in=plat_ids).values(), columns=plat_zone_fields)
+
+        # Payments
+        payment_fields = [
+            'lot_id_id', 'credit_source__resolution_number', 'credit_account__account_name',
+            'entry_date', 'paid_roads', 'paid_sewer_trans',
+            'paid_sewer_cap', 'paid_parks', 'paid_storm', 'paid_open_space',
+        ]
+        df_payments_frame = pd.DataFrame.from_records(Payment.objects.filter(lot_id__id__in=lot_ids).values(), columns=payment_fields)
+        df_payments_frame = df_payments_frame.rename(columns={
+            'credit_source__resolution_number': 'Agreement',
+            'credit_account__account_name': 'Account',
+            'entry_date': 'Entry Date',
+            'paid_roads': 'Payment Roads',
+            'paid_sewer_trans': 'Payment Sewer Trans.',
+            'paid_sewer_cap': 'Payment Sewer Cap.',
+            'paid_parks': 'Payment Parks',
+            'paid_storm': 'Payment Storm',
+            'paid_open_space': 'Payment Open Space',
+        })
+
+        df_payments = df_payments_frame.set_index(['lot_id_id', df_payments_frame.groupby(['lot_id_id']).cumcount()+1]).unstack().sort_index(level=1, axis=1)
+        df_payments.columns = df_payments.columns.map('{0[0]}_{0[1]}'.format)
+        df_payments.reset_index()
+
+        # Account Ledgers
+        ledger_fields = [
+            'entry_date', 'account_from__account_name', 'account_to__account_name',
+            'lot_id', 'agreement__resolution_number', 'entry_type',
+            'non_sewer_credits', 'sewer_credits',
+            'roads', 'parks', 'storm', 'open_space',
+            'sewer_trans', 'sewer_cap',
+        ]
+        df_ledgers_frame = pd.DataFrame.from_records(AccountLedger.objects.filter(lot__id__in=lot_ids).values(), columns=ledger_fields)
+        df_ledgers_frame = df_ledgers_frame.rename(columns={
+            'entry_date': 'Credit Entry Date',
+            'account_from__account_name': 'Credit Account From',
+            'account_to__account_name': 'Credit Account To',
+            'agreement__resolution_number': 'Credit Agreement',
+            'entry_type': 'Credit Entry Type',
+            'non_sewer_credits': 'Credit Non-Sewer',
+            'sewer_credits': 'Credit Sewer',
+            'roads': 'Credit Roads',
+            'parks': 'Credit Parks',
+            'storm': 'Credit Storm',
+            'open_space': 'Credit Open Space',
+            'sewer_trans': 'Credit Sewer Trans.',
+            'sewer_cap': 'Credit Sewer Cap.',
+        })
+
+        df_ledgers = df_ledgers_frame.set_index(['lot_id', df_ledgers_frame.groupby(['lot_id']).cumcount()+1]).unstack().sort_index(level=1, axis=1)
+        df_ledgers.columns = df_ledgers.columns.map('{0[0]}_{0[1]}'.format)
+        df_ledgers.reset_index()
+
+        # Notes
+        note_fields = ['object_id', 'note']
+
+        lot_content = ContentType.objects.get_for_model(Lot)
+        lot_notes = pd.DataFrame.from_records(Note.objects.filter(
+            content_type=lot_content,
+            object_id__in=lot_ids,
+        ).values(), columns=note_fields)
+
+        plat_content = ContentType.objects.get_for_model(Plat)
+        plat_notes = pd.DataFrame.from_records(Note.objects.filter(
+            content_type=plat_content,
+            object_id__in=plat_ids,
+        ).values(), columns=note_fields)
+
+
+        subdivision_content = ContentType.objects.get_for_model(Subdivision)
+        subdivision_notes = pd.DataFrame.from_records(Note.objects.filter(
+            content_type=subdivision_content,
+            object_id__in=subdivision_ids,
+        ).values(), columns=note_fields)
+
+        # Merge data frames
+        final_df = df
+        # Merge lots and plats
+        if not df_plat.empty:
+            final_df = pd.merge(
+                df,
+                df_plat,
+                left_on='plat_id',
+                right_on='pk',
+                how='left',
+                suffixes=['_plat', '']
+            )
+        # Merge plat zones
+        if not df_plat_zone.empty:
+            final_df = pd.merge(
+                final_df,
+                df_plat_zone,
+                left_on='plat_id',
+                right_on='plat_id',
+                how='left',
+                suffixes=['_zone', '']
+            )
+        # Merge payments
+        if not df_payments.empty:
+            final_df = pd.merge(
+                final_df,
+                df_payments,
+                left_on='id',
+                right_on='lot_id_id',
+                how='left',
+                suffixes=['_payment', '']
+            )
+        # Merge account ledgers
+        if not df_ledgers.empty:
+            final_df = pd.merge(
+                final_df,
+                df_ledgers,
+                left_on='id',
+                right_on='lot_id',
+                how='left',
+                suffixes=['_ledger', '']
+            )
+        # Merge notes made on lots
+        if not lot_notes.empty:
+            final_df = pd.merge(
+                final_df,
+                lot_notes,
+                left_on='id',
+                right_on='object_id',
+                how='left',
+                suffixes=['_lot_note', '']
+            )
+        # Merge notes made on plats
+        if not plat_notes.empty:
+            final_df = pd.merge(
+                final_df,
+                plat_notes,
+                left_on='plat_id',
+                right_on='object_id',
+                how='left',
+                suffixes=['_plat_note', '']
+            )
+        # Merge notes made on subdivisions
+        if not subdivision_notes.empty:
+            final_df = pd.merge(
+                final_df,
+                subdivision_notes,
+                left_on='subdivision_id_plat',
+                right_on='object_id',
+                how='left',
+                suffixes=['_subdivision_note', '']
+            )
+
+        # final_df = final_df.set_index(['address_full'])
+        final_df = final_df.drop(
+            ['id', 'plat_id', 'pk',], axis=1
+        ).rename(columns={
+            'lot_number': 'Lot No.',
+            'permit_id': 'Permit No.',
+            'address_number': 'Street No.',
+            'address_street': 'Street', 
+            'address_full': 'Address',
+            'alternative_address_number': 'Alt. Street No.',
+            'alternative_address_street': 'Alt. Street',
+            'dues_roads_dev': 'Dev. Roads Exactions',
+            'dues_roads_own': 'Own Roads Exactions',
+            'dues_sewer_trans_dev': 'Dev. Sewer Trans. Exactions',
+            'dues_sewer_trans_own': 'Own Sewer Trans. Exactions',
+            'dues_sewer_cap_dev': 'Dev. Sewer Cap. Exactions',
+            'dues_sewer_cap_own': 'Own Sewer Cap. Exactions',
+            'dues_parks_dev': 'Dev. Parks Exactions',
+            'dues_parks_own': 'Own Parks Exactions',
+            'dues_storm_dev': 'Dev. Storm Exactions',
+            'dues_storm_own': 'Own Storm Exactions',
+            'dues_open_space_dev': 'Dev. Open Space Exactions',
+            'dues_open_space_own': 'Own Open Space Exactions',
+            'current_dues_sewer_trans_dev': 'Current Sewer Trans. Dev. Balance',
+            'current_dues_sewer_trans_own': 'Current Sewer Trans. Own Balance',
+            'current_dues_sewer_cap_dev': 'Current Sewer Cap. Dev. Balance',
+            'current_dues_sewer_cap_own': 'Current Sewer Cap. Own Balance',
+            'current_dues_parks_dev': 'Current Parks Dev. Balance',
+            'current_dues_parks_own': 'Current Parks Own Balance',
+            'current_dues_storm_dev': 'Current Storm Dev. Balance',
+            'current_dues_storm_own': 'Current Storm Own Balance',
+            'current_dues_open_space_dev': 'Current Open Space Dev. Balance',
+            'current_dues_open_space_own': 'Current Open Space Own Balance',
+            'certificate_of_occupancy_final': 'CO Date Final',
+            'certificate_of_occupancy_conditional': 'CO Date Conditional',
+            'name': 'Plat Name',
+            'cabinet': 'Cabinet',
+            'slide': 'Slide',
+            'expansion_area': 'Expansion Area',
+            'unit': 'Unit',
+            'section': 'Section',
+            'block': 'Block',
+            'calculation_note': 'Plat Calc. Notes',
+            'subdivision__name': 'Subdivision',
+        }).set_index(['Address']).sort_values(by=['Street', 'Street No.'])
+
+        with BytesIO() as b:
+            # Use the StringIO object as the filehandle.
+            writer = pd.ExcelWriter(b)
+            final_df.to_excel(writer, sheet_name='Lots')
+            writer.save()
+            return HttpResponse(b.getvalue(), content_type='application/vnd.ms-excel')
