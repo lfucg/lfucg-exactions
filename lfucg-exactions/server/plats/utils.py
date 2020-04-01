@@ -124,8 +124,36 @@ def calculate_lot_balance(lot_queryset):
         'dues_open_space_own': dues_open_space_own,
     }
 
+    if payments:
+        for payment in payments:
+            all_exactions['sewer_payment'] = all_exactions['sewer_payment'] + Decimal(
+                payment.paid_sewer_trans +
+                payment.paid_sewer_cap
+            )
+            all_exactions['non_sewer_payment'] = all_exactions['non_sewer_payment'] + Decimal(
+                payment.paid_roads +
+                payment.paid_parks +
+                payment.paid_storm +
+                payment.paid_open_space
+            )
+
+            all_exactions['sewer_due'] = all_exactions['sewer_due'] - payment.paid_sewer_trans - payment.paid_sewer_cap
+            all_exactions['non_sewer_due'] = all_exactions['non_sewer_due'] - payment.paid_roads - payment.paid_parks - payment.paid_storm - payment.paid_open_space
+
+            all_exactions['dues_sewer_trans_dev'] = all_exactions['dues_sewer_trans_dev'] - payment.paid_sewer_trans
+            all_exactions['dues_sewer_cap_dev'] = all_exactions['dues_sewer_cap_dev'] - payment.paid_sewer_cap
+            all_exactions['dues_roads_dev'] = all_exactions['dues_roads_dev'] - payment.paid_roads
+            all_exactions['dues_parks_dev'] = all_exactions['dues_parks_dev'] - payment.paid_parks
+            all_exactions['dues_storm_dev'] = all_exactions['dues_storm_dev'] - payment.paid_storm
+            all_exactions['dues_open_space_dev'] = all_exactions['dues_open_space_dev'] - payment.paid_open_space
+
     if account_ledgers:
         for ledger in account_ledgers:
+            all_exactions['sewer_credits_applied'] += Decimal(ledger.sewer_credits)
+            all_exactions['non_sewer_credits_applied'] += Decimal(ledger.non_sewer_credits)
+            all_exactions['sewer_due'] -= (Decimal(ledger.sewer_trans) + Decimal(ledger.sewer_cap))
+            all_exactions['non_sewer_due'] -= (Decimal(ledger.roads) + Decimal(ledger.parks) + Decimal(ledger.storm) + Decimal(ledger.open_space))
+
             ledger_set = {
                 'ledger_sewer_trans': Decimal(ledger.sewer_trans),
                 'ledger_sewer_cap': Decimal(ledger.sewer_cap),
@@ -157,25 +185,6 @@ def calculate_lot_balance(lot_queryset):
                 all_exactions[led_keys[1]] = new_dev
                 all_exactions[led_keys[2]] = new_own
 
-    if payments:
-        for payment in payments:
-            all_exactions['sewer_payment'] = all_exactions['sewer_payment'] + Decimal(
-                payment.paid_sewer_trans +
-                payment.paid_sewer_cap
-            )
-            all_exactions['non_sewer_payment'] = all_exactions['non_sewer_payment'] + Decimal(
-                payment.paid_roads +
-                payment.paid_parks +
-                payment.paid_storm +
-                payment.paid_open_space
-            )
-
-            all_exactions['dues_roads_dev'] = all_exactions['dues_roads_dev'] - payment.paid_roads
-            all_exactions['dues_sewer_trans_dev'] = all_exactions['dues_sewer_trans_dev'] - payment.paid_sewer_trans
-            all_exactions['dues_sewer_cap_dev'] = all_exactions['dues_sewer_cap_dev'] - payment.paid_sewer_cap
-            all_exactions['dues_parks_dev'] = all_exactions['dues_parks_dev'] - payment.paid_parks
-            all_exactions['dues_storm_dev'] = all_exactions['dues_storm_dev'] - payment.paid_storm
-            all_exactions['dues_open_space_dev'] = all_exactions['dues_open_space_dev'] - payment.paid_open_space
 
     return all_exactions
 

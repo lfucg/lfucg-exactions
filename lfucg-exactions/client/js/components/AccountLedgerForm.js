@@ -112,6 +112,12 @@ class AccountLedgerForm extends React.Component {
             activeForm.entry_type &&
             activeForm.non_sewer_credits &&
             activeForm.sewer_credits &&
+            activeForm.roads &&
+            activeForm.parks &&
+            activeForm.storm &&
+            activeForm.open_space &&
+            activeForm.sewer_cap &&
+            activeForm.sewer_trans &&
             activeForm.entry_date;
 
         const currentPlat = !!plats && !!plats.currentPlat && plats.currentPlat;
@@ -344,6 +350,7 @@ class AccountLedgerForm extends React.Component {
                                                         placeholder="Non-Sewer Credits"
                                                         disabled={!activeForm.entry_type}
                                                         step="0.01"
+                                                        required
                                                     />
                                                 </FormGroup>
                                             </div>
@@ -355,78 +362,85 @@ class AccountLedgerForm extends React.Component {
                                                         placeholder="Sewer Credits"
                                                         disabled={!activeForm.entry_type}
                                                         step="0.01"
+                                                        required
                                                     />
                                                 </FormGroup>
                                             </div>
                                         </div>
                                         <div className="row">
                                             <div className="col-sm-6">
-                                                <FormGroup label="Roads" id="roads">
+                                                <FormGroup label="* Roads" id="roads">
                                                     <input
                                                         type="number"
                                                         className="form-control"
                                                         placeholder="Roads"
                                                         disabled={!activeForm.entry_type}
                                                         step="0.01"
+                                                        required
                                                     />
                                                 </FormGroup>
                                             </div>
                                             <div className="col-sm-6">
-                                                <FormGroup label="Parks" id="parks">
+                                                <FormGroup label="* Parks" id="parks">
                                                     <input
                                                         type="number"
                                                         className="form-control"
                                                         placeholder="Parks"
                                                         disabled={!activeForm.entry_type}
                                                         step="0.01"
+                                                        required
                                                     />
                                                 </FormGroup>
                                             </div>
                                         </div>
                                         <div className="row">
                                             <div className="col-sm-6">
-                                                <FormGroup label="Storm water" id="storm">
+                                                <FormGroup label="* Storm water" id="storm">
                                                     <input
                                                         type="number"
                                                         className="form-control"
                                                         placeholder="Storm water"
                                                         disabled={!activeForm.entry_type}
                                                         step="0.01"
+                                                        required
                                                     />
                                                 </FormGroup>
                                             </div>
                                             <div className="col-sm-6">
-                                                <FormGroup label="Open Space" id="open_space">
+                                                <FormGroup label="* Open Space" id="open_space">
                                                     <input
                                                         type="number"
                                                         className="form-control"
                                                         placeholder="Open Space"
                                                         disabled={!activeForm.entry_type}
                                                         step="0.01"
+                                                        required
                                                     />
                                                 </FormGroup>
                                             </div>
                                         </div>
                                         <div className="row">
                                             <div className="col-sm-6">
-                                                <FormGroup label="Sewer Transmission" id="sewer_trans">
+                                                <FormGroup label="* Sewer Transmission" id="sewer_trans">
                                                     <input
                                                         type="number"
                                                         className="form-control"
                                                         placeholder="Sewer Transmission"
                                                         disabled={!activeForm.entry_type}
                                                         step="0.01"
+                                                        required
                                                     />
                                                 </FormGroup>
                                             </div>
                                             <div className="col-sm-6">
-                                                <FormGroup label="Sewer Capacity" id="sewer_cap">
+                                                <FormGroup label="* Sewer Capacity" id="sewer_cap">
                                                     <input
                                                         type="number"
                                                         className="form-control"
                                                         placeholder="Sewer Capacity"
                                                         disabled={!activeForm.entry_type}
                                                         step="0.01"
+                                                        required
                                                     />
                                                 </FormGroup>
                                             </div>
