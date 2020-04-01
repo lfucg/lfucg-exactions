@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { hashHistory } from 'react-router';
-import { map } from 'ramda';
+import { map, sum } from 'ramda';
 import PropTypes from 'prop-types';
 
 import Navbar from './Navbar';
@@ -91,6 +91,24 @@ class LotForm extends React.Component {
 
         const lotExactions = currentLot && currentLot.lot_exactions && currentLot.lot_exactions.total_exactions && currentLot.lot_exactions.total_exactions.replace(/\$|,/g, "");
 
+        const sewerTotal = sum([
+            activeForm.dues_sewer_cap_dev,
+            activeForm.dues_sewer_cap_own,
+            activeForm.dues_sewer_trans_dev,
+            activeForm.dues_sewer_trans_own
+        ]).toFixed(2);
+
+        const nonSewerTotal = sum([
+            activeForm.dues_roads_dev,
+            activeForm.dues_roads_own,
+            activeForm.dues_storm_dev,
+            activeForm.dues_storm_own,
+            activeForm.dues_parks_dev,
+            activeForm.dues_parks_own,
+            activeForm.dues_open_space_dev,
+            activeForm.dues_open_space_own
+        ]).toFixed(2);
+
         return (
             <div className="lot-form">
                 <Navbar />
@@ -140,7 +158,12 @@ class LotForm extends React.Component {
                                                 <div className="row">
                                                     <div className="col-sm-6 form-group">
                                                         <label htmlFor="account" className="form-label" id="account">Developer Account</label>
-                                                        <select className="form-control" id="account" onChange={formChange('account')} value={activeForm.account_show} >
+                                                        <select
+                                                            className="form-control"
+                                                            id="account"
+                                                            onChange={formChange('account')}
+                                                            value={activeForm.account_show || 'start_account'}
+                                                        >
                                                             <option value="start_account">Developer Account</option>
                                                             {accountsList}
                                                         </select>
@@ -191,7 +214,12 @@ class LotForm extends React.Component {
                                                     </div>
                                                     <div className="col-sm-3 form-group">
                                                         <label htmlFor="address_zip" className="form-label" id="address_zip">Zipcode</label>
-                                                        <select className="form-control" id="address_zip" onChange={formChange('address_zip')} value={activeForm.address_zip_show} >
+                                                        <select
+                                                            className="form-control"
+                                                            id="address_zip"
+                                                            onChange={formChange('address_zip')}
+                                                            value={activeForm.address_zip_show || 'start_zip'}
+                                                        >
                                                             <option value="start_zip">Zipcode</option>
                                                             <option value={['40505', '40505']}>40505</option>
                                                             <option value={['40509', '40509']}>40509</option>
@@ -207,7 +235,12 @@ class LotForm extends React.Component {
                                                 <div className="row">
                                                     <div className="col-sm-6 form-group">
                                                         <label htmlFor="plat" className="form-label" id="plat" aria-required="true">* Plat</label>
-                                                        <select className="form-control" id="plat" onChange={formChange('plat')} value={activeForm.plat_show} >
+                                                        <select
+                                                            className="form-control"
+                                                            id="plat"
+                                                            onChange={formChange('plat')}
+                                                            value={activeForm.plat_show || 'start_plat'}
+                                                        >
                                                             <option value="start_plat">Plat</option>
                                                             {platsList}
                                                         </select>
@@ -445,8 +478,20 @@ class LotForm extends React.Component {
                                                             </div>
                                                         </div>
                                                     </fieldset>
+                                                    <div className="row">
+                                                        <div className="col-sm-6">
+                                                            <h3>Sewer Exactions: </h3>
+                                                            <h4>${sewerTotal}</h4>
+                                                        </div>
+                                                        <div className="col-sm-6">
+                                                            <h3>Non-Sewer Exactions: </h3>
+                                                            <h4>${nonSewerTotal}</h4>
+                                                        </div>
+                                                    </div>
                                                     <div className="col-xs-6 text-center">
-                                                        <button disabled={!submitEnabled} className="btn btn-lex" onClick={onLotDues} >Submit</button>
+                                                        <button disabled={!submitEnabled} className="btn btn-lex" onClick={onLotDues} >
+                                                            {currentUser.is_superuser || (currentUser.profile && currentUser.profile.is_supervisor) ? <div>Submit / Approve</div> : <div>Submit</div>}
+                                                        </button>
                                                         {!submitEnabled ? (
                                                             <div>
                                                                 <div className="clearfix" />
@@ -672,7 +717,6 @@ function mapDispatchToProps(dispatch, params) {
         onLotDues() {
             if (selectedLot) {
                 dispatch(putLot(selectedLot));
-                hashHistory.push(`lot/summary/${selectedLot}`);
             }
         },
         showExactions() {

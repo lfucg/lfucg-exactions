@@ -36,6 +36,7 @@ class SearchBar extends React.Component {
       apiCalls: this.props.apiCalls,
       advancedSearch: this.props.advancedSearch,
       csvEndpoint: this.props.csvEndpoint,
+      SecondaryCsvEndpoint: this.props.SecondaryCsvEndpoint,
       dateFilters: this.props.dateFilters,
     });
   }
@@ -65,6 +66,16 @@ class SearchBar extends React.Component {
       filter(key_name => activeForm[key_name] && (key_name.indexOf('filter_') !== -1)),
     )(Object.keys(activeForm));
 
+    const secondaryQueryString = compose(
+      reduce((acc, value) => acc + value, this.props.SecondaryCsvEndpoint),
+      map((key_name) => {
+        const filter_index = key_name.indexOf('filter_') + 'filter_'.length;
+        const field = key_name.slice(filter_index, key_name.length);
+        return `&${field}=${activeForm[key_name]}`;
+      }),
+      filter(key_name => activeForm[key_name] && (key_name.indexOf('filter_') !== -1)),
+    )(Object.keys(activeForm));
+
     const advancedSearchDropdowns = this.props && this.props.advancedSearch &&
       (map((field) => {
         return (
@@ -78,7 +89,7 @@ class SearchBar extends React.Component {
                 onChange={() => onFilter(this[field.displayName])}
                 ref={(input) => { this[field.displayName] = input; }}
                 name={field.filterField}
-                value={path(['searchParams', page, field.filterField], search)}
+                value={path(['searchParams', page, field.filterField], search) || ""}
               >
                 <option value="">
                   Select {field.displayName}
@@ -224,6 +235,11 @@ class SearchBar extends React.Component {
               <a href={`${queryString}`} className="btn button-modal-link" aria-label="Generate CSV from Current Results">
                 <i className="fa fa-download button-modal-icon" aria-hidden="true" />&nbsp;Generate CSV from Current Results
               </a>
+              {!!currentUser && currentUser.is_superuser &&
+                <a href={`${secondaryQueryString}`} className="btn button-modal-link" aria-label="Admin CSV Export">
+                  <i className="fa fa-download button-modal-icon" aria-hidden="true" />&nbsp;Admin CSV Export
+                </a>
+              }
             </div>
           </div>
         }
@@ -268,17 +284,19 @@ function mapDispatchToProps(dispatch, props) {
     },
     onSearchTextChange(field) {
       return (e, ...args) => {
-        const value = typeof e.target.value !== 'undefined' ? e.target.value : args[1];
-        const update = {
-          [field]: value,
-        };
+        if (e.keyCode != 13) {
+          const value = typeof e.target.value !== 'undefined' ? e.target.value : args[1];
+          const update = {
+            [field]: value,
+          };
 
-        dispatch(formUpdate(update));
-        dispatch(updateSearch({
-          page: props.currentPage,
-          text: e.target.value,
-        }));
-        dispatch(searchQuery());
+          dispatch(formUpdate(update));
+          dispatch(updateSearch({
+            page: props.currentPage,
+            text: e.target.value,
+          }));
+          dispatch(searchQuery());
+        }
       };
     },
     onFilter(field) {

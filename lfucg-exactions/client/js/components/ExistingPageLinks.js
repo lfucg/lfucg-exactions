@@ -9,7 +9,7 @@ class ExistingPageLinks extends React.Component {
             currentUser,
         } = this.props;
 
-        const modelPermission = `currentUser.permissions.${this.props.permissionModel}`;
+        const modelPermission = !!currentUser && !!currentUser.permissions && currentUser.permissions[this.props.permissionModel];
 
         return (
             <div className="existing-page-links">
@@ -24,7 +24,7 @@ class ExistingPageLinks extends React.Component {
                 <div className={this.props.approval ? 'row link-row' : 'row link-row-approval-pending'}>
                     <div className={this.props.uniqueReport ? 'col-xs-12 col-sm-7 col-sm-offset-5' : 'col-xs-12 col-sm-6 pull-right'}>
                         <div className="col-xs-4">
-                            {currentUser && currentUser.permissions && modelPermission &&
+                            {modelPermission &&
                                 <Link to={`${this.props.linkStart}/form/${this.props.instanceID}`} aria-label={`Edit ${this.props.title}`}>
                                     <i className="fa fa-pencil-square link-icon col-xs-4 col-sm-3" aria-hidden="true" />
                                     <div className="col-xs-7 col-sm-8 link-label">
@@ -35,7 +35,7 @@ class ExistingPageLinks extends React.Component {
                         </div>
                         {this.props.uniqueReport &&
                             <div className="col-xs-4">
-                                {currentUser && currentUser.permissions && modelPermission &&
+                                {modelPermission &&
                                     <Link to={`${this.props.linkStart}/report/${this.props.instanceID}`} aria-label={`${this.props.title} Report`}>
                                         <i className="fa fa-line-chart link-icon col-xs-4 col-sm-3" aria-hidden="true" />
                                         <div className="col-xs-7 col-sm-8 link-label">

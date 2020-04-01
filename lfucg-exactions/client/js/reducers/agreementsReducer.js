@@ -1,4 +1,4 @@
-import { contains } from 'ramda';
+import { contains, find } from 'ramda';
 
 import { API_CALL_START } from '../constants/actionTypes';
 import { SET_LOADING_FALSE } from '../constants/stateConstants';
@@ -14,6 +14,8 @@ import {
     GET_PAGINATION,
     SEARCH_QUERY,
 } from '../constants/apiConstants';
+
+import { SET_CURRENT_AGREEMENT } from '../constants/componentConstants/agreementConstants';
 
 const initialState = {
     currentAgreement: null,
@@ -78,6 +80,11 @@ const agreementsReducer = (state = initialState, action) => {
             agreements: action.response,
             prev: null,
         };
+    case SET_CURRENT_AGREEMENT:
+        return {
+            ...state,
+            currentAgreement: find((agreement) => (agreement.id == action.agreement))(state.agreements)
+        }
     case POST_AGREEMENT:
     case PUT_AGREEMENT:
         return {

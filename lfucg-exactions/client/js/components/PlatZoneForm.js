@@ -50,7 +50,13 @@ class PlatZoneForm extends React.Component {
                         <div className="row">
                             <div className="col-sm-6 form-group">
                                 <label htmlFor="plat" className="form-label" id="plat">* Plat</label>
-                                <select className="form-control" id="plat" onChange={formChange('plat')} value={activeForm.plat_name} disabled>
+                                <select
+                                    className="form-control"
+                                    id="plat"
+                                    onChange={formChange('plat')}
+                                    value={activeForm.plat_name}
+                                    disabled
+                                >
                                     <option value="start_plat">{activeForm.plat_name}</option>
                                 </select>
                             </div>
@@ -58,7 +64,12 @@ class PlatZoneForm extends React.Component {
                         <div className="row">
                             <div className="col-sm-6 form-group">
                                 <label htmlFor={this.props.zone_id} className="form-label">* Zone</label>
-                                <select className="form-control" id={this.props.zone_id} onChange={formChange('zone')} onFocus={() => this.props.zone_value ? calculationWarning(`${this.props.zone_id}_warning`) : null}>
+                                <select
+                                    className="form-control"
+                                    id={this.props.zone_id}
+                                    onChange={formChange('zone')}
+                                    onFocus={() => this.props.zone_value ? calculationWarning(`${this.props.zone_id}_warning`) : null}
+                                >
                                     {this.props.zone_value ? (
                                         <option value={[`${this.props.zone_value}`, `${this.props.zone_value}`]} aria-label={this.props.zone_value}>{this.props.zone_value}</option>
                                     ) : (

@@ -167,7 +167,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     return {
         onComponentDidMount() {
-            dispatch(getPagination('/plat/'))
+            dispatch(getPagination('/platQuick/'))
             .then(() => {
                 dispatch(formUpdate({ loading: false }));
             });

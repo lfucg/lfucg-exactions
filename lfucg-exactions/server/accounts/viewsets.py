@@ -60,7 +60,7 @@ class AccountViewSet(viewsets.ModelViewSet):
 
 class AccountQuickViewSet(viewsets.ModelViewSet):
     serializer_class = AccountQuickSerializer
-    queryset = Account.objects.all().order_by('account_name')
+    queryset = Account.objects.filter(is_active=True).order_by('account_name')
     pagination_class = None
 
 class AgreementViewSet(viewsets.ModelViewSet):
@@ -92,7 +92,7 @@ class AgreementViewSet(viewsets.ModelViewSet):
             pagination_class = PageNumberPagination
             PageNumberPagination.page_size = pageSize
 
-        return queryset.order_by('expansion_area')
+        return queryset.order_by('resolution_number', 'expansion_area')
 
     def create(self, request):
         data_set = request.data
@@ -112,7 +112,7 @@ class AgreementViewSet(viewsets.ModelViewSet):
 
 class AgreementQuickViewSet(viewsets.ModelViewSet):
     serializer_class = AgreementQuickSerializer
-    queryset = Agreement.objects.all().order_by('resolution_number')
+    queryset = Agreement.objects.filter(is_active=True).order_by('resolution_number')
     pagination_class = None
             
 class PaymentViewSet(viewsets.ModelViewSet):
@@ -227,7 +227,7 @@ class ProjectViewSet(viewsets.ModelViewSet):
     
 class ProjectQuickViewSet(viewsets.ModelViewSet):
     serializer_class = ProjectQuickSerializer
-    queryset = Project.objects.all().order_by('-date_modified')
+    queryset = Project.objects.filter(is_active=True).order_by('-date_modified')
     pagination_class = None
             
 class ProjectCostEstimateViewSet(viewsets.ModelViewSet):

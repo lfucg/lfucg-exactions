@@ -565,7 +565,7 @@ export function getPlatLots(selectedPlat) {
     return {
         type: API_CALL,
         endpoint: GET_PLAT_LOTS,
-        url: `/lot/?paginatePage&plat=${selectedPlat}`,
+        url: `/lotQuick/?paginatePage&plat=${selectedPlat}`,
     };
 }
 
@@ -1439,14 +1439,13 @@ export function postAccountLedger() {
         body: (getState) => {
             const {
                 activeForm,
+                accounts,
+                agreements,
+                lots,
+                plats,
             } = getState();
             const {
                 entry_date,
-                account_from,
-                account_to,
-                plat,
-                lot,
-                agreement,
                 entry_type,
                 non_sewer_credits,
                 sewer_credits,
@@ -1460,11 +1459,11 @@ export function postAccountLedger() {
             } = activeForm;
             return {
                 entry_date,
-                account_from,
-                account_to,
-                plat,
-                lot,
-                agreement,
+                account_from: !!accounts.accountFrom ? accounts.accountFrom.id : null,
+                account_to: !!accounts.accountTo ? accounts.accountTo.id : null,
+                plat: !!plats.currentPlat ? plats.currentPlat.id : null,
+                lot: !!lots.currentLot ? lots.currentLot.id : null,
+                agreement: !!agreements.currentAgreement ? agreements.currentAgreement.id : null,
                 entry_type,
                 non_sewer_credits,
                 sewer_credits,
@@ -1489,14 +1488,13 @@ export function putAccountLedger(selectedAccountLedger) {
         body: (getState) => {
             const {
                 activeForm,
+                accounts,
+                agreements,
+                lots,
+                plats,
             } = getState();
             const {
                 entry_date,
-                account_from,
-                account_to,
-                plat,
-                lot,
-                agreement,
                 entry_type,
                 non_sewer_credits,
                 sewer_credits,
@@ -1510,11 +1508,11 @@ export function putAccountLedger(selectedAccountLedger) {
             } = activeForm;
             return {
                 entry_date,
-                account_from,
-                account_to,
-                plat,
-                lot,
-                agreement,
+                account_from: !!accounts.accountFrom ? accounts.accountFrom.id : null,
+                account_to: !!accounts.accountTo ? accounts.accountTo.id : null,
+                plat: !!plats.currentPlat ? plats.currentPlat.id : null,
+                lot: !!lots.currentLot ? lots.currentLot.id : null,
+                agreement: !!agreements.currentAgreement ? agreements.currentAgreement.id : null,
                 entry_type,
                 non_sewer_credits,
                 sewer_credits,
@@ -1673,7 +1671,7 @@ export function getPagination(page) {
             if (page.indexOf('paginatePage') === -1) {
                 return `${page}?paginatePage`;
             }
-            return `${page}`;
+            return page;
         },
     };
 }
@@ -1687,15 +1685,17 @@ export function searchQuery() {
                 activeForm,
             } = getState();
 
+            const currPage = activeForm.currentPage;
+            const currentPageModel = currPage.indexOf('?') !== -1 ?
+                currPage.substring(1, currPage.indexOf('?')) :
+                currPage.substring(1,);
 
-            let query_all = `${activeForm.currentPage}?paginatePage`;
+            let query_all = `/${currentPageModel}?paginatePage`;
 
-            if (activeForm.currentPage === '/credit-transfer/') {
-                query_all = '/ledger/?paginatePage';
-            }
-
-            if (activeForm.currentPage === '/project-cost/') {
-                query_all = '/estimate/?paginatePage';
+            if (currentPageModel === 'credit-transfer') {
+                query_all = '/ledger?paginatePage';
+            } else if (currentPageModel === 'project-cost') {
+                query_all = '/estimate?paginatePage';
             }
 
             const queryString = compose(
@@ -1707,6 +1707,7 @@ export function searchQuery() {
                 }),
                 filter(key_name => activeForm[key_name] && (key_name.indexOf('filter_') !== -1)),
             )(Object.keys(activeForm));
+
             return queryString;
         },
         meta: {
