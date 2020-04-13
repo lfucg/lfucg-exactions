@@ -522,7 +522,17 @@ class LotSearchCSVExportView(View):
 
 class AdminLotSearchCSVExportView(View):
     def get(self, request, *args, **kwargs):
-        lots = Lot.objects.all().filter(is_active=True)
+        lots = Lot.objects.all().filter(is_active=True).prefetch_related(
+            'payment',
+            'ledger_lot',
+            Prefetch(
+                'plat',
+                queryset=Plat.objects.all().prefetch_related(
+                    'subdivision',
+                    'plat_zone',
+                ),
+            )
+        )
 
         plat_set = self.request.GET.get('plat', None)
         if plat_set is not None:
@@ -548,18 +558,6 @@ class AdminLotSearchCSVExportView(View):
                 Q(plat__name__icontains=search_set)
             ))
 
-        lots = lots.prefetch_related(
-            'payment',
-            'ledger_lot',
-            Prefetch(
-                'plat',
-                queryset=Plat.objects.all().prefetch_related(
-                    'subdivision',
-                    'plat_zone',
-                ),
-            )
-        )
-
         lot_fields = [
             'id', 'lot_number', 'permit_id',
             'address_number', 'address_street', 'address_full',
@@ -582,7 +580,7 @@ class AdminLotSearchCSVExportView(View):
         df = pd.DataFrame.from_records(lots.values(), columns=lot_fields) 
         lot_ids = list(set([lot.id for lot in lots.all()]))
         plat_ids = list(set([lot.plat.id for lot in lots.all()]))
-        subdivision_ids = list(set([operator.attrgetter('plat.subdivision.id')(lot) for lot in lots.all()]))
+        subdivision_ids = list(set([operator.attrgetter('plat.subdivision.id')(lot) for lot in lots.all() if operator.attrgetter('plat.subdivision')(lot)]))
 
         # Plats
         plat_fields = [
