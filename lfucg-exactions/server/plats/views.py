@@ -778,12 +778,13 @@ class AdminLotSearchCSVExportView(View):
                     how='left',
                     suffixes=['', '_plat_note']
                 )
+
             # Merge notes made on subdivisions
-            if not subdivision_notes.empty:
+            if not subdivision_notes.empty and hasattr(final_df.columns, 'subdivision_id'):
                 final_df = pd.merge(
                     final_df,
                     subdivision_notes,
-                    left_on='subdivision_id_plat',
+                    left_on='subdivision_id',
                     right_on='object_id',
                     how='left',
                     suffixes=['', '_subdivision_note']
