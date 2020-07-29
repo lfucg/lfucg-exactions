@@ -88,7 +88,7 @@ def lot_update_exactions_and_email_supervisor(sender, instance, **kwargs):
     related_lot = Lot.objects.get(id=instance.id)
 
     if (instance.modified_by.is_superuser or ((hasattr(instance.modified_by, 'profile') and instance.modified_by.profile.is_supervisor == True))):
-        instance.is_approved = True
+        related_lot.is_approved = True
         users = User.objects.filter(Q(profile__is_supervisor=True) & Q(groups__name='Planning'))
 
         for user in users:
@@ -132,7 +132,7 @@ def lot_update_exactions_and_email_supervisor(sender, instance, **kwargs):
                 msg.attach_alternative(html_content, "text/html")
                 msg.send()
 
-        instance.is_approved = False
+        related_lot.is_approved = False
 
     if related_lot and not(
         kwargs['update_fields'] is not None and hasattr(kwargs['update_fields'], 'current_dues_roads_dev')
