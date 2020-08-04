@@ -89,6 +89,7 @@ def lot_update_exactions_and_email_supervisor(sender, instance, **kwargs):
 
     if (instance.modified_by.is_superuser or ((hasattr(instance.modified_by, 'profile') and instance.modified_by.profile.is_supervisor == True))):
         related_lot.is_approved = True
+        related_lot.save()
         users = User.objects.filter(Q(profile__is_supervisor=True) & Q(groups__name='Planning'))
 
         for user in users:
@@ -134,23 +135,24 @@ def lot_update_exactions_and_email_supervisor(sender, instance, **kwargs):
 
         related_lot.is_approved = False
 
-    if related_lot and not(
-        kwargs['update_fields'] is not None and hasattr(kwargs['update_fields'], 'current_dues_roads_dev')
-    ):
-        lot_balances = calculate_lot_balance(related_lot)
+    if related_lot:
+        if not(
+            kwargs['update_fields'] is not None and hasattr(kwargs['update_fields'], 'current_dues_roads_dev')
+        ):
+            lot_balances = calculate_lot_balance(related_lot)
 
-        related_lot.current_dues_roads_dev = lot_balances['dues_roads_dev']
-        related_lot.current_dues_roads_own = lot_balances['dues_roads_own']
-        related_lot.current_dues_sewer_trans_dev = lot_balances['dues_sewer_trans_dev']
-        related_lot.current_dues_sewer_trans_own = lot_balances['dues_sewer_trans_own']
-        related_lot.current_dues_sewer_cap_dev = lot_balances['dues_sewer_cap_dev']
-        related_lot.current_dues_sewer_cap_own = lot_balances['dues_sewer_cap_own']
-        related_lot.current_dues_parks_dev = lot_balances['dues_parks_dev']
-        related_lot.current_dues_parks_own = lot_balances['dues_parks_own']
-        related_lot.current_dues_storm_dev = lot_balances['dues_storm_dev']
-        related_lot.current_dues_storm_own = lot_balances['dues_storm_own']
-        related_lot.current_dues_open_space_dev = lot_balances['dues_open_space_dev']
-        related_lot.current_dues_open_space_own = lot_balances['dues_open_space_own']
+            related_lot.current_dues_roads_dev = lot_balances['dues_roads_dev']
+            related_lot.current_dues_roads_own = lot_balances['dues_roads_own']
+            related_lot.current_dues_sewer_trans_dev = lot_balances['dues_sewer_trans_dev']
+            related_lot.current_dues_sewer_trans_own = lot_balances['dues_sewer_trans_own']
+            related_lot.current_dues_sewer_cap_dev = lot_balances['dues_sewer_cap_dev']
+            related_lot.current_dues_sewer_cap_own = lot_balances['dues_sewer_cap_own']
+            related_lot.current_dues_parks_dev = lot_balances['dues_parks_dev']
+            related_lot.current_dues_parks_own = lot_balances['dues_parks_own']
+            related_lot.current_dues_storm_dev = lot_balances['dues_storm_dev']
+            related_lot.current_dues_storm_own = lot_balances['dues_storm_own']
+            related_lot.current_dues_open_space_dev = lot_balances['dues_open_space_dev']
+            related_lot.current_dues_open_space_own = lot_balances['dues_open_space_own']
 
         related_lot.save()
 
