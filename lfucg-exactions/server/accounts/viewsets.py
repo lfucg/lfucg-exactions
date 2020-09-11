@@ -309,6 +309,14 @@ class AccountLedgerViewSet(viewsets.ModelViewSet):
         if agreement_set is not None:
             queryset = queryset.filter(agreement=agreement_set)
 
+        starting_date = self.request.query_params.get('starting_date', None)
+        if starting_date is not None:
+            queryset = queryset.filter(entry_date__gte=starting_date)
+
+        ending_date = self.request.query_params.get('ending_date', None)
+        if ending_date is not None:
+            queryset = queryset.filter(entry_date__lte=ending_date)
+
         return queryset.order_by('entry_date', 'id')
 
     def create(self, request):
