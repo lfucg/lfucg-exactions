@@ -16,6 +16,7 @@ domain = app['domains'][0]
 environment = app['environment']
 
 virtualenv = "/home/ubuntu/env"
+rewrite_engine = environment['REWRITE_ENGINE']
 
 python_package "mod_wsgi" do
   version "4.5.2"
@@ -34,7 +35,7 @@ end
 web_app 'lfucg-exactions' do
   template "vhost.conf.erb"
   server_name "#{domain}"
-  rewrite_engine "#{environment.REWRITE_ENGINE}"
+  rewrite_engine "#{rewrite_engine}"
   docroot "/home/ubuntu/lfucg-exactions/lfucg-exactions/server"
   admin "kelly@apaxsoftware.com"
 end
