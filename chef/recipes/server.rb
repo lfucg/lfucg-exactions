@@ -34,6 +34,7 @@ end
 web_app 'lfucg-exactions' do
   template "vhost.conf.erb"
   server_name "#{domain}"
+  rewrite_engine environment.rewrite_engine
   docroot "/home/ubuntu/lfucg-exactions/lfucg-exactions/server"
   admin "kelly@apaxsoftware.com"
 end
