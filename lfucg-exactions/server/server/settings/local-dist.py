@@ -40,14 +40,11 @@ ADMINS = (
 )
 MANAGERS = ADMINS
 
-EMAIL_BACKEND = "sgbackend.SendGridBackend"
-SENDGRID_API_KEY ='<%= @config["SENDGRID_API_KEY"] %>'
+# EMAIL_BACKEND = "sgbackend.SendGridBackend"
+# SENDGRID_API_KEY ='<%= @config["SENDGRID_API_KEY"] %>'
 
-# EMAIL_BACKEND = 'postmarker.django.EmailBackend'
-# POSTMARK = {
-#     'TOKEN': '<%= @config["POSTMARK_API_KEY"] %>',
-#     'TEST_MODE': False,
-# }
+EMAIL_BACKEND = 'postmark.django_backend.EmailBackend'
+POSTMARK_API_KEY ='<%= @config["POSTMARK_API_KEY"] %>'
 
 CACHES = {
     'default': {
