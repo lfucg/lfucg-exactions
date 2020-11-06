@@ -287,6 +287,7 @@ INTERNAL_IPS = ('127.0.0.1')
 
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
+EMAIL_BACKEND = 'postmark.django_backend.EmailBackend'
 SERVER_EMAIL = "webmaster@example.com"
 DEFAULT_FROM_EMAIL = "exactions@apaxdev.com"
 SYSTEM_EMAIL_PREFIX = "[server]"
