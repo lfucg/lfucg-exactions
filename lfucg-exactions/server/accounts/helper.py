@@ -10,11 +10,14 @@ from django.contrib.contenttypes.models import ContentType
 from decimal import Decimal
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from builtins import hasattr
+from postmarker.core import PostmarkClient
 
 from django.contrib.auth.models import User
 from plats.models import Plat, Lot
 from .models import Account, Agreement, AccountLedger, Payment, Project, ProjectCostEstimate, Profile
 from plats.utils import calculate_lot_balance, calculate_plat_balance
+
+postmark = PostmarkClient(server_token=settings.POSTMARK_API_KEY)
 
 def send_password_reset_email(user, token):
     text_template = get_template('emails/password_reset.txt')
@@ -32,9 +35,16 @@ def send_password_reset_email(user, token):
 
     subject, from_email = 'LFUCG Exactions: Password Reset', settings.DEFAULT_FROM_EMAIL
 
-    msg = EmailMultiAlternatives(subject, text_content, from_email, [user.email])
-    msg.attach_alternative(html_content, "text/html")
-    msg.send()
+    postmark.emails.send(
+        From=settings.DEFAULT_FROM_EMAIL,
+        To=[user.email],
+        Subject='LFUCG Exactions: Password Reset',
+        HtmlBody=html_content,
+    )
+
+    # msg = EmailMultiAlternatives(subject, text_content, from_email, [user.email])
+    # msg.attach_alternative(html_content, "text/html")
+    # msg.send()
 
 def send_lost_username_email(user):
     text_template = get_template('emails/forgot_username.txt')
@@ -50,9 +60,17 @@ def send_lost_username_email(user):
     text_content = text_template.render(context)
     html_content = html_template.render(context)
 
-    msg = EmailMultiAlternatives(subject, text_content, from_email, [user.email])
-    msg.attach_alternative(html_content, "text/html")
-    msg.send()
+
+    postmark.emails.send(
+        From=settings.DEFAULT_FROM_EMAIL,
+        To=[user.email],
+        Subject=subject,
+        HtmlBody=html_content,
+    )
+
+    # msg = EmailMultiAlternatives(subject, text_content, from_email, [user.email])
+    # msg.attach_alternative(html_content, "text/html")
+    # msg.send()
 
 @receiver(post_save, sender=User)
 def send_email_to_new_user(sender, instance, created, **kwargs):
@@ -75,12 +93,19 @@ def send_email_to_new_user(sender, instance, created, **kwargs):
         text_content = text_template.render(context)
         html_content = html_template.render(context)
 
-        msg = EmailMultiAlternatives(subject, text_content, from_email, [user.email])
-        msg.attach_alternative(html_content, "text/html")
-        try:
-            msg.send()
-        except Exception as exc:
-            print('SEND NEW USER EMAIL EXCEPTION', exc)
+        postmark.emails.send(
+            From=settings.DEFAULT_FROM_EMAIL,
+            To=[user.email],
+            Subject=subject,
+            HtmlBody=html_content,
+        )
+
+        # msg = EmailMultiAlternatives(subject, text_content, from_email, [user.email])
+        # msg.attach_alternative(html_content, "text/html")
+        # try:
+        #     msg.send()
+        # except Exception as exc:
+        #     print('SEND NEW USER EMAIL EXCEPTION', exc)
 
 @receiver(post_save, sender=Lot)
 def lot_update_exactions_and_email_supervisor(sender, instance, **kwargs):
@@ -129,9 +154,15 @@ def lot_update_exactions_and_email_supervisor(sender, instance, **kwargs):
                 html_content = html_template.render(context)
                 text_content = text_template.render(context)
 
-                msg = EmailMultiAlternatives(subject, text_content, from_email, to_emails)
-                msg.attach_alternative(html_content, "text/html")
-                msg.send()
+                postmark.emails.send(
+                    From=settings.DEFAULT_FROM_EMAIL,
+                    To=[user.email],
+                    Subject=subject,
+                    HtmlBody=html_content,
+                )
+                # msg = EmailMultiAlternatives(subject, text_content, from_email, to_emails)
+                # msg.attach_alternative(html_content, "text/html")
+                # msg.send()
 
         related_lot.is_approved = False
 
@@ -221,8 +252,14 @@ def send_email_to_finance_supervisors(sender, instance, **kwargs):
                 html_content = html_template.render(context)
                 text_content = text_template.render(context)
 
-                msg = EmailMultiAlternatives(subject, text_content, from_email, to_emails)
-                msg.attach_alternative(html_content, "text/html")
+                postmark.emails.send(
+                    From=settings.DEFAULT_FROM_EMAIL,
+                    To=[user.email],
+                    Subject=subject,
+                    HtmlBody=html_content,
+                )
+                # msg = EmailMultiAlternatives(subject, text_content, from_email, to_emails)
+                # msg.attach_alternative(html_content, "text/html")
                 # msg.send()
         
         instance.is_approved = False
@@ -275,9 +312,16 @@ def send_email_to_planning_supervisors(sender, instance, **kwargs):
                 html_content = html_template.render(context)
                 text_content = text_template.render(context)
 
-                msg = EmailMultiAlternatives(subject, text_content, from_email, to_emails)
-                msg.attach_alternative(html_content, "text/html")
-                # msg.send()
+                postmark.emails.send(
+                    From=settings.DEFAULT_FROM_EMAIL,
+                    To=[user.email],
+                    Subject=subject,
+                    HtmlBody=html_content,
+                )
+
+                # msg = EmailMultiAlternatives(subject, text_content, from_email, to_emails)
+                # msg.attach_alternative(html_content, "text/html")
+                # # msg.send()
 
         instance.is_approved = False
 
