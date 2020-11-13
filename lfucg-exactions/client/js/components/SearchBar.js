@@ -235,7 +235,7 @@ class SearchBar extends React.Component {
               <a href={`${queryString}`} className="btn button-modal-link" aria-label="Generate CSV from Current Results">
                 <i className="fa fa-download button-modal-icon" aria-hidden="true" />&nbsp;Generate CSV from Current Results
               </a>
-              {!!currentUser && currentUser.is_superuser &&
+              {!!currentUser && currentUser.is_superuser && !!this.props.SecondaryCsvEndpoint &&
                 <a href={`${secondaryQueryString}`} className="btn button-modal-link" aria-label="Admin CSV Export">
                   <i className="fa fa-download button-modal-icon" aria-hidden="true" />&nbsp;Admin CSV Export
                 </a>
