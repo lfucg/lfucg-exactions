@@ -39,7 +39,7 @@ end
 # Build JS and CSS dependencies
 execute "gulp-build" do
   cwd "/home/#{user}/lfucg-exactions/lfucg-exactions/client"
-  command "npm run build"
+  command "npm run build --max-old-space-size=8192"
   environment "HOME" => "/home/#{user}"
   user "#{user}"
   group "#{user}"
