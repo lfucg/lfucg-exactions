@@ -87,8 +87,8 @@ class Plat(models.Model):
     latitude = models.CharField(max_length=100, null=True, blank=True)
     longitude = models.CharField(max_length=100, null=True, blank=True)
 
-    total_acreage = models.DecimalField(max_digits=20, decimal_places=2)
-    right_of_way_acreage = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True)
+    total_acreage = models.DecimalField(max_digits=20, decimal_places=4)
+    right_of_way_acreage = models.DecimalField(max_digits=20, decimal_places=4, null=True, blank=True)
     acreage_type = models.CharField(max_length=100, choices=ACREAGE_TYPE, null=True, blank=True)
 
     # plan or development plan
