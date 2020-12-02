@@ -1008,6 +1008,7 @@ class TransactionCSVExportView(View):
             'paid_open_space': 'Open Space', 'paid_parks': 'Parks', 'paid_roads': 'Roads', 
             'paid_sewer_cap': 'Sewer Cap.', 'paid_sewer_trans': 'Sewer Trans.', 'paid_storm': 'Storm'
         })
+        print('PAYMENTS', payments[:2])
 
         ledgers = pd.DataFrame.from_records(
             AccountLedger.objects.filter(
@@ -1028,11 +1029,13 @@ class TransactionCSVExportView(View):
             'roads': 'Roads', 'storm': 'Storm',
             'sewer_cap': 'Sewer Cap.', 'sewer_credits': 'Sewer', 'sewer_trans': 'Sewer Trans.'
         })
+        print('LEDGERS', ledgers[:2])
 
         agreements = pd.DataFrame.from_records(
             Agreement.objects.filter(ledger__in=ledgers['id']).exclude(is_active=False).distinct().values(),
             columns=['id', 'resolution_number']
         )
+        print('AGREEMENTS', agreements[:2])
 
         accounts = pd.DataFrame.from_records(
             Account.objects.filter(
@@ -1042,19 +1045,24 @@ class TransactionCSVExportView(View):
             ).exclude(is_active=False).distinct().values(),
             columns=['id', 'account_name']
         )
+        print('ACCOUNT', accounts[:2])
 
         pay_account = pd.merge(payments, accounts, left_on='credit_account_id', right_on='id', suffixes=['_payment', '_payaccount'])
         pay_account = pay_account.drop(columns=['credit_account_id', 'id_payaccount'])
-        
+
+        print('PAY ACCOUNT', pay_account[:2])
         led_agree = pd.merge(ledgers, agreements, left_on='agreement_id', right_on='id', suffixes=['_ledger', '_ledagree'])
         led_agree = led_agree.drop(columns=['agreement_id', 'id_ledagree'])
 
+        print('LEDGER AGREEMENT', led_agree[:2])
         led_agree_from_account = pd.merge(led_agree, accounts, left_on='account_from_id', right_on='id', how='inner', suffixes=['_led_agree', '_from'])
         led_agree_from_account = led_agree_from_account.drop(columns=['account_from_id', 'id'])
 
+        print('LEDGER ACCOUNT FROM', led_agree_from_account[:2])
         led_combine = pd.merge(led_agree_from_account, accounts, left_on='account_to_id', right_on='id', suffixes=['_from', '_to'])
         led_combine = led_combine.drop(columns=['account_to_id', 'id'])
 
+        print('LEDGER COMBINE', led_combine[:2])
         lots = pd.DataFrame.from_records(
             Lot.objects.filter(
                 Q(payment__in=payments['id']) |
@@ -1062,6 +1070,7 @@ class TransactionCSVExportView(View):
             ).exclude(is_active=False).distinct().values(),
             columns=['id', 'plat_id', 'lot_number', 'address_full']
         )
+        print('LOTS', lots[:2])
 
         plats = pd.DataFrame.from_records(
             Plat.objects.filter(lot__in=lots['id']).exclude(is_active=False).distinct().values(),
@@ -1070,6 +1079,7 @@ class TransactionCSVExportView(View):
             'cabinet',
             'slide']
         )
+        print('PLATS', plats[:2])
 
         plat_lot = pd.merge(lots, plats, left_on='plat_id', right_on='id', how='inner', suffixes=['_lots', '_plats'])
         plat_lot = plat_lot.drop(columns=['id_plats', 'plat_id'])
