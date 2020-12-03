@@ -31,7 +31,7 @@ class Subdivision(models.Model):
     modified_by = models.ForeignKey(User, related_name='subdivision_modified')    
 
     name = models.CharField(max_length=200)
-    gross_acreage = models.DecimalField(max_digits=20, decimal_places=3)
+    gross_acreage = models.DecimalField(max_digits=20, decimal_places=4)
 
     history = HistoricalRecords()
 
@@ -300,7 +300,7 @@ class PlatZone(models.Model):
     modified_by = models.ForeignKey(User, related_name='plat_zone_modified')
 
     zone = models.CharField(max_length=100, choices=ZONES)
-    acres = models.DecimalField(max_digits=20, decimal_places=2)
+    acres = models.DecimalField(max_digits=20, decimal_places=4)
 
     dues_roads = models.DecimalField(max_digits=20, decimal_places=2, default=0)
     dues_open_spaces = models.DecimalField(max_digits=20, decimal_places=2, default=0)
