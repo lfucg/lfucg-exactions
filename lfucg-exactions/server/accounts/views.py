@@ -1074,14 +1074,28 @@ class TransactionCSVExportView(View):
 
         plats = pd.DataFrame.from_records(
             Plat.objects.filter(lot__in=lots['id']).exclude(is_active=False).distinct().values(),
-            columns=['id',
-            # 'subdivision',
-            'cabinet',
-            'slide']
+            columns=[
+                'id',
+                # 'subdivision',
+                'cabinet',
+                'slide',
+            ]
         )
         print('PLATS', plats[:2])
+        plat_zones = pd.DataFrame.from_records(
+            PlatZone.objects.filter(plat__in=plats['id']).values(),
+            columns=[
+                'id',
+                'zone',
+                'plat_id',
+            ]
+        )
+        plat_zone_plat = pd.merge(plats, plat_zones, left_on='id', right_on='plat_id', how='inner', suffixes=['', '_plat_zones'])
+        plat_zone_plat = plat_zone_plat.drop(columns=['plat_id', 'id_plat_zones'])
+        print('PLAT ZONE WITH PLATS', plat_zone_plat[:2])
 
-        plat_lot = pd.merge(lots, plats, left_on='plat_id', right_on='id', how='inner', suffixes=['_lots', '_plats'])
+        plat_lot = pd.merge(lots, plat_zone_plat, left_on='plat_id', right_on='id', how='inner', suffixes=['_lots', '_plats'])
+        print('PLAT LOT MERGE', plat_lot[:2])
         plat_lot = plat_lot.drop(columns=['id_plats', 'plat_id'])
 
         lot_payments = pd.merge(plat_lot, pay_account, left_on='id_lots', right_on='lot_id_id', how='inner', suffixes=['_platlots', '_payaccount'])
@@ -1100,10 +1114,11 @@ class TransactionCSVExportView(View):
         concat = concat.drop(columns=['id_lots', 'Date'])
         concat = concat.rename(index=str, columns={
             'address_full': 'Lot Address', 'cabinet': 'Cabinet',
+            'zone': 'Plat Zones',
             'lot_number': 'Lot ID', 'slide': 'Slide'
         })
         concat = concat[[
-            'Lot ID', 'Lot Address', 'Cabinet', 'Slide', 
+            'Lot ID', 'Lot Address', 'Cabinet', 'Slide', 'Plat Zones',
             'Account From', 'Account To', 'Resolution', 
             'Transaction Type', 'Paid By', 'Check', 
             'Non-Sewer', 'Open Space', 'Parks', 'Roads', 'Storm', 
