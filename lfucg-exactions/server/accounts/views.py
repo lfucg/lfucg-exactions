@@ -1079,6 +1079,7 @@ class TransactionCSVExportView(View):
                 # 'subdivision',
                 'cabinet',
                 'slide',
+                'expansion_area',
             ]
         )
         print('PLATS', plats[:2])
@@ -1115,10 +1116,12 @@ class TransactionCSVExportView(View):
         concat = concat.rename(index=str, columns={
             'address_full': 'Lot Address', 'cabinet': 'Cabinet',
             'zone': 'Plat Zones',
+            'expansion_area': 'Expansion Area',
             'lot_number': 'Lot ID', 'slide': 'Slide'
         })
         concat = concat[[
             'Lot ID', 'Lot Address', 'Cabinet', 'Slide', 'Plat Zones',
+            'Expansion Area',
             'Account From', 'Account To', 'Resolution', 
             'Transaction Type', 'Paid By', 'Check', 
             'Non-Sewer', 'Open Space', 'Parks', 'Roads', 'Storm', 
