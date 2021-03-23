@@ -297,6 +297,7 @@ class LotSerializer(serializers.ModelSerializer):
 
 class LotQuickSerializer(serializers.ModelSerializer):
     lot_exactions = serializers.SerializerMethodField(read_only=True)
+    plat = PlatQuickSerializer()
     
     def get_lot_exactions(self, obj):
         return calculate_lot_totals(obj)
@@ -310,6 +311,7 @@ class LotQuickSerializer(serializers.ModelSerializer):
             'permit_id',
             'is_approved',
             'lot_exactions',
+            'plat',
         )
 
 class LotExactionsSerializer(serializers.ModelSerializer):

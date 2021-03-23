@@ -2,7 +2,7 @@ from rest_framework.generics import RetrieveAPIView
 import csv
 from django.views.generic import View
 from django.http import HttpResponse
-from django.db.models import Count, Max, Q
+from django.db.models import Count, Max, Q, Prefetch
 import datetime
 from decimal import Decimal
 import pandas as pd
@@ -479,7 +479,16 @@ class PaymentCSVExportView(View):
         all_rows = []
 
         payment_value = request.GET.get('payment', None)
-        payment_queryset = Payment.objects.all()
+        payment_queryset = Payment.objects.all().prefetch_related(
+            'credit_source',
+            'credit_account',
+            Prefetch(
+                'lot_id',
+                queryset=Lot.objects.all().prefetch_related(
+                    'plat',
+                )
+            )
+        )
 
         show_inactive = request.GET.get('showDeleted', False)
         if show_inactive:
@@ -550,7 +559,8 @@ class PaymentCSVExportView(View):
 
             if payment['lot_id']:
                 lot_address = payment['lot_id']['address_full']
-                if payment['lot_id']['plat']:
+
+                if 'plat' in payment['lot_id']:
                     expansion_area = payment['lot_id']['plat']['expansion_area']
 
             if payment['credit_account']:
