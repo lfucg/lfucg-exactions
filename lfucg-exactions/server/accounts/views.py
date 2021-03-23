@@ -459,6 +459,7 @@ class PaymentCSVExportView(View):
     def get(self, request, *args, **kwargs):
         headers = [
             'Lot',
+            'Expansion Area',
             'Payment Type',
             'Payer Type',
             'Payer',
@@ -545,9 +546,12 @@ class PaymentCSVExportView(View):
             lot_address = ''
             account_name = ''
             agreement_number = ''
+            expansion_area = ''
 
             if payment['lot_id']:
                 lot_address = payment['lot_id']['address_full']
+                if payment['lot_id']['plat']:
+                    expansion_area = payment['lot_id']['plat']['expansion_area']
 
             if payment['credit_account']:
                 account_name = payment['credit_account']['account_name']
@@ -557,6 +561,7 @@ class PaymentCSVExportView(View):
 
             row = {
                 'Lot': lot_address,
+                'Expansion Area': expansion_area,
                 'Payment Type': payment['payment_type_display'],
                 'Payer Type': payment['paid_by_type_display'],
                 'Payer': payment['paid_by'],
