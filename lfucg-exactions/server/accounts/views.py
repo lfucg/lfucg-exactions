@@ -1,11 +1,13 @@
-from rest_framework.generics import RetrieveAPIView
 import csv
+import math
+from rest_framework.generics import RetrieveAPIView
 from django.views.generic import View
 from django.http import HttpResponse
 from django.db.models import Count, Max, Q, Prefetch
 import datetime
 from decimal import Decimal
 import pandas as pd
+import numpy as np
 from io import BytesIO
 
 from django.contrib.auth.models import User
@@ -1002,146 +1004,289 @@ class AccountLedgerCSVExportView(View):
 class TransactionCSVExportView(View):
     def get(self, request, *args, **kwargs):
         starting_date = request.GET.get('starting_date', None)
+        print('STARTING DATE', starting_date)
         ending_date = request.GET.get('ending_date', datetime.date.today())
+        print('ENDING DATE', ending_date)
 
-        payments = pd.DataFrame.from_records(
-            Payment.objects.filter(
-                entry_date__lte=ending_date, entry_date__gte=starting_date
-            ).exclude(
-                is_active=False
-            ).values(),
-            columns=[
-                'check_number', 'credit_account_id', 'entry_date',
-                'id', 'lot_id_id', 'paid_by', 'payment_type',
-                'paid_open_space', 'paid_parks', 'paid_roads', 'paid_sewer_cap',
-                'paid_sewer_trans', 'paid_storm'
-            ]
+        payment_prefetch = Payment.objects.filter(
+            entry_date__lte=ending_date, entry_date__gte=starting_date
+        ).exclude(
+            is_active=False
+        ).prefetch_related(
+            Prefetch(
+                'credit_source',
+                queryset=Agreement.objects.exclude(is_active=False),
+            ),
+            Prefetch(
+                'credit_account',
+                queryset=Account.objects.exclude(is_active=False),
+            ),
+            Prefetch(
+                'lot_id',
+                queryset=Lot.objects.exclude(
+                    is_active=False
+                ).prefetch_related(
+                    Prefetch(
+                        'plat',
+                        queryset=Plat.objects.exclude(is_active=False).prefetch_related(
+                            'plat_zone',
+                            'subdivision',
+                        ),
+                    ),
+                ),
+            ),
+        ).values(
+            'lot_id__address_full', 'lot_id__lot_number',
+            'lot_id__plat__plat_zone', 'lot_id__plat__expansion_area',
+            'lot_id__plat__cabinet', 'lot_id__plat__slide', 
+            'credit_account__account_name', 'credit_source__resolution_number',
+            'check_number', 'entry_date',
+            'paid_by', 'paid_by_type', 'payment_type',
+            'paid_open_space', 'paid_parks', 'paid_roads', 'paid_storm',
+            'paid_sewer_cap', 'paid_sewer_trans',
         )
-        payments = payments.rename(index=str, columns={
+        payment_pandas = pd.DataFrame.from_records(payment_prefetch)
+        print('PAYMENT PANDAS', payment_pandas[:2])
+
+        payments = payment_pandas.rename(index=str, columns={
+            'lot_id__address_full': 'Lot Address',
+            'lot_id__lot_number': 'Lot ID',
+            'lot_id__plat__plat_zone': 'Plat Zones',
+            'lot_id__plat__expansion_area': 'Expansion Area',
+            'lot_id__plat__cabinet': 'Cabinet',
+            'lot_id__plat__slide': 'Slide', 
+            'credit_account__account_name': 'Account From',
+            'credit_source__resolution_number': 'Resolution',
             'check_number': 'Check', 'entry_date': 'Date',
-            'paid_by': 'Paid By', 'payment_type': 'Transaction Type',
+            'paid_by': 'Paid By', 'paid_by_type': 'Paid By Type', 'payment_type': 'Transaction Type',
             'paid_open_space': 'Open Space', 'paid_parks': 'Parks', 'paid_roads': 'Roads', 
             'paid_sewer_cap': 'Sewer Cap.', 'paid_sewer_trans': 'Sewer Trans.', 'paid_storm': 'Storm'
         })
-        print('PAYMENTS', payments[:2])
+        print('PAYMENTS RENAMED', payments[:2])
 
-        ledgers = pd.DataFrame.from_records(
-            AccountLedger.objects.filter(
-                entry_date__lte=ending_date, entry_date__gte=starting_date
-            ).exclude(
-                is_active=False
-            ).values(),
-            columns=[
-                'account_from_id', 'account_to_id', 'agreement_id',
-                'entry_date', 'entry_type', 'id', 'lot_id',
-                'non_sewer_credits', 'open_space', 'parks', 'roads', 'sewer_cap',
-                'sewer_credits', 'sewer_trans', 'storm'
-            ]
+        ledger_prefetch = AccountLedger.objects.filter(
+            entry_date__lte=ending_date, entry_date__gte=starting_date
+        ).exclude(
+            is_active=False
+        ).prefetch_related(
+            Prefetch(
+                'account_from',
+                queryset=Account.objects.exclude(is_active=False),
+            ),
+            Prefetch(
+                'account_to',
+                queryset=Account.objects.exclude(is_active=False),
+            ),
+            Prefetch(
+                'agreement',
+                queryset=Agreement.objects.exclude(is_active=False),
+            ),
+            Prefetch(
+                'lot',
+                queryset=Lot.objects.exclude(
+                    is_active=False
+                ).prefetch_related(
+                    Prefetch(
+                        'plat',
+                        queryset=Plat.objects.exclude(is_active=False).prefetch_related(
+                            'plat_zone',
+                            'subdivision',
+                        ),
+                    ),
+                ),
+            ),
+        ).values(
+            'account_from__account_name', 'account_to__account_name',
+            'agreement__resolution_number',
+            'lot__lot_number', 'lot__address_full',
+            'lot__plat__plat_zone', 'lot__plat__expansion_area',
+            'lot__plat__cabinet', 'lot__plat__slide', 
+            'entry_date', 'entry_type',
+            'non_sewer_credits', 'open_space', 'parks', 'roads', 'storm',
+            'sewer_cap', 'sewer_credits', 'sewer_trans',
         )
-        ledgers = ledgers.rename(index=str, columns={
+        ledger_pandas = pd.DataFrame.from_records(ledger_prefetch)
+        print('LEDGER PANDAS', ledger_pandas[:2])
+
+        ledgers = ledger_pandas.rename(index=str, columns={
+            'lot__address_full': 'Lot Address',
+            'lot__lot_number': 'Lot ID',
+            'lot__plat__plat_zone': 'Plat Zones',
+            'lot__plat__expansion_area': 'Expansion Area',
+            'lot__plat__cabinet': 'Cabinet',
+            'lot__plat__slide': 'Slide', 
+            'account_from__account_name': 'Account From',
+            'account_to__account_name': 'Account To',
+            'agreement__resolution_number': 'Resolution',
             'entry_date': 'Date', 'entry_type': 'Transaction Type',
             'non_sewer_credits': 'Non-Sewer', 'open_space': 'Open Space', 'parks': 'Parks', 
             'roads': 'Roads', 'storm': 'Storm',
             'sewer_cap': 'Sewer Cap.', 'sewer_credits': 'Sewer', 'sewer_trans': 'Sewer Trans.'
         })
-        print('LEDGERS', ledgers[:2])
+        print('LEDGERS RENAMED', ledgers[:2])
 
-        agreements = pd.DataFrame.from_records(
-            Agreement.objects.filter(ledger__in=ledgers['id']).exclude(is_active=False).distinct().values(),
-            columns=['id', 'resolution_number']
-        )
-        print('AGREEMENTS', agreements[:2])
+        # payments = pd.DataFrame.from_records(
+        #     Payment.objects.filter(
+        #         entry_date__lte=ending_date, entry_date__gte=starting_date
+        #     ).exclude(
+        #         is_active=False
+        #     ).values(),
+        #     columns=[
+        #         'check_number', 'credit_account_id', 'entry_date',
+        #         'id', 'lot_id_id', 'paid_by', 'payment_type',
+        #         'paid_open_space', 'paid_parks', 'paid_roads', 'paid_sewer_cap',
+        #         'paid_sewer_trans', 'paid_storm'
+        #     ]
+        # )
+        # payments = payments.rename(index=str, columns={
+        #     'check_number': 'Check', 'entry_date': 'Date',
+        #     'paid_by': 'Paid By', 'payment_type': 'Transaction Type',
+        #     'paid_open_space': 'Open Space', 'paid_parks': 'Parks', 'paid_roads': 'Roads', 
+        #     'paid_sewer_cap': 'Sewer Cap.', 'paid_sewer_trans': 'Sewer Trans.', 'paid_storm': 'Storm'
+        # })
+        # print('PAYMENTS', payments[:2])
 
-        accounts = pd.DataFrame.from_records(
-            Account.objects.filter(
-                Q(payment_account__in=payments['id']) |
-                Q(ledger_account_from__in=ledgers['id']) |
-                Q(ledger_account_to__in=ledgers['id'])
-            ).exclude(is_active=False).distinct().values(),
-            columns=['id', 'account_name']
-        )
-        print('ACCOUNT', accounts[:2])
+        # ledgers = pd.DataFrame.from_records(
+        #     AccountLedger.objects.filter(
+        #         entry_date__lte=ending_date, entry_date__gte=starting_date
+        #     ).exclude(
+        #         is_active=False
+        #     ).values(),
+        #     columns=[
+        #         'account_from_id', 'account_to_id', 'agreement_id',
+        #         'entry_date', 'entry_type', 'id', 'lot_id',
+        #         'non_sewer_credits', 'open_space', 'parks', 'roads', 'sewer_cap',
+        #         'sewer_credits', 'sewer_trans', 'storm'
+        #     ],
+        # )
+        # ledger_cols = ['id', 'account_from_id', 'account_to_id'] 
+        # # ledgers[ledger_cols]= pd.to_numeric(ledgers[ledger_cols], errors='coerce')
+        # # ledgers[ledger_cols]= ledgers[ledger_cols].astype('Int64', errors='coerce')
+        # # ledgers['id']= ledgers['id'].apply(lambda x: x if math.isnan(x) else np.int64)
+        # # ledgers['account_from_id']= ledgers['account_from_id'].apply(lambda x: x if math.isnan(x) else int(x))
+        # # ledgers['account_to_id']= ledgers['account_to_id'].apply(lambda x: x if math.isnan(x) else np.int64)
+        # # ledgers[ledger_cols]= ledgers[ledger_cols].applymap(lambda x: np.int64 if x==x else '')
+        # # ledgers[ledger_cols]= ledgers[ledger_cols].applymap(np.int64)
+        # ledgers['id']= ledgers['id'].apply(np.int64)
+        # print('ID')
+        # # ledgers['account_from_id']= ledgers['account_from_id'].apply(np.int64)
+        # print('FROM')
+        # # ledgers['account_to_id']= ledgers['account_to_id'].apply(np.int64)
+        # print('TO')
+        # print('LEDGERS BEFORE RENAME', ledgers[:2])
+        # ledgers = ledgers.rename(index=str, columns={
+        #     'entry_date': 'Date', 'entry_type': 'Transaction Type',
+        #     'non_sewer_credits': 'Non-Sewer', 'open_space': 'Open Space', 'parks': 'Parks', 
+        #     'roads': 'Roads', 'storm': 'Storm',
+        #     'sewer_cap': 'Sewer Cap.', 'sewer_credits': 'Sewer', 'sewer_trans': 'Sewer Trans.'
+        # })
+        # print('LEDGERS', ledgers[:2])
 
-        pay_account = pd.merge(payments, accounts, left_on='credit_account_id', right_on='id', suffixes=['_payment', '_payaccount'])
-        pay_account = pay_account.drop(columns=['credit_account_id', 'id_payaccount'])
+        # agreements = pd.DataFrame.from_records(
+        #     Agreement.objects.filter(ledger__in=ledgers['id']).exclude(is_active=False).distinct().values(),
+        #     columns=['id', 'resolution_number']
+        # )
+        # print('AGREEMENTS', agreements[:2])
 
-        print('PAY ACCOUNT', pay_account[:2])
-        led_agree = pd.merge(ledgers, agreements, left_on='agreement_id', right_on='id', suffixes=['_ledger', '_ledagree'])
-        led_agree = led_agree.drop(columns=['agreement_id', 'id_ledagree'])
+        # try:
+        #     # import pdb; pdb.set_trace();
+        #     print('TRY')
+        #     accounts = pd.DataFrame.from_records(
+        #         Account.objects.filter(
+        #             Q(payment_account__in=payments['id']) |
+        #             Q(ledger_account_from__in=ledgers['id']) |
+        #             Q(ledger_account_to__in=ledgers['id'])
+        #         ).exclude(
+        #             is_active=False
+        #         ).distinct().values(),
+        #         # columns=['id', 'account_name']
+        #     )
+        #     print('ACCOUNT', accounts[:2])
+        # except Exception as ex:
+        #     print('ACCOUNT EXCEPTION', ex)
 
-        print('LEDGER AGREEMENT', led_agree[:2])
-        led_agree_from_account = pd.merge(led_agree, accounts, left_on='account_from_id', right_on='id', how='inner', suffixes=['_led_agree', '_from'])
-        led_agree_from_account = led_agree_from_account.drop(columns=['account_from_id', 'id'])
+        # pay_account = pd.merge(payments, accounts, left_on='credit_account_id', right_on='id', suffixes=['_payment', '_payaccount'])
+        # pay_account = pay_account.drop(columns=['credit_account_id', 'id_payaccount'])
 
-        print('LEDGER ACCOUNT FROM', led_agree_from_account[:2])
-        led_combine = pd.merge(led_agree_from_account, accounts, left_on='account_to_id', right_on='id', suffixes=['_from', '_to'])
-        led_combine = led_combine.drop(columns=['account_to_id', 'id'])
+        # print('PAY ACCOUNT', pay_account[:2])
+        # led_agree = pd.merge(ledgers, agreements, left_on='agreement_id', right_on='id', suffixes=['_ledger', '_ledagree'])
+        # led_agree = led_agree.drop(columns=['agreement_id', 'id_ledagree'])
 
-        print('LEDGER COMBINE', led_combine[:2])
-        lots = pd.DataFrame.from_records(
-            Lot.objects.filter(
-                Q(payment__in=payments['id']) |
-                Q(ledger_lot__in=ledgers['id'])
-            ).exclude(is_active=False).distinct().values(),
-            columns=['id', 'plat_id', 'lot_number', 'address_full']
-        )
-        print('LOTS', lots[:2])
+        # print('LEDGER AGREEMENT', led_agree[:2])
+        # led_agree_from_account = pd.merge(led_agree, accounts, left_on='account_from_id', right_on='id', how='inner', suffixes=['_led_agree', '_from'])
+        # led_agree_from_account = led_agree_from_account.drop(columns=['account_from_id', 'id'])
 
-        plats = pd.DataFrame.from_records(
-            Plat.objects.filter(lot__in=lots['id']).exclude(is_active=False).distinct().values(),
-            columns=[
-                'id',
-                # 'subdivision',
-                'cabinet',
-                'slide',
-                'expansion_area',
-            ]
-        )
-        print('PLATS', plats[:2])
-        plat_zones = pd.DataFrame.from_records(
-            PlatZone.objects.filter(plat__in=plats['id']).values(),
-            columns=[
-                'id',
-                'zone',
-                'plat_id',
-            ]
-        )
-        plat_zone_plat = pd.merge(plats, plat_zones, left_on='id', right_on='plat_id', how='inner', suffixes=['', '_plat_zones'])
-        plat_zone_plat = plat_zone_plat.drop(columns=['plat_id', 'id_plat_zones'])
-        print('PLAT ZONE WITH PLATS', plat_zone_plat[:2])
+        # print('LEDGER ACCOUNT FROM', led_agree_from_account[:2])
+        # led_combine = pd.merge(led_agree_from_account, accounts, left_on='account_to_id', right_on='id', suffixes=['_from', '_to'])
+        # led_combine = led_combine.drop(columns=['account_to_id', 'id'])
 
-        plat_lot = pd.merge(lots, plat_zone_plat, left_on='plat_id', right_on='id', how='inner', suffixes=['_lots', '_plats'])
-        print('PLAT LOT MERGE', plat_lot[:2])
-        plat_lot = plat_lot.drop(columns=['id_plats', 'plat_id'])
+        # print('LEDGER COMBINE', led_combine[:2])
+        # lots = pd.DataFrame.from_records(
+        #     Lot.objects.filter(
+        #         Q(payment__in=payments['id']) |
+        #         Q(ledger_lot__in=ledgers['id'])
+        #     ).exclude(is_active=False).distinct().values(),
+        #     columns=['id', 'plat_id', 'lot_number', 'address_full']
+        # )
+        # print('LOTS', lots[:2])
 
-        lot_payments = pd.merge(plat_lot, pay_account, left_on='id_lots', right_on='lot_id_id', how='inner', suffixes=['_platlots', '_payaccount'])
-        lot_payments = lot_payments.drop(columns=['lot_id_id', 'id_payment'])
-        lot_payments = lot_payments.rename(index=str, columns={'account_name': 'Account From'})
+        # plats = pd.DataFrame.from_records(
+        #     Plat.objects.filter(lot__in=lots['id']).exclude(is_active=False).distinct().values(),
+        #     columns=[
+        #         'id',
+        #         # 'subdivision',
+        #         'cabinet',
+        #         'slide',
+        #         'expansion_area',
+        #     ]
+        # )
+        # print('PLATS', plats[:2])
+        # plat_zones = pd.DataFrame.from_records(
+        #     PlatZone.objects.filter(plat__in=plats['id']).values(),
+        #     columns=[
+        #         'id',
+        #         'zone',
+        #         'plat_id',
+        #     ]
+        # )
+        # plat_zone_plat = pd.merge(plats, plat_zones, left_on='id', right_on='plat_id', how='inner', suffixes=['', '_plat_zones'])
+        # plat_zone_plat = plat_zone_plat.drop(columns=['plat_id', 'id_plat_zones'])
+        # print('PLAT ZONE WITH PLATS', plat_zone_plat[:2])
 
-        lot_ledgers_agreements = pd.merge(plat_lot, led_combine, left_on='id_lots', right_on='lot_id', how='inner', suffixes=['_platlots', '_ledcomb'])
-        lot_ledgers_agreements = lot_ledgers_agreements.drop(columns=['id_lots', 'id_ledger', 'lot_id'])
-        lot_ledgers_agreements = lot_ledgers_agreements.rename(index=str, columns={
-            'resolution_number': 'Resolution',
-            'account_name_from': 'Account From',
-            'account_name_to': 'Account To',
-        })
+        # plat_lot = pd.merge(lots, plat_zone_plat, left_on='plat_id', right_on='id', how='inner', suffixes=['_lots', '_plats'])
+        # print('PLAT LOT MERGE', plat_lot[:2])
+        # plat_lot = plat_lot.drop(columns=['id_plats', 'plat_id'])
 
-        concat = pd.concat([lot_payments, lot_ledgers_agreements])
-        concat = concat.drop(columns=['id_lots', 'Date'])
-        concat = concat.rename(index=str, columns={
-            'address_full': 'Lot Address', 'cabinet': 'Cabinet',
-            'zone': 'Plat Zones',
-            'expansion_area': 'Expansion Area',
-            'lot_number': 'Lot ID', 'slide': 'Slide'
-        })
+        # lot_payments = pd.merge(plat_lot, pay_account, left_on='id_lots', right_on='lot_id_id', how='inner', suffixes=['_platlots', '_payaccount'])
+        # lot_payments = lot_payments.drop(columns=['lot_id_id', 'id_payment'])
+        # lot_payments = lot_payments.rename(index=str, columns={'account_name': 'Account From'})
+
+        # lot_ledgers_agreements = pd.merge(plat_lot, led_combine, left_on='id_lots', right_on='lot_id', how='inner', suffixes=['_platlots', '_ledcomb'])
+        # lot_ledgers_agreements = lot_ledgers_agreements.drop(columns=['id_lots', 'id_ledger', 'lot_id'])
+        # lot_ledgers_agreements = lot_ledgers_agreements.rename(index=str, columns={
+        #     'resolution_number': 'Resolution',
+        #     'account_name_from': 'Account From',
+        #     'account_name_to': 'Account To',
+        # })
+
+        concat = pd.concat([payments, ledgers], join='outer')
+        print('CONCAT', concat[:2])
+        print('CONCAT COLUMNS ', list(concat))
+        # concat = concat.drop(columns=['id_lots', 'Date'])
+        # concat = concat.rename(index=str, columns={
+        #     'address_full': 'Lot Address', 'cabinet': 'Cabinet',
+        #     'zone': 'Plat Zones',
+        #     'expansion_area': 'Expansion Area',
+        #     'lot_number': 'Lot ID', 'slide': 'Slide'
+        # })
         concat = concat[[
-            'Lot ID', 'Lot Address', 'Cabinet', 'Slide', 'Plat Zones',
+            'Lot Address', 'Lot ID', 'Cabinet', 'Slide', 'Plat Zones',
             'Expansion Area',
             'Account From', 'Account To', 'Resolution', 
             'Transaction Type', 'Paid By', 'Check', 
             'Non-Sewer', 'Open Space', 'Parks', 'Roads', 'Storm', 
             'Sewer', 'Sewer Cap.', 'Sewer Trans.'
-        ]].sort_values(by=['Lot ID'])
+        ]].sort_values(by=['Lot Address'])
 
         bytesio = BytesIO()
 
