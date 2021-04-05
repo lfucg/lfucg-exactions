@@ -1152,14 +1152,14 @@ class TransactionCSVExportView(View):
         # print('CONCAT COLUMNS ', list(concat))
 
         if len(concat) > 0:
-            concat = concat[[
+            concat = concat.reindex([
                 'Lot Address', 'Lot ID', 'Cabinet', 'Slide', 'Plat Zones',
                 'Expansion Area',
                 'Account From', 'Account To', 'Resolution', 
                 'Transaction Type', 'Paid By', 'Check', 
                 'Non-Sewer', 'Open Space', 'Parks', 'Roads', 'Storm', 
                 'Sewer', 'Sewer Cap.', 'Sewer Trans.'
-            ]].sort_values(by=['Lot Address'])
+            ]).sort_values(by=['Lot Address'])
         else:
             concat = pd.DataFrame(columns=[
                 'Lot Address', 'Lot ID', 'Cabinet', 'Slide', 'Plat Zones',
