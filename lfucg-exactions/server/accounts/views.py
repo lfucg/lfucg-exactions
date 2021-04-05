@@ -1065,6 +1065,7 @@ class TransactionCSVExportView(View):
                 'paid_open_space': 'Open Space', 'paid_parks': 'Parks', 'paid_roads': 'Roads', 
                 'paid_sewer_cap': 'Sewer Cap.', 'paid_sewer_trans': 'Sewer Trans.', 'paid_storm': 'Storm'
             })
+            payments['Sewer', 'Account To', 'Non-Sewer',] = np.nan
             # print('PAYMENTS RENAMED', payments[:2])
         except:
             payments = pd.DataFrame(columns=[
@@ -1073,7 +1074,8 @@ class TransactionCSVExportView(View):
                 'Account From', 'Resolution', 
                 'Transaction Type', 'Paid By', 'Check', 
                 'Open Space', 'Parks', 'Roads', 'Storm', 
-                'Sewer Cap.', 'Sewer Trans.'
+                'Sewer Cap.', 'Sewer Trans.',
+                'Sewer', 'Account To', 'Non-Sewer',
             ])
 
         try:
@@ -1158,8 +1160,7 @@ class TransactionCSVExportView(View):
                 'Expansion Area',
                 'Account From', 'Account To', 'Resolution', 
                 'Transaction Type', 'Paid By', 'Check', 
-                'Non-Sewer', 'Open Space', 'Parks', 'Roads', 'Storm', 
-                'Sewer', 'Sewer Cap.', 'Sewer Trans.',
+                'Non-Sewer', 'Open Space', 'Parks', 'Roads', 'Storm', 'Sewer', 'Sewer Cap.', 'Sewer Trans.',
             ]].sort_values(by=['Lot Address'])
         else:
             concat = pd.DataFrame(columns=[
