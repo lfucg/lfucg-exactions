@@ -1010,16 +1010,6 @@ class TransactionCSVExportView(View):
         ending_date = request.GET.get('ending_date', datetime.date.today())
         print('ENDING DATE', ending_date)
 
-        payments = pd.DataFrame(columns=[
-            'Lot Address', 'Lot ID', 'Cabinet', 'Slide', 'Plat Zones',
-            'Expansion Area',
-            'Account From', 'Resolution', 
-            'Transaction Type', 'Paid By', 'Check', 
-            'Open Space', 'Parks', 'Roads', 'Storm', 
-            'Sewer Cap.', 'Sewer Trans.',
-            'Sewer', 'Account To', 'Non-Sewer',
-        ])
-
         payment_prefetch = Payment.objects.filter(
             entry_date__lte=ending_date, entry_date__gte=starting_date
         ).exclude(
@@ -1060,32 +1050,32 @@ class TransactionCSVExportView(View):
         payment_pandas = pd.DataFrame.from_records(payment_prefetch)
         # print('PAYMENT PANDAS', payment_pandas[:2])
 
-        payments = payment_pandas.rename(index=str, columns={
-            'lot_id__address_full': 'Lot Address',
-            'lot_id__lot_number': 'Lot ID',
-            'lot_id__plat__plat_zone': 'Plat Zones',
-            'lot_id__plat__expansion_area': 'Expansion Area',
-            'lot_id__plat__cabinet': 'Cabinet',
-            'lot_id__plat__slide': 'Slide', 
-            'credit_account__account_name': 'Account From',
-            'credit_source__resolution_number': 'Resolution',
-            'check_number': 'Check', 'entry_date': 'Date',
-            'paid_by': 'Paid By', 'paid_by_type': 'Paid By Type', 'payment_type': 'Transaction Type',
-            'paid_open_space': 'Open Space', 'paid_parks': 'Parks', 'paid_roads': 'Roads', 
-            'paid_sewer_cap': 'Sewer Cap.', 'paid_sewer_trans': 'Sewer Trans.', 'paid_storm': 'Storm'
-        })
-        payments['Sewer', 'Account To', 'Non-Sewer',] = np.nan
+        if payment_pandas.empty:
+            payments = pd.DataFrame(columns=[
+                'Lot Address', 'Lot ID', 'Cabinet', 'Slide', 'Plat Zones',
+                'Expansion Area',
+                'Account From', 'Resolution', 
+                'Transaction Type', 'Paid By', 'Check', 
+                'Open Space', 'Parks', 'Roads', 'Storm', 
+                'Sewer Cap.', 'Sewer Trans.',
+                'Sewer', 'Account To', 'Non-Sewer',
+            ])
+        else:
+            payments = payment_pandas.rename(index=str, columns={
+                'lot_id__address_full': 'Lot Address',
+                'lot_id__lot_number': 'Lot ID',
+                'lot_id__plat__plat_zone': 'Plat Zones',
+                'lot_id__plat__expansion_area': 'Expansion Area',
+                'lot_id__plat__cabinet': 'Cabinet',
+                'lot_id__plat__slide': 'Slide', 
+                'credit_account__account_name': 'Account From',
+                'credit_source__resolution_number': 'Resolution',
+                'check_number': 'Check', 'entry_date': 'Date',
+                'paid_by': 'Paid By', 'paid_by_type': 'Paid By Type', 'payment_type': 'Transaction Type',
+                'paid_open_space': 'Open Space', 'paid_parks': 'Parks', 'paid_roads': 'Roads', 
+                'paid_sewer_cap': 'Sewer Cap.', 'paid_sewer_trans': 'Sewer Trans.', 'paid_storm': 'Storm'
+            })
         # print('PAYMENTS RENAMED', payments[:2])
-
-        ledgers = pd.DataFrame(columns=[
-            'Lot Address', 'Lot ID', 'Cabinet', 'Slide', 'Plat Zones',
-            'Expansion Area',
-            'Account From', 'Account To', 'Resolution', 
-            'Transaction Type', 'Paid By', 'Check', 
-            'Non-Sewer', 'Open Space', 'Parks', 'Roads', 'Storm', 
-            'Sewer', 'Sewer Cap.', 'Sewer Trans.'
-        ])
-
 
         ledger_prefetch = AccountLedger.objects.filter(
             entry_date__lte=ending_date, entry_date__gte=starting_date
@@ -1131,22 +1121,32 @@ class TransactionCSVExportView(View):
         ledger_pandas = pd.DataFrame.from_records(ledger_prefetch)
         # print('LEDGER PANDAS', ledger_pandas[:2])
 
-        ledgers = ledger_pandas.rename(index=str, columns={
-            'lot__address_full': 'Lot Address',
-            'lot__lot_number': 'Lot ID',
-            'lot__plat__plat_zone': 'Plat Zones',
-            'lot__plat__expansion_area': 'Expansion Area',
-            'lot__plat__cabinet': 'Cabinet',
-            'lot__plat__slide': 'Slide', 
-            'account_from__account_name': 'Account From',
-            'account_to__account_name': 'Account To',
-            'agreement__resolution_number': 'Resolution',
-            'entry_date': 'Date', 'entry_type': 'Transaction Type',
-            'non_sewer_credits': 'Non-Sewer', 'open_space': 'Open Space', 'parks': 'Parks', 
-            'roads': 'Roads', 'storm': 'Storm',
-            'sewer_cap': 'Sewer Cap.', 'sewer_credits': 'Sewer', 'sewer_trans': 'Sewer Trans.'
-        })
-        # print('LEDGERS RENAMED', ledgers[:2])
+        if ledger_pandas.empty:
+            ledgers = pd.DataFrame(columns=[
+                'Lot Address', 'Lot ID', 'Cabinet', 'Slide', 'Plat Zones',
+                'Expansion Area',
+                'Account From', 'Account To', 'Resolution', 
+                'Transaction Type', 'Paid By', 'Check', 
+                'Non-Sewer', 'Open Space', 'Parks', 'Roads', 'Storm', 
+                'Sewer', 'Sewer Cap.', 'Sewer Trans.'
+            ])
+        else:
+            ledgers = ledger_pandas.rename(index=str, columns={
+                'lot__address_full': 'Lot Address',
+                'lot__lot_number': 'Lot ID',
+                'lot__plat__plat_zone': 'Plat Zones',
+                'lot__plat__expansion_area': 'Expansion Area',
+                'lot__plat__cabinet': 'Cabinet',
+                'lot__plat__slide': 'Slide', 
+                'account_from__account_name': 'Account From',
+                'account_to__account_name': 'Account To',
+                'agreement__resolution_number': 'Resolution',
+                'entry_date': 'Date', 'entry_type': 'Transaction Type',
+                'non_sewer_credits': 'Non-Sewer', 'open_space': 'Open Space', 'parks': 'Parks', 
+                'roads': 'Roads', 'storm': 'Storm',
+                'sewer_cap': 'Sewer Cap.', 'sewer_credits': 'Sewer', 'sewer_trans': 'Sewer Trans.'
+            })
+            # print('LEDGERS RENAMED', ledgers[:2])
 
         concat = pd.concat([payments, ledgers], join='outer')
         # concat = concat.reindex(['Lot ID'])
