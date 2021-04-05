@@ -1048,7 +1048,7 @@ class TransactionCSVExportView(View):
             'paid_sewer_cap', 'paid_sewer_trans',
         )
         payment_pandas = pd.DataFrame.from_records(payment_prefetch)
-        print('PAYMENT PANDAS', payment_pandas[:2])
+        # print('PAYMENT PANDAS', payment_pandas[:2])
 
         payments = payment_pandas.rename(index=str, columns={
             'lot_id__address_full': 'Lot Address',
@@ -1064,7 +1064,7 @@ class TransactionCSVExportView(View):
             'paid_open_space': 'Open Space', 'paid_parks': 'Parks', 'paid_roads': 'Roads', 
             'paid_sewer_cap': 'Sewer Cap.', 'paid_sewer_trans': 'Sewer Trans.', 'paid_storm': 'Storm'
         })
-        print('PAYMENTS RENAMED', payments[:2])
+        # print('PAYMENTS RENAMED', payments[:2])
 
         ledger_prefetch = AccountLedger.objects.filter(
             entry_date__lte=ending_date, entry_date__gte=starting_date
@@ -1108,7 +1108,7 @@ class TransactionCSVExportView(View):
             'sewer_cap', 'sewer_credits', 'sewer_trans',
         )
         ledger_pandas = pd.DataFrame.from_records(ledger_prefetch)
-        print('LEDGER PANDAS', ledger_pandas[:2])
+        # print('LEDGER PANDAS', ledger_pandas[:2])
 
         ledgers = ledger_pandas.rename(index=str, columns={
             'lot__address_full': 'Lot Address',
@@ -1125,11 +1125,11 @@ class TransactionCSVExportView(View):
             'roads': 'Roads', 'storm': 'Storm',
             'sewer_cap': 'Sewer Cap.', 'sewer_credits': 'Sewer', 'sewer_trans': 'Sewer Trans.'
         })
-        print('LEDGERS RENAMED', ledgers[:2])
+        # print('LEDGERS RENAMED', ledgers[:2])
 
         concat = pd.concat([payments, ledgers], join='outer')
-        print('CONCAT', concat[:2])
-        print('CONCAT COLUMNS ', list(concat))
+        # print('CONCAT', concat[:2])
+        # print('CONCAT COLUMNS ', list(concat))
 
         if len(concat) > 0:
             concat = concat[[
