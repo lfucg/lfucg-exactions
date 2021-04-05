@@ -1070,10 +1070,10 @@ class TransactionCSVExportView(View):
             payments = pd.DataFrame(columns=[
                 'Lot Address', 'Lot ID', 'Cabinet', 'Slide', 'Plat Zones',
                 'Expansion Area',
-                'Account From', 'Account To', 'Resolution', 
+                'Account From', 'Resolution', 
                 'Transaction Type', 'Paid By', 'Check', 
-                'Non-Sewer', 'Open Space', 'Parks', 'Roads', 'Storm', 
-                'Sewer', 'Sewer Cap.', 'Sewer Trans.'
+                'Open Space', 'Parks', 'Roads', 'Storm', 
+                'Sewer Cap.', 'Sewer Trans.'
             ])
 
         try:
