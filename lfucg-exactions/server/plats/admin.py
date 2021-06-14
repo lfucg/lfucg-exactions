@@ -77,6 +77,8 @@ class LotHistoryAdmin(SimpleHistoryAdmin):
         'permit_id',
         'address_number',
         'address_street',
+        'alternative_address_number',
+        'alternative_address_street',
     )
     readonly_fields = (
         'created_by',
@@ -89,7 +91,9 @@ class LotHistoryAdmin(SimpleHistoryAdmin):
         'address_street',
         'address_full',
         'plat__name',
-        'account__account_name'
+        'account__account_name',
+        'alternative_address_number',
+        'alternative_address_street',
     )
     list_filter = (
         'plat',
