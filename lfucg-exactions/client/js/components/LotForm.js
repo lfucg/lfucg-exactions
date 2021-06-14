@@ -229,6 +229,26 @@ class LotForm extends React.Component {
                                                         </select>
                                                     </div>
                                                 </div>
+                                                <div className="row">
+                                                    <div className="col-xs-12">
+                                                        <h3><b>Alternative Address</b></h3>
+                                                    </div>
+                                                </div>
+                                                <div className="row">
+                                                    <div className="col-sm-4">
+                                                        <FormGroup label="Alternative Number" id="alternative_address_number" aria-required="true">
+                                                            <input type="number" className="form-control" placeholder="Alternative Address Number" autoFocus />
+                                                        </FormGroup>
+                                                    </div>
+                                                    <div className="col-sm-8">
+                                                        <FormGroup label="Alternative Street" id="alternative_address_street" aria-required="true">
+                                                            <input type="text" className="form-control" placeholder="Alternative Street" />
+                                                        </FormGroup>
+                                                    </div>
+                                                </div>
+                                                <div className="row">
+
+                                                </div>
                                                 <div className="row form-subheading">
                                                     <h3>Location Identification</h3>
                                                 </div>
@@ -589,6 +609,8 @@ function mapDispatchToProps(dispatch, params) {
                         address_state: data_lot.response.address_state,
                         address_zip: data_lot.response.address_zip,
                         address_zip_show: `${data_lot.response.address_zip},${data_lot.response.address_zip}`,
+                        alternative_address_number: data_lot.response.alternative_address_number,
+                        alternative_address_street: data_lot.response.alternative_address_street,
                         lot_number: data_lot.response.lot_number,
                         parcel_id: data_lot.response.parcel_id,
                         permit_id: data_lot.response.permit_id,
