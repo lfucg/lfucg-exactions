@@ -79,6 +79,8 @@ class PaymentHistoryAdmin(SimpleHistoryAdmin):
     search_fields = (
         'lot_id__address_street', 
         'lot_id__address_number'
+        'lot_id__alternative_address_street', 
+        'lot_id__alternative_address_number'
     )
 
     def account_name(self, obj):
@@ -158,6 +160,7 @@ class AccountLedgerHistoryAdmin(SimpleHistoryAdmin):
         'account_to__account_name',
         'lot__address_full',
         'lot__address_street',
+        'lot__alternative_address_street',
         'agreement__resolution_number',
     )
     raw_id_fields = (
