@@ -170,7 +170,10 @@ class LotSummary extends React.Component {
                                             </div>
                                             <div className="col-xs-12">
                                                 <h3 className="col-xs-12 ">Current Exactions: {!!lots.currentLot.lot_exactions && lots.currentLot.lot_exactions.total_exactions}</h3>
-                                                <p className="col-md-8 col-xs-12">Address: {lots.currentLot.address_full}</p>
+                                                <p className="col-xs-12">Address: {lots.currentLot.address_full}</p>
+                                                {!!lots.currentLot.alternative_address_street && <p className="col-xs-12">
+                                                    Alternative Address: {lots.currentLot.alternative_address_number} {lots.currentLot.alternative_address_street}, Lexington KY
+                                                </p>}
                                                 <p className="col-md-4 col-xs-6">Lot Number: {lots.currentLot.lot_number}</p>
                                                 <p className="col-md-4 col-xs-6 ">Permit ID: {lots.currentLot.permit_id}</p>
                                                 <p className="col-md-4 col-xs-6">Latitude: {lots.currentLot.latitude}</p>
