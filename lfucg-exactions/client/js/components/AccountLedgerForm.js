@@ -634,7 +634,7 @@ function mapDispatchToProps(dispatch, params) {
                 };
                 dispatch(formUpdate(initial_constants));
             }
-            dispatch(getLotExactions());
+            // dispatch(getLotExactions());
         },
         formChange(field) {
             return (e, ...args) => {
