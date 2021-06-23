@@ -58,12 +58,17 @@ class LotExisting extends React.Component {
                     <div key={lot.id} className="col-xs-12">
                         {(currentUser.id || lot.is_approved) && <div>
                             <ExistingPageLinks
-                              linkStart="lot"
-                              approval={lot.is_approved}
-                              title={lot.address_full}
-                              permissionModel="lot"
-                              instanceID={lot.id}
-                              uniqueReport={false}
+                                linkStart="lot"
+                                approval={lot.is_approved}
+                                title={lot.address_full}
+                                subtitle={
+                                    !!lot.alternative_address_street ?
+                                    `(${lot.alternative_address_number} ${lot.alternative_address_street})` :
+                                    null
+                                }
+                                permissionModel="lot"
+                                instanceID={lot.id}
+                                uniqueReport={false}
                             />
                             <div className="row">
                                 <div className="col-sm-offset-1">
