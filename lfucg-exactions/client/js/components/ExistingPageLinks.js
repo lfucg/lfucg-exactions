@@ -15,10 +15,17 @@ class ExistingPageLinks extends React.Component {
             <div className="existing-page-links">
                 <div className={this.props.approval ? 'row form-subheading' : 'row unapproved-heading'}>
                     <div className="col-sm-11">
-                        <h3>
-                            {this.props.title}
-                            {!this.props.approval && <span className="pull-right">Approval Pending</span>}
-                        </h3>
+                        <span>
+                            <h3>
+                                {this.props.title}
+                                {!this.props.approval && <span className="pull-right">Approval Pending</span>}
+                            </h3>
+                            {!!this.props.subtitle &&
+                                <h4 style={{paddingLeft: '20px'}}>
+                                    {this.props.subtitle}
+                                </h4>
+                            }
+                        </span>
                     </div>
                 </div>
                 <div className={this.props.approval ? 'row link-row' : 'row link-row-approval-pending'}>
@@ -65,6 +72,7 @@ ExistingPageLinks.propTypes = {
     linkStart: PropTypes.string,
     approval: PropTypes.bool,
     title: PropTypes.string,
+    subtitle: PropTypes.string,
     instanceID: PropTypes.number,
     permissionModel: PropTypes.string,
     uniqueReport: PropTypes.bool,
