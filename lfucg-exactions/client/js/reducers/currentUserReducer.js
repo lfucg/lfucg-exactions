@@ -1,3 +1,5 @@
+import { map } from 'ramda';
+
 import {
     ME,
     LOGIN,
@@ -10,7 +12,13 @@ const currentUserReducer = (state = {}, action) => {
     } = action;
     switch (endpoint) {
     case ME:
-        return action.response;
+        return {
+            ...state,
+            ...action.response,
+            userGroups: !!action.response && map(
+                (group) => group.name,
+            )(action.response.groups),
+        };
     case LOGIN:
         return action.response.user;
     case LOGOUT:
