@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import PropTypes from 'prop-types';
-import { filter } from 'ramda';
+import { contains } from 'ramda';
 
 import Navbar from './Navbar';
 import Footer from './Footer';
@@ -12,10 +12,14 @@ class DashboardPage extends React.Component {
     render() {
         const {
             currentUser,
+            userGroups,
         } = this.props;
 
-        const userGroup = currentUser && currentUser.groups &&
-            filter(user => user.name === 'Finance')(currentUser.groups);
+        const canViewReports = !!userGroups && (
+            contains('Finance', userGroups) ||
+            contains('Consultant', userGroups)
+        );
+
         return (
             <div className="dashboard">
                 <Navbar />
@@ -61,7 +65,7 @@ class DashboardPage extends React.Component {
                                 <Link to="project-cost" role="link"><h2 className="in-page-link">Project Costs</h2></Link>
                                 <p>Lexington project costs.</p>
                             </div> */}
-                            {((currentUser && currentUser.is_superuser) || (userGroup && userGroup.length > 0)) &&
+                            {((currentUser && currentUser.is_superuser) || canViewReports) &&
                                 <div className="col-md-4 col-sm-6">
                                     <Link to="reports-additional" role="link"><h2 className="in-page-link">Transaction Report</h2></Link>
                                     <p>Create transaction reports for a chosen time frame.</p>
@@ -84,11 +88,13 @@ class DashboardPage extends React.Component {
 
 DashboardPage.propTypes = {
     currentUser: PropTypes.object,
+    userGroups: PropTypes.array,
 };
 
 function mapStateToProps(state) {
     return {
         currentUser: state.currentUser,
+        userGroups: !!state.currentUser && state.currentUser.userGroups,
     };
 }
 

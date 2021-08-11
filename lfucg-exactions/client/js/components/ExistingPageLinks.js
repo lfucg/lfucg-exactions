@@ -2,14 +2,17 @@ import React from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { contains } from 'ramda';
 
 class ExistingPageLinks extends React.Component {
     render() {
         const {
             currentUser,
+            userGroups,
         } = this.props;
 
         const modelPermission = !!currentUser && !!currentUser.permissions && currentUser.permissions[this.props.permissionModel];
+        const groupAllowed = contains('Consultant', userGroups);
 
         return (
             <div className="existing-page-links">
@@ -42,7 +45,7 @@ class ExistingPageLinks extends React.Component {
                         </div>
                         {this.props.uniqueReport &&
                             <div className="col-xs-4">
-                                {modelPermission &&
+                                {(modelPermission || groupAllowed) &&
                                     <Link to={`${this.props.linkStart}/report/${this.props.instanceID}`} aria-label={`${this.props.title} Report`}>
                                         <i className="fa fa-line-chart link-icon col-xs-4 col-sm-3" aria-hidden="true" />
                                         <div className="col-xs-7 col-sm-8 link-label">
@@ -69,6 +72,7 @@ class ExistingPageLinks extends React.Component {
 
 ExistingPageLinks.propTypes = {
     currentUser: PropTypes.object,
+    userGroups: PropTypes.array,
     linkStart: PropTypes.string,
     approval: PropTypes.bool,
     title: PropTypes.string,
@@ -81,6 +85,7 @@ ExistingPageLinks.propTypes = {
 function mapStateToProps(state) {
     return {
         currentUser: state.currentUser,
+        userGroups: !!state.currentUser && state.currentUser.userGroups,
     };
 }
 
