@@ -18,4 +18,5 @@ DATABASES = {
     },
 }
 
+# This is a fake key for tests
 SECRET_KEY = 'l@qwn(9^(i4jslsby9tpdvar3*0af62gzc+gh7tj+_kpu9(wj+'
