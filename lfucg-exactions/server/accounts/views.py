@@ -867,7 +867,12 @@ class AccountLedgerCSVExportView(View):
         return serializer
 
     def get(self, request, *args, **kwargs):
-        ledger_prefetch = AccountLedger.objects.exclude(
+        starting_date = request.GET.get('starting_date', '1970-1-1')
+        ending_date = request.GET.get('ending_date', datetime.date.today())
+
+        ledger_prefetch = AccountLedger.objects.filter(
+            entry_date__lte=ending_date, entry_date__gte=starting_date
+        ).exclude(
             is_active=False
         ).prefetch_related(
             Prefetch(
@@ -931,7 +936,7 @@ class AccountLedgerCSVExportView(View):
         bytesio.seek(0)
 
         response = HttpResponse(bytesio.read(), content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-        response['Content-Disposition'] = 'attachment; filename=Transaction_report_' + '.xlsx'
+        response['Content-Disposition'] = 'attachment; filename=Transaction_report_' + str(starting_date) + '_' + str(ending_date) + '.xlsx'
 
         return response
 
