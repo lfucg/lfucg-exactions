@@ -14,6 +14,8 @@ else
   user = "ubuntu"
 end
 
+ENV['SSL_CERT_FILE']="/etc/ssl/certs/ca-certificates.crt"
+
 virtualenv = "/home/#{user}/env"
 
 # Install git
