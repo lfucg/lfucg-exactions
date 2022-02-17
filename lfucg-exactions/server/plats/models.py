@@ -233,7 +233,9 @@ class Lot(models.Model):
     history = HistoricalRecords()
 
     class Meta:
-        unique_together = (('address_number', 'address_street'),)
+        unique_together = (
+            ('address_number', 'address_street', 'address_unit', 'address_direction'),
+        )
 
     def __str__(self):
         return self.address_full and self.address_full or '%s %s%s, %s, %s %s' % (self.address_number, self.address_street, str(self.address_unit and ' ' + self.address_unit or ''), self.address_city, self.address_state, str(self.address_zip and ' ' + self.address_zip or ''))
