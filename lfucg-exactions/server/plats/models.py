@@ -180,10 +180,10 @@ class Lot(models.Model):
     longitude = models.CharField(max_length=100, null=True, blank=True)
 
     address_number = models.IntegerField()
-    address_direction = models.CharField(max_length=50, null=True, blank=True)
+    address_direction = models.CharField(max_length=50, null=True, blank=True, default='')
     address_street = models.CharField(max_length=200)
     address_suffix = models.CharField(max_length=100, null=True, blank=True)
-    address_unit = models.CharField(max_length=100, null=True, blank=True)
+    address_unit = models.CharField(max_length=100, null=True, blank=True, default='')
     address_city = models.CharField(max_length=100, default='Lexington')
     address_state = models.CharField(max_length=50, choices=STATES, default='KY')
     address_zip = models.CharField(max_length=10, choices=ZIPCODES, blank=True, null=True)
@@ -234,7 +234,8 @@ class Lot(models.Model):
 
     class Meta:
         unique_together = (
-            ('address_number', 'address_street', 'address_unit', 'address_direction'),
+            ('address_number', 'address_street', 'address_full'),
+            # ('address_number', 'address_street', 'address_unit', 'address_direction'),
         )
 
     def __str__(self):
