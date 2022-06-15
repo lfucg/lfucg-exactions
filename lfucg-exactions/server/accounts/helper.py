@@ -13,7 +13,7 @@ from builtins import hasattr
 from postmarker.core import PostmarkClient
 
 from django.contrib.auth.models import User
-from plats.models import Plat, Lot
+from plats.models import Plat, Lot, PlatZone
 from .models import Account, Agreement, AccountLedger, Payment, Project, ProjectCostEstimate, Profile
 from plats.utils import calculate_lot_balance, calculate_plat_balance
 
@@ -328,6 +328,43 @@ def send_email_to_planning_supervisors(sender, instance, **kwargs):
     plat.is_approved=instance.is_approved
     plat.save()
     post_save.connect(send_email_to_planning_supervisors, sender=Plat)
+
+@receiver(post_save, sender=Plat)
+def calculate_current_plat_balance(sender, instance, **kwargs):
+    related_plat = None
+    post_save.disconnect(calculate_current_plat_balance, sender=Plat)
+
+    try:
+        if sender.__name__ == 'Plat':
+            related_plat = Plat.objects.filter(
+                id=instance.id
+            ).prefetch_related(
+                Prefetch(
+                    'plat_zone',
+                    queryset=PlatZone.objects.exclude(is_active=False),
+                )
+            )
+
+        if related_plat:
+            first_plat = related_plat.first()
+
+            plat = first_plat
+            plat_balances = calculate_plat_balance(plat)
+
+            first_plat.current_sewer_due = plat_balances['plat_sewer_due']
+            first_plat.current_non_sewer_due = plat_balances['plat_non_sewer_due']
+            first_plat.modified_by = instance.modified_by
+
+            plat.save(update_fields=[
+                'current_sewer_due',
+                'current_non_sewer_due',
+                'modified_by',
+            ])
+
+    except Exception as exc:
+        print('EXCEPTION calculate_current_plat_balance', exc)
+    
+    post_save.connect(calculate_current_plat_balance, sender=Plat)
 
 @receiver(post_save, sender=Payment)
 @receiver(post_save, sender=AccountLedger)
