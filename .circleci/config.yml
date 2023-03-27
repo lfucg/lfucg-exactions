@@ -22,6 +22,7 @@ jobs:
       - checkout
       - run: gem install faraday -v 1.10.0
       - run: gem install semverse -v 3.0.0
+      - run: gem install public_suffix -v 4.0.7
       - run: gem install dream-ops -v 0.4.2
       - run: dream deploy opsworks -T 4c6e1652-6e5c-4d8c-ba27-33b9abf7c6c3
 
