@@ -1118,17 +1118,22 @@ class TransactionCSVExportView(View):
             'lot_id__plat__plat_zone', 'lot_id__plat__expansion_area',
             'lot_id__plat__cabinet', 'lot_id__plat__slide', 
             'credit_account__account_name', 'credit_source__resolution_number',
-            'check_number', 'entry_date',
+            'check_number', 
+            'entry_date', 'date_modified', 'date_created', 'id',
             'paid_by', 'paid_by_type', 'payment_type',
             'paid_open_space', 'paid_parks', 'paid_roads', 'paid_storm',
             'paid_sewer_cap', 'paid_sewer_trans',
         )
         payment_pandas = pd.DataFrame.from_records(payment_prefetch)
         # print('PAYMENT PANDAS', payment_pandas[:2])
+        payment_pandas['entry_date'] = payment_pandas['entry_date'].astype(str)
+        payment_pandas['date_created'] = payment_pandas['date_created'].astype(str)
+        payment_pandas['date_modified'] = payment_pandas['date_modified'].astype(str)
 
         if payment_pandas.empty:
             payments = pd.DataFrame(columns=[
                 'Lot Address', 'Lot ID', 'Cabinet', 'Slide', 'Plat Zones',
+                'Payment ID', 'Payment Entry Date', 'Payment Date Created', 'Payment Date Modified',
                 'Expansion Area',
                 'Account From', 'Resolution', 
                 'Transaction Type', 'Paid By', 'Check', 
@@ -1140,13 +1145,17 @@ class TransactionCSVExportView(View):
             payments = payment_pandas.rename(index=str, columns={
                 'lot_id__address_full': 'Lot Address',
                 'lot_id__lot_number': 'Lot ID',
+                'id': 'Payment ID',
+                'entry_date': 'Payment Entry Date',
+                'date_created': 'Payment Date Created',
+                'date_modified': 'Payment Date Modified',
                 'lot_id__plat__plat_zone': 'Plat Zones',
                 'lot_id__plat__expansion_area': 'Expansion Area',
                 'lot_id__plat__cabinet': 'Cabinet',
                 'lot_id__plat__slide': 'Slide', 
                 'credit_account__account_name': 'Account From',
                 'credit_source__resolution_number': 'Resolution',
-                'check_number': 'Check', 'entry_date': 'Date',
+                'check_number': 'Check',
                 'paid_by': 'Paid By', 'paid_by_type': 'Paid By Type', 'payment_type': 'Transaction Type',
                 'paid_open_space': 'Open Space', 'paid_parks': 'Parks', 'paid_roads': 'Roads', 
                 'paid_sewer_cap': 'Sewer Cap.', 'paid_sewer_trans': 'Sewer Trans.', 'paid_storm': 'Storm'
@@ -1187,6 +1196,7 @@ class TransactionCSVExportView(View):
         ).values(
             'account_from__account_name', 'account_to__account_name',
             'agreement__resolution_number',
+            'id', 'date_created', 'date_modified',
             'lot__lot_number', 'lot__address_full',
             'lot__plat__plat_zone', 'lot__plat__expansion_area',
             'lot__plat__cabinet', 'lot__plat__slide', 
@@ -1196,11 +1206,16 @@ class TransactionCSVExportView(View):
         )
         ledger_pandas = pd.DataFrame.from_records(ledger_prefetch)
         # print('LEDGER PANDAS', ledger_pandas[:2])
+        ledger_pandas['entry_date'] = ledger_pandas['entry_date'].astype(str)
+        ledger_pandas['date_created'] = ledger_pandas['date_created'].astype(str)
+        ledger_pandas['date_modified'] = ledger_pandas['date_modified'].astype(str)
+
 
         if ledger_pandas.empty:
             ledgers = pd.DataFrame(columns=[
                 'Lot Address', 'Lot ID', 'Cabinet', 'Slide', 'Plat Zones',
-                'Expansion Area',
+                'Ledger ID', 'Ledger Entry Date', 'Ledger Date Created', 'Ledger Date Modified',
+                'Expansion Area', 
                 'Account From', 'Account To', 'Resolution', 
                 'Transaction Type', 'Paid By', 'Check', 
                 'Non-Sewer', 'Open Space', 'Parks', 'Roads', 'Storm', 
@@ -1209,6 +1224,10 @@ class TransactionCSVExportView(View):
         else:
             ledgers = ledger_pandas.rename(index=str, columns={
                 'lot__address_full': 'Lot Address',
+                'id': 'Ledger ID',
+                'entry_date': 'Ledger Entry Date',
+                'date_created': 'Ledger Date Created',
+                'date_modified': 'Ledger Date Modified',
                 'lot__lot_number': 'Lot ID',
                 'lot__plat__plat_zone': 'Plat Zones',
                 'lot__plat__expansion_area': 'Expansion Area',
@@ -1217,7 +1236,7 @@ class TransactionCSVExportView(View):
                 'account_from__account_name': 'Account From',
                 'account_to__account_name': 'Account To',
                 'agreement__resolution_number': 'Resolution',
-                'entry_date': 'Date', 'entry_type': 'Transaction Type',
+                'entry_type': 'Transaction Type',
                 'non_sewer_credits': 'Non-Sewer', 'open_space': 'Open Space', 'parks': 'Parks', 
                 'roads': 'Roads', 'storm': 'Storm',
                 'sewer_cap': 'Sewer Cap.', 'sewer_credits': 'Sewer', 'sewer_trans': 'Sewer Trans.'
@@ -1233,6 +1252,8 @@ class TransactionCSVExportView(View):
             concat = concat[[
                 'Lot Address', 'Lot ID', 'Cabinet', 'Slide', 'Plat Zones',
                 'Expansion Area',
+                'Payment ID', 'Payment Entry Date', 'Payment Date Created', 'Payment Date Modified',
+                'Ledger ID', 'Ledger Entry Date', 'Ledger Date Created', 'Ledger Date Modified',
                 'Account From', 'Account To', 'Resolution', 
                 'Transaction Type', 'Paid By', 'Check', 
                 'Non-Sewer', 'Open Space', 'Parks', 'Roads', 'Storm', 'Sewer', 'Sewer Cap.', 'Sewer Trans.',
@@ -1241,6 +1262,8 @@ class TransactionCSVExportView(View):
             concat = pd.DataFrame(columns=[
                 'Lot Address', 'Lot ID', 'Cabinet', 'Slide', 'Plat Zones',
                 'Expansion Area',
+                'Payment ID', 'Payment Entry Date', 'Payment Date Created', 'Payment Date Modified',
+                'Ledger ID', 'Ledger Entry Date', 'Ledger Date Created', 'Ledger Date Modified',
                 'Account From', 'Account To', 'Resolution', 
                 'Transaction Type', 'Paid By', 'Check', 
                 'Non-Sewer', 'Open Space', 'Parks', 'Roads', 'Storm', 
@@ -1249,7 +1272,7 @@ class TransactionCSVExportView(View):
 
         bytesio = BytesIO()
 
-        writer = pd.ExcelWriter(bytesio)
+        writer = pd.ExcelWriter(bytesio, date_format='YYYY-MM-DD')
         concat.to_excel(writer, 'Transaction Report')
 
         writer.save()
