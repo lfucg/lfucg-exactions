@@ -1126,9 +1126,12 @@ class TransactionCSVExportView(View):
         )
         payment_pandas = pd.DataFrame.from_records(payment_prefetch)
         # print('PAYMENT PANDAS', payment_pandas[:2])
-        payment_pandas['entry_date'] = payment_pandas['entry_date'].astype(str)
-        payment_pandas['date_created'] = payment_pandas['date_created'].astype(str)
-        payment_pandas['date_modified'] = payment_pandas['date_modified'].astype(str)
+        if hasattr(payment_pandas, 'entry_date'):
+            payment_pandas['entry_date'] = payment_pandas['entry_date'].astype(str)
+        if hasattr(payment_pandas, 'date_created'):
+            payment_pandas['date_created'] = payment_pandas['date_created'].astype(str)
+        if hasattr(payment_pandas, 'date_modified'):
+            payment_pandas['date_modified'] = payment_pandas['date_modified'].astype(str)
 
         if payment_pandas.empty:
             payments = pd.DataFrame(columns=[
@@ -1206,9 +1209,12 @@ class TransactionCSVExportView(View):
         )
         ledger_pandas = pd.DataFrame.from_records(ledger_prefetch)
         # print('LEDGER PANDAS', ledger_pandas[:2])
-        ledger_pandas['entry_date'] = ledger_pandas['entry_date'].astype(str)
-        ledger_pandas['date_created'] = ledger_pandas['date_created'].astype(str)
-        ledger_pandas['date_modified'] = ledger_pandas['date_modified'].astype(str)
+        if hasattr(ledger_pandas, 'entry_date'):
+            ledger_pandas['entry_date'] = ledger_pandas['entry_date'].astype(str)
+        if hasattr(ledger_pandas, 'date_created'):
+            ledger_pandas['date_created'] = ledger_pandas['date_created'].astype(str)
+        if hasattr(ledger_pandas, 'date_modified'):
+            ledger_pandas['date_modified'] = ledger_pandas['date_modified'].astype(str)
 
 
         if ledger_pandas.empty:
