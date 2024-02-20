@@ -140,12 +140,22 @@ def calculate_lot_balance(lot_queryset):
             all_exactions['sewer_due'] = all_exactions['sewer_due'] - payment.paid_sewer_trans - payment.paid_sewer_cap
             all_exactions['non_sewer_due'] = all_exactions['non_sewer_due'] - payment.paid_roads - payment.paid_parks - payment.paid_storm - payment.paid_open_space
 
-            all_exactions['dues_sewer_trans_dev'] = all_exactions['dues_sewer_trans_dev'] - payment.paid_sewer_trans
-            all_exactions['dues_sewer_cap_dev'] = all_exactions['dues_sewer_cap_dev'] - payment.paid_sewer_cap
-            all_exactions['dues_roads_dev'] = all_exactions['dues_roads_dev'] - payment.paid_roads
-            all_exactions['dues_parks_dev'] = all_exactions['dues_parks_dev'] - payment.paid_parks
-            all_exactions['dues_storm_dev'] = all_exactions['dues_storm_dev'] - payment.paid_storm
-            all_exactions['dues_open_space_dev'] = all_exactions['dues_open_space_dev'] - payment.paid_open_space
+            own_sum = all_exactions['dues_sewer_trans_own'] + all_exactions['dues_sewer_cap_own'] + all_exactions['dues_roads_own'] + all_exactions['dues_parks_own'] + all_exactions['dues_storm_own'] + all_exactions['dues_open_space_own']
+ 
+            if own_sum > 0:
+                all_exactions['dues_sewer_trans_own'] = all_exactions['dues_sewer_trans_own'] - payment.paid_sewer_trans
+                all_exactions['dues_sewer_cap_own'] = all_exactions['dues_sewer_cap_own'] - payment.paid_sewer_cap
+                all_exactions['dues_roads_own'] = all_exactions['dues_roads_own'] - payment.paid_roads
+                all_exactions['dues_parks_own'] = all_exactions['dues_parks_own'] - payment.paid_parks
+                all_exactions['dues_storm_own'] = all_exactions['dues_storm_own'] - payment.paid_storm
+                all_exactions['dues_open_space_own'] = all_exactions['dues_open_space_own'] - payment.paid_open_space
+            else:
+                all_exactions['dues_sewer_trans_dev'] = all_exactions['dues_sewer_trans_dev'] - payment.paid_sewer_trans
+                all_exactions['dues_sewer_cap_dev'] = all_exactions['dues_sewer_cap_dev'] - payment.paid_sewer_cap
+                all_exactions['dues_roads_dev'] = all_exactions['dues_roads_dev'] - payment.paid_roads
+                all_exactions['dues_parks_dev'] = all_exactions['dues_parks_dev'] - payment.paid_parks
+                all_exactions['dues_storm_dev'] = all_exactions['dues_storm_dev'] - payment.paid_storm
+                all_exactions['dues_open_space_dev'] = all_exactions['dues_open_space_dev'] - payment.paid_open_space
 
     if account_ledgers:
         for ledger in account_ledgers:
