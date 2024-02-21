@@ -10,7 +10,7 @@ jobs:
       - image: circleci/ruby:2.4.4
     steps:
       - checkout
-      - run: gem install faraday -v 2.9.0
+      - run: gem install faraday -v 1.10.3
       - run: gem install semverse -v 3.0.0
       - run: gem install public_suffix -v 4.0.7
       - run: gem install ffi -v 1.15.5
@@ -21,7 +21,7 @@ jobs:
       - image: circleci/ruby:2.4.4
     steps:
       - checkout
-      - run: gem install faraday -v 2.9.0
+      - run: gem install faraday -v 1.10.3
       - run: gem install semverse -v 3.0.0
       - run: gem install public_suffix -v 4.0.7
       - run: gem install ffi -v 1.15.5
