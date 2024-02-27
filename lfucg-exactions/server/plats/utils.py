@@ -137,25 +137,84 @@ def calculate_lot_balance(lot_queryset):
                 payment.paid_open_space
             )
 
+            paid_sewer_trans = Decimal(payment.paid_sewer_trans)
+            paid_sewer_cap = Decimal(payment.paid_sewer_cap)
+            paid_roads = Decimal(payment.paid_roads)
+            paid_parks = Decimal(payment.paid_parks)
+            paid_storm = Decimal(payment.paid_storm)
+            paid_open_space = Decimal(payment.paid_open_space)
+
+            pay_val = {
+                'paid_sewer_trans': paid_sewer_trans,
+                'paid_sewer_cap': paid_sewer_cap,
+                'paid_roads': paid_roads,
+                'paid_parks': paid_parks,
+                'paid_storm': paid_storm,
+                'paid_open_space': paid_open_space,
+            }
+
+
             all_exactions['sewer_due'] = all_exactions['sewer_due'] - payment.paid_sewer_trans - payment.paid_sewer_cap
             all_exactions['non_sewer_due'] = all_exactions['non_sewer_due'] - payment.paid_roads - payment.paid_parks - payment.paid_storm - payment.paid_open_space
 
             own_sum = all_exactions['dues_sewer_trans_own'] + all_exactions['dues_sewer_cap_own'] + all_exactions['dues_roads_own'] + all_exactions['dues_parks_own'] + all_exactions['dues_storm_own'] + all_exactions['dues_open_space_own']
  
             if own_sum > 0:
-                all_exactions['dues_sewer_trans_own'] = all_exactions['dues_sewer_trans_own'] - payment.paid_sewer_trans
-                all_exactions['dues_sewer_cap_own'] = all_exactions['dues_sewer_cap_own'] - payment.paid_sewer_cap
-                all_exactions['dues_roads_own'] = all_exactions['dues_roads_own'] - payment.paid_roads
-                all_exactions['dues_parks_own'] = all_exactions['dues_parks_own'] - payment.paid_parks
-                all_exactions['dues_storm_own'] = all_exactions['dues_storm_own'] - payment.paid_storm
-                all_exactions['dues_open_space_own'] = all_exactions['dues_open_space_own'] - payment.paid_open_space
+                if pay_val['paid_sewer_trans'] > all_exactions['dues_sewer_trans_own']:
+                    tmp_paid_sewer_trans = pay_val['paid_sewer_trans'] - all_exactions['dues_sewer_trans_own']
+                    all_exactions['dues_sewer_trans_dev'] = all_exactions['dues_sewer_trans_dev'] - tmp_paid_sewer_trans
+                    all_exactions['dues_sewer_trans_own'] = 0
+                else:
+                    all_exactions['dues_sewer_trans_own'] = all_exactions['dues_sewer_trans_own'] - pay_val['paid_sewer_trans']
+                    pay_val['paid_sewer_trans'] = 0
+
+                if pay_val['paid_sewer_cap'] > all_exactions['dues_sewer_cap_own']:
+                    tmp_paid_sewer_cap = pay_val['paid_sewer_cap'] - all_exactions['dues_sewer_cap_own']
+                    all_exactions['dues_sewer_cap_dev'] = all_exactions['dues_sewer_cap_dev'] - tmp_paid_sewer_cap
+                    all_exactions['dues_sewer_cap_own'] = 0
+                else:
+                    all_exactions['dues_sewer_cap_own'] = all_exactions['dues_sewer_cap_own'] - pay_val['paid_sewer_cap']
+                    pay_val['paid_sewer_cap'] = 0
+
+                if pay_val['paid_roads'] > all_exactions['dues_roads_own']:
+                    tmp_paid_roads = pay_val['paid_roads'] - all_exactions['dues_roads_own']
+                    all_exactions['dues_roads_dev'] = all_exactions['dues_roads_dev'] - tmp_paid_roads
+                    all_exactions['dues_roads_own'] = 0
+                else:
+                    all_exactions['dues_roads_own'] = all_exactions['dues_roads_own'] - pay_val['paid_roads']
+                    pay_val['paid_roads'] = 0
+
+                if pay_val['paid_parks'] > all_exactions['dues_parks_own']:
+                    tmp_paid_parks = pay_val['paid_parks'] - all_exactions['dues_parks_own']
+                    all_exactions['dues_parks_dev'] = all_exactions['dues_parks_dev'] - tmp_paid_parks
+                    all_exactions['dues_parks_own'] = 0
+                else:
+                    all_exactions['dues_parks_own'] = all_exactions['dues_parks_own'] - pay_val['paid_parks']
+                    pay_val['paid_parks'] = 0
+
+                if pay_val['paid_storm'] > all_exactions['dues_storm_own']:
+                    tmp_paid_storm = pay_val['paid_storm'] - all_exactions['dues_storm_own']
+                    all_exactions['dues_storm_dev'] = all_exactions['dues_storm_dev'] - tmp_paid_storm
+                    all_exactions['dues_storm_own'] = 0
+                else:
+                    all_exactions['dues_storm_own'] = all_exactions['dues_storm_own'] - pay_val['paid_storm']
+                    pay_val['paid_storm'] = 0
+
+                if pay_val['paid_open_space'] > all_exactions['dues_open_space_own']:
+                    tmp_paid_open_space = pay_val['paid_open_space'] - all_exactions['dues_open_space_own']
+                    all_exactions['dues_open_space_dev'] = all_exactions['dues_open_space_dev'] - tmp_paid_open_space
+                    all_exactions['dues_open_space_own'] = 0
+                else:
+                    all_exactions['dues_open_space_own'] = all_exactions['dues_open_space_own'] - pay_val['paid_open_space']
+                    pay_val['paid_open_space'] = 0
+
             else:
-                all_exactions['dues_sewer_trans_dev'] = all_exactions['dues_sewer_trans_dev'] - payment.paid_sewer_trans
-                all_exactions['dues_sewer_cap_dev'] = all_exactions['dues_sewer_cap_dev'] - payment.paid_sewer_cap
-                all_exactions['dues_roads_dev'] = all_exactions['dues_roads_dev'] - payment.paid_roads
-                all_exactions['dues_parks_dev'] = all_exactions['dues_parks_dev'] - payment.paid_parks
-                all_exactions['dues_storm_dev'] = all_exactions['dues_storm_dev'] - payment.paid_storm
-                all_exactions['dues_open_space_dev'] = all_exactions['dues_open_space_dev'] - payment.paid_open_space
+                all_exactions['dues_sewer_trans_dev'] = all_exactions['dues_sewer_trans_dev'] - pay_val['paid_sewer_trans']
+                all_exactions['dues_sewer_cap_dev'] = all_exactions['dues_sewer_cap_dev'] - pay_val['paid_sewer_cap']
+                all_exactions['dues_roads_dev'] = all_exactions['dues_roads_dev'] - pay_val['paid_roads']
+                all_exactions['dues_parks_dev'] = all_exactions['dues_parks_dev'] - pay_val['paid_parks']
+                all_exactions['dues_storm_dev'] = all_exactions['dues_storm_dev'] - pay_val['paid_storm']
+                all_exactions['dues_open_space_dev'] = all_exactions['dues_open_space_dev'] - pay_val['paid_open_space']
 
     if account_ledgers:
         for ledger in account_ledgers:
