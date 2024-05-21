@@ -60,7 +60,7 @@ $ source env/bin/activate
 ```
 
 ```bash
-(env) $ cd lfucg-exactions/lfucg-exactions/server
+(env) $ cd lfucg-exactions/backend
 (env) $ ./manage.py runserver 0.0.0.0:8000
 Performing system checks...
 
@@ -76,7 +76,7 @@ There are two directories with `gulpfile.js` and `package.json` files.  They wil
 ```bash
 $ cd lfucg-exactions/chef
 $ vagrant ssh
-$ cd lfucg-exactions/lfucg-exactions/client
+$ cd lfucg-exactions/frontend
 $ npm run gulp
 [14:54:46] Using gulpfile ~/mobileserve-web-app/mobileserve/dashboard/gulpfile.js
 [14:54:46] Starting 'scripts'...
@@ -91,7 +91,7 @@ $ npm run gulp
 [14:55:33] Finished 'default' after 25 s
 ```
 
-If changes are made to the dashboard `package.json` dependencies, you'll want to fetch and compile the external dependecies one time by running (in ssh client terminal):
+If changes are made to the dashboard `package.json` dependencies, you'll want to fetch and compile the external dependecies one time by running (in ssh frontend terminal):
 
 ```bash
 $ npm install

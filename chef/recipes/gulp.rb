@@ -23,7 +23,7 @@ end
 #   group "ubuntu"
 #   recursive true
 # end
-# link "/home/ubuntu/lfucg-exactions/lfucg-exactions/client/node_modules" do
+# link "/home/ubuntu/lfucg-exactions/lfucg-exactions/frontend/node_modules" do
 #   owner "ubuntu"
 #   group "ubuntu"
 #   to "/home/ubuntu/node_modules"
@@ -31,14 +31,14 @@ end
 
 # Install package.json dependencies
 nodejs_npm "npm-install" do
-  path "/home/#{user}/lfucg-exactions/lfucg-exactions/client"
+  path "/home/#{user}/lfucg-exactions/lfucg-exactions/frontend"
   user "#{user}"
   json true
 end
 
 # Build JS and CSS dependencies
 execute "gulp-build" do
-  cwd "/home/#{user}/lfucg-exactions/lfucg-exactions/client"
+  cwd "/home/#{user}/lfucg-exactions/lfucg-exactions/frontend"
   command "npm run build --max-old-space-size=8192"
   environment "HOME" => "/home/#{user}"
   user "#{user}"

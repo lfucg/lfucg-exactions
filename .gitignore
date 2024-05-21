@@ -1,5 +1,8 @@
 .DS_Store
 
+*.pyc
+__pycache__
+*.sqlite3
 dist/
 
 .env

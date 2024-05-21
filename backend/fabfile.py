@@ -15,10 +15,10 @@ from fabric.operations import _prefix_commands, _prefix_env_vars
 
 # CHANGEME
 env.hosts = ['user@server.example.com']
-env.code_dir = '/srv/www/server'
-env.project_dir = '/srv/www/server/server'
-env.static_root = '/srv/www/server/static/'
-env.virtualenv = '/srv/www/server/.virtualenv'
+env.code_dir = '/srv/www/backend'
+env.project_dir = '/srv/www/backend/server'
+env.static_root = '/srv/www/backend/static/'
+env.virtualenv = '/srv/www/backend/.virtualenv'
 env.code_repo = 'git@github.com:user/server.git'
 env.django_settings_module = 'server.settings'
 
@@ -135,7 +135,7 @@ def webserver_restart():
 def restart():
     """ Restart the wsgi process """
     with cd(env.code_dir):
-        run("touch %s/server/wsgi.py" % env.code_dir)
+        run("touch %s/backend/wsgi.py" % env.code_dir)
 
 
 def build_static():
