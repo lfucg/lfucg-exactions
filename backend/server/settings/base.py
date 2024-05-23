@@ -25,6 +25,7 @@ PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__) + "../../../")
 SUPPORTED_NONLOCALES = ['media', 'admin', 'static']
 
 BASE_DIR = Path(__file__).ancestor(3)
+# TODO: Research using webpack to create dist and update base.py as needed
 DIST_DIR = BASE_DIR.ancestor(1).child("dist")
 TEMPLATE_DIR = BASE_DIR.child("templates")
 STATIC_FILE_DIR = BASE_DIR.child("static")
@@ -35,7 +36,7 @@ LANGUAGE_CODE = 'en-us'
 
 # BASE_URL = "http://52.201.224.95/"
 # Defines the views served for root URLs.
-ROOT_URLCONF = 'server.urls'
+ROOT_URLCONF = 'base.urls'
 
 # Application definition
 INSTALLED_APPS = (
