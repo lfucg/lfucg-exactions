@@ -1,0 +1,69 @@
+name: exactions
+proxy:
+  django:
+    - exactions.lndo.site:8000
+  nodejs:
+    - exactions-node.lndo.site:3000
+
+services:
+  django:
+    type: python:custom
+    overrides:
+      image: exactions_local
+      build:
+        context: ./backend
+        dockerfile: ./Dockerfile
+        args:
+          BUILD_ENVIRONMENT: local
+      user: root
+      environment:
+        PYTHONPATH: /app/backend
+        DJANGO_DEBUG: "True"
+        DATABASE_URL: postgres://postgres:@database.exactions.internal:5432/django
+    ssl: true
+    scanner: false
+
+  database:
+    type: postgres:14
+    creds:
+      user: postgres
+      password: ""
+      database: django
+
+  nodejs:
+    type: "node:8"
+    run:
+      - mkdir -p /home/node/.local
+      - cd /app/frontend && npm i && npm run build
+    scanner: false
+    ssl: true
+
+tooling:
+  python:
+    service: django
+    cmd: python
+  pip:
+    service: django
+    cmd: pip
+  psql:
+    service: database
+    cmd: psql -U postgres -d django
+  manage.py:
+    service: django
+    dir: /app/backend
+    cmd: python manage.py
+  runserver:
+    service: django
+    cmd: python manage.py runserver 0.0.0.0:8000
+    dir: /app/backend
+  node:
+    service: nodejs
+  npm:
+    service: nodejs
+    dir: /app/frontend
+  npx:
+    service: nodejs
+    dir: /app/frontend
+    cmd: npx --prefix=/home/node/.local
+    env:
+      HOME: /home/node

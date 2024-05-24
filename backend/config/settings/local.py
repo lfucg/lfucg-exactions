@@ -21,8 +21,16 @@ ALLOWED_HOSTS = [
     "django.exactions.internal",
 ]
 
+DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
+
 CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+    "default": {
+        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
     }
 }
+
+EMAIL_BACKEND = env(
+    "EMAIL_BACKEND", default="django.core.mail.backends.console.EmailBackend"
+)
+
+POSTMARK_API_KEY = env("POSTMARK_API_KEY", default="fake_key")

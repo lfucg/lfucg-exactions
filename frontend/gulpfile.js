@@ -9,7 +9,7 @@ var webpack = require('webpack-stream');
 gulp.task('sass', function () {
   return gulp.src('./sass/main.scss')
     .pipe(sass().on('error', sass.logError))
-    .pipe(gulp.dest('../dist/css'));
+    .pipe(gulp.dest('../backend/dist/css'));
 });
 
 gulp.task('sass:watch', ['sass'], function () {
@@ -19,7 +19,7 @@ gulp.task('sass:watch', ['sass'], function () {
 gulp.task('scripts', function(){
   gulp.src('./js/main.js', {read: false})
     .pipe(webpack(require('./webpack.config.js')))
-    .pipe(gulp.dest('../dist/js'))
+    .pipe(gulp.dest('../backend/dist/js'))
     .on('error', function (error) {console.log(error)});
 });
 
@@ -29,7 +29,7 @@ gulp.task('scripts:watch', ['scripts'], function () {
 
 gulp.task('images', function() {
   gulp.src('./images/*')
-  .pipe(gulp.dest('../dist/images/'));
+  .pipe(gulp.dest('../backend/dist/images/'));
 });
 
 gulp.task('images:watch', ['images'], function () {
@@ -54,7 +54,7 @@ gulp.task('test:watch', ['test'], function () {
   gulp.watch('./js/**/*.js', ['test']);
 });
 
-gulp.task('build', ['sass', 'scripts'], function() {
+gulp.task('build', ['sass', 'scripts', 'images'], function() {
 });
 
 gulp.task('default', ['sass:watch', 'scripts:watch', 'images:watch'], function () {

@@ -5,7 +5,7 @@ from .base import env
 
 SECRET_KEY = env("DJANGO_SECRET_KEY")
 
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 # Disallow DEBUG to avoid sensitive settings leaking
 DEBUG = False
@@ -13,22 +13,27 @@ DEBUG = False
 SITE_DOMAIN = env("SITE_DOMAIN")
 ALLOWED_HOSTS = [SITE_DOMAIN] + ecs.get_task_ips()
 
-AWS_DEFAULT_REGION = 'us-east-1'
-AWS_STORAGE_BUCKET_NAME = env('AWS_STORAGE_BUCKET_NAME')
-AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID')
-AWS_SECRET_ACCESS_KEY = env('AWS_SECRET_ACCESS_KEY')
-AWS_S3_CUSTOM_DOMAIN = 's3.amazonaws.com/%s' % AWS_STORAGE_BUCKET_NAME
+AWS_DEFAULT_REGION = "us-east-1"
+AWS_STORAGE_BUCKET_NAME = env("AWS_STORAGE_BUCKET_NAME")
+AWS_ACCESS_KEY_ID = env("AWS_ACCESS_KEY_ID")
+AWS_SECRET_ACCESS_KEY = env("AWS_SECRET_ACCESS_KEY")
+AWS_S3_CUSTOM_DOMAIN = "s3.amazonaws.com/%s" % AWS_STORAGE_BUCKET_NAME
+AWS_DEFAULT_ACL = None
 
-AWS_STATIC_LOCATION = 'static'
+AWS_STATIC_LOCATION = "static"
 STATIC_URL = "https://%s/static/" % AWS_S3_CUSTOM_DOMAIN
 
 MEDIA_URL = "https://%s/media/" % AWS_S3_CUSTOM_DOMAIN
 
-STATICFILES_STORAGE = 'custom_storages.StaticStorage'
-DEFAULT_FILE_STORAGE = 'custom_storages.MediaStorage'
+STATICFILES_STORAGE = "custom_storages.StaticStorage"
+DEFAULT_FILE_STORAGE = "custom_storages.MediaStorage"
 
-EMAIL_BACKEND = 'postmark.django_backend.EmailBackend'
-POSTMARK_API_KEY = env('POSTMARK_API_KEY')
+EMAIL_BACKEND = "postmarker.django.EmailBackend"
+POSTMARK = {
+    "TOKEN": env("POSTMARK_API_KEY"),
+    "TEST_MODE": False,
+    "VERBOSITY": 0,
+}
 
 # LOGGING
 # ------------------------------------------------------------------------------
@@ -76,4 +81,3 @@ LOGGING = {
         },
     },
 }
-

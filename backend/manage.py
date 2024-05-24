@@ -2,7 +2,7 @@
 import os, sys
 
 if __name__ == "__main__":
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "server.settings")
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings.local")
     # Add the lib/ directory to the system path
     sys.path.append("lib")
 
