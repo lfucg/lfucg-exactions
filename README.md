@@ -1,101 +1,69 @@
-## LFUCG Exactions
+# LFUCG - Exactions
 
-### Requirements
+## Lando with Docker
 
-#### ChefDK
+Be sure you have the latest release of Lando for local development. The `.lando.yml` at the root of the repo is the driving force behind setting things up.
 
-ChefDK includes several utilities for creating and managing chef resources.  To install it, navigate [here](https://docs.chef.io/install_dk.html#get-package-run-installer) and complete the ___Get Package, Run Installer___ and ___Set System Ruby___ sections.
+https://docs.lando.dev/install
 
-#### VirtualBox / Vagrant
+### Trusting the Lando CA
 
-####LFUCG Exactions requires the ubuntu/xenial64 version of Vagrant box.  
+Follow the instructions [here](https://docs.lando.dev/config/security.html#trusting-the-ca) to trust the local `*.lndo.site` SSL certificate.
 
-To upgrade to version 16 requires uninstalling the current VirtualBox.
+## Get up and running for the first time
 
-```bash
-$ rm -rf /Applications/Vagrant
-$ rm -f /usr/local/bin/vagrant
-$ rm -rf /opt/vagrant
+### Environment Variables
+
+No environment variables are required to begin local development. In order to set optional environment variables found in `backend/config/settings/base.py` or `backend/config/settings/local.py`, copy `.env.example` to a new file named `.env` in the `backend` directory and add any variables you wish to set.
+
+### Lando
+
+From the root directory of the project:
+
+```console
+$ lando start
 ```
 
-The final command is essential to proper operation of VirtualBox.
-
-
-VirtualBox and Vagrant will provide you with a virtual machine to provision using this cookbook.  You can download VirtualBox [here](https://www.virtualbox.org/wiki/Downloads) and Vagrant [here](https://www.vagrantup.com/downloads.html).
-
-Once those are installed, install a couple of vagrant chef plugins (these require updates with VirtualBox updates):
+Run Django migrations:
 
 ```bash
-$ vagrant plugin install vagrant-berkshelf
-$ vagrant plugin install vagrant-omnibus
+$ lando manage.py migrate
 ```
 
-### Development
-
-After installing `vagrant` and the chef plugins, you can start a vagrant vm using `vagrant up` from the chef directory:
+Create a super user for testing:
 
 ```bash
-$ vagrant up
-Initializing cookbook submodule ...     [DONE]
-Initializing local.py with defaults ... [DONE]
-Starting vm ...
-Bringing machine 'default' up with 'virtualbox' provider...
-    default: The Berkshelf shelf is at "/Users/user/.berkshelf/vagrant-berkshelf/shelves/berkshelf20160506-3919-1cap0ms-default"
-==> default: Sharing cookbooks with VM
-==> default: Importing base box 'ubuntu/trusty64'...
-==> default: Matching MAC address for NAT networking...
-==> default: Checking if box 'ubuntu/trusty64' is up to date...
-...
+$ lando manage.py createsuperuser
 ```
 
-This will initialize the cookobook, create a default `local.py` (if it doesn't already exist), and start a VirtualBox vm using the cookbook to provision it.  Most importantly, this shares the `lfucg-exactions` directory with the vm.  Any changes made to files within this directory are mirrored in the coupled OS.
+### Frontend
 
-### Work Flow
-
-Once the vm is up and running, you can ssh in to activate the virtual environment and start the django server:
+#### Build the frontend
 
 ```bash
-$ vagrant ssh
-$ source env/bin/activate
+$ lando npm run build
 ```
 
+## Workflow
+
+To start the exactions server, use the following:
+
 ```bash
-(env) $ cd lfucg-exactions/lfucg-exactions/server
-(env) $ ./manage.py runserver 0.0.0.0:8000
+$ lando runserver
 Performing system checks...
 
-System check identified no issues (0 silenced).
-May 06, 2016 - 09:17:57
-Django version 1.8, using settings 'lfucg-exactions.settings'
+System check identified no issues (1 silenced).
+May 23, 2024 - 23:51:48
+Django version 1.11.29, using settings 'config.settings.local'
 Starting development server at http://0.0.0.0:8000/
 Quit the server with CONTROL-C.
 ```
 
-There are two directories with `gulpfile.js` and `package.json` files.  They will already have been built once by the cookbook, but when actively developing on the files that gulp builds, you'll want gulp watching for any changes.  For the dashboard (in a new terminal):
+If you make changes to the frontend, you will need to rebuild the frontend using the `build` script. alternatively, you can use the `gulp` script to watch for changes and rebuild the frontend automatically when changes are made. You must refresh the page to see the changes.
 
 ```bash
-$ cd lfucg-exactions/chef
-$ vagrant ssh
-$ cd lfucg-exactions/lfucg-exactions/client
-$ npm run gulp
-[14:54:46] Using gulpfile ~/mobileserve-web-app/mobileserve/dashboard/gulpfile.js
-[14:54:46] Starting 'scripts'...
-[14:54:46] Starting 'less'...
-[14:54:46] Finished 'less' after 5.98 ms
-[14:54:46] Starting 'celery'...
-[14:54:46] Starting 'celery-beat'...
-[14:54:56] Finished 'celery-beat' after 9.47 s
-[14:54:56] Finished 'celery' after 9.48 s
-[14:55:07] Finished 'scripts' after 21 s
-[14:55:07] Starting 'default'...
-[14:55:33] Finished 'default' after 25 s
+$ lando npm run gulp
 ```
 
-If changes are made to the dashboard `package.json` dependencies, you'll want to fetch and compile the external dependecies one time by running (in ssh client terminal):
-
-```bash
-$ npm install
-$ npm run gulp build
-```
-
-In local.py comment out STATIC_ROOT
+The frontend is accessible at [https://exactions.lndo.site](http://exactions.lndo.site).
+The admin site is accessible at [https://exactions.lndo.site/admin](http://exactions.lndo.site/admin).

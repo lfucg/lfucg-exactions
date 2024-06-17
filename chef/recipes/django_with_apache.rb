@@ -15,6 +15,6 @@ end
 
 bash "collectstatic" do
   code "echo 'yes' | #{virtualenv}/bin/python manage.py collectstatic"
-  cwd "/home/ubuntu/lfucg-exactions/lfucg-exactions/server"
+  cwd "/home/ubuntu/lfucg-exactions/lfucg-exactions/backend"
 end
 

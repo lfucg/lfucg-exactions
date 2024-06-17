@@ -33,4 +33,4 @@
 
 WSGIDaemonProcess exactions python-path=<%= @params[:docroot] %>:/home/ubuntu/env/lib/python3.6/site-packages
 WSGIProcessGroup exactions
-WSGIScriptAlias / <%= @params[:docroot] %>/server/wsgi.py
+WSGIScriptAlias / <%= @params[:docroot] %>/backend/wsgi.py

@@ -1,0 +1,8 @@
+-r base.txt
+
+django-debug-toolbar==1.8
+
+# Testing
+coverage
+pyflakes
+pylint
