@@ -13,11 +13,12 @@ new AppEnvironment(app, {
   sharedEnv,
 });
 
-// new AppEnvironment(app, {
-//   envType: 'prod',
-//   sharedEnv,
-//   certificate: sharedEnv.prodCertificate,
-//   config: {
-
-//   },
-// });
+new AppEnvironment(app, {
+  envType: 'prod',
+  sharedEnv,
+  certificate: sharedEnv.prodCertificate,
+  domainZone: sharedEnv.prodDomainZone,
+  config: {
+    SITE_DOMAIN: PROD_DOMAIN,
+  },
+});
