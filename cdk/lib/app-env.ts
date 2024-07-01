@@ -9,7 +9,6 @@ import * as secmgr from 'aws-cdk-lib/aws-secretsmanager';
 import { Construct } from 'constructs';
 import * as core from '@apaxsoftware/cdk-core';
 
-import AppDatabase from './app-database';
 import { DjangoEnvVars } from './django/django-env-vars';
 import DjangoService from './django/django-service';
 import { SharedEnvironment } from './shared-env';

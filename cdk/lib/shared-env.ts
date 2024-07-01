@@ -1,7 +1,6 @@
 import * as certmgr from 'aws-cdk-lib/aws-certificatemanager';
 import * as ec2 from 'aws-cdk-lib/aws-ec2';
 import * as route53 from 'aws-cdk-lib/aws-route53';
-import * as secmgr from 'aws-cdk-lib/aws-secretsmanager';
 import * as core from '@apaxsoftware/cdk-core';
 import { Construct } from 'constructs';
 import AppDatabase from './app-database';

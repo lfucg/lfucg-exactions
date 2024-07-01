@@ -4,7 +4,6 @@ import * as ec2 from 'aws-cdk-lib/aws-ec2';
 import * as ecs from 'aws-cdk-lib/aws-ecs';
 import * as rds from 'aws-cdk-lib/aws-rds';
 import * as secmgr from 'aws-cdk-lib/aws-secretsmanager';
-import * as core from '@apaxsoftware/cdk-core';
 
 export interface AppDatabaseProps {
   vpc: ec2.IVpc;
@@ -50,13 +49,10 @@ export default class AppDatabase extends Construct {
     const engine = rds.DatabaseInstanceEngine.postgres({
       version: rds.PostgresEngineVersion.VER_14_10,
     });
-    
+
     this.database = new rds.DatabaseInstance(this, 'Database-exactions', {
       instanceIdentifier: 'exactions',
-      instanceType: ec2.InstanceType.of(
-        ec2.InstanceClass.T3,
-        ec2.InstanceSize.SMALL,
-      ),
+      instanceType: ec2.InstanceType.of(ec2.InstanceClass.T3, ec2.InstanceSize.SMALL),
       engine,
       vpc,
       vpcSubnets: {
