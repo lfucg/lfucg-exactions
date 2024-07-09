@@ -16,7 +16,7 @@ import environ
 from django.core.exceptions import ImproperlyConfigured
 from pathlib import Path
 
-BASE_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 env = environ.Env()
 
 # OS environment variables take precedence over variables from .env
