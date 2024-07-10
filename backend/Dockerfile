@@ -1,4 +1,4 @@
-ARG PYTHON_VERSION=3.7-slim-bullseye
+ARG PYTHON_VERSION=3.5.10-slim-buster
 
 # define an alias for the specfic python version used in this file.
 FROM python:${PYTHON_VERSION} as python
@@ -41,7 +41,7 @@ ENV BUILD_ENV ${BUILD_ENVIRONMENT}
 WORKDIR ${APP_HOME}
 
 RUN addgroup --system django \
-    && adduser --system --ingroup django django
+  && adduser --system --ingroup django django
 
 ENV ACCEPT_EULA Y
 

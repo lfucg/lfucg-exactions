@@ -17,7 +17,7 @@ def get_task_ips():
 
     addresses = []
     try:
-        r = requests.get(f"{endpoint}/task", timeout=0.01)
+        r = requests.get("{0}/task".format(endpoint), timeout=0.01)
     except requests.exceptions.RequestException as e:
         print("Failed to retrieve ECS private IPs")
         print(str(e))
