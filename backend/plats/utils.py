@@ -245,15 +245,14 @@ def calculate_lot_balance(lot_queryset):
                 led_keys = list(led_calc.keys())
 
                 new_led, new_dev, new_own = subtract_ledger_values(
-                    led_calc[led_keys[0]],
-                    led_calc[led_keys[1]],
-                    led_calc[led_keys[2]]
+                    led_calc[[i for i in led_keys if 'ledger' in i][0]],
+                    led_calc[[i for i in led_keys if 'dev' in i][0]],
+                    led_calc[[i for i in led_keys if 'own' in i][0]]
                 )
 
                 ledger_set[led_keys[0]] = new_led
                 all_exactions[led_keys[1]] = new_dev
                 all_exactions[led_keys[2]] = new_own
-
 
     return all_exactions
 

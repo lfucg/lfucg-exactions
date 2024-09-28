@@ -106,6 +106,22 @@ def lot_update_exactions_and_email_supervisor(sender, instance, **kwargs):
     post_save.disconnect(lot_update_exactions_and_email_supervisor, sender=Lot)
     related_lot = Lot.objects.get(id=instance.id)
 
+    all_attributes = [
+        "current_dues_roads_dev",
+        "current_dues_roads_own",
+        "current_dues_sewer_trans_dev",
+        "current_dues_sewer_trans_own",
+        "current_dues_sewer_cap_dev",
+        "current_dues_sewer_cap_own",
+        "current_dues_parks_dev",
+        "current_dues_parks_own",
+        "current_dues_storm_dev",
+        "current_dues_storm_own",
+        "current_dues_open_space_dev",
+        "current_dues_open_space_own",
+        "is_approved"
+    ]
+
     if instance.modified_by.is_superuser or (
         (
             hasattr(instance.modified_by, "profile")
@@ -124,8 +140,8 @@ def lot_update_exactions_and_email_supervisor(sender, instance, **kwargs):
             profile.save()
     elif hasattr(related_lot, "is_approved") and (not related_lot.is_approved):
         return
-    elif kwargs["update_fields"] is not None and hasattr(
-        kwargs["update_fields"], "current_dues_roads_dev"
+    elif kwargs["update_fields"] is not None and any(
+        hasattr(kwargs["update_fields"], attr) for attr in all_attributes
     ):
         return
     else:
@@ -173,9 +189,9 @@ def lot_update_exactions_and_email_supervisor(sender, instance, **kwargs):
         related_lot.is_approved = False
 
     if related_lot is not None:
-        if not (
+        if (
             kwargs["update_fields"] is not None
-            and hasattr(kwargs["update_fields"], "current_dues_roads_dev")
+            and set(list(kwargs["update_fields"])).intersection(all_attributes)
         ):
             lot_balances = calculate_lot_balance(related_lot)
 
