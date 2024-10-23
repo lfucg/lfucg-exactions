@@ -11,7 +11,7 @@ SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 DEBUG = False
 
 SITE_DOMAIN = env("SITE_DOMAIN")
-ALLOWED_HOSTS = [SITE_DOMAIN] + ecs.get_task_ips()
+ALLOWED_HOSTS = ["altexactions.lexingtonky.gov", SITE_DOMAIN] + ecs.get_task_ips()
 
 AWS_DEFAULT_REGION = "us-east-1"
 AWS_STORAGE_BUCKET_NAME = env("AWS_STORAGE_BUCKET_NAME")
