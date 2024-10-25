@@ -12,6 +12,10 @@ DEBUG = False
 
 SITE_DOMAIN = env("SITE_DOMAIN")
 ALLOWED_HOSTS = ["altexactions.lexingtonky.gov", SITE_DOMAIN] + ecs.get_task_ips()
+CSRF_TRUSTED_ORIGINS = [
+    "https://altexactions.lexingtonky.gov",
+    "https://" + SITE_DOMAIN,
+]
 
 AWS_DEFAULT_REGION = "us-east-1"
 AWS_STORAGE_BUCKET_NAME = env("AWS_STORAGE_BUCKET_NAME")
