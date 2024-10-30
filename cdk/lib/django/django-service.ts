@@ -38,11 +38,11 @@ export default class DjangoService extends Construct {
       memoryLimitMiB: 2048,
     };
 
-    // if (env.envType === 'prod') {
-    //   serviceSpecs.desiredCount = 2;
-    //   serviceSpecs.cpu = 2048;
-    //   serviceSpecs.memoryLimitMiB = 4096;
-    // }
+    if (env.envType === 'prod') {
+      // serviceSpecs.desiredCount = 2;
+      serviceSpecs.cpu = 1024 * 4;
+      serviceSpecs.memoryLimitMiB = 1024 * 8;
+    }
 
     const service = new ecsp.ApplicationLoadBalancedFargateService(this, 'FargateService', {
       ...serviceSpecs,
