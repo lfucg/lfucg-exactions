@@ -191,19 +191,20 @@ class LotQuickViewSet(viewsets.ModelViewSet):
     queryset = Lot.objects.none()
     filter_backends = (filters.DjangoFilterBackend,)
     filter_fields = ('plat',)
+    pagination_class = PageNumberPagination
 
     def get_queryset(self):
-        queryset = Lot.objects.filter(is_active=True)
+        # queryset = Lot.objects.filter(is_active=True)
 
-        PageNumberPagination.page_size = 0
-        paginatePage = self.request.query_params.get('paginatePage', None)
-        pageSize = self.request.query_params.get('pageSize', settings.PAGINATION_SIZE)
+        # PageNumberPagination.page_size = 0
+        # paginatePage = self.request.query_params.get('paginatePage', None)
+        # pageSize = self.request.query_params.get('pageSize', settings.PAGINATION_SIZE, 10)
 
-        if paginatePage is not None:
-            PageNumberPagination.page_size = 10
-            pagination_class = PageNumberPagination
+        # if paginatePage is not None:
+        #     PageNumberPagination.page_size = pageSize
+        #     pagination_class = PageNumberPagination
         
-        return queryset.order_by('address_street', 'address_number', 'address_unit')
+        return Lot.objects.filter(is_active=True).order_by('address_street', 'address_number', 'address_unit')
 
 class LotExactionsViewSet(viewsets.ModelViewSet):
     serializer_class = LotExactionsSerializer

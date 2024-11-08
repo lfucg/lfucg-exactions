@@ -203,11 +203,11 @@ class ProjectCostEstimateSerializer(serializers.ModelSerializer):
 
     def get_total_costs(self, obj):
         total = (
-            obj.land_cost
-            + obj.design_cost
-            + obj.construction_cost
-            + obj.admin_cost
-            + obj.management_cost
+            obj.land_cost +
+            obj.design_cost +
+            obj.construction_cost +
+            obj.admin_cost +
+            obj.management_cost
         )
         return "${:,.2f}".format(total)
 
