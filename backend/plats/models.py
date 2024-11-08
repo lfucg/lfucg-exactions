@@ -42,11 +42,11 @@ class Subdivision(models.Model):
         try:
             existing_subdivision = Subdivision.objects.get(id=self.id)
             if existing_subdivision.exists():
-                created_by = existing_subdivision.created_by
+                self.created_by = existing_subdivision.created_by
             else:
-                created_by = self.created_by
+                self.created_by = self.created_by
         except:
-            created_by = self.created_by
+            self.created_by = self.created_by
 
         super(Subdivision, self).save(*args, **kwargs)
 
@@ -128,9 +128,9 @@ class Plat(models.Model):
         try:
             existing_plat = Plat.objects.get(id=self.id)
             if existing_plat is not None:
-                created_by = existing_plat.created_by
+                self.created_by = existing_plat.created_by
         except:
-            created_by = self.created_by
+            self.created_by = self.created_by
 
         plat_zones = self.plat_zone.all()
         if plat_zones is not None:
@@ -246,12 +246,20 @@ class Lot(models.Model):
         try:
             existing_lot = Lot.objects.get(id=self.id)
             if existing_lot is not None:
-                created_by = existing_lot.created_by
+                self.created_by = existing_lot.created_by
             else:
-                created_by = self.created_by
-                account = self.plat.account
+                self.created_by = self.created_by
+                self.account = self.plat.account
         except:
-            created_by = self.created_by
+            if hasattr(self, 'created_by') and self.created_by is not None:
+                self.created_by = self.created_by
+            elif hasattr(self, 'created_by_id') and self.created_by_id is not None:
+                user = User.objects.get(id=self.created_by_id)
+                self.created_by = user
+            else:
+                user = User.objects.get(id=self._history_user.id) if self._history_user is not None else None
+                self.created_by = user
+                self.modified_by = user
 
         plat_expansion_area = plat.expansion_area
         if plat_expansion_area == 'EA-1':
