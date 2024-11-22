@@ -282,7 +282,14 @@ def remaining_plat_lots(plat):
 
 def update_entry(self, request, pk):
     existing_object = self.get_object()
-    setattr(existing_object, 'modified_by', request.user)
+    user = request.user
+    setattr(existing_object, 'modified_by', user)
+
+    profile = Profile.objects.filter(user=user).first()
+    is_supervisor = getattr(profile, 'is_supervisor')
+    if is_supervisor and hasattr(existing_object, 'is_approved'):
+        setattr(existing_object, 'is_approved', True)
+
     serializer = self.get_serializer(existing_object, data=request.data, partial=True)
     if serializer.is_valid(raise_exception=True):
         self.perform_update(serializer)
