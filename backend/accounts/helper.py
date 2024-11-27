@@ -190,11 +190,12 @@ def lot_update_exactions_and_email_supervisor(sender, instance, **kwargs):
 
     if related_lot is not None:
         if (
-            kwargs["update_fields"] is not None
-            and set(list(kwargs["update_fields"])).intersection(all_attributes)
+            (kwargs["update_fields"] is not None
+            and set(list(kwargs["update_fields"])).intersection(all_attributes))
+            or kwargs["created"]
         ):
             lot_balances = calculate_lot_balance(related_lot)
-
+            
             related_lot.current_dues_roads_dev = lot_balances["dues_roads_dev"]
             related_lot.current_dues_roads_own = lot_balances["dues_roads_own"]
             related_lot.current_dues_sewer_trans_dev = lot_balances[
