@@ -138,8 +138,6 @@ def lot_update_exactions_and_email_supervisor(sender, instance, **kwargs):
             profile = Profile.objects.filter(user=user).first()
             profile.is_approval_required = False
             profile.save()
-    elif hasattr(related_lot, "is_approved") and (not related_lot.is_approved):
-        return
     elif kwargs["update_fields"] is not None and any(
         hasattr(kwargs["update_fields"], attr) for attr in all_attributes
     ):
