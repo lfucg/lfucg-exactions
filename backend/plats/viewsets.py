@@ -194,9 +194,9 @@ class LotQuickViewSet(viewsets.ModelViewSet):
     pagination_class = PageNumberPagination
 
     def get_queryset(self):
-        # queryset = Lot.objects.filter(is_active=True)
+        queryset = Lot.objects.filter(is_active=True)
 
-        # PageNumberPagination.page_size = 0
+        PageNumberPagination.page_size = 0
         # paginatePage = self.request.query_params.get('paginatePage', None)
         # pageSize = self.request.query_params.get('pageSize', settings.PAGINATION_SIZE, 10)
 
@@ -204,7 +204,7 @@ class LotQuickViewSet(viewsets.ModelViewSet):
         #     PageNumberPagination.page_size = pageSize
         #     pagination_class = PageNumberPagination
         
-        return Lot.objects.filter(is_active=True).order_by('address_street', 'address_number', 'address_unit')
+        return queryset.order_by('address_street', 'address_number', 'address_unit')
 
 class LotExactionsViewSet(viewsets.ModelViewSet):
     serializer_class = LotExactionsSerializer

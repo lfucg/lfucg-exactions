@@ -169,7 +169,9 @@ class AccountLedgerForm extends React.Component {
                                                 </select>
                                             </div>
                                             <div className="col-sm-6 form-group">
-                                                <label htmlFor="plat_lot" className="form-label" id="plat_lot" aria-label="Apply By Plat or Lot">Apply By Plat or Lot</label>
+                                                <label htmlFor="plat_lot" className="form-label" id="plat_lot" aria-label="Apply By Plat or Lot">
+                                                    {activeForm.entry_type === 'USE' ? '* ' : ''}Apply By Plat or Lot
+                                                </label>
                                                 <select
                                                     className="form-control"
                                                     id="plat_lot" 
