@@ -38,13 +38,12 @@ def subtract_ledger_values(ledger_value, lot_dev_value, lot_own_value):
     should_escape = False
 
     while new_led > 0 and not should_escape:
-        if new_dev >= new_led or new_own >= new_led:
-            if new_dev >= new_led:
-                new_dev -= new_led
-                new_led -= new_led
-            if new_own >= new_led:
-                new_own -= new_led
-                new_led -= new_led
+        if new_dev >= new_led and new_own == 0:
+            new_dev -= new_led
+            new_led -= new_led
+        elif new_own >= new_led and new_dev == 0:
+            new_own -= new_led
+            new_led -= new_led
         elif (new_dev + new_own) >= new_led:
             if new_dev > 0:
                 new_led -= new_dev
@@ -210,11 +209,17 @@ def calculate_lot_balance(lot_queryset):
 
             else:
                 all_exactions['dues_sewer_trans_dev'] = all_exactions['dues_sewer_trans_dev'] - pay_val['paid_sewer_trans']
+                all_exactions['dues_sewer_trans_own'] = 0
                 all_exactions['dues_sewer_cap_dev'] = all_exactions['dues_sewer_cap_dev'] - pay_val['paid_sewer_cap']
+                all_exactions['dues_sewer_cap_own'] = 0
                 all_exactions['dues_roads_dev'] = all_exactions['dues_roads_dev'] - pay_val['paid_roads']
+                all_exactions['dues_roads_own'] = 0
                 all_exactions['dues_parks_dev'] = all_exactions['dues_parks_dev'] - pay_val['paid_parks']
+                all_exactions['dues_parks_own'] = 0
                 all_exactions['dues_storm_dev'] = all_exactions['dues_storm_dev'] - pay_val['paid_storm']
+                all_exactions['dues_storm_own'] = 0
                 all_exactions['dues_open_space_dev'] = all_exactions['dues_open_space_dev'] - pay_val['paid_open_space']
+                all_exactions['dues_open_space_own'] = 0
 
     if account_ledgers:
         for ledger in account_ledgers:
@@ -244,15 +249,19 @@ def calculate_lot_balance(lot_queryset):
             for led_calc in ledger_calc_set:
                 led_keys = list(led_calc.keys())
 
+                ledger_key = [i for i in led_keys if 'ledger' in i][0]
+                dev_key = [i for i in led_keys if 'dev' in i][0]
+                own_key = [i for i in led_keys if 'own' in i][0]
+
                 new_led, new_dev, new_own = subtract_ledger_values(
-                    led_calc[[i for i in led_keys if 'ledger' in i][0]],
-                    led_calc[[i for i in led_keys if 'dev' in i][0]],
-                    led_calc[[i for i in led_keys if 'own' in i][0]]
+                    led_calc[ledger_key] or 0,
+                    led_calc[dev_key] or 0,
+                    led_calc[own_key] or 0
                 )
 
-                ledger_set[led_keys[0]] = new_led
-                all_exactions[led_keys[1]] = new_dev
-                all_exactions[led_keys[2]] = new_own
+                ledger_set[ledger_key] = new_led
+                all_exactions[dev_key] = new_dev
+                all_exactions[own_key] = new_own
 
     return all_exactions
 
