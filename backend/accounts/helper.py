@@ -2,7 +2,7 @@ from django.conf import settings
 from django.template.loader import get_template
 from django.core.mail import send_mail
 from django.db.models import Q, Prefetch
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
@@ -421,10 +421,14 @@ def calculate_current_plat_balance(sender, instance, **kwargs):
 
 @receiver(post_save, sender=Payment)
 @receiver(post_save, sender=AccountLedger)
+@receiver(post_delete, sender=Payment)
+@receiver(post_delete, sender=AccountLedger)
 def calculate_current_lot_balance(sender, instance, **kwargs):
     related_lot = None
     post_save.disconnect(calculate_current_lot_balance, sender=AccountLedger)
     post_save.disconnect(calculate_current_lot_balance, sender=Payment)
+    post_delete.disconnect(calculate_current_lot_balance, sender=AccountLedger)
+    post_delete.disconnect(calculate_current_lot_balance, sender=Payment)
 
     try:
         if sender.__name__ == "Payment":
@@ -511,11 +515,15 @@ def calculate_current_lot_balance(sender, instance, **kwargs):
 
     post_save.connect(calculate_current_lot_balance, sender=AccountLedger)
     post_save.connect(calculate_current_lot_balance, sender=Payment)
+    post_delete.connect(calculate_current_lot_balance, sender=AccountLedger)
+    post_delete.connect(calculate_current_lot_balance, sender=Payment)
 
 
 @receiver(post_save, sender=AccountLedger)
+@receiver(post_delete, sender=AccountLedger)
 def calculate_current_account_balance(sender, instance, **kwargs):
     post_save.disconnect(calculate_current_account_balance, sender=AccountLedger)
+    post_delete.disconnect(calculate_current_account_balance, sender=AccountLedger)
 
     account_to = None
     account_from = None
@@ -543,3 +551,4 @@ def calculate_current_account_balance(sender, instance, **kwargs):
         super(Account, account_from).save()
 
     post_save.connect(calculate_current_account_balance, sender=AccountLedger)
+    post_delete.connect(calculate_current_account_balance, sender=AccountLedger)
