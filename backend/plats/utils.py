@@ -38,26 +38,26 @@ def subtract_ledger_values(ledger_value, lot_dev_value, lot_own_value):
     should_escape = False
 
     while new_led > 0 and not should_escape:
-        if new_dev >= new_led and new_own == 0:
-            new_dev -= new_led
-            new_led -= new_led
-        elif new_own >= new_led and new_dev == 0:
+        if new_own >= new_led and new_dev == 0:
             new_own -= new_led
             new_led -= new_led
+        elif new_dev >= new_led and new_own == 0:
+            new_dev -= new_led
+            new_led -= new_led
         elif (new_dev + new_own) >= new_led:
-            if new_dev > 0:
-                new_led -= new_dev
-                new_dev -= new_dev
             if new_own > 0:
                 new_led -= new_own
                 new_own -= new_own
-        elif new_dev > 0 or new_own > 0:
             if new_dev > 0:
-                new_dev -= new_dev
                 new_led -= new_dev
+                new_dev -= new_dev
+        elif new_led > 0:
             if new_own > 0:
                 new_own -= new_own
                 new_led -= new_own
+            else:
+                new_dev -= new_led
+                new_led -= new_led
         else:
             should_escape = True
 
@@ -65,8 +65,8 @@ def subtract_ledger_values(ledger_value, lot_dev_value, lot_own_value):
 
 def calculate_lot_balance(lot_queryset):
     lot = lot_queryset
-    payments = lot_queryset.payment.all() if hasattr(lot_queryset, 'payment') else None
-    account_ledgers = lot_queryset.ledger_lot.all() if hasattr(lot_queryset, 'ledger_lot') else None
+    payments = lot_queryset.payment.filter(is_active=True) if hasattr(lot_queryset, 'payment') else None
+    account_ledgers = lot_queryset.ledger_lot.filter(is_active=True) if hasattr(lot_queryset, 'ledger_lot') else None
 
     dues_roads_dev = Decimal(lot.dues_roads_dev)
     dues_roads_own = Decimal(lot.dues_roads_own)
@@ -123,7 +123,7 @@ def calculate_lot_balance(lot_queryset):
         'dues_open_space_own': dues_open_space_own,
     }
 
-    if payments:
+    if payments is not None:
         for payment in payments:
             all_exactions['sewer_payment'] = all_exactions['sewer_payment'] + Decimal(
                 payment.paid_sewer_trans +
@@ -221,7 +221,7 @@ def calculate_lot_balance(lot_queryset):
                 all_exactions['dues_open_space_dev'] = all_exactions['dues_open_space_dev'] - pay_val['paid_open_space']
                 all_exactions['dues_open_space_own'] = 0
 
-    if account_ledgers:
+    if account_ledgers is not None:
         for ledger in account_ledgers:
             all_exactions['sewer_credits_applied'] += Decimal(ledger.sewer_credits)
             all_exactions['non_sewer_credits_applied'] += Decimal(ledger.non_sewer_credits)
