@@ -38,28 +38,48 @@ def subtract_ledger_values(ledger_value, lot_dev_value, lot_own_value):
     should_escape = False
 
     while new_led > 0 and not should_escape:
-        if new_own >= new_led and new_dev == 0:
-            new_own -= new_led
-            new_led -= new_led
-        elif new_dev >= new_led and new_own == 0:
-            new_dev -= new_led
-            new_led -= new_led
-        elif (new_dev + new_own) >= new_led:
-            if new_own > 0:
-                new_led -= new_own
-                new_own -= new_own
-            if new_dev > 0:
-                new_led -= new_dev
-                new_dev -= new_dev
-        elif new_led > 0:
-            if new_own > 0:
+        if new_own > 0:
+            if new_own >= new_led:
+                new_own -= new_led
+                new_led -= new_led
+            elif new_led > new_own:
                 new_own -= new_own
                 new_led -= new_own
-            else:
+        elif new_dev > 0:
+            if new_dev >= new_led:
                 new_dev -= new_led
                 new_led -= new_led
+            elif new_led > new_dev:
+                new_dev -= new_dev
+                new_led -= new_dev
+        elif new_led > 0:
+            new_dev -= new_led
+            new_led -= new_led
         else:
             should_escape = True
+
+        # if new_own >= new_led and new_dev == 0:
+        #     new_own -= new_led
+        #     new_led -= new_led
+        # elif new_dev >= new_led and new_own == 0:
+        #     new_dev -= new_led
+        #     new_led -= new_led
+        # elif (new_dev + new_own) >= new_led:
+        #     if new_own > 0:
+        #         new_led -= new_own
+        #         new_own -= new_own
+        #     if new_dev > 0:
+        #         new_led -= new_dev
+        #         new_dev -= new_dev
+        # elif new_led > 0:
+        #     if new_own > 0:
+        #         new_own -= new_own
+        #         new_led -= new_own
+        #     else:
+        #         new_dev -= new_led
+        #         new_led -= new_led
+        # else:
+        #     should_escape = True
 
     return (new_led, new_dev, new_own)
 
