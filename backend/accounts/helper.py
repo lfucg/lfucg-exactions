@@ -105,6 +105,7 @@ def send_email_to_new_user(sender, instance, created, **kwargs):
 def lot_update_exactions_and_email_supervisor(sender, instance, **kwargs):
     post_save.disconnect(lot_update_exactions_and_email_supervisor, sender=Lot)
     related_lot = Lot.objects.get(id=instance.id)
+    import_user = User.objects.get(username="IMPORT")
 
     all_attributes = [
         "current_dues_roads_dev",
@@ -122,7 +123,9 @@ def lot_update_exactions_and_email_supervisor(sender, instance, **kwargs):
         "is_approved"
     ]
 
-    if instance.modified_by.is_superuser or (
+    if instance.modified_by == import_user:
+        pass
+    elif instance.modified_by.is_superuser or (
         (
             hasattr(instance.modified_by, "profile")
             and instance.modified_by.profile.is_supervisor == True
@@ -193,7 +196,7 @@ def lot_update_exactions_and_email_supervisor(sender, instance, **kwargs):
             or kwargs["created"]
         ):
             lot_balances = calculate_lot_balance(related_lot)
-            
+
             related_lot.current_dues_roads_dev = lot_balances["dues_roads_dev"]
             related_lot.current_dues_roads_own = lot_balances["dues_roads_own"]
             related_lot.current_dues_sewer_trans_dev = lot_balances[
