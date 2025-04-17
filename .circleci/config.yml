@@ -34,6 +34,45 @@ jobs:
           paths:
             - ./backend/dist
 
+  build_backend:
+    executor:
+      name: python
+
+    resource_class: large
+
+    steps:
+      - checkout
+
+      - restore_cache:
+          keys:
+            - pip-cache-{{ checksum "backend/requirements/base.txt" }}-{{ checksum "backend/requirements/local.txt" }}
+            - pip-cache-
+
+      - run:
+          name: Install system dependencies
+          command: |
+            sudo apt-get update -y
+            sudo apt-get install -y gdal-bin libgdal-dev
+
+      - run:
+          name: Install python dependencies
+          command: pip install -r backend/requirements/local.txt
+
+      - wait-db
+
+      - run:
+          name: Check code quality
+          command: ./.ci/build/django
+
+      - store_test_results:
+          path: backend/test_results.xml
+
+      - save_cache:
+          key: pip-cache-{{ checksum "backend/requirements/base.txt" }}-{{ checksum "backend/requirements/local.txt" }}
+          paths:
+            - ~/.cache/pip
+            - /usr/local/lib/python3.5/site-packages
+
   cdk_diff:
     executor: aws-cli/default
 
