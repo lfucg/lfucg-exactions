@@ -51,7 +51,11 @@ export interface AppEnvironmentProps extends Omit<core.EnvironmentProps, 'envNam
   /** Non-sensitive environment variables that **aren't** a function of CDK constructs */
   config?: Omit<
     DjangoEnvVars,
-    'AWS_STORAGE_BUCKET_NAME' | 'DB_HOST' | 'DB_NAME' | 'DJANGO_SETTINGS_MODULE' | 'SITE_DOMAIN'
+    | 'AWS_STORAGE_BUCKET_NAME'
+    | 'DB_HOST'
+    | 'DB_NAME'
+    // | 'DJANGO_SETTINGS_MODULE'
+    | 'SITE_DOMAIN'
   > &
     Partial<Pick<DjangoEnvVars, 'SITE_DOMAIN'>>;
 }
@@ -115,6 +119,7 @@ export default class AppEnvironment extends core.Environment {
 
     const environment: DjangoEnvVars = {
       SITE_DOMAIN,
+      DJANGO_SETTINGS_MODULE: 'config.settings.production',
       DB_HOST: databaseProxy?.endpoint || database.dbInstanceEndpointAddress,
       DB_NAME: `${this.envType}_${this.envName}`,
       AWS_STORAGE_BUCKET_NAME: storageBucket.bucketName,

@@ -1,0 +1,13 @@
+#!/bin/bash
+
+set -e pipefail
+
+pushd backend
+
+# Run migrations
+./manage.py migrate
+
+# Run tests
+pytest --junitxml="test_results.xml"
+
+popd
