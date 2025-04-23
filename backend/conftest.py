@@ -186,6 +186,7 @@ def test_users() -> TestUsers:
 class TestData:
     subdivision = Subdivision()
     plat = Plat()
+    plat_2 = Plat()
     lot = Lot()
     plat_zone_1 = PlatZone()
     plat_zone_2 = PlatZone()
@@ -264,6 +265,25 @@ def test_data(
         non_buildable_lots="3",
         cabinet="S",
         slide="482",
+        created_by=superuser,
+        modified_by=superuser,
+    )
+
+    data.plat_2 = Plat.objects.create(
+        subdivision=data.subdivision,
+        account=data.account,
+        date_recorded="2016-07-05",
+        name="Plat Test 2",
+        total_acreage=20,
+        acreage_type="NET",
+        plat_type="DEVELOPMENT_PLAN",
+        expansion_area="EA-1",
+        unit="1-C",
+        case_number="3",
+        buildable_lots="32",
+        non_buildable_lots="2",
+        cabinet="M",
+        slide="421",
         created_by=superuser,
         modified_by=superuser,
     )
