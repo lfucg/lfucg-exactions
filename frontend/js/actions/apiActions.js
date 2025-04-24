@@ -1702,8 +1702,6 @@ export function searchQuery() {
 
             if (currentPageModel === 'credit-transfer') {
                 query_all = '/ledger?paginatePage';
-            } else if (currentPageModel === 'project-cost') {
-                query_all = '/estimate?paginatePage';
             }
 
             const queryString = compose(
