@@ -1661,8 +1661,11 @@ export function getPagination(page) {
                 currentPage,
                 page_size,
             } = activeForm;
-            
+
             if (!page) {
+                if (currentPage.indexOf('paginatePage') >= 0) {
+                    return currentPage
+                }
                 if (currentPage === '/credit-transfer/') {
                     return '/ledger/?paginatePage';
                 }

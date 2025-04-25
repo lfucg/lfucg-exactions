@@ -35,7 +35,6 @@ const searchReducer = (state = initialState, action) => {
       return {
         ...state,
         searchParams: {
-          ...state.searchParams,
           [page]: {},
         },
       };
