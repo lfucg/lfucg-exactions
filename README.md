@@ -67,3 +67,10 @@ $ lando npm run gulp
 
 The frontend is accessible at [https://exactions.lndo.site](http://exactions.lndo.site).
 The admin site is accessible at [https://exactions.lndo.site/admin](http://exactions.lndo.site/admin).
+
+## Testing
+Backend testing
+
+```bash
+$ lando django-test
+```
