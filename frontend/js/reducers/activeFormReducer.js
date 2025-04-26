@@ -71,9 +71,10 @@ export default function activeFormReducer(state = initialState, action) {
             };
         case CLEAR_SEARCH:
             const cloneState = clone(state);
+            const currentPage = cloneState.currentPage.split('&')[0]
             return {
                 ...initialState,
-                currentPage: cloneState.currentPage,
+                currentPage,
             };
         default:
             return state;

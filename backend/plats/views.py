@@ -246,7 +246,7 @@ class PlatCSVExportView(View):
                     total_exactions = ''
                     current_exactions = ''
 
-                    if lot['lot_exactions']:
+                    if hasattr(lot, 'lot_exactions') and lot['lot_exactions']:
                         total_exactions = lot['lot_exactions']['total_exactions']
                     #     current_exactions = lot['lot_exactions']['current_exactions']
 

@@ -56,6 +56,12 @@ tooling:
     service: django
     cmd: python manage.py runserver 0.0.0.0:8000
     dir: /app/backend
+  django-test:
+    service: django
+    dir: /app/backend
+    cmd: pytest
+    env:
+      COLUMNS: 110
   node:
     service: nodejs
   npm:

@@ -2,6 +2,13 @@ import * as ecs from 'aws-cdk-lib/aws-ecs';
 
 /** Non-sensitive environment variables for django */
 export interface DjangoEnvVars {
+    /**
+   * Indicates which django settings module to use.
+   *
+   * @default 'config.settings.local'
+   */
+  DJANGO_SETTINGS_MODULE?: 'config.settings.local' | 'config.settings.production';
+
   /**
    * The domain to access the exactions site. This controls
    * {@link https://docs.djangoproject.com/en/1.11/ref/settings/#allowed-hosts Django's}

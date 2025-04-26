@@ -18,6 +18,7 @@ tmp/*
 *.db
 db/
 test_db/
+.pytest_cache/
 .vagrant
 *.sublime-project
 *.sublime-workspace
