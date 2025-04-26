@@ -128,16 +128,15 @@ def calculate_lot_balance(lot_queryset):
 
     if payments is not None:
         for payment in payments:
-            all_exactions['sewer_payment'] = all_exactions['sewer_payment'] + round(float(
-                payment.paid_sewer_trans +
-                payment.paid_sewer_cap
-            ), 2)
-            all_exactions['non_sewer_payment'] = all_exactions['non_sewer_payment'] + round(float(
-                payment.paid_roads +
-                payment.paid_parks +
-                payment.paid_storm +
-                payment.paid_open_space
-            ), 2)
+            all_exactions['sewer_payment'] = all_exactions['sewer_payment'] + \
+                round(float(payment.paid_sewer_trans), 2) + \
+                round(float(payment.paid_sewer_cap), 2)
+
+            all_exactions['non_sewer_payment'] = all_exactions['non_sewer_payment'] + \
+                round(float(payment.paid_roads), 2) + \
+                round(float(payment.paid_parks), 2) + \
+                round(float(payment.paid_storm), 2) + \
+                round(float(payment.paid_open_space), 2)
 
             paid_sewer_trans = round(float(payment.paid_sewer_trans), 2)
             paid_sewer_cap = round(float(payment.paid_sewer_cap), 2)
@@ -156,8 +155,8 @@ def calculate_lot_balance(lot_queryset):
             }
 
 
-            all_exactions['sewer_due'] = all_exactions['sewer_due'] - payment.paid_sewer_trans - payment.paid_sewer_cap
-            all_exactions['non_sewer_due'] = all_exactions['non_sewer_due'] - payment.paid_roads - payment.paid_parks - payment.paid_storm - payment.paid_open_space
+            all_exactions['sewer_due'] = all_exactions['sewer_due'] - paid_sewer_trans - paid_sewer_cap
+            all_exactions['non_sewer_due'] = all_exactions['non_sewer_due'] - paid_roads - paid_parks - paid_storm - paid_open_space
 
             own_sum = all_exactions['dues_sewer_trans_own'] + all_exactions['dues_sewer_cap_own'] + all_exactions['dues_roads_own'] + all_exactions['dues_parks_own'] + all_exactions['dues_storm_own'] + all_exactions['dues_open_space_own']
  
