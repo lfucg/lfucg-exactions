@@ -514,7 +514,7 @@ def calculate_current_lot_balance(sender, instance, **kwargs):
                 ]
             )
     except Exception as exc:
-        print("EXCEPTION", exc)
+        print("EXCEPTION in calculate_current_lot_balance", exc)
 
     post_save.connect(calculate_current_lot_balance, sender=AccountLedger)
     post_save.connect(calculate_current_lot_balance, sender=Payment)
