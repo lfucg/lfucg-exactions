@@ -142,9 +142,11 @@ def lot_update_exactions_and_email_supervisor(sender, instance, **kwargs):
             profile.is_approval_required = False
             profile.save()
     elif kwargs["update_fields"] is not None and any(
-        hasattr(kwargs["update_fields"], attr) for attr in all_attributes
+        update_field == attr
+        for attr in all_attributes
+        for update_field in kwargs["update_fields"]
     ):
-        return
+        pass
     else:
         ctype = ContentType.objects.get_for_model(instance)
         model = ctype.model
