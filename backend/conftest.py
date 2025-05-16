@@ -64,7 +64,7 @@ def test_users() -> TestUsers:
     )
 
     # Finance Users
-    finance_group = Group.objects.get_or_create(name='Finance')
+    finance_group, created = Group.objects.get_or_create(name='Finance')
 
     users.finance_supervisor = User.objects.create_user(
         username='finance_supervisor',
@@ -76,7 +76,7 @@ def test_users() -> TestUsers:
         is_staff=False,
         is_superuser=False,
     )
-    # users.finance_supervisor.groups.add(finance_group)
+    users.finance_supervisor.groups.add(finance_group)
     users.finance_supervisor.save()
     Profile.objects.get_or_create(
         user=users.finance_supervisor,
@@ -94,7 +94,7 @@ def test_users() -> TestUsers:
         is_staff=False,
         is_superuser=False,
     )
-    # users.finance_regular.groups.add(finance_group)
+    users.finance_regular.groups.add(finance_group)
     users.finance_regular.save()
     Profile.objects.get_or_create(
         user=users.finance_regular,
@@ -103,7 +103,7 @@ def test_users() -> TestUsers:
     )
 
     # Planning Users
-    planning_group = Group.objects.get_or_create(name='Planning')
+    planning_group, created = Group.objects.get_or_create(name='Planning')
 
     users.planning_supervisor = User.objects.create_user(
         username='planning_supervisor',
@@ -115,7 +115,7 @@ def test_users() -> TestUsers:
         is_staff=False,
         is_superuser=False,
     )
-    # users.planning_supervisor.groups.add(planning_group)
+    users.planning_supervisor.groups.add(planning_group)
     users.planning_supervisor.save()
     Profile.objects.get_or_create(
         user=users.planning_supervisor,
@@ -133,7 +133,7 @@ def test_users() -> TestUsers:
         is_staff=False,
         is_superuser=False,
     )
-    # users.planning_regular.groups.add(planning_group)
+    users.planning_regular.groups.add(planning_group)
     users.planning_regular.save()
     Profile.objects.get_or_create(
         user=users.planning_regular,
@@ -142,7 +142,7 @@ def test_users() -> TestUsers:
     )
 
     # Building Inspection Users
-    inspection_group = Group.objects.get_or_create(name="Building Inspection")
+    inspection_group, created = Group.objects.get_or_create(name="Building Inspection")
 
     users.inspection_supervisor = User.objects.create_user(
         username='inspection_supervisor',
@@ -154,7 +154,7 @@ def test_users() -> TestUsers:
         is_staff=False,
         is_superuser=False,
     )
-    # users.inspection_supervisor.groups.add(inspection_group)
+    users.inspection_supervisor.groups.add(inspection_group)
     users.inspection_supervisor.save()
     Profile.objects.get_or_create(
         user=users.inspection_supervisor,
@@ -172,7 +172,7 @@ def test_users() -> TestUsers:
         is_staff=False,
         is_superuser=False,
     )
-    # users.inspection_regular.groups.add(inspection_group)
+    users.inspection_regular.groups.add(inspection_group)
     users.inspection_regular.save()
     Profile.objects.get_or_create(
         user=users.inspection_regular,

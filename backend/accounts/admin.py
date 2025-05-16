@@ -194,12 +194,11 @@ class ProfileInline(admin.TabularInline):
 
 class UserSiteAdmin(UserAdmin):
     list_display = ('username', 'email', 'first_name', 'is_staff', 'last_login',)
-    exclude = ('password',)
+    # exclude = ('password',)
     readonly_fields = ('last_login',)
     inlines = (
         ProfileInline,
     )
-    # exclude = ('password',)
 
 
 admin.site.unregister(User)
