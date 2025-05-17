@@ -192,18 +192,17 @@ class ProfileInline(admin.TabularInline):
 #     password = forms.CharField()
 
 
-class UserAdmin(admin.ModelAdmin):
+class UserSiteAdmin(UserAdmin):
     list_display = ('username', 'email', 'first_name', 'is_staff', 'last_login',)
-    exclude = ('password',)
+    # exclude = ('password',)
     readonly_fields = ('last_login',)
     inlines = (
         ProfileInline,
     )
-    # exclude = ('password',)
 
 
 admin.site.unregister(User)
-admin.site.register(User, UserAdmin)
+admin.site.register(User, UserSiteAdmin)
 admin.site.register(Account, AccountHistoryAdmin)
 admin.site.register(Agreement, AgreementHistoryAdmin)
 admin.site.register(Payment, PaymentHistoryAdmin)

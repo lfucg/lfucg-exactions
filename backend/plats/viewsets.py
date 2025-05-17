@@ -17,7 +17,10 @@ class SubdivisionViewSet(viewsets.ModelViewSet):
     queryset = Subdivision.objects.all()
     permission_classes = (CanAdminister,)
     filter_backends = (filters.DjangoFilterBackend, filters.SearchFilter,)
-    search_fields = ('name', 'plat__name',)
+    search_fields = (
+        'name',
+        # 'plat__name',
+    )
     filter_fields = ('plat__id',)
 
     def get_queryset(self):
@@ -59,7 +62,18 @@ class PlatViewSet(viewsets.ModelViewSet):
     queryset = Plat.objects.none()
     permission_classes = (CanAdminister,)
     filter_backends = (filters.DjangoFilterBackend, filters.SearchFilter,)
-    search_fields = ('name', 'expansion_area', 'slide', 'subdivision__name', 'account__account_name', 'cabinet', 'unit', 'section', 'block', 'cabinet_slide',)
+    search_fields = (
+        'name',
+        'expansion_area',
+        'slide',
+        # 'subdivision__name',
+        # 'account__account_name',
+        'cabinet',
+        'unit',
+        'section',
+        'block',
+        'cabinet_slide',
+    )
     filter_fields = ('expansion_area', 'account', 'subdivision', 'plat_type', 'lot__id', 'is_approved',)
 
     def get_queryset(self):
@@ -105,7 +119,18 @@ class PlatQuickViewSet(viewsets.ModelViewSet):
     serializer_class = PlatQuickSerializer
     queryset = Plat.objects.none()
     filter_backends = (filters.DjangoFilterBackend, filters.SearchFilter,)
-    search_fields = ('name', 'expansion_area', 'slide', 'subdivision__name', 'account__account_name', 'cabinet', 'unit', 'section', 'block', 'cabinet_slide',)
+    search_fields = (
+        'name',
+        'expansion_area',
+        'slide',
+        # 'subdivision__name',
+        # 'account__account_name',
+        'cabinet',
+        'unit',
+        'section',
+        'block',
+        'cabinet_slide',
+    )
     filter_fields = ('expansion_area', 'account', 'subdivision', 'plat_type', 'lot__id', 'is_approved',)
 
     def get_queryset(self):
@@ -131,8 +156,8 @@ class LotViewSet(viewsets.ModelViewSet):
         'lot_number',
         'parcel_id',
         'permit_id',
-        'plat__expansion_area',
-        'plat__name',
+        # 'plat__expansion_area',
+        # 'plat__name',
         'address_number',
         'address_street',
         'alternative_address_number',

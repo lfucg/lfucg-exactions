@@ -142,9 +142,11 @@ def lot_update_exactions_and_email_supervisor(sender, instance, **kwargs):
             profile.is_approval_required = False
             profile.save()
     elif kwargs["update_fields"] is not None and any(
-        hasattr(kwargs["update_fields"], attr) for attr in all_attributes
+        update_field == attr
+        for attr in all_attributes
+        for update_field in kwargs["update_fields"]
     ):
-        return
+        pass
     else:
         ctype = ContentType.objects.get_for_model(instance)
         model = ctype.model
@@ -232,16 +234,20 @@ def send_email_to_finance_supervisors(sender, instance, **kwargs):
 
     sender = None
     sender_model = None
+    sender_string = None
 
     if model == "agreement":
         sender = Agreement
         sender_model = Agreement.objects.get(id=instance.id)
+        sender_string = "Agreement"
     elif model == "accountledger":
         sender = AccountLedger
         sender_model = AccountLedger.objects.get(id=instance.id)
+        sender_string = "Credit Transfer"
     elif model == "payment":
         sender = Payment
         sender_model = Payment.objects.get(id=instance.id)
+        sender_string = "Payment"
 
     post_save.disconnect(send_email_to_finance_supervisors, sender=sender)
 
@@ -285,7 +291,7 @@ def send_email_to_finance_supervisors(sender, instance, **kwargs):
                 html_template = get_template("emails/supervisor_email.html")
                 text_template = get_template("emails/supervisor_email.txt")
 
-                subject = "LFUCG Exactions Activity: New Entry Pending Approval"
+                subject = "LFUCG Exactions Activity: New" + sender_string + "Entry Pending Approval"
                 from_email = settings.DEFAULT_FROM_EMAIL
 
                 context = {
