@@ -49,7 +49,7 @@ def ledger_list():
     )
 
     ledger_pandas.to_csv(
-        "../backend/base/management/commands/ledger_differences.csv",
+        "../base/management/commands/ledger_differences.csv",
         sep=",",
         index=False,
     )
