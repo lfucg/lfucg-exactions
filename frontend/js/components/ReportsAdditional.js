@@ -62,6 +62,15 @@ class ReportsAdditional extends React.Component {
                                 >Transaction CSV</a>
                             </div>
                         </form>
+                        <br/>
+                        <div>
+                            <p>Credit transfer differences between manually entered and calculated totals</p>
+                            <a
+                                // className="btn btn-lex"
+                                href={'../api/ledger_differences_csv'}
+                            >Credit Transfer Differences Report
+                            </a>
+                        </div>
                     </div>
                 </div>
                 <Footer />
