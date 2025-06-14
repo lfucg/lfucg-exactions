@@ -93,8 +93,10 @@ class AccountLedgerSummary extends React.Component {
                                       </div>
                                       <div className="col-xs-12">
                                           <p className="col-md-4 col-xs-6">Entry Type: {accountLedgers.currentLedger.entry_type_display}</p>
-                                          <p className="col-md-4 col-xs-6">Sewer Credits: {accountLedgers.currentLedger.dollar_values && accountLedgers.currentLedger.dollar_values.dollar_sewer}</p>
-                                          <p className="col-md-4 col-xs-6">Non-Sewer Credits: {accountLedgers.currentLedger.dollar_values && accountLedgers.currentLedger.dollar_values.dollar_non_sewer}</p>
+                                          <p className="col-md-4 col-xs-6">Manual Sewer Credits: {accountLedgers.currentLedger.dollar_values && accountLedgers.currentLedger.dollar_values.dollar_sewer}</p>
+                                          <p className="col-md-4 col-xs-6">Sum Sewer Credits: {accountLedgers.currentLedger.sum_sewer}</p>
+                                          <p className="col-md-4 col-xs-6">Manual Non-Sewer Credits: {accountLedgers.currentLedger.dollar_values && accountLedgers.currentLedger.dollar_values.dollar_non_sewer}</p>
+                                          <p className="col-md-4 col-xs-6">Sum Non-Sewer Credits: {accountLedgers.currentLedger.sum_non_sewer}</p>
                                           <p className="col-md-4 col-xs-6">Roads: {accountLedgers.currentLedger.dollar_values && accountLedgers.currentLedger.dollar_values.dollar_roads}</p>
                                           <p className="col-md-4 col-xs-6">Parks: {accountLedgers.currentLedger.dollar_values && accountLedgers.currentLedger.dollar_values.dollar_parks}</p>
                                           <p className="col-md-4 col-xs-6">Storm Water: {accountLedgers.currentLedger.dollar_values && accountLedgers.currentLedger.dollar_values.dollar_storm}</p>

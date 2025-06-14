@@ -254,6 +254,8 @@ class AccountLedgerSerializer(serializers.ModelSerializer):
 
     entry_type_display = serializers.SerializerMethodField(read_only=True)
     dollar_values = serializers.SerializerMethodField(read_only=True)
+    sum_non_sewer = serializers.SerializerMethodField(read_only=True)
+    sum_sewer = serializers.SerializerMethodField(read_only=True)
 
     def get_entry_type_display(self, obj):
         return obj.get_entry_type_display()
@@ -269,6 +271,20 @@ class AccountLedgerSerializer(serializers.ModelSerializer):
             "dollar_sewer_trans": "${:,.2f}".format(obj.sewer_trans),
             "dollar_sewer_cap": "${:,.2f}".format(obj.sewer_cap),
         }
+
+    def get_sum_non_sewer(self, obj):
+        return "${:,.2f}".format(sum([
+            obj.roads,
+            obj.parks,
+            obj.storm,
+            obj.open_space,
+        ]))
+
+    def get_sum_sewer(self, obj):
+        return "${:,.2f}".format(sum([
+            obj.sewer_trans,
+            obj.sewer_cap,
+        ]))
 
     class Meta:
         model = AccountLedger
@@ -296,6 +312,8 @@ class AccountLedgerSerializer(serializers.ModelSerializer):
             "open_space",
             "entry_type_display",
             "dollar_values",
+            "sum_non_sewer",
+            "sum_sewer",
         )
 
 
