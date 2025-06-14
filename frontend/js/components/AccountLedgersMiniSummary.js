@@ -41,8 +41,10 @@ class AccountLedgersMiniSummary extends React.Component {
                     <p className="col-xs-6">Agreement Resolution: {this.props.mapSet.agreement && this.props.mapSet.agreement.resolution_number}</p>
                     <p className="col-xs-6">Account From: {this.props.mapSet.account_from && this.props.mapSet.account_from.account_name}</p>
                     <p className="col-xs-6">Account To: {this.props.mapSet.account_to && this.props.mapSet.account_to.account_name}</p>
-                    <p className="col-xs-6">Non-Sewer Credits: {this.props.mapSet.dollar_values && this.props.mapSet.dollar_values.dollar_non_sewer}</p>
-                    <p className="col-xs-6">Sewer Credits: {this.props.mapSet.dollar_values && this.props.mapSet.dollar_values.dollar_sewer}</p>
+                    <p className="col-xs-6">Manual Non-Sewer Credits: {this.props.mapSet.dollar_values && this.props.mapSet.dollar_values.dollar_non_sewer}</p>
+                    <p className="col-xs-6">Sum Non-Sewer Credits: {this.props.mapSet.sum_non_sewer}</p>
+                    <p className="col-xs-6">Manual Sewer Credits: {this.props.mapSet.dollar_values && this.props.mapSet.dollar_values.dollar_sewer}</p>
+                    <p className="col-xs-6">Sum Sewer Credits: {this.props.mapSet.sum_sewer}</p>
                 </div>
             </div>) : (
                 this.props.mapQualifier && map((ledger) => {
@@ -78,8 +80,10 @@ class AccountLedgersMiniSummary extends React.Component {
                                 <p className="col-xs-6">Agreement Resolution: {ledger.agreement && ledger.agreement.resolution_number}</p>
                                 <p className="col-xs-6">Account From: {ledger.account_from && ledger.account_from.account_name}</p>
                                 <p className="col-xs-6">Account To: {ledger.account_to && ledger.account_to.account_name}</p>
-                                <p className="col-xs-6">Non-Sewer Credits: {ledger.dollar_values && ledger.dollar_values.dollar_non_sewer}</p>
-                                <p className="col-xs-6">Sewer Credits: {ledger.dollar_values && ledger.dollar_values.dollar_sewer}</p>
+                                <p className="col-xs-6">Manual Non-Sewer Credits: {ledger.dollar_values && ledger.dollar_values.dollar_non_sewer}</p>
+                                <p className="col-xs-6">Sum Non-Sewer Credits: {ledger.sum_non_sewer}</p>
+                                <p className="col-xs-6">Manual Sewer Credits: {ledger.dollar_values && ledger.dollar_values.dollar_sewer}</p>
+                                <p className="col-xs-6">Sum Sewer Credits: {ledger.sum_sewer}</p>
                             </div>
                         </div>
                     );
