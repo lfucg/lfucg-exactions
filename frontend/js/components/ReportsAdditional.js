@@ -62,7 +62,7 @@ class ReportsAdditional extends React.Component {
                                 >Transaction CSV</a>
                             </div>
                         </form>
-                        <br/>
+                        <div className="clearfix" />
                         <div>
                             <p>Credit transfer differences between manually entered and calculated totals</p>
                             <a
