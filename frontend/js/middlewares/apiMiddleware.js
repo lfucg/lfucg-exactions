@@ -119,6 +119,7 @@ export default function api({ getState, dispatch }) {
             });
         })
         .catch((error) => {
+            let errorMessage = 'API Call Error';
             console.log('API Middleware Error: ', error);  // eslint-disable-line no-console
             if (error.response.status !== 500) {
                 const error_obj = error.response.data;
@@ -129,8 +130,12 @@ export default function api({ getState, dispatch }) {
 
                 dispatch(errorMessageSet(error_message));
             }
+            if (error.response) {
+                errorMessage = error.response.data;
+            }
             return dispatch({
                 type: API_CALL_ERROR,
+                message: errorMessage,
                 error,
             });
         });

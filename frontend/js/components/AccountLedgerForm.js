@@ -467,17 +467,12 @@ class AccountLedgerForm extends React.Component {
                                     </div>
                                     <div className="clearfix" />
                                     <div>
-                                        {!submitEnabled ? (
-                                            <div>
-                                                <div className="clearfix" />
-                                                <span> * All required fields must be filled.</span>
-                                                <div className="clearfix" />
-                                                <span> * Ensure Sewer Capacity and Sewer Transmission equal Sewer Credits.</span>
-                                                <div className="clearfix" />
-                                                <span> * Ensure Roads, Parks, Open Spaces, and Storm Water equal Non-Sewer Credits.</span>
-                                            </div>
-                                        ) : null
-                                        }                                        
+                                        <div className="clearfix" />
+                                        <span> * All required fields must be filled.</span>
+                                        <div className="clearfix" />
+                                        <span> * Ensure Sewer Capacity and Sewer Transmission equal Sewer Credits.</span>
+                                        <div className="clearfix" />
+                                        <span> * Ensure Roads, Parks, Open Spaces, and Storm Water equal Non-Sewer Credits.</span>
                                     </div>
                                 </form>
                                 <div className="clearfix" />
@@ -720,6 +715,9 @@ function mapDispatchToProps(dispatch, params) {
             if (selectedAccountLedger) {
                 dispatch(putAccountLedger(selectedAccountLedger))
                 .then((data) => {
+                    if (!!data.error) {
+                        dispatch(flashMessageSet(`Error: ${data.error}`, 'danger'));
+                    }
                     if (data.response) {
                         hashHistory.push(`credit-transfer/summary/${selectedAccountLedger}`);
                     }
@@ -727,6 +725,9 @@ function mapDispatchToProps(dispatch, params) {
             } else {
                 dispatch(postAccountLedger())
                 .then((data_post) => {
+                    if (!!data_post.error) {
+                        dispatch(flashMessageSet(`Error: ${data_post.message}`, 'danger'));
+                    }
                     if (data_post.response && data_post.response.id) {
                         if (event === 'plat') {
                             hashHistory.push('credit-transfer');
