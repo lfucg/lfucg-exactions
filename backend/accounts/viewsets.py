@@ -393,6 +393,14 @@ class AccountLedgerViewSet(viewsets.ModelViewSet):
                 return Response(serializer.data)
 
     def update(self, request, pk):
+        data_set = request.data
+
+        sewer_equal = data_set['sewer_credits'] == data_set['sewer_cap'] + data_set['sewer_trans']
+        non_sewer_equal = data_set['non_sewer_credits'] == data_set['roads'] + data_set['parks'] + data_set['open_space'] + data_set['storm']
+
+        if not (sewer_equal and non_sewer_equal):
+            raise ValidationError('Ensure sums for both sewer and non-sewer equal the sum of each of their parts.')
+
         return update_entry(self, request, pk)
                 
 class UserViewSet(viewsets.ModelViewSet):
