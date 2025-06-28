@@ -105,6 +105,9 @@ class AccountLedgerForm extends React.Component {
             );
         })(agreements.agreements));
 
+        const sewerEqual = activeForm.sewer_credits == activeForm.sewer_cap + activeForm.sewer_trans;
+        const nonSewerEqual = activeForm.non_sewer_credits == activeForm.parks + activeForm.storm + activeForm.roads + activeForm.open_space;
+
         const submitEnabled =
             !!accounts.accountFrom && !!accounts.accountFrom.id &&
             !!accounts.accountTo && !!accounts.accountTo.id &&
@@ -118,7 +121,9 @@ class AccountLedgerForm extends React.Component {
             activeForm.open_space &&
             activeForm.sewer_cap &&
             activeForm.sewer_trans &&
-            activeForm.entry_date;
+            activeForm.entry_date &&
+            sewerEqual &&
+            nonSewerEqual;
 
         const currentPlat = !!plats && !!plats.currentPlat && plats.currentPlat;
         const currentAccountBalance = !!accounts.accountFrom && accounts.accountFrom.current_account_balance;
@@ -397,11 +402,11 @@ class AccountLedgerForm extends React.Component {
                                         </div>
                                         <div className="row">
                                             <div className="col-sm-6">
-                                                <FormGroup label="* Storm water" id="storm">
+                                                <FormGroup label="* Storm Water" id="storm">
                                                     <input
                                                         type="number"
                                                         className="form-control"
-                                                        placeholder="Storm water"
+                                                        placeholder="Storm Water"
                                                         disabled={!activeForm.entry_type}
                                                         step="0.01"
                                                         required
@@ -452,20 +457,22 @@ class AccountLedgerForm extends React.Component {
                                         <button disabled={!submitEnabled} className="btn btn-lex" onClick={() => onSubmit(activeForm.plat_lot)} >
                                             {currentUser.is_superuser || (currentUser.profile && currentUser.profile.is_supervisor) ? <div>Submit / Approve</div> : <div>Submit</div>}
                                         </button>
-                                        {!submitEnabled ? (
-                                            <div>
-                                                <div className="clearfix" />
-                                                <span> * All required fields must be filled.</span>
-                                            </div>
-                                        ) : null
-                                        }
                                     </div>
                                     <div className="col-xs-4">
                                         <DeclineDelete
                                             currentForm="/ledger/"
                                             selectedEntry={selectedAccountLedger}
                                             parentRoute="credit-transfer"
-                                        />
+                                            />
+                                    </div>
+                                    <div className="clearfix" />
+                                    <div>
+                                        <div className="clearfix" />
+                                        <span> * All required fields must be filled.</span>
+                                        <div className="clearfix" />
+                                        <span> * Ensure Sewer Capacity and Sewer Transmission equal Sewer Credits.</span>
+                                        <div className="clearfix" />
+                                        <span> * Ensure Roads, Parks, Open Spaces, and Storm Water equal Non-Sewer Credits.</span>
                                     </div>
                                 </form>
                                 <div className="clearfix" />
@@ -708,6 +715,9 @@ function mapDispatchToProps(dispatch, params) {
             if (selectedAccountLedger) {
                 dispatch(putAccountLedger(selectedAccountLedger))
                 .then((data) => {
+                    if (!!data.error) {
+                        dispatch(flashMessageSet(`Error: ${data.error}`, 'danger'));
+                    }
                     if (data.response) {
                         hashHistory.push(`credit-transfer/summary/${selectedAccountLedger}`);
                     }
@@ -715,6 +725,9 @@ function mapDispatchToProps(dispatch, params) {
             } else {
                 dispatch(postAccountLedger())
                 .then((data_post) => {
+                    if (!!data_post.error) {
+                        dispatch(flashMessageSet(`Error: ${data_post.message}`, 'danger'));
+                    }
                     if (data_post.response && data_post.response.id) {
                         if (event === 'plat') {
                             hashHistory.push('credit-transfer');

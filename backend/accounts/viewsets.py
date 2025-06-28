@@ -2,6 +2,7 @@
 from rest_framework.pagination import PageNumberPagination
 from rest_framework import viewsets, status, filters
 from django.db.models import Q
+from django.core.exceptions import ValidationError
 from rest_framework.response import Response
 
 from django.contrib.auth.models import User
@@ -270,7 +271,7 @@ class ProjectCostEstimateViewSet(viewsets.ModelViewSet):
 
     def update(self, request, pk):
         return update_entry(self, request, pk)
-            
+
 class AccountLedgerViewSet(viewsets.ModelViewSet):
     serializer_class = AccountLedgerSerializer
     queryset = AccountLedger.objects.all()
@@ -324,6 +325,12 @@ class AccountLedgerViewSet(viewsets.ModelViewSet):
 
         data_set['created_by'] = self.request.user.id
         data_set['modified_by'] = self.request.user.id
+
+        sewer_equal = data_set['sewer_credits'] == data_set['sewer_cap'] + data_set['sewer_trans']
+        non_sewer_equal = data_set['non_sewer_credits'] == data_set['roads'] + data_set['parks'] + data_set['open_space'] + data_set['storm']
+
+        if not (sewer_equal and non_sewer_equal):
+            raise ValidationError('Ensure sums for both sewer and non-sewer equal the sum of each of their parts.')
 
         if 'lot' in self.request.data:
             serializer = AccountLedgerSerializer(data=data_set)
@@ -386,6 +393,14 @@ class AccountLedgerViewSet(viewsets.ModelViewSet):
                 return Response(serializer.data)
 
     def update(self, request, pk):
+        data_set = request.data
+
+        sewer_equal = data_set['sewer_credits'] == data_set['sewer_cap'] + data_set['sewer_trans']
+        non_sewer_equal = data_set['non_sewer_credits'] == data_set['roads'] + data_set['parks'] + data_set['open_space'] + data_set['storm']
+
+        if not (sewer_equal and non_sewer_equal):
+            raise ValidationError('Ensure sums for both sewer and non-sewer equal the sum of each of their parts.')
+
         return update_entry(self, request, pk)
                 
 class UserViewSet(viewsets.ModelViewSet):
