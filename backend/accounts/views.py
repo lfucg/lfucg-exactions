@@ -857,6 +857,92 @@ class ProjectCostEstimateCSVExportView(View):
 
         return response
 
+def generate_ledgers_pandas(mismatched_ledgers):
+    ledger_pandas = pd.DataFrame.from_records(
+        mismatched_ledgers.values(
+
+            'non_sewer_credits',
+            'sewer_credits',
+
+            'non_sewer_sum',
+            'sewer_sum',
+            'entry_date',
+            'date_created',
+            'date_modified',
+
+            'account_from__account_name',
+            'account_to__account_name',
+            'lot__address_full',
+
+            'entry_type',
+
+            'roads',
+            'sewer_trans',
+            'sewer_cap',
+            'parks',
+            'storm',
+            'open_space',
+
+        )
+    )
+
+    if hasattr(ledger_pandas, "entry_date"):
+        ledger_pandas["entry_date"] = ledger_pandas["entry_date"].astype(str)
+    if hasattr(ledger_pandas, "date_created"):
+        ledger_pandas["date_created"] = ledger_pandas["date_created"].astype(str)
+    if hasattr(ledger_pandas, "date_modified"):
+        ledger_pandas["date_modified"] = ledger_pandas["date_modified"].astype(str)
+
+    if ledger_pandas.empty:
+        ledgers = pd.DataFrame(
+            columns=[
+                "Lot Address",
+                "Lot ID",
+                "Credit Transfer ID",
+                "Credit Transfer Entry Date",
+                "Credit Transfer Date Created",
+                "Credit Transfer Date Modified",
+                "Account From",
+                "Account To",
+                "Resolution",
+                "Transaction Type",
+                "Non-Sewer",
+                "Open Space",
+                "Parks",
+                "Roads",
+                "Storm",
+                "Sewer",
+                "Sewer Cap.",
+                "Sewer Trans.",
+            ]
+        )
+    else:
+        ledgers = ledger_pandas.rename(
+            index=str,
+            columns={
+                "lot__address_full": "Lot Address",
+                "id": "Credit Transfer ID",
+                'non_sewer_sum': "Non-sewer Sum",
+                "non_sewer_credits": "Non-Sewer Manual Entry",
+                'sewer_sum': "Sewer Sum",
+                "sewer_credits": "Sewer Manual Entry",
+                "entry_date": "Credit Transfer Entry Date",
+                "open_space": "Open Space",
+                "parks": "Parks",
+                "roads": "Roads",
+                "storm": "Storm",
+                "sewer_cap": "Sewer Cap.",
+                "sewer_trans": "Sewer Trans.",
+                "date_created": "Credit Transfer Date Created",
+                "date_modified": "Credit Transfer Date Modified",
+                "account_from__account_name": "Account From",
+                "account_to__account_name": "Account To",
+                "entry_type": "Transaction Type",
+            },
+        )
+
+    return ledgers
+
 class AccountLedgerDifferencesCSVExportView(View):
     def get_serializer_class(self, serializer_class):
         return serializer_class
@@ -883,88 +969,7 @@ class AccountLedgerDifferencesCSVExportView(View):
 
         mismatched_ledgers = mismatch_non_sewer_ledgers | mismatch_sewer_ledgers
 
-        ledger_pandas = pd.DataFrame.from_records(
-            mismatched_ledgers.values(
-
-                'non_sewer_credits',
-                'sewer_credits',
-
-                'non_sewer_sum',
-                'sewer_sum',
-                'entry_date',
-                'date_created',
-                'date_modified',
-
-                'account_from__account_name',
-                'account_to__account_name',
-                'lot__address_full',
-
-                'entry_type',
-
-                'roads',
-                'sewer_trans',
-                'sewer_cap',
-                'parks',
-                'storm',
-                'open_space',
-
-            )
-        )
-
-        if hasattr(ledger_pandas, "entry_date"):
-            ledger_pandas["entry_date"] = ledger_pandas["entry_date"].astype(str)
-        if hasattr(ledger_pandas, "date_created"):
-            ledger_pandas["date_created"] = ledger_pandas["date_created"].astype(str)
-        if hasattr(ledger_pandas, "date_modified"):
-            ledger_pandas["date_modified"] = ledger_pandas["date_modified"].astype(str)
-
-        if ledger_pandas.empty:
-            ledgers = pd.DataFrame(
-                columns=[
-                    "Lot Address",
-                    "Lot ID",
-                    "Credit Transfer ID",
-                    "Credit Transfer Entry Date",
-                    "Credit Transfer Date Created",
-                    "Credit Transfer Date Modified",
-                    "Account From",
-                    "Account To",
-                    "Resolution",
-                    "Transaction Type",
-                    "Non-Sewer",
-                    "Open Space",
-                    "Parks",
-                    "Roads",
-                    "Storm",
-                    "Sewer",
-                    "Sewer Cap.",
-                    "Sewer Trans.",
-                ]
-            )
-        else:
-            ledgers = ledger_pandas.rename(
-                index=str,
-                columns={
-                    "lot__address_full": "Lot Address",
-                    "id": "Credit Transfer ID",
-                    'non_sewer_sum': "Non-sewer Sum",
-                    "non_sewer_credits": "Non-Sewer Manual Entry",
-                    'sewer_sum': "Sewer Sum",
-                    "sewer_credits": "Sewer Manual Entry",
-                    "entry_date": "Credit Transfer Entry Date",
-                    "open_space": "Open Space",
-                    "parks": "Parks",
-                    "roads": "Roads",
-                    "storm": "Storm",
-                    "sewer_cap": "Sewer Cap.",
-                    "sewer_trans": "Sewer Trans.",
-                    "date_created": "Credit Transfer Date Created",
-                    "date_modified": "Credit Transfer Date Modified",
-                    "account_from__account_name": "Account From",
-                    "account_to__account_name": "Account To",
-                    "entry_type": "Transaction Type",
-                },
-            )
+        ledgers = generate_ledgers_pandas(mismatched_ledgers)
 
         bytesio = BytesIO()
         writer = pd.ExcelWriter(bytesio)
@@ -976,6 +981,98 @@ class AccountLedgerDifferencesCSVExportView(View):
 
         response = HttpResponse(bytesio.read(), content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
         response['Content-Disposition'] = 'attachment; filename=Credit_transfer_differences.xlsx'
+
+        return response
+
+
+class AccountLedgerDifferencesNoZeroCSVExportView(View):
+    def get_serializer_class(self, serializer_class):
+        return serializer_class
+
+    def list(self, queryset, serializer_class, many):
+        serializer_class = self.get_serializer_class(serializer_class)
+        serializer = serializer_class(queryset, many=many)
+        return serializer
+
+    def get(self, request, *args, **kwargs):
+        mismatch_non_sewer_ledgers = AccountLedger.objects.annotate(
+            non_sewer_sum=Sum(F("roads") + F('parks') + F('storm') + F('open_space')),
+            sewer_sum=Sum(F("sewer_trans") + F('sewer_cap'))
+        ).exclude(
+            Q(non_sewer_sum=F('non_sewer_credits')) |
+            Q(sewer_sum=0, non_sewer_sum=0),
+        )
+
+        mismatch_sewer_ledgers = AccountLedger.objects.annotate(
+            non_sewer_sum=Sum(F("roads") + F('parks') + F('storm') + F('open_space')),
+            sewer_sum=Sum(F("sewer_trans") + F('sewer_cap'))
+        ).exclude(
+            Q(sewer_sum=F('sewer_credits')) |
+            Q(sewer_sum=0, non_sewer_sum=0),
+        )
+
+        mismatched_ledgers = mismatch_non_sewer_ledgers | mismatch_sewer_ledgers
+
+        ledgers = generate_ledgers_pandas(mismatched_ledgers)
+
+        bytesio = BytesIO()
+        writer = pd.ExcelWriter(bytesio)
+        ledgers.to_excel(writer, 'Differences in Reported vs Calculated Credit Transfers Excluding All Zero')
+
+        writer.save()
+
+        bytesio.seek(0)
+
+        response = HttpResponse(bytesio.read(), content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        response['Content-Disposition'] = 'attachment; filename=Credit_transfer_differences_not_zero.xlsx'
+
+        return response
+
+
+class AccountLedgerDifferencesOnlyZeroCSVExportView(View):
+    def get_serializer_class(self, serializer_class):
+        return serializer_class
+
+    def list(self, queryset, serializer_class, many):
+        serializer_class = self.get_serializer_class(serializer_class)
+        serializer = serializer_class(queryset, many=many)
+        return serializer
+
+    def get(self, request, *args, **kwargs):
+        mismatch_non_sewer_ledgers = AccountLedger.objects.annotate(
+            non_sewer_sum=Sum(F("roads") + F('parks') + F('storm') + F('open_space')),
+            sewer_sum=Sum(F("sewer_trans") + F('sewer_cap'))
+        ).filter(
+            sewer_sum=0,
+            non_sewer_sum=0,
+        ).exclude(
+            non_sewer_sum=F('non_sewer_credits')
+        )
+
+        mismatch_sewer_ledgers = AccountLedger.objects.annotate(
+            non_sewer_sum=Sum(F("roads") + F('parks') + F('storm') + F('open_space')),
+            sewer_sum=Sum(F("sewer_trans") + F('sewer_cap'))
+        ).filter(
+            sewer_sum=0,
+            non_sewer_sum=0,
+        ).exclude(
+            sewer_sum=F('sewer_credits')
+        )
+
+        mismatched_ledgers = mismatch_non_sewer_ledgers | mismatch_sewer_ledgers
+
+        ledgers = generate_ledgers_pandas(mismatched_ledgers)
+
+        bytesio = BytesIO()
+        writer = pd.ExcelWriter(bytesio)
+        ledgers.to_excel(writer, 'Differences in Reported vs Calculated Credit Transfers Excluding All Zero')
+
+        writer.save()
+
+        bytesio.seek(0)
+
+        response = HttpResponse(bytesio.read(), content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        response['Content-Disposition'] = 'attachment; filename=Credit_transfer_differences_not_zero.xlsx'
 
         return response
 
