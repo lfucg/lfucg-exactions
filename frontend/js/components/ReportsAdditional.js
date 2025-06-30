@@ -71,6 +71,24 @@ class ReportsAdditional extends React.Component {
                             >Credit Transfer Differences Report
                             </a>
                         </div>
+                        <div className="clearfix" />
+                        <div>
+                            <p>Credit transfer differences between manually entered and calculated totals, excluding all zero</p>
+                            <a
+                                // className="btn btn-lex"
+                                href={'../api/ledger_differences_no_zero_csv'}
+                            >Credit Transfer Differences Report No Zero
+                            </a>
+                        </div>
+                        <div className="clearfix" />
+                        <div>
+                            <p>Credit transfer differences between manually entered and calculated totals, only all zero</p>
+                            <a
+                                // className="btn btn-lex"
+                                href={'../api/ledger_differences_only_zero_csv'}
+                            >Credit Transfer Differences Report Only Zero
+                            </a>
+                        </div>
                     </div>
                 </div>
                 <Footer />
