@@ -37,6 +37,16 @@ To add initial data, run:
 $ lando manage.py loaddata -v 0 initial_data.json
 ```
 
+To add groups, run:
+```bash
+$ lando manage.py loaddata -v 0 group_data.json
+```
+
+Add group permissions:
+```bash
+$ lando manage.py import_permissions
+```
+
 Add plats (though there may be errors with some):
 ```bash
 $ lando manage.py import_plat import_files/plat_data.csv
