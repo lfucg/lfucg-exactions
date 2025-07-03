@@ -105,8 +105,8 @@ class AccountLedgerForm extends React.Component {
             );
         })(agreements.agreements));
 
-        const sewerEqual = activeForm.sewer_credits == activeForm.sewer_cap + activeForm.sewer_trans;
-        const nonSewerEqual = activeForm.non_sewer_credits == activeForm.parks + activeForm.storm + activeForm.roads + activeForm.open_space;
+        const sewerEqual = Number(activeForm.sewer_credits) == Number(activeForm.sewer_cap) + Number(activeForm.sewer_trans);
+        const nonSewerEqual = Number(activeForm.non_sewer_credits) == Number(activeForm.parks) + Number(activeForm.storm) + Number(activeForm.roads) + Number(activeForm.open_space);
 
         const submitEnabled =
             !!accounts.accountFrom && !!accounts.accountFrom.id &&
