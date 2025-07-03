@@ -323,7 +323,7 @@ class Command(BaseCommand):
         '?': 'Unknown'
     }
 
-    df = pd.read_csv('plat_data.csv')
+    df = pd.read_csv('import_files/plat_data.csv')
 
     def ConvertDates(self, date_field):
         try:
