@@ -84,7 +84,7 @@ class LotForm extends React.Component {
             activeForm.dues_sewer_trans_own === '0.00';
 
         const submitEnabled =
-            activeForm.plat !== 'choose_plat' &&
+            activeForm.plat !== 'start_plat' &&
             activeForm.lot_number &&
             activeForm.address_number &&
             activeForm.address_street;

@@ -2,7 +2,7 @@ from django.conf import settings
 from django.template.loader import get_template
 from django.core.mail import send_mail
 from django.db.models import Q, Prefetch
-from django.db.models.signals import post_save, post_delete
+from django.db.models.signals import post_save, post_delete, pre_save
 from django.dispatch import receiver
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
@@ -100,6 +100,60 @@ def send_email_to_new_user(sender, instance, created, **kwargs):
             html_message=html_content,
         )
 
+
+@receiver(pre_save, sender=Lot)
+def pre_lot(sender, instance, **kwargs):
+    pre_save.disconnect(pre_lot, sender=Lot)
+
+    recalculate_lot_dues = False
+    old = Lot.objects.get(id=instance.id)
+
+    dues_names = [
+        'dues_roads_dev',
+        'dues_roads_own',
+        'dues_sewer_trans_dev',
+        'dues_sewer_trans_own',
+        'dues_sewer_cap_dev',
+        'dues_sewer_cap_own',
+        'dues_parks_dev',
+        'dues_parks_own',
+        'dues_storm_dev',
+        'dues_storm_own',
+        'dues_open_space_dev',
+        'dues_open_space_own'
+    ]
+
+    for due in dues_names:
+        if getattr(old, due) != getattr(instance, due):
+            recalculate_lot_dues = True
+
+    if recalculate_lot_dues:
+        lot_balances = calculate_lot_balance(instance)
+
+        instance.current_dues_roads_dev = lot_balances["dues_roads_dev"]
+        instance.current_dues_roads_own = lot_balances["dues_roads_own"]
+        instance.current_dues_sewer_trans_dev = lot_balances[
+            "dues_sewer_trans_dev"
+        ]
+        instance.current_dues_sewer_trans_own = lot_balances[
+            "dues_sewer_trans_own"
+        ]
+        instance.current_dues_sewer_cap_dev = lot_balances["dues_sewer_cap_dev"]
+        instance.current_dues_sewer_cap_own = lot_balances["dues_sewer_cap_own"]
+        instance.current_dues_parks_dev = lot_balances["dues_parks_dev"]
+        instance.current_dues_parks_own = lot_balances["dues_parks_own"]
+        instance.current_dues_storm_dev = lot_balances["dues_storm_dev"]
+        instance.current_dues_storm_own = lot_balances["dues_storm_own"]
+        instance.current_dues_open_space_dev = lot_balances[
+            "dues_open_space_dev"
+        ]
+        instance.current_dues_open_space_own = lot_balances[
+            "dues_open_space_own"
+        ]
+
+        instance.save()
+
+    pre_save.connect(pre_lot, sender=Lot)
 
 @receiver(post_save, sender=Lot)
 def lot_update_exactions_and_email_supervisor(sender, instance, **kwargs):
