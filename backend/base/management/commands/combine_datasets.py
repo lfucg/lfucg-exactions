@@ -27,7 +27,7 @@ def combine():
   writer = pd.ExcelWriter('Combined Data.xlsx')
   df_combined.to_excel(writer, 'Total Data')
 
-  writer.save()
+  writer.close()
 
 # For use in shell_plus
 # from base.management.commands.combine_datasets import combine
@@ -50,4 +50,4 @@ def combine():
 #   multiple_resolutions_df = df[(((df['AccountLedgerAgreement-1'].notnull()) | (df['AccountLedgerAgreementType-1'].notnull())) & ((df['AccountLedgerAgreement-2'].notnull()) | (df['AccountLedgerAgreementType-2'].notnull())))]
 #   multiple_resolutions_df.to_excel(writer, 'Multiple Resolutions')
 
-#   writer.save()
+#   writer.close()
