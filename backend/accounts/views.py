@@ -975,7 +975,7 @@ class AccountLedgerDifferencesCSVExportView(View):
         writer = pd.ExcelWriter(bytesio)
         ledgers.to_excel(writer, 'Differences in Reported vs Calculated Credit Transfers')
 
-        writer.save()
+        writer.close()
 
         bytesio.seek(0)
 
@@ -1019,7 +1019,7 @@ class AccountLedgerDifferencesNoZeroCSVExportView(View):
         writer = pd.ExcelWriter(bytesio)
         ledgers.to_excel(writer, 'Differences in Reported vs Calculated Credit Transfers Excluding All Zero')
 
-        writer.save()
+        writer.close()
 
         bytesio.seek(0)
 
@@ -1067,7 +1067,7 @@ class AccountLedgerDifferencesOnlyZeroCSVExportView(View):
         writer = pd.ExcelWriter(bytesio)
         ledgers.to_excel(writer, 'Differences in Reported vs Calculated Credit Transfers Excluding All Zero')
 
-        writer.save()
+        writer.close()
 
         bytesio.seek(0)
 
@@ -1151,7 +1151,7 @@ class AccountLedgerCSVExportView(View):
         writer = pd.ExcelWriter(bytesio)
         ledgers.to_excel(writer, 'Credit Tranfers Report')
 
-        writer.save()
+        writer.close()
 
         bytesio.seek(0)
 
@@ -1501,7 +1501,7 @@ class TransactionCSVExportView(View):
         writer = pd.ExcelWriter(bytesio, date_format='YYYY-MM-DD')
         concat.to_excel(writer, 'Transaction Report')
 
-        writer.save()
+        writer.close()
 
         bytesio.seek(0)
 

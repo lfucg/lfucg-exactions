@@ -844,7 +844,7 @@ class AdminLotSearchCSVExportView(View):
                 # Use the StringIO object as the filehandle.
                 writer = pd.ExcelWriter(b)
                 final_df.to_excel(writer, sheet_name='Lots')
-                writer.save()
+                writer.close()
                 return HttpResponse(b.getvalue(), content_type='application/vnd.ms-excel')
         except Exception as ex:
             print('EXCEPTION ADMIN LOT EXPORT', ex)
