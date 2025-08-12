@@ -1,4 +1,5 @@
-ARG PYTHON_VERSION=3.5.10-slim-buster
+ARG PYTHON_VERSION=3.9.23-slim-bullseye
+# ARG PYTHON_VERSION=3.5.10-slim-buster
 
 # define an alias for the specfic python version used in this file.
 FROM python:${PYTHON_VERSION} as python
@@ -9,8 +10,10 @@ FROM python as python-build-stage
 ARG BUILD_ENVIRONMENT=production
 
 # Install apt packages
-RUN apt-get update && apt-get --fix-broken install --no-install-recommends -y \
+RUN apt-get clean && apt-get update && apt-get --fix-broken install --no-install-recommends -y \
+# RUN apt-get clean update && apt-get --no-install-recommends -y \
   # dependencies for building Python packages
+  # build-essential 
   build-essential \
   zlib1g-dev \
   libjpeg-dev \
