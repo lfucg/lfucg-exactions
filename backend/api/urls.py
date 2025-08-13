@@ -22,6 +22,8 @@ from accounts.views import (
     ProjectCostEstimateCSVExportView,
     TransactionCSVExportView,
     AccountLedgerDifferencesCSVExportView,
+    AccountLedgerDifferencesNoZeroCSVExportView,
+    AccountLedgerDifferencesOnlyZeroCSVExportView,
 )
 
 router = routers.DefaultRouter()
@@ -81,6 +83,8 @@ urlpatterns = [
     url(r'^project_estimate_search_csv/$', ProjectCostEstimateCSVExportView.as_view()),
     url(r'^ledger_search_csv/$', AccountLedgerCSVExportView.as_view()),
     url(r'^ledger_differences_csv/$', AccountLedgerDifferencesCSVExportView.as_view()),
+    url(r'^ledger_differences_no_zero_csv/$', AccountLedgerDifferencesNoZeroCSVExportView.as_view()),
+    url(r'^ledger_differences_only_zero_csv/$', AccountLedgerDifferencesOnlyZeroCSVExportView.as_view()),
 
     url(r'^', include(router.urls)),
 ]

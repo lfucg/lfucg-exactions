@@ -20,14 +20,46 @@ No environment variables are required to begin local development. In order to se
 
 From the root directory of the project:
 
-```console
+```bash
 $ lando start
 ```
+
+#### First time setup
 
 Run Django migrations:
 
 ```bash
 $ lando manage.py migrate
+```
+
+To add initial data, run:
+```bash
+$ lando manage.py loaddata -v 0 initial_data.json
+```
+
+To add groups, run:
+```bash
+$ lando manage.py loaddata -v 0 group_data.json
+```
+
+Add group permissions:
+```bash
+$ lando manage.py import_permissions
+```
+
+Add plats (though there may be errors with some):
+```bash
+$ lando manage.py import_plat import_files/plat_data.csv
+```
+
+Add lots (though there may be errors with some):
+```bash
+$ lando manage.py import_lot import_files/lot_data.csv
+```
+
+Add ledgers (though there may be errors with some):
+```bash
+$ lando manage.py ledger_add_delete_resolution
 ```
 
 Create a super user for testing:
