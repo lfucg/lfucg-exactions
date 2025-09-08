@@ -54,6 +54,8 @@ export default class DjangoService extends Construct {
       publicLoadBalancer: true,
       enableExecuteCommand: true,
       securityGroups: [defaultSG],
+      minHealthyPercent: 100,
+      maxHealthyPercent: 200,
       // circuitBreaker: { rollback: true },
       taskImageOptions: {
         image: ecs.ContainerImage.fromDockerImageAsset(dockerImageAsset),

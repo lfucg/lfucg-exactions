@@ -129,7 +129,7 @@ export default class AppEnvironment extends core.Environment {
     const cluster = new ecs.Cluster(this, `Cluster-${this.id}`, {
       vpc,
       clusterName: this.id,
-      containerInsights: true,
+      containerInsightsV2: ecs.ContainerInsights.ENABLED,
     });
 
     const djangoService = new DjangoService(this, {
