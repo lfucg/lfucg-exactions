@@ -2,7 +2,7 @@ import * as ecs from 'aws-cdk-lib/aws-ecs';
 
 /** Non-sensitive environment variables for django */
 export interface DjangoEnvVars {
-    /**
+  /**
    * Indicates which django settings module to use.
    *
    * @default 'config.settings.local'
