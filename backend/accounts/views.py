@@ -3,6 +3,7 @@ import math
 from django.views.generic import View
 from django.http import HttpResponse
 from django.db.models import Count, F, Max, Q, Prefetch, Sum
+from django.contrib.postgres.aggregates import StringAgg
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.generics import RetrieveAPIView
@@ -1306,43 +1307,63 @@ class TransactionCSVExportView(View):
         ending_date = request.GET.get('ending_date', datetime.date.today())
         print('ENDING DATE', ending_date)
 
-        payment_prefetch = Payment.objects.filter(
-            entry_date__lte=ending_date, entry_date__gte=starting_date
-        ).exclude(
-            is_active=False
-        ).prefetch_related(
-            Prefetch(
-                'credit_source',
-                queryset=Agreement.objects.exclude(is_active=False),
-            ),
-            Prefetch(
-                'credit_account',
-                queryset=Account.objects.exclude(is_active=False),
-            ),
-            Prefetch(
-                'lot_id',
-                queryset=Lot.objects.exclude(
-                    is_active=False
-                ).prefetch_related(
-                    Prefetch(
-                        'plat',
-                        queryset=Plat.objects.exclude(is_active=False).prefetch_related(
-                            'plat_zone',
-                            'subdivision',
+        payment_prefetch = (
+            Payment.objects.filter(
+                entry_date__lte=ending_date, entry_date__gte=starting_date
+            )
+            .exclude(is_active=False)
+            .prefetch_related(
+                Prefetch(
+                    "credit_source",
+                    queryset=Agreement.objects.exclude(is_active=False),
+                ),
+                Prefetch(
+                    "credit_account",
+                    queryset=Account.objects.exclude(is_active=False),
+                ),
+                Prefetch(
+                    "lot_id",
+                    queryset=Lot.objects.exclude(is_active=False).prefetch_related(
+                        Prefetch(
+                            "plat",
+                            queryset=Plat.objects.exclude(
+                                is_active=False
+                            ).prefetch_related(
+                                "plat_zone",
+                                "subdivision",
+                            ),
                         ),
                     ),
                 ),
-            ),
-        ).values(
-            'lot_id__address_full', 'lot_id__lot_number',
-            'lot_id__plat__plat_zone', 'lot_id__plat__expansion_area',
-            'lot_id__plat__cabinet', 'lot_id__plat__slide', 
-            'credit_account__account_name', 'credit_source__resolution_number',
-            'check_number', 
-            'entry_date', 'date_modified', 'date_created', 'id',
-            'paid_by', 'paid_by_type', 'payment_type',
-            'paid_open_space', 'paid_parks', 'paid_roads', 'paid_storm',
-            'paid_sewer_cap', 'paid_sewer_trans',
+            )
+            .annotate(
+                plat_zone_string=StringAgg("lot__plat__plat_zone__zone", delimiter=', and '),
+            )
+            .values(
+                "lot_id__address_full",
+                "lot_id__lot_number",
+                # "lot_id__plat__plat_zone",
+                'plat_zone_string',
+                "lot_id__plat__expansion_area",
+                "lot_id__plat__cabinet",
+                "lot_id__plat__slide",
+                "credit_account__account_name",
+                "credit_source__resolution_number",
+                "check_number",
+                "entry_date",
+                "date_modified",
+                "date_created",
+                "id",
+                "paid_by",
+                "paid_by_type",
+                "payment_type",
+                "paid_open_space",
+                "paid_parks",
+                "paid_roads",
+                "paid_storm",
+                "paid_sewer_cap",
+                "paid_sewer_trans",
+            )
         )
         payment_pandas = pd.DataFrame.from_records(payment_prefetch)
         # print('PAYMENT PANDAS', payment_pandas[:2])
@@ -1372,7 +1393,7 @@ class TransactionCSVExportView(View):
                 'entry_date': 'Payment Entry Date',
                 'date_created': 'Payment Date Created',
                 'date_modified': 'Payment Date Modified',
-                'lot_id__plat__plat_zone': 'Plat Zones',
+                'plat_zone_string': 'Plat Zones',
                 'lot_id__plat__expansion_area': 'Expansion Area',
                 'lot_id__plat__cabinet': 'Cabinet',
                 'lot_id__plat__slide': 'Slide', 
@@ -1385,47 +1406,67 @@ class TransactionCSVExportView(View):
             })
         # print('PAYMENTS RENAMED', payments[:2])
 
-        ledger_prefetch = AccountLedger.objects.filter(
-            entry_date__lte=ending_date, entry_date__gte=starting_date
-        ).exclude(
-            is_active=False
-        ).prefetch_related(
-            Prefetch(
-                'account_from',
-                queryset=Account.objects.exclude(is_active=False),
-            ),
-            Prefetch(
-                'account_to',
-                queryset=Account.objects.exclude(is_active=False),
-            ),
-            Prefetch(
-                'agreement',
-                queryset=Agreement.objects.exclude(is_active=False),
-            ),
-            Prefetch(
-                'lot',
-                queryset=Lot.objects.exclude(
-                    is_active=False
-                ).prefetch_related(
-                    Prefetch(
-                        'plat',
-                        queryset=Plat.objects.exclude(is_active=False).prefetch_related(
-                            'plat_zone',
-                            'subdivision',
+        ledger_prefetch = (
+            AccountLedger.objects.filter(
+                entry_date__lte=ending_date, entry_date__gte=starting_date
+            )
+            .exclude(is_active=False)
+            .prefetch_related(
+                Prefetch(
+                    "account_from",
+                    queryset=Account.objects.exclude(is_active=False),
+                ),
+                Prefetch(
+                    "account_to",
+                    queryset=Account.objects.exclude(is_active=False),
+                ),
+                Prefetch(
+                    "agreement",
+                    queryset=Agreement.objects.exclude(is_active=False),
+                ),
+                Prefetch(
+                    "lot",
+                    queryset=Lot.objects.exclude(is_active=False).prefetch_related(
+                        Prefetch(
+                            "plat",
+                            queryset=Plat.objects.exclude(
+                                is_active=False
+                            ).prefetch_related(
+                                "plat_zone",
+                                "subdivision",
+                            ),
                         ),
                     ),
                 ),
-            ),
-        ).values(
-            'account_from__account_name', 'account_to__account_name',
-            'agreement__resolution_number',
-            'id', 'date_created', 'date_modified',
-            'lot__lot_number', 'lot__address_full',
-            'lot__plat__plat_zone', 'lot__plat__expansion_area',
-            'lot__plat__cabinet', 'lot__plat__slide', 
-            'entry_date', 'entry_type',
-            'non_sewer_credits', 'open_space', 'parks', 'roads', 'storm',
-            'sewer_cap', 'sewer_credits', 'sewer_trans',
+            )
+            .annotate(
+                plat_zone_string=StringAgg("lot__plat__plat_zone__zone", delimiter=', and '),
+            )
+            .values(
+                "account_from__account_name",
+                "account_to__account_name",
+                "agreement__resolution_number",
+                "id",
+                "date_created",
+                "date_modified",
+                "lot__lot_number",
+                "lot__address_full",
+                # "lot__plat__plat_zone",
+                "plat_zone_string",
+                "lot__plat__expansion_area",
+                "lot__plat__cabinet",
+                "lot__plat__slide",
+                "entry_date",
+                "entry_type",
+                "non_sewer_credits",
+                "open_space",
+                "parks",
+                "roads",
+                "storm",
+                "sewer_cap",
+                "sewer_credits",
+                "sewer_trans",
+            )
         )
         ledger_pandas = pd.DataFrame.from_records(ledger_prefetch)
         # print('LEDGER PANDAS', ledger_pandas[:2])
@@ -1448,25 +1489,33 @@ class TransactionCSVExportView(View):
                 'Sewer', 'Sewer Cap.', 'Sewer Trans.'
             ])
         else:
-            ledgers = ledger_pandas.rename(index=str, columns={
-                'lot__address_full': 'Lot Address',
-                'id': 'Ledger ID',
-                'entry_date': 'Ledger Entry Date',
-                'date_created': 'Ledger Date Created',
-                'date_modified': 'Ledger Date Modified',
-                'lot__lot_number': 'Lot ID',
-                'lot__plat__plat_zone': 'Plat Zones',
-                'lot__plat__expansion_area': 'Expansion Area',
-                'lot__plat__cabinet': 'Cabinet',
-                'lot__plat__slide': 'Slide', 
-                'account_from__account_name': 'Account From',
-                'account_to__account_name': 'Account To',
-                'agreement__resolution_number': 'Resolution',
-                'entry_type': 'Transaction Type',
-                'non_sewer_credits': 'Non-Sewer', 'open_space': 'Open Space', 'parks': 'Parks', 
-                'roads': 'Roads', 'storm': 'Storm',
-                'sewer_cap': 'Sewer Cap.', 'sewer_credits': 'Sewer', 'sewer_trans': 'Sewer Trans.'
-            })
+            ledgers = ledger_pandas.rename(
+                index=str,
+                columns={
+                    "lot__address_full": "Lot Address",
+                    "id": "Ledger ID",
+                    "entry_date": "Ledger Entry Date",
+                    "date_created": "Ledger Date Created",
+                    "date_modified": "Ledger Date Modified",
+                    "lot__lot_number": "Lot ID",
+                    "plat_zone_string": "Plat Zones",
+                    "lot__plat__expansion_area": "Expansion Area",
+                    "lot__plat__cabinet": "Cabinet",
+                    "lot__plat__slide": "Slide",
+                    "account_from__account_name": "Account From",
+                    "account_to__account_name": "Account To",
+                    "agreement__resolution_number": "Resolution",
+                    "entry_type": "Transaction Type",
+                    "non_sewer_credits": "Non-Sewer",
+                    "open_space": "Open Space",
+                    "parks": "Parks",
+                    "roads": "Roads",
+                    "storm": "Storm",
+                    "sewer_cap": "Sewer Cap.",
+                    "sewer_credits": "Sewer",
+                    "sewer_trans": "Sewer Trans.",
+                },
+            )
             # print('LEDGERS RENAMED', ledgers[:2])
 
         concat = pd.concat([payments, ledgers], join='outer')
