@@ -1337,7 +1337,7 @@ class TransactionCSVExportView(View):
                 ),
             )
             .annotate(
-                plat_zone_string=StringAgg("lot__plat__plat_zone__zone", delimiter=', and '),
+                plat_zone_string=StringAgg("lot_id__plat__plat_zone__zone", delimiter=', and '),
             )
             .values(
                 "lot_id__address_full",
