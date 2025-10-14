@@ -1,13 +1,15 @@
-from .models import *
+from django.db.models import F, Sum
 from rest_framework.response import Response
 from rest_framework import status
+
+from .models import *
 
 def calculate_agreement_balance(agreement_id):
     agreement = Agreement.objects.filter(id=agreement_id)
 
     ledger_from_value = 0
     ledger_to_value = 0
-    
+
     if agreement.exists():
         related_account_id = agreement[0].account_id.id
 
@@ -35,10 +37,11 @@ def calculate_agreement_balance(agreement_id):
                 payment.paid_storm +
                 payment.paid_open_space
             )
-    
+
     current_agreement_total = ledger_to_value - ledger_from_value - payment_value
 
     return current_agreement_total
+
 
 def update_entry(self, request, pk):
     existing_object = self.get_object()
@@ -49,3 +52,33 @@ def update_entry(self, request, pk):
         return Response(serializer.data, status=status.HTTP_200_OK)
     else:
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+def get_all_zero_ledgers():
+    mismatch_non_sewer_ledgers = (
+        AccountLedger.objects.annotate(
+            non_sewer_sum=Sum(F("roads") + F("parks") + F("storm") + F("open_space")),
+            sewer_sum=Sum(F("sewer_trans") + F("sewer_cap")),
+        )
+        .filter(
+            sewer_sum=0,
+            non_sewer_sum=0,
+        )
+        .exclude(non_sewer_sum=F("non_sewer_credits"))
+    )
+
+    mismatch_sewer_ledgers = (
+        AccountLedger.objects.annotate(
+            non_sewer_sum=Sum(F("roads") + F("parks") + F("storm") + F("open_space")),
+            sewer_sum=Sum(F("sewer_trans") + F("sewer_cap")),
+        )
+        .filter(
+            sewer_sum=0,
+            non_sewer_sum=0,
+        )
+        .exclude(sewer_sum=F("sewer_credits"))
+    )
+
+    mismatched_ledgers = mismatch_non_sewer_ledgers | mismatch_sewer_ledgers
+
+    return mismatched_ledgers
