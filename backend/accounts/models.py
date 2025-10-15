@@ -318,6 +318,10 @@ class AccountLedger(models.Model):
     storm = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True, default=0)
     open_space = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True, default=0)
 
+    # Fields for backing up ledgers before duplicating them for changes
+    original_account_ledger = models.ForeignKey('accounts.AccountLedger', related_name='new_ledger_copies', blank=True, null=True, on_delete=models.SET_NULL,)
+    reconciliation_date = models.DateField(blank=True, null=True)
+    reconciliation_reason = models.CharField(max_length=200, blank=True, null=True)
 
     history = HistoricalRecords()
 

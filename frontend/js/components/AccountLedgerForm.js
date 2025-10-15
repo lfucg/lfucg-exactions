@@ -247,56 +247,69 @@ class AccountLedgerForm extends React.Component {
                                             </div>
                                         </div>
                                         {activeForm.openModal && currentPlat.remaining_lots > 0 &&
-                                        <div
-                                            className={activeForm.openModal ? 'modal in' : 'modal'}
-                                            role="alertdialog"
-                                            aria-labelledby="modal-title"
-                                            aria-describedby="modalDescription"
-                                        >
-                                            <div className="modal-dialog modal-lg" role="document">
-                                                <div className="modal-content">
-                                                    <div className="modal-header">
-                                                        <button
-                                                            type="button"
-                                                            className="close"
-                                                            data-dismiss="modal"
-                                                            aria-label="Plat is Missing Lots Close modal"
-                                                            onClick={closeModal}
-                                                            autoFocus
-                                                        >
-                                                            <span aria-hidden="true">&times;</span>
-                                                        </button>
-                                                        <h4 className="modal-title" tabIndex="0">Plat is Missing Lots</h4>
-                                                    </div>
-                                                    <div className="modal-body">
-                                                        <div className="container">
-                                                            {currentPlat && <div role="document" tabIndex="0">
-                                                                <h4 className="row modalDescription">
-                                                                    The number of buildable lots is greater than the number of lots in this system.
-                                                                </h4>
-                                                                <div className="col-xs-12">
-                                                                    Buildable lots on plat: {currentPlat.buildable_lots}
-                                                                </div>
-                                                                <div className="col-xs-12">
-                                                                    Lots in system: {currentPlat.buildable_lots - currentPlat.remaining_lots}
-                                                                </div>
-                                                                <h5>The credits used will only apply to the lots within the system.</h5>
-                                                            </div>}
+                                            <div
+                                                className={activeForm.openModal ? 'modal in' : 'modal'}
+                                                role="alertdialog"
+                                                aria-labelledby="modal-title"
+                                                aria-describedby="modalDescription"
+                                            >
+                                                <div className="modal-dialog modal-lg" role="document">
+                                                    <div className="modal-content">
+                                                        <div className="modal-header">
+                                                            <button
+                                                                type="button"
+                                                                className="close"
+                                                                data-dismiss="modal"
+                                                                aria-label="Plat is Missing Lots Close modal"
+                                                                onClick={closeModal}
+                                                                autoFocus
+                                                            >
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                            <h4 className="modal-title" tabIndex="0">Plat is Missing Lots</h4>
                                                         </div>
-                                                    </div>
-                                                    <div className="modal-footer">
-                                                        <button
-                                                            className="btn btn-default"
-                                                            data-dismiss="modal"
-                                                            onClick={closeModal}
-                                                            aria-label="Plat is Missing Lots Continue and close modal"
-                                                        >
-                                                            Continue
-                                                        </button>
+                                                        <div className="modal-body">
+                                                            <div className="container">
+                                                                {currentPlat && <div role="document" tabIndex="0">
+                                                                    <h4 className="row modalDescription">
+                                                                        The number of buildable lots is greater than the number of lots in this system.
+                                                                    </h4>
+                                                                    <div className="col-xs-12">
+                                                                        Buildable lots on plat: {currentPlat.buildable_lots}
+                                                                    </div>
+                                                                    <div className="col-xs-12">
+                                                                        Lots in system: {currentPlat.buildable_lots - currentPlat.remaining_lots}
+                                                                    </div>
+                                                                    <h5>The credits used will only apply to the lots within the system.</h5>
+                                                                </div>}
+                                                            </div>
+                                                        </div>
+                                                        <div className="modal-footer">
+                                                            <button
+                                                                className="btn btn-default"
+                                                                data-dismiss="modal"
+                                                                onClick={closeModal}
+                                                                aria-label="Plat is Missing Lots Continue and close modal"
+                                                            >
+                                                                Continue
+                                                            </button>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        }
+                                        {!!activeForm.reconciliation_date &&
+                                            <div className="row">
+                                                <div className="col-sm-6">
+                                                    This ledger had changes made to it and was saved as a new ledger.
+                                                    The original ledger has been marked as inactive.
+                                                </div>
+                                                <div className="col-sm-6">
+                                                    <FormGroup label="Reconciliation Date" id="reconciliation_date">
+                                                        <input type="date" className="form-control" placeholder="Reconciliation Date" disabled />
+                                                    </FormGroup>
+                                                </div>
+                                            </div>
                                         }
                                         <div className="row">
                                             <div className="col-sm-6 form-group">
@@ -617,6 +630,7 @@ function mapDispatchToProps(dispatch, params) {
                                 sewer_cap: ledResp.sewer_cap,
                                 plat_lot: 'lot',
                                 plat_lot_show: 'lot,lot',
+                                reconciliation_date: ledResp.reconciliation_date,
                             };
                             dispatch(formUpdate(update));
                         }

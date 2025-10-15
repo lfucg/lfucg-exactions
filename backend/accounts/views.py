@@ -16,6 +16,7 @@ from io import BytesIO
 from django.contrib.auth.models import User
 from .models import Account, AccountLedger, Agreement, Payment, Project, ProjectCostEstimate
 from .serializers import UserSerializer, AccountSerializer, AccountLedgerSerializer, AgreementSerializer, PaymentSerializer, ProjectSerializer, ProjectCostEstimateSerializer
+from .utils import get_all_zero_ledgers
 from plats.models import Lot, Plat, PlatZone, Subdivision
 from plats.serializers import LotSerializer, PlatSerializer, PlatZoneSerializer
 
@@ -1040,27 +1041,7 @@ class AccountLedgerDifferencesOnlyZeroCSVExportView(View):
         return serializer
 
     def get(self, request, *args, **kwargs):
-        mismatch_non_sewer_ledgers = AccountLedger.objects.annotate(
-            non_sewer_sum=Sum(F("roads") + F('parks') + F('storm') + F('open_space')),
-            sewer_sum=Sum(F("sewer_trans") + F('sewer_cap'))
-        ).filter(
-            sewer_sum=0,
-            non_sewer_sum=0,
-        ).exclude(
-            non_sewer_sum=F('non_sewer_credits')
-        )
-
-        mismatch_sewer_ledgers = AccountLedger.objects.annotate(
-            non_sewer_sum=Sum(F("roads") + F('parks') + F('storm') + F('open_space')),
-            sewer_sum=Sum(F("sewer_trans") + F('sewer_cap'))
-        ).filter(
-            sewer_sum=0,
-            non_sewer_sum=0,
-        ).exclude(
-            sewer_sum=F('sewer_credits')
-        )
-
-        mismatched_ledgers = mismatch_non_sewer_ledgers | mismatch_sewer_ledgers
+        mismatched_ledgers = get_all_zero_ledgers()
 
         ledgers = generate_ledgers_pandas(mismatched_ledgers)
 

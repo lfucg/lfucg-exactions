@@ -104,6 +104,11 @@ class AccountLedgerSummary extends React.Component {
                                           <p className="col-md-4 col-xs-6">Sewer Transmission: {accountLedgers.currentLedger.dollar_values && accountLedgers.currentLedger.dollar_values.dollar_sewer_trans}</p>
                                           <p className="col-md-4 col-xs-6">Sewer Capacity: {accountLedgers.currentLedger.dollar_values && accountLedgers.currentLedger.dollar_values.dollar_sewer_cap}</p>
                                       </div>
+                                      {accountLedgers.currentLedger.reconciliation_date &&
+                                        <div className="col-xs-12">
+                                          <p className="col-md-4 col-xs-6">This credit transfer was reconciled and is a copy of the original.</p>
+                                        </div>
+                                      }
                                   </div>
                               </div>
                               {accountLedgers.currentLedger && accountLedgers.currentLedger.id &&
