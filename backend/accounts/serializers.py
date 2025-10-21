@@ -314,6 +314,7 @@ class AccountLedgerSerializer(serializers.ModelSerializer):
             "dollar_values",
             "sum_non_sewer",
             "sum_sewer",
+            "reconciliation_date",
         )
 
 

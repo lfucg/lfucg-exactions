@@ -136,21 +136,25 @@ class ProjectCostEstimateHistoryAdmin(SimpleHistoryAdmin):
 
 class AccountLedgerHistoryAdmin(SimpleHistoryAdmin):
     list_display = (
-        'id',
-        'account_from',
-        'account_to',
-        'lot',
-        'agreement',
-        'entry_type',
-        'entry_date',
+        "id",
+        "account_from",
+        "account_to",
+        "lot",
+        "agreement",
+        "entry_type",
+        "entry_date",
+        "is_active",
+        "reconciliation_date",
     )
     readonly_fields = (
         'created_by',
         'modified_by',
         'date_created',
         'date_modified',
+        'reconciliation_date',
     )
     list_filter = (
+        'reconciliation_date',
         'account_from',
         'account_to',
         'lot__address_street',
