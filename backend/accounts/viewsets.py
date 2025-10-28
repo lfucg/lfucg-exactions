@@ -1,4 +1,3 @@
-
 from rest_framework.pagination import PageNumberPagination
 from rest_framework import viewsets, status, filters
 from django.db.models import Q
@@ -115,7 +114,7 @@ class AgreementQuickViewSet(viewsets.ModelViewSet):
     serializer_class = AgreementQuickSerializer
     queryset = Agreement.objects.filter(is_active=True).order_by('resolution_number')
     pagination_class = None
-            
+
 class PaymentViewSet(viewsets.ModelViewSet):
     serializer_class = PaymentSerializer
     queryset = Payment.objects.all()
@@ -181,7 +180,7 @@ class PaymentViewSet(viewsets.ModelViewSet):
 
     def update(self, request, pk):
         return update_entry(self, request, pk)
-            
+
 class ProjectViewSet(viewsets.ModelViewSet):
     serializer_class = ProjectSerializer
     queryset = Project.objects.all()
@@ -225,12 +224,12 @@ class ProjectViewSet(viewsets.ModelViewSet):
 
     def update(self, request, pk):
         return update_entry(self, request, pk)
-    
+
 class ProjectQuickViewSet(viewsets.ModelViewSet):
     serializer_class = ProjectQuickSerializer
     queryset = Project.objects.filter(is_active=True).order_by('-date_modified')
     pagination_class = None
-            
+
 class ProjectCostEstimateViewSet(viewsets.ModelViewSet):
     serializer_class = ProjectCostEstimateSerializer
     queryset = ProjectCostEstimate.objects.all()
@@ -293,7 +292,7 @@ class AccountLedgerViewSet(viewsets.ModelViewSet):
             queryset = queryset.exclude(is_active=False)
         if self.request.user.is_anonymous(): 
             queryset = queryset.exclude(is_approved=False)
-        
+
         if paginatePage is not None:
             pagination_class = PageNumberPagination
             PageNumberPagination.page_size = pageSize
@@ -325,14 +324,31 @@ class AccountLedgerViewSet(viewsets.ModelViewSet):
 
         data_set['created_by'] = self.request.user.id
         data_set['modified_by'] = self.request.user.id
-
-        sewer_equal = data_set['sewer_credits'] == data_set['sewer_cap'] + data_set['sewer_trans']
-        non_sewer_equal = data_set['non_sewer_credits'] == data_set['roads'] + data_set['parks'] + data_set['open_space'] + data_set['storm']
-
-        if not (sewer_equal and non_sewer_equal):
-            raise ValidationError('Ensure sums for both sewer and non-sewer equal the sum of each of their parts.')
+        non_sewer_credits_per_lot = 0
+        sewer_credits_per_lot = 0
+        roads_per_lot = 0
+        parks_per_lot = 0
+        storm_per_lot = 0
+        open_space_per_lot = 0
+        sewer_trans_per_lot = 0
+        sewer_cap_per_lot = 0
 
         if 'lot' in self.request.data:
+            non_sewer_credits_per_lot = round(float(data_set['non_sewer_credits']), 2) if hasattr(data_set, 'non_sewer_credits') else 0
+            sewer_credits_per_lot = round(float(data_set['sewer_credits']), 2) if hasattr(data_set, 'sewer_credits') else 0
+            roads_per_lot = round(float(data_set['roads']), 2) if hasattr(data_set, 'roads') else 0
+            parks_per_lot = round(float(data_set["parks"]), 2) if hasattr(data_set, 'parks') else 0
+            storm_per_lot = round(float(data_set["storm"]), 2) if hasattr(data_set, 'storm') else 0
+            open_space_per_lot = round(float(data_set["open_space"]), 2) if hasattr(data_set, 'open_space') else 0
+            sewer_trans_per_lot = round(float(data_set["sewer_trans"]), 2) if hasattr(data_set, 'sewer_trans') else 0
+            sewer_cap_per_lot = round(float(data_set["sewer_cap"]), 2) if hasattr(data_set, 'sewer_cap') else 0
+
+            sewer_equal = sewer_credits_per_lot == sewer_cap_per_lot + sewer_trans_per_lot
+            non_sewer_equal = non_sewer_credits_per_lot == roads_per_lot + parks_per_lot + open_space_per_lot + storm_per_lot
+
+            if not (sewer_equal and non_sewer_equal):
+                raise ValidationError('Ensure sums for both sewer and non-sewer equal the sum of each of their parts.')
+
             serializer = AccountLedgerSerializer(data=data_set)
             if serializer.is_valid(raise_exception=True):
                 self.perform_create(serializer)
@@ -341,14 +357,6 @@ class AccountLedgerViewSet(viewsets.ModelViewSet):
         elif 'plat' in self.request.data:
             chosen_plat = self.request.data['plat']
             plat_set = Plat.objects.filter(id=chosen_plat)
-            non_sewer_credits_per_lot = 0
-            sewer_credits_per_lot = 0
-            roads_per_lot = 0
-            parks_per_lot = 0
-            storm_per_lot = 0
-            open_space_per_lot = 0
-            sewer_trans_per_lot = 0
-            sewer_cap_per_lot = 0
 
             if plat_set.exists():
                 buildable_lots = plat_set[0].buildable_lots
@@ -395,14 +403,24 @@ class AccountLedgerViewSet(viewsets.ModelViewSet):
     def update(self, request, pk):
         data_set = request.data
 
-        sewer_equal = data_set['sewer_credits'] == data_set['sewer_cap'] + data_set['sewer_trans']
-        non_sewer_equal = data_set['non_sewer_credits'] == data_set['roads'] + data_set['parks'] + data_set['open_space'] + data_set['storm']
+        non_sewer_credits_per_lot = round(float(data_set['non_sewer_credits']), 2) if hasattr(data_set, 'non_sewer_credits') else 0
+        sewer_credits_per_lot = round(float(data_set['sewer_credits']), 2) if hasattr(data_set, 'sewer_credits') else 0
+        roads_per_lot = round(float(data_set['roads']), 2) if hasattr(data_set, 'roads') else 0
+        parks_per_lot = round(float(data_set["parks"]), 2) if hasattr(data_set, 'parks') else 0
+        storm_per_lot = round(float(data_set["storm"]), 2) if hasattr(data_set, 'storm') else 0
+        open_space_per_lot = round(float(data_set["open_space"]), 2) if hasattr(data_set, 'open_space') else 0
+        sewer_trans_per_lot = round(float(data_set["sewer_trans"]), 2) if hasattr(data_set, 'sewer_trans') else 0
+        sewer_cap_per_lot = round(float(data_set["sewer_cap"]), 2) if hasattr(data_set, 'sewer_cap') else 0
+
+        sewer_equal = sewer_credits_per_lot == sewer_cap_per_lot + sewer_trans_per_lot
+        non_sewer_equal = non_sewer_credits_per_lot == roads_per_lot + parks_per_lot + open_space_per_lot + storm_per_lot
+
 
         if not (sewer_equal and non_sewer_equal):
             raise ValidationError('Ensure sums for both sewer and non-sewer equal the sum of each of their parts.')
 
         return update_entry(self, request, pk)
-                
+
 class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
     queryset = User.objects.all()
