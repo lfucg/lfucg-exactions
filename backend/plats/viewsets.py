@@ -4,7 +4,7 @@ from django.db.models import Q
 from django.conf import settings
 
 from rest_framework.response import Response
-# from django_filters.rest_framework import DjangoFilterBackend
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.pagination import PageNumberPagination
 
 from .models import *
@@ -16,7 +16,7 @@ class SubdivisionViewSet(viewsets.ModelViewSet):
     serializer_class = SubdivisionSerializer
     queryset = Subdivision.objects.all()
     permission_classes = (CanAdminister,)
-    filter_backends = (filters.DjangoFilterBackend, filters.SearchFilter,)
+    filter_backends = (DjangoFilterBackend, filters.SearchFilter,)
     search_fields = (
         'name',
         # 'plat__name',
@@ -61,7 +61,7 @@ class PlatViewSet(viewsets.ModelViewSet):
     serializer_class = PlatSerializer
     queryset = Plat.objects.none()
     permission_classes = (CanAdminister,)
-    filter_backends = (filters.DjangoFilterBackend, filters.SearchFilter,)
+    filter_backends = (DjangoFilterBackend, filters.SearchFilter,)
     search_fields = (
         'name',
         'expansion_area',
@@ -118,7 +118,7 @@ class PlatViewSet(viewsets.ModelViewSet):
 class PlatQuickViewSet(viewsets.ModelViewSet):
     serializer_class = PlatQuickSerializer
     queryset = Plat.objects.none()
-    filter_backends = (filters.DjangoFilterBackend, filters.SearchFilter,)
+    filter_backends = (DjangoFilterBackend, filters.SearchFilter,)
     search_fields = (
         'name',
         'expansion_area',
@@ -150,7 +150,7 @@ class LotViewSet(viewsets.ModelViewSet):
     serializer_class = LotSerializer
     queryset = Lot.objects.all()
     permission_classes = (CanAdminister,)
-    filter_backends = (filters.DjangoFilterBackend, filters.SearchFilter,)
+    filter_backends = (DjangoFilterBackend, filters.SearchFilter,)
     search_fields = (
         'address_full',
         'lot_number',
@@ -214,7 +214,7 @@ class LotViewSet(viewsets.ModelViewSet):
 class LotQuickViewSet(viewsets.ModelViewSet):
     serializer_class = LotQuickSerializer
     queryset = Lot.objects.none()
-    filter_backends = (filters.DjangoFilterBackend,)
+    filter_backends = (DjangoFilterBackend,)
     filter_fields = ('plat',)
     pagination_class = PageNumberPagination
 

@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     "rest_framework.authtoken",
     "django_extensions",
     # Third-party apps, patches, fixes
+    # "drf_expiring_token",
     "postmarker",
     "compressor",
     # Application base, containing global templates.

@@ -1,9 +1,10 @@
 """urlconf for the base application"""
 
-from django.conf.urls import url, include
+from django.urls import include, path
 from . import views
 from django.contrib.auth import views as auth_views
 from django.contrib import admin
+from django.contrib.auth.views import LogoutView
 
 from django.conf import settings
 from django.conf.urls.static import static
@@ -11,12 +12,12 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 
 urlpatterns = [
-    url(r"^index/$", views.IndexView.as_view(), name="index"),
-    url(r"^logout/$", auth_views.logout, name="logout"),
-    url(r"^health$", views.HealthView.as_view(), name="health"),
-    url(r"^admin/", include(admin.site.urls)),
-    url(r"^api/", include("api.urls")),
-    url(r"^", include("dashboard.urls", namespace="dashboard")),
+    path(r"^logout/$", LogoutView.as_view(), name="logout"),
+    path(r"^index/$", views.IndexView.as_view(), name="index"),
+    path(r"^health$", views.HealthView.as_view(), name="health"),
+    path(r"^admin/", admin.site.urls),
+    path(r"^api/", include("api.urls")),
+    path(r"^", include("dashboard.urls")),
 ]
 
 
@@ -29,4 +30,4 @@ if settings.DEBUG:
     if "debug_toolbar" in settings.INSTALLED_APPS:
         import debug_toolbar
 
-        urlpatterns.append(url(r"^__debug__/", include(debug_toolbar.urls)))
+        urlpatterns.append(path(r"^__debug__/", include(debug_toolbar.urls)))

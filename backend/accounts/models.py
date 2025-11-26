@@ -80,8 +80,10 @@ class Account(models.Model):
     date_created = models.DateField(auto_now_add=True)
     date_modified = models.DateField(auto_now=True)
 
-    created_by = models.ForeignKey(User, related_name='account_created')
-    modified_by = models.ForeignKey(User, related_name='account_modified')
+    created_by = models.ForeignKey(User, related_name='account_created', on_delete=models.PROTECT)
+    modified_by = models.ForeignKey(
+        User, related_name="account_modified", on_delete=models.PROTECT
+    )
 
     account_name = models.CharField(max_length=200)
 
@@ -117,15 +119,21 @@ class Agreement(models.Model):
         ('RESOLUTION', 'Resolution'),
         ('OTHER', 'Other'),
     )
- 
+
     date_executed = models.DateField()
     date_created = models.DateField(auto_now_add=True)
     date_modified = models.DateField(auto_now=True)
 
-    created_by = models.ForeignKey(User, related_name='agreement_created')
-    modified_by = models.ForeignKey(User, related_name='agreement_modified')    
+    created_by = models.ForeignKey(
+        User, related_name="agreement_created", on_delete=models.PROTECT
+    )
+    modified_by = models.ForeignKey(
+        User, related_name="agreement_modified", on_delete=models.PROTECT
+    )
 
-    account_id = models.ForeignKey(Account, related_name='agreement')
+    account_id = models.ForeignKey(
+        Account, related_name="agreement", on_delete=models.PROTECT
+    )
     resolution_number = models.CharField(max_length=100, unique=True)
 
     expansion_area = models.CharField(max_length=100, choices=EXPANSION_AREAS)
@@ -152,16 +160,28 @@ class Payment(models.Model):
         ('OWNER', 'Home Owner'),
     )
 
-    lot_id = models.ForeignKey(Lot, related_name='payment')
-    credit_source = models.ForeignKey(Agreement, related_name='payment_source', null=True, blank=True)
-    credit_account = models.ForeignKey(Account, related_name='payment_account')
+    lot_id = models.ForeignKey(Lot, related_name="payment", on_delete=models.PROTECT)
+    credit_source = models.ForeignKey(
+        Agreement,
+        related_name="payment_source",
+        null=True,
+        blank=True,
+        on_delete=models.PROTECT,
+    )
+    credit_account = models.ForeignKey(
+        Account, related_name="payment_account", on_delete=models.PROTECT
+    )
 
     entry_date = models.DateField()
     date_created = models.DateField(auto_now_add=True)
     date_modified = models.DateField(auto_now=True)
 
-    created_by = models.ForeignKey(User, related_name='payment_created')
-    modified_by = models.ForeignKey(User, related_name='payment_modified')
+    created_by = models.ForeignKey(
+        User, related_name="payment_created", on_delete=models.PROTECT
+    )
+    modified_by = models.ForeignKey(
+        User, related_name="payment_modified", on_delete=models.PROTECT
+    )
 
     paid_by = models.CharField(max_length=100)
     paid_by_type = models.CharField(max_length=100, choices=PAID_BY_TYPE_CHOICES)
@@ -236,10 +256,16 @@ class Project(models.Model):
     date_created = models.DateField(auto_now_add=True)
     date_modified = models.DateField(auto_now=True)
 
-    created_by = models.ForeignKey(User, related_name='project_created')
-    modified_by = models.ForeignKey(User, related_name='project_modified')  
+    created_by = models.ForeignKey(
+        User, related_name="project_created", on_delete=models.PROTECT
+    )
+    modified_by = models.ForeignKey(
+        User, related_name="project_modified", on_delete=models.PROTECT
+    )
 
-    agreement_id = models.ForeignKey(Agreement, related_name='project')
+    agreement_id = models.ForeignKey(
+        Agreement, related_name="project", on_delete=models.PROTECT
+    )
 
     expansion_area = models.CharField(max_length=100, choices=EXPANSION_AREAS)
     name = models.CharField(max_length=200)
@@ -263,10 +289,20 @@ class ProjectCostEstimate(models.Model):
     date_created = models.DateField(auto_now_add=True)
     date_modified = models.DateField(auto_now=True)
 
-    created_by = models.ForeignKey(User, related_name='project_cost_estimate_created')
-    modified_by = models.ForeignKey(User, related_name='project_cost_estimate_modified')  
+    created_by = models.ForeignKey(
+        User, related_name="project_cost_estimate_created", on_delete=models.PROTECT
+    )
+    modified_by = models.ForeignKey(
+        User, related_name="project_cost_estimate_modified", on_delete=models.PROTECT
+    )
 
-    project_id = models.ForeignKey(Project, related_name='project_cost_estimate', null=True, blank=True)
+    project_id = models.ForeignKey(
+        Project,
+        related_name="project_cost_estimate",
+        null=True,
+        blank=True,
+        on_delete=models.PROTECT,
+    )
 
     estimate_type = models.CharField(max_length=200)
 
@@ -298,13 +334,37 @@ class AccountLedger(models.Model):
     date_created = models.DateField(auto_now_add=True)
     date_modified = models.DateField(auto_now=True)
 
-    created_by = models.ForeignKey(User, related_name='ledger_created')
-    modified_by = models.ForeignKey(User, related_name='ledger_modified')  
+    created_by = models.ForeignKey(
+        User, related_name="ledger_created", on_delete=models.PROTECT
+    )
+    modified_by = models.ForeignKey(
+        User, related_name="ledger_modified", on_delete=models.PROTECT
+    )
 
-    account_from = models.ForeignKey(Account, related_name='ledger_account_from', blank=True, null=True)
-    account_to = models.ForeignKey(Account, related_name='ledger_account_to', blank=True, null=True)
-    lot = models.ForeignKey(Lot, related_name='ledger_lot', blank=True, null=True)
-    agreement = models.ForeignKey(Agreement, related_name='ledger', blank=True, null=True)
+    account_from = models.ForeignKey(
+        Account,
+        related_name="ledger_account_from",
+        blank=True,
+        null=True,
+        on_delete=models.PROTECT,
+    )
+    account_to = models.ForeignKey(
+        Account,
+        related_name="ledger_account_to",
+        blank=True,
+        null=True,
+        on_delete=models.PROTECT,
+    )
+    lot = models.ForeignKey(
+        Lot, related_name="ledger_lot", blank=True, null=True, on_delete=models.PROTECT
+    )
+    agreement = models.ForeignKey(
+        Agreement,
+        related_name="ledger",
+        blank=True,
+        null=True,
+        on_delete=models.PROTECT,
+    )
 
     entry_type = models.CharField(max_length=100, choices=ENTRY_TYPE)
 

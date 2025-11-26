@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User
-from django.contrib.auth.views import login
+# from django.contrib.auth import LoginView
 from django.core import signing
 
 from rest_framework import authentication, permissions
@@ -147,7 +147,7 @@ def _delete_token(token):
     try:
         data = signing.loads(token)
         data_token = data.get('passtoken', None)
-        ExpiringToken.objects.get(key=data_token).delete()
+        # ExpiringToken.objects.get(key=data_token).delete()
     except:
         pass
 
