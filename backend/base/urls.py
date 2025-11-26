@@ -12,12 +12,12 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 
 urlpatterns = [
-    path(r"^logout/$", LogoutView.as_view(), name="logout"),
-    path(r"^index/$", views.IndexView.as_view(), name="index"),
-    path(r"^health$", views.HealthView.as_view(), name="health"),
-    path(r"^admin/", admin.site.urls),
-    path(r"^api/", include("api.urls")),
-    path(r"^", include("dashboard.urls")),
+    path("logout/", LogoutView.as_view(), name="logout"),
+    path("index/", views.IndexView.as_view(), name="index"),
+    path("health", views.HealthView.as_view(), name="health"),
+    path("admin/", admin.site.urls),
+    path("api/", include("api.urls")),
+    path("", include("dashboard.urls")),
 ]
 
 
@@ -30,4 +30,4 @@ if settings.DEBUG:
     if "debug_toolbar" in settings.INSTALLED_APPS:
         import debug_toolbar
 
-        urlpatterns.append(path(r"^__debug__/", include(debug_toolbar.urls)))
+        urlpatterns.append(path("__debug__/", include(debug_toolbar.urls)))
