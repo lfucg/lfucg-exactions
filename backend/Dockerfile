@@ -1,5 +1,5 @@
-ARG PYTHON_VERSION=3.9.23-slim-bullseye
-# ARG PYTHON_VERSION=3.5.10-slim-buster
+# ARG PYTHON_VERSION=3.9.23-slim-bullseye
+ARG PYTHON_VERSION=3.12-bookworm
 
 # define an alias for the specfic python version used in this file.
 FROM python:${PYTHON_VERSION} as python
