@@ -147,6 +147,9 @@ STATICFILES_FINDERS = (
 MEDIA_URL = "/media/"
 MEDIA_ROOT = str(BASE_DIR / "media")
 
+# https://docs.djangoproject.com/en/stable/ref/settings/#std:setting-DEFAULT_AUTO_FIELD
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
 INTERNAL_IPS = ("127.0.0.1", "10.0.2.2")
 
 DEFAULT_FROM_EMAIL = "exactions@apaxdev.com"

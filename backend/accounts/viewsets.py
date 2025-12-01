@@ -81,7 +81,7 @@ class AgreementViewSet(viewsets.ModelViewSet):
             print('Show deleted entries')
         else:
             queryset = queryset.exclude(is_active=False)
-        if self.request.user.is_anonymous(): 
+        if self.request.user.is_anonymous: 
             queryset = queryset.exclude(is_approved=False)
 
         account_id_set = self.request.query_params.get('account_id', None)
@@ -136,7 +136,7 @@ class PaymentViewSet(viewsets.ModelViewSet):
         paginatePage = self.request.query_params.get('paginatePage', None)
         pageSize = self.request.query_params.get('pageSize', settings.PAGINATION_SIZE)
 
-        if self.request.user.is_anonymous(): 
+        if self.request.user.is_anonymous: 
             queryset = queryset.exclude(is_approved=False)
 
         if paginatePage is not None:
@@ -196,7 +196,7 @@ class ProjectViewSet(viewsets.ModelViewSet):
         paginatePage = self.request.query_params.get('paginatePage', None)
         pageSize = self.request.query_params.get('pageSize', settings.PAGINATION_SIZE)
 
-        if self.request.user.is_anonymous(): 
+        if self.request.user.is_anonymous: 
             queryset = queryset.exclude(is_approved=False)
 
         if paginatePage is not None:
@@ -246,7 +246,7 @@ class ProjectCostEstimateViewSet(viewsets.ModelViewSet):
         paginatePage = self.request.query_params.get('paginatePage', None)
         pageSize = self.request.query_params.get('pageSize', settings.PAGINATION_SIZE)
         
-        if self.request.user.is_anonymous(): 
+        if self.request.user.is_anonymous: 
             queryset = queryset.exclude(is_approved=False)
 
         if paginatePage is not None:
@@ -290,7 +290,7 @@ class AccountLedgerViewSet(viewsets.ModelViewSet):
             print('Show deleted entries')
         else:
             queryset = queryset.exclude(is_active=False)
-        if self.request.user.is_anonymous(): 
+        if self.request.user.is_anonymous: 
             queryset = queryset.exclude(is_approved=False)
 
         if paginatePage is not None:

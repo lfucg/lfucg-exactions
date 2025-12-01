@@ -90,7 +90,7 @@ class PlatViewSet(viewsets.ModelViewSet):
         else:
             queryset = queryset.exclude(is_active=False)
 
-        if self.request.user.is_anonymous(): 
+        if self.request.user.is_anonymous: 
             queryset = queryset.exclude(is_approved=False)
 
         if paginatePage is not None:
@@ -186,7 +186,7 @@ class LotViewSet(viewsets.ModelViewSet):
         if plat_set is not None:
             queryset = queryset.filter(plat=plat_set)
 
-        if self.request.user.is_anonymous(): 
+        if self.request.user.is_anonymous: 
             queryset = queryset.exclude(is_approved=False)
 
         if paginatePage is not None:
