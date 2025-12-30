@@ -155,19 +155,20 @@ class Plat(models.Model):
             existing_plat = Plat.objects.get(id=self.id)
             if existing_plat is not None:
                 self.created_by = existing_plat.created_by
+
+            plat_zones = self.plat_zone.all()
+            if plat_zones is not None:
+                sewer_calc = 0
+                non_sewer_calc = 0
+                for plat_zone in plat_zones:
+                    sewer_calc += (plat_zone.dues_sewer_cap + plat_zone.dues_sewer_trans)
+                    non_sewer_calc += (plat_zone.dues_roads + plat_zone.dues_open_spaces + plat_zone.dues_parks + plat_zone.dues_storm_water)
+
+                self.sewer_due = sewer_calc
+                self.non_sewer_due = non_sewer_calc
         except:
             self.created_by = self.created_by
 
-        plat_zones = self.plat_zone.all()
-        if plat_zones is not None:
-            sewer_calc = 0
-            non_sewer_calc = 0
-            for plat_zone in plat_zones:
-                sewer_calc += (plat_zone.dues_sewer_cap + plat_zone.dues_sewer_trans)
-                non_sewer_calc += (plat_zone.dues_roads + plat_zone.dues_open_spaces + plat_zone.dues_parks + plat_zone.dues_storm_water)
-
-            self.sewer_due = sewer_calc
-            self.non_sewer_due = non_sewer_calc
         self.cabinet_slide = self.cabinet + '-' + self.slide
 
         super(Plat, self).save(*args, **kwargs)

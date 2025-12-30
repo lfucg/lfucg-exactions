@@ -5,7 +5,7 @@ from rest_framework import status
 from django.contrib.contenttypes.models import ContentType
 
 from rest_framework.parsers import FileUploadParser, MultiPartParser
-from django_filters.rest_framework import DjangoFilterBackend
+from django_filters import rest_framework as dj_filters
 
 from .models import Note, FileUpload, MediaStorage, Rate, RateTable
 from .serializers import *
@@ -120,8 +120,8 @@ class RateViewSet(viewsets.ModelViewSet):
     serializer_class = RateSerializer
     queryset = Rate.objects.all()
     permission_classes = (CanAdminister,)
-    filter_backends = (DjangoFilterBackend, filters.SearchFilter,)
-    filter_fields = ('rate_table_id__id',)
+    filter_backends = (dj_filters.DjangoFilterBackend, filters.SearchFilter,)
+    filterset_fields = ('rate_table_id__id',)
 
     def get_queryset(self):
         queryset = Rate.objects.all()
@@ -189,5 +189,3 @@ class FileUploadCreate(generics.CreateAPIView):
     def perform_create(self, serializer):
         if serializer.is_valid():
             serializer.save()
-
-    
