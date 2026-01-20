@@ -171,7 +171,7 @@ class PlatSerializer(serializers.ModelSerializer):
 
     def get_plat_zone(self, obj):
         plat_zone_set = obj.plat_zone
-        return PlatZoneSerializer(instance=plat_zone_set, many=True).data
+        return PlatZoneSerializer(instance=plat_zone_set, many=True).data if plat_zone_set else []
 
     class Meta:
         model = Plat 

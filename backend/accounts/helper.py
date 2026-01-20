@@ -106,7 +106,7 @@ def pre_lot(sender, instance, **kwargs):
     pre_save.disconnect(pre_lot, sender=Lot)
 
     recalculate_lot_dues = False
-    old = Lot.objects.get(id=instance.id)
+    old = Lot.objects.get(id=instance.id) if instance.id else None
 
     dues_names = [
         'dues_roads_dev',
@@ -123,9 +123,10 @@ def pre_lot(sender, instance, **kwargs):
         'dues_open_space_own'
     ]
 
-    for due in dues_names:
-        if getattr(old, due) != getattr(instance, due):
-            recalculate_lot_dues = True
+    if old is not None:
+        for due in dues_names:
+            if getattr(old, due) != getattr(instance, due):
+                recalculate_lot_dues = True
 
     if recalculate_lot_dues:
         lot_balances = calculate_lot_balance(instance)

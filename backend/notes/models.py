@@ -42,9 +42,9 @@ EXPANSION_AREAS = (
 class Note(models.Model):
     is_active = models.BooleanField(default=True)
 
-    user = models.ForeignKey(User, related_name='note')
+    user = models.ForeignKey(User, related_name="note", on_delete=models.PROTECT)
 
-    content_type = models.ForeignKey(ContentType)
+    content_type = models.ForeignKey(ContentType, on_delete=models.PROTECT)
     object_id = models.PositiveIntegerField()
     content_object = GenericForeignKey('content_type', 'object_id')
 
@@ -62,8 +62,12 @@ class RateTable(models.Model):
     date_created = models.DateField(auto_now_add=True)
     date_modified = models.DateField(auto_now=True)
 
-    created_by = models.ForeignKey(User, related_name='rate_table_created')
-    modified_by = models.ForeignKey(User, related_name='rate_table_modified')
+    created_by = models.ForeignKey(
+        User, related_name="rate_table_created", on_delete=models.PROTECT
+    )
+    modified_by = models.ForeignKey(
+        User, related_name="rate_table_modified", on_delete=models.PROTECT
+    )
 
     begin_effective_date = models.DateField()
     end_effective_date = models.DateField(blank=True, null=True)
@@ -77,14 +81,20 @@ class RateTable(models.Model):
 
 class Rate(models.Model):
     is_active = models.BooleanField(default=True)
-    
+
     date_created = models.DateField(auto_now_add=True)
     date_modified = models.DateField(auto_now=True)
 
-    created_by = models.ForeignKey(User, related_name='rate_created')
-    modified_by = models.ForeignKey(User, related_name='rate_modified')
+    created_by = models.ForeignKey(
+        User, related_name="rate_created", on_delete=models.PROTECT
+    )
+    modified_by = models.ForeignKey(
+        User, related_name="rate_modified", on_delete=models.PROTECT
+    )
 
-    rate_table_id = models.ForeignKey(RateTable, related_name='rate')
+    rate_table_id = models.ForeignKey(
+        RateTable, related_name="rate", on_delete=models.PROTECT
+    )
 
     expansion_area = models.CharField(max_length=100, choices=EXPANSION_AREAS)
     zone = models.CharField(max_length=100, choices=ZONES)
@@ -111,7 +121,7 @@ class FileUpload(models.Model):
     upload = models.FileField(upload_to=model_directory_path)
     date = models.DateTimeField(auto_now_add=True)
 
-    file_content_type = models.ForeignKey(ContentType)
+    file_content_type = models.ForeignKey(ContentType, on_delete=models.PROTECT)
     file_object_id = models.PositiveIntegerField()
     file_content_object = GenericForeignKey('file_content_type', 'file_object_id')
 

@@ -1,5 +1,4 @@
-ARG PYTHON_VERSION=3.9.23-slim-bullseye
-# ARG PYTHON_VERSION=3.5.10-slim-buster
+ARG PYTHON_VERSION=3.12-bookworm
 
 # define an alias for the specfic python version used in this file.
 FROM python:${PYTHON_VERSION} as python
@@ -53,6 +52,8 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
   git \
   # psycopg2 dependencies
   libpq-dev \
+  # PostgreSQL client for running DB commands from CLI if needed
+  postgresql-client \
   # cleaning up unused files
   && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
   && rm -rf /var/lib/apt/lists/*
