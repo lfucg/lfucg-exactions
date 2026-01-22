@@ -6,6 +6,7 @@ botocore==1.7.22
 certifi==2017.7.27.1
 cffi==1.17.1
 chardet==3.0.4
+# Reverting
 Django==1.11.29
 django-appconf==1.0.3
 django-compressor==3.1
