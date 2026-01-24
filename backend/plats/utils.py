@@ -5,22 +5,35 @@ from rest_framework import status
 from decimal import Decimal
 
 def calculate_lot_totals(lot):
+    current_dues_sewer_cap_own = round(float(lot.current_dues_sewer_cap_own), 2) if hasattr(lot, 'current_dues_sewer_cap_own') else 0
+    current_dues_sewer_trans_dev = round(float(lot.current_dues_sewer_trans_dev), 2) if hasattr(lot, 'current_dues_sewer_trans_dev') else 0
+    current_dues_sewer_trans_own = round(float(lot.current_dues_sewer_trans_own), 2) if hasattr(lot, 'current_dues_sewer_trans_own') else 0
+    current_dues_sewer_cap_dev = round(float(lot.current_dues_sewer_cap_dev), 2) if hasattr(lot, 'current_dues_sewer_cap_dev') else 0
+    current_dues_roads_own = round(float(lot.current_dues_roads_own), 2) if hasattr(lot, 'current_dues_roads_own') else 0
+    current_dues_roads_dev = round(float(lot.current_dues_roads_dev), 2) if hasattr(lot, 'current_dues_roads_dev') else 0
+    current_dues_parks_dev = round(float(lot.current_dues_parks_dev), 2) if hasattr(lot, 'current_dues_parks_dev') else 0
+    current_dues_parks_own = round(float(lot.current_dues_parks_own), 2) if hasattr(lot, 'current_dues_parks_own') else 0
+    current_dues_storm_dev = round(float(lot.current_dues_storm_dev), 2) if hasattr(lot, 'current_dues_storm_dev') else 0
+    current_dues_storm_own = round(float(lot.current_dues_storm_own), 2) if hasattr(lot, 'current_dues_storm_own') else 0
+    current_dues_open_space_dev = round(float(lot.current_dues_open_space_dev), 2) if hasattr(lot, 'current_dues_open_space_dev') else 0
+    current_dues_open_space_own = round(float(lot.current_dues_open_space_own), 2) if hasattr(lot, 'current_dues_open_space_own') else 0
+
     sewer_exactions = (
-        round(float(lot.current_dues_sewer_cap_own), 2) +
-        round(float(lot.current_dues_sewer_trans_dev), 2) +
-        round(float(lot.current_dues_sewer_trans_own), 2) +
-        round(float(lot.current_dues_sewer_cap_dev), 2)
+        current_dues_sewer_cap_own +
+        current_dues_sewer_trans_dev +
+        current_dues_sewer_trans_own +
+        current_dues_sewer_cap_dev
     )
 
     non_sewer_exactions = (
-        round(float(lot.current_dues_roads_own), 2) +
-        round(float(lot.current_dues_roads_dev), 2) +
-        round(float(lot.current_dues_parks_dev), 2) +
-        round(float(lot.current_dues_parks_own), 2) +
-        round(float(lot.current_dues_storm_dev), 2) +
-        round(float(lot.current_dues_storm_own), 2) +
-        round(float(lot.current_dues_open_space_dev), 2) +
-        round(float(lot.current_dues_open_space_own), 2)
+        current_dues_roads_own +
+        current_dues_roads_dev +
+        current_dues_parks_dev +
+        current_dues_parks_own +
+        current_dues_storm_dev +
+        current_dues_storm_own +
+        current_dues_open_space_dev +
+        current_dues_open_space_own
     )
 
     total_exactions = sewer_exactions + non_sewer_exactions
@@ -61,18 +74,18 @@ def subtract_ledger_values(ledger_value, lot_dev_value, lot_own_value):
     return (new_led, new_dev, new_own)
 
 def get_all_lot_exactions_from_selected_lot(lot):
-    dues_roads_dev = round(float(lot.dues_roads_dev), 2)
-    dues_roads_own = round(float(lot.dues_roads_own), 2)
-    dues_sewer_trans_dev = round(float(lot.dues_sewer_trans_dev), 2)
-    dues_sewer_trans_own = round(float(lot.dues_sewer_trans_own), 2)
-    dues_sewer_cap_dev = round(float(lot.dues_sewer_cap_dev), 2)
-    dues_sewer_cap_own = round(float(lot.dues_sewer_cap_own), 2)
-    dues_parks_dev = round(float(lot.dues_parks_dev), 2)
-    dues_parks_own = round(float(lot.dues_parks_own), 2)
-    dues_storm_dev = round(float(lot.dues_storm_dev), 2)
-    dues_storm_own = round(float(lot.dues_storm_own), 2)
-    dues_open_space_dev = round(float(lot.dues_open_space_dev), 2)
-    dues_open_space_own = round(float(lot.dues_open_space_own), 2)
+    dues_roads_dev = round(float(lot.dues_roads_dev), 2) if hasattr(lot, 'dues_roads_dev') else 0
+    dues_roads_own = round(float(lot.dues_roads_own), 2) if hasattr(lot, 'dues_roads_own') else 0
+    dues_sewer_trans_dev = round(float(lot.dues_sewer_trans_dev), 2) if hasattr(lot, 'dues_sewer_trans_dev') else 0
+    dues_sewer_trans_own = round(float(lot.dues_sewer_trans_own), 2) if hasattr(lot, 'dues_sewer_trans_own') else 0
+    dues_sewer_cap_dev = round(float(lot.dues_sewer_cap_dev), 2) if hasattr(lot, 'dues_sewer_cap_dev') else 0
+    dues_sewer_cap_own = round(float(lot.dues_sewer_cap_own), 2) if hasattr(lot, 'dues_sewer_cap_own') else 0
+    dues_parks_dev = round(float(lot.dues_parks_dev), 2) if hasattr(lot, 'dues_parks_dev') else 0
+    dues_parks_own = round(float(lot.dues_parks_own), 2) if hasattr(lot, 'dues_parks_own') else 0
+    dues_storm_dev = round(float(lot.dues_storm_dev), 2) if hasattr(lot, 'dues_storm_dev') else 0
+    dues_storm_own = round(float(lot.dues_storm_own), 2) if hasattr(lot, 'dues_storm_own') else 0
+    dues_open_space_dev = round(float(lot.dues_open_space_dev), 2) if hasattr(lot, 'dues_open_space_dev') else 0
+    dues_open_space_own = round(float(lot.dues_open_space_own), 2) if hasattr(lot, 'dues_roads_dev') else 0
 
     sewer_exactions = (
         dues_sewer_cap_own + dues_sewer_trans_dev +
@@ -128,22 +141,22 @@ def calculate_lot_balance(lot_queryset):
 
     if payments is not None:
         for payment in payments:
+            paid_sewer_trans = round(float(payment.paid_sewer_trans), 2) if hasattr(payment, 'paid_sewer_trans') else 0
+            paid_sewer_cap = round(float(payment.paid_sewer_cap), 2) if hasattr(payment, 'paid_sewer_cap') else 0
+            paid_roads = round(float(payment.paid_roads), 2) if hasattr(payment, 'paid_roads') else 0
+            paid_parks = round(float(payment.paid_parks), 2) if hasattr(payment, 'paid_parks') else 0
+            paid_storm = round(float(payment.paid_storm), 2) if hasattr(payment, 'paid_storm') else 0
+            paid_open_space = round(float(payment.paid_open_space), 2) if hasattr(payment, 'paid_open_space') else 0
+
             all_exactions['sewer_payment'] = all_exactions['sewer_payment'] + \
-                round(float(payment.paid_sewer_trans), 2) + \
-                round(float(payment.paid_sewer_cap), 2)
+                paid_sewer_trans + \
+                paid_sewer_cap
 
             all_exactions['non_sewer_payment'] = all_exactions['non_sewer_payment'] + \
-                round(float(payment.paid_roads), 2) + \
-                round(float(payment.paid_parks), 2) + \
-                round(float(payment.paid_storm), 2) + \
-                round(float(payment.paid_open_space), 2)
-
-            paid_sewer_trans = round(float(payment.paid_sewer_trans), 2)
-            paid_sewer_cap = round(float(payment.paid_sewer_cap), 2)
-            paid_roads = round(float(payment.paid_roads), 2)
-            paid_parks = round(float(payment.paid_parks), 2)
-            paid_storm = round(float(payment.paid_storm), 2)
-            paid_open_space = round(float(payment.paid_open_space), 2)
+                paid_roads + \
+                paid_parks + \
+                paid_storm + \
+                paid_open_space
 
             pay_val = {
                 'paid_sewer_trans': paid_sewer_trans,
@@ -225,18 +238,25 @@ def calculate_lot_balance(lot_queryset):
 
     if account_ledgers is not None:
         for ledger in account_ledgers:
-            all_exactions['sewer_credits_applied'] += round(float(ledger.sewer_credits), 2)
-            all_exactions['non_sewer_credits_applied'] += round(float(ledger.non_sewer_credits), 2)
-            all_exactions['sewer_due'] -= (round(float(ledger.sewer_trans), 2) + round(float(ledger.sewer_cap), 2))
-            all_exactions['non_sewer_due'] -= (round(float(ledger.roads), 2) + round(float(ledger.parks), 2) + round(float(ledger.storm), 2) + round(float(ledger.open_space), 2))
+            ledger_sewer_trans = round(float(ledger.sewer_trans), 2) if hasattr(ledger, 'sewer_trans') else 0
+            ledger_sewer_cap = round(float(ledger.sewer_cap), 2) if hasattr(ledger, 'sewer_cap') else 0
+            ledger_roads = round(float(ledger.roads), 2) if hasattr(ledger, 'roads') else 0
+            ledger_parks = round(float(ledger.parks), 2) if hasattr(ledger, 'parks') else 0
+            ledger_storm = round(float(ledger.storm), 2) if hasattr(ledger, 'storm') else 0
+            ledger_open_space = round(float(ledger.open_space), 2) if hasattr(ledger, 'open_space') else 0
+
+            all_exactions['sewer_credits_applied'] += round(float(ledger.sewer_credits), 2) if hasattr(ledger, 'sewer_credits') else 0
+            all_exactions['non_sewer_credits_applied'] += round(float(ledger.non_sewer_credits), 2) if hasattr(ledger, 'non_sewer_credits') else 0
+            all_exactions['sewer_due'] -= (ledger_sewer_trans + ledger_sewer_cap)
+            all_exactions['non_sewer_due'] -= (ledger_roads + ledger_parks + ledger_storm + ledger_open_space)
 
             ledger_set = {
-                'ledger_sewer_trans': round(float(ledger.sewer_trans), 2),
-                'ledger_sewer_cap': round(float(ledger.sewer_cap), 2),
-                'ledger_roads': round(float(ledger.roads), 2),
-                'ledger_parks': round(float(ledger.parks), 2),
-                'ledger_storm': round(float(ledger.storm), 2),
-                'ledger_open_space': round(float(ledger.open_space), 2),
+                'ledger_sewer_trans': ledger_sewer_trans,
+                'ledger_sewer_cap': ledger_sewer_cap,
+                'ledger_roads': ledger_roads,
+                'ledger_parks': ledger_parks,
+                'ledger_storm': ledger_storm,
+                'ledger_open_space': ledger_open_space
             }
 
             ledger_calc_set = [
