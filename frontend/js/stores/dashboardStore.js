@@ -8,7 +8,7 @@ import dashboardReducer from '../reducers/dashboardReducer';
 const enhancer = compose(
     applyMiddleware(
         createDebounce(),
-        flashMiddleware,
+        // flashMiddleware,
         logMiddleware,
         apiMiddleware,
     ),

@@ -13,6 +13,7 @@ import {
     PUT_AGREEMENT,
     GET_PAGINATION,
     SEARCH_QUERY,
+    SET_AGREEMENT_ERROR,
 } from '../constants/apiConstants';
 
 import { SET_CURRENT_AGREEMENT } from '../constants/componentConstants/agreementConstants';
@@ -20,6 +21,7 @@ import { SET_CURRENT_AGREEMENT } from '../constants/componentConstants/agreement
 const initialState = {
     currentAgreement: null,
     loadingAgreement: true,
+    errorAgreement: null,
     agreements: [],
     next: null,
     count: 0,
@@ -38,6 +40,7 @@ const agreementsReducer = (state = initialState, action) => {
             return {
                 ...state,
                 loadingAgreement: true,
+                errorAgreement: null,
             };
         }
         return state;
@@ -46,6 +49,7 @@ const agreementsReducer = (state = initialState, action) => {
             ...state,
             currentAgreement: action.response,
             loadingAgreement: false,
+            errorAgreement: null,
             next: null,
             count: 1,
             prev: null,
@@ -116,6 +120,12 @@ const agreementsReducer = (state = initialState, action) => {
             }
         }
         return state;
+    case SET_AGREEMENT_ERROR:
+        return {
+            ...state,
+            errorAgreement: action.body().agreementError,
+            loadingAgreement: false,
+        };
     default:
         return state;
     }

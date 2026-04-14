@@ -12,7 +12,6 @@ import Notes from './Notes';
 import AccountsMiniSummary from './AccountsMiniSummary';
 import AccountLedgersMiniSummary from './AccountLedgersMiniSummary';
 import PaymentsMiniSummary from './PaymentsMiniSummary';
-import ProjectsMiniSummary from './ProjectsMiniSummary';
 import LoadingScreen from './LoadingScreen';
 
 import {
@@ -23,7 +22,6 @@ import {
     getAgreementID,
     getAccountID,
     getAgreementPayments,
-    getAgreementProjects,
     getAgreementAccountLedgers,
 } from '../actions/apiActions';
 
@@ -38,7 +36,6 @@ class AgreementSummary extends React.Component {
             accounts,
             agreements,
             payments,
-            projects,
             accountLedgers,
         } = this.props;
 
@@ -129,12 +126,6 @@ class AgreementSummary extends React.Component {
                                   payments={payments}
                                 />
 
-                                <ProjectsMiniSummary
-                                  mapSet={projects && projects.projects}
-                                  mapQualifier={projects && projects.projects && projects.projects.length > 0}
-                                  projects={projects}
-                                />
-
                                 <AccountLedgersMiniSummary
                                   mapSet={accountLedgers.accountLedgers}
                                   mapQualifier={accountLedgers && accountLedgers.accountLedgers && accountLedgers.accountLedgers.length > 0}
@@ -166,7 +157,6 @@ AgreementSummary.propTypes = {
     accounts: PropTypes.object,
     agreements: PropTypes.object,
     payments: PropTypes.object,
-    projects: PropTypes.object,
     accountLedgers: PropTypes.object,
     route: PropTypes.object,
     onComponentDidMount: PropTypes.func,
@@ -179,7 +169,6 @@ function mapStateToProps(state) {
         accountLedgers: state.accountLedgers,
         agreements: state.agreements,
         payments: state.payments,
-        projects: state.projects,
     };
 }
 
@@ -189,7 +178,6 @@ function mapDispatchToProps(dispatch, params) {
     return {
         onComponentDidMount() {
             dispatch(getAgreementPayments(selectedAgreement));
-            dispatch(getAgreementProjects(selectedAgreement));
             dispatch(getAgreementAccountLedgers(selectedAgreement))
             .then(() => {
                 dispatch(formUpdate({ loading: false }));

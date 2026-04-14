@@ -10,6 +10,7 @@ import Breadcrumbs from './Breadcrumbs';
 import Notes from './Notes';
 import Uploads from './Uploads';
 import LoadingScreen from './LoadingScreen';
+import ErrorScreen from './ErrorScreen';
 
 import FormGroup from './FormGroup';
 import DeclineDelete from './DeclineDelete';
@@ -28,6 +29,7 @@ import {
     getPlatsQuick,
     getAccountsQuick,
     getAccountID,
+    setLotError,
 } from '../actions/apiActions';
 
 class LotForm extends React.Component {
@@ -123,6 +125,7 @@ class LotForm extends React.Component {
 
                 <div className="inside-body">
                     <div className="container">
+                        {lots.errorLot ? <ErrorScreen error={lots.errorLot} /> : null}
                         {lots.loadingLot ? <LoadingScreen /> :
                         (
 
@@ -710,12 +713,19 @@ function mapDispatchToProps(dispatch, params) {
             event.preventDefault();
             if (selectedLot) {
                 dispatch(putLot(selectedLot))
-                .then(() => {
-                    hashHistory.push(`lot/summary/${selectedLot}`);
+                .then((data) => {
+                    if (data.error) {
+                        dispatch(setLotError({message: data.message}));   
+                    } else {
+                        hashHistory.push(`lot/summary/${selectedLot}`);
+                    }
                 });
             } else {
                 dispatch(postLot())
                 .then((data_post) => {
+                    if (data_post.error) {
+                        dispatch(setLotError({message: data_post.message}));   
+                    }
                     const post_update = {
                         first_section: true,
                         dues_roads_dev: data_post.response.dues_roads_dev,

@@ -8,6 +8,7 @@ import Navbar from './Navbar';
 import Footer from './Footer';
 import Breadcrumbs from './Breadcrumbs';
 import LoadingScreen from './LoadingScreen';
+import ErrorScreen from './ErrorScreen';
 
 import FormGroup from './FormGroup';
 import DeclineDelete from './DeclineDelete';
@@ -30,6 +31,7 @@ import {
     postPayment,
     putPayment,
     getNoteContent,
+    setPaymentError,
 } from '../actions/apiActions';
 
 class PaymentForm extends React.Component {
@@ -107,6 +109,7 @@ class PaymentForm extends React.Component {
 
                 <div className="inside-body">
                     <div className="container">
+                        {payments.errorPayment ? <ErrorScreen error={payments.errorPayment} /> : null}
                         {payments.loadingPayment ? <LoadingScreen /> :
                         (
                             <div className="col-sm-offset-1 col-sm-10">
@@ -554,6 +557,9 @@ function mapDispatchToProps(dispatch, params) {
             if (selectedPayment) {
                 dispatch(putPayment(selectedPayment))
                 .then((data) => {
+                    if (data.error) {
+                        dispatch(setPaymentError({message: data.message}));   
+                    }
                     if (data.response) {
                         hashHistory.push(`payment/summary/${selectedPayment}`);
                     }
@@ -561,6 +567,9 @@ function mapDispatchToProps(dispatch, params) {
             } else {
                 dispatch(postPayment())
                 .then((data_post) => {
+                    if (data_post.error) {
+                        dispatch(setPaymentError({ message: data_post.message }));
+                    }
                     if (data_post.response) {
                         hashHistory.push(`payment/summary/${data_post.response.id}`);
                     }

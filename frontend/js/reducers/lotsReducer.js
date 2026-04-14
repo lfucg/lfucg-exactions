@@ -16,6 +16,7 @@ import {
     PUT_PERMIT_ID_ON_LOT,
     GET_PAGINATION,
     SEARCH_QUERY,
+    SET_LOT_ERROR,
 } from '../constants/apiConstants';
 
 import { SET_CURRENT_LOT } from '../constants/componentConstants/lotConstants';
@@ -23,6 +24,7 @@ import { SET_CURRENT_LOT } from '../constants/componentConstants/lotConstants';
 const initialState = {
     currentLot: null,
     loadingLot: true,
+    errorLot: null,
     lots: [],
     next: null,
     count: 0,
@@ -90,6 +92,7 @@ const lotsReducer = (state = initialState, action) => {
             return {
                 ...state,
                 loadingLot: true,
+                errorLot: null,
             };
         }
         return state;
@@ -114,6 +117,7 @@ const lotsReducer = (state = initialState, action) => {
             next: action.response.next,
             count: action.response.count,
             prev: action.response.previous,
+            errorLot: null,
         }
     case GET_LOTS_QUICK:
     case GET_LOTS_EXACTIONS:
@@ -169,6 +173,12 @@ const lotsReducer = (state = initialState, action) => {
             }
         }
         return state;
+    case SET_LOT_ERROR:
+        return {
+            ...state,
+            errorLot: action.body().lotError,
+            loadingLot: false,
+        };
     default:
         return state;
     }

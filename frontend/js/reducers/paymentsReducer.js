@@ -11,6 +11,7 @@ import {
     GET_AGREEMENT_PAYMENTS,
     POST_PAYMENT,
     PUT_PAYMENT,
+    SET_PAYMENT_ERROR,
     GET_PAGINATION,
     SEARCH_QUERY,
 } from '../constants/apiConstants';
@@ -18,6 +19,7 @@ import {
 const initialState = {
     currentPayment: null,
     loadingPayment: true,
+    errorPayment: null,
     payments: [],
     next: null,
     count: 0,
@@ -36,6 +38,7 @@ const paymentReducer = (state = initialState, action) => {
             return {
                 ...state,
                 loadingPayment: true,
+                errorPayment: null,
             };
         }
         return state;
@@ -60,6 +63,7 @@ const paymentReducer = (state = initialState, action) => {
             next: action.response.next,
             count: action.response.count,
             prev: action.response.previous,
+            errorPayment: null,
         }
     case POST_PAYMENT:
     case PUT_PAYMENT:
@@ -92,6 +96,12 @@ const paymentReducer = (state = initialState, action) => {
             }
         }
         return state;
+    case SET_PAYMENT_ERROR:
+        return {
+            ...state,
+            errorPayment: action.body().paymentError,
+            loadingPayment: false,
+        };
     default:
         return state;
     }
