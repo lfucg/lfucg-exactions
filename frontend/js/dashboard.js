@@ -41,14 +41,6 @@ import PaymentExisting from './components/PaymentExisting';
 import PaymentSummary from './components/PaymentSummary';
 import PaymentForm from './components/PaymentForm';
 
-import ProjectExisting from './components/ProjectExisting';
-import ProjectSummary from './components/ProjectSummary';
-import ProjectForm from './components/ProjectForm';
-
-import ProjectCostExisting from './components/ProjectCostExisting';
-import ProjectCostSummary from './components/ProjectCostSummary';
-import ProjectCostForm from './components/ProjectCostForm';
-
 import AccountLedgerExisting from './components/AccountLedgerExisting';
 import AccountLedgerSummary from './components/AccountLedgerSummary';
 import AccountLedgerForm from './components/AccountLedgerForm';
@@ -107,16 +99,6 @@ ReactDOM.render(
             <Route path="payment/summary/:id" component={PaymentSummary} name="Payment Summary" />
             <Route path="payment/form" component={PaymentForm} name="Payment Form" />
             <Route path="payment/form/:id" component={PaymentForm} name="Current Payment Form" />
-
-            <Route path="project" component={ProjectExisting} name="Existing Projects" />
-            <Route path="project/summary/:id" component={ProjectSummary} name="Project Summary" />
-            <Route path="project/form" component={ProjectForm} name="Project Form" />
-            <Route path="project/form/:id" component={ProjectForm} name="Current Project Form" />
-
-            <Route path="project-cost" component={ProjectCostExisting} name="Existing Project Costs" />
-            <Route path="project-cost/summary/:id" component={ProjectCostSummary} name="Project Cost Summary" />
-            <Route path="project-cost/form" component={ProjectCostForm} name="Project Cost Form" />
-            <Route path="project-cost/form/:id" component={ProjectCostForm} name="Current Project Cost Form" />
 
             <Route path="credit-transfer" component={AccountLedgerExisting} name="Existing Credit Transfers" />
             <Route path="credit-transfer/summary/:id" component={AccountLedgerSummary} name="Credit Transfer Summary" />

@@ -13,6 +13,7 @@ import {
     PUT_ACCOUNT,
     GET_PAGINATION,
     SEARCH_QUERY,
+    SET_ACCOUNT_ERROR,
 } from '../constants/apiConstants';
 
 import {
@@ -23,6 +24,7 @@ import {
 const initialState = {
     currentAccount: null,
     loadingAccount: true,
+    errorAccount: null,
     balanceAvailable: 'No Credit Available',
     accounts: [],
     accountTo: null,
@@ -72,6 +74,7 @@ const accountReducer = (state = initialState, action) => {
             return {
                 ...state,
                 loadingAccount: true,
+                errorAccount: null,
             };
         }
         return state;
@@ -86,6 +89,7 @@ const accountReducer = (state = initialState, action) => {
             next: null,
             count: 1,
             prev: null,
+            errorAccount: null,
         };
     case GET_ACCOUNTS:
         return {
@@ -175,6 +179,12 @@ const accountReducer = (state = initialState, action) => {
             }
         }
         return state;
+    case SET_ACCOUNT_ERROR:
+        return {
+            ...state,
+            errorAccount: action.body().accountError,
+            loadingAccount: false,
+        };
     default:
         return state;
     }

@@ -11,6 +11,7 @@ import {
     PUT_SUBDIVISION,
     GET_PAGINATION,
     SEARCH_QUERY,
+    SET_SUBDIVISION_ERROR,
 } from '../constants/apiConstants';
 
 const initialState = {
@@ -20,6 +21,7 @@ const initialState = {
     next: null,
     count: 0,
     prev: null,
+    errorSubdivision: null,
 }
 
 const subdivisionApiCalls = [GET_SUBDIVISIONS, GET_SUBDIVISIONS_QUICK, GET_SUBDIVISION_ID, POST_SUBDIVISION, PUT_SUBDIVISION];
@@ -34,6 +36,7 @@ const subdivisionsReducer = (state = initialState, action) => {
             return {
                 ...state,
                 loadingSubdivision: true,
+                errorSubdivision: null,
             };
         }
         return state;
@@ -45,6 +48,7 @@ const subdivisionsReducer = (state = initialState, action) => {
             next: null,
             count: 1,
             prev: null,
+            errorSubdivision: null,
         }
     case GET_SUBDIVISIONS:
         return {
@@ -98,6 +102,12 @@ const subdivisionsReducer = (state = initialState, action) => {
             }
         }
         return state;
+    case SET_SUBDIVISION_ERROR:
+        return {
+            ...state,
+            errorSubdivision: action.body().subdivisionError,
+            loadingSubdivision: false,
+        };
     default:
         return state;
     }

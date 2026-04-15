@@ -2,6 +2,7 @@ import { map, reduce, filter, compose } from 'ramda';
 
 import {
   API_CALL,
+  API_CALL_ERROR,
   API_CALL_START,
 } from '../constants/actionTypes';
 
@@ -18,6 +19,7 @@ import {
     GET_SUBDIVISION_ID,
     POST_SUBDIVISION,
     PUT_SUBDIVISION,
+    SET_SUBDIVISION_ERROR,
 
     GET_PLATS,
     GET_PLATS_QUICK,
@@ -26,6 +28,7 @@ import {
     GET_SUBDIVISION_PLATS,
     POST_PLAT,
     PUT_PLAT,
+    SET_PLAT_ERROR,
 
     POST_PLAT_ZONE,
     PUT_PLAT_ZONE,
@@ -42,6 +45,7 @@ import {
     POST_LOT,
     PUT_LOT,
     PUT_PERMIT_ID_ON_LOT,
+    SET_LOT_ERROR,
 
     GET_ACCOUNTS,
     GET_ACCOUNTS_QUICK,
@@ -51,6 +55,7 @@ import {
     GET_LEDGER_ACCOUNT_FROM,
     POST_ACCOUNT,
     PUT_ACCOUNT,
+    SET_ACCOUNT_ERROR,
 
     GET_NOTE_CONTENT,
     GET_SECONDARY_NOTE_CONTENT,
@@ -66,6 +71,7 @@ import {
     GET_LEDGER_AGREEMENT,
     POST_AGREEMENT,
     PUT_AGREEMENT,
+    SET_AGREEMENT_ERROR,
 
     GET_PAYMENTS,
     GET_PAYMENT_ID,
@@ -74,19 +80,7 @@ import {
     GET_AGREEMENT_PAYMENTS,
     POST_PAYMENT,
     PUT_PAYMENT,
-
-    GET_PROJECTS,
-    GET_PROJECTS_QUICK,
-    GET_PROJECT_ID,
-    GET_AGREEMENT_PROJECTS,
-    POST_PROJECT,
-    PUT_PROJECT,
-
-    GET_PROJECT_COSTS,
-    GET_PROJECT_COST_ID,
-    GET_PROJECT_PROJECT_COSTS,
-    POST_PROJECT_COST,
-    PUT_PROJECT_COST,
+    SET_PAYMENT_ERROR,
 
     GET_ACCOUNT_LEDGERS,
     GET_ACCOUNT_LEDGER_ID,
@@ -95,6 +89,7 @@ import {
     GET_AGREEMENT_ACCOUNT_LEDGERS,
     POST_ACCOUNT_LEDGER,
     PUT_ACCOUNT_LEDGER,
+    SET_ACCOUNT_LEDGER_ERROR,
 
     GET_RATE_TABLES,
     GET_RATE_TABLE_ID,
@@ -274,6 +269,18 @@ export function putSubdivision(selectedSubdivision) {
     };
 }
 
+export function setSubdivisionError(results) {
+    return {
+        type: API_CALL_ERROR,
+        endpoint: SET_SUBDIVISION_ERROR,
+        body: () => {
+            return {
+                subdivisionError: results.message,
+            };
+        },
+    };
+}
+
 // PLATS
 export function getPlats() {
     return {
@@ -422,6 +429,18 @@ export function putPlat(selectedPlat) {
                 sewer_due: sewer_due,
                 non_sewer_due: non_sewer_due,
                 account,
+            };
+        },
+    };
+}
+
+export function setPlatError(results) {
+    return {
+        type: API_CALL_ERROR,
+        endpoint: SET_PLAT_ERROR,
+        body: () => {
+            return {
+                platError: results.message,
             };
         },
     };
@@ -729,6 +748,18 @@ export function putLot(selectedLot) {
     };
 }
 
+export function setLotError(results) {
+    return {
+        type: API_CALL_ERROR,
+        endpoint: SET_LOT_ERROR,
+        body: () => {
+            return {
+                lotError: results.message,
+            };
+        },
+    };
+}
+
 export function putPermitIdOnLot(selectedLot) {
     return {
         type: API_CALL,
@@ -969,6 +1000,18 @@ export function putAccount(selectedAccount) {
     };
 }
 
+export function setAccountError(results) {
+    return {
+        type: API_CALL_ERROR,
+        endpoint: SET_ACCOUNT_ERROR,
+        body: () => {
+            return {
+                accountError: results.message,
+            };
+        },
+    };
+}
+
 // AGREEMENTS
 export function getAgreements() {
     return {
@@ -1061,6 +1104,18 @@ export function putAgreement(selectedAgreement) {
                 expansion_area,
                 agreement_type,
                 date_executed,
+            };
+        },
+    };
+}
+
+export function setAgreementError(results) {
+    return {
+        type: API_CALL_ERROR,
+        endpoint: SET_AGREEMENT_ERROR,
+        body: () => {
+            return {
+                agreementError: results.message,
             };
         },
     };
@@ -1199,203 +1254,18 @@ export function putPayment(selectedPayment) {
     };
 }
 
-// PROJECTS
-export function getProjects() {
+export function setPaymentError(results) {
     return {
-        type: API_CALL,
-        endpoint: GET_PROJECTS,
-        url: '/project/',
-    };
-}
-
-export function getProjectQuick() {
-    return {
-        type: API_CALL,
-        endpoint: GET_PROJECTS_QUICK,
-        url: '/projectQuick/',
-    };
-}
-
-export function getProjectID(selectedProject) {
-    return {
-        type: API_CALL,
-        endpoint: GET_PROJECT_ID,
-        url: `/project/${selectedProject}`,
-    };
-}
-
-export function getAgreementProjects(selectedAgreement) {
-    return {
-        type: API_CALL,
-        endpoint: GET_AGREEMENT_PROJECTS,
-        url: `/project/?paginatePage&agreement_id=${selectedAgreement}`,
-    };
-}
-
-export function postProject() {
-    return {
-        type: API_CALL,
-        endpoint: POST_PROJECT,
-        url: '/project/',
-        method: 'POST',
-        body: (getState) => {
-            const {
-                activeForm,
-            } = getState();
-            const {
-                agreement_id,
-                project_category,
-                name,
-                expansion_area,
-                project_type,
-                project_status,
-                status_date,
-                project_cost_estimates,
-                project_description,
-            } = activeForm;
+        type: API_CALL_ERROR,
+        endpoint: SET_PAYMENT_ERROR,
+        body: () => {
             return {
-                agreement_id,
-                project_category,
-                name,
-                expansion_area,
-                project_type,
-                project_status,
-                status_date,
-                project_cost_estimates,
-                project_description,
+                paymentError: results.message,
             };
         },
     };
 }
 
-export function putProject(selectedProject) {
-    return {
-        type: API_CALL,
-        endpoint: PUT_PROJECT,
-        url: `/project/${selectedProject}/`,
-        method: 'PUT',
-        body: (getState) => {
-            const {
-                activeForm,
-            } = getState();
-            const {
-                agreement_id,
-                project_category,
-                name,
-                expansion_area,
-                project_type,
-                project_status,
-                status_date,
-                project_cost_estimates,
-                project_description,
-            } = activeForm;
-            return {
-                agreement_id,
-                project_category,
-                name,
-                expansion_area,
-                project_type,
-                project_status,
-                status_date,
-                project_cost_estimates,
-                project_description,
-            };
-        },
-    };
-}
-
-// PROJECT COST ESTIMATES
-export function getProjectCosts() {
-    return {
-        type: API_CALL,
-        endpoint: GET_PROJECT_COSTS,
-        url: '/estimate/',
-    };
-}
-
-export function getProjectCostID(selectedProjectCost) {
-    return {
-        type: API_CALL,
-        endpoint: GET_PROJECT_COST_ID,
-        url: `/estimate/${selectedProjectCost}`,
-    };
-}
-
-export function getProjectProjectCosts(selectedProject) {
-    return {
-        type: API_CALL,
-        endpoint: GET_PROJECT_PROJECT_COSTS,
-        url: `/estimate/?paginatePage&project_id=${selectedProject}`,
-    };
-}
-
-export function postProjectCost() {
-    return {
-        type: API_CALL,
-        endpoint: POST_PROJECT_COST,
-        url: '/estimate/',
-        method: 'POST',
-        body: (getState) => {
-            const {
-                activeForm,
-            } = getState();
-            const {
-                project_id,
-                estimate_type,
-                land_cost,
-                design_cost,
-                construction_cost,
-                admin_cost,
-                management_cost,
-                credits_available,
-            } = activeForm;
-            return {
-                project_id,
-                estimate_type,
-                land_cost,
-                design_cost,
-                construction_cost,
-                admin_cost,
-                management_cost,
-                credits_available,
-            };
-        },
-    };
-}
-
-export function putProjectCost(selectedProjectCost) {
-    return {
-        type: API_CALL,
-        endpoint: PUT_PROJECT_COST,
-        url: `/estimate/${selectedProjectCost}/`,
-        method: 'PUT',
-        body: (getState) => {
-            const {
-                activeForm,
-            } = getState();
-            const {
-                project_id,
-                estimate_type,
-                land_cost,
-                design_cost,
-                construction_cost,
-                admin_cost,
-                management_cost,
-                credits_available,
-            } = activeForm;
-            return {
-                project_id,
-                estimate_type,
-                land_cost,
-                design_cost,
-                construction_cost,
-                admin_cost,
-                management_cost,
-                credits_available,
-            };
-        },
-    };
-}
 
 // ACCOUNT LEDGERS
 export function getAccountLedgers() {
@@ -1536,6 +1406,18 @@ export function putAccountLedger(selectedAccountLedger) {
     };
 }
 
+export function setAccountLedgerError(results) {
+    return {
+        type: API_CALL_ERROR,
+        endpoint: SET_ACCOUNT_LEDGER_ERROR,
+        body: () => {
+            return {
+                accountLedgerError: results.message,
+            };
+        },
+    };
+}
+
 export function getRateTables() {
     return {
         type: API_CALL,
@@ -1668,10 +1550,6 @@ export function getPagination(page) {
                 }
                 if (currentPage === '/credit-transfer/') {
                     return '/ledger/?paginatePage';
-                }
-
-                if (currentPage === '/project-cost/') {
-                    return '/estimate/?paginatePage';
                 }
 
                 if (page_size) {

@@ -14,6 +14,7 @@ import FormGroup from './FormGroup';
 
 import DeclineDelete from './DeclineDelete';
 import LoadingScreen from './LoadingScreen';
+import ErrorScreen from './ErrorScreen';
 
 import { setLoadingFalse } from '../actions/stateActions';
 import {
@@ -26,6 +27,7 @@ import {
     getAgreementID,
     postAgreement,
     putAgreement,
+    setAgreementError,
 } from '../actions/apiActions';
 
 class AgreementForm extends React.Component {
@@ -74,6 +76,7 @@ class AgreementForm extends React.Component {
 
                 <div className="inside-body">
                     <div className="container">
+                        {agreements.errorAgreement ? <ErrorScreen error={agreements.errorAgreement} /> : null}
                         {agreements.loadingAgreement ? <LoadingScreen /> :
                         (
                             <div className="col-sm-offset-1 col-sm-10">
@@ -270,6 +273,9 @@ function mapDispatchToProps(dispatch, params) {
             if (selectedAgreement) {
                 dispatch(putAgreement(selectedAgreement))
                 .then((data) => {
+                    if (data.error) {
+                        dispatch(setAgreementError({ message: data.message }));
+                    }
                     if (data.response) {
                         hashHistory.push(`agreement/summary/${selectedAgreement}`);
                     }
@@ -277,6 +283,9 @@ function mapDispatchToProps(dispatch, params) {
             } else {
                 dispatch(postAgreement())
                 .then((data_post) => {
+                    if (data_post.error) {
+                        dispatch(setAgreementError({message: data_post.message}));   
+                    }
                     if (data_post.response) {
                         hashHistory.push(`agreement/summary/${data_post.response.id}`);
                     }

@@ -12,11 +12,13 @@ import {
     PUT_ACCOUNT_LEDGER,
     GET_PAGINATION,
     SEARCH_QUERY,
+    SET_ACCOUNT_LEDGER_ERROR,
 } from '../constants/apiConstants';
 
 const initialState = {
     currentLedger: null,
     loadingLedger: true,
+    errorAccountLedger: null,
     accountLedgers: [],
     next: null,
     count: 0,
@@ -35,6 +37,7 @@ const accountLedgersReducer = (state = initialState, action) => {
             return {
                 ...state,
                 loadingLedger: true,
+                errorAccountLedger: null,
             };
         }
         return state;
@@ -46,6 +49,7 @@ const accountLedgersReducer = (state = initialState, action) => {
             next: action.response.next,
             count: action.response.count,
             prev: action.response.previous,
+            errorAccountLedger: null,
         };
     case GET_ACCOUNT_LEDGERS:
     case GET_LOT_ACCOUNT_LEDGERS:
@@ -91,6 +95,12 @@ const accountLedgersReducer = (state = initialState, action) => {
             }
         }
         return state;
+    case SET_ACCOUNT_LEDGER_ERROR:
+        return {
+            ...state,
+            errorAccountLedger: action.body().accountLedgerError,
+            loadingLedger: false,
+        };
     default:
         return state;
     }
