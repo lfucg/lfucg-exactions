@@ -12,6 +12,8 @@ import Notes from './Notes';
 import FormGroup from './FormGroup';
 import Breadcrumbs from './Breadcrumbs';
 import DeclineDelete from './DeclineDelete';
+import LoadingScreen from './LoadingScreen';
+import ErrorScreen from './ErrorScreen';
 
 import { setLoadingFalse } from '../actions/stateActions';
 import {
@@ -23,6 +25,7 @@ import {
     getSubdivisionID,
     postSubdivision,
     putSubdivision,
+    setSubdivisionError,
 } from '../actions/apiActions';
 
 class SubdivisionForm extends React.Component {
@@ -35,6 +38,7 @@ class SubdivisionForm extends React.Component {
             activeForm,
             onSubmit,
             selectedSubdivision,
+            subdivisions,
         } = this.props;
 
         const submitEnabled =
@@ -55,46 +59,49 @@ class SubdivisionForm extends React.Component {
 
                 <div className="inside-body">
                     <div className="container">
-                        <div className="col-sm-offset-1 col-sm-10">
-                            <form >
-                                <fieldset>
-                                    <div className="row">
-                                        <FormGroup label="* Subdivision Name" id="name" ariaRequired="true">
-                                            <input type="text" className="form-control" placeholder="Subdivision Name" autoFocus />
-                                        </FormGroup>
-                                    </div>
-                                    <div className="row">
-                                        <FormGroup label="* Gross Acreage" id="gross_acreage" ariaRequired="true">
-                                            <input type="text" className="form-control" placeholder="Gross Acreage" />
-                                        </FormGroup>
-                                    </div>
-                                </fieldset>
-                                <div className="col-xs-8">
-                                    <button disabled={!submitEnabled} className="btn btn-lex" onClick={onSubmit} >Submit</button>
-                                    {!submitEnabled ? (
-                                        <div>
-                                            <div className="clearfix" />
-                                            <span> * All required fields must be filled.</span>
+                        {subdivisions.errorSubdivision ? <ErrorScreen error={subdivisions.errorSubdivision} /> : null}
+                        {subdivisions.loadingSubdivision ? <LoadingScreen /> :
+                            <div className="col-sm-offset-1 col-sm-10">
+                                <form >
+                                    <fieldset>
+                                        <div className="row">
+                                            <FormGroup label="* Subdivision Name" id="name" ariaRequired="true">
+                                                <input type="text" className="form-control" placeholder="Subdivision Name" autoFocus />
+                                            </FormGroup>
                                         </div>
-                                    ) : null
-                                    }
-                                </div>
-                                <div className="col-xs-4">
-                                    <DeclineDelete currentForm="/subdivision/" selectedEntry={selectedSubdivision} parentRoute="subdivision" />
-                                </div>
-                            </form>
-                            <div className="clearfix" />
-                            <hr aria-hidden="true" />
-                            {selectedSubdivision &&
-                                <Notes
-                                  content_type="plats_subdivision"
-                                  object_id={selectedSubdivision}
-                                  ariaExpanded="true"
-                                  panelClass="panel-collapse collapse row in"
-                                  permission="subdivision"
-                                />
-                            }
-                        </div>
+                                        <div className="row">
+                                            <FormGroup label="* Gross Acreage" id="gross_acreage" ariaRequired="true">
+                                                <input type="text" className="form-control" placeholder="Gross Acreage" />
+                                            </FormGroup>
+                                        </div>
+                                    </fieldset>
+                                    <div className="col-xs-8">
+                                        <button disabled={!submitEnabled} className="btn btn-lex" onClick={onSubmit} >Submit</button>
+                                        {!submitEnabled ? (
+                                            <div>
+                                                <div className="clearfix" />
+                                                <span> * All required fields must be filled.</span>
+                                            </div>
+                                        ) : null
+                                        }
+                                    </div>
+                                    <div className="col-xs-4">
+                                        <DeclineDelete currentForm="/subdivision/" selectedEntry={selectedSubdivision} parentRoute="subdivision" />
+                                    </div>
+                                </form>
+                                <div className="clearfix" />
+                                <hr aria-hidden="true" />
+                                {selectedSubdivision &&
+                                    <Notes
+                                    content_type="plats_subdivision"
+                                    object_id={selectedSubdivision}
+                                    ariaExpanded="true"
+                                    panelClass="panel-collapse collapse row in"
+                                    permission="subdivision"
+                                    />
+                                }
+                            </div>
+                        }
                     </div>
                 </div>
 
@@ -110,11 +117,13 @@ SubdivisionForm.propTypes = {
     onComponentDidMount: PropTypes.func,
     onSubmit: PropTypes.func,
     selectedSubdivision: PropTypes.string,
+    subdivisions: PropTypes.object
 };
 
 function mapStateToProps(state) {
     return {
         activeForm: state.activeForm,
+        subdivisions: state.subdivisions,
     };
 }
 

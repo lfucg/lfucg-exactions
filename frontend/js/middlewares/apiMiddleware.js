@@ -121,12 +121,23 @@ export default function api({ getState, dispatch }) {
         .catch((error) => {
             let errorMessage = 'API Call Error';
             console.log('API Middleware Error: ', error);  // eslint-disable-line no-console
+            if (error.response) {
+                if (error.response.request && error.response.request.response) {
+                    errorMessage = error.response.request.response;
+                } else {
+                    errorMessage = error.response.data;
+                }
+            }
             if (error.response.status !== 500) {
-                const error_obj = error.response.data;
-                const error_message = {};
-                map((one_error) => {
-                    error_message[one_error] = error_obj[one_error][0];
-                })(Object.keys(error_obj));
+                const error_obj = error.response.request.response ? error.response.request.response : error.response.data;
+                let error_message = {};
+                if (typeof error_obj === 'string') {
+                    error_message = error_obj;
+                } else {
+                    map((one_error) => {
+                        error_message[one_error] = error_obj[one_error][0];
+                    })(Object.keys(error_obj));
+                }
 
                 dispatch(errorMessageSet(error_message));
             }

@@ -42,10 +42,6 @@ export default function activeFormReducer(state = initialState, action) {
                     location = '/ledger';
                 }
 
-                if (location === '/project-cost') {
-                    location = '/estimate';
-                }
-
                 if (location === action.response.endpoint) {
                     const currentPage = `${location}/`;
                     return merge(state, { next: action.response.next, prev: action.response.prev, count: action.response.count, currentPage });

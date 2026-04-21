@@ -10,7 +10,6 @@ import LoadingScreen from './LoadingScreen';
 
 import {
     getAgreementID,
-    getAgreementProjects,
     getAgreementPayments,
     getAgreementAccountLedgers,
 } from '../actions/apiActions';
@@ -23,20 +22,9 @@ class AgreementReport extends React.Component {
     render() {
         const {
             agreements,
-            projects,
             payments,
             accountLedgers,
         } = this.props;
-
-        const projectsList = projects && projects.length > 0 && (map((project) => {
-            return (
-                <div className="row" key={project.id}>
-                    <div className="col-sm-3 report-data">{project.project_category_display}</div>
-                    <div className="col-sm-3 report-data">{project.project_type_display}</div>
-                    <div className="col-sm-3 report-data right-border">{project.project_status_display}</div>
-                </div>
-            );
-        })(projects));
 
         const paymentsList = payments && payments.length > 0 && (map((payment) => {
             return (
@@ -103,17 +91,6 @@ class AgreementReport extends React.Component {
                                 <div className="row" />
 
                                 <div className="row">
-                                    <h3 className="col-sm-6">Projects</h3>
-                                </div>
-                                <div className="row report-header">
-                                    <h5 className="col-sm-3">Category</h5>
-                                    <h5 className="col-sm-3">Type</h5>
-                                    <h5 className="col-sm-3 right-border">Status</h5>
-                                </div>
-                                {projectsList}
-                                <div className="row" />
-
-                                <div className="row">
                                     <h3>
                                         <div className="col-sm-6">
                                             Payments
@@ -173,7 +150,6 @@ class AgreementReport extends React.Component {
 
 AgreementReport.propTypes = {
     agreements: PropTypes.object,
-    projects: PropTypes.array,
     payments: PropTypes.array,
     accountLedgers: PropTypes.array,
     route: PropTypes.object,
@@ -183,7 +159,6 @@ AgreementReport.propTypes = {
 function mapStateToProps(state) {
     return {
         agreements: state.agreements,
-        projects: state.projects && state.projects.projects,
         payments: state.payments && state.payments.payments,
         accountLedgers: state.accountLedgers && state.accountLedgers.accountLedgers,
     };
@@ -195,7 +170,6 @@ function mapDispatchToProps(dispatch, params) {
     return {
         onComponentDidMount() {
             dispatch(getAgreementID(selectedAgreement));
-            dispatch(getAgreementProjects(selectedAgreement));
             dispatch(getAgreementPayments(selectedAgreement));
             dispatch(getAgreementAccountLedgers(selectedAgreement));
         },

@@ -106,3 +106,15 @@ Backend testing
 ```bash
 $ lando django-test
 ```
+
+## Postgres
+### Copy prod database into dev
+Dump prod's database into a dump file and prepare to delete the existing database on loading
+```bash
+$ pg_dump prod_exactions --host=exactions.cglwxxxm4cxh.us-east-1.rds.amazonaws.com --username=django --clean > prod_dump
+```
+
+Load the database dump into dev
+```bash
+psql --host=exactions.cglwxxxm4cxh.us-east-1.rds.amazonaws.com --username=django --dbname=dev_exactions < prod_dump
+```

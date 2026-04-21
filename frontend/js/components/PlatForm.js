@@ -15,6 +15,7 @@ import DeclineDelete from './DeclineDelete';
 import PlatZoneForm from './PlatZoneForm';
 import PlatZoneDuesForm from './PlatZoneDuesForm';
 import LoadingScreen from './LoadingScreen';
+import ErrorScreen from './ErrorScreen';
 
 import { setLoadingFalse } from '../actions/stateActions';
 import {
@@ -30,6 +31,7 @@ import {
     putPlat,
     getAccountsQuick,
     getAccountID,
+    setPlatError,
 } from '../actions/apiActions';
 
 class PlatForm extends React.Component {
@@ -153,6 +155,7 @@ class PlatForm extends React.Component {
 
                 <div className="inside-body">
                     <div className="container">
+                        {plats.errorPlat ? <ErrorScreen error={plats.errorPlat} /> : null}
                         {plats.loadingPlat  ? <LoadingScreen /> :
                         (
                             <div className="col-md-offset-1 col-md-10 panel-group" id="accordion" role="tablist" aria-multiselectable="false">
@@ -689,6 +692,9 @@ function mapDispatchToProps(dispatch, params) {
             if (selectedPlat) {
                 dispatch(putPlat(selectedPlat))
                 .then((data) => {
+                    if (data.error) {
+                        dispatch(setPlatError({ message: data.message }));
+                    }
                     if (data.response) {
                         hashHistory.push(`plat/summary/${selectedPlat}`);
                     }
@@ -696,6 +702,9 @@ function mapDispatchToProps(dispatch, params) {
             } else {
                 dispatch(postPlat())
                 .then((data_post) => {
+                    if (data_post.error) {
+                        dispatch(setPlatError({ message: data_post.message }));
+                    }
                     if (data_post.response) {
                         const zone_update = {
                             plat: data_post.response.id,

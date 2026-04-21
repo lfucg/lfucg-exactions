@@ -13,6 +13,7 @@ import {
     PUT_PLAT,
     GET_PAGINATION,
     SEARCH_QUERY,
+    SET_PLAT_ERROR,
 } from '../constants/apiConstants';
 
 import {
@@ -22,6 +23,7 @@ import {
 const initialState = {
     currentPlat: null,
     loadingPlat: true,
+    errorPlat: null,
     next: null,
     count: 0,
     plats: [],
@@ -75,6 +77,7 @@ const platsReducer = (state = initialState, action) => {
             ...state,
             currentPlat: convertCurrency(action.response),
             loadingPlat: false,
+            errorPlat: null,
             next: null,
             count: 1,
             plats: [],
@@ -141,6 +144,12 @@ const platsReducer = (state = initialState, action) => {
             }
         }
         return state;
+    case SET_PLAT_ERROR:
+        return {
+            ...state,
+            errorPlat: action.body().platError,
+            loadingPlat: false,
+        };
     default:
         return state;
     }

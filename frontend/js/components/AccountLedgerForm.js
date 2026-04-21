@@ -12,6 +12,7 @@ import FormGroup from './FormGroup';
 import Notes from './Notes';
 import DeclineDelete from './DeclineDelete';
 import LoadingScreen from './LoadingScreen';
+import ErrorScreen from './ErrorScreen';
 
 import {
     formInit,
@@ -28,6 +29,7 @@ import {
     postAccountLedger,
     putAccountLedger,
     getLotID,
+    setAccountLedgerError,
 } from '../actions/apiActions';
 
 import {
@@ -152,6 +154,7 @@ class AccountLedgerForm extends React.Component {
 
                 <div className="inside-body">
                     <div className="container">
+                        {accountLedgers.errorAccountLedger ? <ErrorScreen error={accountLedgers.errorAccountLedger} /> : null}
                         {accountLedgers.loadingLedger || activeForm.loading ? <LoadingScreen /> :
                         (
                             <div className="col-sm-offset-1 col-sm-10">
@@ -729,8 +732,8 @@ function mapDispatchToProps(dispatch, params) {
             if (selectedAccountLedger) {
                 dispatch(putAccountLedger(selectedAccountLedger))
                 .then((data) => {
-                    if (!!data.error) {
-                        dispatch(flashMessageSet(`Error: ${data.error}`, 'danger'));
+                    if (data.error) {
+                        dispatch(setAccountLedgerError({ message: data.message }));
                     }
                     if (data.response) {
                         hashHistory.push(`credit-transfer/summary/${selectedAccountLedger}`);
@@ -739,8 +742,8 @@ function mapDispatchToProps(dispatch, params) {
             } else {
                 dispatch(postAccountLedger())
                 .then((data_post) => {
-                    if (!!data_post.error) {
-                        dispatch(flashMessageSet(`Error: ${data_post.message}`, 'danger'));
+                    if (data_post.error) {
+                        dispatch(setAccountLedgerError({ message: data_post.message }));
                     }
                     if (data_post.response && data_post.response.id) {
                         if (event === 'plat') {
