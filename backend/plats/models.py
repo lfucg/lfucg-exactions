@@ -277,14 +277,16 @@ class Lot(models.Model):
             storm_calc = 0
             open_space_calc = 0
 
-            if (self.date_created == self.date_modified and
-            self.dues_roads_dev == 0 and
-            self.dues_sewer_cap_dev == 0 and
-            self.dues_sewer_trans_dev == 0 and
-            self.dues_parks_dev == 0 and
-            self.dues_storm_dev == 0 and
-            self.dues_open_space_dev ==0 and
-            plat_buildable != 0):
+            if (
+                self.date_created == self.date_modified and
+                self.dues_roads_dev == 0 and
+                self.dues_sewer_cap_dev == 0 and
+                self.dues_sewer_trans_dev == 0 and
+                self.dues_parks_dev == 0 and
+                self.dues_storm_dev == 0 and
+                self.dues_open_space_dev ==0 and
+                plat_buildable != 0
+            ):
                 for plat_zone in plat_zones:
                     road_calc += round((float(plat_zone.dues_roads) / plat_buildable), 2)
                     sewer_cap_calc += round((float(plat_zone.dues_sewer_cap) / plat_buildable), 2)

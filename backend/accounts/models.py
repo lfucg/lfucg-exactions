@@ -181,12 +181,14 @@ class Payment(models.Model):
         return self.lot_id.address_full
 
     def calculate_payment_total(self):
-        return self.paid_roads + \
-            self.paid_sewer_trans + \
-            self.paid_sewer_cap + \
-            self.paid_parks + \
-            self.paid_storm + \
-            self.paid_open_space
+        return (
+            (self.paid_roads or 0)
+            + (self.paid_sewer_trans or 0)
+            + (self.paid_sewer_cap or 0)
+            + (self.paid_parks or 0)
+            + (self.paid_storm or 0)
+            + (self.paid_open_space or 0)
+        )
 
 
 class Project(models.Model):

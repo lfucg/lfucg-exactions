@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from rest_framework import serializers
 
 from django.contrib.auth.models import User, Group
@@ -65,6 +67,8 @@ class AccountSerializer(serializers.ModelSerializer):
 
 class AccountField(serializers.Field):
     def to_internal_value(self, data):
+        if data is None:
+            raise serializers.ValidationError("Account id is required.")
         try:
             return Account.objects.get(id=data)
         except:
@@ -260,30 +264,33 @@ class AccountLedgerSerializer(serializers.ModelSerializer):
     def get_entry_type_display(self, obj):
         return obj.get_entry_type_display()
 
+    def _format_amount(self, value):
+        return "${:,.2f}".format(value if value is not None else Decimal("0.00"))
+
     def get_dollar_values(self, obj):
         return {
-            "dollar_non_sewer": "${:,.2f}".format(obj.non_sewer_credits),
-            "dollar_sewer": "${:,.2f}".format(obj.sewer_credits),
-            "dollar_roads": "${:,.2f}".format(obj.roads),
-            "dollar_parks": "${:,.2f}".format(obj.parks),
-            "dollar_storm": "${:,.2f}".format(obj.storm),
-            "dollar_open_space": "${:,.2f}".format(obj.open_space),
-            "dollar_sewer_trans": "${:,.2f}".format(obj.sewer_trans),
-            "dollar_sewer_cap": "${:,.2f}".format(obj.sewer_cap),
+            "dollar_non_sewer": self._format_amount(obj.non_sewer_credits),
+            "dollar_sewer": self._format_amount(obj.sewer_credits),
+            "dollar_roads": self._format_amount(obj.roads),
+            "dollar_parks": self._format_amount(obj.parks),
+            "dollar_storm": self._format_amount(obj.storm),
+            "dollar_open_space": self._format_amount(obj.open_space),
+            "dollar_sewer_trans": self._format_amount(obj.sewer_trans),
+            "dollar_sewer_cap": self._format_amount(obj.sewer_cap),
         }
 
     def get_sum_non_sewer(self, obj):
-        return "${:,.2f}".format(sum([
-            obj.roads,
-            obj.parks,
-            obj.storm,
-            obj.open_space,
+        return self._format_amount(sum([
+            obj.roads if obj.roads is not None else Decimal("0.00"),
+            obj.parks if obj.parks is not None else Decimal("0.00"),
+            obj.storm if obj.storm is not None else Decimal("0.00"),
+            obj.open_space if obj.open_space is not None else Decimal("0.00"),
         ]))
 
     def get_sum_sewer(self, obj):
-        return "${:,.2f}".format(sum([
-            obj.sewer_trans,
-            obj.sewer_cap,
+        return self._format_amount(sum([
+            obj.sewer_trans if obj.sewer_trans is not None else Decimal("0.00"),
+            obj.sewer_cap if obj.sewer_cap is not None else Decimal("0.00"),
         ]))
 
     class Meta:
@@ -329,14 +336,20 @@ class PaymentSerializer(serializers.ModelSerializer):
 
     dollar_values = serializers.SerializerMethodField(read_only=True)
 
+    def _format_amount(self, value):
+        return "${:,.2f}".format(value if value is not None else Decimal("0.00"))
+
+    def _decimal_value(self, value):
+        return value if value is not None else Decimal("0.00")
+
     def get_total_paid(self, obj):
         total = (
-            obj.paid_roads
-            + obj.paid_sewer_trans
-            + obj.paid_sewer_cap
-            + obj.paid_parks
-            + obj.paid_storm
-            + obj.paid_open_space
+            self._decimal_value(obj.paid_roads)
+            + self._decimal_value(obj.paid_sewer_trans)
+            + self._decimal_value(obj.paid_sewer_cap)
+            + self._decimal_value(obj.paid_parks)
+            + self._decimal_value(obj.paid_storm)
+            + self._decimal_value(obj.paid_open_space)
         )
         return "${:,.2f}".format(total)
 
@@ -348,12 +361,12 @@ class PaymentSerializer(serializers.ModelSerializer):
 
     def get_dollar_values(self, obj):
         return {
-            "paid_roads": "${:,.2f}".format(obj.paid_roads),
-            "paid_sewer_trans": "${:,.2f}".format(obj.paid_sewer_trans),
-            "paid_sewer_cap": "${:,.2f}".format(obj.paid_sewer_cap),
-            "paid_parks": "${:,.2f}".format(obj.paid_parks),
-            "paid_storm": "${:,.2f}".format(obj.paid_storm),
-            "paid_open_space": "${:,.2f}".format(obj.paid_open_space),
+            "paid_roads": self._format_amount(obj.paid_roads),
+            "paid_sewer_trans": self._format_amount(obj.paid_sewer_trans),
+            "paid_sewer_cap": self._format_amount(obj.paid_sewer_cap),
+            "paid_parks": self._format_amount(obj.paid_parks),
+            "paid_storm": self._format_amount(obj.paid_storm),
+            "paid_open_space": self._format_amount(obj.paid_open_space),
         }
 
     class Meta:

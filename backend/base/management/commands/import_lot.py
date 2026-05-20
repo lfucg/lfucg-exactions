@@ -847,6 +847,7 @@ class Command(BaseCommand):
 
             cleaned_reader = [row for row in reader if row['StreetName'] != 'deleted address']
             for row in cleaned_reader:
+                lot = None
                 print('Address Id', row['AddressID'])
                 for k, v in row.items():
                     if v == 'NULL':
@@ -1288,7 +1289,7 @@ class Command(BaseCommand):
                         self.CheckOrCreatePayment(payment_details)
 
                     # Create Lot Notes
-                    if row['Notes'] is not None:
+                    if row['Notes'] is not None and lot is not None:
                         content = ContentType.objects.get_for_model(Lot)
                         Note.objects.get_or_create(user=self.user, object_id=lot.id,
                             defaults={'content_type': content, 'note': row['Notes'], 'date': self.ConvertDates('1/1/1970')}
