@@ -5,6 +5,13 @@ from rest_framework import status
 from decimal import Decimal
 
 def calculate_lot_totals(lot):
+    if lot is None:
+        return {
+            'sewer_exactions': 0.0,
+            'non_sewer_exactions': 0.0,
+            'total_exactions': 0.0,
+        }
+
     current_dues_sewer_cap_own = round(float(lot.current_dues_sewer_cap_own), 2) if hasattr(lot, 'current_dues_sewer_cap_own') else 0
     current_dues_sewer_trans_dev = round(float(lot.current_dues_sewer_trans_dev), 2) if hasattr(lot, 'current_dues_sewer_trans_dev') else 0
     current_dues_sewer_trans_own = round(float(lot.current_dues_sewer_trans_own), 2) if hasattr(lot, 'current_dues_sewer_trans_own') else 0
