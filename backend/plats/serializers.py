@@ -215,6 +215,8 @@ class PlatSerializer(serializers.ModelSerializer):
 
 class PlatField(serializers.Field):
     def to_internal_value(self, data):
+        if data is None:
+            raise serializers.ValidationError("Plat is required.")
         try: 
             return Plat.objects.get(id=data)
         except: 
