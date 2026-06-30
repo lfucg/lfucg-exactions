@@ -36,9 +36,9 @@ class PlatZoneForm extends React.Component {
             calculationWarning,
         } = this.props;
 
-        const submitEnabled =
-            activeForm.zone &&
-            activeForm.acres;
+        const submitEnabled = (
+            activeForm.zone && activeForm.acres ? true : false
+        );
 
         return (
             <div className="plat-zone-form">
@@ -98,7 +98,11 @@ class PlatZoneForm extends React.Component {
                     </fieldset>
                     <div>
                         <div className="col-xs-8">
-                            <button className="btn btn-lex" onClick={onPlatZoneSubmit({ activeForm })} >
+                            <button
+                                className="btn btn-lex"
+                                onClick={onPlatZoneSubmit({ activeForm })}
+                                disabled={!submitEnabled}
+                            >
                                 {currentUser.is_superuser || (currentUser.profile && currentUser.profile.is_supervisor) ? <div>Submit / Approve</div> : <div>Submit</div>}
                             </button>
                             {!submitEnabled ? (
