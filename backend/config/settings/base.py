@@ -60,6 +60,8 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "simple_history.middleware.HistoryRequestMiddleware",
+    "base.middleware.log500.Log500ErrorsMiddleware",
+    "base.middleware.log400.Log400Midleware",
 ]
 
 ROOT_URLCONF = "base.urls"
