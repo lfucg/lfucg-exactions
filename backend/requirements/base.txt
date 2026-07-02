@@ -34,6 +34,7 @@ pytz==2020.1
 s3transfer==0.1.11
 sendgrid==3.6.3
 sendgrid-django==4.0.0
+sentry-sdk==2.64.0
 six==1.12.0
 sqlparse==0.2.3
 Unipath==1.1
