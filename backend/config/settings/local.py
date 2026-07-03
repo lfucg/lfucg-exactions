@@ -1,5 +1,6 @@
 from .base import *
 from .base import env
+import sentry_sdk
 
 DEBUG = True
 
@@ -34,3 +35,16 @@ EMAIL_BACKEND = env(
 )
 
 POSTMARK_API_KEY = env("POSTMARK_API_KEY", default="fake_key")
+
+SENTRY_API_DSN = env("SENTRY_API_DSN", default=None)
+if(SENTRY_API_DSN):
+    sentry_sdk.init(
+        dsn=SENTRY_API_DSN,
+        environment="local",
+        # Add data like request headers and IP for users,
+        # see https://docs.sentry.io/platforms/python/data-management/data-collected/ for more info
+        send_default_pii=True,
+        # Enable sending logs to Sentry
+        enable_logs=True,
+        add_full_stack=True,
+    )

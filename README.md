@@ -10,6 +10,13 @@ https://docs.lando.dev/install
 
 Follow the instructions [here](https://docs.lando.dev/config/security.html#trusting-the-ca) to trust the local `*.lndo.site` SSL certificate.
 
+You will probably need to run the setup as described in the doc above, else
+there won't be a cert in your local directory yet:
+
+```bash
+lando setup --skip-common-plugins
+```
+
 ## Get up and running for the first time
 
 ### Environment Variables

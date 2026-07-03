@@ -19,6 +19,7 @@ export const configSecretFields = [
   'AWS_ACCESS_KEY_ID',
   'AWS_SECRET_ACCESS_KEY',
   'POSTMARK_API_KEY',
+  'SENTRY_API_DSN',
 ] as const;
 
 type AppConfig = typeof configSecretFields;
