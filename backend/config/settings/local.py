@@ -1,6 +1,7 @@
 from .base import *
 from .base import env
 import sentry_sdk
+import logging
 
 DEBUG = True
 
@@ -40,7 +41,7 @@ SENTRY_API_DSN = env("SENTRY_API_DSN", default=None)
 if(SENTRY_API_DSN):
     sentry_sdk.init(
         dsn=SENTRY_API_DSN,
-        environment="local",
+        environment="local-" + SITE_DOMAIN,
         # Add data like request headers and IP for users,
         # see https://docs.sentry.io/platforms/python/data-management/data-collected/ for more info
         send_default_pii=True,
