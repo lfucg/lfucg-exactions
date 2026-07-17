@@ -131,6 +131,14 @@ class PlatForm extends React.Component {
                 );
             })(sortedPlatZones));
 
+        const exactionsSubmitEnabled = (
+            plats.currentPlat &&
+            plats.currentPlat.plat_zone &&
+            plats.currentPlat.plat_zone.length &&
+            plats.currentPlat.non_sewer_due_float &&
+            plats.currentPlat.sewer_due_float
+        ) ? true : false
+
         const submitEnabled =
             activeForm.total_acreage &&
             activeForm.plat_type &&
@@ -495,11 +503,25 @@ class PlatForm extends React.Component {
                                                                     </div> */}
                                                                 </fieldset>
                                                                 <div className="col-xs-offset-2 col-xs-4">
-                                                                    <button className="btn btn-lex" onClick={onPlatSubmit}>Submit Exactions</button>
+                                                                    <button
+                                                                        className="btn btn-lex"
+                                                                        onClick={onPlatSubmit}
+                                                                        disabled={!exactionsSubmitEnabled}
+                                                                    >Submit Exactions</button>
                                                                 </div>
                                                                 <div className="col-xs-offset-1 col-xs-4">
-                                                                    <button className="btn btn-lex" onClick={onPlatAndCreateLot} >Submit and Create Lot</button>
+                                                                    <button
+                                                                        className="btn btn-lex"
+                                                                        onClick={onPlatAndCreateLot}
+                                                                        disabled={!exactionsSubmitEnabled}
+                                                                    >Submit and Create Lot</button>
                                                                 </div>
+                                                                <div>{ exactionsSubmitEnabled ? null : (
+                                                                    <div>
+                                                                        <div className="clearfix" />
+                                                                        <span> * This plat is missing critical information. Check the zone list and try again.</span>
+                                                                    </div>
+                                                                ) }</div>
                                                             </form>
                                                         </div>
                                                     </div>
