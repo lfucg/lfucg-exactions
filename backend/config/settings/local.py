@@ -1,7 +1,7 @@
 from .base import *
 from .base import env
+from .base import (before_send, before_send_log)
 import sentry_sdk
-import logging
 
 DEBUG = True
 
@@ -37,6 +37,7 @@ EMAIL_BACKEND = env(
 
 POSTMARK_API_KEY = env("POSTMARK_API_KEY", default="fake_key")
 
+
 SENTRY_API_DSN = env("SENTRY_API_DSN", default=None)
 if(SENTRY_API_DSN):
     sentry_sdk.init(
@@ -48,4 +49,8 @@ if(SENTRY_API_DSN):
         # Enable sending logs to Sentry
         enable_logs=True,
         add_full_stack=True,
+        # filter events:
+        # https://docs.sentry.io/platforms/python/configuration/filtering/#using-before-send
+        before_send=before_send,
+        before_send_log=before_send_log,
     )
