@@ -3,6 +3,7 @@ import sentry_sdk
 
 from .base import *
 from .base import env
+from .base import (before_send, before_send_log)
 
 SECRET_KEY = env("DJANGO_SECRET_KEY")
 
@@ -98,4 +99,6 @@ if(SENTRY_API_DSN):
         # Enable sending logs to Sentry
         enable_logs=True,
         add_full_stack=True,
+        before_send=before_send,
+        before_send_log=before_send_log,
     )
