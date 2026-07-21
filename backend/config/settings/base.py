@@ -181,3 +181,23 @@ FILE_UPLOAD_PERMISSIONS = 0o0664
 
 PAGINATION_SIZE = 10
 PASSWORD_RESET_TIMEOUT_DAYS = 7
+
+
+# sentry event filtering method
+def before_send(event, hint):
+    return None
+    # filter out anything that should not be sent by returning None
+    if event.get('logger', None) == 'django.security.DisallowedHost':
+        return None
+    event['extra'] = event.get('extra', {})
+    return event
+
+
+# sentry doesn't call before_send on everything, use before_send_log
+def before_send_log(log, hint):
+    # print('before_send_log', log)
+    attrs = log.get('attributes', {})
+    if attrs.get('logger.name', None) == 'django.security.DisallowedHost':
+        return None
+    log['attributes'] = attrs
+    return log
