@@ -1,5 +1,4 @@
 from django.contrib.auth.models import User
-from django.contrib.auth.views import login
 from django.core import signing
 
 from rest_framework import authentication, permissions
@@ -18,16 +17,11 @@ from .helper import send_password_reset_email, send_lost_username_email
 # from rest_framework_expiring_authtoken.models import ExpiringToken
 
 from accounts.serializers import UserSerializer
-# , PasswordChangeSerializer
-# from api import tasks
 
 from django.utils.timezone import now
 from datetime import timedelta
 import random
 
-
-# @api_view(['POST'])
-# @permission_classes((AllowAny, ))
 
 def get_token_for_user(user):
     token =  Token.objects.get_or_create(user=user)[0]
@@ -147,7 +141,7 @@ def _delete_token(token):
     try:
         data = signing.loads(token)
         data_token = data.get('passtoken', None)
-        ExpiringToken.objects.get(key=data_token).delete()
+        # ExpiringToken.objects.get(key=data_token).delete()
     except:
         pass
 
