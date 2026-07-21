@@ -63,7 +63,7 @@ urlpatterns = [
     # path('password_reset/', reset_password),
     path('forgot-username/', forgot_username),
     path('delete_token/', Logout.as_view()),
-    re_path(r'^reset/(?P<uid>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
+    re_path(r'^reset/(?P<uid>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/',
         # auth_views.password_reset_confirm,
         reset_password,
         name='password_reset_confirm'

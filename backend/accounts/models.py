@@ -269,8 +269,6 @@ class Project(models.Model):
         Agreement, related_name="project", on_delete=models.PROTECT
     )
 
-    agreement_id = models.ForeignKey(Agreement, related_name='project')
-
     expansion_area = models.CharField(max_length=100, choices=EXPANSION_AREAS)
     name = models.CharField(max_length=200)
 
