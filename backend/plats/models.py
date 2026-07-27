@@ -169,16 +169,17 @@ class Plat(models.Model):
         except:
             self.created_by = self.created_by
 
-        plat_zones = self.plat_zone.all()
-        if plat_zones is not None:
-            sewer_calc = 0
-            non_sewer_calc = 0
-            for plat_zone in plat_zones:
-                sewer_calc += (plat_zone.dues_sewer_cap + plat_zone.dues_sewer_trans)
-                non_sewer_calc += (plat_zone.dues_roads + plat_zone.dues_open_spaces + plat_zone.dues_parks + plat_zone.dues_storm_water)
+        if self.pk: # 'Plat' instance needs to have a primary key value before this relationship can be used.
+            plat_zones = self.plat_zone.all()
+            if plat_zones is not None:
+                sewer_calc = 0
+                non_sewer_calc = 0
+                for plat_zone in plat_zones:
+                    sewer_calc += (plat_zone.dues_sewer_cap + plat_zone.dues_sewer_trans)
+                    non_sewer_calc += (plat_zone.dues_roads + plat_zone.dues_open_spaces + plat_zone.dues_parks + plat_zone.dues_storm_water)
 
-            self.sewer_due = sewer_calc
-            self.non_sewer_due = non_sewer_calc
+                self.sewer_due = sewer_calc
+                self.non_sewer_due = non_sewer_calc
         self.cabinet_slide = self.cabinet + '-' + self.slide
 
         super(Plat, self).save(*args, **kwargs)
