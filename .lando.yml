@@ -25,6 +25,7 @@ services:
 
   database:
     type: postgres:14
+    portforward: 5434
     creds:
       user: postgres
       password: ""

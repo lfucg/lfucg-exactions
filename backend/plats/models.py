@@ -27,8 +27,12 @@ class Subdivision(models.Model):
     date_created = models.DateField(auto_now_add=True)
     date_modified = models.DateField(auto_now=True)
 
-    created_by = models.ForeignKey(User, related_name='subdivision_created')
-    modified_by = models.ForeignKey(User, related_name='subdivision_modified')    
+    created_by = models.ForeignKey(
+        User, related_name="subdivision_created", on_delete=models.PROTECT
+    )
+    modified_by = models.ForeignKey(
+        User, related_name="subdivision_modified", on_delete=models.PROTECT
+    )
 
     name = models.CharField(max_length=200)
     gross_acreage = models.DecimalField(max_digits=20, decimal_places=4)
@@ -72,18 +76,40 @@ class Plat(models.Model):
         ('NET', 'net'),
     )
 
-    subdivision = models.ForeignKey(Subdivision, blank=True, null=True, related_name='plat')
-    account = models.ForeignKey('accounts.Account', blank=True, null=True, related_name='plat_account')
-    amended_parent_plat = models.ForeignKey('plats.Plat', blank=True, null=True, related_name='plat_amend')
+    subdivision = models.ForeignKey(
+        Subdivision,
+        blank=True,
+        null=True,
+        related_name="plat",
+        on_delete=models.PROTECT,
+    )
+    account = models.ForeignKey(
+        "accounts.Account",
+        blank=True,
+        null=True,
+        related_name="plat_account",
+        on_delete=models.PROTECT,
+    )
+    amended_parent_plat = models.ForeignKey(
+        "plats.Plat",
+        blank=True,
+        null=True,
+        related_name="plat_amend",
+        on_delete=models.PROTECT,
+    )
 
     date_recorded = models.DateField()
     date_created = models.DateField(auto_now_add=True)
     date_modified = models.DateField(auto_now=True)
 
-    created_by = models.ForeignKey(User, related_name='plat_created')
-    modified_by = models.ForeignKey(User, related_name='plat_modified')
+    created_by = models.ForeignKey(
+        User, related_name="plat_created", on_delete=models.PROTECT
+    )
+    modified_by = models.ForeignKey(
+        User, related_name="plat_modified", on_delete=models.PROTECT
+    )
 
-    name = models.CharField(max_length=300)    
+    name = models.CharField(max_length=300)
     latitude = models.CharField(max_length=100, null=True, blank=True)
     longitude = models.CharField(max_length=100, null=True, blank=True)
 
@@ -99,7 +125,7 @@ class Plat(models.Model):
     section = models.CharField(max_length=200, null=True, blank=True)
     block = models.CharField(max_length=200, null=True, blank=True)
     case_number = models.CharField(max_length=200, null=True, blank=True)
-    
+
     buildable_lots = models.IntegerField()
     non_buildable_lots = models.IntegerField(default=0)
 
@@ -129,19 +155,31 @@ class Plat(models.Model):
             existing_plat = Plat.objects.get(id=self.id)
             if existing_plat is not None:
                 self.created_by = existing_plat.created_by
+
+            plat_zones = self.plat_zone.all()
+            if plat_zones is not None:
+                sewer_calc = 0
+                non_sewer_calc = 0
+                for plat_zone in plat_zones:
+                    sewer_calc += (plat_zone.dues_sewer_cap + plat_zone.dues_sewer_trans)
+                    non_sewer_calc += (plat_zone.dues_roads + plat_zone.dues_open_spaces + plat_zone.dues_parks + plat_zone.dues_storm_water)
+
+                self.sewer_due = sewer_calc
+                self.non_sewer_due = non_sewer_calc
         except:
             self.created_by = self.created_by
 
-        plat_zones = self.plat_zone.all()
-        if plat_zones is not None:
-            sewer_calc = 0
-            non_sewer_calc = 0
-            for plat_zone in plat_zones:
-                sewer_calc += (plat_zone.dues_sewer_cap + plat_zone.dues_sewer_trans)
-                non_sewer_calc += (plat_zone.dues_roads + plat_zone.dues_open_spaces + plat_zone.dues_parks + plat_zone.dues_storm_water)
+        if self.pk: # 'Plat' instance needs to have a primary key value before this relationship can be used.
+            plat_zones = self.plat_zone.all()
+            if plat_zones is not None:
+                sewer_calc = 0
+                non_sewer_calc = 0
+                for plat_zone in plat_zones:
+                    sewer_calc += (plat_zone.dues_sewer_cap + plat_zone.dues_sewer_trans)
+                    non_sewer_calc += (plat_zone.dues_roads + plat_zone.dues_open_spaces + plat_zone.dues_parks + plat_zone.dues_storm_water)
 
-            self.sewer_due = sewer_calc
-            self.non_sewer_due = non_sewer_calc
+                self.sewer_due = sewer_calc
+                self.non_sewer_due = non_sewer_calc
         self.cabinet_slide = self.cabinet + '-' + self.slide
 
         super(Plat, self).save(*args, **kwargs)
@@ -163,15 +201,25 @@ class Lot(models.Model):
         ('40516', '40516'),
     )
 
-    plat = models.ForeignKey(Plat, related_name='lot')
-    account = models.ForeignKey('accounts.Account', blank=True, null=True, related_name='lot_account')
+    plat = models.ForeignKey(Plat, related_name="lot", on_delete=models.PROTECT)
+    account = models.ForeignKey(
+        "accounts.Account",
+        blank=True,
+        null=True,
+        related_name="lot_account",
+        on_delete=models.PROTECT,
+    )
     parcel_id = models.CharField(max_length=200, null=True, blank=True)
-    
+
     date_created = models.DateField(auto_now_add=True)
     date_modified = models.DateField(auto_now=True)
 
-    created_by = models.ForeignKey(User, related_name='lot_created')
-    modified_by = models.ForeignKey(User, related_name='lot_modified')
+    created_by = models.ForeignKey(
+        User, related_name="lot_created", on_delete=models.PROTECT
+    )
+    modified_by = models.ForeignKey(
+        User, related_name="lot_modified", on_delete=models.PROTECT
+    )
 
     lot_number = models.CharField(max_length=100, null=True, blank=True)
     permit_id = models.CharField(max_length=200, null=True, blank=True)
@@ -194,7 +242,7 @@ class Lot(models.Model):
 
     dues_roads_dev = models.DecimalField(max_digits=20, decimal_places=2, default=0)
     dues_roads_own = models.DecimalField(max_digits=20, decimal_places=2, default=0)
-    
+
     dues_sewer_trans_dev = models.DecimalField(max_digits=20, decimal_places=2, default=0)
     dues_sewer_trans_own = models.DecimalField(max_digits=20, decimal_places=2, default=0)
     dues_sewer_cap_dev = models.DecimalField(max_digits=20, decimal_places=2, default=0)
@@ -212,7 +260,7 @@ class Lot(models.Model):
     # Current Dues based on calculations of payments and ledgers vs initial exactions
     current_dues_roads_dev = models.DecimalField(max_digits=20, decimal_places=2, default=0)
     current_dues_roads_own = models.DecimalField(max_digits=20, decimal_places=2, default=0)
-    
+
     current_dues_sewer_trans_dev = models.DecimalField(max_digits=20, decimal_places=2, default=0)
     current_dues_sewer_trans_own = models.DecimalField(max_digits=20, decimal_places=2, default=0)
     current_dues_sewer_cap_dev = models.DecimalField(max_digits=20, decimal_places=2, default=0)
@@ -307,13 +355,17 @@ class Lot(models.Model):
 class PlatZone(models.Model):
     is_active = models.BooleanField(default=True)
 
-    plat = models.ForeignKey(Plat, related_name='plat_zone')
+    plat = models.ForeignKey(Plat, related_name="plat_zone", on_delete=models.PROTECT)
 
     date_created = models.DateField(auto_now_add=True)
     date_modified = models.DateField(auto_now=True)
 
-    created_by = models.ForeignKey(User, related_name='plat_zone_created')
-    modified_by = models.ForeignKey(User, related_name='plat_zone_modified')
+    created_by = models.ForeignKey(
+        User, related_name="plat_zone_created", on_delete=models.PROTECT
+    )
+    modified_by = models.ForeignKey(
+        User, related_name="plat_zone_modified", on_delete=models.PROTECT
+    )
 
     zone = models.CharField(max_length=100, choices=ZONES)
     acres = models.DecimalField(max_digits=20, decimal_places=4)

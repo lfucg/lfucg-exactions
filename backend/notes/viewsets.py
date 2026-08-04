@@ -5,7 +5,7 @@ from rest_framework import status
 from django.contrib.contenttypes.models import ContentType
 
 from rest_framework.parsers import FileUploadParser, MultiPartParser
-# from django_filters.rest_framework import DjangoFilterBackend
+from django_filters import rest_framework as dj_filters
 
 from .models import Note, FileUpload, MediaStorage, Rate, RateTable
 from .serializers import *
@@ -23,7 +23,7 @@ class NoteViewSet(viewsets.ModelViewSet):
 
         child_content_type_string = self.request.query_params.get('content_type', None)
         child_object_id = self.request.query_params.get('object_id', None)
-                
+
         if child_content_type_string is not None:
             split_child_content = child_content_type_string.split('_')
 
@@ -108,7 +108,7 @@ class RateTableViewSet(viewsets.ModelViewSet):
                     if self != rate_table:
                         rate_table.is_active = False
                         rate_table.save()
-                
+
                 self_table['is_active'] = True
                 return update_entry(self, request, pk)
             else:
@@ -120,8 +120,8 @@ class RateViewSet(viewsets.ModelViewSet):
     serializer_class = RateSerializer
     queryset = Rate.objects.all()
     permission_classes = (CanAdminister,)
-    filter_backends = (filters.DjangoFilterBackend, filters.SearchFilter,)
-    filter_fields = ('rate_table_id__id',)
+    filter_backends = (dj_filters.DjangoFilterBackend, filters.SearchFilter,)
+    filterset_fields = ('rate_table_id__id',)
 
     def get_queryset(self):
         queryset = Rate.objects.all()
@@ -161,7 +161,7 @@ class FileUploadViewSet(viewsets.ModelViewSet):
 
         file_content_type_string = self.request.query_params.get('file_content_type', None)
         file_object_id = self.request.query_params.get('file_object_id', None)
-        
+
         if file_content_type_string is not None:
             split_content_type = file_content_type_string.split('_')
 
@@ -189,5 +189,3 @@ class FileUploadCreate(generics.CreateAPIView):
     def perform_create(self, serializer):
         if serializer.is_valid():
             serializer.save()
-
-    

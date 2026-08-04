@@ -11,7 +11,7 @@ from .permissions import CanAdminister
 from django.conf import settings
 from builtins import hasattr
 
-# from django_filters.rest_framework import DjangoFilterBackend
+from django_filters import rest_framework as dj_filters
 
 from plats.models import Plat, Lot
 
@@ -21,9 +21,9 @@ class AccountViewSet(viewsets.ModelViewSet):
     serializer_class = AccountSerializer
     queryset = Account.objects.all()
     permission_classes = (CanAdminister,)
-    filter_backends = (filters.DjangoFilterBackend, filters.SearchFilter,)
+    filter_backends = (dj_filters.DjangoFilterBackend, filters.SearchFilter,)
     search_fields = ('account_name', 'contact_full_name', 'address_full', 'phone', 'email',)
-    filter_fields = ('plat_account__id', 'lot_account__id', 'ledger_account_to', 'ledger_account_from', )
+    filterset_fields = ('plat_account__id', 'lot_account__id', 'ledger_account_to', 'ledger_account_from', )
 
     def get_queryset(self):
         queryset = Account.objects.all()
@@ -34,7 +34,7 @@ class AccountViewSet(viewsets.ModelViewSet):
             print('Show deleted entries')
         else:
             queryset = queryset.exclude(is_active=False)
-        
+
         paginatePage = self.request.query_params.get('paginatePage', None)
         pageSize = self.request.query_params.get('pageSize', settings.PAGINATION_SIZE)
 
@@ -67,9 +67,9 @@ class AgreementViewSet(viewsets.ModelViewSet):
     serializer_class = AgreementSerializer
     queryset = Agreement.objects.all()
     permission_classes = (CanAdminister,)
-    filter_backends = (filters.DjangoFilterBackend, filters.SearchFilter,)
+    filter_backends = (dj_filters.DjangoFilterBackend, filters.SearchFilter,)
     search_fields = ('resolution_number', 'account_id__account_name', 'agreement_type', 'expansion_area',)
-    filter_fields = ('agreement_type', 'account_id', 'expansion_area', 'is_approved', 'ledger',)
+    filterset_fields = ('agreement_type', 'account_id', 'expansion_area', 'is_approved', 'ledger',)
 
     def get_queryset(self):
         queryset = Agreement.objects.all()
@@ -81,7 +81,7 @@ class AgreementViewSet(viewsets.ModelViewSet):
             print('Show deleted entries')
         else:
             queryset = queryset.exclude(is_active=False)
-        if self.request.user.is_anonymous(): 
+        if self.request.user.is_anonymous:
             queryset = queryset.exclude(is_approved=False)
 
         account_id_set = self.request.query_params.get('account_id', None)
@@ -119,9 +119,9 @@ class PaymentViewSet(viewsets.ModelViewSet):
     serializer_class = PaymentSerializer
     queryset = Payment.objects.all()
     permission_classes = (CanAdminister,)
-    filter_backends = (filters.DjangoFilterBackend, filters.SearchFilter,)
+    filter_backends = (dj_filters.DjangoFilterBackend, filters.SearchFilter,)
     search_fields = ('lot_id__address_full', 'payment_type', 'check_number', 'credit_account__account_name', 'paid_by', 'credit_source__resolution_number')
-    filter_fields = ('payment_type', 'paid_by_type', 'credit_account', 'lot_id', 'credit_source', 'is_approved',)
+    filterset_fields = ('payment_type', 'paid_by_type', 'credit_account', 'lot_id', 'credit_source', 'is_approved',)
 
     def get_queryset(self):
         queryset = Payment.objects.all()
@@ -136,7 +136,7 @@ class PaymentViewSet(viewsets.ModelViewSet):
         paginatePage = self.request.query_params.get('paginatePage', None)
         pageSize = self.request.query_params.get('pageSize', settings.PAGINATION_SIZE)
 
-        if self.request.user.is_anonymous(): 
+        if self.request.user.is_anonymous:
             queryset = queryset.exclude(is_approved=False)
 
         if paginatePage is not None:
@@ -158,7 +158,7 @@ class PaymentViewSet(viewsets.ModelViewSet):
         ending_date = self.request.query_params.get('ending_date', None)
         if ending_date is not None:
             queryset = queryset.filter(Q(entry_date__lte=ending_date))
-        
+
         starting_date = self.request.query_params.get('starting_date', None)
         if starting_date is not None:
             queryset = queryset.filter(Q(entry_date__gte=starting_date))
@@ -185,9 +185,9 @@ class ProjectViewSet(viewsets.ModelViewSet):
     serializer_class = ProjectSerializer
     queryset = Project.objects.all()
     permission_classes = (CanAdminister,)
-    filter_backends = (filters.DjangoFilterBackend, filters.SearchFilter,)
+    filter_backends = (dj_filters.DjangoFilterBackend, filters.SearchFilter,)
     search_fields = ('agreement_id__resolution_number', 'name', 'project_category', 'project_description',)
-    filter_fields = ('project_category', 'project_status', 'agreement_id', 'project_type', 'expansion_area', 'is_approved',)
+    filterset_fields = ('project_category', 'project_status', 'agreement_id', 'project_type', 'expansion_area', 'is_approved',)
 
     def get_queryset(self):
         queryset = Project.objects.exclude(is_active=False)
@@ -196,7 +196,7 @@ class ProjectViewSet(viewsets.ModelViewSet):
         paginatePage = self.request.query_params.get('paginatePage', None)
         pageSize = self.request.query_params.get('pageSize', settings.PAGINATION_SIZE)
 
-        if self.request.user.is_anonymous(): 
+        if self.request.user.is_anonymous:
             queryset = queryset.exclude(is_approved=False)
 
         if paginatePage is not None:
@@ -234,9 +234,9 @@ class ProjectCostEstimateViewSet(viewsets.ModelViewSet):
     serializer_class = ProjectCostEstimateSerializer
     queryset = ProjectCostEstimate.objects.all()
     permission_classes = (CanAdminister,)
-    filter_backends = (filters.DjangoFilterBackend, filters.SearchFilter,)
+    filter_backends = (dj_filters.DjangoFilterBackend, filters.SearchFilter,)
     search_fields = ('project_id__name', 'estimate_type',)
-    filter_fields = ('project_id', 'is_approved',)
+    filterset_fields = ('project_id', 'is_approved',)
 
 
     def get_queryset(self):
@@ -245,8 +245,8 @@ class ProjectCostEstimateViewSet(viewsets.ModelViewSet):
 
         paginatePage = self.request.query_params.get('paginatePage', None)
         pageSize = self.request.query_params.get('pageSize', settings.PAGINATION_SIZE)
-        
-        if self.request.user.is_anonymous(): 
+
+        if self.request.user.is_anonymous:
             queryset = queryset.exclude(is_approved=False)
 
         if paginatePage is not None:
@@ -260,7 +260,7 @@ class ProjectCostEstimateViewSet(viewsets.ModelViewSet):
 
         data_set['created_by'] = self.request.user.id
         data_set['modified_by'] = self.request.user.id
-        
+
         serializer = ProjectCostEstimateSerializer(data=data_set)
         if serializer.is_valid(raise_exception=True):
             self.perform_create(serializer)
@@ -275,9 +275,9 @@ class AccountLedgerViewSet(viewsets.ModelViewSet):
     serializer_class = AccountLedgerSerializer
     queryset = AccountLedger.objects.all()
     permission_classes = (CanAdminister,)
-    filter_backends = (filters.DjangoFilterBackend, filters.SearchFilter,)
+    filter_backends = (dj_filters.DjangoFilterBackend, filters.SearchFilter,)
     search_fields = ('entry_type', 'agreement__resolution_number', 'lot__address_full', 'account_to__account_name', 'account_from__account_name',)
-    filter_fields = ('entry_type', 'agreement', 'lot', 'account_to', 'account_from', 'is_approved',)
+    filterset_fields = ('entry_type', 'agreement', 'lot', 'account_to', 'account_from', 'is_approved',)
 
     def get_queryset(self):
         queryset = AccountLedger.objects.all()
@@ -290,7 +290,7 @@ class AccountLedgerViewSet(viewsets.ModelViewSet):
             print('Show deleted entries')
         else:
             queryset = queryset.exclude(is_active=False)
-        if self.request.user.is_anonymous(): 
+        if self.request.user.is_anonymous:
             queryset = queryset.exclude(is_approved=False)
 
         if paginatePage is not None:
