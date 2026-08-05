@@ -1,10 +1,10 @@
 ARG PYTHON_VERSION=3.12-bookworm
 
 # define an alias for the specfic python version used in this file.
-FROM python:${PYTHON_VERSION} as python
+FROM python:${PYTHON_VERSION} AS python
 
 # Python build stage
-FROM python as python-build-stage
+FROM python AS python-build-stage
 
 ARG BUILD_ENVIRONMENT=production
 
@@ -12,7 +12,7 @@ ARG BUILD_ENVIRONMENT=production
 RUN apt-get clean && apt-get update && apt-get --fix-broken install --no-install-recommends -y \
 # RUN apt-get clean update && apt-get --no-install-recommends -y \
   # dependencies for building Python packages
-  # build-essential 
+  # build-essential
   build-essential \
   zlib1g-dev \
   libjpeg-dev \
@@ -31,7 +31,7 @@ RUN pip wheel --wheel-dir /usr/src/app/wheels  \
   -r ${BUILD_ENVIRONMENT}.txt -c build-constraints.txt --build-constraint build-constraints.txt
 
 # Python 'run' stage
-FROM python as python-run-stage
+FROM python AS python-run-stage
 
 ARG BUILD_ENVIRONMENT=production
 ARG APP_HOME=/app
@@ -79,7 +79,7 @@ RUN chmod +x /start.sh
 # copy application code to WORKDIR
 COPY --chown=django:django . ${APP_HOME}
 
-# make django owner of the WORKDIR directory as well.
+# make django owner of the WORKDIR directory AS well.
 RUN chown django:django ${APP_HOME}
 
 USER django
