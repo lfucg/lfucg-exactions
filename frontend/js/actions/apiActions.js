@@ -108,6 +108,10 @@ import {
 
 } from '../constants/apiConstants';
 
+// TODO: move this to library
+const moneyToFloat = (val) =>
+    typeof val === 'string' ? parseFloat(val.replace(/[$,]/g, '')) : val
+
 export function startAPI(apiCall) {
     return {
         type: API_CALL_START,
@@ -370,8 +374,8 @@ export function postPlat() {
                 cabinet,
                 slide,
                 calculation_note,
-                sewer_due,
-                non_sewer_due,
+                sewer_due: moneyToFloat(sewer_due),
+                non_sewer_due: moneyToFloat(non_sewer_due),
                 account,
             };
         },
@@ -426,8 +430,8 @@ export function putPlat(selectedPlat) {
                 cabinet,
                 slide,
                 calculation_note,
-                sewer_due: sewer_due,
-                non_sewer_due: non_sewer_due,
+                sewer_due: moneyToFloat(sewer_due),
+                non_sewer_due: moneyToFloat(non_sewer_due),
                 account,
             };
         },
@@ -647,7 +651,7 @@ export function postLot() {
                 address_zip,
                 alternative_address_number: !!alternative_address_number ? alternative_address_number : null,
                 alternative_address_street: !!alternative_address_street ? alternative_address_street : null,
-                address_full: `${address_number} ${address_direction ? address_direction : ''}${address_street}${address_suffix ? address_suffix : ''} ${address_unit ? address_unit : ''} Lexington, KY ${address_zip ? address_zip : ''}`,
+                address_full: `${address_number} ${address_direction ? address_direction : ''} ${address_street} ${address_suffix ? address_suffix : ''} ${address_unit ? address_unit : ''}, Lexington, KY ${address_zip ? address_zip : ''}`,
                 dues_roads_dev,
                 dues_roads_own,
                 dues_sewer_trans_dev,
@@ -727,7 +731,7 @@ export function putLot(selectedLot) {
                 address_zip,
                 alternative_address_number: !!alternative_address_number ? alternative_address_number : null,
                 alternative_address_street: !!alternative_address_street ? alternative_address_street : null,
-                address_full: `${address_number} ${address_direction ? address_direction : ''}${address_street}${address_suffix ? address_suffix : ''}${address_unit ? address_unit : ''} Lexington, KY ${address_zip ? address_zip : ''}`,
+                address_full: `${address_number} ${address_direction ? address_direction : ''} ${address_street} ${address_suffix ? address_suffix : ''} ${address_unit ? address_unit : ''}, Lexington, KY ${address_zip ? address_zip : ''}`,
                 dues_roads_dev,
                 dues_roads_own,
                 dues_sewer_trans_dev,

@@ -156,7 +156,7 @@ class PlatSerializer(serializers.ModelSerializer):
                 )
             )
         )
-        
+
         return queryset
 
     def get_cleaned_total_acreage(self, obj):
@@ -171,10 +171,10 @@ class PlatSerializer(serializers.ModelSerializer):
 
     def get_plat_zone(self, obj):
         plat_zone_set = obj.plat_zone
-        return PlatZoneSerializer(instance=plat_zone_set, many=True).data
+        return PlatZoneSerializer(instance=plat_zone_set, many=True).data if plat_zone_set else []
 
     class Meta:
-        model = Plat 
+        model = Plat
         fields = (
             'id',
             'is_approved',
@@ -188,8 +188,8 @@ class PlatSerializer(serializers.ModelSerializer):
             'created_by',
             'modified_by',
 
-            'name', 
-            'total_acreage',          
+            'name',
+            'total_acreage',
             'cleaned_total_acreage',
             'latitude',
             'longitude',
@@ -217,9 +217,9 @@ class PlatField(serializers.Field):
     def to_internal_value(self, data):
         if data is None:
             raise serializers.ValidationError("Plat is required.")
-        try: 
+        try:
             return Plat.objects.get(id=data)
-        except: 
+        except:
             return None
 
     def to_representation(self, obj):
@@ -229,7 +229,7 @@ class LotSerializer(serializers.ModelSerializer):
     plat = PlatField()
 
     lot_exactions = serializers.SerializerMethodField(read_only=True)
-    
+
     def get_lot_exactions(self, obj):
         return calculate_lot_totals(obj)
 
@@ -242,7 +242,7 @@ class LotSerializer(serializers.ModelSerializer):
             'plat',
             'account',
 
-            'parcel_id',            
+            'parcel_id',
             'date_created',
             'date_modified',
             'created_by',
@@ -278,7 +278,7 @@ class LotSerializer(serializers.ModelSerializer):
             'dues_storm_own',
             'dues_open_space_dev',
             'dues_open_space_own',
-            
+
             'current_dues_roads_dev',
             'current_dues_roads_own',
             'current_dues_sewer_trans_dev',
@@ -300,7 +300,7 @@ class LotSerializer(serializers.ModelSerializer):
 class LotQuickSerializer(serializers.ModelSerializer):
     lot_exactions = serializers.SerializerMethodField(read_only=True)
     plat = PlatQuickSerializer()
-    
+
     def get_lot_exactions(self, obj):
         return calculate_lot_totals(obj)
 
@@ -318,7 +318,7 @@ class LotQuickSerializer(serializers.ModelSerializer):
 
 class LotExactionsSerializer(serializers.ModelSerializer):
     lot_exactions = serializers.SerializerMethodField(read_only=True)
-    
+
     def get_lot_exactions(self, obj):
         return calculate_lot_totals(obj)
 

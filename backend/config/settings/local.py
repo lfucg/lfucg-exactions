@@ -23,6 +23,10 @@ ALLOWED_HOSTS = [
     "django.exactions.internal",
 ]
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://" + SITE_DOMAIN,
+]
+
 DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
 
 CACHES = {

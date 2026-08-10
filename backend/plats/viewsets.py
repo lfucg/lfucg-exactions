@@ -1,10 +1,10 @@
 from django.db.models import Prefetch
 from rest_framework import viewsets, status, filters
+from django_filters import rest_framework as dj_filters
 from django.db.models import Q
 from django.conf import settings
 
 from rest_framework.response import Response
-# from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.pagination import PageNumberPagination
 
 from .models import *
@@ -16,12 +16,12 @@ class SubdivisionViewSet(viewsets.ModelViewSet):
     serializer_class = SubdivisionSerializer
     queryset = Subdivision.objects.all()
     permission_classes = (CanAdminister,)
-    filter_backends = (filters.DjangoFilterBackend, filters.SearchFilter,)
+    filter_backends = (dj_filters.DjangoFilterBackend, filters.SearchFilter,)
     search_fields = (
         'name',
         # 'plat__name',
     )
-    filter_fields = ('plat__id',)
+    filterset_fields = ('plat__id',)
 
     def get_queryset(self):
         queryset = Subdivision.objects.exclude(is_active=False)
@@ -32,7 +32,7 @@ class SubdivisionViewSet(viewsets.ModelViewSet):
         if paginatePage is not None:
             PageNumberPagination.page_size = pageSize
             pagination_class = PageNumberPagination
-            
+
 
         return queryset.order_by('name')
 
@@ -61,7 +61,7 @@ class PlatViewSet(viewsets.ModelViewSet):
     serializer_class = PlatSerializer
     queryset = Plat.objects.none()
     permission_classes = (CanAdminister,)
-    filter_backends = (filters.DjangoFilterBackend, filters.SearchFilter,)
+    filter_backends = (dj_filters.DjangoFilterBackend, filters.SearchFilter,)
     search_fields = (
         'name',
         'expansion_area',
@@ -74,7 +74,7 @@ class PlatViewSet(viewsets.ModelViewSet):
         'block',
         'cabinet_slide',
     )
-    filter_fields = ('expansion_area', 'account', 'subdivision', 'plat_type', 'lot__id', 'is_approved',)
+    filterset_fields = ('expansion_area', 'account', 'subdivision', 'plat_type', 'lot__id', 'is_approved',)
 
     def get_queryset(self):
         queryset = Plat.objects.all()
@@ -90,7 +90,7 @@ class PlatViewSet(viewsets.ModelViewSet):
         else:
             queryset = queryset.exclude(is_active=False)
 
-        if self.request.user.is_anonymous(): 
+        if self.request.user.is_anonymous:
             queryset = queryset.exclude(is_approved=False)
 
         if paginatePage is not None:
@@ -118,7 +118,7 @@ class PlatViewSet(viewsets.ModelViewSet):
 class PlatQuickViewSet(viewsets.ModelViewSet):
     serializer_class = PlatQuickSerializer
     queryset = Plat.objects.none()
-    filter_backends = (filters.DjangoFilterBackend, filters.SearchFilter,)
+    filter_backends = (dj_filters.DjangoFilterBackend, filters.SearchFilter,)
     search_fields = (
         'name',
         'expansion_area',
@@ -131,7 +131,7 @@ class PlatQuickViewSet(viewsets.ModelViewSet):
         'block',
         'cabinet_slide',
     )
-    filter_fields = ('expansion_area', 'account', 'subdivision', 'plat_type', 'lot__id', 'is_approved',)
+    filterset_fields = ('expansion_area', 'account', 'subdivision', 'plat_type', 'lot__id', 'is_approved',)
 
     def get_queryset(self):
         queryset = Plat.objects.filter(is_active=True)
@@ -143,14 +143,14 @@ class PlatQuickViewSet(viewsets.ModelViewSet):
         if paginatePage is not None:
             PageNumberPagination.page_size = 10
             pagination_class = PageNumberPagination
-        
+
         return queryset.order_by('cabinet', 'slide')
 
 class LotViewSet(viewsets.ModelViewSet):
     serializer_class = LotSerializer
     queryset = Lot.objects.all()
     permission_classes = (CanAdminister,)
-    filter_backends = (filters.DjangoFilterBackend, filters.SearchFilter,)
+    filter_backends = (dj_filters.DjangoFilterBackend, filters.SearchFilter,)
     search_fields = (
         'address_full',
         'lot_number',
@@ -163,7 +163,7 @@ class LotViewSet(viewsets.ModelViewSet):
         'alternative_address_number',
         'alternative_address_street',
     )
-    filter_fields = (
+    filterset_fields = (
         'account',
         'plat',
         'is_approved',
@@ -186,7 +186,7 @@ class LotViewSet(viewsets.ModelViewSet):
         if plat_set is not None:
             queryset = queryset.filter(plat=plat_set)
 
-        if self.request.user.is_anonymous(): 
+        if self.request.user.is_anonymous:
             queryset = queryset.exclude(is_approved=False)
 
         if paginatePage is not None:
@@ -214,8 +214,8 @@ class LotViewSet(viewsets.ModelViewSet):
 class LotQuickViewSet(viewsets.ModelViewSet):
     serializer_class = LotQuickSerializer
     queryset = Lot.objects.none()
-    filter_backends = (filters.DjangoFilterBackend,)
-    filter_fields = ('plat',)
+    filter_backends = (dj_filters.DjangoFilterBackend,)
+    filterset_fields = ('plat',)
     pagination_class = PageNumberPagination
 
     def get_queryset(self):
@@ -228,7 +228,7 @@ class LotQuickViewSet(viewsets.ModelViewSet):
         # if paginatePage is not None:
         #     PageNumberPagination.page_size = pageSize
         #     pagination_class = PageNumberPagination
-        
+
         return queryset.order_by('address_street', 'address_number', 'address_unit')
 
 class LotExactionsViewSet(viewsets.ModelViewSet):
@@ -262,4 +262,4 @@ class PlatZoneViewSet(viewsets.ModelViewSet):
 class CalculationWorksheetViewSet(viewsets.ModelViewSet):
     serializer_class = CalculationWorksheetSerializer
     queryset = CalculationWorksheet.objects.all()
-    
+
