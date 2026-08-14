@@ -51,16 +51,35 @@ POSTMARK = {
 # the site admins on every HTTP 500 error when DEBUG=False.
 
 # Removed logging from prod config 2026-08-14
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "verbose": {
+            "format": "%(levelname)s %(asctime)s %(module)s "
+            "%(process)d %(thread)d %(message)s"
+        }
+    },
+    "handlers": {
+        "console": {
+            "level": "DEBUG",
+            "class": "logging.StreamHandler",
+            "formatter": "verbose",
+        }
+    },
+    "root": {"level": "INFO", "handlers": ["console"]},
+}
 
+# filter events:
+# https://docs.sentry.io/platforms/python/configuration/filtering/#using-before-send
+# Add data like request headers and IP for users,
+# see https://docs.sentry.io/platforms/python/data-management/data-collected/ for more info
 SENTRY_API_DSN = env("SENTRY_API_DSN", default=None)
 if(SENTRY_API_DSN):
     sentry_sdk.init(
         dsn=SENTRY_API_DSN,
         environment="production-" + SITE_DOMAIN,
-        # Add data like request headers and IP for users,
-        # see https://docs.sentry.io/platforms/python/data-management/data-collected/ for more info
         send_default_pii=True,
-        # Enable sending logs to Sentry
         enable_logs=True,
         add_full_stack=True,
         before_send=before_send,
