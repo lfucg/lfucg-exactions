@@ -1,7 +1,9 @@
+import django
 from .base import *
 from .base import env
 from .base import (before_send, before_send_log)
 import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
 
 DEBUG = True
 
@@ -42,19 +44,32 @@ EMAIL_BACKEND = env(
 POSTMARK_API_KEY = env("POSTMARK_API_KEY", default="fake_key")
 
 
+# filter events:
+# https://docs.sentry.io/platforms/python/configuration/filtering/#using-before-send
+# Add data like request headers and IP for users,
+# see https://docs.sentry.io/platforms/python/data-management/data-collected/ for more info
 SENTRY_API_DSN = env("SENTRY_API_DSN", default=None)
 if(SENTRY_API_DSN):
     sentry_sdk.init(
         dsn=SENTRY_API_DSN,
         environment="local-" + SITE_DOMAIN,
-        # Add data like request headers and IP for users,
-        # see https://docs.sentry.io/platforms/python/data-management/data-collected/ for more info
         send_default_pii=True,
-        # Enable sending logs to Sentry
         enable_logs=True,
         add_full_stack=True,
-        # filter events:
-        # https://docs.sentry.io/platforms/python/configuration/filtering/#using-before-send
         before_send=before_send,
         before_send_log=before_send_log,
+        max_request_body_size="always",
+        integrations=[
+            DjangoIntegration(
+                # transaction_style='url',
+                # middleware_spans=True,
+                # signals_spans=False,
+                # signals_denylist=[
+                    # django.db.models.signals.pre_init,
+                    # django.db.models.signals.post_init,
+                # ],
+                # cache_spans=False,
+                # http_methods_to_capture=("GET", "POST", "PUT",),
+            ),
+        ],
     )
