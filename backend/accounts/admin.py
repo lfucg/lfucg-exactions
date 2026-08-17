@@ -47,7 +47,7 @@ class AgreementHistoryAdmin(SimpleHistoryAdmin):
         'modified_by',
         'date_created',
         'date_modified',
-    )    
+    )
     search_fields = (
         'resolution_number',
         'account_id__account_name'
@@ -77,9 +77,9 @@ class PaymentHistoryAdmin(SimpleHistoryAdmin):
         'credit_account__account_name',
     )
     search_fields = (
-        'lot_id__address_street', 
+        'lot_id__address_street',
         'lot_id__address_number'
-        'lot_id__alternative_address_street', 
+        'lot_id__alternative_address_street',
         'lot_id__alternative_address_number'
     )
 
@@ -92,8 +92,16 @@ class PaymentHistoryAdmin(SimpleHistoryAdmin):
     lot_address.short_description = 'Lot'
 
     def amount_paid(self, obj):
-        return obj.paid_roads + obj.paid_parks + obj.paid_storm + obj.paid_open_space + obj.paid_sewer_trans + obj.paid_sewer_cap
+        return (
+            (obj.paid_roads or 0) +
+            (obj.paid_parks or 0) +
+            (obj.paid_storm or 0) +
+            (obj.paid_open_space or 0) +
+            (obj.paid_sewer_trans or 0) +
+            (obj.paid_sewer_cap or 0)
+        )
     amount_paid.short_description = 'Amount Paid'
+
 
 class ProjectHistoryAdmin(SimpleHistoryAdmin):
     list_display = (

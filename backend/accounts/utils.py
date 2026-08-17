@@ -29,14 +29,7 @@ def calculate_agreement_balance(agreement_id):
 
     if payments.exists():
         for payment in payments:
-            payment_value += (
-                payment.paid_roads +
-                payment.paid_sewer_trans +
-                payment.paid_sewer_cap +
-                payment.paid_parks +
-                payment.paid_storm +
-                payment.paid_open_space
-            )
+            payment_value += payment.calculate_payment_total()
 
     current_agreement_total = ledger_to_value - ledger_from_value - payment_value
 
