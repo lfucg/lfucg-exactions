@@ -84,4 +84,18 @@ if(SENTRY_API_DSN):
         add_full_stack=True,
         before_send=before_send,
         before_send_log=before_send_log,
+        max_request_body_size="always",
+        integrations=[
+            DjangoIntegration(
+                # transaction_style='url',
+                # middleware_spans=True,
+                # signals_spans=False,
+                # signals_denylist=[
+                    # django.db.models.signals.pre_init,
+                    # django.db.models.signals.post_init,
+                # ],
+                # cache_spans=False,
+                # http_methods_to_capture=("GET", "POST", "PUT",),
+            ),
+        ],
     )
