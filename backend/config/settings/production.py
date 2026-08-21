@@ -114,3 +114,5 @@ if(SENTRY_API_DSN):
             sentry_logging,
         ],
     )
+    logger = logging.getLogger(__name__)
+    logger.info("sentry sdk initialized, production.py")

@@ -83,3 +83,5 @@ if(SENTRY_API_DSN):
             sentry_logging,
         ],
     )
+    logger = logging.getLogger(__name__)
+    logger.warn("sentry sdk initialized, local.py")
