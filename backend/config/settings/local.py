@@ -9,8 +9,8 @@ from sentry_sdk.integrations.django import DjangoIntegration
 from sentry_sdk.integrations.logging import LoggingIntegration
 
 sentry_logging = LoggingIntegration(
-    level=logging.INFO,          # Info logs and above captured as breadcrumbs
-    event_level=logging.ERROR    # Error logs and above captured as separate Sentry events
+    level=logging.INFO,
+    event_level=logging.INFO,
 )
 
 DEBUG = True
