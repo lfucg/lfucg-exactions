@@ -60,9 +60,34 @@ POSTMARK = {
 # the site admins on every HTTP 500 error when DEBUG=False.
 
 # Removed logging from prod config 2026-08-14
+# LOGGING = {
+    # "version": 1,
+    # "disable_existing_loggers": False,
+    # "formatters": {
+        # "verbose": {
+            # "format": "%(levelname)s %(asctime)s %(module)s "
+            # "%(process)d %(thread)d %(message)s"
+        # }
+    # },
+    # "handlers": {
+        # "console": {
+            # "level": "DEBUG",
+            # "class": "logging.StreamHandler",
+            # "formatter": "verbose",
+        # },
+        # "sentry": {
+            # "level": "INFO",
+            # "class": "sentry_sdk.integrations.logging.EventHandler",
+        # },
+    # },
+    # "root": {"level": "INFO", "handlers": ["console", "sentry"]},
+# }
+
+# reinstated original LOGGING to see if that changed the outcome
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
+    "filters": {"require_debug_false": {"()": "django.utils.log.RequireDebugFalse"}},
     "formatters": {
         "verbose": {
             "format": "%(levelname)s %(asctime)s %(module)s "
@@ -70,17 +95,32 @@ LOGGING = {
         }
     },
     "handlers": {
+        "mail_admins": {
+            "level": "ERROR",
+            "filters": ["require_debug_false"],
+            "class": "django.utils.log.AdminEmailHandler",
+        },
         "console": {
             "level": "DEBUG",
             "class": "logging.StreamHandler",
             "formatter": "verbose",
         },
-        "sentry": {
-            "level": "INFO",
-            "class": "sentry_sdk.integrations.logging.EventHandler",
+        "null": {
+            "class": "logging.NullHandler",
         },
     },
-    "root": {"level": "INFO", "handlers": ["console", "sentry"]},
+    "root": {"level": "INFO", "handlers": ["console"]},
+    "loggers": {
+        "django.request": {
+            "handlers": ["mail_admins"],
+            "level": "ERROR",
+            "propagate": True,
+        },
+        "django.security.DisallowedHost": {
+            "handlers": ["null"],
+            "propagate": False,
+        },
+    },
 }
 
 # filter events:
@@ -98,7 +138,7 @@ if(SENTRY_API_DSN):
         before_send=before_send,
         before_send_log=before_send_log,
         max_request_body_size="always",
-        traces_sample_rate=1.0,
+        # traces_sample_rate=1.0,
         integrations=[
             DjangoIntegration(
                 # transaction_style='url',
