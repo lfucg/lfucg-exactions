@@ -1,5 +1,14 @@
 from config import ecs
+
+import logging
 import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
+from sentry_sdk.integrations.logging import LoggingIntegration
+
+sentry_logging = LoggingIntegration(
+    level=logging.INFO,
+    event_level=logging.INFO,
+)
 
 from .base import *
 from .base import env
@@ -49,6 +58,32 @@ POSTMARK = {
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
 # the site admins on every HTTP 500 error when DEBUG=False.
+
+# Removed logging from prod config 2026-08-14
+# LOGGING = {
+    # "version": 1,
+    # "disable_existing_loggers": False,
+    # "formatters": {
+        # "verbose": {
+            # "format": "%(levelname)s %(asctime)s %(module)s "
+            # "%(process)d %(thread)d %(message)s"
+        # }
+    # },
+    # "handlers": {
+        # "console": {
+            # "level": "DEBUG",
+            # "class": "logging.StreamHandler",
+            # "formatter": "verbose",
+        # },
+        # "sentry": {
+            # "level": "INFO",
+            # "class": "sentry_sdk.integrations.logging.EventHandler",
+        # },
+    # },
+    # "root": {"level": "INFO", "handlers": ["console", "sentry"]},
+# }
+
+# reinstated original LOGGING to see if that changed the outcome
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
@@ -88,17 +123,36 @@ LOGGING = {
     },
 }
 
+# filter events:
+# https://docs.sentry.io/platforms/python/configuration/filtering/#using-before-send
+# Add data like request headers and IP for users,
+# see https://docs.sentry.io/platforms/python/data-management/data-collected/ for more info
 SENTRY_API_DSN = env("SENTRY_API_DSN", default=None)
 if(SENTRY_API_DSN):
     sentry_sdk.init(
         dsn=SENTRY_API_DSN,
         environment="production-" + SITE_DOMAIN,
-        # Add data like request headers and IP for users,
-        # see https://docs.sentry.io/platforms/python/data-management/data-collected/ for more info
         send_default_pii=True,
-        # Enable sending logs to Sentry
         enable_logs=True,
         add_full_stack=True,
         before_send=before_send,
         before_send_log=before_send_log,
+        max_request_body_size="always",
+        # traces_sample_rate=1.0,
+        integrations=[
+            DjangoIntegration(
+                # transaction_style='url',
+                # middleware_spans=True,
+                # signals_spans=False,
+                # signals_denylist=[
+                    # django.db.models.signals.pre_init,
+                    # django.db.models.signals.post_init,
+                # ],
+                # cache_spans=False,
+                # http_methods_to_capture=("GET", "POST", "PUT",),
+            ),
+            sentry_logging,
+        ],
     )
+    logger = logging.getLogger(__name__)
+    logger.info("sentry sdk initialized, production.py")
