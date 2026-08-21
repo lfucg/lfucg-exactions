@@ -2,8 +2,16 @@ import django
 from .base import *
 from .base import env
 from .base import (before_send, before_send_log)
+
+import logging
 import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
+from sentry_sdk.integrations.logging import LoggingIntegration
+
+sentry_logging = LoggingIntegration(
+    level=logging.INFO,          # Info logs and above captured as breadcrumbs
+    event_level=logging.ERROR    # Error logs and above captured as separate Sentry events
+)
 
 DEBUG = True
 
@@ -59,6 +67,7 @@ if(SENTRY_API_DSN):
         before_send=before_send,
         before_send_log=before_send_log,
         max_request_body_size="always",
+        traces_sample_rate=1.0,
         integrations=[
             DjangoIntegration(
                 # transaction_style='url',
@@ -71,5 +80,6 @@ if(SENTRY_API_DSN):
                 # cache_spans=False,
                 # http_methods_to_capture=("GET", "POST", "PUT",),
             ),
+            sentry_logging,
         ],
     )

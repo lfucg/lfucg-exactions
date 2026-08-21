@@ -177,9 +177,13 @@ LOGGING = {
             "level": "DEBUG",
             "class": "logging.StreamHandler",
             "formatter": "verbose",
-        }
+        },
+        "sentry": {
+            "level": "INFO",
+            "class": "sentry_sdk.integrations.logging.EventHandler",
+        },
     },
-    "root": {"level": "INFO", "handlers": ["console"]},
+    "root": {"level": "INFO", "handlers": ["console", "sentry"]},
 }
 
 TEST_RUNNER = "django.test.runner.DiscoverRunner"
