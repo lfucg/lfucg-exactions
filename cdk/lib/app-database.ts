@@ -46,6 +46,12 @@ export default class AppDatabase extends Construct {
       DB_PASSWORD: ecs.Secret.fromSecretsManager(databaseSecret, 'password'),
     };
 
+    // Suppress warning for not using `storageEncrypted: true`
+    cdk.Validations.of(this).acknowledge({
+      id: 'CloudFormation-Validate::W9008',
+      reason: "We'll get around to this one day",
+    });
+
     const engine = rds.DatabaseInstanceEngine.postgres({
       version: rds.PostgresEngineVersion.VER_14_10,
     });
@@ -62,6 +68,8 @@ export default class AppDatabase extends Construct {
       credentials: rds.Credentials.fromSecret(databaseSecret),
       enablePerformanceInsights: true,
       removalPolicy: cdk.RemovalPolicy.RETAIN,
+      // NOTE: Enabling this will destroy the old DB. Only use this when you update psql
+      // storageEncrypted: true,
     });
 
     this.databaseProxy = this.database.addProxy('DatabaseProxy-exactions', {

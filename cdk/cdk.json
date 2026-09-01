@@ -97,6 +97,7 @@
     "@aws-cdk/core:cfnIncludeRejectComplexResourceUpdateCreatePolicyIntrinsics": false,
     "@aws-cdk/core:enableAdditionalMetadataCollection": false,
     "@aws-cdk/core:explicitStackTags": false,
-    "@aws-cdk/s3-notifications:addS3TrustKeyPolicyForSnsSubscriptions": false
+    "@aws-cdk/s3-notifications:addS3TrustKeyPolicyForSnsSubscriptions": false,
+    "@aws-cdk/core:defaultCrossStackReferences": "strong"
   }
 }
