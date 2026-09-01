@@ -123,7 +123,6 @@ LOGGING = {
         },
     },
     "root": {"level": "INFO", "handlers": ["console", 'console_on_not_debug']},
-    },
 }
 
 # filter events:
