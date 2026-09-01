@@ -87,7 +87,14 @@ POSTMARK = {
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
-    "filters": {"require_debug_false": {"()": "django.utils.log.RequireDebugFalse"}},
+    "filters": {
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse',
+        },
+        'require_debug_true': {
+            '()': 'django.utils.log.RequireDebugTrue',
+        },
+    },
     "formatters": {
         "verbose": {
             "format": "%(levelname)s %(asctime)s %(module)s "
@@ -102,24 +109,20 @@ LOGGING = {
         },
         "console": {
             "level": "DEBUG",
+            'filters': ['require_debug_true'],
             "class": "logging.StreamHandler",
             "formatter": "verbose",
+        },
+        'console_on_not_debug': {
+            'level': 'WARNING',
+            'filters': ['require_debug_false'],
+            'class': 'logging.StreamHandler',
         },
         "null": {
             "class": "logging.NullHandler",
         },
     },
-    "root": {"level": "INFO", "handlers": ["console"]},
-    "loggers": {
-        "django.request": {
-            "handlers": ["mail_admins"],
-            "level": "ERROR",
-            "propagate": True,
-        },
-        "django.security.DisallowedHost": {
-            "handlers": ["null"],
-            "propagate": False,
-        },
+    "root": {"level": "INFO", "handlers": ["console", 'console_on_not_debug']},
     },
 }
 
