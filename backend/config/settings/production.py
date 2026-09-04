@@ -4,12 +4,6 @@ import logging
 import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
 from sentry_sdk.integrations.logging import LoggingIntegration
-
-sentry_logging = LoggingIntegration(
-    level=logging.INFO,
-    event_level=logging.INFO,
-)
-
 from .base import *
 from .base import env
 from .base import (before_send, before_send_log)
@@ -50,6 +44,36 @@ POSTMARK = {
     "VERBOSITY": 0,
 }
 
+# do sentry setup before LOGGING
+# filter events:
+# https://docs.sentry.io/platforms/python/configuration/filtering/#using-before-send
+# Add data like request headers and IP for users,
+# see https://docs.sentry.io/platforms/python/data-management/data-collected/ for more info
+sentry_logging = LoggingIntegration(
+    level=logging.INFO,
+    event_level=logging.INFO,
+)
+SENTRY_API_DSN = env("SENTRY_API_DSN", default=None)
+if(SENTRY_API_DSN):
+    sentry_sdk.init(
+        debug=True,
+        dsn=SENTRY_API_DSN,
+        environment="production-" + SITE_DOMAIN,
+        send_default_pii=True,
+        enable_logs=True,
+        add_full_stack=True,
+        before_send=before_send,
+        before_send_log=before_send_log,
+        max_request_body_size="always",
+        traces_sample_rate=1.0,
+        integrations=[
+            DjangoIntegration(),
+        ],
+    )
+    logger = logging.getLogger(__name__)
+    logger.info("sentry sdk initialized, production.py")
+
+
 # LOGGING
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#logging
@@ -60,34 +84,17 @@ POSTMARK = {
 # the site admins on every HTTP 500 error when DEBUG=False.
 
 # Removed logging from prod config 2026-08-14
-# LOGGING = {
-    # "version": 1,
-    # "disable_existing_loggers": False,
-    # "formatters": {
-        # "verbose": {
-            # "format": "%(levelname)s %(asctime)s %(module)s "
-            # "%(process)d %(thread)d %(message)s"
-        # }
-    # },
-    # "handlers": {
-        # "console": {
-            # "level": "DEBUG",
-            # "class": "logging.StreamHandler",
-            # "formatter": "verbose",
-        # },
-        # "sentry": {
-            # "level": "INFO",
-            # "class": "sentry_sdk.integrations.logging.EventHandler",
-        # },
-    # },
-    # "root": {"level": "INFO", "handlers": ["console", "sentry"]},
-# }
-
-# reinstated original LOGGING to see if that changed the outcome
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
-    "filters": {"require_debug_false": {"()": "django.utils.log.RequireDebugFalse"}},
+    "filters": {
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse',
+        },
+        'require_debug_true': {
+            '()': 'django.utils.log.RequireDebugTrue',
+        },
+    },
     "formatters": {
         "verbose": {
             "format": "%(levelname)s %(asctime)s %(module)s "
@@ -102,57 +109,22 @@ LOGGING = {
         },
         "console": {
             "level": "DEBUG",
+            'filters': ['require_debug_true'],
             "class": "logging.StreamHandler",
             "formatter": "verbose",
+        },
+        'console_on_not_debug': {
+            'level': 'DEBUG',
+            'filters': ['require_debug_false'],
+            'class': 'logging.StreamHandler',
+        },
+        "sentry": {
+            "level": "DEBUG",
+            "class": "sentry_sdk.integrations.logging.EventHandler",
         },
         "null": {
             "class": "logging.NullHandler",
         },
     },
-    "root": {"level": "INFO", "handlers": ["console"]},
-    "loggers": {
-        "django.request": {
-            "handlers": ["mail_admins"],
-            "level": "ERROR",
-            "propagate": True,
-        },
-        "django.security.DisallowedHost": {
-            "handlers": ["null"],
-            "propagate": False,
-        },
-    },
+    "root": {"level": "DEBUG", "handlers": ["console", 'console_on_not_debug', 'sentry']},
 }
-
-# filter events:
-# https://docs.sentry.io/platforms/python/configuration/filtering/#using-before-send
-# Add data like request headers and IP for users,
-# see https://docs.sentry.io/platforms/python/data-management/data-collected/ for more info
-SENTRY_API_DSN = env("SENTRY_API_DSN", default=None)
-if(SENTRY_API_DSN):
-    sentry_sdk.init(
-        dsn=SENTRY_API_DSN,
-        environment="production-" + SITE_DOMAIN,
-        send_default_pii=True,
-        enable_logs=True,
-        add_full_stack=True,
-        before_send=before_send,
-        before_send_log=before_send_log,
-        max_request_body_size="always",
-        # traces_sample_rate=1.0,
-        integrations=[
-            DjangoIntegration(
-                # transaction_style='url',
-                # middleware_spans=True,
-                # signals_spans=False,
-                # signals_denylist=[
-                    # django.db.models.signals.pre_init,
-                    # django.db.models.signals.post_init,
-                # ],
-                # cache_spans=False,
-                # http_methods_to_capture=("GET", "POST", "PUT",),
-            ),
-            sentry_logging,
-        ],
-    )
-    logger = logging.getLogger(__name__)
-    logger.info("sentry sdk initialized, production.py")

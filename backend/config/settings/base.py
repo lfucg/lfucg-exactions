@@ -172,18 +172,33 @@ LOGGING = {
             "%(process)d %(thread)d %(message)s"
         }
     },
+    "filters": {
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse',
+        },
+        'require_debug_true': {
+            '()': 'django.utils.log.RequireDebugTrue',
+        },
+    },
     "handlers": {
+        "mail_admins": {
+            "level": "ERROR",
+            "filters": ["require_debug_false"],
+            "class": "django.utils.log.AdminEmailHandler",
+        },
         "console": {
             "level": "DEBUG",
+            'filters': ['require_debug_true'],
             "class": "logging.StreamHandler",
             "formatter": "verbose",
         },
-        "sentry": {
-            "level": "INFO",
-            "class": "sentry_sdk.integrations.logging.EventHandler",
+        'console_on_not_debug': {
+            'level': 'WARNING',
+            'filters': ['require_debug_false'],
+            'class': 'logging.StreamHandler',
         },
     },
-    "root": {"level": "INFO", "handlers": ["console", "sentry"]},
+    "root": {"level": "INFO", "handlers": ["console", 'console_on_not_debug']},
 }
 
 TEST_RUNNER = "django.test.runner.DiscoverRunner"
@@ -195,7 +210,6 @@ PASSWORD_RESET_TIMEOUT_DAYS = 7
 
 # sentry event filtering method
 def before_send(event, hint):
-    return None
     # filter out anything that should not be sent by returning None
     if event.get('logger', None) == 'django.security.DisallowedHost':
         return None
