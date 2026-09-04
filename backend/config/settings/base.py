@@ -210,7 +210,6 @@ PASSWORD_RESET_TIMEOUT_DAYS = 7
 
 # sentry event filtering method
 def before_send(event, hint):
-    return None
     # filter out anything that should not be sent by returning None
     if event.get('logger', None) == 'django.security.DisallowedHost':
         return None
